@@ -11,7 +11,9 @@
       "Bash(more)",
       "Bash(git commit -q -m 'Add variadic \\(repeat\\) param to the template linker; best-of supports N candidates *)",
       "Bash(git commit --amend -m ' *)",
-      "Bash(git commit -q -m ' *)"
+      "Bash(git commit -q -m ' *)",
+      "Bash(echo \"EXIT_CODE=$?\")",
+      "Bash(git commit -m ' *)"
     ]
   }
 }
