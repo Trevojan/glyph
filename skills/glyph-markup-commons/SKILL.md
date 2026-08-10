@@ -1,9 +1,9 @@
 ---
 name: glyph-markup-commons
-description: Common vocabulary and canonical aliases reference for Glyph Markup v1.9.2.
+description: Common vocabulary and canonical aliases reference for Glyph Markup v1.9.3.
 ---
 
-# Glyph Common Vocabulary & Aliases (v1.9.2)
+# Glyph Common Vocabulary & Aliases (v1.9.3)
 
 Tabela unificada de comandos canônicos e vocabulário base:
 

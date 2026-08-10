@@ -287,3 +287,49 @@ Sem ele, uma regra nova poderia transformar uso normal em erro sem a suíte nota
 - `best-of` limitado a dois candidatos até o ligador aceitar casa variádica.
 - Comentários de `glyph-parser.js` e da suíte ainda em português.
 - Cache de `file://` não invalida `<script src>` ao editar: recarregue com bypass de cache ao testar mudanças em JS/CSS.
+
+---
+
+# v1.9.3 — Pendências fechadas
+
+Todas as seis pendências listadas acima foram resolvidas nesta passagem.
+
+- **`ERROR` e `PROB`**: `ERROR` registrado como hieróglifo (nível 0, `= BASE`
+  em `expansoes.txt`); `PROB` corrigido para `ERROR + CTX` (era `FLS +
+  TRYFR`, derivação errada). Ambos registrados em `CATS`/`INSTR` seguindo o
+  padrão de `CRIT`/`SCRU`/`TRYFR` — vocabulário sem entrada em `FRAMES`,
+  livre de aridade. `SESSION.prob` ("problema") foi removido: com `PROB`
+  agora resolvendo em `INSTR`, `classify()` nunca mais alcançaria aquela
+  entrada — ficaria vocabulário morto. Casos `P-24`/`P-25` na suíte; `N-11`
+  trocou de `ERROR` (agora válido) para `BOGUS`.
+- **`glyph-grammar.ebnf`**: `segment_break` e o operador renomeado
+  `line_break` trocados de lugar — `;` fecha o segmento, `;;` só quebra a
+  resposta sem fechar nada, casando com o motor e a tabela `PUNCT`.
+- **`skills/*/SKILL.md`**: versão bumped para v1.9.3; conteúdo atualizado com
+  o contrato de severidade (`fix`/`ask`/`note`), ligação de templates (casas
+  nomeadas, posicionais e a casa repetível nova), regras semânticas
+  (`pair`/`order`/`precondition`) e o vocabulário `ERROR`/`PROB`.
+- **`best-of` com N candidatos**: o ligador de templates ganhou um tipo de
+  casa nova — `"repeat": true` num `param`, no máximo um por template. Ela
+  sai da ordem posicional (um param fixo declarado depois, como o
+  `criterion` do `best-of`, colidiria com a posição de candidatos extras) e
+  só se preenche por chamada nomeada repetida: `[ph-more'C'][ph-more'D']`.
+  Zero chamadas remove a casa da expansão em vez de virar `<needs>` — é
+  pluralidade opcional sobre o que os params fixos já garantem, não uma casa
+  obrigatória. `best-of` ganhou o param `more` nessas condições; chamada
+  posicional de 2 candidatos continua idêntica a antes.
+- **Comentários em inglês**: `glyph-parser.js` convertido (comentários de
+  código — a tabela de vocabulário, glosas e mensagens de diagnóstico
+  continuam PT-BR/EN-EU, são interface, não comentário).
+  `test-corpus.js` convertido por inteiro (é ferramenta de desenvolvimento,
+  não interface do produto). `glyph-rules.json` e `build-templates.js`
+  conferidos: já estavam 100% convertidos, como o changelist da v1.9.2
+  afirmava.
+- **Cache de `file://`**: `glyph-engine-alias.html` ganhou um
+  `GLYPH_ASSET_VERSION` único que vira `?v=` nos quatro `<script src>`,
+  via `document.write` preservando a ordem de carga. Verificado no
+  navegador: sem erro de console, ordem de carga correta.
+
+`VERSION` em `glyph-parser.js` estava parado em `"1.9.1"` mesmo depois da
+v1.9.2 ter entregado templates e regras semânticas — bumped para `1.9.3`
+junto com esta passagem.

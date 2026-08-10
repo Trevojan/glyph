@@ -20,7 +20,7 @@
 })(typeof self !== "undefined" ? self : this, function () {
   "use strict";
 
-  var VERSION = "1.9.1";
+  var VERSION = "1.9.3";
 
   /* ======================================================
      1. VOCABULARY — Appendix A, one slot per command
