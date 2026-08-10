@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add *)",
+      "Bash(git commit -q -m 'Register ERROR as hieroglyph, fix PROB derivation to ERROR+CTX *)"
+    ]
+  }
+}

@@ -33,10 +33,10 @@
       ["SUM","resumir"],["CAT","categorizar"]
     ]},
     { id:"juizo", label:"Juízo", note:"medir algo que já existe", items:[
-      ["REV","revisar"],["CRIT","criticar"],["SCRU","escrutinar"],["EVAL","avaliar"],
-      ["VRFY","verificar"],["VAL","validar"],["SKEP","ser cético"],["CMP","comparar"],
-      ["DIST","distinguir"],["TRUE","verdadeiro"],["FLS","falso"],["POS","positivo"],
-      ["NGT","negativo"],["REAL","realista"]
+      ["REV","revisar"],["CRIT","criticar"],["SCRU","escrutinar"],["PROB","problema"],
+      ["EVAL","avaliar"],["VRFY","verificar"],["VAL","validar"],["SKEP","ser cético"],
+      ["CMP","comparar"],["DIST","distinguir"],["TRUE","verdadeiro"],["FLS","falso"],
+      ["POS","positivo"],["NGT","negativo"],["ERROR","erro"],["REAL","realista"]
     ]},
     { id:"pergunta", label:"Pergunta", note:"obter o que falta", items:[
       ["QST","pergunta"],["ASK","pergunte"],["CLAR","esclarecer"],["CONF","confirmar"]
@@ -81,7 +81,7 @@
     VAR:"Variable", PARAM:"Parameter", FMT:"Format", TPL:"Template", SUM:"Summary",
     CLAR:"Clarification", CONF:"Confirmation", RESTR:"Restriction", ONLYIF:"Only If",
     UNLS:"Unless", INSTOF:"Instead Of", FOREX:"For Example", SEEAL:"See Also", DONT:"Do Not",
-    PT:"Part", RSN:"Reason", TGT:"Target", QST:"Question", TRYFR:"Try For Result",
+    PT:"Part", RSN:"Reason", TGT:"Target", QST:"Question", TRYFR:"Try For Result", PROB:"Problem",
     SKEP:"Skeptic", IMAG:"Imagine", RMBR:"Remember", FRGT:"Forget",
     ITR:"Iterate", CMP:"Compare", CTRD:"Contradict", SIMP:"Simplify", ELAB:"Elaborate",
     HYP:"Hypothesis", EVAL:"Evaluate", BRST:"Brainstorm", RTNL:"Rationale", ALT:"Alternative",
@@ -90,7 +90,7 @@
     POS:"Positive", NGT:"Negative", REAL:"Realistic", FIN:"Finally", RWK:"Rework",
     CRIT:"Criticize", SCRU:"Scrutinize", NEV:"Never", ALW:"Always", RDY:"Ready",
     INTN:"Intention", IMPR:"Improve", REV:"Review", LRN:"Learn", DRVF:"Derive From",
-    FLS:"False", TRUE:"True", ASSM:"Assumption", VAL:"Validate", ASK:"Ask",
+    FLS:"False", TRUE:"True", ERROR:"Error", ASSM:"Assumption", VAL:"Validate", ASK:"Ask",
     DENY:"Deny", BASE:"Base", DFN:"Define Symbol",
     GT:"Greater Than", GTE:"Greater Than Equal", LT:"Less Than", LTE:"Less Than Equal",
     EQ:"Equal", NEQ:"Not Equal"
@@ -143,8 +143,11 @@
     imp:"impaciência", sur:"surpresa"
   };
 
+  /* "prob" saiu daqui: agora que PROB é tag registrada em INSTR (ERROR+CTX),
+     classify() a resolveria antes de chegar neste bloco de qualquer jeito —
+     ficaria como vocabulário morto, inalcançável em qualquer grafia. */
   var SESSION = {
-    rd:"ler", info:"informação", org:"organizar", prob:"problema",
+    rd:"ler", info:"informação", org:"organizar",
     ok:"ok, entendido", go:"vai, faz", dtl:"detalhe"
   };
 

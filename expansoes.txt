@@ -1,6 +1,7 @@
 # ---- BASE: os 14 hieroglifos isolados na triagem + operadores puros ----
 TRUE = BASE
 FLS = BASE
+ERROR = BASE
 POS = BASE
 NGT = BASE
 MAND = BASE
@@ -35,5 +36,4 @@ VAL = CMP CNST
 CRIT = CMP CTX
 SCRU = CTX VRFY CRIT ASK
 TRYFR = TGT VRFY
-PROB = FLS TRYFR
-ERROR = PROB
+PROB = ERROR CTX

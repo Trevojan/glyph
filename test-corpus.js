@@ -69,7 +69,11 @@ const POSITIVE = [
   { id:"P-22", name:"Alias SPEC resolve para ELAB.", src:"[SPEC'requisito']",
     clean:true, cmds:["ELAB"] },
   { id:"P-23", name:"Slots de CTX (what, where, when).", src:"[CTX'banco','prodDB','v1.7']",
-    clean:true, xml:["<context>","<user-input>prodDB</user-input>"] }
+    clean:true, xml:["<context>","<user-input>prodDB</user-input>"] },
+  { id:"P-24", name:"ERROR é hieróglifo — comando atômico, sem aridade.", src:"[ERROR]",
+    clean:true, xml:["<error/>"] },
+  { id:"P-25", name:"PROB é composto ERROR+CTX — aceita contexto aninhado.", src:"[PROB[CTX'timeout']]",
+    clean:true, cmds:["PROB","CTX"], xml:["<problem>","<context>"] }
 ];
 
 const INCOMPLETE = [
@@ -96,7 +100,7 @@ const INVALID = [
     code:"UnterminatedLiteral" },
   { id:"N-09", name:"FAIL fora do vocabulário", src:"[IF[INS[FAIL]],[MAND[FMT]",
     code:"UnknownCommand", xml:['<unresolved tag="FAIL"'] },
-  { id:"N-11", name:"ERROR fora do vocabulário", src:"[CRIT[CTX],[IF[ERROR],[WARN];",
+  { id:"N-11", name:"BOGUS fora do vocabulário", src:"[CRIT[CTX],[IF[BOGUS],[WARN];",
     code:"UnknownCommand" },
   { id:"N-12", name:"ABREV fora do vocabulário", src:"[AVD[ABREV'X']]",
     code:"UnknownCommand" },
