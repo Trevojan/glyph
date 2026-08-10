@@ -1,0 +1,85 @@
+<title>Glyph — molde e motor</title>
+
+<link rel="stylesheet" href="glyph-engine.css">
+
+<div class="page">
+
+  <header class="top">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+      <h1><span class="p">[</span>glyph<span class="p">]</span><span class="arrow">→</span>xml / ast</h1>
+      <div class="chips" id="langPicker">
+        <button class="chip" type="button" data-lang="pt_BR" aria-pressed="true">PT-BR</button>
+        <button class="chip" type="button" data-lang="en">EN-EU</button>
+      </div>
+    </div>
+    <p class="rule" id="headerRule">Molde pergunta, você responde o que souber. <strong>Casa vazia não bloqueia</strong>: vira <code>&lt;needs&gt;</code> no XML — mande incompleto, preencha com a resposta. Sem <kbd>shift</kbd>: humor <code>/frs/</code> · literal <code>'texto'</code> · teto e piso <code>pc[] pb[]</code> · retorno <code>r-</code>.</p>
+  </header>
+
+  <div class="grid">
+
+    <div class="col">
+      <section class="card">
+        <div class="hd">
+          <span id="moldeName">molde</span>
+          <div class="chips" id="moldePick"></div>
+        </div>
+        <div class="bd" id="moldeBody"></div>
+      </section>
+
+      <section class="card">
+        <div class="hd">
+          <span>fonte glyph</span>
+          <div class="chips" id="presets"></div>
+        </div>
+        <div class="bd">
+          <label for="src" style="position:absolute;left:-9999px">Comandos Glyph</label>
+          <textarea id="src" class="src" spellcheck="false" placeholder="[rw[cr'api/pedidos.py'"></textarea>
+          <div class="lit" id="litOut"></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="hd"><span>comandos por categoria</span><span id="cmdCount"></span></div>
+        <div class="bd">
+          <label for="find" style="position:absolute;left:-9999px">Buscar comando</label>
+          <input id="find" class="find" type="text" spellcheck="false" placeholder="buscar por sentido: revisar, condição, arredonda…">
+          <div class="catrow" id="catRow"></div>
+          <div class="tbl" id="cmdTbl"></div>
+        </div>
+      </section>
+    </div>
+
+    <div class="col">
+      <section class="card">
+        <div class="hd">
+          <span>xml pra colar no chat</span>
+          <button class="btn" id="copy" type="button">copiar xml</button>
+        </div>
+        <div class="bd flush"><pre class="xml" id="xmlOut"></pre></div>
+      </section>
+
+      <section class="card">
+        <div class="hd">
+          <span>ast json (o trunfo do glyph)</span>
+          <button class="btn" id="copyAst" type="button">copiar ast</button>
+        </div>
+        <div class="bd flush"><pre class="xml" id="astOut" style="max-height:260px;color:var(--h-lit)"></pre></div>
+      </section>
+
+      <section class="card">
+        <div class="hd"><span>o que falta dizer</span><span id="gapCount"></span></div>
+        <div class="bd flush"><div class="gaps" id="gapOut"></div></div>
+      </section>
+    </div>
+  </div>
+
+  <footer class="ft">
+    <span>o xml não faz nada sozinho — ele é o recado pra mim</span>
+    <span id="stat"></span>
+  </footer>
+</div>
+
+<script src="glyph-parser.js"></script>
+<script src="glyph-data.js"></script>
+<script src="glyph-moldes.js"></script>
+<script src="glyph-ui.js"></script>

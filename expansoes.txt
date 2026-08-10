@@ -1,0 +1,39 @@
+# ---- BASE: os 14 hieroglifos isolados na triagem + operadores puros ----
+TRUE = BASE
+FLS = BASE
+POS = BASE
+NGT = BASE
+MAND = BASE
+OPT = BASE
+DONT = BASE
+ALW = BASE
+NEV = BASE
+PRIO = BASE
+OVR = BASE
+PT = BASE
+VAR = BASE
+PARAM = BASE
+PH = BASE
+TPL = BASE
+DEF = BASE
+DFN = BASE
+
+# ---- Primitivos de enquadre, restrição e pergunta ----
+CMP = BASE
+CNST = BASE
+CTX = BASE
+ASK = BASE
+TGT = BASE
+EX = BASE
+ELAB = BASE
+CLAR = BASE
+COND = BASE
+
+# ---- Expansões Derivadas v1.7 ----
+VRFY = CMP TRUE
+VAL = CMP CNST
+CRIT = CMP CTX
+SCRU = CTX VRFY CRIT ASK
+TRYFR = TGT VRFY
+PROB = FLS TRYFR
+ERROR = PROB

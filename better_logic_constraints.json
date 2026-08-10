@@ -1,0 +1,509 @@
+{
+  "type": "GlyphAST",
+  "version": "1.9",
+  "segments": [
+    {
+      "type": "Segment",
+      "mood": [],
+      "isReturn": false,
+      "continues": false,
+      "breaks": 0,
+      "autoClosedCount": 3,
+      "body": [
+        {
+          "type": "Template",
+          "name": "germinate",
+          "isDefinition": true,
+          "body": [
+            {
+              "type": "Command",
+              "raw": "itr",
+              "canonical": "ITR",
+              "tier": "instr",
+              "gloss": "Iterate",
+              "element": "iterate",
+              "isAlias": false,
+              "chainElement": false,
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "autoClosed": true,
+              "suggestion": null,
+              "emotions": [],
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "over seeds (every aspect of a situation, being it good, bad or neutral)",
+                  "form": "tick"
+                },
+                {
+                  "type": "Command",
+                  "raw": "val",
+                  "canonical": "VAL",
+                  "tier": "instr",
+                  "gloss": "Validate",
+                  "element": "validate",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "autoClosed": true,
+                  "suggestion": null,
+                  "emotions": [],
+                  "body": [
+                    {
+                      "type": "Command",
+                      "raw": "lrn",
+                      "canonical": "LRN",
+                      "tier": "instr",
+                      "gloss": "Learn",
+                      "element": "learn",
+                      "isAlias": false,
+                      "chainElement": false,
+                      "slotName": false,
+                      "editorial": false,
+                      "name": null,
+                      "autoClosed": false,
+                      "suggestion": null,
+                      "emotions": [],
+                      "body": [
+                        {
+                          "type": "Command",
+                          "raw": "impr",
+                          "canonical": "IMPR",
+                          "tier": "instr",
+                          "gloss": "Improve",
+                          "element": "improve",
+                          "isAlias": false,
+                          "chainElement": false,
+                          "slotName": false,
+                          "editorial": false,
+                          "name": null,
+                          "autoClosed": false,
+                          "suggestion": null,
+                          "emotions": [],
+                          "body": [
+                            {
+                              "type": "Literal",
+                              "value": "basic thinking",
+                              "form": "tick"
+                            },
+                            {
+                              "type": "Command",
+                              "raw": "skl",
+                              "canonical": "SKL",
+                              "tier": "struct",
+                              "gloss": "Skill",
+                              "element": "skill",
+                              "isAlias": false,
+                              "chainElement": false,
+                              "slotName": false,
+                              "editorial": false,
+                              "name": null,
+                              "autoClosed": false,
+                              "suggestion": null,
+                              "emotions": [],
+                              "body": [
+                                {
+                                  "type": "Literal",
+                                  "value": "tree logic structure",
+                                  "form": "tick"
+                                },
+                                {
+                                  "type": "Command",
+                                  "raw": "tgt",
+                                  "canonical": "TGT",
+                                  "tier": "instr",
+                                  "gloss": "Target",
+                                  "element": "target",
+                                  "isAlias": false,
+                                  "chainElement": false,
+                                  "slotName": false,
+                                  "editorial": false,
+                                  "name": null,
+                                  "autoClosed": false,
+                                  "suggestion": null,
+                                  "emotions": [],
+                                  "body": [
+                                    {
+                                      "type": "Literal",
+                                      "value": "roots=problem,trunk=effort (anything that takes time and demands action),branches=resources(place, idea, person, method, any kind of),leaves = actions(effective denoted actions to be made to achieve the goal along the branch),fruit = the goal.",
+                                      "form": "tick"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "Literal",
+                      "value": "logic breaking when it gets too long",
+                      "form": "tick"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Segment",
+      "mood": [],
+      "isReturn": false,
+      "continues": true,
+      "breaks": 0,
+      "autoClosedCount": 2,
+      "body": [
+        {
+          "type": "Text",
+          "value": "rd"
+        },
+        {
+          "type": "Command",
+          "raw": "ctx",
+          "canonical": "CTX",
+          "tier": "instr",
+          "gloss": "Context",
+          "element": "context",
+          "isAlias": false,
+          "chainElement": false,
+          "slotName": false,
+          "editorial": false,
+          "name": null,
+          "autoClosed": true,
+          "suggestion": null,
+          "emotions": [],
+          "body": [
+            {
+              "type": "Literal",
+              "value": "engine",
+              "form": "quote"
+            },
+            {
+              "type": "Command",
+              "raw": "intn",
+              "canonical": "INTN",
+              "tier": "instr",
+              "gloss": "Intention",
+              "element": "intention",
+              "isAlias": false,
+              "chainElement": false,
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "autoClosed": true,
+              "suggestion": null,
+              "emotions": [],
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "foresee semantics and logic problems when the user writes a long glyph query",
+                  "form": "tick"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Segment",
+      "mood": [],
+      "isReturn": false,
+      "continues": false,
+      "breaks": 0,
+      "autoClosedCount": 6,
+      "body": [
+        {
+          "type": "Template",
+          "name": "germinate",
+          "isDefinition": false,
+          "body": [
+            {
+              "type": "Command",
+              "raw": "mand",
+              "canonical": "MAND",
+              "tier": "instr",
+              "gloss": "Mandatory",
+              "element": "mandatory",
+              "isAlias": false,
+              "chainElement": false,
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "autoClosed": true,
+              "suggestion": null,
+              "emotions": [],
+              "body": [
+                {
+                  "type": "Command",
+                  "raw": "org",
+                  "canonical": "org",
+                  "tier": "session",
+                  "gloss": "organizar",
+                  "element": "org",
+                  "isAlias": false,
+                  "chainElement": true,
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "body": []
+                },
+                {
+                  "type": "Command",
+                  "raw": "tgt",
+                  "canonical": "TGT",
+                  "tier": "instr",
+                  "gloss": "Target",
+                  "element": "target",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "autoClosed": true,
+                  "suggestion": null,
+                  "emotions": [],
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "algorythm analysis",
+                      "form": "quote"
+                    },
+                    {
+                      "type": "Literal",
+                      "value": "by problem",
+                      "form": "quote"
+                    },
+                    {
+                      "type": "Command",
+                      "raw": "cncl",
+                      "canonical": "CNCL",
+                      "tier": "instr",
+                      "gloss": "Conclude",
+                      "element": "conclude",
+                      "isAlias": false,
+                      "chainElement": false,
+                      "slotName": false,
+                      "editorial": false,
+                      "name": null,
+                      "autoClosed": true,
+                      "suggestion": null,
+                      "emotions": [],
+                      "body": [
+                        {
+                          "type": "Command",
+                          "raw": "lrn",
+                          "canonical": "LRN",
+                          "tier": "instr",
+                          "gloss": "Learn",
+                          "element": "learn",
+                          "isAlias": false,
+                          "chainElement": false,
+                          "slotName": false,
+                          "editorial": false,
+                          "name": null,
+                          "autoClosed": true,
+                          "suggestion": null,
+                          "emotions": [],
+                          "body": [
+                            {
+                              "type": "Command",
+                              "raw": "avd",
+                              "canonical": "AVD",
+                              "tier": "instr",
+                              "gloss": "Avoid",
+                              "element": "avoid",
+                              "isAlias": false,
+                              "chainElement": false,
+                              "slotName": false,
+                              "editorial": false,
+                              "name": null,
+                              "autoClosed": true,
+                              "suggestion": null,
+                              "emotions": [],
+                              "body": [
+                                {
+                                  "type": "Literal",
+                                  "value": "ambiguity",
+                                  "form": "tick"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Segment",
+      "mood": [],
+      "isReturn": false,
+      "continues": true,
+      "breaks": 0,
+      "autoClosedCount": 2,
+      "body": [
+        {
+          "type": "Command",
+          "raw": "prop",
+          "canonical": "PROP",
+          "tier": "instr",
+          "gloss": "Propose",
+          "element": "propose",
+          "isAlias": false,
+          "chainElement": false,
+          "slotName": false,
+          "editorial": false,
+          "name": null,
+          "autoClosed": true,
+          "suggestion": null,
+          "emotions": [],
+          "body": [
+            {
+              "type": "Command",
+              "raw": "alt",
+              "canonical": "ALT",
+              "tier": "instr",
+              "gloss": "Alternative",
+              "element": "alternative",
+              "isAlias": false,
+              "chainElement": true,
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "body": []
+            },
+            {
+              "type": "Command",
+              "raw": "ovr",
+              "canonical": "OVR",
+              "tier": "instr",
+              "gloss": "Override",
+              "element": "override",
+              "isAlias": false,
+              "chainElement": false,
+              "slotName": false,
+              "editorial": true,
+              "name": null,
+              "autoClosed": true,
+              "suggestion": null,
+              "emotions": [],
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "strict business logic",
+                  "form": "tick"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Segment",
+      "mood": [],
+      "isReturn": true,
+      "continues": false,
+      "breaks": 0,
+      "autoClosedCount": 0,
+      "body": [
+        {
+          "type": "Command",
+          "raw": "tgt",
+          "canonical": "TGT",
+          "tier": "instr",
+          "gloss": "Target",
+          "element": "target",
+          "isAlias": false,
+          "chainElement": false,
+          "slotName": false,
+          "editorial": false,
+          "name": null,
+          "autoClosed": false,
+          "suggestion": null,
+          "emotions": [],
+          "body": [
+            {
+              "type": "Literal",
+              "value": "user command blocks",
+              "form": "tick"
+            }
+          ]
+        },
+        {
+          "type": "Command",
+          "raw": "skep",
+          "canonical": "SKEP",
+          "tier": "instr",
+          "gloss": "Skeptic",
+          "element": "skeptic",
+          "isAlias": false,
+          "chainElement": false,
+          "slotName": false,
+          "editorial": false,
+          "name": null,
+          "autoClosed": false,
+          "suggestion": null,
+          "emotions": [],
+          "body": [
+            {
+              "type": "Command",
+              "raw": "crit",
+              "canonical": "CRIT",
+              "tier": "instr",
+              "gloss": "Criticize",
+              "element": "criticize",
+              "isAlias": false,
+              "chainElement": true,
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "body": []
+            },
+            {
+              "type": "Command",
+              "raw": "scru",
+              "canonical": "SCRU",
+              "tier": "instr",
+              "gloss": "Scrutinize",
+              "element": "scrutinize",
+              "isAlias": false,
+              "chainElement": true,
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "body": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "diagnostics": []
+}

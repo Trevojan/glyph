@@ -1,0 +1,70 @@
+{
+  "schema": 1,
+  "note": "Template library, source of truth. Node, the CLI and the test suite read this file directly. The browser opens over file:// and cannot fetch .json, so run `node build-templates.js` to regenerate glyph-data.js after editing. The [ph-name] holes in a body are the parameters: a call binds them by name ([ph-name'value']) or by position (bare literals, in declaration order). An unbound hole becomes <needs> and does not block. The same [ph-name] may appear more than once in a body; every occurrence receives the same value.",
+  "templates": {
+    "germinate": {
+      "gloss": "Walks every aspect of a situation as seeds and lays the path to the goal as a tree: roots=problem, trunk=effort, branches=resources, leaves=actions, fruit=goal.",
+      "params": [
+        { "name": "alvo", "ask": "what to germinate — the situation, subject or problem" },
+        { "name": "criterio", "ask": "what to validate the result against" }
+      ],
+      "body": "[itr[ph-alvo`over seeds (every aspect of a situation, being it good, bad or neutral)`][val[lrn[impr`basic thinking`[skl`tree logic structure`[tgt`roots=problem,trunk=effort (anything that takes time and demands action),branches=resources(place, idea, person, method, any kind of),leaves = actions(effective denoted actions to be made to achieve the goal along the branch),fruit = the goal.`]]]][ph-criterio`the external criterion to validate against`]]"
+    },
+
+    "scientific-review": {
+      "gloss": "Apply scientific rigour: criticise the target, rework it with what the critique found, and validate the result against an external standard.",
+      "params": [
+        { "name": "target", "ask": "what to put under scientific review" },
+        { "name": "standard", "ask": "the external standard to hold it to — method, evidence, reproducibility" }
+      ],
+      "body": "[crit[ph-target`what to put under scientific review`]][rwk`the target itself, corrected by what the critique found`][val`the reworked result`,[ph-standard`the external standard: method, evidence, reproducibility`]]"
+    },
+
+    "reinforce": {
+      "gloss": "There is a must-follow rule. Raise its precedence and state why it holds, so it survives a long context.",
+      "params": [
+        { "name": "rule", "ask": "the rule that must be followed" },
+        { "name": "why", "ask": "why it must hold" }
+      ],
+      "body": "[prio[mand[ph-rule`the rule that must be followed`]]][rsn[ph-why`why it must hold, so it is not dropped later`]]"
+    },
+
+    "insight": {
+      "gloss": "Frame the situation and its limits first, then brainstorm one realistic way out — not a list of options.",
+      "params": [
+        { "name": "situation", "ask": "the situation to get out of" },
+        { "name": "limits", "ask": "what the idea must respect" }
+      ],
+      "body": "[ctx[ph-situation`the situation to get out of`]][cnst[ph-limits`what the idea must respect`]][brst`one realistic way out, restricted by the constraints above — not a list of options`][real]"
+    },
+
+    "fertilize": {
+      "gloss": "Add base context to a situation, surface the implicit details as seeds, rebuild the problem from them, and propose new resources. Companion to germinate.",
+      "params": [
+        { "name": "situation", "ask": "the situation to fertilize" },
+        { "name": "known", "ask": "what is already established and must not be re-derived" }
+      ],
+      "body": "[ctx[ph-situation`the situation to fertilize`]][base[ph-known`what is already established and must not be re-derived`]][elab`seeds — the details the situation left implicit`][drvf`rebuild the roots (the problem) from those seeds`][prop`new resources to feed the branches — at least two, of different kinds: place, idea, person or method`]"
+    },
+
+    "best-of": {
+      "gloss": "Compare candidates that share one context, score them against a stated condition, name the winner and return the points that justify it.",
+      "params": [
+        { "name": "context", "ask": "the context all candidates share" },
+        { "name": "a", "ask": "first candidate" },
+        { "name": "b", "ask": "second candidate" },
+        { "name": "criterion", "ask": "the condition that decides the winner" }
+      ],
+      "body": "[ctx[ph-context`the context all candidates share`]][cmp[ph-a`first candidate`],[ph-b`second candidate`]][val`each candidate against the stated condition`,[ph-criterion`the condition that decides the winner`]][cncl`the winner`][rtnl`the points that justify the result`]"
+    },
+
+    "track": {
+      "gloss": "Explain where a detail came from across a long context: where it entered, what changed it, where it stands now. For the small things a human lets slip.",
+      "params": [
+        { "name": "item", "ask": "the detail whose origin to explain" },
+        { "name": "scope", "ask": "the stretch of conversation to trace through" }
+      ],
+      "body": "[ctx[ph-scope`the stretch of conversation to trace through`]][drvf[ph-item`the detail whose origin to explain`]][elab`the chain: where it entered, what changed it, where it stands now`]"
+    }
+  }
+}

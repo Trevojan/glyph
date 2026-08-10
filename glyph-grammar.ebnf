@@ -1,0 +1,88 @@
+(* ====================================================================
+   Glyph Markup Language v1.7 — Formal EBNF Specification
+   ISO/IEC 14977 Compliant
+   ==================================================================== *)
+
+(* --- High-level Structure --- *)
+document         = { segment } ;
+segment          = [ emotion_header ] , element_sequence , [ segment_break | auto_close ] ;
+segment_break    = ";;" ;
+auto_close       = ";" ;
+
+(* --- Emotion Headers (Resolução C-01) --- *)
+emotion_header   = "/" , emo_code , "/" , { emo_code , "/" } ;
+emo_code         = letter , { letter } ;
+
+(* --- Core Element Sequence --- *)
+element_sequence = element , { element } ;
+element          = command 
+                 | chained_command 
+                 | template_expr 
+                 | logic_block 
+                 | modifier_cmd 
+                 | comparison_cmd 
+                 | define_cmd 
+                 | literal 
+                 | free_text ;
+
+(* --- Standard Commands & Slots (Resolução C-03, C-05, C-08) --- *)
+command          = "[" , cmd_name , [ cmd_body ] , "]" ;
+cmd_name         = letter , { letter | digit | "_" | "." } ;
+cmd_body         = slot_list | inline_content ;
+
+slot_list        = ( ":" , slot_value | slot_value ) , { "," , slot_value } ;
+slot_value       = literal | element | cmd_name ;
+inline_content   = element_sequence ;
+
+(* --- Chained Extension Operator "-" (Resolução C-01: Divisor "/" eliminado) --- *)
+chained_command  = "[" , cmd_name , "-" , chain_item , { "-" , chain_item } , [ "]" ] ;
+chain_item       = cmd_name | literal ;
+
+(* --- Templates (Resolução C-04 & C-09) --- *)
+template_expr    = template_def | template_invoke ;
+template_def     = "[--" , template_name , "=" , element_sequence , [ "]" ] ;
+template_invoke  = "[--" , template_name , [ slot_list ] , [ "]" ] ;
+template_name    = letter , { letter | digit | "_" | "-" | "." } ;
+
+(* --- Prefix Comparison Operators (Resolução C-06) --- *)
+comparison_cmd   = "[" , comp_op_name , slot_list , "]" ;
+comp_op_name     = "gt" | "gte" | "lt" | "lte" | "eq" | "neq" ;
+
+(* --- Polarity & Modality Modifiers (Resolução C-11) --- *)
+modifier_cmd     = polarity_cmd | modality_cmd ;
+polarity_cmd     = "[pos" , [ cmd_body ] , "]" | "[neg" , [ cmd_body ] , "]" ;
+modality_cmd     = "[mand" , [ cmd_body ] , "]" | "[opt" , [ cmd_body ] , "]" ;
+
+(* --- Definition & Default Commands (Resolução C-02) --- *)
+define_cmd       = "[dfn" , slot_list , "]" ;
+default_cmd      = "[def]" ;
+
+(* --- Logic Blocks & Expressions --- *)
+logic_block      = "[logic" , [ "-" , logic_name ] , "]" , logic_body , "[/logic]" ;
+logic_name       = identifier ;
+logic_body       = { logic_line } ;
+logic_line       = logic_let | logic_rule | logic_expr ;
+logic_let        = identifier , "=" , expr ;
+logic_rule       = [ "?" | "!" ] , expr , "->" , expr ;
+logic_expr       = expr ;
+
+(* Formal Expression Productions *)
+expr             = primary_expr , { binary_op , primary_expr } ;
+primary_expr     = identifier | number | dice_expr | func_call | "(" , expr , ")" ;
+binary_op        = "+" | "-" | "*" | "/" | "^" | "==" | "!=" | "<" | "<=" | ">" | ">=" ;
+func_call        = func_name , [ "[" , expr , "]" | "(" , expr , ")" ] ;
+func_name        = "pb" | "pc" | "ar" | "floor" | "ceil" | "round" | identifier ;
+dice_expr        = number , "d" , number , [ ("kh" | "kl") , number ] ;
+
+(* --- Literals & Terminals --- *)
+literal          = tick_literal | quote_literal ;
+tick_literal     = "`" , { character - "`" } , "`" ;
+quote_literal    = "'" , { character - "'" } , "'" ;
+
+free_text        = character - ( "[" | "]" | ";" | "/" | "`" | "'" ) ;
+
+identifier       = letter , { letter | digit | "_" } ;
+number           = digit , { digit } , [ "." , digit , { digit } ] ;
+letter           = "A".."Z" | "a".."z" ;
+digit            = "0".."9" ;
+character        = ? any valid unicode character ? ;
