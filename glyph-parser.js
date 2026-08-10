@@ -1,16 +1,16 @@
 /**
  * Glyph Core v1.9 (glyph-parser.js)
  *
- * Núcleo único da cadeia  humano → glifo → xml → máquina.
+ * Single core of the chain  human → glyph → xml → machine.
  *
- * Até a v1.8 existiam dois parsers divergentes: este módulo (que só sabia
- * emitir AST e descartava texto livre, cadeias, [logic] e ;;) e o parser
- * embutido em glyph-engine-alias.html (completo, mas preso ao navegador,
- * único capaz de emitir XML). A v1.9 unifica: este arquivo é a implementação
- * de referência, e o HTML passa a ser um consumidor dele.
+ * Through v1.8 there were two divergent parsers: this module (which only
+ * emitted AST and dropped free text, chains, [logic] and ;;) and the parser
+ * embedded in glyph-engine-alias.html (complete, but browser-locked, the
+ * only one able to emit XML). v1.9 unifies them: this file is the reference
+ * implementation, and the HTML becomes a consumer of it.
  *
- * UMD: funciona em Node (require) e no navegador (window.GlyphCore).
- * Como CLI:  node glyph-parser.js "[crit[ctx]]" [--ast|--xml|--diag]
+ * UMD: works in Node (require) and in the browser (window.GlyphCore).
+ * As a CLI:  node glyph-parser.js "[crit[ctx]]" [--ast|--xml|--diag]
  */
 
 (function (root, factory) {
@@ -23,7 +23,7 @@
   var VERSION = "1.9.1";
 
   /* ======================================================
-     1. VOCABULÁRIO — Apêndice A, uma casa por comando
+     1. VOCABULARY — Appendix A, one slot per command
      ====================================================== */
 
   var CATS = [
@@ -108,7 +108,7 @@
     IN:"INS", AS:"ASSM", CX:"CTX", PR:"PRIO", TG:"TGT", RY:"RDY", VL:"VAL",
     RQ:"REQ", CR:"CRIT", RW:"RWK", RV:"REV", FM:"FMT", IM:"IMPR", FN:"FIN",
     CL:"CLAR", RT:"RTNL", CN:"CNST", WN:"WARN", SM:"SUM",
-    /* fusoes v1.7: forma aceita a esquerda, canonica a direita */
+    /* v1.7 merges: accepted form on the left, canonical on the right */
     FOREX:"EX", QST:"ASK", EVAL:"CRIT", REV:"CRIT", ONLYIF:"COND", SPEC:"ELAB", SIMP:"CLAR"
   };
   var ALIAS_OF = {};
@@ -143,9 +143,10 @@
     imp:"impaciência", sur:"surpresa"
   };
 
-  /* "prob" saiu daqui: agora que PROB é tag registrada em INSTR (ERROR+CTX),
-     classify() a resolveria antes de chegar neste bloco de qualquer jeito —
-     ficaria como vocabulário morto, inalcançável em qualquer grafia. */
+  /* "prob" left this table: now that PROB is a registered INSTR tag
+     (ERROR+CTX), classify() would resolve it before ever reaching this
+     block anyway — it would sit here as dead vocabulary, unreachable
+     under any casing. */
   var SESSION = {
     rd:"ler", info:"informação", org:"organizar",
     ok:"ok, entendido", go:"vai, faz", dtl:"detalhe"
@@ -175,9 +176,9 @@
     ["[logic-nome]","abre bloco de conta"]
   ];
 
-  /* valência: o que cada comando precisa receber pra ficar determinado.
-     SECTION e BLOCK entram aqui na v1.9 para casar com ASSINATURAS.md,
-     que já lhes atribuía aridade mínima 1. */
+  /* valency: what each command needs to receive to be determinate.
+     SECTION and BLOCK enter here in v1.9 to match ASSINATURAS.md, which
+     already assigned them minimum arity 1. */
   var FRAMES = {
     INS:["o que fazer"], TRYFR:["o resultado desejado"], PROP:["o que propor"],
     IMPR:["o que melhorar"], REV:["o que revisar"], CRIT:["o que criticar"],
@@ -202,12 +203,13 @@
     SECTION:["o nome da seção"], BLOCK:["o nome do bloco"]
   };
 
-  /* comandos estruturais cujo primeiro filho precisa ser um literal (o nome) */
+  /* structural commands whose first child must be a literal (the name) */
   var NAMED_STRUCT = { SECTION:1, BLOCK:1 };
 
-  /* Slots ordenados obrigatórios — ASSINATURAS.md §3 (comparação prefixa) e
-     as assinaturas de aridade 2. FRAMES só modela o primeiro slot; aqui cada
-     posição faltante vira um <needs slot="…"> no XML, em vez de sumir calada. */
+  /* Mandatory ordered slots — ASSINATURAS.md §3 (prefix comparison) and the
+     arity-2 signatures. FRAMES only models the first slot; here each missing
+     position becomes a <needs slot="…"> in the XML, instead of silently
+     vanishing. */
   var SLOTS = {
     GT: ["o primeiro termo", "o segundo termo"],
     GTE:["o primeiro termo", "o segundo termo"],
@@ -219,24 +221,24 @@
     VAL:["o que validar", "o critério externo"]
   };
 
-  /* Limites de bloco longo (v1.9.1).
+  /* Long-block limits (v1.9.1).
 
-     Em Glyph todo `[` sem `]` entra DENTRO do anterior, então uma query longa
-     não fica larga: fica funda. Isso tinha três consequências, todas corrigidas
-     aqui — a indentação crescia com o quadrado da profundidade (2 KB de entrada
-     viravam 500 KB de XML), os emissores recursivos estouravam a pilha, e o
-     usuário não recebia aviso nenhum de que 40 comandos haviam virado 40 níveis
-     de escopo aninhado. */
+     In Glyph every `[` without a `]` nests INSIDE the previous one, so a long
+     query doesn't grow wide: it grows deep. That had three consequences, all
+     fixed here — indentation grew with the square of depth (2 KB of input
+     became 500 KB of XML), the recursive emitters overflowed the call stack,
+     and the user got no warning at all that 40 commands had turned into 40
+     levels of nested scope. */
   var LIMITS = {
-    indent: 12,      // teto de recuo visual; além disso o XML para de engordar
-    nesting: 10,     // a partir daqui, avisa que o aninhamento é provavelmente não-intencional
-    autoClose: 8,    // `;` fechando mais que isso de uma vez merece aviso
-    astDepth: 200    // teto da AST: JSON.stringify do V8 é recursivo e estoura
+    indent: 12,      // visual indent ceiling; past this the XML stops growing
+    nesting: 10,     // past this depth, warn that the nesting is probably unintentional
+    autoClose: 8,    // `;` closing more than this at once deserves a warning
+    astDepth: 200    // AST ceiling: V8's JSON.stringify is recursive and overflows
   };
 
-  /* ---- registro de templates ----------------------------------------
-     Preenchido por useTemplates(). O Node carrega de glyph-templates.json;
-     o navegador, do glyph-templates.js gerado (file:// bloqueia fetch). */
+  /* ---- template registry ----------------------------------------------
+     Filled by useTemplates(). Node loads it from glyph-templates.json;
+     the browser, from the generated glyph-data.js (file:// blocks fetch). */
   var TEMPLATES = {};
   function useTemplates(store) {
     TEMPLATES = (store && store.templates) || store || {};
@@ -246,7 +248,7 @@
     return (opts && opts.templates) || TEMPLATES;
   }
 
-  /* filhos que contam como slot preenchido */
+  /* children that count as a filled slot */
   function valueChildren(nd) {
     return (nd.children || []).filter(function (ch) {
       return ch.canonical || ch.literal || ch.logic || ch.template || (ch.text && ch.v) || ch.mode;
@@ -506,7 +508,7 @@
   }
 
   /* ======================================================
-     3. BLOCO [logic]
+     3. [logic] BLOCK
      ====================================================== */
 
   var RESERVED_WORDS = /^(and|or|not|if|then|else|true|false|min|max|abs|sum|floor|ceil|round|sem|se|senao|entao|no|de|do|da|pb|pc|ar|kh|kl|e|ou)$/i;
@@ -540,8 +542,8 @@
 
   function freeVars(raw) {
     var s = raw
-      /* a rolagem inteira sai, inclusive o sufixo kh/kl — senão "4d6kh3"
-         deixa "kh3" para trás e ele vaza como variável indefinida */
+      /* the whole roll comes out, including the kh/kl suffix — otherwise
+         "4d6kh3" leaves "kh3" behind and it leaks out as an undefined variable */
       .replace(/(^|[^\w])\d+\s*d\s*\d+\s*(?:k[hl]\s*\d*)?/gi, " ")
       .replace(/`[^`]*`/g, " ")
       .replace(/'[^']*'/g, " ")
@@ -619,8 +621,8 @@
      4. PARSER
      ====================================================== */
 
-  /* Iterativo de propósito: em bloco longo a árvore é funda, e a versão
-     recursiva estourava a pilha junto com os emissores. */
+  /* Iterative on purpose: in a long block the tree is deep, and the
+     recursive version overflowed the stack right along with the emitters. */
   function walk(list, fn) {
     var stack = [], i;
     for (i = (list || []).length - 1; i >= 0; i--) stack.push(list[i]);
@@ -641,16 +643,18 @@
   }
 
   /* ======================================================
-     3b. EXPANSÃO DE TEMPLATES
+     3b. TEMPLATE EXPANSION
 
-     Até a v1.9.1 a invocação `[--nome[…]]` emitia apenas o que estava escrito
-     nela: o corpo da definição não entrava, nem na mesma mensagem. Quem ligava
-     as duas pontas era o leitor humano ou o modelo. Agora o motor liga.
+     Through v1.9.1 an invocation `[--name[…]]` emitted only what was written
+     in the call itself: the definition's body never entered, not even in the
+     same message. The human reader or the model was what connected the two
+     ends. Now the engine connects them.
 
-     Ligação: a definição declara casas com `[ph-nome\`pergunta\`]`; a chamada
-     preenche por nome (`[ph-nome'valor']`) ou por posição (literais soltos, na
-     ordem de declaração). O que não for preenchimento entra como conteúdo
-     extra no fim. Casa não preenchida continua virando <needs> — não bloqueia.
+     Linking: the definition declares holes with `[ph-name\`question\`]`; the
+     call fills them by name (`[ph-name'value']`) or by position (bare
+     literals, in declaration order). Whatever isn't a fill lands as extra
+     content at the end. An unfilled hole still becomes <needs> — it does not
+     block.
      ====================================================== */
 
   function phName(nd) {
@@ -763,14 +767,14 @@
 
       var sub = parse(def.body, {
         session: opts.session,
-        valency: false,                       // a valência é julgada no contexto final
+        valency: false,                       // valency is judged in the final context
         templates: registry,
         _expanding: chain.concat(key)
       });
 
-      /* Erros de sintaxe (e ciclos) do corpo armazenado precisam subir: as
-         passagens externas rodam sobre a árvore já expandida e não os
-         reproduzem. Os `ask`/`note` ficam de fora porque são regenerados. */
+      /* Syntax errors (and cycles) from the stored body need to bubble up:
+         the outer passes run over the already-expanded tree and do not
+         reproduce them. `ask`/`note` stay out because they get regenerated. */
       sub.gaps.forEach(function (g) {
         if (g.sev === "fix")
           G(g.sev, g.lab, "no corpo de <code>[--" + esc(inv.template) + "</code>: " + g.msg, g.code);
@@ -792,11 +796,12 @@
   }
 
   /* ======================================================
-     3c. CONTRADIÇÕES
+     3c. CONTRADICTIONS
 
-     O critério que faltava para "os comandos não se contradizem". Tabela
-     finita e externa (glyph-contradictions.json): editar o arquivo muda a
-     regra, sem tocar em código. `hard` vira `fix`, `tension` vira `ask`.
+     The criterion that was missing for "commands don't contradict each
+     other". Finite, external table (glyph-rules.json): editing the file
+     changes the rule, without touching code. `hard` becomes `fix`, `tension`
+     becomes `ask`.
      ====================================================== */
 
   var RULES = null;
@@ -919,9 +924,9 @@
 
   /**
    * parse(input, opts)
-   *   input — código-fonte Glyph (string) ou um array de tokens já lexado.
+   *   input — Glyph source code (string) or an already-tokenized array.
    *   opts  — { session:true, valency:true }
-   * Retorna { segments, gaps, tokens }.
+   * Returns { segments, gaps, tokens }.
    */
   function parse(input, opts) {
     opts = opts || {};
@@ -1117,9 +1122,10 @@
             G("note", "palavra solta",
               "<code>" + esc(v) + "</code> solto. Lógica: <code>[if</code> <code>[unls</code> <code>[logic]</code>.",
               "LooseKeyword");
-          /* Uma palavra solta que existe no vocabulário quase sempre é comando
-             escrito sem `[`. Sem isto ela vira <off>, prosa inerte: o `rd` de
-             uma query longa some sem aviso nenhum. */
+          /* A loose word that exists in the vocabulary is almost always a
+             command written without `[`. Without this it becomes <off>,
+             inert prose: the `rd` in a long query vanishes with no warning
+             at all. */
           else if (/^[A-Za-z][A-Za-z0-9_.]*$/.test(v)) {
             var uw = v.toUpperCase(), lw = v.toLowerCase();
             var known = INSTR[uw] || ALIAS[uw] || STRUCT[uw] || META[uw] ||
@@ -1140,12 +1146,12 @@
     }
     closeSeg("eof");
 
-    // ---- expansão de templates ----
-    // Antes das outras passagens de propósito: valência, contradição e casa
-    // vazia devem enxergar o corpo expandido, não a casca da chamada.
+    // ---- template expansion ----
+    // Before the other passes on purpose: valency, contradiction and empty
+    // slot must see the expanded body, not the bare call.
     expandInvocations(segments, opts, G);
 
-    // ---- casa vazia do molde ----
+    // ---- empty template slot ----
     segments.forEach(function (sgx) {
       walk(sgx.children, function (nd2) {
         if (nd2.canonical !== "PH") return;
@@ -1157,9 +1163,9 @@
       });
     });
 
-    // ---- aninhamento profundo em bloco longo ----
-    // Um `[` sem `]` entra dentro do anterior. Depois de alguns comandos isso
-    // deixa de ser refinamento e vira escopo que o usuário não pediu.
+    // ---- deep nesting in a long block ----
+    // A `[` without a `]` nests inside the previous one. After a few
+    // commands this stops being refinement and becomes scope nobody asked for.
     segments.forEach(function (sgd) {
       var deepest = null;
       walk(sgd.children, function (nd2) {
@@ -1178,7 +1184,7 @@
       }
     });
 
-    // ---- nome obrigatório de SECTION / BLOCK ----
+    // ---- mandatory name for SECTION / BLOCK ----
     segments.forEach(function (sgn) {
       walk(sgn.children, function (nd2) {
         if (!NAMED_STRUCT[nd2.canonical]) return;
@@ -1192,7 +1198,7 @@
       });
     });
 
-    // ---- valência ----
+    // ---- valency ----
     if (opts.valency !== false) {
       segments.forEach(function (sg2) {
         walk(sg2.children, function (nd2) {
@@ -1200,7 +1206,7 @@
           if (nd2.canonical === "PH") return;
           if (nd2.tier === "unknown" || nd2.tier === "empty") return;
 
-          /* aridade posicional estrita tem precedência sobre a valência de FRAMES */
+          /* strict positional arity takes precedence over FRAMES valency */
           var slots = SLOTS[nd2.canonical];
           if (slots) {
             var got = valueChildren(nd2).length + (nd2.colon ? 1 : 0);
@@ -1260,13 +1266,13 @@
   }
 
   /* ======================================================
-     5. EMISSOR XML — o recado que viaja até a máquina
+     5. XML EMITTER — the message that travels to the machine
      ====================================================== */
 
-  /* Recuo com teto. Sem o teto o XML cresce com o QUADRADO da profundidade:
-     500 níveis viravam ~500 KB de espaços em branco, e o XML é justamente a
-     coisa que se copia para o chat. Passado o teto a estrutura continua legível
-     pelas próprias tags. */
+  /* Ceilinged indent. Without the ceiling the XML grows with the SQUARE of
+     depth: 500 levels turned into ~500 KB of whitespace, and the XML is
+     exactly the thing that gets copied into the chat. Past the ceiling the
+     structure stays readable through the tags themselves. */
   function pad(d) { return new Array(Math.min(d, LIMITS.indent) + 1).join("  "); }
 
   function buildXml(segments) {
@@ -1278,15 +1284,15 @@
         collect(sg.children, exp, bad);
         L.push(pad(1) + "<block" + blockAttrs(sg) + ">");
         var head = '<user-expectative expects="' + xesc(exp.join(",")) + '"';
-        /* `expects` é só o sumário achatado. Até a v1.9 ele era TUDO que o bloco
-           de retorno emitia, então literais e aninhamento eram descartados:
-           `r-[tgt\`user command blocks\`` perdia o texto inteiro. O corpo real
-           viaja junto agora. */
+        /* `expects` is only the flattened summary. Through v1.9 it was ALL the
+           return block emitted, so literals and nesting were discarded:
+           `r-[tgt\`user command blocks\`` lost the whole text. The real body
+           travels along with it now. */
         if (!sg.children.length) L.push(pad(2) + head + "/>");
         else {
           L.push(pad(2) + head + ">");
-          // emit() já rende tier desconhecido como <unresolved>, então `bad`
-          // serve só para decidir o sumário — não se emite duas vezes.
+          // emit() already renders an unknown tier as <unresolved>, so `bad`
+          // only serves to decide the summary — nothing gets emitted twice.
           sg.children.forEach(function (nd) { emit(nd, 3, L); });
           L.push(pad(2) + "</user-expectative>");
         }
@@ -1321,10 +1327,11 @@
     });
   }
 
-  /* Iterativo com pilha explícita. A versão recursiva estourava a pilha do JS
-     por volta de 2000 níveis, e em Glyph a profundidade cresce com o tamanho da
-     query (todo `[` sem `]` aninha). Um frame com `tail` são as linhas que
-     fecham o nó, empilhadas antes dos filhos para saírem depois deles. */
+  /* Iterative with an explicit stack. The recursive version overflowed the
+     JS call stack around 2000 levels, and in Glyph depth grows with the
+     query's size (every `[` without a `]` nests). A frame with `tail` holds
+     the lines that close the node, pushed before the children so they come
+     out after them. */
   function emit(root, startDepth, L) {
     var stack = [{ nd:root, d:startDepth }];
 
@@ -1340,7 +1347,7 @@
 
       if (nd.literal) {
         if (nd.form === "raw") { L.push(pad(d) + "<off>" + xesc(nd.v.trim()) + "</off>"); continue; }
-        // valor ligado a uma casa do template: o nome da casa viaja junto
+        // value bound to a template slot: the slot's name travels along with it
         var slotAt = nd.boundSlot ? ' slot="' + xesc(nd.boundSlot) + '"' : "";
         L.push(pad(d) + "<user-input" + slotAt + ">" + xesc(nd.v) + "</user-input>");
         continue;
@@ -1361,7 +1368,7 @@
         continue;
       }
 
-      // casa vazia do molde: a pergunta viaja no lugar da resposta
+      // empty template slot: the question travels in place of the answer
       if (nd.canonical === "PH") {
         var nameNode = (nd.children || []).filter(function (c) { return c.slotName; })[0];
         var qNode = (nd.children || []).filter(function (c) { return c.literal; })[0];
@@ -1387,7 +1394,7 @@
 
       var kids = valueChildren(nd);
 
-      /* slots ordenados: cada posição vazia viaja como <needs slot="n"> */
+      /* ordered slots: each empty position travels as <needs slot="n"> */
       var slots = nd.chainElement ? null : SLOTS[nd.canonical];
       var slotNeeds = [];
       if (slots) {
@@ -1432,16 +1439,16 @@
     L.push(pad(d) + "</logic>");
   }
 
-  /** humano → glifo → XML, em uma chamada. */
+  /** human → glyph → XML, in one call. */
   function toXML(src, opts) {
     return buildXml(parse(src, opts).segments);
   }
 
   /* ======================================================
-     6. AST JSON — serialização limpa, sem ciclos
+     6. AST JSON — clean serialization, no cycles
      ====================================================== */
 
-  /* O nó raso, sem `body` — o corpo é preenchido pelo laço iterativo abaixo. */
+  /* The shallow node, without `body` — the body gets filled by the iterative loop below. */
   function astShallow(nd) {
     if (nd.literal) return { type: nd.form === "raw" ? "Raw" : "Literal", value: nd.v, form: nd.form };
     if (nd.text) return { type:"Text", value:nd.v };
@@ -1477,15 +1484,16 @@
     };
   }
 
-  /* Nós que levam `body`. Logic guarda regras, não filhos. */
+  /* Nodes that carry `body`. Logic holds rules, not children. */
   function astHasBody(nd) { return !!(nd.mode || nd.template || (!nd.literal && !nd.text && !nd.logic)); }
 
-  /* Iterativo pelo mesmo motivo do emit: em bloco longo a árvore é funda.
+  /* Iterative for the same reason as emit: in a long block the tree is deep.
 
-     O teto de profundidade não é capricho: mesmo com a construção iterativa,
-     `JSON.stringify` do V8 recursa e estoura por volta de mil níveis. Como a
-     AST é painel de inspeção (o entregável é o XML, que não tem teto), truncar
-     com marcador explícito é preferível a derrubar a serialização inteira. */
+     The depth ceiling isn't a whim: even with iterative construction, V8's
+     `JSON.stringify` recurses internally and overflows around a thousand
+     levels. Since the AST is an inspection panel (the deliverable is the
+     XML, which has no ceiling), truncating with an explicit marker beats
+     bringing down the whole serialization. */
   function astNode(root, stats) {
     var holder = [];
     var stack = [{ nd:root, arr:holder, d:0 }];
@@ -1511,8 +1519,8 @@
     return holder[0];
   }
 
-  /* Serializa segmentos já parseados. Os nós crus carregam `parent` e `tok`,
-     que fecham ciclos — JSON.stringify direto neles estoura. */
+  /* Serializes already-parsed segments. The raw nodes carry `parent` and
+     `tok`, which close cycles — JSON.stringify straight on them overflows. */
   function serializeAST(segments, gaps) {
     var stats = { truncated: 0 };
     var out = {
@@ -1526,7 +1534,7 @@
           continues: !!s.continues,
           breaks: s.breaks,
           autoClosedCount: s.autoClosed,
-          // não usar map(astNode) direto: map passa o índice no 2º argumento
+          // not map(astNode) directly: map passes the index as the 2nd argument
           body: s.children.map(function (nd) { return astNode(nd, stats); })
         };
       }),
@@ -1562,12 +1570,12 @@
 /* ---------- CLI ---------- */
 if (typeof require === "function" && typeof module === "object" && require.main === module) {
   var G = module.exports;
-  // stores opcionais: ausentes, o motor roda igual, só sem expansão/contradição
+  // optional stores: if absent, the engine still runs, just without expansion/contradiction checks
   ["./glyph-templates.json", "./glyph-rules.json"].forEach(function (f) {
     try {
       var data = require(require("path").resolve(__dirname, f));
       if (f.indexOf("templates") !== -1) G.useTemplates(data); else G.useRules(data);
-    } catch (e) { /* store ausente é situação válida */ }
+    } catch (e) { /* missing store is a valid situation */ }
   });
   var argv = process.argv.slice(2);
   var mode = "xml";
