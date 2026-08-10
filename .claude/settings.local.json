@@ -3,7 +3,8 @@
     "allow": [
       "Bash(git add *)",
       "Bash(git commit -q -m 'Register ERROR as hieroglyph, fix PROB derivation to ERROR+CTX *)",
-      "Bash(git commit -q -m 'Fix glyph-grammar.ebnf: swap ; and ;; to match tested engine behavior *)"
+      "Bash(git commit -q -m 'Fix glyph-grammar.ebnf: swap ; and ;; to match tested engine behavior *)",
+      "Bash(git commit -q -m 'Add cache-busting query string to glyph-engine-alias.html script tags *)"
     ]
   }
 }

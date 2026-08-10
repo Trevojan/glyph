@@ -79,7 +79,11 @@
   </footer>
 </div>
 
-<script src="glyph-parser.js"></script>
-<script src="glyph-data.js"></script>
-<script src="glyph-moldes.js"></script>
-<script src="glyph-ui.js"></script>
+<script>
+  // file:// does not revalidate <script src> on edit — bump this after
+  // touching parser/data/moldes/ui and reload to bypass the stale cache.
+  var GLYPH_ASSET_VERSION = "1.9.2";
+  ["glyph-parser.js", "glyph-data.js", "glyph-moldes.js", "glyph-ui.js"].forEach(function (f) {
+    document.write('<script src="' + f + '?v=' + GLYPH_ASSET_VERSION + '"><\/script>');
+  });
+</script>
