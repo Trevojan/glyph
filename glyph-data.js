@@ -4,7 +4,7 @@
   "use strict";
   root.GlyphTemplates = {
   "schema": 1,
-  "note": "Template library, source of truth. Node, the CLI and the test suite read this file directly. The browser opens over file:// and cannot fetch .json, so run `node build-templates.js` to regenerate glyph-data.js after editing. The [ph-name] holes in a body are the parameters: a call binds them by name ([ph-name'value']) or by position (bare literals, in declaration order). An unbound hole becomes <needs> and does not block. The same [ph-name] may appear more than once in a body; every occurrence receives the same value.",
+  "note": "Template library, source of truth. Node, the CLI and the test suite read this file directly. The browser opens over file:// and cannot fetch .json, so run `node build-templates.js` to regenerate glyph-data.js after editing. The [ph-name] holes in a body are the parameters: a call binds them by name ([ph-name'value']) or by position (bare literals, in declaration order). An unbound hole becomes <needs> and does not block. The same [ph-name] may appear more than once in a body; every occurrence receives the same value. A param may instead be marked \"repeat\": true (at most one per template) for a variadic hole: it is excluded from positional order (a fixed param declared after it would collide with however many repeats were supplied) and binds only through the call repeating [ph-name'v1'][ph-name'v2']..., each occurrence becoming one more sibling node where the hole sat. Zero repeats drops the hole from the output instead of leaving a <needs> — it is optional plurality on top of whatever fixed params already satisfy the template's minimum, not a required slot. See best-of's `more` param.",
   "templates": {
     "germinate": {
       "gloss": "Walks every aspect of a situation as seeds and lays the path to the goal as a tree: roots=problem, trunk=effort, branches=resources, leaves=actions, fruit=goal.",
@@ -57,9 +57,10 @@
         { "name": "context", "ask": "the context all candidates share" },
         { "name": "a", "ask": "first candidate" },
         { "name": "b", "ask": "second candidate" },
+        { "name": "more", "ask": "an extra candidate beyond the first two — repeat the ph-more call once per extra candidate", "repeat": true },
         { "name": "criterion", "ask": "the condition that decides the winner" }
       ],
-      "body": "[ctx[ph-context`the context all candidates share`]][cmp[ph-a`first candidate`],[ph-b`second candidate`]][val`each candidate against the stated condition`,[ph-criterion`the condition that decides the winner`]][cncl`the winner`][rtnl`the points that justify the result`]"
+      "body": "[ctx[ph-context`the context all candidates share`]][cmp[ph-a`first candidate`],[ph-b`second candidate`],[ph-more`an extra candidate, repeated once per extra`]][val`each candidate against the stated condition`,[ph-criterion`the condition that decides the winner`]][cncl`the winner`][rtnl`the points that justify the result`]"
     },
 
     "track": {

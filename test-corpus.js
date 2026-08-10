@@ -184,7 +184,15 @@ const TEMPLATES = [
     src:"[--quebrado]", code:"UnterminatedLiteral",
     opts:{ templates:{ quebrado:{ body:"[sum'abc", params:[] } } } },
   { id:"T-10", name:"template desconhecido continua sendo só aviso",
-    src:"[--naoexiste]", opts:WITH_TPL, code:"UndefinedTemplate", noFix:true }
+    src:"[--naoexiste]", opts:WITH_TPL, code:"UndefinedTemplate", noFix:true },
+  { id:"T-11", name:"casa repetível: 2 candidatos por posição (default)",
+    src:"[--best-of'ctx','A','B','crit']", opts:WITH_TPL,
+    xml:["<user-input slot=\"a\">A</user-input>", "<user-input slot=\"b\">B</user-input>"],
+    xmlAbsent:["slot=\"more\""] },
+  { id:"T-12", name:"casa repetível: N candidatos via [ph-more] repetido",
+    src:"[--best-of'ctx','A','B'[ph-more'C'][ph-more'D'][ph-criterion'crit']]", opts:WITH_TPL,
+    xml:["<user-input slot=\"more\">C</user-input>", "<user-input slot=\"more2\">D</user-input>",
+         "<user-input slot=\"criterion\">crit</user-input>"] }
 ];
 
 /* Regras semânticas: pares, ordem e pré-condição. É o critério que faltava

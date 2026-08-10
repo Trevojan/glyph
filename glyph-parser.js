@@ -658,14 +658,21 @@
     return n ? String(n.raw) : null;
   }
 
-  function collectFills(inv) {
+  /* `repeatName` (lowercase) is the one param, if any, declared with
+     `"repeat": true` in the template store — see bindHoles below for why it
+     is collected separately from the positional/named split. */
+  function collectFills(inv, repeatName) {
     var named = {}, positional = [], extra = [];
+    var repeatKey = repeatName ? String(repeatName).toLowerCase() : null;
     (inv.children || []).forEach(function (c) {
       if (c.canonical === "PH") {
         var nm = phName(c);
         if (nm) {
           var lit = (c.children || []).filter(function (k) { return k.literal; })[0];
-          named[nm.toLowerCase()] = lit ? lit.v : "";
+          var val = lit ? lit.v : "";
+          var key = nm.toLowerCase();
+          if (repeatKey && key === repeatKey) (named[key] = named[key] || []).push(val);
+          else named[key] = val;
           return;
         }
       }
@@ -675,29 +682,52 @@
     return { named:named, positional:positional, extra:extra };
   }
 
-  function bindHoles(nodes, fills, params) {
-    /* as posicionais preenchem, na ordem de declaração, só as casas que não
-       foram preenchidas por nome */
-    var order = params.filter(function (p) { return !(String(p).toLowerCase() in fills.named); });
+  /* A repeatable hole (at most one per template, marked `repeat` on its
+     param) does not fit the position-by-declaration-order scheme: a fixed
+     param declared after it (e.g. best-of's `criterion`) would collide with
+     whatever positional index the repeats push it to. So the repeatable
+     hole binds only through repeated named calls — `[ph-more'x'][ph-more'y']`
+     — and is excluded from positional `order` entirely. Each call beyond the
+     first adds one more sibling node where the hole sat, instead of
+     overwriting a single value; zero calls drops the hole from the output
+     (it is optional plurality, not a required slot, so it does not become
+     <needs> — the template's other fixed params already cover the minimum). */
+  function bindHoles(nodes, fills, params, repeatName) {
+    var order = params.filter(function (p) {
+      return p !== repeatName && !(String(p).toLowerCase() in fills.named);
+    });
 
     function valueFor(name) {
       var k = String(name).toLowerCase();
-      if (k in fills.named) return fills.named[k];
+      if (k in fills.named) { var v = fills.named[k]; return Array.isArray(v) ? v[0] : v; }
       var at = order.indexOf(name);
       return (at !== -1 && at < fills.positional.length) ? fills.positional[at] : null;
     }
 
     function rebuild(list) {
-      return (list || []).map(function (nd) {
+      var out = [];
+      (list || []).forEach(function (nd) {
         if (nd.canonical === "PH") {
           var nm = phName(nd);
-          var v = nm ? valueFor(nm) : null;
-          if (v !== null && v !== undefined && String(v).length)
-            return { literal:true, v:String(v), form:"quote", boundSlot:nm };
+          if (nm && repeatName && nm.toLowerCase() === String(repeatName).toLowerCase()) {
+            var vals = fills.named[nm.toLowerCase()] || [];
+            vals.forEach(function (v, idx) {
+              if (v === null || v === undefined || !String(v).length) return;
+              out.push({ literal:true, v:String(v), form:"quote",
+                         boundSlot: nm + (idx ? String(idx + 1) : "") });
+            });
+            return;
+          }
+          var v2 = nm ? valueFor(nm) : null;
+          if (v2 !== null && v2 !== undefined && String(v2).length) {
+            out.push({ literal:true, v:String(v2), form:"quote", boundSlot:nm });
+            return;
+          }
         }
         if (nd.children && nd.children.length) nd.children = rebuild(nd.children);
-        return nd;
+        out.push(nd);
       });
+      return out;
     }
     return rebuild(nodes);
   }
@@ -750,9 +780,11 @@
       sub.segments.forEach(function (s) { body = body.concat(s.children); });
 
       var params = (def.params || []).map(function (p) { return p.name || p; });
-      var fills = collectFills(inv);
+      var repeatDef = (def.params || []).filter(function (p) { return p && p.repeat; })[0];
+      var repeatName = repeatDef ? (repeatDef.name || repeatDef) : null;
+      var fills = collectFills(inv, repeatName);
 
-      inv.children = bindHoles(body, fills, params).concat(fills.extra);
+      inv.children = bindHoles(body, fills, params, repeatName).concat(fills.extra);
       reparent(inv.children, inv);
       inv.expanded = true;
       inv.gloss = def.gloss || "";
