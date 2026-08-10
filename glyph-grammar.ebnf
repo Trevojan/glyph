@@ -5,9 +5,9 @@
 
 (* --- High-level Structure --- *)
 document         = { segment } ;
-segment          = [ emotion_header ] , element_sequence , [ segment_break | auto_close ] ;
-segment_break    = ";;" ;
-auto_close       = ";" ;
+segment          = [ emotion_header ] , element_sequence , [ segment_break | line_break ] ;
+segment_break    = ";" ;                 (* closes all open commands and ends the segment *)
+line_break       = ";;" ;                (* splits the reply in two; does NOT close open commands *)
 
 (* --- Emotion Headers (Resolução C-01) --- *)
 emotion_header   = "/" , emo_code , "/" , { emo_code , "/" } ;
