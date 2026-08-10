@@ -9,7 +9,9 @@
       "Bash(node -e ' *)",
       "Bash(node test-corpus.js)",
       "Bash(more)",
-      "Bash(git commit -q -m 'Add variadic \\(repeat\\) param to the template linker; best-of supports N candidates *)"
+      "Bash(git commit -q -m 'Add variadic \\(repeat\\) param to the template linker; best-of supports N candidates *)",
+      "Bash(git commit --amend -m ' *)",
+      "Bash(git commit -q -m ' *)"
     ]
   }
 }
