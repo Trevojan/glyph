@@ -4,7 +4,7 @@
   "use strict";
   root.GlyphTemplates = {
   "schema": 1,
-  "note": "Template library, source of truth. Node, the CLI and the test suite read this file directly. The browser opens over file:// and cannot fetch .json, so run `node build-templates.js` to regenerate glyph-data.js after editing. The [ph-name] holes in a body are the parameters: a call binds them by name ([ph-name'value']) or by position (bare literals, in declaration order). An unbound hole becomes <needs> and does not block. The same [ph-name] may appear more than once in a body; every occurrence receives the same value. A param may instead be marked \"repeat\": true (at most one per template) for a variadic hole: it is excluded from positional order (a fixed param declared after it would collide with however many repeats were supplied) and binds only through the call repeating [ph-name'v1'][ph-name'v2']..., each occurrence becoming one more sibling node where the hole sat. Zero repeats drops the hole from the output instead of leaving a <needs> — it is optional plurality on top of whatever fixed params already satisfy the template's minimum, not a required slot. See best-of's `more` param.",
+  "note": "Template library, source of truth. Node, the CLI and the test suite read this file directly. The browser opens over file:// and cannot fetch .json, so run `node build-templates.js` to regenerate glyph-data.js after editing. The [ph-name] holes in a body are the parameters: a call binds them by name ([ph-name'value']) or by position (bare literals, in declaration order). An unbound hole becomes <needs> and does not block. The same [ph-name] may appear more than once in a body; every occurrence receives the same value. A param may instead be marked \"repeat\": true (at most one per template) for a variadic hole: it is excluded from positional order (a fixed param declared after it would collide with however many repeats were supplied) and binds only through the call repeating [ph-name'v1'][ph-name'v2']..., each occurrence becoming one more sibling node where the hole sat. Zero repeats drops the hole from the output instead of leaving a <needs> — it is optional plurality on top of whatever fixed params already satisfy the template's minimum, not a required slot. See best-of's `more` param. A template may also carry `constraints`: each one names, in `forbid`, a class (\"@name\", resolved through glyph-rules.json's classes) or a bare command that must not appear inside that template's own expansion. It is checked only within that expansion, and an explicit [ovr]/[byp] around the offender exempts it — a preset de-limits the shape it promised, it does not wall the writer in. Keep constraint severity at `ask`: leaving a preset's shape is not broken syntax, so it must not be `fix`. See loop's `no-coarsen` / `no-exit`.",
   "templates": {
     "germinate": {
       "gloss": "Walks every aspect of a situation as seeds and lays the path to the goal as a tree: roots=problem, trunk=effort, branches=resources, leaves=actions, fruit=goal.",
@@ -63,6 +63,24 @@
       "body": "[ctx[ph-context`the context all candidates share`]][cmp[ph-a`first candidate`],[ph-b`second candidate`],[ph-more`an extra candidate, repeated once per extra`]][val`each candidate against the stated condition`,[ph-criterion`the condition that decides the winner`]][cncl`the winner`][rtnl`the points that justify the result`]"
     },
 
+    "loop": {
+      "gloss": "Iterate on one target until a stated stop condition holds, deepening the detail on every pass instead of restating it. Each pass is checked for realism against the stop condition before the next one opens.",
+      "params": [
+        { "name": "target", "ask": "what to iterate on" },
+        { "name": "pass", "ask": "what each pass must produce that the previous one did not" },
+        { "name": "until", "ask": "the stop condition — what makes another pass unnecessary" }
+      ],
+      "body": "[itr[ph-target`what to iterate on`]][ins[ph-pass`what each pass must add that the previous one did not — go one level finer, do not restate`]][cond[ph-until`the stop condition: what makes another pass unnecessary`]][real`each pass against the stop condition, before opening the next one`]",
+      "constraints": [
+        { "id": "no-coarsen", "forbid": "@coarsen", "severity": "ask", "label": "regride o detalhe",
+          "why": "o laço existe para aprofundar a cada passagem, e generalizar ou resumir desfaz o detalhe que a passagem anterior ganhou",
+          "suggest": "elabore dentro da passagem; resuma ou generalize depois que [cond] fechar o laço, não no meio dele" },
+        { "id": "no-exit", "forbid": "@exit", "severity": "ask", "label": "abandona o laço",
+          "why": "trocar o alvo, cair no plano B ou esquecer o que veio antes dissolve a iteração que o preset abriu, em vez de completá-la",
+          "suggest": "se a condição de parada é que está errada, corrija [cond]; trocar o alvo no meio começa um laço novo, não termina este" }
+      ]
+    },
+
     "track": {
       "gloss": "Explain where a detail came from across a long context: where it entered, what changed it, where it stands now. For the small things a human lets slip.",
       "params": [
@@ -80,8 +98,12 @@
   "classes": {
     "thinking": ["CLAR", "CRIT", "BRST", "GEN", "SUM", "ELAB"],
     "subject":  ["CTX", "TGT", "REF", "BASE", "INS", "SECTION", "BLOCK", "PT"],
-    "condition": ["COND", "IF", "UNLS", "ONLYW", "EXC"]
+    "condition": ["COND", "IF", "UNLS", "ONLYW", "EXC"],
+    "coarsen": ["GEN", "SUM", "CLAR"],
+    "exit": ["INSTOF", "FBK", "FRGT"]
   },
+
+  "classNote": "`coarsen` and `exit` exist for template constraints (see glyph-templates.json), not for the rules below. `coarsen` is the direction that undoes detail: generalise, summarise, and clarify (which absorbed simplify in v1.7). `exit` is the direction that leaves the structure standing but stops using it: substitute the target, fall back, forget. Neither is wrong on its own — they are only worth flagging inside a preset that promised the opposite direction.",
 
   "scope": {
     "sameTarget": "siblings under one parent, OR one is an ancestor of the other",

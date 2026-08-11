@@ -922,6 +922,98 @@
     });
   }
 
+  /* ======================================================
+     3d. TEMPLATE CONSTRAINTS — the shape a preset promises
+
+     The rules in 3c are all LOCAL: they compare two commands to each other
+     (siblings, or one an ancestor of the other) or check what preceded a
+     target in the same segment. None of them sees the SHAPE of a whole
+     preset once it is expanded. So a template that set up an iteration
+     could be handed commands that dissolve the very loop it opened, and the
+     engine stayed quiet — it only knew two commands coexisted, not that one
+     of them walked out of the structure the other one promised.
+
+     A constraint travels with the template that declares it and is checked
+     ONLY inside that template's own expansion — same provenance the
+     [ovr]/[byp] exemption already walks, via the `parent` chain that
+     reparent() builds at expansion time.
+
+     `forbid` names a class or command that must not appear inside. The
+     exemption is deliberate and is the whole point: under an explicit
+     [ovr]/[byp] the departure was requested out loud. The preset
+     de-limits, it does not wall in — leaving the rails stays possible, it
+     just stops happening by drift.
+
+     Severity is data, but `ask` is the right default and what the shipped
+     presets use: walking out of a preset's shape is not broken syntax, the
+     XML stays trustworthy, so it must not be `fix` (that would also make
+     any such template fail the Guard bucket).
+     ====================================================== */
+
+  /* A class ("@name") resolves through the rules store; a bare name is
+     itself. Returns [] for a class naming a store that is not loaded —
+     the constraint then simply does not fire, matching C-09's "no store
+     loaded, nothing gets checked". */
+  function constraintNames(rulesStore, spec) {
+    var out = [];
+    (Array.isArray(spec) ? spec : [spec]).forEach(function (n) {
+      if (String(n).charAt(0) === "@") {
+        var cls = ((rulesStore && rulesStore.classes) || {})[String(n).slice(1)];
+        if (cls) cls.forEach(function (x) { out.push(String(x).toUpperCase()); });
+      } else out.push(String(n).toUpperCase());
+    });
+    return out;
+  }
+
+  function checkTemplateConstraints(segments, opts, G) {
+    var registry = templateRegistry(opts);
+    if (!registry) return;
+    var rulesStore = (opts && opts.rules) || RULES;
+
+    var exempt = {};
+    (((rulesStore || {}).scope || {}).exemptUnder || ["OVR", "BYP"])
+      .forEach(function (x) { exempt[x] = 1; });
+
+    /* Same walk as checkRules' underExempt, but it stops at the template
+       node: an [ovr] wrapping the whole invocation from outside says
+       nothing about what happens inside this preset. */
+    function exemptWithin(nd, stopAt) {
+      var p = nd.parent, hops = 0;
+      while (p && p !== stopAt && hops++ < 64) { if (exempt[p.canonical]) return true; p = p.parent; }
+      return false;
+    }
+
+    segments.forEach(function (sg) {
+      walk(sg.children, function (inv) {
+        if (!inv.template || !inv.expanded) return;
+        var def = registry[String(inv.template).toLowerCase()] || registry[inv.template];
+        var cons = (def && def.constraints) || [];
+        if (!cons.length) return;
+
+        var inside = [];
+        walk(inv.children || [], function (nd) { if (nd.canonical) inside.push(nd); });
+
+        cons.forEach(function (c) {
+          if (!c.forbid) return;
+          var names = {};
+          constraintNames(rulesStore, c.forbid).forEach(function (n) { names[n] = 1; });
+
+          for (var i = 0; i < inside.length; i++) {
+            var nd = inside[i];
+            if (!names[nd.canonical] || exemptWithin(nd, inv)) continue;
+            G(c.severity || "ask", c.label || "fora do trilho",
+              "<code>[" + esc(String(nd.canonical).toLowerCase()) + "</code> dentro de <code>[--" +
+              esc(inv.template) + "</code>" + (c.why ? " — " + esc(c.why) : "") + "." +
+              (c.suggest ? " <em>Sugestão: " + esc(c.suggest) + ".</em>" : "") +
+              " Se a saída for proposital, marque com <code>[ovr</code>.",
+              "TemplateConstraint:" + c.id);
+            return;                 // one report per constraint, not per offender
+          }
+        });
+      });
+    });
+  }
+
   /**
    * parse(input, opts)
    *   input — Glyph source code (string) or an already-tokenized array.
@@ -1237,6 +1329,9 @@
 
     // ---- semantic rules (pairs, order, preconditions) ----
     checkRules(segments, opts, G);
+
+    // ---- template constraints (the shape each preset promises) ----
+    checkTemplateConstraints(segments, opts, G);
 
     // ---- templates ----
     var defd = {}, invoked = [];

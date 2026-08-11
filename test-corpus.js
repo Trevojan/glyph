@@ -28,6 +28,9 @@ const TPL = require("./glyph-templates.json");
 const RULESTORE = require("./glyph-rules.json");
 const WITH_TPL = { templates: TPL.templates };
 const WITH_RULES = { rules: RULESTORE };
+/* Template constraints naming a class ("@coarsen") resolve it through the
+   rules store, so those cases need both loaded. */
+const WITH_BOTH = { templates: TPL.templates, rules: RULESTORE };
 
 /* ------------------------------------------------------------------ *
  * cases
@@ -197,6 +200,36 @@ const TEMPLATES = [
          "<user-input slot=\"criterion\">crit</user-input>"] }
 ];
 
+/* Template constraints: the rules above are local (command vs command).
+   These check the SHAPE a preset promised, only inside its own expansion —
+   the gap that let a loop be handed commands dissolving the loop itself. */
+const CONSTRAINTS = [
+  { id:"K-01", name:"preset intacto não acusa nada",
+    src:"[--loop'a arquitetura','um nível mais fino','quando couber numa página']",
+    opts:WITH_BOTH, codeAbsent:"TemplateConstraint:", noFix:true },
+  { id:"K-02", name:"improvisar DENTRO da passagem é permitido",
+    src:"[--loop'x','y','z'[brst'ideias para a próxima passagem']]",
+    opts:WITH_BOTH, codeAbsent:"TemplateConstraint:" },
+  { id:"K-03", name:"regredir o nível de detalhe é sinalizado",
+    src:"[--loop'x','y','z'[gen'o padrão geral']]",
+    opts:WITH_BOTH, code:"TemplateConstraint:no-coarsen", noFix:true },
+  { id:"K-04", name:"abandonar o laço é sinalizado",
+    src:"[--loop'x','y','z'[instof'outro alvo']]",
+    opts:WITH_BOTH, code:"TemplateConstraint:no-exit", noFix:true },
+  { id:"K-05", name:"[ovr] isenta: a saída foi pedida em voz alta",
+    src:"[--loop'x','y','z'[ovr[gen'o padrão']]]",
+    opts:WITH_BOTH, codeAbsent:"TemplateConstraint:" },
+  { id:"K-06", name:"o mesmo comando fora do preset não acusa",
+    src:"[gen'x']", opts:WITH_BOTH, codeAbsent:"TemplateConstraint:" },
+  { id:"K-07", name:"preset sem constraints declaradas segue livre",
+    src:"[--germinate'a','b'[gen'x']]", opts:WITH_BOTH, codeAbsent:"TemplateConstraint:" },
+  { id:"K-08", name:"sem store de regras, a classe não resolve e nada é checado",
+    src:"[--loop'x','y','z'[gen'x']]", opts:WITH_TPL, codeAbsent:"TemplateConstraint:" },
+  { id:"K-09", name:"a mensagem carrega o reparo, não só a queixa",
+    src:"[--loop'x','y','z'[gen'x']]", opts:WITH_BOTH,
+    messageHas:"depois que [cond] fechar o laço" }
+];
+
 /* Semantic rules: pairs, order and precondition. The criterion that was
    missing for "commands don't contradict each other". */
 const RULE_CASES = [
@@ -353,6 +386,7 @@ const rR = runGroup("v1.8 regressions closed in v1.9", REGRESSION, { noFix:false
 const rL = runGroup("Long blocks — the engine must not break", LONG, { noFix:false });
 const rT = runGroup("Templates — invocation expands the definition", TEMPLATES, { noFix:false });
 const rC = runGroup("Semantic rules — pair, order, precondition", RULE_CASES, { noFix:false });
+const rK = runGroup("Template constraints — the shape a preset promises", CONSTRAINTS, { noFix:false });
 const rG = runGroup("Guard — rules must not break normal usage", POSITIVE_WITH_RULES, { noFix:true });
 
 console.log("\n=================================================");
@@ -363,6 +397,7 @@ console.log(" Regressions  " + rR + "/" + REGRESSION.length);
 console.log(" Long blocks  " + rL + "/" + LONG.length);
 console.log(" Templates    " + rT + "/" + TEMPLATES.length);
 console.log(" Rules        " + rC + "/" + RULE_CASES.length);
+console.log(" Constraints  " + rK + "/" + CONSTRAINTS.length);
 console.log(" Guard        " + rG + "/" + POSITIVE_WITH_RULES.length);
 console.log("=================================================");
 

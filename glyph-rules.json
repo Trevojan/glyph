@@ -5,8 +5,12 @@
   "classes": {
     "thinking": ["CLAR", "CRIT", "BRST", "GEN", "SUM", "ELAB"],
     "subject":  ["CTX", "TGT", "REF", "BASE", "INS", "SECTION", "BLOCK", "PT"],
-    "condition": ["COND", "IF", "UNLS", "ONLYW", "EXC"]
+    "condition": ["COND", "IF", "UNLS", "ONLYW", "EXC"],
+    "coarsen": ["GEN", "SUM", "CLAR"],
+    "exit": ["INSTOF", "FBK", "FRGT"]
   },
+
+  "classNote": "`coarsen` and `exit` exist for template constraints (see glyph-templates.json), not for the rules below. `coarsen` is the direction that undoes detail: generalise, summarise, and clarify (which absorbed simplify in v1.7). `exit` is the direction that leaves the structure standing but stops using it: substitute the target, fall back, forget. Neither is wrong on its own — they are only worth flagging inside a preset that promised the opposite direction.",
 
   "scope": {
     "sameTarget": "siblings under one parent, OR one is an ancestor of the other",
