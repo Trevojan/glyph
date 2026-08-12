@@ -1,12 +1,12 @@
 /**
- * Glyph Core v1.9 (glyph-parser.js)
+ * Glyph Core v1.0.9 (glyph-parser.js)
  *
  * Single core of the chain  human → glyph → xml → machine.
  *
  * Through v1.8 there were two divergent parsers: this module (which only
  * emitted AST and dropped free text, chains, [logic] and ;;) and the parser
  * embedded in glyph-engine-alias.html (complete, but browser-locked, the
- * only one able to emit XML). v1.9 unifies them: this file is the reference
+ * only one able to emit XML). v1.0.9 unifies them: this file is the reference
  * implementation, and the HTML becomes a consumer of it.
  *
  * UMD: works in Node (require) and in the browser (window.GlyphCore).
@@ -20,7 +20,7 @@
 })(typeof self !== "undefined" ? self : this, function () {
   "use strict";
 
-  var VERSION = "1.9.3";
+  var VERSION = "1.0.9.3";
 
   /* ======================================================
      1. VOCABULARY — Appendix A, one slot per command
@@ -177,7 +177,7 @@
   ];
 
   /* valency: what each command needs to receive to be determinate.
-     SECTION and BLOCK enter here in v1.9 to match ASSINATURAS.md, which
+     SECTION and BLOCK enter here in v1.0.9 to match ASSINATURAS.md, which
      already assigned them minimum arity 1. */
   var FRAMES = {
     INS:["o que fazer"], TRYFR:["o resultado desejado"], PROP:["o que propor"],
@@ -221,7 +221,7 @@
     VAL:["o que validar", "o critério externo"]
   };
 
-  /* Long-block limits (v1.9.1).
+  /* Long-block limits (v1.0.9.1).
 
      In Glyph every `[` without a `]` nests INSIDE the previous one, so a long
      query doesn't grow wide: it grows deep. That had three consequences, all
@@ -645,7 +645,7 @@
   /* ======================================================
      3b. TEMPLATE EXPANSION
 
-     Through v1.9.1 an invocation `[--name[…]]` emitted only what was written
+     Through v1.0.9.1 an invocation `[--name[…]]` emitted only what was written
      in the call itself: the definition's body never entered, not even in the
      same message. The human reader or the model was what connected the two
      ends. Now the engine connects them.
@@ -1379,7 +1379,7 @@
         collect(sg.children, exp, bad);
         L.push(pad(1) + "<block" + blockAttrs(sg) + ">");
         var head = '<user-expectative expects="' + xesc(exp.join(",")) + '"';
-        /* `expects` is only the flattened summary. Through v1.9 it was ALL the
+        /* `expects` is only the flattened summary. Through v1.0.9 it was ALL the
            return block emitted, so literals and nesting were discarded:
            `r-[tgt\`user command blocks\`` lost the whole text. The real body
            travels along with it now. */

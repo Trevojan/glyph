@@ -1,9 +1,9 @@
 ---
 name: glyph-markup
-description: Glyph Shorthand Markup Language v1.9.3 Specification & Parser Integration. Use when writing or reading Glyph compact structured notation.
+description: Glyph Shorthand Markup Language v1.0.9.3 Specification & Parser Integration. Use when writing or reading Glyph compact structured notation.
 ---
 
-# Glyph Shorthand Markup Language (v1.9.3 Specification)
+# Glyph Shorthand Markup Language (v1.0.9.3 Specification)
 
 Glyph é uma notação de comandos abreviados, entre delimitadores, que descreve um fluxo lógico escalável até os mínimos detalhes. A implementação de referência é `glyph-parser.js`: um núcleo único (Node via `require`, navegador via `window.GlyphCore`) que faz lexer, parser, checagem de aridade, regras semânticas e emissão de **XML** — o XML é o entregável, não a AST (que é só painel de inspeção).
 

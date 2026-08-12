@@ -11,7 +11,7 @@
 
      Vocabulário, lexer, bloco [logic], parser e emissor XML moravam aqui
      dentro até a v1.8, em cópia divergente da do módulo standalone: só esta
-     sabia emitir XML, só a outra rodava fora do navegador. Desde a v1.9 há
+     sabia emitir XML, só a outra rodava fora do navegador. Desde a v1.0.9 há
      uma implementação só, e este arquivo é consumidor dela.
      ====================================================== */
 
@@ -458,7 +458,7 @@
     $("xmlOut").innerHTML = colorize(lastXml);
     $("litOut").innerHTML = src.trim() ? renderLit(src, tokens, OPTS) : "";
 
-    // v1.9: os nós crus têm `parent`/`tok` e fechavam ciclo — JSON.stringify
+    // v1.0.9: os nós crus têm `parent`/`tok` e fechavam ciclo — JSON.stringify
     // estourava aqui e matava o resto de run(). O módulo serializa direito.
     $("astOut").textContent = JSON.stringify(Core.serializeAST(res.segments, res.gaps), null, 2);
 
@@ -550,7 +550,7 @@
   bindMolde();
   drawCatRow();
   drawCmds();
-  rebuild();   // v1.9: era sync(false), função que nunca existiu — o bootstrap
+  rebuild();   // v1.0.9: era sync(false), função que nunca existiu — o bootstrap
                // morria aqui e o painel de XML nascia vazio.
 
   window.__glyph = {

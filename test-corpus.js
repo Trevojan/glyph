@@ -1,5 +1,5 @@
 /**
- * Glyph Corpus Test Suite v1.9 (test-corpus.js)
+ * Glyph Corpus Test Suite v1.0.9 (test-corpus.js)
  *
  * The v1.8 suite counted segments and gave PASS to anything: in the negative
  * cases it incremented the counter in all three branches (including the
@@ -158,7 +158,7 @@ const LONG = [
     src:"[ins`x`] uma frase inteira de prosa aqui", codeAbsent:"LooseCommandWord" }
 ];
 
-/* Templates: through v1.9.1 the invocation didn't bring in the definition's
+/* Templates: through v1.0.9.1 the invocation didn't bring in the definition's
    body, not even in the same message. The reader was what connected the ends. */
 const TEMPLATES = [
   { id:"T-01", name:"invocation expands the definition's body",
@@ -382,7 +382,7 @@ console.log("=================================================");
 const rP = runGroup("Positive — parse clean", POSITIVE, { noFix:true });
 const rI = runGroup("Incomplete — become <needs>, do not block", INCOMPLETE, { noFix:true });
 const rN = runGroup("Invalid — require a `fix` diagnostic", INVALID, { requireFix:true });
-const rR = runGroup("v1.8 regressions closed in v1.9", REGRESSION, { noFix:false });
+const rR = runGroup("v1.8 regressions closed in v1.0.9", REGRESSION, { noFix:false });
 const rL = runGroup("Long blocks — the engine must not break", LONG, { noFix:false });
 const rT = runGroup("Templates — invocation expands the definition", TEMPLATES, { noFix:false });
 const rC = runGroup("Semantic rules — pair, order, precondition", RULE_CASES, { noFix:false });
