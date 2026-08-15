@@ -1,98 +1,99 @@
 ---
 name: glyph-markup-commons
-description: Common vocabulary and canonical aliases reference for Glyph Markup v1.2.0.0.
+description: Common vocabulary and canonical aliases reference for Glyph Markup v1.3.0.0.
 ---
 
-# Glyph — vocabulário comum e aliases (v1.2.0.0)
+# Glyph — common vocabulary and aliases (v1.3.0.0)
 
-Tabela de bolso. A referência normativa completa é `GLOSSARY.md`; as aridades
-estão em `SIGNATURES.md`.
+The pocket table. The full normative reference is `GLOSSARY.md`; arities are in
+`SIGNATURES.md`.
 
-## O mínimo para começar
+## The minimum to get going
 
 ```
-[crit'o parser']                    critique isto
-[crit'o parser'][ctx'api/pedidos.py']   …neste contexto
-[rw-cr'o módulo']                   retrabalhe E critique (cadeia)
-/frs/[crit'esse parser me venceu']  com humor declarado
+[crit'the parser']                        criticise this
+[crit'the parser'][ctx'api/orders.py']    …in this context
+[rw-cr'the module']                       rework AND criticise (chain)
+/frs/[crit'this parser beat me']          with the mood stated
 ```
 
-**Casa vazia não bloqueia.** `[sum]` sem alvo não é erro: vira
-`<needs>o que resumir</needs>` no XML e a mensagem segue utilizável. Só sintaxe
-ou vocabulário quebrado é `fix`.
+**An empty slot does not block.** `[sum]` with no target is not an error: it
+becomes `<needs>what to summarise</needs>` in the XML and the message stays
+usable. Only broken syntax or vocabulary is `fix`.
 
-## Pontuação
+## Punctuation
 
-| símbolo | o quê |
+| symbol | what it does |
 |---|---|
-| `'texto'` | literal — sem precisar de shift |
-| `;` | fecha o bloco (fecha mesmo com casa vazia) |
-| `;;` | quebra a resposta em duas — **não** fecha nada |
-| `,` | lista itens / continua cadeia |
-| `-` | encadeia: `[rw-cr]` |
-| `r-` | o que eu devo devolver |
-| `[--nome` | chama template · `[--nome=` define |
-| `[=` | este bloco continua do anterior |
-| `[logic-nome]` | abre bloco de conta |
-| `[off]` … `[on]` | desliga e religa a leitura de Glyph |
+| `'text'` | literal — no shift key needed |
+| `;` | closes the block (closes even with an empty slot) |
+| `;;` | splits the reply in two — closes **nothing** |
+| `,` | lists items / continues a chain |
+| `-` | chains: `[rw-cr]` |
+| `r-` | what I should hand back |
+| `[--name` | invokes a template · `[--name=` defines one |
+| `[=` | this block continues from the previous |
+| `[logic-name]` | opens a calculation block |
+| `[off]` … `[on]` | turns Glyph reading off and back on |
 
-## Duas espécies
+## Two species
 
-- **hieróglifo** (88) — átomo, não decompõe. `[ctx]`, `[error]`, `[core]`, `[tgt]`
-- **glifo composto** (32) — tem fórmula que o reduz a hieróglifos. `[crit]`,
+- **hieroglyph** (88) — atom, does not decompose. `[ctx]`, `[error]`, `[core]`,
+  `[tgt]`
+- **composite glyph** (32) — has a formula reducing it to hieroglyphs. `[crit]`,
   `[scru]`, `[prob]`, `[hyp]`
 
-Para ver do que um comando é feito:
+To see what a command is made of:
 `node scripts/glyph-parser.js CRIT --expand`
 
-## Comandos canônicos principais
+## Main canonical commands
 
-- `[CRIT]` criticar — comparar com o objetivo declarado
-- `[EVAL]` avaliar — comparar com padrão realista de qualidade
-- `[REV]` revisar — varredura de leitura, sem comparação formal
-- `[VAL]` validar contra critério externo *(2 slots obrigatórios)*
-- `[VRFY]` verificar — comparar com a verdade/fato
-- `[SCRU]` escrutinar *(composto: contexto + verificar + criticar + perguntar)*
-- `[COND]` condição — gate genérico · `[ONLYIF]` condição necessária
-- `[ELAB]` detalhar (o ato) · `[SPEC]` a especificação (o artefato)
-- `[CLAR]` remover ambiguidade · `[SIMP]` cortar complexidade
-- `[EX]` o exemplo em si · `[FOREX]` o conectivo que introduz um
-- `[ASK]` perguntar a alguém · `[QST]` marcar o bloco como interrogativo
-- `[DFN]` definir símbolo *(2 slots)* · `[DEF]` valor padrão
-- `[CORE]` fundamento estrutural *(era `[BASE]` até a v1.0.9.3)*
-- `[ERROR]` erro *(hieróglifo)* · `[PROB]` erro situado num contexto *(composto)*
-- `[SUM]` resumir · `[TRYFR]` tentar atingir o alvo com verificação
+- `[CRIT]` criticise — compare against the declared objective
+- `[EVAL]` evaluate — compare against a realistic quality standard
+- `[REV]` review — reading sweep, no formal comparison
+- `[VAL]` validate against an external criterion *(2 required slots)*
+- `[VRFY]` verify — compare against truth or fact
+- `[SCRU]` scrutinise *(composite: context + verify + criticise + ask)*
+- `[COND]` condition — generic gate · `[ONLYIF]` necessary condition
+- `[ELAB]` elaborate (the act) · `[SPEC]` the specification (the artefact)
+- `[CLAR]` remove ambiguity · `[SIMP]` cut complexity
+- `[EX]` the example itself · `[FOREX]` the connective that introduces one
+- `[ASK]` ask someone · `[QST]` mark the block as interrogative
+- `[DFN]` define a symbol *(2 slots)* · `[DEF]` default value
+- `[CORE]` structural foundation *(was `[BASE]` until v1.0.9.3)*
+- `[ERROR]` error *(hieroglyph)* · `[PROB]` an error situated in a context *(composite)*
+- `[SUM]` summarise · `[TRYFR]` try to reach the target with verification
 
-## Pares que se confundem
+## Pairs that get confused
 
-| par | o que separa |
+| pair | what separates them |
 |---|---|
-| `[EVAL]` / `[CRIT]` | contra padrão realista / contra o objetivo declarado |
-| `[REV]` / `[CRIT]` | varredura de leitura / comparação formal |
-| `[SPEC]` / `[ELAB]` | o artefato detalhado / o ato de detalhar |
-| `[SIMP]` / `[CLAR]` | cortar complexidade / remover ambiguidade |
-| `[QST]` / `[ASK]` | tipagem do bloco / ato dirigido a alguém |
-| `[FOREX]` / `[EX]` | o conectivo que introduz / o dado em si |
-| `[ONLYIF]` / `[COND]` | condição necessária / gate genérico |
-| `[DONT]` / `[DENY]` | nega **a ação** / rejeita **a via até um resultado** |
-| `[LIM]` / `[RESTR]` | constata um limite / impõe um limite |
-| `[NGT]` / `[DONT]` | inverte valor de verdade / proíbe fazer |
+| `[EVAL]` / `[CRIT]` | against a realistic standard / against the declared objective |
+| `[REV]` / `[CRIT]` | reading sweep / formal comparison |
+| `[SPEC]` / `[ELAB]` | the detailed artefact / the act of detailing |
+| `[SIMP]` / `[CLAR]` | cutting complexity / removing ambiguity |
+| `[QST]` / `[ASK]` | typing of the block / act aimed at someone |
+| `[FOREX]` / `[EX]` | the connective that introduces / the datum itself |
+| `[ONLYIF]` / `[COND]` | necessary condition / generic gate |
+| `[DONT]` / `[DENY]` | negates **the action** / rejects **the route to a result** |
+| `[LIM]` / `[RESTR]` | observes a limit / imposes one |
+| `[NGT]` / `[DONT]` | inverts a truth value / forbids doing |
 
-*(Os sete primeiros foram fundidos na v1.7 e separados de novo na v1.1.0.0 —
+*(The first seven were fused in v1.7 and separated again in v1.1.0.0 —
 `GLOSSARY.md` §6.5.)*
 
-## Vocabulário da v1.1.0.0
+## Vocabulary added in v1.1.0.0
 
-- **Contexto** — `[FIND]` buscar · `[GET]` ler e reter · `[ADD]` acrescentar ·
-  `[SUB]` subtrair · `[WHR]` onde
-- **Intensidade** — `[HGH]` alta · `[LOW]` baixa · `[BOLD]` ênfase forte ·
-  `[LIGHT]` ênfase suave
-- **Outros** — `[SWITCH]` alternar entre estados · `[GO]` executar
+- **Context** — `[FIND]` find · `[GET]` read and hold · `[ADD]` add ·
+  `[SUB]` subtract · `[WHR]` where
+- **Intensity** — `[HGH]` high · `[LOW]` low · `[BOLD]` strong emphasis ·
+  `[LIGHT]` soft emphasis
+- **Others** — `[SWITCH]` alternate between states · `[GO]` execute
 
-Os quatro de intensidade e o `[WHR]` são primitivos: valem sozinhos, nunca
-pedem operando.
+The four intensity ones and `[WHR]` are primitives: they stand alone and never
+ask for an operand.
 
-## Aliases curtos
+## Short aliases
 
 `[IN]`→`[INS]` · `[AS]`→`[ASSM]` · `[CX]`→`[CTX]` · `[PR]`→`[PRIO]` ·
 `[TG]`→`[TGT]` · `[RY]`→`[RDY]` · `[VL]`→`[VAL]` · `[RQ]`→`[REQ]` ·
@@ -100,14 +101,18 @@ pedem operando.
 `[IM]`→`[IMPR]` · `[FN]`→`[FIN]` · `[CL]`→`[CLAR]` · `[RT]`→`[RTNL]` ·
 `[CN]`→`[CNST]` · `[WN]`→`[WARN]` · `[SM]`→`[SUM]`
 
-## Templates prontos
+## Ready-made templates
 
 `germinate`, `scientific-review`, `reinforce`, `insight`, `fertilize`,
-`best-of`, `loop`, `track`. Invocar com `[--nome'valor1','valor2',…]`
-(posicional) ou `[ph-nome'valor']` (por nome) expande o corpo inteiro na
-mensagem. `best-of` aceita mais candidatos repetindo `[ph-more'C'][ph-more'D']`.
+`best-of`, `loop`, `track`. Invoking with `[--name'value1','value2',…]`
+(positional) or `[ph-name'value']` (by name) expands the whole body into the
+message. `best-of` takes further candidates by repeating
+`[ph-more'C'][ph-more'D']`.
 
-## Emoções (`/xxx/`)
+## Moods (`/xxx/`)
 
-`/eth/` entusiasmo · `/cnf/` confusão · `/clm/` calma · `/hop/` esperança ·
-`/grt/` gratidão · `/cur/` curiosidade · `/frs/` frustração · `/skp/` ceticismo
+`/eth/` enthusiasm · `/cnf/` confusion · `/clm/` calm · `/hop/` hope ·
+`/grt/` gratitude · `/cur/` curiosity · `/frs/` frustration · `/skp/` scepticism
+
+*(These reach the XML as `<mood dominant="enthusiasm">`, hence English. The
+interface that lists them is pt-BR.)*

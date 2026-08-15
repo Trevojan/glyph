@@ -1,41 +1,47 @@
 # Glyph
 
-Notação de comandos abreviados que descreve um fluxo lógico até os mínimos
-detalhes. Você escreve `[crit'o parser'][ctx'api/pedidos.py']`, o motor devolve
-XML estruturado para colar num chat.
+A shorthand command notation that describes a logical flow down to the smallest
+detail. You write `[crit'the parser'][ctx'api/orders.py']`, the engine returns
+structured XML to paste into a chat.
 
-O princípio do desenho: **casa vazia não bloqueia.** Falta de informação vira
-`<needs>` no XML em vez de erro — mande incompleto, volte preenchido.
+The design principle: **an empty slot does not block.** Missing information
+becomes `<needs>` in the XML instead of an error — send it incomplete, get it
+back filled in.
+
+> **Language.** Everything that reaches the deliverable is English — the
+> vocabulary, the definitions, the slot questions, the XML. The interface is
+> pt-BR and stays that way.
 
 ---
 
-## Rodar
+## Run it
 
-### O app — sem instalar nada
+### The app — nothing to install
 
-**Dê duplo clique em `glyph-engine-alias.html`.** É só isso. Ele foi feito para
-abrir por `file://`, sem servidor e sem build: os dados já vêm embutidos em
-`scripts/glyph-data.js` justamente porque `file://` bloqueia `fetch` de `.json`.
+**Double-click `glyph-engine-alias.html`.** That is all. It is built to open
+over `file://`, with no server and no build step: the data is already embedded
+in `scripts/glyph-data.js` precisely because `file://` blocks `fetch` of
+`.json`.
 
-Precisa apenas de um navegador.
+All it needs is a browser.
 
-> Se a página abrir em branco, veja **Depois de editar** abaixo — quase sempre
-> é cache. Se ainda assim falhar, use o servidor de desenvolvimento.
+> If the page comes up blank, see **After editing** below — it is almost always
+> the cache. If that does not fix it, use the dev server.
 
-### A linha de comando — precisa de Node
+### The command line — needs Node
 
 ```bash
-node scripts/glyph-parser.js "[crit[ctx'o parser']]" --xml
+node scripts/glyph-parser.js "[crit[ctx'the parser']]" --xml
 ```
 
-Modos: `--xml` (padrão, o entregável) · `--ast` (painel de inspeção JSON) ·
-`--diag` (só os diagnósticos) · `--hgml` (a queima atômica) · `--expand` (do que
-um comando é feito).
+Modes: `--xml` (default, the deliverable) · `--ast` (JSON inspection panel) ·
+`--diag` (diagnostics only) · `--hgml` (the atomic burn) · `--expand` (what a
+command is made of).
 
-### `.hgml` — a queima atômica
+### `.hgml` — the atomic burn
 
-Reduz tudo a hieróglifos puros: cada composto trocado pela sua fórmula, até não
-sobrar nada que decomponha.
+Reduces everything to pure hieroglyphs: each composite replaced by its formula
+until nothing decomposable is left.
 
 ```bash
 node scripts/glyph-parser.js "[prob'timeout']" --hgml
@@ -47,88 +53,107 @@ node scripts/glyph-parser.js "[prob'timeout']" --hgml
 [/error]
 ```
 
-É **expansão, não compressão** — um composto vale ~15 hieróglifos e `[hyp]`
-chega a 97. A saída continua sendo Glyph válido, então pode ser reprocessada.
+It is an **expansion, not a compression** — a composite is worth ~15
+hieroglyphs and `[hyp]` reaches 97. The output is still valid Glyph, so it can
+be fed back in.
 
 ```bash
 node scripts/glyph-parser.js CRIT --expand
 ```
 ```
-CRIT  [composite]  nível 2
-  fórmula: [CMP[CTX],[SPEC-CORE],[EVAL[ERROR]]]
-  15 hieróglifos: CMP CTX SPEC CORE REAL CORE CTX DIST SKL REF DEF SPEC CORE CTX ERROR
+CRIT  [composite]  level 2
+  formula: [CMP[CTX],[SPEC-CORE],[EVAL[ERROR]]]
+  15 hieroglyphs: CMP CTX SPEC CORE REAL CORE CTX DIST SKL REF DEF SPEC CORE CTX ERROR
 ```
 
-### O servidor de desenvolvimento
+### Self-describing XML
 
-Útil quando o cache do `file://` atrapalha, ou para abrir de outro aparelho na
-mesma rede:
+`describe` makes the message carry its own semantics, so whoever reads it does
+not need the Glyph vocabulary loaded:
+
+```xml
+<review means="A reading sweep looking for error or inconsistency, with no formal comparison.">
+  <user-input>the diff</user-input>
+</review>
+```
+
+Off by default — it changes the deliverable and costs about 59% more XML.
+
+### The dev server
+
+Useful when the `file://` cache gets in the way, or to open the app from another
+device on the same network:
 
 ```bash
 node scripts/serve-dev.js
 ```
 
-Abre em `http://localhost:8731`. Nada no app depende dele.
+Serves at `http://localhost:8731`. Nothing in the app depends on it.
 
 ---
 
-## Depois de editar
+## After editing
 
-**Mexeu num `.js`?** O `file://` não revalida `<script src>` ao editar. Suba o
-`GLYPH_ASSET_VERSION` no topo de `glyph-engine-alias.html` e recarregue — é o
-que existe para furar o cache.
+**Touched a `.js`?** `file://` does not revalidate `<script src>` on edit. Bump
+`GLYPH_ASSET_VERSION` at the top of `glyph-engine-alias.html` and reload — that
+is what it exists for.
 
-**Mexeu em `glyph-rules.json`, `glyph-templates.json` ou `expansions.txt`?**
-Rode o build. Os `.json` e o `.txt` são a fonte; `scripts/glyph-data.js` é a
-cópia que o navegador consegue carregar.
+**Touched `glyph-rules.json`, `glyph-templates.json`, `expansions.txt` or
+`GLOSSARY.md`?** Run the build. Those are the sources;
+`scripts/glyph-data.js` and `glyph-expansions.json` are the copies the engine
+loads.
 
 ```bash
 node scripts/build-templates.js
 ```
 
+The build **refuses to generate** if the composition table has a cycle or an
+undefined dependency, or if any command lacks a glossary entry. A silently
+opaque command is how drift gets in.
+
 ---
 
-## Verificar
+## Verify
 
 ```bash
-node scripts/test-corpus.js     # suíte — 137 casos
-node scripts/dag.js             # tabela de composição — 0 ciclos, 0 indefinidos
+node scripts/test-corpus.js     # suite — 154 cases
+node scripts/dag.js             # composition table — 0 cycles, 0 undefined
 ```
 
-Os dois saem com código diferente de zero quando falham, então servem em CI.
+Both exit non-zero on failure, so they work in CI.
 
 ---
 
-## Onde está o quê
+## Where things live
 
-`/scripts` guarda **JavaScript**; dados, o app e os documentos ficam na raiz. O
-critério é o tipo do arquivo, não quem o escreveu — por isso o gerado
-`glyph-data.js` (JS) fica em `/scripts` e o gerado `glyph-expansions.json`
-(dados) fica na raiz, junto dos outros stores.
+`/scripts` holds **JavaScript**; data, the app and the documents stay at the
+root. The criterion is the file's kind, not who wrote it — which is why the
+generated `glyph-data.js` (JS) sits in `/scripts` and the generated
+`glyph-expansions.json` (data) sits at the root beside the other stores.
 
-| arquivo | papel |
+| file | role |
 |---|---|
-| `glyph-engine-alias.html` + `glyph-engine.css` | o app — só interface |
-| `scripts/glyph-parser.js` | o núcleo: lexer, árvore, regras, emissores |
-| `scripts/glyph-ui.js` · `glyph-moldes.js` | interface e formulários |
-| `glyph-rules.json` · `glyph-templates.json` | stores de dados, editáveis à mão |
-| `expansions.txt` | tabela de composição: átomos e fórmulas |
-| `scripts/glyph-data.js` · `glyph-expansions.json` | **gerados** — não edite |
+| `glyph-engine-alias.html` + `glyph-engine.css` | the app — interface only |
+| `scripts/glyph-parser.js` | the core: lexer, tree, rules, emitters |
+| `scripts/glyph-ui.js` · `glyph-moldes.js` | interface and forms (pt-BR) |
+| `glyph-rules.json` · `glyph-templates.json` | data stores, hand-editable |
+| `expansions.txt` | composition table: atoms and formulas |
+| `scripts/glyph-data.js` · `glyph-expansions.json` | **generated** — do not edit |
 
-## Documentação
+## Documentation
 
-| documento | responde |
+| document | answers |
 |---|---|
-| [`GLOSSARY.md`](GLOSSARY.md) | **o que** cada comando é — a referência normativa |
-| [`SIGNATURES.md`](SIGNATURES.md) | **quantos** operandos cada um pede |
-| [`glyph-grammar.ebnf`](glyph-grammar.ebnf) | a sintaxe, formalmente |
-| [`CHANGELOG.md`](CHANGELOG.md) | o que mudou e por quê |
-| [`HGML_PLAN.md`](HGML_PLAN.md) | para onde isto vai — o formato `.hgml` |
+| [`GLOSSARY.md`](GLOSSARY.md) | **what** each command is — the normative reference |
+| [`SIGNATURES.md`](SIGNATURES.md) | **how many** operands each one asks for |
+| [`glyph-grammar.ebnf`](glyph-grammar.ebnf) | the syntax, formally |
+| [`CHANGELOG.md`](CHANGELOG.md) | what changed and why |
+| [`HGML_PLAN.md`](HGML_PLAN.md) | where this is going — the `.hgml` format |
 
-O motor deriva do `GLOSSARY.md`, não o contrário, e a suíte tem uma checagem
-(`X-01`) que falha se os dois divergirem.
+The engine derives from `GLOSSARY.md`, not the other way round, and the suite
+has checks (`X-01`, `X-14`) that fail if the two ever drift apart.
 
-## Versionamento — `a.b.c.d`
+## Versioning — `a.b.c.d`
 
-`a` frontend · `b` backend (o parser) · `c` business rules · `d` dados e
-constantes. Um dígito que anda zera todos à direita.
+`a` frontend · `b` backend (the parser) · `c` business rules · `d` data and
+constants. A digit that moves resets every digit to its right.
