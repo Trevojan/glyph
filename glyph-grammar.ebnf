@@ -1,5 +1,5 @@
 (* ====================================================================
-   Glyph Markup Language v1.7 — Formal EBNF Specification
+   Glyph Markup Language v1.1.0.1 — Formal EBNF Specification
    ISO/IEC 14977 Compliant
    ==================================================================== *)
 
@@ -48,9 +48,12 @@ template_name    = letter , { letter | digit | "_" | "-" | "." } ;
 comparison_cmd   = "[" , comp_op_name , slot_list , "]" ;
 comp_op_name     = "gt" | "gte" | "lt" | "lte" | "eq" | "neq" ;
 
-(* --- Polarity & Modality Modifiers (Resolução C-11) --- *)
+(* --- Polarity & Modality Modifiers (Resolução C-11) ---
+   `ngt`, nao `neg`: o vocabulario nunca teve NEG. A gramatica e o
+   ASSINATURAS.md carregaram `[neg]` da v1.7 ate a v1.1.0.1, descrevendo um
+   comando que o motor rejeitaria como fora do vocabulario. *)
 modifier_cmd     = polarity_cmd | modality_cmd ;
-polarity_cmd     = "[pos" , [ cmd_body ] , "]" | "[neg" , [ cmd_body ] , "]" ;
+polarity_cmd     = "[pos" , [ cmd_body ] , "]" | "[ngt" , [ cmd_body ] , "]" ;
 modality_cmd     = "[mand" , [ cmd_body ] , "]" | "[opt" , [ cmd_body ] , "]" ;
 
 (* --- Definition & Default Commands (Resolução C-02) --- *)

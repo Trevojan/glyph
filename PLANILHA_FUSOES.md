@@ -1,4 +1,43 @@
-# Planilha de fusões — as 12 casas com mais de um comando
+# Planilha de fusões — documento histórico (v1.7)
+
+> ## ⚠ As fusões desta planilha foram DESFEITAS na v1.1.0.0
+>
+> Os sete alias decididos aqui saíram do motor. `[eval]`, `[rev]`, `[spec]`,
+> `[simp]`, `[qst]`, `[forex]` e `[onlyif]` voltaram a ser comandos próprios.
+> Ver `GLOSSARIO.md` §6.5.
+>
+> O documento fica **como registro do método e do erro**, não como norma. O que
+> vale hoje sobre cada par:
+>
+> | par | eixo que os separa |
+> |---|---|
+> | `[eval]` / `[crit]` | contra padrão realista de qualidade / contra o objetivo declarado |
+> | `[rev]` / `[crit]` | varredura de leitura, sem comparação formal / comparação formal |
+> | `[spec]` / `[elab]` | o artefato detalhado (substantivo) / o ato de detalhar (verbo) |
+> | `[simp]` / `[clar]` | cortar complexidade / remover ambiguidade |
+> | `[qst]` / `[ask]` | tipagem do bloco como interrogativo / ato dirigido a alguém |
+> | `[forex]` / `[ex]` | o conectivo que introduz / o dado em si |
+> | `[onlyif]` / `[cond]` | condição necessária / gate genérico |
+>
+> ### O que o método errou
+>
+> O teste **P2** ("você sabe qual usar no momento de digitar, sem parar?") tratou
+> **hesitação** como prova de **identidade**. Não é a mesma coisa: hesitar diz que
+> a distinção é difícil de lembrar, não que ela não existe. Todos os sete pares
+> tinham um eixo real — os sete eixos estão na tabela acima, e nenhum deles é
+> novidade inventada depois, todos eram deriváveis das glosas que já existiam.
+>
+> O sintoma de que P2 estava medindo a coisa errada aparece no próprio documento:
+> a regra dizia "passou nas três → manter as duas, **e escrever o critério de
+> diferença na documentação (se não conseguir escrever, é porque falhou em P2)**".
+> O critério era escrevível em todos os sete casos. Ninguém tentou escrever antes
+> de fundir.
+>
+> **Lição para a próxima planilha:** troque P2 por "consigo escrever o critério de
+> diferença em uma linha?". Se consegue, os dois vivem e a linha vira documentação.
+> Se não consegue, aí sim funda.
+
+---
 
 Objetivo: para cada casa, decidir **um sobrevivente canônico** e transformar os outros em alias.
 Nada é removido. Alias continua sendo aceito ao digitar; o motor emite o canônico.
@@ -97,8 +136,16 @@ comando continua parseando. Verificado: a suíte de 11 seções passa sem altera
 
 ## Depois de preencher
 
+*(Procedimento da v1.7, mantido como registro. `test-lexer.js` não existe mais —
+a suíte é `scripts/test-corpus.js`, e a tabela de camadas já está completa em
+`expansoes.txt`, verificável com `node scripts/dag.js`.)*
+
 1. Some as fusões. Cada uma é uma linha em `ALIAS`.
-2. Rode `node test-lexer.js`. Deve continuar passando — se quebrar, o alias colidiu com algo.
+2. Rode a suíte. Deve continuar passando — se quebrar, o alias colidiu com algo.
 3. Para cada par **mantido**, escreva uma linha de critério na documentação. Se travar ao
    escrever, o par falhou em P2 e você acabou de descobrir tarde. Volte e funda.
 4. Os sobreviventes canônicos entram em `expansoes.txt` para o `dag.js` calcular as camadas.
+
+> O passo 3 era a salvaguarda, e foi ele que a v1.7 pulou. Escrever o critério
+> **antes** de fundir teria mostrado que os sete pares tinham critério — ver o
+> aviso no topo.

@@ -1,108 +1,38 @@
-# Glifos e Hieróglifos — referência completa (v1.0.9.3)
+# Glifos e Hieróglifos — movido
 
-Compilado direto de `expansoes.txt` (base + compostos) e `glyph-parser.js` (vocabulário completo: `CATS`/`INSTR`/`ALIAS`/`STRUCT`/`META`/`EMO`). Nada inventado — é o que já existe no motor hoje.
+**A referência do vocabulário é [`GLOSSARIO.md`](GLOSSARIO.md).**
 
----
+Este arquivo era uma compilação do vocabulário na v1.0.9.3, escrita antes do
+glossário normativo existir. Foi esvaziado na v1.1.0.1 em vez de atualizado,
+de propósito.
 
-## 1. Hieróglifos-base (`expansoes.txt`)
+## Por que não manter as duas
 
-Os tags que a triagem trata como átomos — não se decompõem em nada mais simples. 28 no total.
+Duas referências completas do mesmo vocabulário divergem — é questão de tempo,
+não de disciplina. E divergência entre duas descrições do vocabulário é
+exatamente o defeito que custou esta versão inteira para consertar: o glossário
+declarava doze comandos que o motor nunca conhecera, metade das fórmulas de
+composição não resolvia, e nada acusou porque nada comparava as duas listas.
 
-**Núcleo + operadores puros:**
-`TRUE`, `FLS`, `ERROR`, `POS`, `NGT`, `MAND`, `OPT`, `DONT`, `ALW`, `NEV`, `PRIO`, `OVR`, `PT`, `VAR`, `PARAM`, `PH`, `TPL`, `DEF`, `DFN`
+O conserto foi reduzir a **uma** fonte por tipo de informação, e amarrar cada
+uma a uma verificação automática:
 
-**Primitivos de enquadre, restrição e pergunta:**
-`CMP`, `CNST`, `CTX`, `ASK`, `TGT`, `EX`, `ELAB`, `CLAR`, `COND`
-
----
-
-## 2. Compostos já expandidos (v1.7)
-
-Os únicos 6 comandos que hoje têm fórmula oficial em hieróglifos-base:
-
-| Composto | Fórmula | Glosa |
+| o quê | onde | verificado por |
 |---|---|---|
-| `VRFY` | `CMP + TRUE` | verificar = comparar com verdadeiro |
-| `VAL` | `CMP + CNST` | validar = comparar com restrição |
-| `CRIT` | `CMP + CTX` | criticar = comparar com contexto |
-| `SCRU` | `CTX + VRFY + CRIT + ASK` | escrutinar = contexto + verificar + criticar + perguntar |
-| `TRYFR` | `TGT + VRFY` | tentar chegar em = alvo + verificar |
-| `PROB` | `ERROR + CTX` | problema = erro + contexto |
+| o que cada comando **é** | `GLOSSARIO.md` | `X-01` na suíte — motor e tabela têm de bater |
+| do que cada comando **é feito** | `expansoes.txt` | `node scripts/dag.js` — 0 ciclos, 0 indefinidos |
+| **quantos** operandos pede | `ASSINATURAS.md` | derivado de `SLOTS`/`FRAMES` no parser |
+| o que o motor **faz** | `scripts/glyph-parser.js` | `node scripts/test-corpus.js` |
 
-Os outros ~90 comandos do vocabulário completo (seção 3) **ainda não têm** fórmula — é o trabalho em aberto que o HGML_PLAN.md aponta como decisão D6/passo 22.
+Recriar aqui um quarto recorte dos mesmos dados reabriria o buraco, sem nenhuma
+checagem cobrindo-o.
 
----
+## Se quiser o recorte temático de volta
 
-## 3. Vocabulário completo (`INSTR`, por categoria)
-
-Todo comando reconhecido pelo motor, agrupado como em `CATS`. Os marcados com ⚛ já são hieróglifo-base (repetidos da seção 1, aqui só pra mostrar a categoria deles); os marcados com 🧩 já têm composto (seção 2); o resto é vocabulário solto, candidato a expansão futura.
-
-### Ação — operar sobre algo que já existe
-`RWK` retrabalhar · `FMT` formatar · `IMPR` melhorar · `SIMP` simplificar · `ELAB` ⚛ detalhar · `ITR` iterar · `GEN` generalizar · `SPEC` especificar · `SUM` resumir · `CAT` categorizar
-
-### Juízo — medir algo que já existe
-`REV` revisar · `CRIT` 🧩 criticar · `SCRU` 🧩 escrutinar · `PROB` 🧩 problema · `EVAL` avaliar · `VRFY` 🧩 verificar · `VAL` 🧩 validar · `SKEP` ser cético · `CMP` ⚛ comparar · `DIST` distinguir · `TRUE` ⚛ verdadeiro · `FLS` ⚛ falso · `POS` ⚛ positivo · `NGT` ⚛ negativo · `ERROR` ⚛ erro · `REAL` realista
-
-### Pergunta — obter o que falta
-`QST` pergunta · `ASK` ⚛ pergunte · `CLAR` ⚛ esclarecer · `CONF` confirmar
-
-### Enquadre — situar a coisa no mundo
-`CTX` ⚛ contexto · `REF` referência · `SEEAL` veja também · `BASE` base, ponto de partida · `DRVF` derivar de · `EX` ⚛ exemplo · `FOREX` por exemplo · `NT` nota · `PT` ⚛ parte n
-
-### Condição — quando vale, quando não, o que entra no lugar
-`COND` ⚛ condição · `IF` se · `UNLS` a menos que · `ONLYIF` só se · `ONLYW` só quando · `EXC` exceção · `FBK` plano B · `INSTOF` em vez de
-
-### Limite — o que é proibido, exigido ou opcional
-`CNST` ⚛ restrição · `RESTR` limite · `LIM` limitação · `REQ` exigência · `MAND` ⚛ obrigatório · `OPT` ⚛ opcional · `AVD` evitar · `DONT` ⚛ não faça · `DENY` negar · `NEV` ⚛ nunca · `ALW` ⚛ sempre · `DEPR` obsoleto
-
-### Raciocínio — construir e explorar ideia
-`RSN` motivo · `RTNL` racional · `JUST` justificar · `HYP` hipótese · `IMAG` imagine · `BRST` brainstorm · `CNSD` considere · `ALT` alternativa · `PROP` propor · `ASSM` suposição · `CTRD` contradizer · `CNCL` concluir · `TRYFR` 🧩 tenta chegar em · `INTN` intenção
-
-### Rumo — alvo, ordem e prontidão
-`TGT` ⚛ alvo · `PRIO` ⚛ prioridade · `FIN` por fim · `RDY` prontidão · `INS` instrução
-
-### Molde — peças de estrutura e template
-`TPL` ⚛ template · `PH` ⚛ casa a preencher · `VAR` ⚛ variável · `PARAM` ⚛ parâmetro · `DEF` ⚛ define · `SECTION` seção · `BLOCK` bloco · `LOGIC` bloco de conta · `SKL` skill
-
-### Marca — aviso e memória
-`WARN` aviso · `RMBR` lembre · `FRGT` esqueça · `LRN` aprender · `BYP` contornar · `OVR` ⚛ sobrepor
-
-### Fora das categorias acima (comparadores lógicos, só em `INSTR`)
-`GT` maior que · `GTE` maior ou igual · `LT` menor que · `LTE` menor ou igual · `EQ` igual · `NEQ` diferente · `DFN` ⚛ define símbolo
-
----
-
-## 4. Aliases (forma curta → canônica)
-
-`IN`→INS · `AS`→ASSM · `CX`→CTX · `PR`→PRIO · `TG`→TGT · `RY`→RDY · `VL`→VAL · `RQ`→REQ · `CR`→CRIT · `RW`→RWK · `RV`→REV · `FM`→FMT · `IM`→IMPR · `FN`→FIN · `CL`→CLAR · `RT`→RTNL · `CN`→CNST · `WN`→WARN · `SM`→SUM
-
-Fusões da v1.7 (forma aceita → canônica, tratadas como o mesmo comando):
-`FOREX`→EX · `QST`→ASK · `EVAL`→CRIT · `REV`→CRIT · `ONLYIF`→COND · `SPEC`→ELAB · `SIMP`→CLAR
-
----
-
-## 5. Estruturais, modo e meta (fora do `INSTR`)
-
-**STRUCT** (abrem bloco, não são instrução solta): `SECTION`, `BLOCK`, `IF`, `UNLS`, `SKL`, `DEF`, `PH`, `TPL`, `LOGIC`
-
-**META**: `QUICK`, `TOBLOCK`, `TOSECTION`, `HMN`, `EXT`, `ATC`
-
-**MODE**: `OFF`, `ON`
-
----
-
-## 6. Glifos de emoção (`\tag\`, sistema paralelo por backslash)
-
-74 tags no total, PT-BR já embutido no motor.
-
-**Positivas:** `hpy` felicidade · `joy` alegria · `exc` empolgação · `cnt` contentamento · `clm` calma · `ser` serenidade · `pea` paz · `grt` gratidão · `hop` esperança · `prd` orgulho · `lov` amor · `afc` afeto · `adm` admiração · `amu` divertimento · `del` deleite · `rlf` alívio · `cfd` confiança · `eth` entusiasmo · `cur` curiosidade · `awe` assombro · `ply` brincadeira · `chr` animação
-
-**Negativas / difíceis:** `sad` tristeza · `ang` raiva · `fry` fúria · `fear` medo · `dis` desdém · `dsg` nojo · `anx` ansiedade · `frs` frustração · `irr` irritação · `ann` incômodo · `env` inveja · `jel` ciúme · `glt` culpa · `shm` vergonha · `reg` arrependimento · `dsp` desespero · `grf` luto · `lon` solidão · `bor` tédio · `res` ressentimento · `btr` amargura · `ctm` desprezo · `hum` humilhação · `emb` vergonha social · `pan` pânico · `drd` pavor · `ter` terror · `exh` exaustão · `str` estresse · `ovw` sobrecarga · `ins` insegurança · `apt` apatia · `num` anestesia · `mel` melancolia
-
-**Ambíguas / mistas:** `cnf` confusão · `dbt` dúvida · `sus` suspeita · `skp` ceticismo · `nos` nostalgia · `lng` saudade · `vul` vulnerabilidade · `emp` empatia · `cmp` compaixão · `sym` simpatia · `trs` confiança · `bet` traição · `ind` indiferença · `ant` expectativa · `imp` impaciência · `sur` surpresa
-
----
-
-## O que falta pra virar .hgml "100% hieróglifo"
-
-Cada comando marcado sem ⚛ nem 🧩 na seção 3 (a maioria — ~90 dos ~100) ainda não tem uma fórmula de composição em hieróglifos-base. É esse preenchimento que o plano de `.hgml` (D6) deixa como trabalho seu — decidir, comando por comando, do que ele "é feito" na base dos 28 átomos da seção 1, seguindo o padrão que os 6 compostos da seção 2 já estabeleceram (ex: `VRFY = CMP + TRUE`).
+O `GLOSSARIO.md` organiza por **espécie** (hieróglifo, glifo, engine, modo),
+porque é a espécie que decide o que o `.hgml` pode tratar como átomo. O recorte
+antigo, por **categoria** (Ação, Juízo, Enquadre…), continua existindo vivo em
+`CATS`, dentro de `scripts/glyph-parser.js` — é o que a interface usa para montar
+o navegador de comandos. Se ele fizer falta como documento, o caminho certo é
+**gerá-lo** a partir de `CATS`, como `build-templates.js` já faz com os outros
+dados gerados, e não mantê-lo à mão.
