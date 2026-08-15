@@ -42,7 +42,7 @@
 })(typeof self !== "undefined" ? self : this, function () {
   "use strict";
 
-  var VERSION = "1.2.0.0";
+  var VERSION = "1.2.0.1";
 
   /* ======================================================
      1. VOCABULARY — Appendix A, one slot per command
@@ -1519,7 +1519,7 @@
      structure stays readable through the tags themselves. */
   function pad(d) { return new Array(Math.min(d, LIMITS.indent) + 1).join("  "); }
 
-  function buildXml(segments) {
+  function buildXml(segments, opts) {
     if (!segments.length) return "<!-- escolha um molde ou escreva do lado esquerdo -->";
     var L = ["<glyph>"];
     segments.forEach(function (sg) {
@@ -1537,7 +1537,7 @@
           L.push(pad(2) + head + ">");
           // emit() already renders an unknown tier as <unresolved>, so `bad`
           // only serves to decide the summary — nothing gets emitted twice.
-          sg.children.forEach(function (nd) { emit(nd, 3, L); });
+          sg.children.forEach(function (nd) { emit(nd, 3, L, opts); });
           L.push(pad(2) + "</user-expectative>");
         }
         L.push(pad(1) + "</block>");
@@ -1551,7 +1551,7 @@
           a.push('also="' + xesc(sg.mood.slice(1).map(function (m) { return m.gloss; }).join(",")) + '"');
         L.push(pad(2) + "<mood " + a.join(" ") + "/>");
       }
-      sg.children.forEach(function (nd) { emit(nd, 2, L); });
+      sg.children.forEach(function (nd) { emit(nd, 2, L, opts); });
       L.push(pad(1) + "</block>");
       if (sg.breaks) L.push(pad(1) + "<break/>");
     });
@@ -1576,7 +1576,7 @@
      query's size (every `[` without a `]` nests). A frame with `tail` holds
      the lines that close the node, pushed before the children so they come
      out after them. */
-  function emit(root, startDepth, L) {
+  function emit(root, startDepth, L, opts) {
     var stack = [{ nd:root, d:startDepth }];
 
     function pushKids(kids, d) {
@@ -1632,6 +1632,27 @@
         var attrs = [];
         if (nd.editorial) attrs.push('force="editorial"');
         if (nd.colon) attrs.push('name="' + xesc(nd.colon) + '"');
+        /* `describe` makes the message carry its own semantics, so whoever
+           reads it does not need the Glyph vocabulary loaded to know what
+           `<scrutinize>` means. Nothing here is invented: `means` is the gloss
+           and `made-of` is the composition table, both already in the engine.
+
+           Off by default — it changes the deliverable, and the plain form is
+           the one every doc and every test describes. */
+        if (opts && opts.describe) {
+          if (nd.gloss) attrs.push('means="' + xesc(nd.gloss) + '"');
+          var sp = speciesOf(nd.canonical, opts);
+          if (sp === "composite") {
+            /* Unique and sorted, not the raw sequence: as a signature of what
+               the command IS, `ctx` appearing four times says nothing more
+               than it appearing once — and the raw burn of SCRU is 64 items. */
+            var seen = {}, uniq = [];
+            (atomsOf(nd.canonical, opts) || []).forEach(function (a) {
+              if (!seen[a]) { seen[a] = 1; uniq.push(a.toLowerCase()); }
+            });
+            attrs.push('made-of="' + xesc(uniq.sort().join(" ")) + '"');
+          }
+        }
         open = "<" + el + (attrs.length ? " " + attrs.join(" ") : "");
         closeName = el;
       }
@@ -1685,7 +1706,7 @@
 
   /** human → glyph → XML, in one call. */
   function toXML(src, opts) {
-    return buildXml(parse(src, opts).segments);
+    return buildXml(parse(src, opts).segments, opts);
   }
 
   /* ======================================================
@@ -1736,6 +1757,30 @@
   /* Nodes that carry `body`. Logic holds rules, not children. */
   function astHasBody(nd) { return !!(nd.mode || nd.template || (!nd.literal && !nd.text && !nd.logic)); }
 
+  /* Every node used to carry all sixteen fields whether or not they said
+     anything: 43% of them were `false`, `null` or `[]`. A 321-character input
+     produced 23 KB of AST, and a panel that long is a panel nobody reads.
+
+     Dropped: anything empty, plus `raw` when it only repeats `canonical` in
+     lower case. NOT dropped, even though derivable: `element` (the contract
+     with the XML emitter), `depth` and `type`. Those are cheap and something
+     downstream may switch on them — thinning a payload is not worth breaking
+     a consumer over.
+
+     `{verbose:true}` restores the old shape. */
+  function astLean(o) {
+    var out = {}, k, v;
+    for (k in o) {
+      if (!Object.prototype.hasOwnProperty.call(o, k)) continue;
+      v = o[k];
+      if (v === null || v === false || v === "" || (Array.isArray(v) && !v.length)) continue;
+      if (k === "raw" && o.canonical && String(v).toUpperCase() === o.canonical) continue;
+      if (k === "compositionDepth" && o.species === "atom") continue;   // átomo é sempre 0
+      out[k] = v;
+    }
+    return out;
+  }
+
   /* Iterative for the same reason as emit: in a long block the tree is deep.
 
      The depth ceiling isn't a whim: even with iterative construction, V8's
@@ -1743,7 +1788,7 @@
      levels. Since the AST is an inspection panel (the deliverable is the
      XML, which has no ceiling), truncating with an explicit marker beats
      bringing down the whole serialization. */
-  function astNode(root, stats) {
+  function astNode(root, stats, opts) {
     var holder = [];
     var stack = [{ nd:root, arr:holder, d:0 }];
     while (stack.length) {
@@ -1758,6 +1803,7 @@
       }
 
       var obj = astShallow(f.nd);
+      if (!(opts && opts.verbose)) obj = astLean(obj);
       f.arr.push(obj);
       if (astHasBody(f.nd)) {
         obj.body = [];
@@ -1770,22 +1816,24 @@
 
   /* Serializes already-parsed segments. The raw nodes carry `parent` and
      `tok`, which close cycles — JSON.stringify straight on them overflows. */
-  function serializeAST(segments, gaps) {
+  function serializeAST(segments, gaps, opts) {
     var stats = { truncated: 0 };
     var out = {
       type: "GlyphAST",
       version: VERSION,
       segments: segments.map(function (s) {
-        return {
+        var seg = {
           type: "Segment",
           mood: s.mood,
           isReturn: !!s.isReturn,
           continues: !!s.continues,
           breaks: s.breaks,
-          autoClosedCount: s.autoClosed,
-          // not map(astNode) directly: map passes the index as the 2nd argument
-          body: s.children.map(function (nd) { return astNode(nd, stats); })
+          autoClosedCount: s.autoClosed
         };
+        if (!(opts && opts.verbose)) seg = astLean(seg);
+        // not map(astNode) directly: map passes the index as the 2nd argument
+        seg.body = s.children.map(function (nd) { return astNode(nd, stats, opts); });
+        return seg;
       }),
       diagnostics: (gaps || []).map(function (g) {
         return { code:g.code, severity:g.sev, label:g.lab, message:g.plain };
@@ -1797,7 +1845,7 @@
 
   function toAST(src, opts) {
     var r = parse(src, opts);
-    return serializeAST(r.segments, r.gaps);
+    return serializeAST(r.segments, r.gaps, opts);
   }
 
   /* ======================================================

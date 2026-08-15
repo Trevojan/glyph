@@ -497,7 +497,37 @@ function runExpansionChecks() {
 
   const bare = G.toAST("[crit'x']", {});
   ok("X-07", "with no store loaded, species is null and nothing breaks",
-     (bare.segments[0].body[0].species === null) ? null : "species não veio null sem store");
+     (bare.segments[0].body[0].species == null) ? null : "species não veio null sem store");
+
+  /* v1.2.0.1 — the AST used to carry all sixteen fields on every node whether
+     or not they said anything, and 43% of them were false/null/[]. */
+  const lean = G.toAST("[crit'x']", opts);
+  const verbose = G.toAST("[crit'x']", { ...opts, verbose: true });
+  const leanNode = lean.segments[0].body[0];
+  ok("X-08", "a AST não carrega mais campos vazios",
+     (!("isAlias" in leanNode) && !("autoClosed" in leanNode) && !("suggestion" in leanNode))
+       ? null : "sobraram vazios: " + JSON.stringify(Object.keys(leanNode)));
+  ok("X-09", "o que diz algo continua lá",
+     (leanNode.canonical === "CRIT" && leanNode.gloss && leanNode.species === "composite")
+       ? null : "perdeu campo com conteúdo: " + JSON.stringify(leanNode));
+  ok("X-10", "`verbose` restaura a forma antiga inteira",
+     ("isAlias" in verbose.segments[0].body[0] &&
+      JSON.stringify(verbose).length > JSON.stringify(lean).length)
+       ? null : "verbose não trouxe os campos de volta");
+
+  /* v1.2.0.1 — `describe` carries the semantics into the message, so whoever
+     reads the XML does not need the vocabulary loaded. Off by default: it
+     changes the deliverable. */
+  const plain = G.toXML("[scru'x']", opts);
+  const rich = G.toXML("[scru'x']", { ...opts, describe: true });
+  ok("X-11", "`describe` está desligado por padrão",
+     (!/means=/.test(plain) && !/made-of=/.test(plain)) ? null : "vazou describe no XML normal");
+  ok("X-12", "com `describe`, um composto carrega do que é feito",
+     (/means="Scrutinize"/.test(rich) && /made-of="[a-z ]+"/.test(rich))
+       ? null : "faltou means/made-of em <scrutinize>");
+  ok("X-13", "um hieróglifo não ganha `made-of` — não decompõe",
+     !/made-of=/.test(G.toXML("[ctx'x']", { ...opts, describe: true }))
+       ? null : "átomo veio com made-of");
 
   return X.length;
 }
@@ -603,7 +633,7 @@ console.log(" Templates    " + rT + "/" + TEMPLATES.length);
 console.log(" Rules        " + rC + "/" + RULE_CASES.length);
 console.log(" Constraints  " + rK + "/" + CONSTRAINTS.length);
 console.log(" Guard        " + rG + "/" + POSITIVE_WITH_RULES.length);
-console.log(" Composition  " + rX + "/8");
+console.log(" Composition  " + rX + "/14");
 console.log(" .hgml burn   " + rH + "/9");
 console.log("=================================================");
 

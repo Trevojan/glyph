@@ -14,6 +14,52 @@ Todas as mudanças notáveis do Glyph são documentadas aqui, da mais recente pa
 
 ---
 
+## [1.2.0.1] — A AST emagrece; o XML pode se explicar
+
+Duas mudanças na forma da saída, nenhuma no que o motor entende.
+
+### Alterado
+
+- **A AST não carrega mais campos vazios.** Todo nó levava os dezesseis campos
+  dissesse ele algo ou não, e **43% deles eram `false`, `null` ou `[]`**. Uma
+  entrada de 321 caracteres produzia 23 KB de AST — e painel desse tamanho é
+  painel que ninguém lê. Agora sai 45% menor.
+
+  Descartado: o que está vazio, mais `raw` quando ele só repete `canonical` em
+  minúscula, e `compositionDepth` num átomo (é sempre 0). **Não** descartado,
+  ainda que derivável: `element` (é o contrato com o emissor de XML), `depth` e
+  `type` — são baratos e algo lá fora pode ligar neles. Emagrecer payload não
+  vale quebrar consumidor.
+
+  `toAST(src, {verbose:true})` devolve a forma antiga inteira.
+
+### Adicionado
+
+- **`toXML(src, {describe:true})` — o XML carrega a própria semântica.** Cada
+  comando ganha `means` (a glosa) e, se for composto, `made-of` com os
+  hieróglifos de que é feito. Quem lê a mensagem deixa de precisar do
+  vocabulário Glyph carregado para saber o que `<scrutinize>` quer dizer.
+
+  Nada aqui é inventado: sai da tabela de composição e das glosas que já
+  existiam. `made-of` vai **único e ordenado**, não na sequência crua — como
+  assinatura do que o comando *é*, `ctx` quatro vezes não diz mais que uma, e a
+  queima crua de `SCRU` tem 64 itens.
+
+  **Desligado por padrão**, porque muda o entregável e a forma simples é a que
+  toda a documentação e todos os testes descrevem. Custo quando ligado: ~59% a
+  mais de XML.
+
+### Limitação conhecida
+
+`means` vem de `INSTR`, que guarda o **rótulo** em inglês, não a definição:
+`means="Review"` não acrescenta nada a `<review>`. O valor real está em
+`made-of` — e ele só existe para compostos. Ou seja, **os 88 hieróglifos, que
+são justamente o que não se pode decompor, continuam sem definição legível na
+mensagem.** As definições existem, mas em prosa no `GLOSSARIO.md`, fora do
+alcance do motor. Levá-las para dentro é trabalho de dado, não de código.
+
+---
+
 ## [1.2.0.0] — `.hgml`: a queima atômica existe e funciona
 
 O emissor que faltava. `toHGML()` reduz a árvore a **hieróglifos puros**: todo
