@@ -40,7 +40,7 @@ caso você prefira mantê-las como compostos.
 ## O que eu não tinha visto na 1ª passada
 
 **A lacuna real não são as fórmulas — são os átomos não declarados.**
-`expansoes.txt` declara 28; o glossário v1.0.9.4 declara 76. São ~48 linhas
+`expansions.txt` declara 28; o glossário v1.0.9.4 declara 76. São ~48 linhas
 `= BASE` faltando: trabalho mecânico, zero decisão de conteúdo, e é o que está
 travando o `dag.js` de calcular qualquer coisa. Eu tinha tratado as 15 fórmulas
 como o gargalo. Não são — a parte mecânica é 3× maior e vem antes.
@@ -51,7 +51,7 @@ declarada. Escrevi as minhas assumindo vírgula = conjunção; **você confirmou
 regra**, que virou normativa na §0.1 do glossário. A notação `A + B` fica
 aposentada — as quatro fórmulas antigas que a usavam têm reescrita proposta.
 
-**`BASE` estava sobrecarregado** — era palavra-chave do `expansoes.txt` *e*
+**`BASE` estava sobrecarregado** — era palavra-chave do `expansions.txt` *e*
 comando do vocabulário. **Resolvido**: o comando virou `CORE`, a palavra-chave
 segue `BASE`. Impacto medido na §6.4 do glossário — 4 pontos de código, zero
 casos de teste.

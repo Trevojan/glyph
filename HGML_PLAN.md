@@ -75,7 +75,7 @@ que qualquer suíte escrita à mão.
 
 Só que tem uma leitura mais literal do seu pedido — "montado 100% de
 hieróglifos" — que é outro nível de esforço, e vale nomear separado. O
-`expansoes.txt` só decompõe ~10 comandos derivados (`VRFY`, `VAL`, `CRIT`,
+`expansions.txt` só decompõe ~10 comandos derivados (`VRFY`, `VAL`, `CRIT`,
 `SCRU`, `TRYFR`, `PROB`) nos 18 hieróglifos-base. O vocabulário inteiro em
 `glyph-parser.js` tem quase 100 comandos (`RWK`, `FMT`, `SUM`, `COND`, toda a
 categoria de raciocínio...). Pra `.hgml` ser **literalmente** só hieróglifos-
@@ -104,7 +104,7 @@ não recomendaria começar antes da forma canônica estar de pé.
 | D3 | `.hgml` = reimpressão canônica (Opção 1) ou decomposição total em átomos (Opção 2)? | Passo 13 | Opção 1 primeiro, Opção 2 como fase posterior opcional |
 | D4 | Nomes das tags `.hgml`: reaproveitar os canônicos existentes (`crit`, `ctx`...) ou vocabulário novo tipo `[FECHAMENTO]`? | Passo 14 | reaproveitar os existentes — zero vocabulário novo pra manter |
 | D5 | O que o "filtro denso" descarta: texto livre desaparece de vez, ou vira literal condensado? | Passo 15 | desaparece por padrão, com flag pra preservar |
-| D6 | Se Opção 2 for adiante: quem escreve as ~90 expansões que faltam em `expansoes.txt`? | Passo 21 | você, com meu apoio verificando ciclos via `dag.js` |
+| D6 | Se Opção 2 for adiante: quem escreve as ~90 expansões que faltam em `expansions.txt`? | Passo 21 | você, com meu apoio verificando ciclos via `dag.js` |
 
 ---
 
@@ -114,7 +114,7 @@ não recomendaria começar antes da forma canônica estar de pé.
 |---|---|---|---|---|
 | 1 | Decidir D1 (A ou B) antes de tocar em qualquer arquivo | — | nenhum ainda | **decisão sua** |
 | 2 | Criar `/scripts` vazio | — | nenhum | mecânico |
-| 3 | Mover `dag.js` e `glyph-moldes.js` pra `/scripts` — nenhum dos dois é `require`d por outro arquivo do jeito que muda com a mudança de pasta (`dag.js` recebe o caminho de `expansoes.txt` por argumento; `glyph-moldes.js` só é carregado via `<script src>`) | `glyph-engine-alias.html` (path do `<script src="glyph-moldes.js">`) | nenhum — não fazem parte do require graph de `test-corpus.js` | mecânico |
+| 3 | Mover `dag.js` e `glyph-moldes.js` pra `/scripts` — nenhum dos dois é `require`d por outro arquivo do jeito que muda com a mudança de pasta (`dag.js` recebe o caminho de `expansions.txt` por argumento; `glyph-moldes.js` só é carregado via `<script src>`) | `glyph-engine-alias.html` (path do `<script src="glyph-moldes.js">`) | nenhum — não fazem parte do require graph de `test-corpus.js` | mecânico |
 | 4 | Mover `build-templates.js` pra `/scripts`; ajustar `SOURCES` pra `../glyph-templates.json` e `../glyph-rules.json`; manter a saída `glyph-data.js` na raiz (é o que o HTML carrega) | `build-templates.js` | nenhum direto — rodar depois e diferenciar o `glyph-data.js` gerado contra o atual pra confirmar saída idêntica | mecânico, checkpoint: diff do output |
 | 5 | Mover `test-corpus.js` pra `/scripts`; ajustar os três `require("./...")` pra `require("../glyph-parser.js")` etc. Rodar. | `test-corpus.js` | **é o teste** — rodar e confirmar 110/110 antes de seguir | mecânico, **checkpoint obrigatório** |
 | 6 | *(só se D1=B)* Criar `scripts/core/` com um arquivo por seção já comentada no `glyph-parser.js` atual: `vocabulary.js`, `lexer.js`, `logic-block.js`, `template-expansion.js`, `rules-engine.js`, `template-constraints.js`, `parser.js`, `xml-emitter.js`, `ast-serializer.js`, mais um `context.js` pro estado hoje compartilhado por closure (D2 nomes ajustáveis) | novo diretório | nenhum ainda — só criação, sem mover código | proposta minha, ajustável |
@@ -129,7 +129,7 @@ não recomendaria começar antes da forma canônica estar de pé.
 
 | # | Passo | Toca | Impacto em `test-corpus.js` | Tipo |
 |---|---|---|---|---|
-| 13 | Decidir D3: Opção 1 (reimpressão canônica fechada, reaproveita gramática/parser/testes) vs Opção 2 (decomposição total em átomos-hieróglifo, exige completar `expansoes.txt`) | design do formato | nenhum ainda | **decisão sua** |
+| 13 | Decidir D3: Opção 1 (reimpressão canônica fechada, reaproveita gramática/parser/testes) vs Opção 2 (decomposição total em átomos-hieróglifo, exige completar `expansions.txt`) | design do formato | nenhum ainda | **decisão sua** |
 | 14 | Decidir D4: nomes das tags `.hgml` — canônicos existentes (`crit`, `ctx`, `vrfy`...) vs vocabulário novo | design do formato | nenhum ainda | **decisão sua** |
 | 15 | Decidir D5: texto livre desaparece por padrão no filtro denso, ou vira literal condensado com flag pra preservar | design do formato | nenhum ainda | **decisão sua** |
 | 16 | Escrever um adendo normativo (`glyph-hgml.ebnf` ou seção nova em `glyph-grammar.ebnf`) descrevendo a forma canônica `.hgml` como **subconjunto** da gramática atual: sempre `[tag]...[/tag]` explícito, sem `;` de auto-fechamento, sem `bareTag`, sem texto livre. Documento pra revisão sua antes de codar. | novo doc / `glyph-grammar.ebnf` | nenhum | design meu, **checkpoint de revisão antes do passo 17** |
@@ -138,8 +138,8 @@ não recomendaria começar antes da forma canônica estar de pé.
 | 19 | Criar `scripts/test-hgml-corpus.js` com um **oráculo de round-trip**: gera `.hgml`, re-tokeniza/re-parseia (já que `.hgml` é Glyph válido), compara a AST resultante com a original. Reaproveitar os casos dos buckets já existentes em `test-corpus.js` (`POSITIVE`, `TEMPLATES`, `RULE_CASES`...) em vez de escrever casos do zero. | novo arquivo de teste | não altera os 110 atuais — soma uma suíte nova ao lado | mecânico, mas é o **verdadeiro crash-test** da fase |
 | 20 | Rodar o round-trip contra os 110 casos reaproveitados; qualquer nó que não sobreviva aponta um bug em `toHGML` ou uma ambiguidade real na gramática atual que ninguém tinha notado | — | usa os 110 como insumo, não os modifica | validação |
 | 21 | **Checkpoint B** — revisar com você 5-10 exemplos de saída `.hgml` lado a lado com o XML equivalente, confirmar que a forma "sente certo" antes de generalizar | — | — | checkpoint |
-| 22 | *(só se D3=Opção 2)* Completar `expansoes.txt` pros ~90 comandos de `INSTR` que hoje não têm expansão em hieróglifos-base, verificando ausência de ciclos a cada adição via `node scripts/dag.js` | `expansoes.txt` | nenhum direto — é insumo de dados, não código do parser | **trabalho seu**, com meu apoio na verificação de ciclos |
-| 23 | *(só se D3=Opção 2)* Implementar um segundo emissor (`toHGMLAtomic` ou flag `deep:true` em `toHGML`) que substitui cada comando canônico pela cadeia de átomos-base segundo `expansoes.txt`, sobre a mesma AST | `glyph-parser.js` | precisa de round-trip próprio — decompor em átomos pode não ser reversível 1:1, então esse é o passo que mais precisa de teste dedicado | design + implementação, alto esforço |
+| 22 | *(só se D3=Opção 2)* Completar `expansions.txt` pros ~90 comandos de `INSTR` que hoje não têm expansão em hieróglifos-base, verificando ausência de ciclos a cada adição via `node scripts/dag.js` | `expansions.txt` | nenhum direto — é insumo de dados, não código do parser | **trabalho seu**, com meu apoio na verificação de ciclos |
+| 23 | *(só se D3=Opção 2)* Implementar um segundo emissor (`toHGMLAtomic` ou flag `deep:true` em `toHGML`) que substitui cada comando canônico pela cadeia de átomos-base segundo `expansions.txt`, sobre a mesma AST | `glyph-parser.js` | precisa de round-trip próprio — decompor em átomos pode não ser reversível 1:1, então esse é o passo que mais precisa de teste dedicado | design + implementação, alto esforço |
 | 24 | Atualizar `SIGNATURES.md`/`skills/glyph-markup/SKILL.md` com a seção normativa de `.hgml`; bump de `VERSION` em `glyph-parser.js` e de `GLYPH_ASSET_VERSION` no HTML (hoje incoerentes entre si — `1.0.9.3` vs `1.9.3`, vale alinhar de passagem); entrada nova em `CHANGELOG.md` seguindo o padrão das entradas anteriores | docs + versão | nenhum | mecânico, feito por último |
 
 ---

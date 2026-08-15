@@ -85,7 +85,7 @@ const POSITIVE = [
     clean:true, cmds:["PROB","CTX"], xml:["<problem>","<context>"] },
 
   /* ---- v1.1.0.0: the vocabulary GLOSSARY.md declared and the engine
-     did not have. Half the formulas in expansoes.txt referenced these. ---- */
+     did not have. Half the formulas in expansions.txt referenced these. ---- */
   { id:"P-26", name:"CORE replaces BASE — the command, not the atom keyword.",
     src:"[CORE'o ponto de partida']", clean:true, cmds:["CORE"], xml:["<core>"] },
   { id:"P-27", name:"Context ops read, write and locate inside the scope.",
@@ -134,7 +134,7 @@ const INCOMPLETE = [
 
 const INVALID = [
   /* v1.1.0.0: BASE is no longer a command — it is only the keyword on the
-     right-hand side of expansoes.txt, meaning "this one is an atom". Writing
+     right-hand side of expansions.txt, meaning "this one is an atom". Writing
      it as a command has to fail, or the collision the rename fixed comes
      back through the parser. */
   { id:"N-13", name:"BASE is no longer a command — CORE took its place",
@@ -460,7 +460,7 @@ function runExpansionChecks() {
   const table = new Set(Object.keys(store.commands));
 
   const missing = [...vocab].filter(c => !table.has(c)).sort();
-  ok("X-01a", "every command in the engine is in expansoes.txt",
+  ok("X-01a", "every command in the engine is in expansions.txt",
      missing.length ? missing.length + " missing from the table: " + missing.join(" ") : null);
 
   /* The reverse direction is not symmetric: MODE (OFF/ON) and the engine
@@ -468,7 +468,7 @@ function runExpansionChecks() {
      are not INSTR commands. Only real vocabulary has to round-trip. */
   const extra = [...table].filter(c =>
     !vocab.has(c) && !G.MODE[c] && !G.ALIAS[c]).sort();
-  ok("X-01b", "every command in expansoes.txt is in the engine",
+  ok("X-01b", "every command in expansions.txt is in the engine",
      extra.length ? extra.length + " in the table with no entry in the engine: " + extra.join(" ") : null);
 
   ok("X-02", "atoms report species `atom` and depth 0",

@@ -5,7 +5,7 @@ rather than by theme, because species is what decides whether `.hgml` may treat
 something as an atom.
 
 **The engine derives from this document, not the other way round.** The 120
-entries below exist in the vocabulary, `expansoes.txt` closes with 0 cycles and
+entries below exist in the vocabulary, `expansions.txt` closes with 0 cycles and
 0 undefined, and the suite fails (`X-01`, `X-14`) if the two ever drift apart.
 
 **Language:** everything that reaches the deliverable is English — definitions,
@@ -40,7 +40,7 @@ Two independent axes, plus two kinds that are not vocabulary at all.
 - **mode** — changes how the rest of the document is read.
 
 Practical consequence: **every hieroglyph is one `= BASE` line in
-`expansoes.txt`; every glyph is a line with a formula.** That boundary is what
+`expansions.txt`; every glyph is a line with a formula.** That boundary is what
 `.hgml` needs, and the only reason the legend exists.
 
 ## 0.1 Formula notation — normative
@@ -59,10 +59,10 @@ and is rewritten in brackets so two syntaxes do not stay alive at once.
 
 ## 0.2 `BASE` and `CORE` — the disambiguation
 
-`BASE` used to be two things: the right-hand keyword in `expansoes.txt` ("this
+`BASE` used to be two things: the right-hand keyword in `expansions.txt` ("this
 one is an atom") and a vocabulary command ("structural foundation"). Resolved:
 
-- **`BASE`** — only the `expansoes.txt` keyword. Not a command, never appears in
+- **`BASE`** — only the `expansions.txt` keyword. Not a command, never appears in
   brackets, never enters a formula.
 - **`CORE`** ★ — the command. Structural foundation of a context object.
 
@@ -312,7 +312,7 @@ revisiting once the first ones have run against real cases.
 
 ## 6. Record of what was closed
 
-### 6.1 The composition table — `expansoes.txt`
+### 6.1 The composition table — `expansions.txt`
 
 88 non-expanding declarations (77 vocabulary atoms + 11 engine/mode entries that
 appear inside formulas) and 32 composite formulas.

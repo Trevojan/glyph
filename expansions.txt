@@ -1,6 +1,6 @@
 # Glyph atom and expansion table — v1.3.0.0
 #
-# Format (read by read-expansoes.js):
+# Format (read by read-expansions.js):
 #   CMD = BASE          -> atom, does not expand
 #   CMD = <formula>     -> composite, expands
 #

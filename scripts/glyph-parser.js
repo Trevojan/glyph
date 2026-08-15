@@ -20,12 +20,12 @@
  * normative reference from here on. Three changes, all backend:
  *
  *   1. `BASE` the command became `CORE`. `BASE` stayed as the keyword in
- *      expansoes.txt meaning "this is an atom" — the two used to collide on
+ *      expansions.txt meaning "this is an atom" — the two used to collide on
  *      the same word and no expansion table could disambiguate them.
  *   2. Twelve commands the glossary declared but the engine never knew:
  *      FIND GET ADD SUB WHR (context ops), HGH LOW BOLD LIGHT (intensity),
  *      SWITCH (condition), GO (execution). Half the composition formulas in
- *      expansoes.txt referenced them and could not resolve.
+ *      expansions.txt referenced them and could not resolve.
  *   3. The v1.7 fusions are undone. EVAL, REV, SPEC, SIMP, QST, FOREX and
  *      ONLYIF are commands in their own right again, each separated from the
  *      one it was folded into by a stated axis (object vs. act, or standard
@@ -148,7 +148,7 @@
     GT:"Greater Than", GTE:"Greater Than Equal", LT:"Less Than", LTE:"Less Than Equal",
     EQ:"Equal", NEQ:"Not Equal",
     /* v1.1.0.0 — declarados em GLOSSARY.md §1/§2 e usados pelas fórmulas de
-       expansoes.txt, mas ausentes do motor até aqui. */
+       expansions.txt, mas ausentes do motor até aqui. */
     FIND:"Find", GET:"Get", ADD:"Add", SUB:"Subtract", WHR:"Where",
     HGH:"High", LOW:"Low", BOLD:"Bold", LIGHT:"Light",
     SWITCH:"Switch", GO:"Go"
@@ -338,7 +338,7 @@
      hieroglyphs (atoms, they do not decompose) and which are glyphs
      (composites, with a formula that reduces them to atoms).
 
-     Generated from expansoes.txt into glyph-expansions.json by
+     Generated from expansions.txt into glyph-expansions.json by
      build-templates.js. Optional, exactly like the template and rule stores:
      with no store loaded the engine parses and emits the same as before, it
      just cannot say what anything is made of.

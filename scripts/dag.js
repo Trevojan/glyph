@@ -2,9 +2,9 @@
 /**
  * dag.js — reports the composition layers of the Glyph vocabulary.
  *
- *   node dag.js [expansoes.txt]
+ *   node dag.js [expansions.txt]
  *
- * Reading the format is `read-expansoes.js`'s job; this file only reports.
+ * Reading the format is `read-expansions.js`'s job; this file only reports.
  * Through v1.1.0.0 the two were the same file, which meant the format was
  * about to be understood in two places at once — see the header there.
  *
@@ -17,46 +17,46 @@
 
 const fs = require("fs");
 const path = require("path");
-const X = require("./read-expansoes.js");
+const X = require("./read-expansions.js");
 
 /* Default resolves against the repository root, not the caller's cwd: the
    table is data and lives one level up from the scripts. */
-const file = process.argv[2] || path.join(__dirname, "..", "expansoes.txt");
+const file = process.argv[2] || path.join(__dirname, "..", "expansions.txt");
 const { parsed, analysis } = X.build(fs.readFileSync(file, "utf8"));
 
 parsed.malformed.forEach(m =>
-  console.error("linha " + m.line + " ignorada (formato): " + m.text));
+  console.error("line " + m.line + " skipped (bad format): " + m.text));
 
-/* Nivel 0 e atomo; todo nivel acima e composto, e o numero e a profundidade.
-   Os rotulos antigos chamavam o nivel 1 de "primitivo", o que contradiz a
-   taxonomia do GLOSSARIO: ALT, VRFY e RMBR estao no nivel 1 e sao compostos. */
-const NAMES = { 0: "hieroglifo" };
+/* Level 0 is the atom; every level above is a composite, the number is its depth.
+   The old labels called level 1 "primitive", which contradicts the glossary
+   taxonomy: ALT, VRFY and RMBR sit at level 1 and are composites. */
+const NAMES = { 0: "hieroglyph" };
 const byDepth = {};
 Object.keys(analysis.depth).sort()
   .forEach(c => { (byDepth[analysis.depth[c]] = byDepth[analysis.depth[c]] || []).push(c); });
 
-console.log("=== CAMADAS (por ordenacao topologica) ===");
+console.log("=== LAYERS (topological order) ===");
 Object.keys(byDepth).map(Number).sort((a, b) => a - b).forEach(k => {
-  console.log("\nnivel " + k + "  [" + (NAMES[k] || ("composto-" + k)) + "]  (" + byDepth[k].length + ")");
+  console.log("\nlevel " + k + "  [" + (NAMES[k] || ("composite-" + k)) + "]  (" + byDepth[k].length + ")");
   console.log("  " + byDepth[k].join(" "));
 });
 
 if (analysis.undefinedDeps.length) {
   console.log("\n=== DEPENDENCIAS NUNCA DEFINIDAS (" + analysis.undefinedDeps.length + ") ===");
   console.log("  " + analysis.undefinedDeps.join(" "));
-  console.log("  -> ou sao hieroglifos (declare '= BASE') ou faltam expansoes.");
+  console.log("  -> either they are hieroglyphs (declare '= BASE') or expansions are missing.");
 }
 if (analysis.cycles.length) {
-  console.log("\n=== CICLOS (" + analysis.cycles.length + ") — camada indefinivel ===");
+  console.log("\n=== CICLOS (" + analysis.cycles.length + ") — layer undefinable ===");
   analysis.cycles.forEach(c => console.log("  " + c.join(" -> ")));
-  console.log("  -> quebre cada ciclo promovendo um dos membros a '= BASE'.");
+  console.log("  -> break each cycle by promoting one member to '= BASE'.");
 }
 if (analysis.unlayered.length) {
   console.log("\n=== SEM CAMADA ATRIBUIVEL (" + analysis.unlayered.length + ") ===");
   console.log("  " + analysis.unlayered.join(" "));
 }
 
-console.log("\nresumo: " + Object.keys(analysis.depth).length + " com camada, " +
-  analysis.undefinedDeps.length + " indefinidos, " + analysis.cycles.length + " ciclos.");
+console.log("\nsummary: " + Object.keys(analysis.depth).length + " layered, " +
+  analysis.undefinedDeps.length + " undefined, " + analysis.cycles.length + " cycles.");
 
 process.exit(analysis.undefinedDeps.length || analysis.cycles.length ? 1 : 0);

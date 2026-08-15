@@ -65,7 +65,7 @@ Distinção central da v1.1.0.0, e é ela que o `.hgml` vai consumir:
 - **hieróglifo** — átomo. Não decompõe. 88 deles.
 - **glifo composto** — tem fórmula que o reduz a hieróglifos. 32 deles.
 
-A tabela vive em `expansoes.txt` (átomos declarados `= BASE`, compostos com
+A tabela vive em `expansions.txt` (átomos declarados `= BASE`, compostos com
 fórmula) e é compilada para `glyph-expansions.json`. O motor a consome por
 `useExpansions()`, opcional como os outros stores:
 
@@ -149,7 +149,7 @@ gerado `glyph-expansions.json` (dados) fica na raiz.
 |---|---|
 | `GLOSSARY.md` | referência normativa do vocabulário |
 | `SIGNATURES.md` | aridades, derivadas do motor |
-| `expansoes.txt` | tabela de composição (fonte, editável) |
+| `expansions.txt` | tabela de composição (fonte, editável) |
 | `scripts/glyph-parser.js` | o núcleo |
 | `glyph-rules.json` · `glyph-templates.json` | stores, editáveis |
 | `scripts/glyph-data.js` · `glyph-expansions.json` | **gerados** |

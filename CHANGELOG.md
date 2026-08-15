@@ -208,7 +208,7 @@ e o gerado `glyph-expansions.json` (dados) fica na raiz, ao lado dos outros stor
 
 Movidos com `git mv`, então `git log --follow` continua funcionando em cada um:
 `glyph-parser.js`, `glyph-ui.js`, `glyph-moldes.js`, `glyph-data.js`,
-`read-expansoes.js`, `build-templates.js`, `dag.js`, `test-corpus.js`,
+`read-expansions.js`, `build-templates.js`, `dag.js`, `test-corpus.js`,
 `serve-dev.js`.
 
 Caminhos corrigidos em seis lugares: os quatro `<script src>` do HTML (agora
@@ -233,21 +233,21 @@ saber de qual das duas veio.
 
 ## [1.1.0.1] — O motor passa a saber do que as coisas são feitas
 
-A ponte para o `.hgml`. Até aqui `expansoes.txt` era uma tabela que só o `dag.js`
+A ponte para o `.hgml`. Até aqui `expansions.txt` era uma tabela que só o `dag.js`
 lia: o motor conhecia os 120 comandos mas não sabia quais eram átomos, quais eram
 compostos, nem a fórmula de nenhum. Agora sabe. Dígito `d` porque é dado e constante —
 nenhuma regra de negócio mudou, nenhum diagnóstico mudou, nenhum XML mudou.
 
 ### Adicionado
 
-- **`read-expansoes.js` — o leitor único do formato.** Três coisas precisam entender
-  `expansoes.txt`: o `dag.js` (que reporta camadas e ciclos), o `build-templates.js`
+- **`read-expansions.js` — o leitor único do formato.** Três coisas precisam entender
+  `expansions.txt`: o `dag.js` (que reporta camadas e ciclos), o `build-templates.js`
   (que o compila para o motor) e por extensão o próprio motor. Até aqui só o `dag.js`
   sabia, e o conhecimento estava prestes a ser copiado — que é exatamente como o bug do
   regex de cadeia entrou e ficou invisível. Um leitor, um lugar para errar.
 - **`glyph-expansions.json`** (gerado) e `GlyphExpansions` em `glyph-data.js`. Mapeia
   cada comando para `atom` ou `composite`, com fórmula, dependências e camada.
-  `expansoes.txt` segue sendo a fonte que um humano edita — uma entrada por linha é
+  `expansions.txt` segue sendo a fonte que um humano edita — uma entrada por linha é
   melhor que JSON aninhado à mão.
 - **`useExpansions()` no motor**, irmão opcional de `useTemplates()` e `useRules()`:
   sem store carregado o motor roda idêntico, só não sabe do que as coisas são feitas.
@@ -261,7 +261,7 @@ nenhuma regra de negócio mudou, nenhum diagnóstico mudou, nenhum XML mudou.
 - **`--expand` no CLI.** Recebe um nome de comando, não fonte Glyph, e responde do que
   ele é feito. `HYP` queima até 101 hieróglifos.
 - **Bucket `X` na suíte — 8 checagens de integridade.** A que importa é `X-01`: todo
-  comando do motor tem de estar em `expansoes.txt` e vice-versa. Glossário e motor já
+  comando do motor tem de estar em `expansions.txt` e vice-versa. Glossário e motor já
   divergiram uma vez — doze comandos declarados que o motor nunca ouviu falar, metade
   das fórmulas incapaz de resolver — e nada pegou porque nada comparava as duas listas.
   Verificado que a asserção morde nas duas direções antes de dar por pronta.
@@ -286,9 +286,9 @@ nenhuma regra de negócio mudou, nenhum diagnóstico mudou, nenhum XML mudou.
 ## [1.1.0.0] — O glossário vira a fonte, o motor deriva dele
 
 Salto de *backend*: `GLOSSARY.md` passa a ser a referência normativa do vocabulário, e
-o parser foi alinhado a ele. `expansoes.txt` deixa de ser um esboço de 6 fórmulas e
+o parser foi alinhado a ele. `expansions.txt` deixa de ser um esboço de 6 fórmulas e
 passa a descrever o vocabulário inteiro — **120 verbetes, 0 ciclos, 0 dependências
-indefinidas**, verificável com `node dag.js expansoes.txt`. A suíte vai de 110 para
+indefinidas**, verificável com `node dag.js expansions.txt`. A suíte vai de 110 para
 **129 casos**, todos verdes.
 
 ### Adicionado
@@ -301,7 +301,7 @@ indefinidas**, verificável com `node dag.js expansoes.txt`. A suíte vai de 110
   (que é o que `Enquadre` já fazia); **Intensidade** gradua *um* item, enquanto `PRIO`
   ordena *entre* itens. Os seis operadores ganharam valência em `FRAMES`; os cinco
   primitivos não, porque "valem sozinhos" e portanto não geram `<needs>`.
-- **`expansoes.txt` completo.** 88 declarações não-expansivas (77 átomos de vocabulário
+- **`expansions.txt` completo.** 88 declarações não-expansivas (77 átomos de vocabulário
   + 11 de engine/modo, que aparecem em fórmulas) e 32 fórmulas de composto. `HYP` é o
   comando mais caro do vocabulário, com 6 níveis de profundidade — informação que a
   tabela não tinha como dar antes.
@@ -311,7 +311,7 @@ indefinidas**, verificável com `node dag.js expansoes.txt`. A suíte vai de 110
 ### Alterado
 
 - **`BASE` o comando virou `CORE`.** A palavra era duas coisas: a palavra-chave do lado
-  direito em `expansoes.txt` ("isto é um átomo") e um comando do vocabulário
+  direito em `expansions.txt` ("isto é um átomo") e um comando do vocabulário
   ("fundamento estrutural"). Enquanto colidiam, nenhuma tabela de expansão podia
   desambiguar as duas. `BASE` fica como palavra-chave; o comando é `CORE`. Aplicado em
   `CATS`, `INSTR`, na classe `subject` de `glyph-rules.json` e nos três moldes que
@@ -356,7 +356,7 @@ indefinidas**, verificável com `node dag.js expansoes.txt`. A suíte vai de 110
 
 ### Pendente
 
-- **O parser ainda não sabe o que `expansoes.txt` sabe.** Conhece os 120 comandos, mas
+- **O parser ainda não sabe o que `expansions.txt` sabe.** Conhece os 120 comandos, mas
   não quais são átomos, quais são compostos, nem a fórmula de cada composto — que é
   exatamente o que um emissor `.hgml` precisa. O caminho tem precedente: o mesmo
   `build-templates.js` que gera `glyph-data.js` pode gerar a tabela de composição, e o
@@ -373,7 +373,7 @@ nesta passagem.
 ### Corrigido
 
 - **`ERROR` e `PROB` sem entrada em `INSTR`.** `ERROR` registrado como hieróglifo
-  (nível 0, `= BASE` em `expansoes.txt`); `PROB` corrigido para `ERROR + CTX` (era
+  (nível 0, `= BASE` em `expansions.txt`); `PROB` corrigido para `ERROR + CTX` (era
   `FLS + TRYFR`, derivação errada). Ambos entram em `CATS`/`INSTR` seguindo o padrão
   de `CRIT`/`SCRU`/`TRYFR` — vocabulário sem entrada em `FRAMES`, livre de aridade.
   `SESSION.prob` ("problema") foi removido: com `PROB` resolvendo em `INSTR`,
@@ -482,7 +482,7 @@ nesta passagem.
 
 ### Pendências conhecidas (fechadas em [1.0.9.3](#1093--pendências-fechadas))
 
-- `ERROR` e `PROB` em `expansoes.txt` derivados no DAG mas nunca registrados em `INSTR`.
+- `ERROR` e `PROB` em `expansions.txt` derivados no DAG mas nunca registrados em `INSTR`.
 - `glyph-grammar.ebnf` divergindo da implementação quanto a `;` e `;;`.
 - `skills/*/SKILL.md` ainda anunciando v1.8.
 - `best-of` limitado a dois candidatos.

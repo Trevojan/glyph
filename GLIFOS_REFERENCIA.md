@@ -20,7 +20,7 @@ uma a uma verificação automática:
 | o quê | onde | verificado por |
 |---|---|---|
 | o que cada comando **é** | `GLOSSARY.md` | `X-01` na suíte — motor e tabela têm de bater |
-| do que cada comando **é feito** | `expansoes.txt` | `node scripts/dag.js` — 0 ciclos, 0 indefinidos |
+| do que cada comando **é feito** | `expansions.txt` | `node scripts/dag.js` — 0 ciclos, 0 indefinidos |
 | **quantos** operandos pede | `SIGNATURES.md` | derivado de `SLOTS`/`FRAMES` no parser |
 | o que o motor **faz** | `scripts/glyph-parser.js` | `node scripts/test-corpus.js` |
 

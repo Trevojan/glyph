@@ -78,7 +78,7 @@ Abre em `http://localhost:8731`. Nada no app depende dele.
 `GLYPH_ASSET_VERSION` no topo de `glyph-engine-alias.html` e recarregue — é o
 que existe para furar o cache.
 
-**Mexeu em `glyph-rules.json`, `glyph-templates.json` ou `expansoes.txt`?**
+**Mexeu em `glyph-rules.json`, `glyph-templates.json` ou `expansions.txt`?**
 Rode o build. Os `.json` e o `.txt` são a fonte; `scripts/glyph-data.js` é a
 cópia que o navegador consegue carregar.
 
@@ -112,7 +112,7 @@ critério é o tipo do arquivo, não quem o escreveu — por isso o gerado
 | `scripts/glyph-parser.js` | o núcleo: lexer, árvore, regras, emissores |
 | `scripts/glyph-ui.js` · `glyph-moldes.js` | interface e formulários |
 | `glyph-rules.json` · `glyph-templates.json` | stores de dados, editáveis à mão |
-| `expansoes.txt` | tabela de composição: átomos e fórmulas |
+| `expansions.txt` | tabela de composição: átomos e fórmulas |
 | `scripts/glyph-data.js` · `glyph-expansions.json` | **gerados** — não edite |
 
 ## Documentação

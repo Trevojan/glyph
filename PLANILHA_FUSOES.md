@@ -138,13 +138,13 @@ comando continua parseando. Verificado: a suíte de 11 seções passa sem altera
 
 *(Procedimento da v1.7, mantido como registro. `test-lexer.js` não existe mais —
 a suíte é `scripts/test-corpus.js`, e a tabela de camadas já está completa em
-`expansoes.txt`, verificável com `node scripts/dag.js`.)*
+`expansions.txt`, verificável com `node scripts/dag.js`.)*
 
 1. Some as fusões. Cada uma é uma linha em `ALIAS`.
 2. Rode a suíte. Deve continuar passando — se quebrar, o alias colidiu com algo.
 3. Para cada par **mantido**, escreva uma linha de critério na documentação. Se travar ao
    escrever, o par falhou em P2 e você acabou de descobrir tarde. Volte e funda.
-4. Os sobreviventes canônicos entram em `expansoes.txt` para o `dag.js` calcular as camadas.
+4. Os sobreviventes canônicos entram em `expansions.txt` para o `dag.js` calcular as camadas.
 
 > O passo 3 era a salvaguarda, e foi ele que a v1.7 pulou. Escrever o critério
 > **antes** de fundir teria mostrado que os sete pares tinham critério — ver o

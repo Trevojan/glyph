@@ -1,5 +1,5 @@
 /**
- * read-expansoes.js — the single reader of the expansoes.txt format.
+ * read-expansions.js — the single reader of the expansions.txt format.
  *
  * Three things need to understand this file: `dag.js` (which reports layers
  * and cycles), `build-templates.js` (which turns it into a store the engine
@@ -18,13 +18,13 @@
  * used to be called BASE is `CORE` since v1.1.0.0, precisely so this word can
  * mean only one thing here.
  *
- * UMD: Node (require) and browser (window.GlyphExpansoes).
+ * UMD: Node (require) and browser (window.GlyphExpansions).
  */
 
 (function (root, factory) {
   "use strict";
   if (typeof module === "object" && module.exports) module.exports = factory();
-  else root.GlyphExpansoes = factory();
+  else root.GlyphExpansions = factory();
 })(typeof self !== "undefined" ? self : this, function () {
   "use strict";
 
