@@ -1,72 +1,163 @@
 ---
 name: glyph-markup
-description: Glyph Shorthand Markup Language v1.1.0.0 Specification & Parser Integration. Use when writing or reading Glyph compact structured notation.
+description: Glyph Shorthand Markup Language v1.1.0.1 Specification & Parser Integration. Use when writing or reading Glyph compact structured notation.
 ---
 
-# Glyph Shorthand Markup Language (v1.1.0.0 Specification)
+# Glyph Shorthand Markup Language (v1.1.0.1)
 
-Glyph é uma notação de comandos abreviados, entre delimitadores, que descreve um fluxo lógico escalável até os mínimos detalhes. A implementação de referência é `glyph-parser.js`: um núcleo único (Node via `require`, navegador via `window.GlyphCore`) que faz lexer, parser, checagem de aridade, regras semânticas e emissão de **XML** — o XML é o entregável, não a AST (que é só painel de inspeção).
+Glyph é uma notação de comandos abreviados, entre delimitadores, que descreve um
+fluxo lógico escalável até os mínimos detalhes. A implementação de referência é
+`scripts/glyph-parser.js`: um núcleo único (Node via `require`, navegador via
+`window.GlyphCore`) que faz lexer, parser, checagem de aridade, regras semânticas
+e emissão de **XML** — o XML é o entregável, não a AST (que é só painel de
+inspeção).
+
+`GLOSSARIO.md` é a referência normativa do vocabulário. O motor deriva dele, e a
+suíte tem uma checagem (`X-01`) que falha se os dois divergirem.
 
 ## Regras Normativas
 
-1. **Delimitadores de Emoção**: Emoções usam exclusivamente slashes `/`: `/eth/`, `/cnf/`, `/clm/`. O uso de backslashes `\` foi totalmente removido.
-2. **Operador de Encadamento**: Encadear comandos é feito **exclusivamente por hífen `-`**: `[CMD1-CMD2-CMD3]`. O antigo operador `/` divisor foi removido.
-3. **Definição de Símbolos**: `[DFN'símbolo','significado']` define novos símbolos. `[DEF]` é reservado para valor padrão (default).
-4. **Operadores de Comparação Prefixos**: Comparações usam forma prefixa de 2 argumentos: `[gt'A','B']`, `[gte'A','B']`, `[lt'A','B']`, `[lte'A','B']`, `[eq'A','B']`, `[neq'A','B']`.
-5. **Invocação de Templates**: Invocação de template usa `[--nome` ou `[--nome'parâmetro']`. Definição usa `[--nome=...`.
-6. **Fechamento de bloco (`;`) vs quebra visual (`;;`)**: `;` fecha todos os comandos abertos e encerra o segmento — só auto-fecha um comando se a aridade mínima dele já estiver satisfeita. `;;` **não fecha nada**: só divide a resposta em duas, os comandos abertos continuam abertos (o parser avisa com `LinebreakInsideBlock` se isso acontecer sem querer).
+1. **Emoção** usa exclusivamente slashes: `/eth/`, `/cnf/`, `/clm/`. Backslash
+   foi removido.
+2. **Encadeamento** é exclusivamente por hífen: `[CMD1-CMD2-CMD3]`. O antigo
+   divisor `/` foi removido.
+3. **Definição de símbolo**: `[DFN'símbolo','significado']`. `[DEF]` é reservado
+   para valor padrão.
+4. **Comparação é prefixa**, sempre 2 argumentos: `[gt'A','B']`, `[gte]`, `[lt]`,
+   `[lte]`, `[eq]`, `[neq]`.
+5. **Template**: invoca com `[--nome` ou `[--nome'parâmetro']`; define com
+   `[--nome=…`.
+6. **`;` fecha, `;;` não.** `;` fecha todos os comandos abertos e encerra o
+   segmento — e fecha **mesmo com casas vazias**, que viram `<needs>`. `;;` só
+   divide a resposta; os comandos abertos continuam abertos (o motor avisa com
+   `LinebreakInsideBlock`).
+7. **Polaridade negativa é `[ngt]`, não `[neg]`.** `NEG` nunca existiu no
+   vocabulário.
 
-## Severidade dos diagnósticos — o contrato
+## Severidade — o contrato
 
 Casa vazia **não é erro** neste desenho:
 
 | severidade | significado | efeito no XML |
 |---|---|---|
 | `fix` | sintaxe ou vocabulário quebrado | o XML não é confiável |
-| `ask` | falta informação | vira `<needs>`, **não bloqueia** — mande incompleto |
-| `note` | aviso | não bloqueia |
+| `ask` | falta informação | vira `<needs>`, **não bloqueia** |
+| `note` | aviso de forma | não bloqueia |
+
+## Aridade — quatro classes
+
+Detalhe completo em `ASSINATURAS.md`; o resumo operacional:
+
+| classe | comportamento |
+|---|---|
+| **estrita, 2 posições** (8) | `GT GTE LT LTE EQ NEQ DFN VAL` — cada posição vazia vira `<needs slot="n">` |
+| **n-ária** (6) | `ALT CAT CMP CNSD DIST SWITCH` — `note` ao receber só 1 item |
+| **um slot** (60) | `<needs>` com a pergunta do slot quando vazio |
+| **aridade zero** (44) | valem sozinhos, nunca geram `<needs>` |
+
+`SECTION` e `BLOCK` exigem literal como primeiro filho (o nome) — sem ele é
+`fix`, não `ask`: bloco anônimo é estrutura quebrada, não informação faltando.
+
+## Duas espécies: hieróglifo e glifo
+
+Distinção central da v1.1.0.0, e é ela que o `.hgml` vai consumir:
+
+- **hieróglifo** — átomo. Não decompõe. 88 deles.
+- **glifo composto** — tem fórmula que o reduz a hieróglifos. 32 deles.
+
+A tabela vive em `expansoes.txt` (átomos declarados `= BASE`, compostos com
+fórmula) e é compilada para `glyph-expansions.json`. O motor a consome por
+`useExpansions()`, opcional como os outros stores:
+
+```js
+G.speciesOf("CRIT")   // "composite"
+G.depthOf("CRIT")     // 2
+G.formulaOf("CRIT")   // "[CMP[CTX],[SPEC-CORE],[EVAL[ERROR]]]"
+G.atomsOf("CRIT")     // 15 hieróglifos
+```
+
+Na AST cada comando traz `species` e `compositionDepth`. **Cuidado com o par
+homônimo:** `depth` é a profundidade do nó no texto do usuário;
+`compositionDepth` é a do comando no vocabulário. Eixos diferentes.
+
+```bash
+node scripts/glyph-parser.js CRIT --expand
+```
+
+## Notação das fórmulas
+
+Quatro construções, cada uma com uma leitura só:
+
+| forma | leitura |
+|---|---|
+| `[A[B]]` | aninhamento — B é operando de A |
+| `[A],[B]` | conjunção — A e B valem juntos, sem ordem entre si |
+| `[A][B]` | sequência — A, depois B |
+| `[A-B]` | cadeia — A e B aplicados ao mesmo operando |
+
+**Ligação do operando** (`GLOSSARIO.md` §0.3): o operando do humano é o
+**sujeito da fórmula inteira**. Vírgula não troca o sujeito; justaposição
+encadeia no resultado; o que está aninhado é o *padrão* contra o qual se opera,
+não sujeito novo.
+
+`[crit'o parser']` lê-se: compare *'o parser'* com o contexto; especifique o
+núcleo de *'o parser'*; avalie *'o parser'* quanto a erros.
 
 ## Templates que expandem
 
-`[--nome=corpo]` define; `[--nome[...]]` invoca **e expande** — o corpo da definição entra na mensagem, não só a casca da chamada. O corpo declara casas com `` [ph-nome`pergunta`] ``; a chamada preenche por nome (`[ph-nome'valor']`) ou por posição (literais soltos, na ordem de declaração em `params`). Casa não preenchida vira `<needs>`. Um `param` pode ser marcado `"repeat": true` (no máximo um por template): essa casa não entra na ordem posicional e só se preenche por chamada nomeada repetida (`[ph-mais'A'][ph-mais'B']`), virando um nó a mais por ocorrência; zero chamadas remove a casa da expansão em vez de virar `<needs>`. Ciclos diretos e indiretos são barrados (`TemplateCycle`).
+`[--nome=corpo]` define; `[--nome[…]]` invoca **e expande** — o corpo entra na
+mensagem, não só a casca. O corpo declara casas com `` [ph-nome`pergunta`] ``; a
+chamada preenche por nome (`[ph-nome'valor']`) ou por posição (literais soltos,
+na ordem de `params`). Casa não preenchida vira `<needs>`. Um `param` pode ser
+`"repeat": true` (no máximo um por template): sai da ordem posicional e só se
+preenche por chamada nomeada repetida, virando um nó a mais por ocorrência.
+Ciclos são barrados (`TemplateCycle`).
 
 ## Regras semânticas
 
-Além da sintaxe, `glyph-rules.json` checa **coerência**: `pair` (dois comandos no mesmo alvo — irmãos ou um ancestral do outro), `order` (`then` antes de `first` entre irmãos) e `precondition` (alvo sem nenhum dos `requiresBefore` antes dele na mesma sentença). Sob `[ovr]` ou `[byp]` a sobreposição é isenta — foi pedida de propósito.
+`glyph-rules.json` checa **coerência** além da sintaxe: `pair` (dois comandos no
+mesmo alvo — irmãos ou um ancestral do outro), `order` (`then` antes de `first`)
+e `precondition` (alvo sem nenhum dos `requiresBefore` antes dele no mesmo
+segmento). Sob `[ovr]` ou `[byp]` a sobreposição é isenta — foi pedida de
+propósito.
 
-## Tabela de Aliases
+## Aliases
 
-Formas curtas (a forma longa é a canônica): `[IN]`→`[INS]`, `[AS]`→`[ASSM]`,
-`[CX]`→`[CTX]`, `[PR]`→`[PRIO]`, `[TG]`→`[TGT]`, `[RY]`→`[RDY]`,
-`[VL]`→`[VAL]`, `[RQ]`→`[REQ]`, `[CR]`→`[CRIT]`, `[RW]`→`[RWK]`,
-`[RV]`→`[REV]`, `[FM]`→`[FMT]`, `[IM]`→`[IMPR]`, `[FN]`→`[FIN]`,
-`[CL]`→`[CLAR]`, `[RT]`→`[RTNL]`, `[CN]`→`[CNST]`, `[WN]`→`[WARN]`,
-`[SM]`→`[SUM]`
+Formas curtas (a longa é a canônica): `[IN]`→`[INS]`, `[AS]`→`[ASSM]`,
+`[CX]`→`[CTX]`, `[PR]`→`[PRIO]`, `[TG]`→`[TGT]`, `[RY]`→`[RDY]`, `[VL]`→`[VAL]`,
+`[RQ]`→`[REQ]`, `[CR]`→`[CRIT]`, `[RW]`→`[RWK]`, `[RV]`→`[REV]`, `[FM]`→`[FMT]`,
+`[IM]`→`[IMPR]`, `[FN]`→`[FIN]`, `[CL]`→`[CLAR]`, `[RT]`→`[RTNL]`,
+`[CN]`→`[CNST]`, `[WN]`→`[WARN]`, `[SM]`→`[SUM]`
 
-**As sete fusões da v1.7 foram desfeitas na v1.1.0.0.** `[EVAL]`, `[REV]`,
-`[SPEC]`, `[SIMP]`, `[QST]`, `[FOREX]` e `[ONLYIF]` voltaram a ser comandos
-próprios — não são mais alias de `[CRIT]`, `[ELAB]`, `[CLAR]`, `[ASK]`, `[EX]`
-e `[COND]`. Cada par é separado por um eixo declarado (objeto vs. ato, ou
-padrão de comparação); ver `GLOSSARIO.md` §6.5 e a tabela em
-`glyph-markup-commons`.
+**As sete fusões da v1.7 foram desfeitas.** `[EVAL]`, `[REV]`, `[SPEC]`,
+`[SIMP]`, `[QST]`, `[FOREX]` e `[ONLYIF]` são comandos próprios de novo — ver a
+tabela de eixos em `glyph-markup-commons`.
 
-## Estrutura de Slots de Contexto (`[CTX]`)
+## `[ctx]` — três posições
 
-`[ctx'what','where','when']` aceita 3 slots posicionais opcionais:
-1. `what`: O assunto ou entidade principal.
-2. `where`: O arquivo, módulo ou escopo.
-3. `when`: A versão ou condição temporal.
+`[ctx'what','where','when']`: 1 o assunto, 2 o escopo (arquivo, módulo), 3 a
+versão ou condição temporal. Só a primeira é exigida.
 
-## Arquivos da implementação
+## Arquivos
 
-**Layout:** `/scripts` guarda todo o JavaScript; dados (`.json`, `.txt`), o app
-(`.html`, `.css`) e os documentos ficam na raiz. O critério é o tipo do arquivo,
-não quem o escreveu — o gerado `glyph-data.js` é JS e fica em `/scripts`; o
-gerado `glyph-expansions.json` é dado e fica na raiz.
+`/scripts` guarda **JavaScript**; dados (`.json`, `.txt`), o app (`.html`,
+`.css`) e os documentos ficam na raiz. O critério é o tipo do arquivo, não quem
+o escreveu — por isso o gerado `glyph-data.js` (JS) fica em `/scripts` e o
+gerado `glyph-expansions.json` (dados) fica na raiz.
 
-`GLOSSARIO.md` é a referência normativa do vocabulário — é dele que o motor deriva, não o contrário. `expansoes.txt` é a tabela de composição (átomos declarados `= BASE`, compostos com fórmula), verificável com `node scripts/dag.js`. `glyph-parser.js` é o núcleo único; `glyph-rules.json` e `glyph-templates.json` são os stores de dados (fonte de verdade — editar o `.json` e rodar `node scripts/build-templates.js` para regenerar `glyph-data.js`, já que `file://` bloqueia `fetch` de `.json`); `glyph-engine-alias.html` + `glyph-engine.css` + `glyph-moldes.js` + `glyph-ui.js` são só a interface, consumidora do núcleo.
+| arquivo | papel |
+|---|---|
+| `GLOSSARIO.md` | referência normativa do vocabulário |
+| `ASSINATURAS.md` | aridades, derivadas do motor |
+| `expansoes.txt` | tabela de composição (fonte, editável) |
+| `scripts/glyph-parser.js` | o núcleo |
+| `glyph-rules.json` · `glyph-templates.json` | stores, editáveis |
+| `scripts/glyph-data.js` · `glyph-expansions.json` | **gerados** |
+
+Editou um `.json` ou o `.txt`? Rode `node scripts/build-templates.js`.
+Verificação: `node scripts/test-corpus.js` e `node scripts/dag.js`.
 
 ## Versionamento — `a.b.c.d`
 
-`a` frontend · `b` backend (parser) · `c` business rules · `d` data e constantes.
-Um dígito que anda zera todos à direita.
+`a` frontend · `b` backend (parser) · `c` business rules · `d` dados e
+constantes. Um dígito que anda zera todos à direita.
