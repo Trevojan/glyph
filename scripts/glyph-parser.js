@@ -42,7 +42,7 @@
 })(typeof self !== "undefined" ? self : this, function () {
   "use strict";
 
-  var VERSION = "1.2.0.1";
+  var VERSION = "1.2.1.0";
 
   /* ======================================================
      1. VOCABULARY — Appendix A, one slot per command
@@ -356,6 +356,13 @@
   function formulaOf(name, opts) {
     var e = entryOf(name, opts);
     return (e && e.formula) || null;
+  }
+  /** what the command MEANS — extracted from GLOSSARIO.md at build time.
+      `formulaOf` says what a composite is made OF; this says what any command
+      IS, and for the 88 hieroglyphs it is the only thing there is to say. */
+  function defOf(name, opts) {
+    var e = entryOf(name, opts);
+    return (e && e.def) || null;
   }
 
   /**
@@ -1640,7 +1647,11 @@
            Off by default — it changes the deliverable, and the plain form is
            the one every doc and every test describes. */
         if (opts && opts.describe) {
-          if (nd.gloss) attrs.push('means="' + xesc(nd.gloss) + '"');
+          /* A definição do glossário, não o rótulo do INSTR: `means="Review"`
+             não acrescentava nada a `<review>`. Cai no rótulo só se a tabela
+             de composição não estiver carregada. */
+          var mean = defOf(nd.canonical, opts) || nd.gloss;
+          if (mean) attrs.push('means="' + xesc(mean) + '"');
           var sp = speciesOf(nd.canonical, opts);
           if (sp === "composite") {
             /* Unique and sorted, not the raw sequence: as a signature of what
@@ -2027,6 +2038,7 @@
     useRules: useRules,
     useExpansions: useExpansions, expansionRegistry: expansionRegistry,
     speciesOf: speciesOf, depthOf: depthOf, formulaOf: formulaOf, atomsOf: atomsOf,
+    defOf: defOf,
     buildXml: buildXml, toXML: toXML, toAST: toAST, serializeAST: serializeAST,
     burn: burn, toHGML: toHGML,
     esc: esc, xesc: xesc

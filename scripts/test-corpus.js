@@ -523,11 +523,27 @@ function runExpansionChecks() {
   ok("X-11", "`describe` está desligado por padrão",
      (!/means=/.test(plain) && !/made-of=/.test(plain)) ? null : "vazou describe no XML normal");
   ok("X-12", "com `describe`, um composto carrega do que é feito",
-     (/means="Scrutinize"/.test(rich) && /made-of="[a-z ]+"/.test(rich))
+     (/means="[^"]+"/.test(rich) && /made-of="[a-z ]+"/.test(rich))
        ? null : "faltou means/made-of em <scrutinize>");
   ok("X-13", "um hieróglifo não ganha `made-of` — não decompõe",
      !/made-of=/.test(G.toXML("[ctx'x']", { ...opts, describe: true }))
        ? null : "átomo veio com made-of");
+
+  /* v1.2.1.0 — as definições do GLOSSARIO.md dentro do motor. Sem elas o
+     `means` repetia o rótulo em inglês (`means="Review"` em `<review>`) e os
+     88 hieróglifos, que são o que NÃO decompõe, nada tinham a dizer de si. */
+  const semDef = Object.keys(store.commands).filter(c => !store.commands[c].def).sort();
+  ok("X-14", "todo comando tem definição vinda do glossário",
+     semDef.length ? semDef.length + " sem def: " + semDef.join(" ") : null);
+
+  const atomRich = G.toXML("[ctx'x']", { ...opts, describe: true });
+  ok("X-15", "`means` traz a definição, não o rótulo em inglês",
+     (/means="Escopo declarado\."/.test(atomRich) && !/means="Context"/.test(atomRich))
+       ? null : "means não trouxe a definição do glossário");
+
+  ok("X-16", "um hieróglifo se explica mesmo sem ter do que ser feito",
+     (G.defOf("HGH", opts) && !G.formulaOf("HGH", opts))
+       ? null : "HGH ficou sem def ou ganhou fórmula");
 
   return X.length;
 }
@@ -633,7 +649,7 @@ console.log(" Templates    " + rT + "/" + TEMPLATES.length);
 console.log(" Rules        " + rC + "/" + RULE_CASES.length);
 console.log(" Constraints  " + rK + "/" + CONSTRAINTS.length);
 console.log(" Guard        " + rG + "/" + POSITIVE_WITH_RULES.length);
-console.log(" Composition  " + rX + "/14");
+console.log(" Composition  " + rX + "/17");
 console.log(" .hgml burn   " + rH + "/9");
 console.log("=================================================");
 
