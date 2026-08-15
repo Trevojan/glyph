@@ -1905,7 +1905,7 @@
 
   var BURN_LIMIT = 24;          // safety net; the build already refuses cycles
 
-  /* The human's operand is the subject of the whole formula (GLOSSARIO §0.3).
+  /* The human's operand is the subject of the whole formula (GLOSSARY.md §0.3).
      Concretely: it becomes the first child of the formula's head command. The
      rule has to be mechanical or the burn cannot be automated at all. */
   function injectSubject(body, operands) {

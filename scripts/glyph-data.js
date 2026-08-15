@@ -147,7 +147,7 @@
       "label": "tension",
       "why": "requiring something to exist while rejecting a route that reaches it — legitimate if the rejected route is not the only one, wrong if it is",
       "suggest": "Name the route that stays open, or drop one side.",
-      "note": "Was severity `fix` and label `contradiction` through v1.0.9, when DENY meant refusing a proposal. In v1.1.0.0 DENY rejects the route to a result and REQ demands existence, so the two no longer collide by construction — GLOSSARIO.md §6.6." },
+      "note": "Was severity `fix` and label `contradiction` through v1.0.9, when DENY meant refusing a proposal. In v1.1.0.0 DENY rejects the route to a result and REQ demands existence, so the two no longer collide by construction — GLOSSARY.md §6.6." },
 
     { "id": "req-dont", "kind": "pair", "a": "REQ", "b": "DONT", "severity": "ask",
       "label": "redundancy",
@@ -249,7 +249,7 @@
     { "pair": "BRST + CAT", "why": "generate items, then group them" },
     { "pair": "ALW + COND", "why": "'always, under this condition' is scoping, not contradiction" },
     { "pair": "POS + CRIT", "why": "criticism can be positive" },
-    { "pair": "EXC + INSTOF", "why": "exception and substitution coexist — PLANILHA_FUSOES, house 7" }
+    { "pair": "EXC + INSTOF", "why": "exception and substitution coexist — FUSIONS_WORKSHEET.md, house 7" }
   ]
 };
   root.GlyphExpansions = {

@@ -1,16 +1,22 @@
 # Changelog
 
-Todas as mudanças notáveis do Glyph são documentadas aqui, da mais recente para a mais antiga.
+All notable changes to Glyph are documented here, most recent first.
 
-> **Nota sobre versionamento:** desde a `1.1.0.0` cada dígito de `a.b.c.d` nomeia a
-> camada que se moveu — `a` frontend (HTML/CSS/UI), `b` backend (o parser), `c` business
-> rules (`glyph-rules.json`, constraints, valência), `d` data (tabelas de vocabulário,
-> constantes, glosas). Um dígito que anda zera todos à direita.
+> **Language.** Entries from v1.3.0.0 onward are in English, following the
+> boundary that version drew: everything reaching the deliverable is English,
+> the interface stays pt-BR. Earlier entries are left in Portuguese as they
+> were written — a changelog is a record of what happened, and rewriting it
+> after the fact would make it a worse record, not a better one.
+
+> **Versioning.** Since `1.1.0.0` each digit of `a.b.c.d` names the layer that
+> moved — `a` frontend (HTML/CSS/UI), `b` backend (the parser), `c` business rules
+> (`glyph-rules.json`, constraints, valency), `d` data (vocabulary tables,
+> constants, glosses). A digit that moves resets every digit to its right.
 >
-> As versões `1.0.9.x` eram anteriormente identificadas como `1.9`, `1.9.1`, `1.9.2` e
-> `1.9.3`; o conteúdo é o mesmo, só a numeração muda. Versões anteriores (`v1.7`,
-> `v1.8`) mantêm sua numeração histórica — ver `GLYPH_v1.7_CHANGELIST.md` e
-> `GLYPH_v1.8_CHANGELIST.md`.
+> The `1.0.9.x` versions were previously identified as `1.9`, `1.9.1`, `1.9.2` and
+> `1.9.3`; the content is the same, only the numbering changed. Earlier versions
+> (`v1.7`, `v1.8`) keep their historical numbering — see
+> `GLYPH_v1.7_CHANGELIST.md` and `GLYPH_v1.8_CHANGELIST.md`.
 
 ---
 
@@ -33,11 +39,11 @@ nothing is lost in a translation neither of them asked for.
 
 ### Renamed
 
-- `GLOSSARIO.md` → **`GLOSSARY.md`**, rewritten in English. Still the normative
+- `GLOSSARY.md` → **`GLOSSARY.md`**, rewritten in English. Still the normative
   reference the engine derives from, and still what `build-templates.js` reads
   to fill `def`. All 120 definitions translated; section numbering was kept so
   `§0.3`, `§6.5` and the rest still resolve.
-- `ASSINATURAS.md` → **`SIGNATURES.md`**, likewise. Gained a short section on
+- `SIGNATURES.md` → **`SIGNATURES.md`**, likewise. Gained a short section on
   where species and arity disagree — `RSN` and `FIN` are primitives in the
   glossary yet `RSN` carries a `FRAMES` entry, so it asks for an operand in
   practice. Recorded rather than silently "fixed" in either direction.
@@ -54,7 +60,7 @@ wants to be its own commit.
 ### Still pt-BR, by omission rather than design
 
 The prose documents — `README.md`, this changelog, `HGML_PLAN.md`,
-`GLIFOS_COMPOSTOS.md`, `PLANILHA_FUSOES.md`, `GLIFOS_REFERENCIA.md` and the two
+`FORMULA_REVIEW.md`, `FUSIONS_WORKSHEET.md`, `GLOSSARY.md` and the two
 skills. They are documentation, not interface, so by the rule above they should
 be English; they are simply not done yet.
 
