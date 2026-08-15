@@ -1,86 +1,59 @@
 #!/usr/bin/env node
-// Calcula camadas do Glyph a partir de um arquivo de expansoes.
-// Uso: node dag.js expansoes.txt
-// Formato de cada linha:  cmd = cmd1 cmd2 cmd3      (expansao)
-//                         cmd = BASE                (hieroglifo, nao expande)
-// Linhas vazias e as que comecam com # sao ignoradas.
+/**
+ * dag.js — reports the composition layers of the Glyph vocabulary.
+ *
+ *   node dag.js [expansoes.txt]
+ *
+ * Reading the format is `read-expansoes.js`'s job; this file only reports.
+ * Through v1.1.0.0 the two were the same file, which meant the format was
+ * about to be understood in two places at once — see the header there.
+ *
+ * Exits non-zero when the table does not close: an undefined dependency or a
+ * cycle means no `.hgml` emitter can decompose reliably, so this is a build
+ * gate, not just a printout.
+ */
+
+"use strict";
 
 const fs = require("fs");
+const X = require("./read-expansoes.js");
+
 const file = process.argv[2] || "expansoes.txt";
-const src = fs.readFileSync(file, "utf8");
+const { parsed, analysis } = X.build(fs.readFileSync(file, "utf8"));
 
-const def = {};                      // cmd -> [deps]
-const base = new Set();
-src.split(/\r?\n/).forEach((ln, i) => {
-  const s = ln.trim();
-  if (!s || s.startsWith("#")) return;
-  const m = /^([A-Za-z_][\w-]*)\s*=\s*(.+)$/.exec(s);
-  if (!m) { console.error("linha " + (i+1) + " ignorada (formato): " + s); return; }
-  const lhs = m[1].toUpperCase();
-  const rhs = m[2].trim();
-  if (/^BASE$/i.test(rhs)) { base.add(lhs); def[lhs] = []; return; }
-  def[lhs] = rhs.toUpperCase().match(/[A-Z_][\w-]*/g) || [];
-});
+parsed.malformed.forEach(m =>
+  console.error("linha " + m.line + " ignorada (formato): " + m.text));
 
-const all = new Set(Object.keys(def));
-Object.values(def).forEach(ds => ds.forEach(d => all.add(d)));
-
-// 1. dependencias nunca definidas
-const undef = [...all].filter(c => !(c in def)).sort();
-
-// 2. deteccao de ciclos (DFS com pilha)
-const WHITE=0, GRAY=1, BLACK=2, color={}, cycles=[];
-[...all].forEach(c => color[c]=WHITE);
-function dfs(node, path) {
-  if (color[node]===GRAY) { cycles.push(path.slice(path.indexOf(node)).concat(node)); return; }
-  if (color[node]===BLACK) return;
-  color[node]=GRAY; path.push(node);
-  (def[node]||[]).forEach(d => dfs(d, path));
-  path.pop(); color[node]=BLACK;
-}
-[...all].sort().forEach(c => { if (color[c]===WHITE) dfs(c, []); });
-
-// 3. camadas: profundidade = 1 + max(profundidade das deps). Hieroglifo = 0.
-const depth = {}, unresolvable = new Set(cycles.flat());
-function d(node, seen) {
-  if (node in depth) return depth[node];
-  if (unresolvable.has(node) || !(node in def)) return null;
-  seen = seen || new Set();
-  if (seen.has(node)) return null;
-  seen.add(node);
-  const ds = def[node];
-  if (!ds.length) return (depth[node]=0);
-  let mx = -1;
-  for (const x of ds) { const v = d(x, seen); if (v===null) return null; if (v>mx) mx=v; }
-  return (depth[node] = mx+1);
-}
-[...all].sort().forEach(c => d(c));
-
-// --- saida ---
-const NAMES = {0:"hieroglifo", 1:"primitivo", 2:"composto", 3:"composto-2", 4:"composto-3"};
+/* Nivel 0 e atomo; todo nivel acima e composto, e o numero e a profundidade.
+   Os rotulos antigos chamavam o nivel 1 de "primitivo", o que contradiz a
+   taxonomia do GLOSSARIO: ALT, VRFY e RMBR estao no nivel 1 e sao compostos. */
+const NAMES = { 0: "hieroglifo" };
 const byDepth = {};
-Object.keys(depth).sort().forEach(c => { (byDepth[depth[c]] = byDepth[depth[c]]||[]).push(c); });
+Object.keys(analysis.depth).sort()
+  .forEach(c => { (byDepth[analysis.depth[c]] = byDepth[analysis.depth[c]] || []).push(c); });
 
 console.log("=== CAMADAS (por ordenacao topologica) ===");
-Object.keys(byDepth).map(Number).sort((a,b)=>a-b).forEach(k => {
-  console.log("\nnivel " + k + "  [" + (NAMES[k]||("composto-"+(k-1))) + "]  (" + byDepth[k].length + ")");
+Object.keys(byDepth).map(Number).sort((a, b) => a - b).forEach(k => {
+  console.log("\nnivel " + k + "  [" + (NAMES[k] || ("composto-" + k)) + "]  (" + byDepth[k].length + ")");
   console.log("  " + byDepth[k].join(" "));
 });
 
-if (undef.length) {
-  console.log("\n=== DEPENDENCIAS NUNCA DEFINIDAS (" + undef.length + ") ===");
-  console.log("  " + undef.join(" "));
+if (analysis.undefinedDeps.length) {
+  console.log("\n=== DEPENDENCIAS NUNCA DEFINIDAS (" + analysis.undefinedDeps.length + ") ===");
+  console.log("  " + analysis.undefinedDeps.join(" "));
   console.log("  -> ou sao hieroglifos (declare '= BASE') ou faltam expansoes.");
 }
-if (cycles.length) {
-  console.log("\n=== CICLOS (" + cycles.length + ") — camada indefinivel ===");
-  cycles.forEach(c => console.log("  " + c.join(" -> ")));
+if (analysis.cycles.length) {
+  console.log("\n=== CICLOS (" + analysis.cycles.length + ") — camada indefinivel ===");
+  analysis.cycles.forEach(c => console.log("  " + c.join(" -> ")));
   console.log("  -> quebre cada ciclo promovendo um dos membros a '= BASE'.");
 }
-const semCamada = [...all].filter(c => !(c in depth)).sort();
-if (semCamada.length) {
-  console.log("\n=== SEM CAMADA ATRIBUIVEL (" + semCamada.length + ") ===");
-  console.log("  " + semCamada.join(" "));
+if (analysis.unlayered.length) {
+  console.log("\n=== SEM CAMADA ATRIBUIVEL (" + analysis.unlayered.length + ") ===");
+  console.log("  " + analysis.unlayered.join(" "));
 }
-console.log("\nresumo: " + Object.keys(depth).length + " com camada, " +
-  undef.length + " indefinidos, " + cycles.length + " ciclos.");
+
+console.log("\nresumo: " + Object.keys(analysis.depth).length + " com camada, " +
+  analysis.undefinedDeps.length + " indefinidos, " + analysis.cycles.length + " ciclos.");
+
+process.exit(analysis.undefinedDeps.length || analysis.cycles.length ? 1 : 0);

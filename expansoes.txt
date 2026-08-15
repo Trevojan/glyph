@@ -1,39 +1,168 @@
-# ---- BASE: os 14 hieroglifos isolados na triagem + operadores puros ----
+# Tabela de atomos e expansoes do Glyph — v1.0.9.4
+#
+# Formato (lido por dag.js):
+#   CMD = BASE          -> atomo, nao expande
+#   CMD = <formula>     -> composto, expande
+#
+# `BASE` aqui e PALAVRA-CHAVE, nao comando. O comando que antes se chamava
+# BASE foi renomeado para CORE justamente para desfazer essa colisao.
+#
+# Notacao das formulas (normativa — GLOSSARIO.md §0.1):
+#   [A[B]]     aninhamento: B e operando de A
+#   [A],[B]    conjuncao:   A e B valem juntos, sem ordem entre si
+#   [A][B]     sequencia:   A, depois B
+#   [A-B]      cadeia:      A e B aplicados ao mesmo operando
+#
+# ====================================================================
+# 1. HIEROGLIFOS OPERADORES — atomos que agem sobre outro elemento (39)
+# ====================================================================
+
 TRUE = BASE
 FLS = BASE
-ERROR = BASE
 POS = BASE
 NGT = BASE
-MAND = BASE
-OPT = BASE
 DONT = BASE
-ALW = BASE
-NEV = BASE
+DENY = BASE
 PRIO = BASE
 OVR = BASE
+DFN = BASE
+CMP = BASE
+CNST = BASE
+ASK = BASE
+ELAB = BASE
+CLAR = BASE
+COND = BASE
+FMT = BASE
+ITR = BASE
+CONF = BASE
+UNLS = BASE
+ONLYIF = BASE
+ONLYW = BASE
+INSTOF = BASE
+AVD = BASE
+RDY = BASE
+INS = BASE
+WARN = BASE
+BYP = BASE
+FIND = BASE
+GT = BASE
+GTE = BASE
+LT = BASE
+LTE = BASE
+EQ = BASE
+NEQ = BASE
+GET = BASE
+SUB = BASE
+ADD = BASE
+SWITCH = BASE
+GO = BASE
+
+# ====================================================================
+# 2. HIEROGLIFOS PRIMITIVOS — atomos que valem por si (38)
+# ====================================================================
+
+ERROR = BASE
+MAND = BASE
+OPT = BASE
+ALW = BASE
+NEV = BASE
 PT = BASE
 VAR = BASE
 PARAM = BASE
 PH = BASE
-TPL = BASE
 DEF = BASE
-DFN = BASE
-
-# ---- Primitivos de enquadre, restrição e pergunta ----
-CMP = BASE
-CNST = BASE
+TPL = BASE
+CORE = BASE
 CTX = BASE
-ASK = BASE
 TGT = BASE
-EX = BASE
-ELAB = BASE
-CLAR = BASE
-COND = BASE
+SPEC = BASE
+LOGIC = BASE
+WHR = BASE
+HGH = BASE
+LOW = BASE
+BOLD = BASE
+LIGHT = BASE
+ATC = BASE
 
-# ---- Expansões Derivadas v1.7 ----
-VRFY = CMP TRUE
-VAL = CMP CNST
-CRIT = CMP CTX
-SCRU = CTX VRFY CRIT ASK
-TRYFR = TGT VRFY
-PROB = ERROR CTX
+# reclassificados de "glifo primitivo" para "hieroglifo primitivo"
+EX = BASE
+RWK = BASE
+IMPR = BASE
+REV = BASE
+SKEP = BASE
+DIST = BASE
+REAL = BASE
+REF = BASE
+SEEAL = BASE
+NT = BASE
+EXC = BASE
+LIM = BASE
+REQ = BASE
+EXT = BASE
+RSN = BASE
+FIN = BASE
+
+# ====================================================================
+# 3. ENGINE E MODOS — nao sao vocabulario de instrucao, mas aparecem
+#    em formulas (IF, SKL, NONE) e precisam resolver no dag. (11)
+# ====================================================================
+
+IF = BASE
+SECTION = BASE
+BLOCK = BASE
+SKL = BASE
+NONE = BASE
+TOBLOCK = BASE
+TOSECTION = BASE
+HMN = BASE
+QUICK = BASE
+OFF = BASE
+ON = BASE
+
+# ====================================================================
+# 4. GLIFOS COMPOSTOS — tem formula (32)
+# ====================================================================
+
+# --- juizo: comparar contra um padrao ---
+VRFY = [CMP-TRUE[[CORE],[TGT]]]
+VAL = [CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]
+CRIT = [CMP[CTX],[SPEC-CORE],[EVAL[ERROR]]]
+EVAL = [REAL[CORE-CTX[DIST[SKL]]]],[REF[DEF[SPEC-CORE-CTX]]]
+SCRU = [DIST-RSN[TRYFR[FIND-REAL][WHR[REAL-EQ[R:[CONF]]]]][CTX-VRFY-RSN],[SUM[ASK[DIST-RSN[TRYFR[REAL]]]]]]
+TRYFR = [REV[REF[TGT]]][VRFY[TGT],[TRUE[CNCL[GO-LOGIC]]]]
+PROB = [ERROR[CTX]]
+
+# --- acao: operar sobre o que existe ---
+SIMP = [RTNL-SUB],[CTX]
+GEN = [ELAB],[RWK],[SUB-CTX]
+SUM = [SIMP],[CORE]
+CAT = [SUM],[CORE],[ELAB]
+
+# --- pergunta e enquadre ---
+QST = [CTX[GET[CORE],[WHR[LOGIC-NONE]]],[ASK]]
+DRVF = [RTNL-RWK[MAND-NEQ],[CTX[GO-SWITCH]]]
+FOREX = [GO-ALT[AVD[GET[CTX-REQ],[CTX-CNST],[CTX-EXC]]]]
+
+# --- condicao e limite ---
+FBK = [IF-ERROR][EQ[RMBR[CORE]],[INSTOF[TRYFR],[GO[ALT]]]]
+RESTR = [IF[SKEP[CNST]][TRUE][LIM-GO[CTX-EQ[CNST]]]]
+DEPR = [AVD[GO]],[OPT[REF[INSTOF]]]
+
+# --- raciocinio ---
+HYP = [RMBR[FBK]][IMAG[ONLYIF[CNST-REAL]][TRUE],[ADD[CTX][FOREX-CORE]],[FBK]]
+IMAG = [ADD[CTX[NEQ[REAL]]]]
+ALT = [NEQ[CORE]],[EQ[TGT]]
+ASSM = [ADD[CORE]],[NEV[VRFY]]
+RTNL = [ELAB[RSN]],[REF[CNST]]
+BRST = [ITR[ADD[ALT-IMAG]]],[NEV[CNST]]
+CNSD = [ITR[CMP[ALT],[CNST]]],[NEV[CNCL]]
+PROP = [GO[ALT[RTNL]]],[ASK[CONF]]
+CTRD = [NGT[TGT]],[RTNL[DIST]]
+CNCL = [FIN[DRVF[CORE-CTX]]]
+JUST = [GO[RTNL]],[TGT[CNCL]]
+INTN = [DFN[TGT[RSN]]]
+
+# --- marca e memoria ---
+RMBR = [ALW[GET[CTX]]]
+FRGT = [NEV[GET[CTX]]]
+LRN = [GEN[RMBR]],[ADD[CORE]]
