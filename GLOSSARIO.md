@@ -77,6 +77,45 @@ Também reclassifiquei `CORE` de *engine* para *hieróglifo primitivo* ★: ele
 aparece como operando em 11 fórmulas, o que é comportamento de átomo de
 vocabulário, não de estrutura de motor.
 
+## 0.3 Ligação do operando — normativo
+
+Uma fórmula descreve operações, mas não diz **sobre o quê**. Quando o humano
+escreve `[crit'o parser']`, algo tem que decidir onde `'o parser'` entra na
+fórmula de `CRIT`. A regra:
+
+> **O operando do humano é o sujeito da fórmula inteira.** Cada item opera sobre
+> esse mesmo sujeito; o que aparece aninhado dentro de um item é o *padrão* ou
+> *aspecto* contra o qual aquele item opera, não um sujeito novo.
+
+Combinada com a §0.1:
+
+| forma | sujeito de `B` |
+|---|---|
+| `[A],[B]` | o mesmo de `A` — conjunção não troca o sujeito |
+| `[A][B]` | o **resultado** de `A` — sequência encadeia |
+| `[A[B]]` | `B` não é sujeito: é operando/padrão de `A` |
+
+`CRIT` = `[CMP[CTX]],[SPEC-CORE],[EVAL[ERROR]]`, com `'o parser'` como sujeito,
+lê-se: **compare `'o parser'` com o contexto; especifique o núcleo de
+`'o parser'`; avalie `'o parser'` quanto a erros.** Os três itens são vírgula,
+então os três falam do parser — `CTX`, `CORE` e `ERROR` são contra o quê, não
+sobre o quê.
+
+A regra se sustenta em toda a tabela:
+
+| invocação | leitura |
+|---|---|
+| `[prob'timeout']` | `[ERROR[CTX]]` — timeout é erro, situado num contexto |
+| `[vrfy'a saída']` | `[CMP-TRUE[[CORE],[TGT]]]` — compare a saída com a verdade, contra fundamento e alvo |
+| `[alt'usar cache']` | `[NEQ[CORE]],[EQ[TGT]]` — difere do fundamento, coincide no alvo |
+| `[assm'o banco responde']` | `[ADD[CORE]],[NEV[VRFY]]` — entra como fundamento, nunca é verificado |
+
+**Por que isto precisava ser escrito:** a glosa em prosa de uma fórmula tende a
+suprir o sujeito entre parênteses ("o núcleo *do contexto*"), e a fórmula não o
+diz. Sem a regra, cada leitor supre um sujeito diferente e o emissor `.hgml` não
+tem como escolher. Com ela, a decomposição é mecânica — que é a condição para
+`toHGML()` existir (`HGML_PLAN.md`, passo 17).
+
 ---
 
 ## 1. Hieróglifos operadores
@@ -502,8 +541,7 @@ CRIT  [composite]  nível 2
 `HYP` queima até **101 hieróglifos** — a primeira medida concreta do que
 "matéria pura" custa.
 
-**O que ainda falta é o emissor.** `toHGML()` precisa de uma decisão que a
-tabela não resolve: ao queimar `[crit'o parser']`, o literal `'o parser'` é
-operando de qual peça da fórmula de `CRIT`? A tabela diz do que `CRIT` é feito,
-não onde o argumento do usuário se encaixa depois de decomposto. É a primeira
-pergunta do passo 17 do `HGML_PLAN.md`.
+**O que ainda falta é o emissor** — mas o bloqueio dele caiu. A pergunta era
+onde `'o parser'` entra ao queimar `[crit'o parser']`, e a §0.3 responde: é o
+sujeito da fórmula inteira. Com isso a decomposição vira mecânica, e `toHGML()`
+passa a ser trabalho de implementação, não de desenho (`HGML_PLAN.md`, passo 17).

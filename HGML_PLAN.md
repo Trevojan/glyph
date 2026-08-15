@@ -4,8 +4,10 @@
 > vivem em `/scripts`, os caminhos foram corrigidos, e Node e navegador foram
 > verificados. O que **não** foi feito é a partição interna do `glyph-parser.js`
 > (passos 6-9, decisão D1) — ela continua valendo como está escrita abaixo.
-> A Parte B (`.hgml`) ganhou a ponte de composição na v1.1.0.1 e está travada
-> só no passo 17.
+> A Parte B (`.hgml`) ganhou a ponte de composição na v1.1.0.1, e o passo 17
+> foi **destravado**: a regra de ligação do operando está normatizada em
+> `GLOSSARIO.md` §0.3 — o argumento do humano é o sujeito da fórmula inteira.
+> Com isso a decomposição é mecânica e o emissor virou implementação.
 >
 > Regra de layout adotada: **`/scripts` guarda JavaScript; dados (`.json`,
 > `.txt`), o app (`.html`, `.css`) e os documentos ficam na raiz.** O critério é
