@@ -38,7 +38,7 @@ const WITH_BOTH = { templates: TPL.templates, rules: RULESTORE };
 
 const POSITIVE = [
   { id:"P-01", name:"Summarize this.", src:"[SUM]",
-    xml:["<summary>", "<needs>o que resumir</needs>"] },
+    xml:["<summary>", "<needs>what to summarise</needs>"] },
   { id:"P-02", name:"Summarize this, step by step.", src:"[SUM'step by step']",
     xml:["<summary>", "<user-input>step by step</user-input>"], clean:true },
   { id:"P-03", name:"Criticize, considering the context.", src:"[CRIT[CTX]]",
@@ -57,7 +57,7 @@ const POSITIVE = [
     xml:['<template name="REVCHECK"/>'] },
   { id:"P-13", name:"Default value.", src:"[DEF]", clean:true, xml:["<define/>"] },
   { id:"P-14", name:"Emotion with enthusiasm.", src:"/eth/[BRST'3']",
-    clean:true, xml:['<mood dominant="entusiasmo"/>'] },
+    clean:true, xml:['<mood dominant="enthusiasm"/>'] },
   { id:"P-15", name:"Block B: verify and conclude.", src:"[BLOCK'blockB',[VRFY],[CNCL]]",
     cmds:["BLOCK","VRFY","CNCL"] },
   { id:"P-16", name:"Segment boundary.", src:"[SUM];[LIM]", segments:2 },
@@ -72,7 +72,7 @@ const POSITIVE = [
   /* v1.1.0.0: these two asserted the v1.7 fusion. With it undone, each side
      stands on its own — EVAL compares against a realistic quality standard,
      CRIT against the declared goal; SPEC is the detailed artefact, ELAB the
-     act of detailing. GLOSSARIO.md §6.5. */
+     act of detailing. GLOSSARY.md §6.5. */
   { id:"P-21", name:"EVAL is its own command, not an alias of CRIT.", src:"[EVAL'projeto']",
     clean:true, cmds:["EVAL"], xml:["<evaluate>"] },
   { id:"P-22", name:"SPEC is its own command, not an alias of ELAB.", src:"[SPEC'requisito']",
@@ -84,7 +84,7 @@ const POSITIVE = [
   { id:"P-25", name:"PROB is composite ERROR+CTX — accepts nested context.", src:"[PROB[CTX'timeout']]",
     clean:true, cmds:["PROB","CTX"], xml:["<problem>","<context>"] },
 
-  /* ---- v1.1.0.0: the vocabulary GLOSSARIO.md declared and the engine
+  /* ---- v1.1.0.0: the vocabulary GLOSSARY.md declared and the engine
      did not have. Half the formulas in expansoes.txt referenced these. ---- */
   { id:"P-26", name:"CORE replaces BASE — the command, not the atom keyword.",
     src:"[CORE'o ponto de partida']", clean:true, cmds:["CORE"], xml:["<core>"] },
@@ -100,7 +100,7 @@ const POSITIVE = [
     xml:["<switch>","<go>"] },
 
   /* ---- v1.1.0.0: the seven v1.7 fusions, undone. Each case pins the side
-     that used to disappear into the other. GLOSSARIO.md §6.5. ---- */
+     that used to disappear into the other. GLOSSARY.md §6.5. ---- */
   { id:"P-30", name:"REV is a reading sweep, not CRIT's formal comparison.",
     src:"[REV'o diff']", clean:true, cmds:["REV"], xml:["<review>"] },
   { id:"P-31", name:"SIMP cuts complexity; CLAR removes ambiguity. Both survive.",
@@ -119,17 +119,17 @@ const POSITIVE = [
 
 const INCOMPLETE = [
   { id:"I-01", name:"IF with no condition becomes <needs>", src:"[IF;",
-    code:"UnfilledSlot", xml:["<needs>a condição</needs>"] },
+    code:"UnfilledSlot", xml:["<needs>the condition</needs>"] },
   { id:"I-02", name:"CMP with a single term warns", src:"[CMP'a']",
     code:"SingletonList" },
   { id:"I-06", name:"Template not defined in this session", src:"[--NAOEXISTE]",
     code:"UndefinedTemplate" },
   { id:"I-08", name:"GT missing the second term", src:"[gt'A']",
-    code:"MissingOperand", xml:['<needs slot="2">o segundo termo</needs>'] },
+    code:"MissingOperand", xml:['<needs slot="2">the second term</needs>'] },
   { id:"I-09", name:"DFN missing the meaning", src:"[DFN'símbolo']",
-    code:"MissingOperand", xml:['<needs slot="2">o significado</needs>'] },
+    code:"MissingOperand", xml:['<needs slot="2">the meaning</needs>'] },
   { id:"I-10", name:"VAL missing the external criterion", src:"[VAL'alvo']",
-    code:"MissingOperand", xml:['<needs slot="2">o critério externo</needs>'] }
+    code:"MissingOperand", xml:['<needs slot="2">the external criterion</needs>'] }
 ];
 
 const INVALID = [
@@ -461,7 +461,7 @@ function runExpansionChecks() {
 
   const missing = [...vocab].filter(c => !table.has(c)).sort();
   ok("X-01a", "every command in the engine is in expansoes.txt",
-     missing.length ? missing.length + " ausente(s) da tabela: " + missing.join(" ") : null);
+     missing.length ? missing.length + " missing from the table: " + missing.join(" ") : null);
 
   /* The reverse direction is not symmetric: MODE (OFF/ON) and the engine
      structures are declared in the table so formulas can name them, but they
@@ -469,81 +469,81 @@ function runExpansionChecks() {
   const extra = [...table].filter(c =>
     !vocab.has(c) && !G.MODE[c] && !G.ALIAS[c]).sort();
   ok("X-01b", "every command in expansoes.txt is in the engine",
-     extra.length ? extra.length + " na tabela sem verbete no motor: " + extra.join(" ") : null);
+     extra.length ? extra.length + " in the table with no entry in the engine: " + extra.join(" ") : null);
 
   ok("X-02", "atoms report species `atom` and depth 0",
      (G.speciesOf("CORE", opts) === "atom" && G.depthOf("CORE", opts) === 0)
-       ? null : "CORE saiu como " + G.speciesOf("CORE", opts) + "/" + G.depthOf("CORE", opts));
+       ? null : "CORE came out as " + G.speciesOf("CORE", opts) + "/" + G.depthOf("CORE", opts));
 
   ok("X-03", "composites report a formula and a depth above zero",
      (G.speciesOf("CRIT", opts) === "composite" && G.depthOf("CRIT", opts) > 0 &&
       /CMP/.test(G.formulaOf("CRIT", opts) || ""))
-       ? null : "CRIT não trouxe fórmula/profundidade coerentes");
+       ? null : "CRIT did not return a coherent formula/depth");
 
   const atoms = G.atomsOf("PROB", opts);
   ok("X-04", "a composite burns down to hieroglyphs only",
      (atoms && atoms.length && atoms.every(a => G.speciesOf(a, opts) === "atom"))
-       ? null : "PROB não reduziu a átomos: " + JSON.stringify(atoms));
+       ? null : "PROB did not reduce to atoms: " + JSON.stringify(atoms));
 
   ok("X-05", "an atom burns down to itself",
      JSON.stringify(G.atomsOf("CTX", opts)) === JSON.stringify(["CTX"])
-       ? null : "CTX reduziu a " + JSON.stringify(G.atomsOf("CTX", opts)));
+       ? null : "CTX reduced to " + JSON.stringify(G.atomsOf("CTX", opts)));
 
   const ast = G.toAST("[crit'x']", opts);
   const node = ast.segments[0].body[0];
   ok("X-06", "the AST carries species and composition depth",
      (node.species === "composite" && node.compositionDepth === 2)
-       ? null : "nó veio " + node.species + "/" + node.compositionDepth);
+       ? null : "nó got " + node.species + "/" + node.compositionDepth);
 
   const bare = G.toAST("[crit'x']", {});
   ok("X-07", "with no store loaded, species is null and nothing breaks",
-     (bare.segments[0].body[0].species == null) ? null : "species não veio null sem store");
+     (bare.segments[0].body[0].species == null) ? null : "species não got null sem store");
 
   /* v1.2.0.1 — the AST used to carry all sixteen fields on every node whether
      or not they said anything, and 43% of them were false/null/[]. */
   const lean = G.toAST("[crit'x']", opts);
   const verbose = G.toAST("[crit'x']", { ...opts, verbose: true });
   const leanNode = lean.segments[0].body[0];
-  ok("X-08", "a AST não carrega mais campos vazios",
+  ok("X-08", "the AST no longer carries empty fields",
      (!("isAlias" in leanNode) && !("autoClosed" in leanNode) && !("suggestion" in leanNode))
-       ? null : "sobraram vazios: " + JSON.stringify(Object.keys(leanNode)));
-  ok("X-09", "o que diz algo continua lá",
+       ? null : "empties left: " + JSON.stringify(Object.keys(leanNode)));
+  ok("X-09", "whatever says something is still there",
      (leanNode.canonical === "CRIT" && leanNode.gloss && leanNode.species === "composite")
-       ? null : "perdeu campo com conteúdo: " + JSON.stringify(leanNode));
-  ok("X-10", "`verbose` restaura a forma antiga inteira",
+       ? null : "dropped a field with content: " + JSON.stringify(leanNode));
+  ok("X-10", "`verbose` restores the whole old shape",
      ("isAlias" in verbose.segments[0].body[0] &&
       JSON.stringify(verbose).length > JSON.stringify(lean).length)
-       ? null : "verbose não trouxe os campos de volta");
+       ? null : "verbose did not bring the fields back");
 
   /* v1.2.0.1 — `describe` carries the semantics into the message, so whoever
      reads the XML does not need the vocabulary loaded. Off by default: it
      changes the deliverable. */
   const plain = G.toXML("[scru'x']", opts);
   const rich = G.toXML("[scru'x']", { ...opts, describe: true });
-  ok("X-11", "`describe` está desligado por padrão",
-     (!/means=/.test(plain) && !/made-of=/.test(plain)) ? null : "vazou describe no XML normal");
-  ok("X-12", "com `describe`, um composto carrega do que é feito",
+  ok("X-11", "`describe` is off by default",
+     (!/means=/.test(plain) && !/made-of=/.test(plain)) ? null : "describe leaked into the plain XML");
+  ok("X-12", "with `describe`, a composite carries what it is made of",
      (/means="[^"]+"/.test(rich) && /made-of="[a-z ]+"/.test(rich))
-       ? null : "faltou means/made-of em <scrutinize>");
-  ok("X-13", "um hieróglifo não ganha `made-of` — não decompõe",
+       ? null : "means/made-of missing on <scrutinize>");
+  ok("X-13", "a hieroglyph gets no `made-of` — it does not decompose",
      !/made-of=/.test(G.toXML("[ctx'x']", { ...opts, describe: true }))
-       ? null : "átomo veio com made-of");
+       ? null : "atom came with made-of");
 
-  /* v1.2.1.0 — as definições do GLOSSARIO.md dentro do motor. Sem elas o
+  /* v1.2.1.0 — as definições do GLOSSARY.md dentro do motor. Sem elas o
      `means` repetia o rótulo em inglês (`means="Review"` em `<review>`) e os
      88 hieróglifos, que são o que NÃO decompõe, nada tinham a dizer de si. */
   const semDef = Object.keys(store.commands).filter(c => !store.commands[c].def).sort();
-  ok("X-14", "todo comando tem definição vinda do glossário",
-     semDef.length ? semDef.length + " sem def: " + semDef.join(" ") : null);
+  ok("X-14", "every command has a definition from the glossary",
+     semDef.length ? semDef.length + " without def: " + semDef.join(" ") : null);
 
   const atomRich = G.toXML("[ctx'x']", { ...opts, describe: true });
-  ok("X-15", "`means` traz a definição, não o rótulo em inglês",
-     (/means="Escopo declarado\."/.test(atomRich) && !/means="Context"/.test(atomRich))
-       ? null : "means não trouxe a definição do glossário");
+  ok("X-15", "`means` carries the definition, not the English label",
+     (/means="Declared scope\."/.test(atomRich) && !/means="Context"/.test(atomRich))
+       ? null : "means did not carry the glossary definition");
 
-  ok("X-16", "um hieróglifo se explica mesmo sem ter do que ser feito",
+  ok("X-16", "a hieroglyph explains itself with nothing to be made of",
      (G.defOf("HGH", opts) && !G.formulaOf("HGH", opts))
-       ? null : "HGH ficou sem def ou ganhou fórmula");
+       ? null : "HGH lost its def or gained a formula");
 
   return X.length;
 }
@@ -560,7 +560,7 @@ const rX = runExpansionChecks();
  * ------------------------------------------------------------------ */
 
 function runHgmlChecks() {
-  console.log("\n--- .hgml — a queima atômica ---");
+  console.log("\n--- .hgml — the atomic burn ---");
   const H = [];
   const ok = (id, name, why) => {
     if (why) { console.log("  ✗ " + id + ": " + name); console.log("      " + why); failures.push(id); }
@@ -588,32 +588,32 @@ function runHgmlChecks() {
   };
 
   const crit = reburn("[crit'o parser']");
-  ok("H-01", "um composto reduz só a hieróglifos",
-     crit.nonAtom.length ? "sobrou: " + crit.nonAtom.join(",") : null);
-  ok("H-02", "a saída reparseia sem nenhum `fix`",
+  ok("H-01", "a composite reduces to hieroglyphs only",
+     crit.nonAtom.length ? "left over: " + crit.nonAtom.join(",") : null);
+  ok("H-02", "the output re-parses with no `fix`",
      crit.fix.length ? crit.fix.join(",") : null);
-  ok("H-03", "o que o humano escreveu sobrevive à queima",
-     crit.lits.includes("o parser") ? null : "literal perdido: " + JSON.stringify(crit.lits));
-  ok("H-04", "todo tag sai em forma fechada `[x[/x]`",
+  ok("H-03", "what the human wrote survives the burn",
+     crit.lits.includes("o parser") ? null : "literal lost: " + JSON.stringify(crit.lits));
+  ok("H-04", "every tag comes out in closed form `[x[/x]`",
      /\[cmp\b/.test(crit.out) && /\[\/cmp\]/.test(crit.out)
-       ? null : "sem par de abertura/fechamento em cmp");
+       ? null : "no open/close pair on cmp");
 
   const atom = reburn("[ctx'api/pedidos.py']");
-  ok("H-05", "um hieróglifo atravessa intacto",
+  ok("H-05", "a hieroglyph passes through untouched",
      JSON.stringify(atom.cmds) === JSON.stringify(["CTX"])
-       ? null : "veio " + JSON.stringify(atom.cmds));
+       ? null : "got " + JSON.stringify(atom.cmds));
 
   const once = G.toHGML("[crit'x'][prob'y']", opts);
-  ok("H-06", "queimar o queimado não muda nada",
-     G.toHGML(once, opts) === once ? null : "a segunda queima diferiu");
+  ok("H-06", "burning the burnt changes nothing",
+     G.toHGML(once, opts) === once ? null : "the second burn differed");
 
-  ok("H-07", "sem store, avisa em vez de quebrar",
-     /^#/.test(G.toHGML("[crit'x']", {})) ? null : "não devolveu o aviso");
+  ok("H-07", "with no store it warns instead of breaking",
+     /^#/.test(G.toHGML("[crit'x']", {})) ? null : "did not return the warning");
 
   /* The burn is an EXPANSION: this pins the order of magnitude so a silent
      regression to shallow output gets noticed. */
   const hyp = reburn("[hyp'o banco responde']");
-  ok("H-08", "HYP, o mais fundo, reduz inteiro (~97 hieróglifos)",
+  ok("H-08", "HYP, the deepest, reduces fully (~97 hieroglyphs)",
      (!hyp.nonAtom.length && !hyp.fix.length && hyp.cmds.length > 80)
        ? null : "sobrou " + hyp.nonAtom.join(",") + " / " + hyp.cmds.length + " tags");
 
@@ -631,9 +631,9 @@ function runHgmlChecks() {
     const r = reburn("[" + c.toLowerCase() + "'x']");
     return r.fix.length || r.nonAtom.length;
   }).sort();
-  ok("H-09", "30 dos 32 compostos queimam limpo; 2 conhecidos falham",
+  ok("H-09", "30 of 32 composites burn clean; 2 known ones fail",
      JSON.stringify(failing) === JSON.stringify(KNOWN)
-       ? null : "esperado " + JSON.stringify(KNOWN) + ", veio " + JSON.stringify(failing));
+       ? null : "expected " + JSON.stringify(KNOWN) + ", got " + JSON.stringify(failing));
 
   return H.length;
 }

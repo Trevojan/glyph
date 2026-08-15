@@ -5,8 +5,8 @@ description: Common vocabulary and canonical aliases reference for Glyph Markup 
 
 # Glyph — vocabulário comum e aliases (v1.2.0.0)
 
-Tabela de bolso. A referência normativa completa é `GLOSSARIO.md`; as aridades
-estão em `ASSINATURAS.md`.
+Tabela de bolso. A referência normativa completa é `GLOSSARY.md`; as aridades
+estão em `SIGNATURES.md`.
 
 ## O mínimo para começar
 
@@ -79,7 +79,7 @@ Para ver do que um comando é feito:
 | `[NGT]` / `[DONT]` | inverte valor de verdade / proíbe fazer |
 
 *(Os sete primeiros foram fundidos na v1.7 e separados de novo na v1.1.0.0 —
-`GLOSSARIO.md` §6.5.)*
+`GLOSSARY.md` §6.5.)*
 
 ## Vocabulário da v1.1.0.0
 

@@ -1,6 +1,6 @@
 # Glifos e Hieróglifos — movido
 
-**A referência do vocabulário é [`GLOSSARIO.md`](GLOSSARIO.md).**
+**A referência do vocabulário é [`GLOSSARY.md`](GLOSSARY.md).**
 
 Este arquivo era uma compilação do vocabulário na v1.0.9.3, escrita antes do
 glossário normativo existir. Foi esvaziado na v1.1.0.1 em vez de atualizado,
@@ -19,9 +19,9 @@ uma a uma verificação automática:
 
 | o quê | onde | verificado por |
 |---|---|---|
-| o que cada comando **é** | `GLOSSARIO.md` | `X-01` na suíte — motor e tabela têm de bater |
+| o que cada comando **é** | `GLOSSARY.md` | `X-01` na suíte — motor e tabela têm de bater |
 | do que cada comando **é feito** | `expansoes.txt` | `node scripts/dag.js` — 0 ciclos, 0 indefinidos |
-| **quantos** operandos pede | `ASSINATURAS.md` | derivado de `SLOTS`/`FRAMES` no parser |
+| **quantos** operandos pede | `SIGNATURES.md` | derivado de `SLOTS`/`FRAMES` no parser |
 | o que o motor **faz** | `scripts/glyph-parser.js` | `node scripts/test-corpus.js` |
 
 Recriar aqui um quarto recorte dos mesmos dados reabriria o buraco, sem nenhuma
@@ -29,7 +29,7 @@ checagem cobrindo-o.
 
 ## Se quiser o recorte temático de volta
 
-O `GLOSSARIO.md` organiza por **espécie** (hieróglifo, glifo, engine, modo),
+O `GLOSSARY.md` organiza por **espécie** (hieróglifo, glifo, engine, modo),
 porque é a espécie que decide o que o `.hgml` pode tratar como átomo. O recorte
 antigo, por **categoria** (Ação, Juízo, Enquadre…), continua existindo vivo em
 `CATS`, dentro de `scripts/glyph-parser.js` — é o que a interface usa para montar

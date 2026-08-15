@@ -1,20 +1,20 @@
-# Tabela de atomos e expansoes do Glyph — v1.0.9.4
+# Glyph atom and expansion table — v1.3.0.0
 #
-# Formato (lido por dag.js):
-#   CMD = BASE          -> atomo, nao expande
-#   CMD = <formula>     -> composto, expande
+# Format (read by read-expansoes.js):
+#   CMD = BASE          -> atom, does not expand
+#   CMD = <formula>     -> composite, expands
 #
-# `BASE` aqui e PALAVRA-CHAVE, nao comando. O comando que antes se chamava
-# BASE foi renomeado para CORE justamente para desfazer essa colisao.
+# `BASE` here is a KEYWORD, not a command. The command formerly called BASE was
+# renamed CORE precisely to undo that collision.
 #
-# Notacao das formulas (normativa — GLOSSARIO.md §0.1):
-#   [A[B]]     aninhamento: B e operando de A
-#   [A],[B]    conjuncao:   A e B valem juntos, sem ordem entre si
-#   [A][B]     sequencia:   A, depois B
-#   [A-B]      cadeia:      A e B aplicados ao mesmo operando
+# Formula notation (normative — GLOSSARY.md 0.1):
+#   [A[B]]     nesting:      B is A's operand
+#   [A],[B]    conjunction:  A and B hold together, no order between them
+#   [A][B]     sequence:     A, then B
+#   [A-B]      chain:        A and B applied to the same operand
 #
 # ====================================================================
-# 1. HIEROGLIFOS OPERADORES — atomos que agem sobre outro elemento (39)
+# 1. HIEROGLYPH OPERATORS — atoms that act on another element (39)
 # ====================================================================
 
 TRUE = BASE
@@ -58,7 +58,7 @@ SWITCH = BASE
 GO = BASE
 
 # ====================================================================
-# 2. HIEROGLIFOS PRIMITIVOS — atomos que valem por si (38)
+# 2. HIEROGLYPH PRIMITIVES — atoms that stand on their own (38)
 # ====================================================================
 
 ERROR = BASE
@@ -84,7 +84,7 @@ BOLD = BASE
 LIGHT = BASE
 ATC = BASE
 
-# reclassificados de "glifo primitivo" para "hieroglifo primitivo"
+# reclassified from "primitive glyph" to "hieroglyph primitive"
 EX = BASE
 RWK = BASE
 IMPR = BASE
@@ -103,8 +103,8 @@ RSN = BASE
 FIN = BASE
 
 # ====================================================================
-# 3. ENGINE E MODOS — nao sao vocabulario de instrucao, mas aparecem
-#    em formulas (IF, SKL, NONE) e precisam resolver no dag. (11)
+# 3. ENGINE AND MODES — not instruction vocabulary, but they appear in
+#    formulas (IF, SKL, NONE) and must resolve in the dag. (11)
 # ====================================================================
 
 IF = BASE
@@ -120,10 +120,10 @@ OFF = BASE
 ON = BASE
 
 # ====================================================================
-# 4. GLIFOS COMPOSTOS — tem formula (32)
+# 4. COMPOSITE GLYPHS — these carry a formula (32)
 # ====================================================================
 
-# --- juizo: comparar contra um padrao ---
+# --- judgement: compare against a standard ---
 VRFY = [CMP-TRUE[[CORE],[TGT]]]
 VAL = [CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]
 CRIT = [CMP[CTX],[SPEC-CORE],[EVAL[ERROR]]]
@@ -132,23 +132,23 @@ SCRU = [DIST-RSN[TRYFR[FIND-REAL][WHR[REAL-EQ[R:[CONF]]]]][CTX-VRFY-RSN],[SUM[AS
 TRYFR = [REV[REF[TGT]]][VRFY[TGT],[TRUE[CNCL[GO-LOGIC]]]]
 PROB = [ERROR[CTX]]
 
-# --- acao: operar sobre o que existe ---
+# --- action: operate on what already exists ---
 SIMP = [RTNL-SUB],[CTX]
 GEN = [ELAB],[RWK],[SUB-CTX]
 SUM = [SIMP],[CORE]
 CAT = [SUM],[CORE],[ELAB]
 
-# --- pergunta e enquadre ---
+# --- question and frame ---
 QST = [CTX[GET[CORE],[WHR[LOGIC-NONE]]],[ASK]]
 DRVF = [RTNL-RWK[MAND-NEQ],[CTX[GO-SWITCH]]]
 FOREX = [GO-ALT[AVD[GET[CTX-REQ],[CTX-CNST],[CTX-EXC]]]]
 
-# --- condicao e limite ---
+# --- condition and limit ---
 FBK = [IF-ERROR][EQ[RMBR[CORE]],[INSTOF[TRYFR],[GO[ALT]]]]
 RESTR = [IF[SKEP[CNST]][TRUE][LIM-GO[CTX-EQ[CNST]]]]
 DEPR = [AVD[GO]],[OPT[REF[INSTOF]]]
 
-# --- raciocinio ---
+# --- reasoning ---
 HYP = [RMBR[FBK]][IMAG[ONLYIF[CNST-REAL]][TRUE],[ADD[CTX][FOREX-CORE]],[FBK]]
 IMAG = [ADD[CTX[NEQ[REAL]]]]
 ALT = [NEQ[CORE]],[EQ[TGT]]
@@ -162,7 +162,7 @@ CNCL = [FIN[DRVF[CORE-CTX]]]
 JUST = [GO[RTNL]],[TGT[CNCL]]
 INTN = [DFN[TGT[RSN]]]
 
-# --- marca e memoria ---
+# --- mark and memory ---
 RMBR = [ALW[GET[CTX]]]
 FRGT = [NEV[GET[CTX]]]
 LRN = [GEN[RMBR]],[ADD[CORE]]

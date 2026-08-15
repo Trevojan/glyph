@@ -4,7 +4,7 @@
 >
 > Os sete alias decididos aqui saíram do motor. `[eval]`, `[rev]`, `[spec]`,
 > `[simp]`, `[qst]`, `[forex]` e `[onlyif]` voltaram a ser comandos próprios.
-> Ver `GLOSSARIO.md` §6.5.
+> Ver `GLOSSARY.md` §6.5.
 >
 > O documento fica **como registro do método e do erro**, não como norma. O que
 > vale hoje sobre cada par:

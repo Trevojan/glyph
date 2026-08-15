@@ -16,7 +16,7 @@
  *   d  data fixes      vocabulary tables, constants, glosses
  * A digit moving resets every digit to its right.
  *
- * v1.1.0.0 — the vocabulary is now aligned to GLOSSARIO.md, which is the
+ * v1.1.0.0 — the vocabulary is now aligned to GLOSSARY.md, which is the
  * normative reference from here on. Three changes, all backend:
  *
  *   1. `BASE` the command became `CORE`. `BASE` stayed as the keyword in
@@ -29,7 +29,7 @@
  *   3. The v1.7 fusions are undone. EVAL, REV, SPEC, SIMP, QST, FOREX and
  *      ONLYIF are commands in their own right again, each separated from the
  *      one it was folded into by a stated axis (object vs. act, or standard
- *      of comparison) — see GLOSSARIO.md §6.5.
+ *      of comparison) — see GLOSSARY.md §6.5.
  *
  * UMD: works in Node (require) and in the browser (window.GlyphCore).
  * As a CLI:  node glyph-parser.js "[crit[ctx]]" [--ast|--xml|--diag]
@@ -42,11 +42,27 @@
 })(typeof self !== "undefined" ? self : this, function () {
   "use strict";
 
-  var VERSION = "1.2.1.0";
+  var VERSION = "1.3.0.0";
 
   /* ======================================================
      1. VOCABULARY — Appendix A, one slot per command
-     ====================================================== */
+     ======================================================
+
+     LANGUAGE BOUNDARY. Everything that reaches the deliverable is English:
+     INSTR glosses (which become the XML element names), FRAMES and SLOTS
+     (which become <needs>), EMO (which becomes <mood>), and the definitions
+     extracted from GLOSSARY.md.
+
+     CATS below is the exception, and deliberately so: its labels and glosses
+     exist only to drive the interface — the category browser, the search box
+     and the tooltip — and the interface is pt-BR. They feed PTBR and CAT_OF,
+     both consumed by glyph-ui.js and by two diagnostic messages, which are
+     also screen text.
+
+     That mixing is the next data-engineering step, not an oversight: engine
+     data and interface data should not share a file. Moving CATS out means
+     giving glyph-ui.js its own vocabulary table, which is a change to the
+     interface contract and wants to be its own commit. */
 
   var CATS = [
     { id:"acao", label:"Ação", note:"operar sobre algo que já existe", items:[
@@ -67,9 +83,9 @@
       ["CTX","contexto"],["REF","referência"],["SEEAL","veja também"],["CORE","fundamento, ponto de partida"],
       ["DRVF","derivar de"],["EX","exemplo"],["FOREX","por exemplo"],["NT","nota"],["PT","parte n"]
     ]},
-    /* v1.1.0.0: operar SOBRE o contexto, não apenas situar-se nele. A separação
-       de "enquadre" é o que distingue declarar um escopo de ler, escrever e
-       localizar dentro dele. */
+    /* Operating ON the context, not merely sitting in it. Splitting this from
+       "enquadre" is what separates declaring a scope from reading, writing and
+       locating inside one. */
     { id:"contexto", label:"Contexto", note:"ler, escrever e localizar no escopo", items:[
       ["FIND","buscar no contexto"],["GET","ler e reter"],["ADD","acrescentar"],
       ["SUB","subtrair"],["WHR","onde, lugar"]
@@ -94,9 +110,9 @@
       ["TGT","alvo"],["PRIO","prioridade"],["FIN","por fim"],["RDY","prontidão"],["INS","instrução"],
       ["GO","executa, vai"]
     ]},
-    /* v1.1.0.0: grau. PRIO ordena entre itens; estes graduam um item só —
-       quanta força ele tem (HGH/LOW) e quanto peso ganha na saída
-       (BOLD/LIGHT). Eram os únicos do glossário sem casa temática. */
+    /* Degree. PRIO orders items against each other; these grade a single item —
+       how much force it carries (HGH/LOW) and how much weight it gets in the
+       output (BOLD/LIGHT). */
     { id:"intensidade", label:"Intensidade", note:"grau de força e de ênfase", items:[
       ["HGH","alta"],["LOW","baixa"],["BOLD","ênfase forte"],["LIGHT","ênfase suave"]
     ]},
@@ -131,7 +147,7 @@
     DENY:"Deny", CORE:"Core", DFN:"Define Symbol",
     GT:"Greater Than", GTE:"Greater Than Equal", LT:"Less Than", LTE:"Less Than Equal",
     EQ:"Equal", NEQ:"Not Equal",
-    /* v1.1.0.0 — declarados em GLOSSARIO.md §1/§2 e usados pelas fórmulas de
+    /* v1.1.0.0 — declarados em GLOSSARY.md §1/§2 e usados pelas fórmulas de
        expansoes.txt, mas ausentes do motor até aqui. */
     FIND:"Find", GET:"Get", ADD:"Add", SUB:"Subtract", WHR:"Where",
     HGH:"High", LOW:"Low", BOLD:"Bold", LIGHT:"Light",
@@ -158,7 +174,7 @@
        the command. All seven already had their own INSTR entry; classify()
        consults ALIAS *before* INSTR, so merely having the line here was enough
        for the merge to win. Deleting it is the whole de-fusion.
-       GLOSSARIO.md §6.5. */
+       GLOSSARY.md §6.5. */
   };
   var ALIAS_OF = {};
   Object.keys(ALIAS).forEach(function (a) { (ALIAS_OF[ALIAS[a]] = ALIAS_OF[ALIAS[a]] || []).push(a); });
@@ -168,7 +184,7 @@
     DEF:"Define", PH:"Placeholder", TPL:"Template", LOGIC:"Logic"
   };
   /* META and STRUCT are PARSING buckets, not the species taxonomy of
-     GLOSSARIO.md — the two axes are independent and both are needed. The
+     GLOSSARY.md — the two axes are independent and both are needed. The
      glossary classifies by COMPOSITION (does it decompose into atoms?);
      these classify by BEHAVIOUR (does it open a named block? is it exempt
      from the slot-order warning?). A command can be an atom in one and a
@@ -176,27 +192,30 @@
   var META = {
     QUICK:"Quick", TOBLOCK:"To Block", TOSECTION:"To Section",
     HMN:"Human", EXT:"External", ATC:"Attachment",
-    NONE:"None"                       // v1.1.0.0 — engine em GLOSSARIO.md §4
+    NONE:"None"                       // v1.1.0.0 — engine em GLOSSARY.md §4
   };
   var MODE = { OFF:"Mode off", ON:"Mode on" };
 
+  /* Reaches the deliverable as <mood dominant="…">, so English like the rest of
+     the XML. `lng` keeps its Portuguese name in the comment because "saudade"
+     has no one-word English equivalent — "longing" is the closest. */
   var EMO = {
-    hpy:"felicidade", joy:"alegria", exc:"empolgação", cnt:"contentamento", clm:"calma",
-    ser:"serenidade", pea:"paz", grt:"gratidão", hop:"esperança", prd:"orgulho",
-    lov:"amor", afc:"afeto", adm:"admiração", amu:"divertimento", del:"deleite",
-    rlf:"alívio", cfd:"confiança", eth:"entusiasmo", cur:"curiosidade", awe:"assombro",
-    ply:"brincadeira", chr:"animação",
-    sad:"tristeza", ang:"raiva", fry:"fúria", fear:"medo", dis:"desdém", dsg:"nojo",
-    anx:"ansiedade", frs:"frustração", irr:"irritação", ann:"incômodo", env:"inveja",
-    jel:"ciúme", glt:"culpa", shm:"vergonha", reg:"arrependimento", dsp:"desespero",
-    grf:"luto", lon:"solidão", bor:"tédio", res:"ressentimento", btr:"amargura",
-    ctm:"desprezo", hum:"humilhação", emb:"vergonha social", pan:"pânico", drd:"pavor",
-    ter:"terror", exh:"exaustão", str:"estresse", ovw:"sobrecarga", ins:"insegurança",
-    apt:"apatia", num:"anestesia", mel:"melancolia",
-    cnf:"confusão", dbt:"dúvida", sus:"suspeita", skp:"ceticismo", nos:"nostalgia",
-    lng:"saudade", vul:"vulnerabilidade", emp:"empatia", cmp:"compaixão", sym:"simpatia",
-    trs:"confiança", bet:"traição", ind:"indiferença", ant:"expectativa",
-    imp:"impaciência", sur:"surpresa"
+    hpy:"happiness", joy:"joy", exc:"excitement", cnt:"contentment", clm:"calm",
+    ser:"serenity", pea:"peace", grt:"gratitude", hop:"hope", prd:"pride",
+    lov:"love", afc:"affection", adm:"admiration", amu:"amusement", del:"delight",
+    rlf:"relief", cfd:"confidence", eth:"enthusiasm", cur:"curiosity", awe:"awe",
+    ply:"playfulness", chr:"cheer",
+    sad:"sadness", ang:"anger", fry:"fury", fear:"fear", dis:"disdain", dsg:"disgust",
+    anx:"anxiety", frs:"frustration", irr:"irritation", ann:"annoyance", env:"envy",
+    jel:"jealousy", glt:"guilt", shm:"shame", reg:"regret", dsp:"despair",
+    grf:"grief", lon:"loneliness", bor:"boredom", res:"resentment", btr:"bitterness",
+    ctm:"contempt", hum:"humiliation", emb:"embarrassment", pan:"panic", drd:"dread",
+    ter:"terror", exh:"exhaustion", str:"stress", ovw:"overwhelm", ins:"insecurity",
+    apt:"apathy", num:"numbness", mel:"melancholy",
+    cnf:"confusion", dbt:"doubt", sus:"suspicion", skp:"scepticism", nos:"nostalgia",
+    lng:"longing", vul:"vulnerability", emp:"empathy", cmp:"compassion", sym:"sympathy",
+    trs:"trust", bet:"betrayal", ind:"indifference", ant:"anticipation",
+    imp:"impatience", sur:"surprise"
   };
 
   /* "prob" left this table: now that PROB is a registered INSTR tag
@@ -205,11 +224,11 @@
      under any casing.
 
      "go" left for the same reason in v1.1.0.0: GO is now a command
-     (GLOSSARIO.md §1), and INSTR is consulted before SESSION. Leaving it
+     (GLOSSARY.md §1), and INSTR is consulted before SESSION. Leaving it
      would be a second, unreachable definition of the same word. */
   var SESSION = {
-    rd:"ler", info:"informação", org:"organizar",
-    ok:"ok, entendido", dtl:"detalhe"
+    rd:"read", info:"information", org:"organise",
+    ok:"ok, understood", dtl:"detail"
   };
 
   var LOGIC_OPS = [
@@ -237,54 +256,54 @@
   ];
 
   /* valency: what each command needs to receive to be determinate.
-     SECTION and BLOCK enter here in v1.0.9 to match ASSINATURAS.md, which
+     SECTION and BLOCK enter here in v1.0.9 to match SIGNATURES.md, which
      already assigned them minimum arity 1. */
   var FRAMES = {
-    INS:["o que fazer"], TRYFR:["o resultado desejado"], PROP:["o que propor"],
-    IMPR:["o que melhorar"], REV:["o que revisar"], CRIT:["o que criticar"],
-    RWK:["o que retrabalhar"], FMT:["o que formatar"], SUM:["o que resumir"],
-    SCRU:["o que escrutinar"], VRFY:["o que verificar"], VAL:["o que validar"],
-    SKEP:["cético sobre o quê"], SIMP:["o que simplificar"], ELAB:["o que detalhar"],
-    ASK:["o que perguntar"], QST:["a pergunta"], CLAR:["o que esclarecer"],
-    IMAG:["a situação"], HYP:["a hipótese"], BRST:["o assunto"],
-    CNSD:["os fatores*"], CMP:["os termos*"], CAT:["os itens*"], ALT:["as opções*"],
-    DIST:["os termos*"],
-    CTX:["a que se refere"], REF:["a que se refere"], SEEAL:["a que se refere"],
-    TGT:["o alvo"], BYP:["o que contornar"], DRVF:["a origem"],
-    COND:["a condição"], IF:["a condição"], UNLS:["a condição"],
-    ONLYIF:["a condição"], ONLYW:["a condição"], EXC:["a exceção"],
-    RSN:["o motivo"], RTNL:["o racional"], JUST:["a justificativa"],
-    EX:["o caso"], FOREX:["o caso"], REQ:["a exigência"],
-    CNST:["o limite"], RESTR:["o limite"], AVD:["o que evitar"],
-    DONT:["o que não fazer"], DENY:["o que negar"], ASSM:["o que se assume"],
-    NT:["a observação"], WARN:["o risco"], LIM:["o limite"],
-    EVAL:["o que avaliar"], CNCL:["sobre o quê"], ITR:["o que iterar"],
-    GEN:["o que generalizar"], SPEC:["o que especificar"], INSTOF:["o que entra no lugar"],
-    SECTION:["o nome da seção"], BLOCK:["o nome do bloco"],
-    /* v1.1.0.0 — só os operadores entram aqui. WHR, HGH, LOW, BOLD e LIGHT
-       são primitivos no glossário ("valem sozinhos"), então não exigem
-       operando e não geram <needs>. */
-    FIND:["o que buscar"], GET:["o que ler do contexto"],
-    ADD:["o que acrescentar"], SUB:["o que subtrair"],
-    SWITCH:["os estados*"], GO:["o que executar"]
+    INS:["what to do"], TRYFR:["the desired result"], PROP:["what to propose"],
+    IMPR:["what to improve"], REV:["what to review"], CRIT:["what to criticise"],
+    RWK:["what to rework"], FMT:["what to format"], SUM:["what to summarise"],
+    SCRU:["what to scrutinise"], VRFY:["what to verify"], VAL:["what to validate"],
+    SKEP:["sceptical about what"], SIMP:["what to simplify"], ELAB:["what to elaborate"],
+    ASK:["what to ask"], QST:["the question"], CLAR:["what to clarify"],
+    IMAG:["the situation"], HYP:["the hypothesis"], BRST:["the topic"],
+    CNSD:["the factors*"], CMP:["the terms*"], CAT:["the items*"], ALT:["the options*"],
+    DIST:["the terms*"],
+    CTX:["what it refers to"], REF:["what it refers to"], SEEAL:["what it refers to"],
+    TGT:["the target"], BYP:["what to bypass"], DRVF:["the origin"],
+    COND:["the condition"], IF:["the condition"], UNLS:["the condition"],
+    ONLYIF:["the condition"], ONLYW:["the condition"], EXC:["the exception"],
+    RSN:["the reason"], RTNL:["the rationale"], JUST:["the justification"],
+    EX:["the case"], FOREX:["the case"], REQ:["the requirement"],
+    CNST:["the limit"], RESTR:["the limit"], AVD:["what to avoid"],
+    DONT:["what not to do"], DENY:["what to deny"], ASSM:["what is assumed"],
+    NT:["the observation"], WARN:["the risk"], LIM:["the limit"],
+    EVAL:["what to evaluate"], CNCL:["about what"], ITR:["what to iterate"],
+    GEN:["what to generalise"], SPEC:["what to specify"], INSTOF:["what takes its place"],
+    SECTION:["the section name"], BLOCK:["the block name"],
+    /* Only operators belong here. WHR, HGH, LOW, BOLD and LIGHT are primitives
+       in the glossary ("stand alone"), so they require no operand and never
+       produce <needs>. */
+    FIND:["what to find"], GET:["what to read from the context"],
+    ADD:["what to add"], SUB:["what to subtract"],
+    SWITCH:["the states*"], GO:["what to execute"]
   };
 
   /* structural commands whose first child must be a literal (the name) */
   var NAMED_STRUCT = { SECTION:1, BLOCK:1 };
 
-  /* Mandatory ordered slots — ASSINATURAS.md §3 (prefix comparison) and the
+  /* Mandatory ordered slots — SIGNATURES.md §3 (prefix comparison) and the
      arity-2 signatures. FRAMES only models the first slot; here each missing
      position becomes a <needs slot="…"> in the XML, instead of silently
      vanishing. */
   var SLOTS = {
-    GT: ["o primeiro termo", "o segundo termo"],
-    GTE:["o primeiro termo", "o segundo termo"],
-    LT: ["o primeiro termo", "o segundo termo"],
-    LTE:["o primeiro termo", "o segundo termo"],
-    EQ: ["o primeiro termo", "o segundo termo"],
-    NEQ:["o primeiro termo", "o segundo termo"],
-    DFN:["o símbolo", "o significado"],
-    VAL:["o que validar", "o critério externo"]
+    GT: ["the first term", "the second term"],
+    GTE:["the first term", "the second term"],
+    LT: ["the first term", "the second term"],
+    LTE:["the first term", "the second term"],
+    EQ: ["the first term", "the second term"],
+    NEQ:["the first term", "the second term"],
+    DFN:["the symbol", "the meaning"],
+    VAL:["what to validate", "the external criterion"]
   };
 
   /* Long-block limits (v1.0.9.1).
@@ -315,7 +334,7 @@
   }
 
   /* ---- composition registry (v1.1.0.0) --------------------------------
-     What GLOSSARIO.md knows and the engine did not: which commands are
+     What GLOSSARY.md knows and the engine did not: which commands are
      hieroglyphs (atoms, they do not decompose) and which are glyphs
      (composites, with a formula that reduces them to atoms).
 
@@ -357,7 +376,7 @@
     var e = entryOf(name, opts);
     return (e && e.formula) || null;
   }
-  /** what the command MEANS — extracted from GLOSSARIO.md at build time.
+  /** what the command MEANS — extracted from GLOSSARY.md at build time.
       `formulaOf` says what a composite is made OF; this says what any command
       IS, and for the 88 hieroglyphs it is the only thing there is to say. */
   function defOf(name, opts) {

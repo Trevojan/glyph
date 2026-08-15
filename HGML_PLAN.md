@@ -6,7 +6,7 @@
 > (passos 6-9, decisão D1) — ela continua valendo como está escrita abaixo.
 > A Parte B (`.hgml`) ganhou a ponte de composição na v1.1.0.1, e o passo 17
 > foi **destravado**: a regra de ligação do operando está normatizada em
-> `GLOSSARIO.md` §0.3 — o argumento do humano é o sujeito da fórmula inteira.
+> `GLOSSARY.md` §0.3 — o argumento do humano é o sujeito da fórmula inteira.
 > Com isso a decomposição é mecânica e o emissor virou implementação.
 >
 > Regra de layout adotada: **`/scripts` guarda JavaScript; dados (`.json`,
@@ -140,7 +140,7 @@ não recomendaria começar antes da forma canônica estar de pé.
 | 21 | **Checkpoint B** — revisar com você 5-10 exemplos de saída `.hgml` lado a lado com o XML equivalente, confirmar que a forma "sente certo" antes de generalizar | — | — | checkpoint |
 | 22 | *(só se D3=Opção 2)* Completar `expansoes.txt` pros ~90 comandos de `INSTR` que hoje não têm expansão em hieróglifos-base, verificando ausência de ciclos a cada adição via `node scripts/dag.js` | `expansoes.txt` | nenhum direto — é insumo de dados, não código do parser | **trabalho seu**, com meu apoio na verificação de ciclos |
 | 23 | *(só se D3=Opção 2)* Implementar um segundo emissor (`toHGMLAtomic` ou flag `deep:true` em `toHGML`) que substitui cada comando canônico pela cadeia de átomos-base segundo `expansoes.txt`, sobre a mesma AST | `glyph-parser.js` | precisa de round-trip próprio — decompor em átomos pode não ser reversível 1:1, então esse é o passo que mais precisa de teste dedicado | design + implementação, alto esforço |
-| 24 | Atualizar `ASSINATURAS.md`/`skills/glyph-markup/SKILL.md` com a seção normativa de `.hgml`; bump de `VERSION` em `glyph-parser.js` e de `GLYPH_ASSET_VERSION` no HTML (hoje incoerentes entre si — `1.0.9.3` vs `1.9.3`, vale alinhar de passagem); entrada nova em `CHANGELOG.md` seguindo o padrão das entradas anteriores | docs + versão | nenhum | mecânico, feito por último |
+| 24 | Atualizar `SIGNATURES.md`/`skills/glyph-markup/SKILL.md` com a seção normativa de `.hgml`; bump de `VERSION` em `glyph-parser.js` e de `GLYPH_ASSET_VERSION` no HTML (hoje incoerentes entre si — `1.0.9.3` vs `1.9.3`, vale alinhar de passagem); entrada nova em `CHANGELOG.md` seguindo o padrão das entradas anteriores | docs + versão | nenhum | mecânico, feito por último |
 
 ---
 

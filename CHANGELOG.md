@@ -14,6 +14,77 @@ Todas as mudanças notáveis do Glyph são documentadas aqui, da mais recente pa
 
 ---
 
+## [1.3.0.0] — English across the engine; pt-BR stays in the interface
+
+A language boundary, drawn where the artefacts already split. **Everything that
+reaches the deliverable is English; everything that is screen text stays
+pt-BR.** The point is that operator and model reason in the same terms, so
+nothing is lost in a translation neither of them asked for.
+
+| what | goes where | language |
+|---|---|---|
+| `FRAMES` / `SLOTS` | `<needs>what to criticise</needs>` in the **XML** | **EN** |
+| `EMO` | `<mood dominant="enthusiasm">` in the **XML** | **EN** |
+| `SESSION` | XML element names | **EN** |
+| glossary definitions | `means="…"` under `describe` | **EN** |
+| `CATS` labels and glosses | command browser, search, tooltip | **pt-BR** |
+| diagnostic messages | the "o que falta dizer" panel | **pt-BR** |
+| moulds, presets, UI strings | the interface itself | **pt-BR** |
+
+### Renamed
+
+- `GLOSSARIO.md` → **`GLOSSARY.md`**, rewritten in English. Still the normative
+  reference the engine derives from, and still what `build-templates.js` reads
+  to fill `def`. All 120 definitions translated; section numbering was kept so
+  `§0.3`, `§6.5` and the rest still resolve.
+- `ASSINATURAS.md` → **`SIGNATURES.md`**, likewise. Gained a short section on
+  where species and arity disagree — `RSN` and `FIN` are primitives in the
+  glossary yet `RSN` carries a `FRAMES` entry, so it asks for an operand in
+  practice. Recorded rather than silently "fixed" in either direction.
+
+### Marked
+
+`CATS` now carries an explicit **language-boundary comment** saying it is
+interface data and pt-BR by design, so the next reader does not "finish" the
+translation and break the UI. Separating it out is the next data-engineering
+step and is deliberately not taken here: moving `CATS` means giving
+`glyph-ui.js` its own vocabulary table, which changes the interface contract and
+wants to be its own commit.
+
+### Still pt-BR, by omission rather than design
+
+The prose documents — `README.md`, this changelog, `HGML_PLAN.md`,
+`GLIFOS_COMPOSTOS.md`, `PLANILHA_FUSOES.md`, `GLIFOS_REFERENCIA.md` and the two
+skills. They are documentation, not interface, so by the rule above they should
+be English; they are simply not done yet.
+
+---
+
+## [1.2.1.0] — As definições do glossário entram no motor
+
+Fecha a limitação registrada na v1.2.0.1. `means` vinha de `INSTR`, que guarda o
+**rótulo** em inglês e não a definição, então `means="Review"` não acrescentava
+nada a `<review>`. E `made-of` só existe para composto — ou seja, os 88
+hieróglifos, que são justamente o que **não** decompõe, nada tinham a dizer de si.
+
+`build-templates.js` passou a extrair as 120 definições do glossário e gravá-las
+em `glyph-expansions.json` como `def`. **Extraídas, não copiadas** para um
+segundo arquivo: o glossário é a referência normativa e o motor deriva dela —
+copiar recriaria exatamente a divergência que esta série de versões gastou
+fechando.
+
+`def` fica ao lado de `formula` porque respondem à mesma pergunta em dois níveis:
+`def` diz o que o comando **é**, `formula` diz do que ele é **feito**. Um átomo
+só tem a primeira, e é exatamente por isso que ela precisava existir.
+
+Portão de build igual ao do ciclo: comando sem verbete no glossário derruba a
+geração. Comando opaco em silêncio é como a divergência entra.
+
+`defOf()` exposto no motor.
+
+---
+
+
 ## [1.2.0.1] — A AST emagrece; o XML pode se explicar
 
 Duas mudanças na forma da saída, nenhuma no que o motor entende.
@@ -55,7 +126,7 @@ Duas mudanças na forma da saída, nenhuma no que o motor entende.
 `means="Review"` não acrescenta nada a `<review>`. O valor real está em
 `made-of` — e ele só existe para compostos. Ou seja, **os 88 hieróglifos, que
 são justamente o que não se pode decompor, continuam sem definição legível na
-mensagem.** As definições existem, mas em prosa no `GLOSSARIO.md`, fora do
+mensagem.** As definições existem, mas em prosa no `GLOSSARY.md`, fora do
 alcance do motor. Levá-las para dentro é trabalho de dado, não de código.
 
 ---
@@ -214,7 +285,7 @@ nenhuma regra de negócio mudou, nenhum diagnóstico mudou, nenhum XML mudou.
 
 ## [1.1.0.0] — O glossário vira a fonte, o motor deriva dele
 
-Salto de *backend*: `GLOSSARIO.md` passa a ser a referência normativa do vocabulário, e
+Salto de *backend*: `GLOSSARY.md` passa a ser a referência normativa do vocabulário, e
 o parser foi alinhado a ele. `expansoes.txt` deixa de ser um esboço de 6 fórmulas e
 passa a descrever o vocabulário inteiro — **120 verbetes, 0 ciclos, 0 dependências
 indefinidas**, verificável com `node dag.js expansoes.txt`. A suíte vai de 110 para
@@ -531,7 +602,7 @@ vez de erro de aridade, e `N-06` ("template inexistente") reportava
   - `toXML(src)` — a cadeia inteira em uma chamada.
   - `serializeAST(segments, gaps)` / `toAST(src)` — AST limpa, sem ciclos.
   - Diagnósticos ganham `code` tipado e `plain` (texto sem HTML, para CLI).
-- **Aridade posicional de verdade (`SLOTS`)**. `ASSINATURAS.md` §3 exigia 2
+- **Aridade posicional de verdade (`SLOTS`)**. `SIGNATURES.md` §3 exigia 2
   argumentos para as comparações prefixas, `[DFN]` e `[VAL]` — o engine nunca
   checou. `[gt'A']`, `[DFN'símbolo']` e `[VAL'alvo']` passavam sem um único
   diagnóstico; agora cada posição vazia viaja no XML:
@@ -544,7 +615,7 @@ vez de erro de aridade, e `N-06` ("template inexistente") reportava
   ```
 
   `SECTION` e `BLOCK` entraram em `FRAMES` e passaram a exigir nome literal
-  (`MissingStructName`), casando com a aridade mínima que `ASSINATURAS.md` já lhes
+  (`MissingStructName`), casando com a aridade mínima que `SIGNATURES.md` já lhes
   dava.
 
 ### Corrigido

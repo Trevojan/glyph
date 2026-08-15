@@ -16,7 +16,7 @@ Data de lançamento: **2026-08-02**
 - Operadores prefixos de comparação (`[gt]`, `[gte]`, `[lt]`, `[lte]`, `[eq]`, `[neq]`).
 - Modificadores de polaridade e modalidade (`[pos]`, `[neg]`, `[mand]`, `[opt]`).
 
-## 📑 Tabela de Assinaturas e Aridades (`ASSINATURAS.md`)
+## 📑 Tabela de Assinaturas e Aridades (`SIGNATURES.md`)
 - Definição estrita de aridades mínimas/máximas.
 - Padronização dos 3 slots de `[CTX]`: `[ctx'what','where','when']`.
 

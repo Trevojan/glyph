@@ -119,13 +119,13 @@ critério é o tipo do arquivo, não quem o escreveu — por isso o gerado
 
 | documento | responde |
 |---|---|
-| [`GLOSSARIO.md`](GLOSSARIO.md) | **o que** cada comando é — a referência normativa |
-| [`ASSINATURAS.md`](ASSINATURAS.md) | **quantos** operandos cada um pede |
+| [`GLOSSARY.md`](GLOSSARY.md) | **o que** cada comando é — a referência normativa |
+| [`SIGNATURES.md`](SIGNATURES.md) | **quantos** operandos cada um pede |
 | [`glyph-grammar.ebnf`](glyph-grammar.ebnf) | a sintaxe, formalmente |
 | [`CHANGELOG.md`](CHANGELOG.md) | o que mudou e por quê |
 | [`HGML_PLAN.md`](HGML_PLAN.md) | para onde isto vai — o formato `.hgml` |
 
-O motor deriva do `GLOSSARIO.md`, não o contrário, e a suíte tem uma checagem
+O motor deriva do `GLOSSARY.md`, não o contrário, e a suíte tem uma checagem
 (`X-01`) que falha se os dois divergirem.
 
 ## Versionamento — `a.b.c.d`

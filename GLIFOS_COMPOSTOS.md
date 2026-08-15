@@ -1,6 +1,6 @@
 # Revisão das fórmulas propostas — o que mudou da 1ª para a 2ª passada
 
-O glossário consolidado vive em [GLOSSARIO.md](GLOSSARIO.md). Este arquivo é só
+O glossário consolidado vive em [GLOSSARY.md](GLOSSARY.md). Este arquivo é só
 o registro do que revisei e por quê — útil se você quiser reverter alguma
 correção minha, inútil depois que as fórmulas estiverem estáveis.
 

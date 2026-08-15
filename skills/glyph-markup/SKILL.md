@@ -12,7 +12,7 @@ fluxo lógico escalável até os mínimos detalhes. A implementação de referê
 e emissão de **XML** — o XML é o entregável, não a AST (que é só painel de
 inspeção).
 
-`GLOSSARIO.md` é a referência normativa do vocabulário. O motor deriva dele, e a
+`GLOSSARY.md` é a referência normativa do vocabulário. O motor deriva dele, e a
 suíte tem uma checagem (`X-01`) que falha se os dois divergirem.
 
 ## Regras Normativas
@@ -46,7 +46,7 @@ Casa vazia **não é erro** neste desenho:
 
 ## Aridade — quatro classes
 
-Detalhe completo em `ASSINATURAS.md`; o resumo operacional:
+Detalhe completo em `SIGNATURES.md`; o resumo operacional:
 
 | classe | comportamento |
 |---|---|
@@ -95,7 +95,7 @@ Quatro construções, cada uma com uma leitura só:
 | `[A][B]` | sequência — A, depois B |
 | `[A-B]` | cadeia — A e B aplicados ao mesmo operando |
 
-**Ligação do operando** (`GLOSSARIO.md` §0.3): o operando do humano é o
+**Ligação do operando** (`GLOSSARY.md` §0.3): o operando do humano é o
 **sujeito da fórmula inteira**. Vírgula não troca o sujeito; justaposição
 encadeia no resultado; o que está aninhado é o *padrão* contra o qual se opera,
 não sujeito novo.
@@ -147,8 +147,8 @@ gerado `glyph-expansions.json` (dados) fica na raiz.
 
 | arquivo | papel |
 |---|---|
-| `GLOSSARIO.md` | referência normativa do vocabulário |
-| `ASSINATURAS.md` | aridades, derivadas do motor |
+| `GLOSSARY.md` | referência normativa do vocabulário |
+| `SIGNATURES.md` | aridades, derivadas do motor |
 | `expansoes.txt` | tabela de composição (fonte, editável) |
 | `scripts/glyph-parser.js` | o núcleo |
 | `glyph-rules.json` · `glyph-templates.json` | stores, editáveis |
