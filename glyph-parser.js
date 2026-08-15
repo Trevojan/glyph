@@ -1,13 +1,35 @@
 /**
- * Glyph Core v1.0.9 (glyph-parser.js)
+ * Glyph Core v1.1.0 (glyph-parser.js)
  *
  * Single core of the chain  human → glyph → xml → machine.
  *
  * Through v1.8 there were two divergent parsers: this module (which only
  * emitted AST and dropped free text, chains, [logic] and ;;) and the parser
  * embedded in glyph-engine-alias.html (complete, but browser-locked, the
- * only one able to emit XML). v1.0.9 unifies them: this file is the reference
- * implementation, and the HTML becomes a consumer of it.
+ * only one able to emit XML). v1.0.9 unified them: this file is the reference
+ * implementation, and the HTML is a consumer of it.
+ *
+ * VERSION SCHEME — a.b.c.d, each digit naming the layer that moved:
+ *   a  frontend        the HTML/CSS/UI consumer
+ *   b  backend         this parser: lexer, tree, emitters
+ *   c  business rules  glyph-rules.json, template constraints, valency
+ *   d  data fixes      vocabulary tables, constants, glosses
+ * A digit moving resets every digit to its right.
+ *
+ * v1.1.0.0 — the vocabulary is now aligned to GLOSSARIO.md, which is the
+ * normative reference from here on. Three changes, all backend:
+ *
+ *   1. `BASE` the command became `CORE`. `BASE` stayed as the keyword in
+ *      expansoes.txt meaning "this is an atom" — the two used to collide on
+ *      the same word and no expansion table could disambiguate them.
+ *   2. Twelve commands the glossary declared but the engine never knew:
+ *      FIND GET ADD SUB WHR (context ops), HGH LOW BOLD LIGHT (intensity),
+ *      SWITCH (condition), GO (execution). Half the composition formulas in
+ *      expansoes.txt referenced them and could not resolve.
+ *   3. The v1.7 fusions are undone. EVAL, REV, SPEC, SIMP, QST, FOREX and
+ *      ONLYIF are commands in their own right again, each separated from the
+ *      one it was folded into by a stated axis (object vs. act, or standard
+ *      of comparison) — see GLOSSARIO.md §6.5.
  *
  * UMD: works in Node (require) and in the browser (window.GlyphCore).
  * As a CLI:  node glyph-parser.js "[crit[ctx]]" [--ast|--xml|--diag]
@@ -20,7 +42,7 @@
 })(typeof self !== "undefined" ? self : this, function () {
   "use strict";
 
-  var VERSION = "1.0.9.3";
+  var VERSION = "1.1.0.1";
 
   /* ======================================================
      1. VOCABULARY — Appendix A, one slot per command
@@ -42,12 +64,20 @@
       ["QST","pergunta"],["ASK","pergunte"],["CLAR","esclarecer"],["CONF","confirmar"]
     ]},
     { id:"enquadre", label:"Enquadre", note:"situar a coisa no mundo", items:[
-      ["CTX","contexto"],["REF","referência"],["SEEAL","veja também"],["BASE","base, ponto de partida"],
+      ["CTX","contexto"],["REF","referência"],["SEEAL","veja também"],["CORE","fundamento, ponto de partida"],
       ["DRVF","derivar de"],["EX","exemplo"],["FOREX","por exemplo"],["NT","nota"],["PT","parte n"]
+    ]},
+    /* v1.1.0.0: operar SOBRE o contexto, não apenas situar-se nele. A separação
+       de "enquadre" é o que distingue declarar um escopo de ler, escrever e
+       localizar dentro dele. */
+    { id:"contexto", label:"Contexto", note:"ler, escrever e localizar no escopo", items:[
+      ["FIND","buscar no contexto"],["GET","ler e reter"],["ADD","acrescentar"],
+      ["SUB","subtrair"],["WHR","onde, lugar"]
     ]},
     { id:"condicao", label:"Condição", note:"quando vale, quando não, o que entra no lugar", items:[
       ["COND","condição"],["IF","se"],["UNLS","a menos que"],["ONLYIF","só se"],
-      ["ONLYW","só quando"],["EXC","exceção"],["FBK","plano B"],["INSTOF","em vez de"]
+      ["ONLYW","só quando"],["EXC","exceção"],["FBK","plano B"],["INSTOF","em vez de"],
+      ["SWITCH","alternar entre estados"]
     ]},
     { id:"limite", label:"Limite", note:"o que é proibido, exigido ou opcional", items:[
       ["CNST","restrição"],["RESTR","limite"],["LIM","limitação"],["REQ","exigência"],
@@ -61,7 +91,14 @@
       ["TRYFR","tenta chegar em"],["INTN","intenção"]
     ]},
     { id:"rumo", label:"Rumo", note:"alvo, ordem e prontidão", items:[
-      ["TGT","alvo"],["PRIO","prioridade"],["FIN","por fim"],["RDY","prontidão"],["INS","instrução"]
+      ["TGT","alvo"],["PRIO","prioridade"],["FIN","por fim"],["RDY","prontidão"],["INS","instrução"],
+      ["GO","executa, vai"]
+    ]},
+    /* v1.1.0.0: grau. PRIO ordena entre itens; estes graduam um item só —
+       quanta força ele tem (HGH/LOW) e quanto peso ganha na saída
+       (BOLD/LIGHT). Eram os únicos do glossário sem casa temática. */
+    { id:"intensidade", label:"Intensidade", note:"grau de força e de ênfase", items:[
+      ["HGH","alta"],["LOW","baixa"],["BOLD","ênfase forte"],["LIGHT","ênfase suave"]
     ]},
     { id:"molde", label:"Molde", note:"peças de estrutura e template", items:[
       ["TPL","template"],["PH","casa a preencher"],["VAR","variável"],["PARAM","parâmetro"],
@@ -91,9 +128,14 @@
     CRIT:"Criticize", SCRU:"Scrutinize", NEV:"Never", ALW:"Always", RDY:"Ready",
     INTN:"Intention", IMPR:"Improve", REV:"Review", LRN:"Learn", DRVF:"Derive From",
     FLS:"False", TRUE:"True", ERROR:"Error", ASSM:"Assumption", VAL:"Validate", ASK:"Ask",
-    DENY:"Deny", BASE:"Base", DFN:"Define Symbol",
+    DENY:"Deny", CORE:"Core", DFN:"Define Symbol",
     GT:"Greater Than", GTE:"Greater Than Equal", LT:"Less Than", LTE:"Less Than Equal",
-    EQ:"Equal", NEQ:"Not Equal"
+    EQ:"Equal", NEQ:"Not Equal",
+    /* v1.1.0.0 — declarados em GLOSSARIO.md §1/§2 e usados pelas fórmulas de
+       expansoes.txt, mas ausentes do motor até aqui. */
+    FIND:"Find", GET:"Get", ADD:"Add", SUB:"Subtract", WHR:"Where",
+    HGH:"High", LOW:"Low", BOLD:"Bold", LIGHT:"Light",
+    SWITCH:"Switch", GO:"Go"
   };
 
   var PTBR = {};
@@ -107,9 +149,16 @@
   var ALIAS = {
     IN:"INS", AS:"ASSM", CX:"CTX", PR:"PRIO", TG:"TGT", RY:"RDY", VL:"VAL",
     RQ:"REQ", CR:"CRIT", RW:"RWK", RV:"REV", FM:"FMT", IM:"IMPR", FN:"FIN",
-    CL:"CLAR", RT:"RTNL", CN:"CNST", WN:"WARN", SM:"SUM",
-    /* v1.7 merges: accepted form on the left, canonical on the right */
-    FOREX:"EX", QST:"ASK", EVAL:"CRIT", REV:"CRIT", ONLYIF:"COND", SPEC:"ELAB", SIMP:"CLAR"
+    CL:"CLAR", RT:"RTNL", CN:"CNST", WN:"WARN", SM:"SUM"
+    /* The v1.7 merges (FOREX→EX, QST→ASK, EVAL→CRIT, REV→CRIT, ONLYIF→COND,
+       SPEC→ELAB, SIMP→CLAR) left in v1.1.0.0. Each pair had a real axis
+       separating its two sides — the datum vs. the connective that introduces
+       it, the block's typing vs. the act aimed at someone, the standard a
+       comparison is made against — and folding them erased the axis along with
+       the command. All seven already had their own INSTR entry; classify()
+       consults ALIAS *before* INSTR, so merely having the line here was enough
+       for the merge to win. Deleting it is the whole de-fusion.
+       GLOSSARIO.md §6.5. */
   };
   var ALIAS_OF = {};
   Object.keys(ALIAS).forEach(function (a) { (ALIAS_OF[ALIAS[a]] = ALIAS_OF[ALIAS[a]] || []).push(a); });
@@ -118,9 +167,16 @@
     SECTION:"Section", BLOCK:"Block", IF:"If", UNLS:"Unless", SKL:"Skill",
     DEF:"Define", PH:"Placeholder", TPL:"Template", LOGIC:"Logic"
   };
+  /* META and STRUCT are PARSING buckets, not the species taxonomy of
+     GLOSSARIO.md — the two axes are independent and both are needed. The
+     glossary classifies by COMPOSITION (does it decompose into atoms?);
+     these classify by BEHAVIOUR (does it open a named block? is it exempt
+     from the slot-order warning?). A command can be an atom in one and a
+     struct in the other without contradiction. */
   var META = {
     QUICK:"Quick", TOBLOCK:"To Block", TOSECTION:"To Section",
-    HMN:"Human", EXT:"External", ATC:"Attachment"
+    HMN:"Human", EXT:"External", ATC:"Attachment",
+    NONE:"None"                       // v1.1.0.0 — engine em GLOSSARIO.md §4
   };
   var MODE = { OFF:"Mode off", ON:"Mode on" };
 
@@ -146,10 +202,14 @@
   /* "prob" left this table: now that PROB is a registered INSTR tag
      (ERROR+CTX), classify() would resolve it before ever reaching this
      block anyway — it would sit here as dead vocabulary, unreachable
-     under any casing. */
+     under any casing.
+
+     "go" left for the same reason in v1.1.0.0: GO is now a command
+     (GLOSSARIO.md §1), and INSTR is consulted before SESSION. Leaving it
+     would be a second, unreachable definition of the same word. */
   var SESSION = {
     rd:"ler", info:"informação", org:"organizar",
-    ok:"ok, entendido", go:"vai, faz", dtl:"detalhe"
+    ok:"ok, entendido", dtl:"detalhe"
   };
 
   var LOGIC_OPS = [
@@ -200,7 +260,13 @@
     NT:["a observação"], WARN:["o risco"], LIM:["o limite"],
     EVAL:["o que avaliar"], CNCL:["sobre o quê"], ITR:["o que iterar"],
     GEN:["o que generalizar"], SPEC:["o que especificar"], INSTOF:["o que entra no lugar"],
-    SECTION:["o nome da seção"], BLOCK:["o nome do bloco"]
+    SECTION:["o nome da seção"], BLOCK:["o nome do bloco"],
+    /* v1.1.0.0 — só os operadores entram aqui. WHR, HGH, LOW, BOLD e LIGHT
+       são primitivos no glossário ("valem sozinhos"), então não exigem
+       operando e não geram <needs>. */
+    FIND:["o que buscar"], GET:["o que ler do contexto"],
+    ADD:["o que acrescentar"], SUB:["o que subtrair"],
+    SWITCH:["os estados*"], GO:["o que executar"]
   };
 
   /* structural commands whose first child must be a literal (the name) */
@@ -246,6 +312,73 @@
   }
   function templateRegistry(opts) {
     return (opts && opts.templates) || TEMPLATES;
+  }
+
+  /* ---- composition registry (v1.1.0.0) --------------------------------
+     What GLOSSARIO.md knows and the engine did not: which commands are
+     hieroglyphs (atoms, they do not decompose) and which are glyphs
+     (composites, with a formula that reduces them to atoms).
+
+     Generated from expansoes.txt into glyph-expansions.json by
+     build-templates.js. Optional, exactly like the template and rule stores:
+     with no store loaded the engine parses and emits the same as before, it
+     just cannot say what anything is made of.
+
+     This is the table an .hgml emitter burns down to — the reason it exists.
+     Nothing in the XML path reads it yet: species is inspection data, and it
+     travels in the AST. */
+  var EXPANSIONS = null;
+  function useExpansions(store) {
+    EXPANSIONS = (store && store.commands) ? store : (store ? { commands: store } : null);
+    return EXPANSIONS;
+  }
+  function expansionRegistry(opts) {
+    var s = (opts && opts.expansions) || EXPANSIONS;
+    return (s && s.commands) ? s : null;
+  }
+  function entryOf(name, opts) {
+    var reg = expansionRegistry(opts);
+    if (!reg) return null;
+    return reg.commands[String(name || "").toUpperCase()] || null;
+  }
+
+  /** "atom" | "composite" | null (no store, or outside the table) */
+  function speciesOf(name, opts) {
+    var e = entryOf(name, opts);
+    return e ? e.species : null;
+  }
+  /** composition layer: 0 for an atom, 1 + the deepest dependency otherwise */
+  function depthOf(name, opts) {
+    var e = entryOf(name, opts);
+    return e && typeof e.depth === "number" ? e.depth : null;
+  }
+  /** the formula, for a composite; null for an atom */
+  function formulaOf(name, opts) {
+    var e = entryOf(name, opts);
+    return (e && e.formula) || null;
+  }
+
+  /**
+   * atomsOf(name) — the transitive atom closure, in formula order.
+   *
+   * Repeats are kept: a command that reaches CTX by two routes is made of it
+   * twice, and collapsing that would misreport what the composition costs.
+   * The build gate in build-templates.js already refuses a table with cycles,
+   * so `seen` here is belt-and-braces against a hand-edited store.
+   */
+  function atomsOf(name, opts) {
+    var reg = expansionRegistry(opts);
+    if (!reg) return null;
+    var out = [];
+    (function walkDown(n, seen, hops) {
+      var U = String(n).toUpperCase();
+      if (hops > 64 || seen[U]) { out.push(U); return; }
+      var e = reg.commands[U];
+      if (!e || e.species === "atom") { out.push(U); return; }
+      var next = {}; for (var k in seen) next[k] = 1; next[U] = 1;
+      (e.deps || []).forEach(function (d) { walkDown(d, next, hops + 1); });
+    })(name, {}, 0);
+    return out;
   }
 
   /* children that count as a filled slot */
@@ -1327,6 +1460,22 @@
       });
     }
 
+    // ---- composition species (optional store) ----
+    // Annotation only: it changes no diagnostic and no XML. A command being
+    // composite is not a problem to report, it is a fact an .hgml emitter
+    // needs — so it rides in the AST and nowhere else.
+    if (expansionRegistry(opts)) {
+      segments.forEach(function (sgx2) {
+        walk(sgx2.children, function (nd2) {
+          if (!nd2.canonical) return;
+          var e = entryOf(nd2.canonical, opts);
+          if (!e) return;
+          nd2.species = e.species;
+          nd2.compositionDepth = typeof e.depth === "number" ? e.depth : null;
+        });
+      });
+    }
+
     // ---- semantic rules (pairs, order, preconditions) ----
     checkRules(segments, opts, G);
 
@@ -1575,7 +1724,12 @@
       depth: nd.depth,
       autoClosed: !!nd.autoClosed,
       suggestion: nd.suggestion ? nd.suggestion.name : null,
-      emotions: nd.emotions || []
+      emotions: nd.emotions || [],
+      /* v1.1.0.0 — null unless the expansion store is loaded. `depth` above is
+         how deep this node sits in the USER's text; `compositionDepth` is how
+         deep the command sits in the vocabulary. Different axes, both useful. */
+      species: nd.species || null,
+      compositionDepth: (nd.compositionDepth === undefined) ? null : nd.compositionDepth
     };
   }
 
@@ -1657,6 +1811,8 @@
     parse: parse, walk: walk,
     useTemplates: useTemplates, templateRegistry: templateRegistry,
     useRules: useRules,
+    useExpansions: useExpansions, expansionRegistry: expansionRegistry,
+    speciesOf: speciesOf, depthOf: depthOf, formulaOf: formulaOf, atomsOf: atomsOf,
     buildXml: buildXml, toXML: toXML, toAST: toAST, serializeAST: serializeAST,
     esc: esc, xesc: xesc
   };
@@ -1666,25 +1822,44 @@
 if (typeof require === "function" && typeof module === "object" && require.main === module) {
   var G = module.exports;
   // optional stores: if absent, the engine still runs, just without expansion/contradiction checks
-  ["./glyph-templates.json", "./glyph-rules.json"].forEach(function (f) {
+  [["./glyph-templates.json", G.useTemplates],
+   ["./glyph-rules.json", G.useRules],
+   ["./glyph-expansions.json", G.useExpansions]].forEach(function (pair) {
     try {
-      var data = require(require("path").resolve(__dirname, f));
-      if (f.indexOf("templates") !== -1) G.useTemplates(data); else G.useRules(data);
+      pair[1](require(require("path").resolve(__dirname, pair[0])));
     } catch (e) { /* missing store is a valid situation */ }
   });
   var argv = process.argv.slice(2);
   var mode = "xml";
   var src = [];
   argv.forEach(function (a) {
-    if (a === "--ast" || a === "--xml" || a === "--diag") mode = a.slice(2);
+    if (a === "--ast" || a === "--xml" || a === "--diag" || a === "--expand") mode = a.slice(2);
     else src.push(a);
   });
   var input = src.join(" ");
   if (!input) {
-    console.error("uso: node glyph-parser.js \"[crit[ctx]]\" [--xml|--ast|--diag]");
+    console.error("uso: node glyph-parser.js \"[crit[ctx]]\" [--xml|--ast|--diag|--expand]");
     process.exit(2);
   }
-  if (mode === "ast") console.log(JSON.stringify(G.toAST(input), null, 2));
+  if (mode === "expand") {
+    /* --expand takes a COMMAND NAME, not Glyph source: it answers "what is
+       this made of", which is the question the .hgml emitter will ask. */
+    var nm = input.replace(/[\[\]']/g, "").trim().toUpperCase();
+    var sp = G.speciesOf(nm);
+    if (!sp) {
+      console.error(nm + ": fora da tabela de composição (ou store não carregado).");
+      process.exit(2);
+    }
+    console.log(nm + "  [" + sp + "]  nível " + G.depthOf(nm));
+    if (sp === "composite") {
+      console.log("  fórmula: " + G.formulaOf(nm));
+      var at = G.atomsOf(nm);
+      console.log("  " + at.length + " hieróglifos: " + at.join(" "));
+    } else {
+      console.log("  hieróglifo — não decompõe.");
+    }
+  }
+  else if (mode === "ast") console.log(JSON.stringify(G.toAST(input), null, 2));
   else if (mode === "diag") {
     var gaps = G.parse(input).gaps;
     if (!gaps.length) console.log("sem diagnósticos.");

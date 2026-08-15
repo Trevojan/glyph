@@ -13,11 +13,55 @@
 
 const fs = require("fs");
 const path = require("path");
+const X = require("./read-expansoes.js");
 
 const HERE = __dirname;
+
+/* expansoes.txt is not JSON, so unlike the other two stores it cannot just be
+   copied — it is compiled into glyph-expansions.json first, and THAT is what
+   both Node and the browser load. The .txt stays the source a human edits:
+   one entry per line beats hand-maintaining nested JSON. */
+function buildExpansions() {
+  const src = path.join(HERE, "expansoes.txt");
+  if (!fs.existsSync(src)) { console.error("  ! expansoes.txt not found."); return null; }
+
+  const { parsed, analysis, commands } = X.build(fs.readFileSync(src, "utf8"));
+
+  /* A table that does not close must not reach the engine: an undefined
+     dependency or a cycle means decomposition would silently stop halfway,
+     and half-burnt output is worse than none. */
+  if (analysis.undefinedDeps.length || analysis.cycles.length) {
+    console.error("  ! expansoes.txt does not close — " +
+      analysis.undefinedDeps.length + " undefined, " + analysis.cycles.length + " cycles.");
+    console.error("    run: node dag.js expansoes.txt");
+    process.exit(1);
+  }
+
+  const store = {
+    schema: 1,
+    note: "GENERATED from expansoes.txt by build-templates.js — DO NOT EDIT BY HAND. " +
+          "Maps every command to its species: `atom` (a hieroglyph, does not decompose) " +
+          "or `composite` (a glyph, with the formula that decomposes it). `depth` is the " +
+          "layer: 0 for an atom, 1 + the deepest dependency for a composite.",
+    atoms: parsed.atoms.length,
+    composites: Object.keys(parsed.composites).length,
+    maxDepth: Math.max.apply(null, Object.keys(analysis.depth).map(k => analysis.depth[k])),
+    commands: commands
+  };
+
+  const out = path.join(HERE, "glyph-expansions.json");
+  fs.writeFileSync(out, JSON.stringify(store, null, 2) + "\n");
+  console.log("  ✓ expansoes.txt -> glyph-expansions.json (" +
+    store.atoms + " átomos, " + store.composites + " compostos, fundo " + store.maxDepth + ")");
+  return store;
+}
+
+buildExpansions();
+
 const SOURCES = [
-  { file: "glyph-templates.json",      global: "GlyphTemplates" },
-  { file: "glyph-rules.json", global: "GlyphRules" }
+  { file: "glyph-templates.json",   global: "GlyphTemplates" },
+  { file: "glyph-rules.json",       global: "GlyphRules" },
+  { file: "glyph-expansions.json",  global: "GlyphExpansions" }
 ];
 
 const parts = [

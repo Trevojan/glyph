@@ -1,9 +1,9 @@
 ---
 name: glyph-markup
-description: Glyph Shorthand Markup Language v1.0.9.3 Specification & Parser Integration. Use when writing or reading Glyph compact structured notation.
+description: Glyph Shorthand Markup Language v1.1.0.0 Specification & Parser Integration. Use when writing or reading Glyph compact structured notation.
 ---
 
-# Glyph Shorthand Markup Language (v1.0.9.3 Specification)
+# Glyph Shorthand Markup Language (v1.1.0.0 Specification)
 
 Glyph é uma notação de comandos abreviados, entre delimitadores, que descreve um fluxo lógico escalável até os mínimos detalhes. A implementação de referência é `glyph-parser.js`: um núcleo único (Node via `require`, navegador via `window.GlyphCore`) que faz lexer, parser, checagem de aridade, regras semânticas e emissão de **XML** — o XML é o entregável, não a AST (que é só painel de inspeção).
 
@@ -36,12 +36,19 @@ Além da sintaxe, `glyph-rules.json` checa **coerência**: `pair` (dois comandos
 
 ## Tabela de Aliases
 
-- `[EVAL]` e `[REV]` resolvem para `[CRIT]`
-- `[ONLYIF]` resolve para `[COND]`
-- `[SPEC]` resolve para `[ELAB]`
-- `[SIMP]` resolve para `[CLAR]`
-- `[FOREX]` resolve para `[EX]`
-- `[QST]` resolve para `[ASK]`
+Formas curtas (a forma longa é a canônica): `[IN]`→`[INS]`, `[AS]`→`[ASSM]`,
+`[CX]`→`[CTX]`, `[PR]`→`[PRIO]`, `[TG]`→`[TGT]`, `[RY]`→`[RDY]`,
+`[VL]`→`[VAL]`, `[RQ]`→`[REQ]`, `[CR]`→`[CRIT]`, `[RW]`→`[RWK]`,
+`[RV]`→`[REV]`, `[FM]`→`[FMT]`, `[IM]`→`[IMPR]`, `[FN]`→`[FIN]`,
+`[CL]`→`[CLAR]`, `[RT]`→`[RTNL]`, `[CN]`→`[CNST]`, `[WN]`→`[WARN]`,
+`[SM]`→`[SUM]`
+
+**As sete fusões da v1.7 foram desfeitas na v1.1.0.0.** `[EVAL]`, `[REV]`,
+`[SPEC]`, `[SIMP]`, `[QST]`, `[FOREX]` e `[ONLYIF]` voltaram a ser comandos
+próprios — não são mais alias de `[CRIT]`, `[ELAB]`, `[CLAR]`, `[ASK]`, `[EX]`
+e `[COND]`. Cada par é separado por um eixo declarado (objeto vs. ato, ou
+padrão de comparação); ver `GLOSSARIO.md` §6.5 e a tabela em
+`glyph-markup-commons`.
 
 ## Estrutura de Slots de Contexto (`[CTX]`)
 
@@ -52,4 +59,9 @@ Além da sintaxe, `glyph-rules.json` checa **coerência**: `pair` (dois comandos
 
 ## Arquivos da implementação
 
-`glyph-parser.js` é o núcleo único; `glyph-rules.json` e `glyph-templates.json` são os stores de dados (fonte de verdade — editar o `.json` e rodar `node build-templates.js` para regenerar `glyph-data.js`, já que `file://` bloqueia `fetch` de `.json`); `glyph-engine-alias.html` + `glyph-engine.css` + `glyph-moldes.js` + `glyph-ui.js` são só a interface, consumidora do núcleo.
+`GLOSSARIO.md` é a referência normativa do vocabulário — é dele que o motor deriva, não o contrário. `expansoes.txt` é a tabela de composição (átomos declarados `= BASE`, compostos com fórmula), verificável com `node dag.js expansoes.txt`. `glyph-parser.js` é o núcleo único; `glyph-rules.json` e `glyph-templates.json` são os stores de dados (fonte de verdade — editar o `.json` e rodar `node build-templates.js` para regenerar `glyph-data.js`, já que `file://` bloqueia `fetch` de `.json`); `glyph-engine-alias.html` + `glyph-engine.css` + `glyph-moldes.js` + `glyph-ui.js` são só a interface, consumidora do núcleo.
+
+## Versionamento — `a.b.c.d`
+
+`a` frontend · `b` backend (parser) · `c` business rules · `d` data e constantes.
+Um dígito que anda zera todos à direita.

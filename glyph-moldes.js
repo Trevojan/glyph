@@ -21,7 +21,7 @@
           { id:"prova", tag:"val", q:"qual o teste para validar o fluxo?" }
         ]},
         { id:"partida", label:"Partida", note:"pré-estado", slots:[
-          { id:"entrada", tag:"base", q:"estado inicial e dependências necessárias" },
+          { id:"entrada", tag:"core", q:"estado inicial e dependências necessárias" },
           { id:"pre", tag:"cond", q:"condição prévia de execução" }
         ]},
         { id:"percurso", label:"Percurso", note:"passos e junções", slots:[
@@ -39,7 +39,7 @@
           { id:"escolha", tag:"ask", q:"bifurcação / decisão técnica requerida" }
         ]},
         { id:"partida", label:"Partida", note:"critério", slots:[
-          { id:"criterio", tag:"base", q:"parâmetro ou variável de decisão" },
+          { id:"criterio", tag:"core", q:"parâmetro ou variável de decisão" },
           { id:"limiar", tag:"cond", q:"limiar / valor de corte condicional" }
         ]},
         { id:"percurso", label:"Percurso", note:"ramos de execução", slots:[
@@ -59,7 +59,7 @@
           { id:"acumula", tag:"tgt", q:"acumulador / estado final pós-iteração" }
         ]},
         { id:"partida", label:"Partida", note:"coleção", slots:[
-          { id:"colecao", tag:"base", q:"coleção de dados / iterável" },
+          { id:"colecao", tag:"core", q:"coleção de dados / iterável" },
           { id:"vazia", tag:"exc", q:"tratamento para coleção vazia" }
         ]},
         { id:"percurso", label:"Percurso", note:"corpo do laço", slots:[

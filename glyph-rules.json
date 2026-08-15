@@ -4,13 +4,13 @@
 
   "classes": {
     "thinking": ["CLAR", "CRIT", "BRST", "GEN", "SUM", "ELAB"],
-    "subject":  ["CTX", "TGT", "REF", "BASE", "INS", "SECTION", "BLOCK", "PT"],
-    "condition": ["COND", "IF", "UNLS", "ONLYW", "EXC"],
-    "coarsen": ["GEN", "SUM", "CLAR"],
+    "subject":  ["CTX", "TGT", "REF", "CORE", "INS", "SECTION", "BLOCK", "PT"],
+    "condition": ["COND", "IF", "UNLS", "ONLYIF", "ONLYW", "EXC", "SWITCH"],
+    "coarsen": ["GEN", "SUM", "SIMP"],
     "exit": ["INSTOF", "FBK", "FRGT"]
   },
 
-  "classNote": "`coarsen` and `exit` exist for template constraints (see glyph-templates.json), not for the rules below. `coarsen` is the direction that undoes detail: generalise, summarise, and clarify (which absorbed simplify in v1.7). `exit` is the direction that leaves the structure standing but stops using it: substitute the target, fall back, forget. Neither is wrong on its own — they are only worth flagging inside a preset that promised the opposite direction.",
+  "classNote": "`coarsen` and `exit` exist for template constraints (see glyph-templates.json), not for the rules below. `coarsen` is the direction that undoes detail: generalise, summarise, simplify. CLAR left this class in v1.1.0.0 — with the v1.7 fusion undone, clarifying means removing ambiguity, which often ADDS words rather than cutting them, so it is not a coarsening direction. `exit` is the direction that leaves the structure standing but stops using it: substitute the target, fall back, forget. Neither is wrong on its own — they are only worth flagging inside a preset that promised the opposite direction.",
 
   "scope": {
     "sameTarget": "siblings under one parent, OR one is an ancestor of the other",
@@ -50,10 +50,11 @@
       "why": "remembering to forget makes the block impossible to honour",
       "suggest": "rmbr + cond + val + frgt — state when to forget and against which criterion." },
 
-    { "id": "req-deny", "kind": "pair", "a": "REQ", "b": "DENY", "severity": "fix",
-      "label": "contradiction",
-      "why": "requiring and denying the same thing",
-      "suggest": "Pick one; if both are meant, separate them by condition." },
+    { "id": "req-deny", "kind": "pair", "a": "REQ", "b": "DENY", "severity": "ask",
+      "label": "tension",
+      "why": "requiring something to exist while rejecting a route that reaches it — legitimate if the rejected route is not the only one, wrong if it is",
+      "suggest": "Name the route that stays open, or drop one side.",
+      "note": "Was severity `fix` and label `contradiction` through v1.0.9, when DENY meant refusing a proposal. In v1.1.0.0 DENY rejects the route to a result and REQ demands existence, so the two no longer collide by construction — GLOSSARIO.md §6.6." },
 
     { "id": "req-dont", "kind": "pair", "a": "REQ", "b": "DONT", "severity": "ask",
       "label": "redundancy",
@@ -105,10 +106,10 @@
       "why": "assuming a hypothesis may not produce rational results — the thing under test is being taken as given",
       "suggest": "subject + hyp, or subject + assm — give each its own subject and keep them apart." },
 
-    { "id": "clar-elab", "kind": "pair", "a": "CLAR", "b": "ELAB", "severity": "ask",
+    { "id": "simp-elab", "kind": "pair", "a": "SIMP", "b": "ELAB", "severity": "ask",
       "label": "tension",
-      "why": "clarify (which absorbed simplify) and elaborate pull in opposite directions",
-      "suggest": "Pick the direction, or elaborate first and clarify the result." },
+      "why": "simplify cuts and elaborate adds — opposite directions on the same target",
+      "suggest": "Pick the direction, or elaborate first and simplify the result." },
 
     { "id": "sum-elab", "kind": "pair", "a": "SUM", "b": "ELAB", "severity": "ask",
       "label": "tension",
@@ -117,8 +118,13 @@
 
     { "id": "gen-elab", "kind": "pair", "a": "GEN", "b": "ELAB", "severity": "ask",
       "label": "tension",
-      "why": "generalising and specifying (ELAB absorbed SPEC) the same thing",
+      "why": "generalising drops the particulars that elaborating is adding",
       "suggest": "Pick the direction, or separate them by condition." },
+
+    { "id": "gen-spec", "kind": "pair", "a": "GEN", "b": "SPEC", "severity": "ask",
+      "label": "tension",
+      "why": "a general pattern and a detailed specification of the same thing pull apart",
+      "suggest": "Generalise first and specify the result, or scope them to different targets." },
 
     { "id": "elab-before-thinking", "kind": "order", "first": "ELAB", "then": "@thinking",
       "severity": "note", "label": "order",

@@ -1,5 +1,5 @@
 /**
- * Glyph Corpus Test Suite v1.0.9 (test-corpus.js)
+ * Glyph Corpus Test Suite v1.1.0 (test-corpus.js)
  *
  * The v1.8 suite counted segments and gave PASS to anything: in the negative
  * cases it incremented the counter in all three branches (including the
@@ -48,7 +48,7 @@ const POSITIVE = [
   { id:"P-05", name:"Compare two terms.", src:"[CMP'termo1','termo2']",
     clean:true, xml:["<compare>"] },
   { id:"P-06", name:"Review, improve and format.", src:"[REV-IMPR-FMT]",
-    clean:true, cmds:["CRIT","IMPR","FMT"], xml:["<criticize>","<improve/>","<format/>"] },
+    clean:true, cmds:["REV","IMPR","FMT"], xml:["<review>","<improve/>","<format/>"] },
   { id:"P-07", name:"Section A: criticize and propose.", src:"[SECTION'sectA',[CRIT],[PROP[ALT]]]",
     cmds:["SECTION","CRIT","PROP","ALT"] },
   { id:"P-08", name:"Prefix comparison gt.", src:"[COND[gt[VAR'A'],[VAR'B']],[INSTOF[SUM],[ASK;",
@@ -69,16 +69,52 @@ const POSITIVE = [
     clean:true, xml:["<define-symbol>"] },
   { id:"P-20", name:"Validate against a specification.", src:"[VAL'solução','especificação']",
     clean:true, xml:["<validate>"] },
-  { id:"P-21", name:"Alias EVAL resolves to CRIT.", src:"[EVAL'projeto']",
-    clean:true, cmds:["CRIT"], xml:["<criticize>"] },
-  { id:"P-22", name:"Alias SPEC resolves to ELAB.", src:"[SPEC'requisito']",
-    clean:true, cmds:["ELAB"] },
+  /* v1.1.0.0: these two asserted the v1.7 fusion. With it undone, each side
+     stands on its own — EVAL compares against a realistic quality standard,
+     CRIT against the declared goal; SPEC is the detailed artefact, ELAB the
+     act of detailing. GLOSSARIO.md §6.5. */
+  { id:"P-21", name:"EVAL is its own command, not an alias of CRIT.", src:"[EVAL'projeto']",
+    clean:true, cmds:["EVAL"], xml:["<evaluate>"] },
+  { id:"P-22", name:"SPEC is its own command, not an alias of ELAB.", src:"[SPEC'requisito']",
+    clean:true, cmds:["SPEC"] },
   { id:"P-23", name:"CTX slots (what, where, when).", src:"[CTX'banco','prodDB','v1.7']",
     clean:true, xml:["<context>","<user-input>prodDB</user-input>"] },
   { id:"P-24", name:"ERROR is a hieroglyph — atomic command, no arity.", src:"[ERROR]",
     clean:true, xml:["<error/>"] },
   { id:"P-25", name:"PROB is composite ERROR+CTX — accepts nested context.", src:"[PROB[CTX'timeout']]",
-    clean:true, cmds:["PROB","CTX"], xml:["<problem>","<context>"] }
+    clean:true, cmds:["PROB","CTX"], xml:["<problem>","<context>"] },
+
+  /* ---- v1.1.0.0: the vocabulary GLOSSARIO.md declared and the engine
+     did not have. Half the formulas in expansoes.txt referenced these. ---- */
+  { id:"P-26", name:"CORE replaces BASE — the command, not the atom keyword.",
+    src:"[CORE'o ponto de partida']", clean:true, cmds:["CORE"], xml:["<core>"] },
+  { id:"P-27", name:"Context ops read, write and locate inside the scope.",
+    src:"[FIND'a variável'][GET'o valor'][ADD'um caso'][SUB'o ruído'][WHR'no parser']",
+    clean:true, cmds:["FIND","GET","ADD","SUB","WHR"],
+    xml:["<find>","<get>","<add>","<subtract>","<where>"] },
+  { id:"P-28", name:"Intensity primitives stand alone — no operand, no <needs>.",
+    src:"[HGH][LOW][BOLD][LIGHT]", clean:true,
+    xml:["<high/>","<low/>","<bold/>","<light/>"] },
+  { id:"P-29", name:"SWITCH takes the states, GO takes what to run.",
+    src:"[SWITCH'A','B'][GO'a suíte']", clean:true, cmds:["SWITCH","GO"],
+    xml:["<switch>","<go>"] },
+
+  /* ---- v1.1.0.0: the seven v1.7 fusions, undone. Each case pins the side
+     that used to disappear into the other. GLOSSARIO.md §6.5. ---- */
+  { id:"P-30", name:"REV is a reading sweep, not CRIT's formal comparison.",
+    src:"[REV'o diff']", clean:true, cmds:["REV"], xml:["<review>"] },
+  { id:"P-31", name:"SIMP cuts complexity; CLAR removes ambiguity. Both survive.",
+    src:"[SIMP'o texto'][CLAR'o termo']", clean:true, cmds:["SIMP","CLAR"],
+    xml:["<simplify>","<clarification>"] },
+  { id:"P-32", name:"QST types the block; ASK aims at someone.",
+    src:"[QST'cabe em memória?'][ASK'ao time']", clean:true, cmds:["QST","ASK"],
+    xml:["<question>","<ask>"] },
+  { id:"P-33", name:"FOREX introduces an example; EX is the example itself.",
+    src:"[FOREX'o caso do parser'][EX'4d6kh3']", clean:true, cmds:["FOREX","EX"],
+    xml:["<for-example>","<example>"] },
+  { id:"P-34", name:"ONLYIF is a necessary condition, COND a generic gate.",
+    src:"[ONLYIF'o teste passar'][COND'houver tempo']", clean:true,
+    cmds:["ONLYIF","COND"], xml:["<only-if>","<condition>"] }
 ];
 
 const INCOMPLETE = [
@@ -97,6 +133,12 @@ const INCOMPLETE = [
 ];
 
 const INVALID = [
+  /* v1.1.0.0: BASE is no longer a command — it is only the keyword on the
+     right-hand side of expansoes.txt, meaning "this one is an atom". Writing
+     it as a command has to fail, or the collision the rename fixed comes
+     back through the parser. */
+  { id:"N-13", name:"BASE is no longer a command — CORE took its place",
+    src:"[BASE'o ponto de partida']", code:"UnknownCommand" },
   { id:"N-03", name:"SECTION with no literal name", src:"[SECTION,[CRIT]]",
     code:"MissingStructName" },
   { id:"N-04", name:"Dangling extension", src:"[COND-]",
@@ -125,7 +167,7 @@ const INVALID = [
    the data-suffix leak inside the [logic] block. */
 const REGRESSION = [
   { id:"R-01", name:"hyphen chain preserves every link", src:"[REV-IMPR-FMT]",
-    cmds:["CRIT","IMPR","FMT"] },
+    cmds:["REV","IMPR","FMT"] },
   { id:"R-02", name:"free text survives as <off>", src:"[INS] escreva isto aqui",
     xml:["<off>escreva isto aqui</off>"] },
   { id:"R-03", name:";; emits a break instead of vanishing", src:"[SUM];;[LIM]",
@@ -389,6 +431,78 @@ const rC = runGroup("Semantic rules — pair, order, precondition", RULE_CASES, 
 const rK = runGroup("Template constraints — the shape a preset promises", CONSTRAINTS, { noFix:false });
 const rG = runGroup("Guard — rules must not break normal usage", POSITIVE_WITH_RULES, { noFix:true });
 
+/* ------------------------------------------------------------------ *
+ * X — composition table (v1.1.0.0)
+ *
+ * These do not fit the case shape above: they assert about the VOCABULARY
+ * as a whole, not about one input. The important one is X-01. Glossary and
+ * engine drifted apart once already — twelve commands declared in the
+ * glossary that the engine had never heard of, and half the composition
+ * formulas silently unable to resolve. Nothing caught it because nothing
+ * was comparing the two lists. Now something does.
+ * ------------------------------------------------------------------ */
+
+function runExpansionChecks() {
+  console.log("\n--- Composition table — glossary and engine must agree ---");
+  const X = [];
+  const ok = (id, name, why) => {
+    if (why) { console.log("  ✗ " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  ✓ " + id + ": " + name); X.push(id); }
+  };
+
+  const store = require("./glyph-expansions.json");
+  const opts = { expansions: store };
+
+  // every command the parser knows, from every bucket that yields a canonical
+  const vocab = new Set([
+    ...Object.keys(G.INSTR), ...Object.keys(G.STRUCT), ...Object.keys(G.META)
+  ]);
+  const table = new Set(Object.keys(store.commands));
+
+  const missing = [...vocab].filter(c => !table.has(c)).sort();
+  ok("X-01a", "every command in the engine is in expansoes.txt",
+     missing.length ? missing.length + " ausente(s) da tabela: " + missing.join(" ") : null);
+
+  /* The reverse direction is not symmetric: MODE (OFF/ON) and the engine
+     structures are declared in the table so formulas can name them, but they
+     are not INSTR commands. Only real vocabulary has to round-trip. */
+  const extra = [...table].filter(c =>
+    !vocab.has(c) && !G.MODE[c] && !G.ALIAS[c]).sort();
+  ok("X-01b", "every command in expansoes.txt is in the engine",
+     extra.length ? extra.length + " na tabela sem verbete no motor: " + extra.join(" ") : null);
+
+  ok("X-02", "atoms report species `atom` and depth 0",
+     (G.speciesOf("CORE", opts) === "atom" && G.depthOf("CORE", opts) === 0)
+       ? null : "CORE saiu como " + G.speciesOf("CORE", opts) + "/" + G.depthOf("CORE", opts));
+
+  ok("X-03", "composites report a formula and a depth above zero",
+     (G.speciesOf("CRIT", opts) === "composite" && G.depthOf("CRIT", opts) > 0 &&
+      /CMP/.test(G.formulaOf("CRIT", opts) || ""))
+       ? null : "CRIT não trouxe fórmula/profundidade coerentes");
+
+  const atoms = G.atomsOf("PROB", opts);
+  ok("X-04", "a composite burns down to hieroglyphs only",
+     (atoms && atoms.length && atoms.every(a => G.speciesOf(a, opts) === "atom"))
+       ? null : "PROB não reduziu a átomos: " + JSON.stringify(atoms));
+
+  ok("X-05", "an atom burns down to itself",
+     JSON.stringify(G.atomsOf("CTX", opts)) === JSON.stringify(["CTX"])
+       ? null : "CTX reduziu a " + JSON.stringify(G.atomsOf("CTX", opts)));
+
+  const ast = G.toAST("[crit'x']", opts);
+  const node = ast.segments[0].body[0];
+  ok("X-06", "the AST carries species and composition depth",
+     (node.species === "composite" && node.compositionDepth === 2)
+       ? null : "nó veio " + node.species + "/" + node.compositionDepth);
+
+  const bare = G.toAST("[crit'x']", {});
+  ok("X-07", "with no store loaded, species is null and nothing breaks",
+     (bare.segments[0].body[0].species === null) ? null : "species não veio null sem store");
+
+  return X.length;
+}
+const rX = runExpansionChecks();
+
 console.log("\n=================================================");
 console.log(" Positive     " + rP + "/" + POSITIVE.length);
 console.log(" Incomplete   " + rI + "/" + INCOMPLETE.length);
@@ -399,6 +513,7 @@ console.log(" Templates    " + rT + "/" + TEMPLATES.length);
 console.log(" Rules        " + rC + "/" + RULE_CASES.length);
 console.log(" Constraints  " + rK + "/" + CONSTRAINTS.length);
 console.log(" Guard        " + rG + "/" + POSITIVE_WITH_RULES.length);
+console.log(" Composition  " + rX + "/8");
 console.log("=================================================");
 
 if (failures.length) {

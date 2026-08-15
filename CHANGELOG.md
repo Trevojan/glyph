@@ -2,13 +2,149 @@
 
 Todas as mudanças notáveis do Glyph são documentadas aqui, da mais recente para a mais antiga.
 
-> **Nota sobre versionamento:** a partir desta reorganização, o projeto adota o esquema
-> `1.0.9.x` como faixa de desenvolvimento pré-`2.0` — o salto para `2.0` fica reservado
-> para uma revisão deliberada e significativa, não para o próximo incremento de rotina.
-> As versões abaixo eram anteriormente identificadas como `1.9`, `1.9.1`, `1.9.2` e
+> **Nota sobre versionamento:** desde a `1.1.0.0` cada dígito de `a.b.c.d` nomeia a
+> camada que se moveu — `a` frontend (HTML/CSS/UI), `b` backend (o parser), `c` business
+> rules (`glyph-rules.json`, constraints, valência), `d` data (tabelas de vocabulário,
+> constantes, glosas). Um dígito que anda zera todos à direita.
+>
+> As versões `1.0.9.x` eram anteriormente identificadas como `1.9`, `1.9.1`, `1.9.2` e
 > `1.9.3`; o conteúdo é o mesmo, só a numeração muda. Versões anteriores (`v1.7`,
 > `v1.8`) mantêm sua numeração histórica — ver `GLYPH_v1.7_CHANGELIST.md` e
 > `GLYPH_v1.8_CHANGELIST.md`.
+
+---
+
+## [1.1.0.1] — O motor passa a saber do que as coisas são feitas
+
+A ponte para o `.hgml`. Até aqui `expansoes.txt` era uma tabela que só o `dag.js`
+lia: o motor conhecia os 120 comandos mas não sabia quais eram átomos, quais eram
+compostos, nem a fórmula de nenhum. Agora sabe. Dígito `d` porque é dado e constante —
+nenhuma regra de negócio mudou, nenhum diagnóstico mudou, nenhum XML mudou.
+
+### Adicionado
+
+- **`read-expansoes.js` — o leitor único do formato.** Três coisas precisam entender
+  `expansoes.txt`: o `dag.js` (que reporta camadas e ciclos), o `build-templates.js`
+  (que o compila para o motor) e por extensão o próprio motor. Até aqui só o `dag.js`
+  sabia, e o conhecimento estava prestes a ser copiado — que é exatamente como o bug do
+  regex de cadeia entrou e ficou invisível. Um leitor, um lugar para errar.
+- **`glyph-expansions.json`** (gerado) e `GlyphExpansions` em `glyph-data.js`. Mapeia
+  cada comando para `atom` ou `composite`, com fórmula, dependências e camada.
+  `expansoes.txt` segue sendo a fonte que um humano edita — uma entrada por linha é
+  melhor que JSON aninhado à mão.
+- **`useExpansions()` no motor**, irmão opcional de `useTemplates()` e `useRules()`:
+  sem store carregado o motor roda idêntico, só não sabe do que as coisas são feitas.
+  Com ele vêm `speciesOf()`, `depthOf()`, `formulaOf()` e `atomsOf()` — este último
+  devolve o fecho transitivo em hieróglifos, mantendo repetições (um comando que chega
+  a `CTX` por dois caminhos é feito dele duas vezes, e colapsar isso mentiria sobre o
+  custo da composição).
+- **`species` e `compositionDepth` na AST.** Cuidado com o par homônimo: `depth` é a
+  profundidade do nó *no texto do usuário*; `compositionDepth` é a do comando *no
+  vocabulário*.
+- **`--expand` no CLI.** Recebe um nome de comando, não fonte Glyph, e responde do que
+  ele é feito. `HYP` queima até 101 hieróglifos.
+- **Bucket `X` na suíte — 8 checagens de integridade.** A que importa é `X-01`: todo
+  comando do motor tem de estar em `expansoes.txt` e vice-versa. Glossário e motor já
+  divergiram uma vez — doze comandos declarados que o motor nunca ouviu falar, metade
+  das fórmulas incapaz de resolver — e nada pegou porque nada comparava as duas listas.
+  Verificado que a asserção morde nas duas direções antes de dar por pronta.
+
+### Alterado
+
+- **`dag.js` virou um CLI fino sobre o leitor**, e passou a **sair com código diferente
+  de zero** quando a tabela não fecha. Uma dependência indefinida ou um ciclo significa
+  que a decomposição pararia no meio em silêncio, e saída meio queimada é pior que
+  nenhuma — então isso é portão de build, não relatório.
+- **`build-templates.js` recusa gerar** se a tabela não fechar, pelo mesmo motivo.
+
+### Pendente
+
+- **`toHGML()` precisa de uma decisão que a tabela não resolve.** Ao queimar
+  `[crit'o parser']`, o literal `'o parser'` é operando de qual peça da fórmula de
+  `CRIT`? A tabela diz do que `CRIT` é feito, não onde o argumento do usuário se encaixa
+  depois de decomposto. Primeira pergunta do passo 17 do `HGML_PLAN.md`.
+
+---
+
+## [1.1.0.0] — O glossário vira a fonte, o motor deriva dele
+
+Salto de *backend*: `GLOSSARIO.md` passa a ser a referência normativa do vocabulário, e
+o parser foi alinhado a ele. `expansoes.txt` deixa de ser um esboço de 6 fórmulas e
+passa a descrever o vocabulário inteiro — **120 verbetes, 0 ciclos, 0 dependências
+indefinidas**, verificável com `node dag.js expansoes.txt`. A suíte vai de 110 para
+**129 casos**, todos verdes.
+
+### Adicionado
+
+- **Doze comandos que o glossário declarava e o motor não conhecia.** `FIND`, `GET`,
+  `ADD`, `SUB`, `WHR` (contexto), `HGH`, `LOW`, `BOLD`, `LIGHT` (intensidade), `SWITCH`
+  (condição), `GO` (rumo) e `NONE` (engine, em `META`). Metade das fórmulas de
+  composição os referenciava e não resolvia. Duas categorias novas em `CATS` porque não
+  cabiam nas existentes: **Contexto** separa *operar dentro* de um escopo de *declará-lo*
+  (que é o que `Enquadre` já fazia); **Intensidade** gradua *um* item, enquanto `PRIO`
+  ordena *entre* itens. Os seis operadores ganharam valência em `FRAMES`; os cinco
+  primitivos não, porque "valem sozinhos" e portanto não geram `<needs>`.
+- **`expansoes.txt` completo.** 88 declarações não-expansivas (77 átomos de vocabulário
+  + 11 de engine/modo, que aparecem em fórmulas) e 32 fórmulas de composto. `HYP` é o
+  comando mais caro do vocabulário, com 6 níveis de profundidade — informação que a
+  tabela não tinha como dar antes.
+- **19 casos novos na suíte.** `P-26`..`P-29` cobrem o vocabulário novo, `P-30`..`P-34`
+  fixam cada par des-fundido como distinto, e `N-13` fixa que `[base]` *tem* que falhar.
+
+### Alterado
+
+- **`BASE` o comando virou `CORE`.** A palavra era duas coisas: a palavra-chave do lado
+  direito em `expansoes.txt` ("isto é um átomo") e um comando do vocabulário
+  ("fundamento estrutural"). Enquanto colidiam, nenhuma tabela de expansão podia
+  desambiguar as duas. `BASE` fica como palavra-chave; o comando é `CORE`. Aplicado em
+  `CATS`, `INSTR`, na classe `subject` de `glyph-rules.json` e nos três moldes que
+  usavam `tag:"base"`.
+- **As sete fusões da v1.7 foram desfeitas.** `EVAL`, `REV`, `SPEC`, `SIMP`, `QST`,
+  `FOREX` e `ONLYIF` voltam a ser comandos próprios. Cada par tinha um eixo real
+  separando os dois lados — o dado vs. o conectivo que o introduz, a tipagem do bloco
+  vs. o ato dirigido a alguém, o padrão contra o qual se compara — e a fusão apagava o
+  eixo junto com o comando. Os sete já tinham verbete em `INSTR` e valência em `FRAMES`;
+  como `classify()` consulta `ALIAS` antes de `INSTR`, a existência da linha era a fusão
+  inteira, e apagar as 7 linhas foi a de-fusão completa.
+- **`req-deny` rebaixada de `fix`/contradição para `ask`/tensão.** Foi escrita quando
+  `DENY` significava recusar uma proposta. Com `DENY` incidindo sobre a *via até um
+  resultado* e `REQ` sobre a *existência de algo*, os dois deixaram de colidir por
+  construção. Como `fix` a regra reprovava entrada válida — e `fix` significa "o XML não
+  é confiável", o que não era o caso.
+- **`clar-elab` virou `simp-elab`; nasceu `gen-spec`.** A tensão real é cortar ×
+  acrescentar, e quem corta é `SIMP` — `CLAR` remove ambiguidade, o que muitas vezes
+  *adiciona* palavras. Pelo mesmo motivo a classe `coarsen` deixou de ser
+  `[GEN, SUM, CLAR]` e virou `[GEN, SUM, SIMP]`. `gen-spec` é a tensão que a fusão
+  `SPEC`→`ELAB` vinha escondendo.
+- **`GLYPH_ASSET_VERSION` passou a seguir `VERSION`.** Dizia `"1.9.3"` enquanto o parser
+  dizia `"1.0.9.3"` — dois esquemas de versão para um build só.
+
+### Corrigido
+
+- **`dag.js` comia as cadeias.** O regex de dependências era `/[A-Z_][\w-]*/g`, com `-`
+  *dentro* da classe de caracteres — então `CMP-TRUE` saía como um identificador
+  fantasma único em vez de `CMP` e `TRUE`. Foi escrito quando as fórmulas eram separadas
+  por espaço (`VRFY = CMP TRUE`); a notação de cadeia o quebrava em silêncio. Também
+  passou a descartar os tokens de retorno (`R:`, `r-`) antes de extrair dependências:
+  são pontuação do lexer, e compor é ortogonal a marcar retorno.
+- **Os rótulos de nível do `dag.js` contradiziam a taxonomia.** Chamava o nível 1 de
+  "primitivo", mas `ALT`, `VRFY` e `RMBR` estão no nível 1 e são compostos. Nível 0 é
+  `hieroglifo`; todo nível acima é `composto-N`.
+- **`SESSION.go` removido.** Com `GO` resolvendo em `INSTR`, `classify()` nunca mais
+  alcançaria a entrada de sessão — mesmo motivo pelo qual `SESSION.prob` saiu na
+  `1.0.9.3`.
+- **Três fórmulas com colchetes desbalanceados** (`VAL`, `EVAL`, `SCRU`). Em
+  Glyph-fonte é legal, mas numa fórmula de composição torna impossível dizer qual
+  hieróglifo é operando de qual — e o `.hgml` exige fechamento explícito.
+
+### Pendente
+
+- **O parser ainda não sabe o que `expansoes.txt` sabe.** Conhece os 120 comandos, mas
+  não quais são átomos, quais são compostos, nem a fórmula de cada composto — que é
+  exatamente o que um emissor `.hgml` precisa. O caminho tem precedente: o mesmo
+  `build-templates.js` que gera `glyph-data.js` pode gerar a tabela de composição, e o
+  parser consumi-la por um `useExpansions()`, irmão opcional de `useTemplates()` e
+  `useRules()`. Ver `HGML_PLAN.md`.
 
 ---
 

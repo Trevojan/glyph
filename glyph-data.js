@@ -97,13 +97,13 @@
 
   "classes": {
     "thinking": ["CLAR", "CRIT", "BRST", "GEN", "SUM", "ELAB"],
-    "subject":  ["CTX", "TGT", "REF", "BASE", "INS", "SECTION", "BLOCK", "PT"],
-    "condition": ["COND", "IF", "UNLS", "ONLYW", "EXC"],
-    "coarsen": ["GEN", "SUM", "CLAR"],
+    "subject":  ["CTX", "TGT", "REF", "CORE", "INS", "SECTION", "BLOCK", "PT"],
+    "condition": ["COND", "IF", "UNLS", "ONLYIF", "ONLYW", "EXC", "SWITCH"],
+    "coarsen": ["GEN", "SUM", "SIMP"],
     "exit": ["INSTOF", "FBK", "FRGT"]
   },
 
-  "classNote": "`coarsen` and `exit` exist for template constraints (see glyph-templates.json), not for the rules below. `coarsen` is the direction that undoes detail: generalise, summarise, and clarify (which absorbed simplify in v1.7). `exit` is the direction that leaves the structure standing but stops using it: substitute the target, fall back, forget. Neither is wrong on its own — they are only worth flagging inside a preset that promised the opposite direction.",
+  "classNote": "`coarsen` and `exit` exist for template constraints (see glyph-templates.json), not for the rules below. `coarsen` is the direction that undoes detail: generalise, summarise, simplify. CLAR left this class in v1.1.0.0 — with the v1.7 fusion undone, clarifying means removing ambiguity, which often ADDS words rather than cutting them, so it is not a coarsening direction. `exit` is the direction that leaves the structure standing but stops using it: substitute the target, fall back, forget. Neither is wrong on its own — they are only worth flagging inside a preset that promised the opposite direction.",
 
   "scope": {
     "sameTarget": "siblings under one parent, OR one is an ancestor of the other",
@@ -143,10 +143,11 @@
       "why": "remembering to forget makes the block impossible to honour",
       "suggest": "rmbr + cond + val + frgt — state when to forget and against which criterion." },
 
-    { "id": "req-deny", "kind": "pair", "a": "REQ", "b": "DENY", "severity": "fix",
-      "label": "contradiction",
-      "why": "requiring and denying the same thing",
-      "suggest": "Pick one; if both are meant, separate them by condition." },
+    { "id": "req-deny", "kind": "pair", "a": "REQ", "b": "DENY", "severity": "ask",
+      "label": "tension",
+      "why": "requiring something to exist while rejecting a route that reaches it — legitimate if the rejected route is not the only one, wrong if it is",
+      "suggest": "Name the route that stays open, or drop one side.",
+      "note": "Was severity `fix` and label `contradiction` through v1.0.9, when DENY meant refusing a proposal. In v1.1.0.0 DENY rejects the route to a result and REQ demands existence, so the two no longer collide by construction — GLOSSARIO.md §6.6." },
 
     { "id": "req-dont", "kind": "pair", "a": "REQ", "b": "DONT", "severity": "ask",
       "label": "redundancy",
@@ -198,10 +199,10 @@
       "why": "assuming a hypothesis may not produce rational results — the thing under test is being taken as given",
       "suggest": "subject + hyp, or subject + assm — give each its own subject and keep them apart." },
 
-    { "id": "clar-elab", "kind": "pair", "a": "CLAR", "b": "ELAB", "severity": "ask",
+    { "id": "simp-elab", "kind": "pair", "a": "SIMP", "b": "ELAB", "severity": "ask",
       "label": "tension",
-      "why": "clarify (which absorbed simplify) and elaborate pull in opposite directions",
-      "suggest": "Pick the direction, or elaborate first and clarify the result." },
+      "why": "simplify cuts and elaborate adds — opposite directions on the same target",
+      "suggest": "Pick the direction, or elaborate first and simplify the result." },
 
     { "id": "sum-elab", "kind": "pair", "a": "SUM", "b": "ELAB", "severity": "ask",
       "label": "tension",
@@ -210,8 +211,13 @@
 
     { "id": "gen-elab", "kind": "pair", "a": "GEN", "b": "ELAB", "severity": "ask",
       "label": "tension",
-      "why": "generalising and specifying (ELAB absorbed SPEC) the same thing",
+      "why": "generalising drops the particulars that elaborating is adding",
       "suggest": "Pick the direction, or separate them by condition." },
+
+    { "id": "gen-spec", "kind": "pair", "a": "GEN", "b": "SPEC", "severity": "ask",
+      "label": "tension",
+      "why": "a general pattern and a detailed specification of the same thing pull apart",
+      "suggest": "Generalise first and specify the result, or scope them to different targets." },
 
     { "id": "elab-before-thinking", "kind": "order", "first": "ELAB", "then": "@thinking",
       "severity": "note", "label": "order",
@@ -245,5 +251,777 @@
     { "pair": "POS + CRIT", "why": "criticism can be positive" },
     { "pair": "EXC + INSTOF", "why": "exception and substitution coexist — PLANILHA_FUSOES, house 7" }
   ]
+};
+  root.GlyphExpansions = {
+  "schema": 1,
+  "note": "GENERATED from expansoes.txt by build-templates.js — DO NOT EDIT BY HAND. Maps every command to its species: `atom` (a hieroglyph, does not decompose) or `composite` (a glyph, with the formula that decomposes it). `depth` is the layer: 0 for an atom, 1 + the deepest dependency for a composite.",
+  "atoms": 88,
+  "composites": 32,
+  "maxDepth": 6,
+  "commands": {
+    "TRUE": {
+      "species": "atom",
+      "depth": 0
+    },
+    "FLS": {
+      "species": "atom",
+      "depth": 0
+    },
+    "POS": {
+      "species": "atom",
+      "depth": 0
+    },
+    "NGT": {
+      "species": "atom",
+      "depth": 0
+    },
+    "DONT": {
+      "species": "atom",
+      "depth": 0
+    },
+    "DENY": {
+      "species": "atom",
+      "depth": 0
+    },
+    "PRIO": {
+      "species": "atom",
+      "depth": 0
+    },
+    "OVR": {
+      "species": "atom",
+      "depth": 0
+    },
+    "DFN": {
+      "species": "atom",
+      "depth": 0
+    },
+    "CMP": {
+      "species": "atom",
+      "depth": 0
+    },
+    "CNST": {
+      "species": "atom",
+      "depth": 0
+    },
+    "ASK": {
+      "species": "atom",
+      "depth": 0
+    },
+    "ELAB": {
+      "species": "atom",
+      "depth": 0
+    },
+    "CLAR": {
+      "species": "atom",
+      "depth": 0
+    },
+    "COND": {
+      "species": "atom",
+      "depth": 0
+    },
+    "FMT": {
+      "species": "atom",
+      "depth": 0
+    },
+    "ITR": {
+      "species": "atom",
+      "depth": 0
+    },
+    "CONF": {
+      "species": "atom",
+      "depth": 0
+    },
+    "UNLS": {
+      "species": "atom",
+      "depth": 0
+    },
+    "ONLYIF": {
+      "species": "atom",
+      "depth": 0
+    },
+    "ONLYW": {
+      "species": "atom",
+      "depth": 0
+    },
+    "INSTOF": {
+      "species": "atom",
+      "depth": 0
+    },
+    "AVD": {
+      "species": "atom",
+      "depth": 0
+    },
+    "RDY": {
+      "species": "atom",
+      "depth": 0
+    },
+    "INS": {
+      "species": "atom",
+      "depth": 0
+    },
+    "WARN": {
+      "species": "atom",
+      "depth": 0
+    },
+    "BYP": {
+      "species": "atom",
+      "depth": 0
+    },
+    "FIND": {
+      "species": "atom",
+      "depth": 0
+    },
+    "GT": {
+      "species": "atom",
+      "depth": 0
+    },
+    "GTE": {
+      "species": "atom",
+      "depth": 0
+    },
+    "LT": {
+      "species": "atom",
+      "depth": 0
+    },
+    "LTE": {
+      "species": "atom",
+      "depth": 0
+    },
+    "EQ": {
+      "species": "atom",
+      "depth": 0
+    },
+    "NEQ": {
+      "species": "atom",
+      "depth": 0
+    },
+    "GET": {
+      "species": "atom",
+      "depth": 0
+    },
+    "SUB": {
+      "species": "atom",
+      "depth": 0
+    },
+    "ADD": {
+      "species": "atom",
+      "depth": 0
+    },
+    "SWITCH": {
+      "species": "atom",
+      "depth": 0
+    },
+    "GO": {
+      "species": "atom",
+      "depth": 0
+    },
+    "ERROR": {
+      "species": "atom",
+      "depth": 0
+    },
+    "MAND": {
+      "species": "atom",
+      "depth": 0
+    },
+    "OPT": {
+      "species": "atom",
+      "depth": 0
+    },
+    "ALW": {
+      "species": "atom",
+      "depth": 0
+    },
+    "NEV": {
+      "species": "atom",
+      "depth": 0
+    },
+    "PT": {
+      "species": "atom",
+      "depth": 0
+    },
+    "VAR": {
+      "species": "atom",
+      "depth": 0
+    },
+    "PARAM": {
+      "species": "atom",
+      "depth": 0
+    },
+    "PH": {
+      "species": "atom",
+      "depth": 0
+    },
+    "DEF": {
+      "species": "atom",
+      "depth": 0
+    },
+    "TPL": {
+      "species": "atom",
+      "depth": 0
+    },
+    "CORE": {
+      "species": "atom",
+      "depth": 0
+    },
+    "CTX": {
+      "species": "atom",
+      "depth": 0
+    },
+    "TGT": {
+      "species": "atom",
+      "depth": 0
+    },
+    "SPEC": {
+      "species": "atom",
+      "depth": 0
+    },
+    "LOGIC": {
+      "species": "atom",
+      "depth": 0
+    },
+    "WHR": {
+      "species": "atom",
+      "depth": 0
+    },
+    "HGH": {
+      "species": "atom",
+      "depth": 0
+    },
+    "LOW": {
+      "species": "atom",
+      "depth": 0
+    },
+    "BOLD": {
+      "species": "atom",
+      "depth": 0
+    },
+    "LIGHT": {
+      "species": "atom",
+      "depth": 0
+    },
+    "ATC": {
+      "species": "atom",
+      "depth": 0
+    },
+    "EX": {
+      "species": "atom",
+      "depth": 0
+    },
+    "RWK": {
+      "species": "atom",
+      "depth": 0
+    },
+    "IMPR": {
+      "species": "atom",
+      "depth": 0
+    },
+    "REV": {
+      "species": "atom",
+      "depth": 0
+    },
+    "SKEP": {
+      "species": "atom",
+      "depth": 0
+    },
+    "DIST": {
+      "species": "atom",
+      "depth": 0
+    },
+    "REAL": {
+      "species": "atom",
+      "depth": 0
+    },
+    "REF": {
+      "species": "atom",
+      "depth": 0
+    },
+    "SEEAL": {
+      "species": "atom",
+      "depth": 0
+    },
+    "NT": {
+      "species": "atom",
+      "depth": 0
+    },
+    "EXC": {
+      "species": "atom",
+      "depth": 0
+    },
+    "LIM": {
+      "species": "atom",
+      "depth": 0
+    },
+    "REQ": {
+      "species": "atom",
+      "depth": 0
+    },
+    "EXT": {
+      "species": "atom",
+      "depth": 0
+    },
+    "RSN": {
+      "species": "atom",
+      "depth": 0
+    },
+    "FIN": {
+      "species": "atom",
+      "depth": 0
+    },
+    "IF": {
+      "species": "atom",
+      "depth": 0
+    },
+    "SECTION": {
+      "species": "atom",
+      "depth": 0
+    },
+    "BLOCK": {
+      "species": "atom",
+      "depth": 0
+    },
+    "SKL": {
+      "species": "atom",
+      "depth": 0
+    },
+    "NONE": {
+      "species": "atom",
+      "depth": 0
+    },
+    "TOBLOCK": {
+      "species": "atom",
+      "depth": 0
+    },
+    "TOSECTION": {
+      "species": "atom",
+      "depth": 0
+    },
+    "HMN": {
+      "species": "atom",
+      "depth": 0
+    },
+    "QUICK": {
+      "species": "atom",
+      "depth": 0
+    },
+    "OFF": {
+      "species": "atom",
+      "depth": 0
+    },
+    "ON": {
+      "species": "atom",
+      "depth": 0
+    },
+    "VRFY": {
+      "species": "composite",
+      "formula": "[CMP-TRUE[[CORE],[TGT]]]",
+      "deps": [
+        "CMP",
+        "TRUE",
+        "CORE",
+        "TGT"
+      ],
+      "depth": 1
+    },
+    "VAL": {
+      "species": "composite",
+      "formula": "[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]",
+      "deps": [
+        "CMP",
+        "CTX",
+        "CNST",
+        "SUB",
+        "EQ",
+        "CMP",
+        "CTX",
+        "CAT",
+        "EQ"
+      ],
+      "depth": 5
+    },
+    "CRIT": {
+      "species": "composite",
+      "formula": "[CMP[CTX],[SPEC-CORE],[EVAL[ERROR]]]",
+      "deps": [
+        "CMP",
+        "CTX",
+        "SPEC",
+        "CORE",
+        "EVAL",
+        "ERROR"
+      ],
+      "depth": 2
+    },
+    "EVAL": {
+      "species": "composite",
+      "formula": "[REAL[CORE-CTX[DIST[SKL]]]],[REF[DEF[SPEC-CORE-CTX]]]",
+      "deps": [
+        "REAL",
+        "CORE",
+        "CTX",
+        "DIST",
+        "SKL",
+        "REF",
+        "DEF",
+        "SPEC",
+        "CORE",
+        "CTX"
+      ],
+      "depth": 1
+    },
+    "SCRU": {
+      "species": "composite",
+      "formula": "[DIST-RSN[TRYFR[FIND-REAL][WHR[REAL-EQ[R:[CONF]]]]][CTX-VRFY-RSN],[SUM[ASK[DIST-RSN[TRYFR[REAL]]]]]]",
+      "deps": [
+        "DIST",
+        "RSN",
+        "TRYFR",
+        "FIND",
+        "REAL",
+        "WHR",
+        "REAL",
+        "EQ",
+        "CONF",
+        "CTX",
+        "VRFY",
+        "RSN",
+        "SUM",
+        "ASK",
+        "DIST",
+        "RSN",
+        "TRYFR",
+        "REAL"
+      ],
+      "depth": 5
+    },
+    "TRYFR": {
+      "species": "composite",
+      "formula": "[REV[REF[TGT]]][VRFY[TGT],[TRUE[CNCL[GO-LOGIC]]]]",
+      "deps": [
+        "REV",
+        "REF",
+        "TGT",
+        "VRFY",
+        "TGT",
+        "TRUE",
+        "CNCL",
+        "GO",
+        "LOGIC"
+      ],
+      "depth": 4
+    },
+    "PROB": {
+      "species": "composite",
+      "formula": "[ERROR[CTX]]",
+      "deps": [
+        "ERROR",
+        "CTX"
+      ],
+      "depth": 1
+    },
+    "SIMP": {
+      "species": "composite",
+      "formula": "[RTNL-SUB],[CTX]",
+      "deps": [
+        "RTNL",
+        "SUB",
+        "CTX"
+      ],
+      "depth": 2
+    },
+    "GEN": {
+      "species": "composite",
+      "formula": "[ELAB],[RWK],[SUB-CTX]",
+      "deps": [
+        "ELAB",
+        "RWK",
+        "SUB",
+        "CTX"
+      ],
+      "depth": 1
+    },
+    "SUM": {
+      "species": "composite",
+      "formula": "[SIMP],[CORE]",
+      "deps": [
+        "SIMP",
+        "CORE"
+      ],
+      "depth": 3
+    },
+    "CAT": {
+      "species": "composite",
+      "formula": "[SUM],[CORE],[ELAB]",
+      "deps": [
+        "SUM",
+        "CORE",
+        "ELAB"
+      ],
+      "depth": 4
+    },
+    "QST": {
+      "species": "composite",
+      "formula": "[CTX[GET[CORE],[WHR[LOGIC-NONE]]],[ASK]]",
+      "deps": [
+        "CTX",
+        "GET",
+        "CORE",
+        "WHR",
+        "LOGIC",
+        "NONE",
+        "ASK"
+      ],
+      "depth": 1
+    },
+    "DRVF": {
+      "species": "composite",
+      "formula": "[RTNL-RWK[MAND-NEQ],[CTX[GO-SWITCH]]]",
+      "deps": [
+        "RTNL",
+        "RWK",
+        "MAND",
+        "NEQ",
+        "CTX",
+        "GO",
+        "SWITCH"
+      ],
+      "depth": 2
+    },
+    "FOREX": {
+      "species": "composite",
+      "formula": "[GO-ALT[AVD[GET[CTX-REQ],[CTX-CNST],[CTX-EXC]]]]",
+      "deps": [
+        "GO",
+        "ALT",
+        "AVD",
+        "GET",
+        "CTX",
+        "REQ",
+        "CTX",
+        "CNST",
+        "CTX",
+        "EXC"
+      ],
+      "depth": 2
+    },
+    "FBK": {
+      "species": "composite",
+      "formula": "[IF-ERROR][EQ[RMBR[CORE]],[INSTOF[TRYFR],[GO[ALT]]]]",
+      "deps": [
+        "IF",
+        "ERROR",
+        "EQ",
+        "RMBR",
+        "CORE",
+        "INSTOF",
+        "TRYFR",
+        "GO",
+        "ALT"
+      ],
+      "depth": 5
+    },
+    "RESTR": {
+      "species": "composite",
+      "formula": "[IF[SKEP[CNST]][TRUE][LIM-GO[CTX-EQ[CNST]]]]",
+      "deps": [
+        "IF",
+        "SKEP",
+        "CNST",
+        "TRUE",
+        "LIM",
+        "GO",
+        "CTX",
+        "EQ",
+        "CNST"
+      ],
+      "depth": 1
+    },
+    "DEPR": {
+      "species": "composite",
+      "formula": "[AVD[GO]],[OPT[REF[INSTOF]]]",
+      "deps": [
+        "AVD",
+        "GO",
+        "OPT",
+        "REF",
+        "INSTOF"
+      ],
+      "depth": 1
+    },
+    "HYP": {
+      "species": "composite",
+      "formula": "[RMBR[FBK]][IMAG[ONLYIF[CNST-REAL]][TRUE],[ADD[CTX][FOREX-CORE]],[FBK]]",
+      "deps": [
+        "RMBR",
+        "FBK",
+        "IMAG",
+        "ONLYIF",
+        "CNST",
+        "REAL",
+        "TRUE",
+        "ADD",
+        "CTX",
+        "FOREX",
+        "CORE",
+        "FBK"
+      ],
+      "depth": 6
+    },
+    "IMAG": {
+      "species": "composite",
+      "formula": "[ADD[CTX[NEQ[REAL]]]]",
+      "deps": [
+        "ADD",
+        "CTX",
+        "NEQ",
+        "REAL"
+      ],
+      "depth": 1
+    },
+    "ALT": {
+      "species": "composite",
+      "formula": "[NEQ[CORE]],[EQ[TGT]]",
+      "deps": [
+        "NEQ",
+        "CORE",
+        "EQ",
+        "TGT"
+      ],
+      "depth": 1
+    },
+    "ASSM": {
+      "species": "composite",
+      "formula": "[ADD[CORE]],[NEV[VRFY]]",
+      "deps": [
+        "ADD",
+        "CORE",
+        "NEV",
+        "VRFY"
+      ],
+      "depth": 2
+    },
+    "RTNL": {
+      "species": "composite",
+      "formula": "[ELAB[RSN]],[REF[CNST]]",
+      "deps": [
+        "ELAB",
+        "RSN",
+        "REF",
+        "CNST"
+      ],
+      "depth": 1
+    },
+    "BRST": {
+      "species": "composite",
+      "formula": "[ITR[ADD[ALT-IMAG]]],[NEV[CNST]]",
+      "deps": [
+        "ITR",
+        "ADD",
+        "ALT",
+        "IMAG",
+        "NEV",
+        "CNST"
+      ],
+      "depth": 2
+    },
+    "CNSD": {
+      "species": "composite",
+      "formula": "[ITR[CMP[ALT],[CNST]]],[NEV[CNCL]]",
+      "deps": [
+        "ITR",
+        "CMP",
+        "ALT",
+        "CNST",
+        "NEV",
+        "CNCL"
+      ],
+      "depth": 4
+    },
+    "PROP": {
+      "species": "composite",
+      "formula": "[GO[ALT[RTNL]]],[ASK[CONF]]",
+      "deps": [
+        "GO",
+        "ALT",
+        "RTNL",
+        "ASK",
+        "CONF"
+      ],
+      "depth": 2
+    },
+    "CTRD": {
+      "species": "composite",
+      "formula": "[NGT[TGT]],[RTNL[DIST]]",
+      "deps": [
+        "NGT",
+        "TGT",
+        "RTNL",
+        "DIST"
+      ],
+      "depth": 2
+    },
+    "CNCL": {
+      "species": "composite",
+      "formula": "[FIN[DRVF[CORE-CTX]]]",
+      "deps": [
+        "FIN",
+        "DRVF",
+        "CORE",
+        "CTX"
+      ],
+      "depth": 3
+    },
+    "JUST": {
+      "species": "composite",
+      "formula": "[GO[RTNL]],[TGT[CNCL]]",
+      "deps": [
+        "GO",
+        "RTNL",
+        "TGT",
+        "CNCL"
+      ],
+      "depth": 4
+    },
+    "INTN": {
+      "species": "composite",
+      "formula": "[DFN[TGT[RSN]]]",
+      "deps": [
+        "DFN",
+        "TGT",
+        "RSN"
+      ],
+      "depth": 1
+    },
+    "RMBR": {
+      "species": "composite",
+      "formula": "[ALW[GET[CTX]]]",
+      "deps": [
+        "ALW",
+        "GET",
+        "CTX"
+      ],
+      "depth": 1
+    },
+    "FRGT": {
+      "species": "composite",
+      "formula": "[NEV[GET[CTX]]]",
+      "deps": [
+        "NEV",
+        "GET",
+        "CTX"
+      ],
+      "depth": 1
+    },
+    "LRN": {
+      "species": "composite",
+      "formula": "[GEN[RMBR]],[ADD[CORE]]",
+      "deps": [
+        "GEN",
+        "RMBR",
+        "ADD",
+        "CORE"
+      ],
+      "depth": 2
+    }
+  }
 };
 })(typeof self !== "undefined" ? self : this);

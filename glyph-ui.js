@@ -34,6 +34,11 @@
      contradição. */
   if (typeof GlyphTemplates !== "undefined" && GlyphTemplates) Core.useTemplates(GlyphTemplates);
   if (typeof GlyphRules !== "undefined" && GlyphRules) Core.useRules(GlyphRules);
+  /* v1.1.0.0: tabela de composição (átomo x composto), compilada de
+     expansoes.txt. Alimenta `species`/`compositionDepth` na AST — sem ela a
+     AST sai igual, só com esses dois campos em null. */
+  if (typeof GlyphExpansions !== "undefined" && GlyphExpansions &&
+      Core.useExpansions) Core.useExpansions(GlyphExpansions);
 
   var tokenize = Core.tokenize, classify = Core.classify, suggest = Core.suggest,
       elName = Core.elName, expandExpr = Core.expandExpr, freeVars = Core.freeVars,
