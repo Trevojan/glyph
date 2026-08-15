@@ -1,5 +1,5 @@
 /**
- * Glyph Core v1.1.0 (glyph-parser.js)
+ * Glyph Core v1.2.0 (glyph-parser.js)
  *
  * Single core of the chain  human → glyph → xml → machine.
  *
@@ -42,7 +42,7 @@
 })(typeof self !== "undefined" ? self : this, function () {
   "use strict";
 
-  var VERSION = "1.1.0.1";
+  var VERSION = "1.2.0.0";
 
   /* ======================================================
      1. VOCABULARY — Appendix A, one slot per command
@@ -1800,6 +1800,172 @@
     return serializeAST(r.segments, r.gaps);
   }
 
+  /* ======================================================
+     7. .hgml — HIEROGLYPH MARKDOWN, the atomic burn
+
+     What the XML emitter does NOT do: reduce. `<criticize>` travels as one
+     tag, and whatever CRIT is *made of* stays implicit. .hgml burns the tree
+     down to pure matter — every composite replaced by its formula, over and
+     over, until only hieroglyphs are left.
+
+     Two things make this cheap instead of a second language:
+
+       1. A formula IS valid Glyph, so `parse()` reads it. No second grammar.
+       2. The output is valid Glyph too, so it can be re-parsed — which gives
+          a correctness oracle for free (see the round-trip bucket in the
+          suite) instead of a hand-written expectation per case.
+
+     Form: every tag opens WITHOUT `]` and closes with `[/name]`. That is not
+     decoration — `]` already closes a command, so `[ctx][/ctx]` would emit an
+     UnmatchedCloseTag. `[ctx[/ctx]` is the closed form.
+
+     Cost: the burn is an EXPANSION, not a compression. A composite averages
+     ~15 hieroglyphs and HYP reaches 101, so a short input grows about 25x.
+     That is inherent to "100% hieroglyphs" — density and full decomposition
+     pull in opposite directions, and this format chose decomposition.
+     ====================================================== */
+
+  var BURN_LIMIT = 24;          // safety net; the build already refuses cycles
+
+  /* The human's operand is the subject of the whole formula (GLOSSARIO §0.3).
+     Concretely: it becomes the first child of the formula's head command. The
+     rule has to be mechanical or the burn cannot be automated at all. */
+  function injectSubject(body, operands) {
+    if (!operands || !operands.length) return body;
+    for (var i = 0; i < body.length; i++) {
+      if (body[i].canonical) {
+        body[i].children = operands.concat(body[i].children || []);
+        return body;
+      }
+    }
+    return operands.concat(body);   // formula with no command head: prepend
+  }
+
+  function burnList(list, opts, chain) {
+    var out = [];
+    (list || []).forEach(function (nd) {
+      /* Literals are what the human actually said — they survive. Free prose
+         does not: it is not vocabulary, and .hgml is hieroglyphs only. */
+      if (nd.literal) { if (nd.form !== "raw") out.push(nd); return; }
+      if (nd.text)    { if (opts && opts.keepText) out.push(nd); return; }
+      if (nd.mode)    { out = out.concat(burnList(nd.children, opts, chain)); return; }
+      if (nd.logic)   { out.push(nd); return; }
+      /* A template invocation already expanded during parse(); what is left
+         is the shell, so the burn walks straight through it. */
+      if (nd.template) { out = out.concat(burnList(nd.children, opts, chain)); return; }
+      if (!nd.canonical) return;
+
+      var e = entryOf(nd.canonical, opts);
+
+      /* The operands are burnt FIRST, under the CURRENT chain — before the
+         formula is opened. This is not an optimisation, it is the difference
+         between working and not: an operand is not part of the formula it is
+         passed to, so it must not inherit that formula's chain.
+
+         `[rmbr[fbk]]` inside HYP's formula is RMBR receiving FBK as argument.
+         Burning the argument after injecting it made FBK look like something
+         RMBR's formula contains, and since FBK's formula does mention RMBR,
+         the guard read a cycle that is not there — HYP → RMBR → FBK → RMBR —
+         and stopped with RMBR unreduced. Burning arguments first keeps the two
+         relationships apart: containment extends the chain, argument does not. */
+      var operands = burnList(nd.children || [], opts, chain);
+
+      if (!e || e.species === "atom") {
+        out.push({ canonical: nd.canonical, children: operands });
+        return;
+      }
+
+      var key = String(nd.canonical).toUpperCase();
+      if (chain.indexOf(key) !== -1 || chain.length >= BURN_LIMIT) {
+        /* Only reachable from a hand-edited store: build-templates.js refuses
+           to generate a table with cycles. Emitting the node unburned beats
+           looping, and the marker says the output is not fully reduced. */
+        out.push({ canonical: key, children: operands, unburned: true,
+                   via: chain.concat(key).join(" → ") });
+        return;
+      }
+
+      var sub = parse(e.formula, {
+        session: opts && opts.session,
+        valency: false,          // a formula is a definition, not a request
+        expansions: (opts && opts.expansions) || EXPANSIONS
+      });
+      var body = [];
+      sub.segments.forEach(function (s) { body = body.concat(s.children); });
+
+      /* Burn the formula body, then inject the already-atomic operands. */
+      var burnedBody = burnList(body, opts, chain.concat(key));
+      out = out.concat(injectSubject(burnedBody, operands));
+    });
+    return out;
+  }
+
+  /* Walks the burnt tree and reports what came out of it. Counted here rather
+     than during the burn because operands are burnt before their formula, so
+     an in-flight counter double-counts them. */
+  function burnStats(list, acc) {
+    acc = acc || { atoms:0, literals:0, unburned:0, via:[] };
+    (list || []).forEach(function (nd) {
+      if (nd.literal || nd.text) acc.literals++;
+      else if (nd.canonical) {
+        if (nd.unburned) { acc.unburned++; acc.via.push(nd.via); }
+        else acc.atoms++;
+      }
+      burnStats(nd.children, acc);
+    });
+    return acc;
+  }
+
+  function hgmlLit(v) {
+    /* `'` closes a literal, `]` and a newline end one. Nothing survives them
+       intact, so they are folded rather than escaped — .hgml carries the
+       human's words to the engine, not their punctuation. */
+    return String(v == null ? "" : v)
+      .replace(/'/g, "’").replace(/]/g, ")").replace(/\s+/g, " ").trim();
+  }
+
+  function hgmlLines(list, d, L) {
+    (list || []).forEach(function (nd) {
+      if (nd.literal) { L.push(pad(d) + "'" + hgmlLit(nd.v) + "'"); return; }
+      if (nd.text)    { L.push(pad(d) + "'" + hgmlLit(nd.v) + "'"); return; }
+      if (nd.logic)   { L.push(pad(d) + "[logic" + (nd.logic.name ? "-" + nd.logic.name : "") + "[/logic]"); return; }
+      var name = String(nd.canonical || "?").toLowerCase();
+      var kids = nd.children || [];
+      if (!kids.length) { L.push(pad(d) + "[" + name + "[/" + name + "]"); return; }
+      L.push(pad(d) + "[" + name);
+      hgmlLines(kids, d + 1, L);
+      L.push(pad(d) + "[/" + name + "]");
+    });
+  }
+
+  /**
+   * burn(segments, opts) — the tree reduced to hieroglyphs.
+   * Returns { segments:[{children}], stats }.
+   */
+  function burn(segments, opts) {
+    opts = opts || {};
+    var out = (segments || []).map(function (sg) {
+      return { children: burnList(sg.children, opts, []), isReturn: !!sg.isReturn, breaks: sg.breaks };
+    });
+    var acc = { atoms:0, literals:0, unburned:0, via:[] };
+    out.forEach(function (sg) { burnStats(sg.children, acc); });
+    return { segments: out, stats: acc };
+  }
+
+  /** human → glyph → .hgml, in one call. */
+  function toHGML(src, opts) {
+    opts = opts || {};
+    if (!expansionRegistry(opts))
+      return "# sem tabela de composição: carregue glyph-expansions.json (useExpansions)";
+    var b = burn(parse(src, opts).segments, opts);
+    var L = [];
+    b.segments.forEach(function (sg, i) {
+      if (i) L.push("");
+      hgmlLines(sg.children, 0, L);
+    });
+    return L.join("\n");
+  }
+
   return {
     VERSION: VERSION,
     CATS: CATS, INSTR: INSTR, ALIAS: ALIAS, ALIAS_OF: ALIAS_OF, STRUCT: STRUCT,
@@ -1814,6 +1980,7 @@
     useExpansions: useExpansions, expansionRegistry: expansionRegistry,
     speciesOf: speciesOf, depthOf: depthOf, formulaOf: formulaOf, atomsOf: atomsOf,
     buildXml: buildXml, toXML: toXML, toAST: toAST, serializeAST: serializeAST,
+    burn: burn, toHGML: toHGML,
     esc: esc, xesc: xesc
   };
 });
@@ -1833,15 +2000,18 @@ if (typeof require === "function" && typeof module === "object" && require.main 
   var mode = "xml";
   var src = [];
   argv.forEach(function (a) {
-    if (a === "--ast" || a === "--xml" || a === "--diag" || a === "--expand") mode = a.slice(2);
+    if (a === "--ast" || a === "--xml" || a === "--diag" ||
+        a === "--expand" || a === "--hgml") mode = a.slice(2);
     else src.push(a);
   });
   var input = src.join(" ");
   if (!input) {
-    console.error("uso: node glyph-parser.js \"[crit[ctx]]\" [--xml|--ast|--diag|--expand]");
+    console.error("uso: node scripts/glyph-parser.js \"[crit[ctx]]\" [--xml|--ast|--diag|--hgml]");
+    console.error("     node scripts/glyph-parser.js CRIT --expand");
     process.exit(2);
   }
-  if (mode === "expand") {
+  if (mode === "hgml") console.log(G.toHGML(input));
+  else if (mode === "expand") {
     /* --expand takes a COMMAND NAME, not Glyph source: it answers "what is
        this made of", which is the question the .hgml emitter will ask. */
     var nm = input.replace(/[\[\]']/g, "").trim().toUpperCase();

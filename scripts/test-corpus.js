@@ -503,6 +503,96 @@ function runExpansionChecks() {
 }
 const rX = runExpansionChecks();
 
+/* ------------------------------------------------------------------ *
+ * H — .hgml, the atomic burn (v1.1.1.0)
+ *
+ * The oracle is the format itself: .hgml is valid Glyph, so the output can
+ * be re-parsed and checked against two invariants that need no hand-written
+ * expectation per case — every tag is an atom, and nothing became `fix`.
+ * That is a stronger test than any table of expected strings, and it is the
+ * reason the format reuses the grammar instead of inventing one.
+ * ------------------------------------------------------------------ */
+
+function runHgmlChecks() {
+  console.log("\n--- .hgml — a queima atômica ---");
+  const H = [];
+  const ok = (id, name, why) => {
+    if (why) { console.log("  ✗ " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  ✓ " + id + ": " + name); H.push(id); }
+  };
+
+  const store = require("../glyph-expansions.json");
+  const opts = { expansions: store };
+
+  /** re-parses .hgml and reports what survived */
+  const reburn = src => {
+    const out = G.toHGML(src, opts);
+    const re = G.parse(out, opts);
+    const cmds = [];
+    const lits = [];
+    re.segments.forEach(s => G.walk(s.children, n => {
+      if (n.canonical) cmds.push(n.canonical);
+      if (n.literal) lits.push(n.v);
+    }));
+    return {
+      out, cmds, lits,
+      fix: re.gaps.filter(g => g.sev === "fix").map(g => g.code),
+      nonAtom: [...new Set(cmds.filter(c => G.speciesOf(c, opts) !== "atom"))]
+    };
+  };
+
+  const crit = reburn("[crit'o parser']");
+  ok("H-01", "um composto reduz só a hieróglifos",
+     crit.nonAtom.length ? "sobrou: " + crit.nonAtom.join(",") : null);
+  ok("H-02", "a saída reparseia sem nenhum `fix`",
+     crit.fix.length ? crit.fix.join(",") : null);
+  ok("H-03", "o que o humano escreveu sobrevive à queima",
+     crit.lits.includes("o parser") ? null : "literal perdido: " + JSON.stringify(crit.lits));
+  ok("H-04", "todo tag sai em forma fechada `[x[/x]`",
+     /\[cmp\b/.test(crit.out) && /\[\/cmp\]/.test(crit.out)
+       ? null : "sem par de abertura/fechamento em cmp");
+
+  const atom = reburn("[ctx'api/pedidos.py']");
+  ok("H-05", "um hieróglifo atravessa intacto",
+     JSON.stringify(atom.cmds) === JSON.stringify(["CTX"])
+       ? null : "veio " + JSON.stringify(atom.cmds));
+
+  const once = G.toHGML("[crit'x'][prob'y']", opts);
+  ok("H-06", "queimar o queimado não muda nada",
+     G.toHGML(once, opts) === once ? null : "a segunda queima diferiu");
+
+  ok("H-07", "sem store, avisa em vez de quebrar",
+     /^#/.test(G.toHGML("[crit'x']", {})) ? null : "não devolveu o aviso");
+
+  /* The burn is an EXPANSION: this pins the order of magnitude so a silent
+     regression to shallow output gets noticed. */
+  const hyp = reburn("[hyp'o banco responde']");
+  ok("H-08", "HYP, o mais fundo, reduz inteiro (~97 hieróglifos)",
+     (!hyp.nonAtom.length && !hyp.fix.length && hyp.cmds.length > 80)
+       ? null : "sobrou " + hyp.nonAtom.join(",") + " / " + hyp.cmds.length + " tags");
+
+  /* Two formulas carry tokens the grammar cannot read inside brackets, and
+     both are DATA problems, not burn bugs:
+       SCRU  `R:` — the return token is segment-level punctuation, so `[R:`
+             parses as a command named R.
+       QST   `[LOGIC-NONE]` — the lexer claims any `[logic…]` as a calculation
+             block and then wants `[/logic]`.
+     Pinned by name: if either is fixed the count moves and this case fails,
+     which is the point — it must not be fixed silently. */
+  const KNOWN = ["QST", "SCRU"];
+  const failing = Object.keys(store.commands).filter(c => {
+    if (store.commands[c].species !== "composite") return false;
+    const r = reburn("[" + c.toLowerCase() + "'x']");
+    return r.fix.length || r.nonAtom.length;
+  }).sort();
+  ok("H-09", "30 dos 32 compostos queimam limpo; 2 conhecidos falham",
+     JSON.stringify(failing) === JSON.stringify(KNOWN)
+       ? null : "esperado " + JSON.stringify(KNOWN) + ", veio " + JSON.stringify(failing));
+
+  return H.length;
+}
+const rH = runHgmlChecks();
+
 console.log("\n=================================================");
 console.log(" Positive     " + rP + "/" + POSITIVE.length);
 console.log(" Incomplete   " + rI + "/" + INCOMPLETE.length);
@@ -514,6 +604,7 @@ console.log(" Rules        " + rC + "/" + RULE_CASES.length);
 console.log(" Constraints  " + rK + "/" + CONSTRAINTS.length);
 console.log(" Guard        " + rG + "/" + POSITIVE_WITH_RULES.length);
 console.log(" Composition  " + rX + "/8");
+console.log(" .hgml burn   " + rH + "/9");
 console.log("=================================================");
 
 if (failures.length) {

@@ -1,9 +1,9 @@
 ---
 name: glyph-markup
-description: Glyph Shorthand Markup Language v1.1.0.1 Specification & Parser Integration. Use when writing or reading Glyph compact structured notation.
+description: Glyph Shorthand Markup Language v1.2.0.0 Specification & Parser Integration. Use when writing or reading Glyph compact structured notation.
 ---
 
-# Glyph Shorthand Markup Language (v1.1.0.1)
+# Glyph Shorthand Markup Language (v1.2.0.0)
 
 Glyph é uma notação de comandos abreviados, entre delimitadores, que descreve um
 fluxo lógico escalável até os mínimos detalhes. A implementação de referência é
@@ -161,3 +161,22 @@ Verificação: `node scripts/test-corpus.js` e `node scripts/dag.js`.
 
 `a` frontend · `b` backend (parser) · `c` business rules · `d` dados e
 constantes. Um dígito que anda zera todos à direita.
+
+## `.hgml` — a queima atômica
+
+`toHGML()` reduz a árvore a hieróglifos puros: cada composto trocado pela sua
+fórmula, até não sobrar nada que decomponha. Forma fechada `[nome … [/nome]`,
+abrindo **sem** `]` (porque `]` já fecha, e `[ctx][/ctx]` daria
+`UnmatchedCloseTag`).
+
+```bash
+node scripts/glyph-parser.js "[prob'timeout']" --hgml
+```
+
+É **expansão, não compressão**: ~15 hieróglifos por composto, 97 para `[hyp]`,
+cerca de 25x numa entrada curta. A saída continua Glyph válido, então reparseia —
+o que dá o oráculo de correção da suíte.
+
+30 dos 32 compostos queimam limpo. `SCRU` (usa `R:` dentro de colchetes) e `QST`
+(usa `[LOGIC-…]`, que o lexer reivindica como bloco de conta) não — são
+problemas de dado, fixados pelo nome no caso `H-09`.

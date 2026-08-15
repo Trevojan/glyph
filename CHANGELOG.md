@@ -14,6 +14,71 @@ Todas as mudanças notáveis do Glyph são documentadas aqui, da mais recente pa
 
 ---
 
+## [1.2.0.0] — `.hgml`: a queima atômica existe e funciona
+
+O emissor que faltava. `toHGML()` reduz a árvore a **hieróglifos puros**: todo
+composto trocado pela sua fórmula, repetidamente, até não sobrar nada que
+decomponha.
+
+```bash
+node scripts/glyph-parser.js "[prob'timeout']" --hgml
+```
+```
+[error
+  'timeout'
+  [ctx[/ctx]
+[/error]
+```
+
+Duas coisas fazem disso um emissor barato em vez de uma segunda linguagem: uma
+fórmula **é** Glyph válido, então `parse()` a lê sem gramática nova; e a saída
+também é Glyph válido, então pode ser reparseada — o que dá um **oráculo de
+correção de graça**, em vez de uma expectativa escrita à mão por caso.
+
+**A queima é expansão, não compressão.** Um composto vale ~15 hieróglifos em
+média e `HYP` chega a 97; uma entrada curta cresce cerca de 25x. Isso é inerente
+a "100% hieróglifos" — densidade e decomposição total puxam para lados opostos, e
+este formato escolheu decomposição.
+
+### Adicionado
+
+- **`toHGML(src, opts)` e `burn(segments, opts)`**, mais o modo `--hgml` no CLI.
+  Somativo: nenhum diagnóstico e nenhum XML mudaram.
+- **Forma fechada** `[nome … [/nome]`. Não é decoração: `]` já fecha um comando,
+  então `[ctx][/ctx]` emitiria `UnmatchedCloseTag`. A forma fechada abre **sem**
+  `]`.
+- **Bucket `H` na suíte — 9 casos.** O oráculo é o próprio formato: reparseia a
+  saída e cobra dois invariantes que não precisam de expectativa escrita à mão —
+  toda tag é átomo, e nada virou `fix`.
+
+### Corrigido
+
+- **A guarda de ciclo confundia *fórmula contém* com *argumento aninhado*.**
+  `[rmbr[fbk]]` dentro da fórmula de `HYP` é `RMBR` **recebendo** `FBK` como
+  argumento. Como os argumentos eram injetados antes de queimar, herdavam a
+  cadeia da fórmula — e como a fórmula de `FBK` menciona `RMBR`, a guarda lia um
+  ciclo que não existe (`HYP → RMBR → FBK → RMBR`) e parava com `RMBR` inteiro.
+  Agora os argumentos queimam **antes** da fórmula abrir, sob a cadeia corrente:
+  conter estende a cadeia, receber como argumento não. `HYP` passou de 95 tags
+  com resíduo para 97 totalmente reduzidas.
+
+### Pendente — duas fórmulas que a gramática não consegue ler
+
+Ambas são problemas de **dado**, não do queimador, e nenhuma foi corrigida em
+silêncio: o caso `H-09` fixa as duas pelo nome, então consertar qualquer uma
+falha o teste de propósito.
+
+- **`SCRU`** usa `R:` dentro de colchetes. O token de retorno é pontuação de
+  segmento, então `[R:` parseia como um comando chamado `R` → `UnknownCommand`.
+- **`QST`** usa `[LOGIC-NONE]`. O lexer reivindica qualquer `[logic…]` como bloco
+  de conta e depois exige `[/logic]` — ou seja, **o comando `LOGIC` é
+  inescrevível dentro de uma fórmula**. Isto é limitação da linguagem, não da
+  fórmula.
+
+30 dos 32 compostos queimam limpo.
+
+---
+
 ## [1.1.0.1] — Granulação: todo JavaScript em `/scripts`
 
 A raiz tinha nove `.js` misturados com dados, documentos e o app. Agora não tem

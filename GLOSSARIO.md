@@ -541,7 +541,27 @@ CRIT  [composite]  nível 2
 `HYP` queima até **101 hieróglifos** — a primeira medida concreta do que
 "matéria pura" custa.
 
-**O que ainda falta é o emissor** — mas o bloqueio dele caiu. A pergunta era
-onde `'o parser'` entra ao queimar `[crit'o parser']`, e a §0.3 responde: é o
-sujeito da fórmula inteira. Com isso a decomposição vira mecânica, e `toHGML()`
-passa a ser trabalho de implementação, não de desenho (`HGML_PLAN.md`, passo 17).
+### O emissor existe — `.hgml` (v1.2.0.0)
+
+`toHGML()` reduz a árvore a hieróglifos puros. A §0.3 é o que o torna mecânico:
+o operando do humano vira o sujeito da fórmula, e a partir daí a decomposição
+não tem decisão a tomar.
+
+```
+[prob'timeout']   →   [error
+                        'timeout'
+                        [ctx[/ctx]
+                      [/error]
+```
+
+Forma fechada `[nome … [/nome]`, abrindo **sem** `]` — porque `]` já fecha um
+comando, e `[ctx][/ctx]` emitiria `UnmatchedCloseTag`.
+
+**30 dos 32 compostos queimam limpo.** Os dois que faltam são problemas de dado
+que a queima tornou visíveis, e estão fixados pelo nome no caso `H-09` da suíte:
+
+- **`SCRU`** — `R:` dentro de colchetes. O token de retorno é pontuação de
+  segmento; `[R:` parseia como comando chamado `R`.
+- **`QST`** — `[LOGIC-NONE]`. O lexer reivindica todo `[logic…]` como bloco de
+  conta, então **o comando `LOGIC` é inescrevível dentro de uma fórmula**.
+  Limitação da linguagem, não da fórmula.

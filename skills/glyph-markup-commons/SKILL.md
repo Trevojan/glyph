@@ -1,9 +1,9 @@
 ---
 name: glyph-markup-commons
-description: Common vocabulary and canonical aliases reference for Glyph Markup v1.1.0.1.
+description: Common vocabulary and canonical aliases reference for Glyph Markup v1.2.0.0.
 ---
 
-# Glyph — vocabulário comum e aliases (v1.1.0.1)
+# Glyph — vocabulário comum e aliases (v1.2.0.0)
 
 Tabela de bolso. A referência normativa completa é `GLOSSARIO.md`; as aridades
 estão em `ASSINATURAS.md`.

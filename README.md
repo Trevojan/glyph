@@ -29,7 +29,26 @@ node scripts/glyph-parser.js "[crit[ctx'o parser']]" --xml
 ```
 
 Modos: `--xml` (padrão, o entregável) · `--ast` (painel de inspeção JSON) ·
-`--diag` (só os diagnósticos) · `--expand` (do que um comando é feito).
+`--diag` (só os diagnósticos) · `--hgml` (a queima atômica) · `--expand` (do que
+um comando é feito).
+
+### `.hgml` — a queima atômica
+
+Reduz tudo a hieróglifos puros: cada composto trocado pela sua fórmula, até não
+sobrar nada que decomponha.
+
+```bash
+node scripts/glyph-parser.js "[prob'timeout']" --hgml
+```
+```
+[error
+  'timeout'
+  [ctx[/ctx]
+[/error]
+```
+
+É **expansão, não compressão** — um composto vale ~15 hieróglifos e `[hyp]`
+chega a 97. A saída continua sendo Glyph válido, então pode ser reprocessada.
 
 ```bash
 node scripts/glyph-parser.js CRIT --expand
