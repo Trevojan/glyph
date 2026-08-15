@@ -88,7 +88,13 @@ SOURCES.forEach(({ file, global }) => {
   }
   const raw = fs.readFileSync(full, "utf8");
   JSON.parse(raw); // fail fast on malformed JSON
-  parts.push("  root." + global + " = " + raw.trim() + ";");
+  /* Normaliza CRLF: no Windows os .json costumam estar com fim de linha do
+     sistema, e embutir o conteúdo cru fazia o arquivo GERADO sair misturado —
+     LF no que este script escreve, CRLF no que ele copia. Sem efeito nenhum
+     em JS, mas o arquivo aparecia como modificado depois de todo build, e
+     git status que mente sobre arquivo gerado é git status em que ninguém
+     mais olha. */
+  parts.push("  root." + global + " = " + raw.replace(/\r\n/g, "\n").trim() + ";");
   console.log("  ✓ " + file + " -> " + global);
 });
 

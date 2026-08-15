@@ -1,0 +1,11 @@
+# Fim de linha LF no repositório, qualquer que seja o sistema de quem edita.
+#
+# Sem isto, um .json editado no Windows entra com CRLF, o build-templates.js
+# embute esse conteúdo no glyph-data.js, e o arquivo gerado passa a aparecer
+# como modificado depois de todo build — sem nenhuma diferença real.
+* text=auto eol=lf
+
+# Binários, se algum dia entrarem
+*.png binary
+*.jpg binary
+*.pdf binary
