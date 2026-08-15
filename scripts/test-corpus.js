@@ -24,8 +24,8 @@ const G = require("./glyph-parser.js");
 
 /* Stores travel through opts in the cases that need them, so the suite
    doesn't depend on the module's global state or on test order. */
-const TPL = require("./glyph-templates.json");
-const RULESTORE = require("./glyph-rules.json");
+const TPL = require("../glyph-templates.json");
+const RULESTORE = require("../glyph-rules.json");
 const WITH_TPL = { templates: TPL.templates };
 const WITH_RULES = { rules: RULESTORE };
 /* Template constraints naming a class ("@coarsen") resolve it through the
@@ -450,7 +450,7 @@ function runExpansionChecks() {
     else { console.log("  ✓ " + id + ": " + name); X.push(id); }
   };
 
-  const store = require("./glyph-expansions.json");
+  const store = require("../glyph-expansions.json");
   const opts = { expansions: store };
 
   // every command the parser knows, from every bucket that yields a canonical

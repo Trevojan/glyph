@@ -19,7 +19,7 @@ const fs = require("fs");
 const path = require("path");
 
 const PORT = Number(process.argv[2]) || 8731;
-const ROOT = __dirname;
+const ROOT = path.join(__dirname, "..");   // serve o repo inteiro, nao so scripts/
 
 const TYPES = {
   ".html": "text/html; charset=utf-8",

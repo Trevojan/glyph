@@ -4,7 +4,7 @@
     {
       "name": "glyph-static",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["serve-dev.js"],
+      "runtimeArgs": ["scripts/serve-dev.js"],
       "port": 8731
     }
   ]

@@ -290,7 +290,7 @@ estão registradas aqui para reversão.
 revisitaria depois de ver as primeiras rodando contra casos reais.
 
 **Ciclos:** verifiquei as 15 à mão, nenhuma alcança a si mesma. Confirmar com
-`node dag.js expansoes.txt` depois que §6.1 estiver resolvido.
+`node scripts/dag.js` depois que §6.1 estiver resolvido.
 
 ---
 
@@ -300,7 +300,7 @@ revisitaria depois de ver as primeiras rodando contra casos reais.
 
 `expansoes.txt` foi reescrito com as 88 declarações não-expansivas (77 átomos de
 vocabulário + 11 de engine/modo, que aparecem em fórmulas e precisavam resolver)
-e as 32 fórmulas de composto. Resultado de `node dag.js expansoes.txt`:
+e as 32 fórmulas de composto. Resultado de `node scripts/dag.js`:
 
 ```
 nivel 0  [hieroglifo]   88
@@ -493,7 +493,7 @@ diferentes.
 No CLI, `--expand` responde "do que isto é feito":
 
 ```
-$ node glyph-parser.js CRIT --expand
+$ node scripts/glyph-parser.js CRIT --expand
 CRIT  [composite]  nível 2
   fórmula: [CMP[CTX],[SPEC-CORE],[EVAL[ERROR]]]
   15 hieróglifos: CMP CTX SPEC CORE REAL CORE CTX DIST SKL REF DEF SPEC CORE CTX ERROR

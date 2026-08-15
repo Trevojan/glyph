@@ -16,9 +16,12 @@
 "use strict";
 
 const fs = require("fs");
+const path = require("path");
 const X = require("./read-expansoes.js");
 
-const file = process.argv[2] || "expansoes.txt";
+/* Default resolves against the repository root, not the caller's cwd: the
+   table is data and lives one level up from the scripts. */
+const file = process.argv[2] || path.join(__dirname, "..", "expansoes.txt");
 const { parsed, analysis } = X.build(fs.readFileSync(file, "utf8"));
 
 parsed.malformed.forEach(m =>

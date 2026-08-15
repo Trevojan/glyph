@@ -15,14 +15,20 @@ const fs = require("fs");
 const path = require("path");
 const X = require("./read-expansoes.js");
 
+/* Two roots since the granulation: scripts hold JavaScript, the repository
+   root holds the data a human edits (.json, .txt) and the app itself. The
+   generated glyph-data.js is JavaScript, so it lands here; the generated
+   glyph-expansions.json is data, so it lands at the root, next to the other
+   stores. The rule is the file's kind, not who wrote it. */
 const HERE = __dirname;
+const ROOT = path.join(__dirname, "..");
 
 /* expansoes.txt is not JSON, so unlike the other two stores it cannot just be
    copied — it is compiled into glyph-expansions.json first, and THAT is what
    both Node and the browser load. The .txt stays the source a human edits:
    one entry per line beats hand-maintaining nested JSON. */
 function buildExpansions() {
-  const src = path.join(HERE, "expansoes.txt");
+  const src = path.join(ROOT, "expansoes.txt");
   if (!fs.existsSync(src)) { console.error("  ! expansoes.txt not found."); return null; }
 
   const { parsed, analysis, commands } = X.build(fs.readFileSync(src, "utf8"));
@@ -49,7 +55,7 @@ function buildExpansions() {
     commands: commands
   };
 
-  const out = path.join(HERE, "glyph-expansions.json");
+  const out = path.join(ROOT, "glyph-expansions.json");
   fs.writeFileSync(out, JSON.stringify(store, null, 2) + "\n");
   console.log("  ✓ expansoes.txt -> glyph-expansions.json (" +
     store.atoms + " átomos, " + store.composites + " compostos, fundo " + store.maxDepth + ")");
@@ -73,7 +79,7 @@ const parts = [
 
 let missing = 0;
 SOURCES.forEach(({ file, global }) => {
-  const full = path.join(HERE, file);
+  const full = path.join(ROOT, file);
   if (!fs.existsSync(full)) {
     console.error("  ! " + file + " not found — " + global + " will be null.");
     parts.push("  root." + global + " = null;");

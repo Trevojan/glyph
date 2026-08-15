@@ -14,6 +14,41 @@ Todas as mudanças notáveis do Glyph são documentadas aqui, da mais recente pa
 
 ---
 
+## [1.1.0.1] — Granulação: todo JavaScript em `/scripts`
+
+A raiz tinha nove `.js` misturados com dados, documentos e o app. Agora não tem
+nenhum.
+
+**Regra de layout:** `/scripts` guarda JavaScript; dados (`.json`, `.txt`), o app
+(`.html`, `.css`) e os documentos ficam na raiz. O critério é o **tipo do arquivo,
+não quem o escreveu** — por isso o gerado `glyph-data.js` (JS) fica em `/scripts`
+e o gerado `glyph-expansions.json` (dados) fica na raiz, ao lado dos outros stores.
+
+Movidos com `git mv`, então `git log --follow` continua funcionando em cada um:
+`glyph-parser.js`, `glyph-ui.js`, `glyph-moldes.js`, `glyph-data.js`,
+`read-expansoes.js`, `build-templates.js`, `dag.js`, `test-corpus.js`,
+`serve-dev.js`.
+
+Caminhos corrigidos em seis lugares: os quatro `<script src>` do HTML (agora
+`scripts/…`), os stores que o `glyph-parser.js` carrega no CLI, os `require` da
+suíte, as duas raízes do `build-templates.js` (`HERE` para JS gerado, `ROOT` para
+dados), o default do `dag.js` — que agora resolve contra a raiz do repositório e
+não contra o `cwd`, para funcionar chamado de qualquer lugar — e o `serve-dev.js`,
+que serve o repositório inteiro e não só `scripts/`.
+
+Verificado nos dois ambientes, porque um caminho errado quebra em silêncio:
+`node scripts/test-corpus.js` fecha 137/137, `node scripts/dag.js` fecha 120/0/0
+tanto da raiz quanto de dentro de `scripts/`, e a página carrega no navegador com
+os quatro scripts em `scripts/…`, os três stores e zero erro de console.
+
+**Não incluído:** a partição interna do `glyph-parser.js` em módulos
+(`HGML_PLAN.md`, passos 6-9). Ela depende da decisão D1 — bundler novo ou
+namespace por ordem de carga — e misturar refatoração de fiação interna com uma
+mudança de caminho no mesmo passo é como um bug silencioso entra sem ninguém
+saber de qual das duas veio.
+
+---
+
 ## [1.1.0.1] — O motor passa a saber do que as coisas são feitas
 
 A ponte para o `.hgml`. Até aqui `expansoes.txt` era uma tabela que só o `dag.js`

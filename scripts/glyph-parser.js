@@ -1822,9 +1822,9 @@
 if (typeof require === "function" && typeof module === "object" && require.main === module) {
   var G = module.exports;
   // optional stores: if absent, the engine still runs, just without expansion/contradiction checks
-  [["./glyph-templates.json", G.useTemplates],
-   ["./glyph-rules.json", G.useRules],
-   ["./glyph-expansions.json", G.useExpansions]].forEach(function (pair) {
+  [["../glyph-templates.json", G.useTemplates],
+   ["../glyph-rules.json", G.useRules],
+   ["../glyph-expansions.json", G.useExpansions]].forEach(function (pair) {
     try {
       pair[1](require(require("path").resolve(__dirname, pair[0])));
     } catch (e) { /* missing store is a valid situation */ }

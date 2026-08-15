@@ -1,11 +1,21 @@
 # Plano — granulação em `/scripts` + formato `.hgml`
 
-Documento de planejamento. Nenhum arquivo foi movido, nenhum código foi escrito.
-Serve pra decidir o formato antes de mexer em qualquer coisa — o `glyph-parser.js`
-tem 1694 linhas e alimenta os 110 casos de `test-corpus.js`; a suíte é o único
-jeito confiável de saber se uma mudança quebrou algo, e nada aqui deve andar
-sem rodar `node test-corpus.js` (ou `node scripts/test-corpus.js`, depois do
-passo 5) logo em seguida.
+> **Estado (v1.1.0.1).** A **mudança** da Parte A está feita: os 9 arquivos `.js`
+> vivem em `/scripts`, os caminhos foram corrigidos, e Node e navegador foram
+> verificados. O que **não** foi feito é a partição interna do `glyph-parser.js`
+> (passos 6-9, decisão D1) — ela continua valendo como está escrita abaixo.
+> A Parte B (`.hgml`) ganhou a ponte de composição na v1.1.0.1 e está travada
+> só no passo 17.
+>
+> Regra de layout adotada: **`/scripts` guarda JavaScript; dados (`.json`,
+> `.txt`), o app (`.html`, `.css`) e os documentos ficam na raiz.** O critério é
+> o tipo do arquivo, não quem o escreveu — por isso o gerado `glyph-data.js`
+> (JS) fica em `/scripts` e o gerado `glyph-expansions.json` (dados) fica na raiz.
+
+Documento de planejamento. Serve pra decidir o formato antes de mexer em
+qualquer coisa — o `glyph-parser.js` alimenta a suíte de `test-corpus.js`, que é
+o único jeito confiável de saber se uma mudança quebrou algo, e nada aqui deve
+andar sem rodar `node scripts/test-corpus.js` logo em seguida.
 
 ## O que me diz — avaliação honesta
 
@@ -126,7 +136,7 @@ não recomendaria começar antes da forma canônica estar de pé.
 | 19 | Criar `scripts/test-hgml-corpus.js` com um **oráculo de round-trip**: gera `.hgml`, re-tokeniza/re-parseia (já que `.hgml` é Glyph válido), compara a AST resultante com a original. Reaproveitar os casos dos buckets já existentes em `test-corpus.js` (`POSITIVE`, `TEMPLATES`, `RULE_CASES`...) em vez de escrever casos do zero. | novo arquivo de teste | não altera os 110 atuais — soma uma suíte nova ao lado | mecânico, mas é o **verdadeiro crash-test** da fase |
 | 20 | Rodar o round-trip contra os 110 casos reaproveitados; qualquer nó que não sobreviva aponta um bug em `toHGML` ou uma ambiguidade real na gramática atual que ninguém tinha notado | — | usa os 110 como insumo, não os modifica | validação |
 | 21 | **Checkpoint B** — revisar com você 5-10 exemplos de saída `.hgml` lado a lado com o XML equivalente, confirmar que a forma "sente certo" antes de generalizar | — | — | checkpoint |
-| 22 | *(só se D3=Opção 2)* Completar `expansoes.txt` pros ~90 comandos de `INSTR` que hoje não têm expansão em hieróglifos-base, verificando ausência de ciclos a cada adição via `node dag.js` | `expansoes.txt` | nenhum direto — é insumo de dados, não código do parser | **trabalho seu**, com meu apoio na verificação de ciclos |
+| 22 | *(só se D3=Opção 2)* Completar `expansoes.txt` pros ~90 comandos de `INSTR` que hoje não têm expansão em hieróglifos-base, verificando ausência de ciclos a cada adição via `node scripts/dag.js` | `expansoes.txt` | nenhum direto — é insumo de dados, não código do parser | **trabalho seu**, com meu apoio na verificação de ciclos |
 | 23 | *(só se D3=Opção 2)* Implementar um segundo emissor (`toHGMLAtomic` ou flag `deep:true` em `toHGML`) que substitui cada comando canônico pela cadeia de átomos-base segundo `expansoes.txt`, sobre a mesma AST | `glyph-parser.js` | precisa de round-trip próprio — decompor em átomos pode não ser reversível 1:1, então esse é o passo que mais precisa de teste dedicado | design + implementação, alto esforço |
 | 24 | Atualizar `ASSINATURAS.md`/`skills/glyph-markup/SKILL.md` com a seção normativa de `.hgml`; bump de `VERSION` em `glyph-parser.js` e de `GLYPH_ASSET_VERSION` no HTML (hoje incoerentes entre si — `1.0.9.3` vs `1.9.3`, vale alinhar de passagem); entrada nova em `CHANGELOG.md` seguindo o padrão das entradas anteriores | docs + versão | nenhum | mecânico, feito por último |
 

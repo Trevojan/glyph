@@ -59,7 +59,12 @@ padrão de comparação); ver `GLOSSARIO.md` §6.5 e a tabela em
 
 ## Arquivos da implementação
 
-`GLOSSARIO.md` é a referência normativa do vocabulário — é dele que o motor deriva, não o contrário. `expansoes.txt` é a tabela de composição (átomos declarados `= BASE`, compostos com fórmula), verificável com `node dag.js expansoes.txt`. `glyph-parser.js` é o núcleo único; `glyph-rules.json` e `glyph-templates.json` são os stores de dados (fonte de verdade — editar o `.json` e rodar `node build-templates.js` para regenerar `glyph-data.js`, já que `file://` bloqueia `fetch` de `.json`); `glyph-engine-alias.html` + `glyph-engine.css` + `glyph-moldes.js` + `glyph-ui.js` são só a interface, consumidora do núcleo.
+**Layout:** `/scripts` guarda todo o JavaScript; dados (`.json`, `.txt`), o app
+(`.html`, `.css`) e os documentos ficam na raiz. O critério é o tipo do arquivo,
+não quem o escreveu — o gerado `glyph-data.js` é JS e fica em `/scripts`; o
+gerado `glyph-expansions.json` é dado e fica na raiz.
+
+`GLOSSARIO.md` é a referência normativa do vocabulário — é dele que o motor deriva, não o contrário. `expansoes.txt` é a tabela de composição (átomos declarados `= BASE`, compostos com fórmula), verificável com `node scripts/dag.js`. `glyph-parser.js` é o núcleo único; `glyph-rules.json` e `glyph-templates.json` são os stores de dados (fonte de verdade — editar o `.json` e rodar `node scripts/build-templates.js` para regenerar `glyph-data.js`, já que `file://` bloqueia `fetch` de `.json`); `glyph-engine-alias.html` + `glyph-engine.css` + `glyph-moldes.js` + `glyph-ui.js` são só a interface, consumidora do núcleo.
 
 ## Versionamento — `a.b.c.d`
 
