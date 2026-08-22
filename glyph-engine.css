@@ -272,3 +272,93 @@
     gap:14px; flex-wrap:wrap;
   }
   @media (prefers-reduced-motion:reduce) { * { transition:none !important; } }
+
+  /* ---------- dobra: .card virou <details>, .hd virou <summary> ----------
+     O combinador filho de .card > .hd e .card > .bd continua valendo — só
+     mudou a etiqueta, não a posição. O marcador nativo sai porque o cabeçalho
+     já é flex e o triângulo dele quebraria o alinhamento dos botões. */
+  details.card > summary.hd { cursor:pointer; list-style:none; }
+  details.card > summary.hd::-webkit-details-marker { display:none; }
+  details.card > summary.hd::after {
+    content:"▸"; color:var(--muted); font-size:10px; margin-left:auto;
+    display:inline-block; transition:transform .12s;
+  }
+  details.card[open] > summary.hd::after { transform:rotate(90deg); }
+  details.card > summary.hd:hover { color:var(--text-dim); }
+  /* o botão dentro do summary não pode abrir e fechar a dobra junto */
+  details.card > summary.hd .btn, details.card > summary.hd .chip { cursor:pointer; }
+
+  /* ---------- xml editável ---------- */
+  textarea.xml.editbox {
+    width:100%; box-sizing:border-box; min-height:240px; resize:vertical; display:block;
+    background:var(--surface-2); color:var(--text); border:0; border-bottom:1px solid var(--line);
+    border-radius:0; padding:13px; font-family:var(--mono); font-size:12.5px; line-height:1.6;
+  }
+
+  /* ---------- biblioteca de modelos e moldes ---------- */
+  .lib { display:flex; flex-direction:column; gap:1px; margin-top:9px; }
+  .libRow {
+    display:flex; align-items:center; gap:8px; padding:6px 0;
+    border-bottom:1px solid var(--line-soft);
+  }
+  .libRow .nm { font-family:var(--mono); font-size:12.5px; color:var(--h-cmd); }
+  .libRow .gl { font-size:11.5px; color:var(--muted); flex:1 1 auto; min-width:0;
+                overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .libRow .own {
+    font-size:9px; letter-spacing:.06em; text-transform:uppercase; color:var(--ask);
+    border:1px solid var(--line); border-radius:var(--r); padding:1px 4px; flex:0 0 auto;
+  }
+  .libRow .acts { display:flex; gap:4px; flex:0 0 auto; }
+
+  .editor { margin-top:12px; padding-top:11px; border-top:1px solid var(--line-soft); }
+  .fld { display:flex; flex-direction:column; gap:3px; margin-bottom:8px; }
+  .fld > span { font-size:12px; color:var(--text-dim); }
+  .fld input[type="text"], .fld textarea {
+    width:100%; box-sizing:border-box; background:var(--surface-2); color:var(--text);
+    border:1px solid var(--line); border-radius:var(--r); padding:6px 9px;
+    font-family:var(--mono); font-size:12.5px; line-height:1.5; resize:vertical;
+  }
+  .fld input::placeholder, .fld textarea::placeholder { color:var(--muted); }
+
+/* ---------- abas de saída (v1.4.4.01) ----------
+   Os formatos moravam em três cards empilhados, cada um repetindo seu par
+   copiar/baixar, e o .pgml ficava longe dos outros, junto da fonte. Agora são
+   quatro abas num card só, com UMA barra de ações que age sobre a aba ativa:
+   o botão é o botão daquela aba sem precisar existir quatro vezes. */
+.tabs { display:flex; gap:1px; background:var(--line-soft); border:1px solid var(--line);
+        border-radius:var(--r); overflow:hidden; }
+.tabs .tab {
+  appearance:none; cursor:pointer; background:var(--surface-2); color:var(--muted);
+  border:0; padding:4px 11px; font-family:var(--mono); font-size:11px; letter-spacing:0.04em;
+}
+.tabs .tab:hover { background:var(--surface-3); color:var(--text-dim); }
+.tabs .tab[aria-selected="true"] {
+  background:var(--surface-3); color:var(--text); box-shadow:inset 0 -2px 0 var(--h-op);
+}
+.tabpanel[hidden] { display:none; }
+.tabpanel > pre.xml { max-height:340px; }
+
+/* ---------- destino ----------
+   O motor emitia sem dizer para onde. Estes três campos tornam visível, antes
+   de qualquer emissão, qual arquivo será escrito e com que cabeçalho. */
+.targetrow { display:flex; gap:10px; flex-wrap:wrap; }
+.targetrow .fld { flex:1 1 150px; display:flex; flex-direction:column; gap:3px; min-width:0; }
+.targetrow .fld > span {
+  font-family:var(--mono); font-size:10px; letter-spacing:0.09em;
+  text-transform:uppercase; color:var(--muted);
+}
+.targetrow select {
+  width:100%; box-sizing:border-box; background:var(--surface-2); color:var(--text);
+  border:1px solid var(--line); border-radius:var(--r); padding:5px 8px;
+  font-family:var(--mono); font-size:12.5px;
+}
+.targetrow select:disabled { color:var(--muted); }
+.prev {
+  margin-top:11px; padding:9px 11px; background:var(--surface-2);
+  border:1px solid var(--line-soft); border-radius:var(--r);
+  font-family:var(--mono); font-size:11.5px; line-height:1.65; color:var(--text-dim);
+  white-space:pre-wrap; overflow-x:auto;
+}
+.prev .k { color:var(--at); }
+.prev .warn { color:var(--note); font-style:italic; }
+#targetPath { font-family:var(--mono); font-size:11px; color:var(--h-cmd); }

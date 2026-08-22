@@ -28,7 +28,7 @@ lost a superfluous `[SUB[CTX]]`; `JUST` and `CTRD` each lost a level of nesting;
 **A side benefit:** cutting `[SUB[CTX]]` from `FRGT` turned the `RMBR`/`FRGT`
 pair into `[ALW[GET[CTX]]]` against `[NEV[GET[CTX]]]` — a perfect minimal pair,
 same operand and opposite quantifiers. That is what makes the `rmbr-frgt`
-contradiction in `glyph-rules.json` *derivable*. The redundant version hid it.
+contradiction in `rules.json` *derivable*. The redundant version hid it.
 
 ## Two formulas withdrawn
 

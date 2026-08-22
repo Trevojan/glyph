@@ -21,7 +21,7 @@ const X = require("./read-expansions.js");
 
 /* Default resolves against the repository root, not the caller's cwd: the
    table is data and lives one level up from the scripts. */
-const file = process.argv[2] || path.join(__dirname, "..", "expansions.txt");
+const file = process.argv[2] || path.join(__dirname, "..", ".guidelines", "expansions.txt");
 const { parsed, analysis } = X.build(fs.readFileSync(file, "utf8"));
 
 parsed.malformed.forEach(m =>

@@ -65,7 +65,7 @@ The next real step. A rule kind that maps co-occurrence to a richer element:
   "why": "reviewing and scrutinising together is one deep review, not two" }
 ```
 
-It is data, like the rules store, and `glyph-rules.json` already has the
+It is data, like the rules store, and `rules.json` already has the
 matching machinery — `pair`, `order` and `precondition` all match co-occurrence
 over the tree; they simply diagnose instead of emitting.
 

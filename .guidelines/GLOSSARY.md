@@ -14,16 +14,16 @@ slot questions, mood glosses. The interface stays pt-BR, and its strings live in
 
 Marks: **★** entry proposed during consolidation, not in the original draft.
 
-## Versioning — `a.b.c.d`
+## Versioning — `app.front.rules.content`
 
 | digit | layer |
 |---|---|
-| `a` | frontend — HTML, CSS, UI |
-| `b` | backend — the parser: lexer, tree, emitters |
-| `c` | business rules — `glyph-rules.json`, constraints, valency |
-| `d` | data — vocabulary tables, constants, glosses |
+| `app` | the application as a whole |
+| `front` | the interface — HTML, CSS, UI |
+| `rules` | business rules — `rules.json`, constraints, valency |
+| `content` | data, constants, glosses, and where things live |
 
-A digit that moves **resets every digit to its right**.
+**No digit resets any other** — digits move independently and keep their place.
 
 ---
 
@@ -156,7 +156,7 @@ Atoms that act on another element.
 
 **On the `DONT` / `DENY` pair:** the distinction is what gets negated — `DONT`
 bears on the **action** ("do not do X"), `DENY` on the **route** ("I refuse the
-path that leads to Y"). Consequence in `glyph-rules.json`: the `req-deny` rule
+path that leads to Y"). Consequence in `rules.json`: the `req-deny` rule
 was written when `DENY` meant refusing a proposal, and under the refined reading
 `REQ` (demanding something exist) and `DENY` (rejecting a route to a result) no
 longer collide by construction — see §6.6.
@@ -278,7 +278,7 @@ describes the state, not the procedure.
 
 **`RMBR` / `FRGT` — the pair that pays for itself.** `[ALW[GET[CTX]]]` against
 `[NEV[GET[CTX]]]`: same operand, opposite quantifiers. The `rmbr-frgt`
-contradiction sitting in `glyph-rules.json` as a hand-written table becomes
+contradiction sitting in `rules.json` as a hand-written table becomes
 *derivable* from the formula. That is the strongest argument for the expansion
 project as a whole: the semantic rules stop being convention and become
 consequence.
@@ -377,7 +377,7 @@ Composing and marking a return are different axes.
 ### 6.4 `BASE` → `CORE`
 
 Applied at four points: `CATS` and `INSTR` in the parser, the `subject` class in
-`glyph-rules.json`, and three `tag:"base"` occurrences in the moulds. A negative
+`rules.json`, and three `tag:"base"` occurrences in the moulds. A negative
 case (`N-13`) pins that `[base]` must now fail as unknown vocabulary — without
 it the collision the rename undid could creep back through the parser unnoticed.
 

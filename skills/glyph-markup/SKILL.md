@@ -72,7 +72,7 @@ The central distinction, and what `.hgml` consumes:
 - **composite glyph** — has a formula reducing it to hieroglyphs. 32 of them.
 
 The table lives in `expansions.txt` (atoms declared `= BASE`, composites with a
-formula) and is compiled into `glyph-expansions.json`. The engine consumes it
+formula) and is compiled into `expansions.json`. The engine consumes it
 through `useExpansions()`, optional like the other stores:
 
 ```js
@@ -148,7 +148,7 @@ one sibling node per occurrence. Cycles are barred (`TemplateCycle`).
 
 ## Semantic rules
 
-`glyph-rules.json` checks **coherence** beyond syntax: `pair` (two commands on
+`rules.json` checks **coherence** beyond syntax: `pair` (two commands on
 the same target — siblings, or one an ancestor of the other), `order` (`then`
 before `first`) and `precondition` (a target with none of its `requiresBefore`
 ahead of it in the same segment). Under `[ovr]` or `[byp]` the overlap is
@@ -183,8 +183,8 @@ not who wrote it.
 | `SIGNATURES.md` | arities, derived from the engine |
 | `expansions.txt` | composition table (source, editable) |
 | `scripts/glyph-parser.js` | the core |
-| `glyph-rules.json` · `glyph-templates.json` | stores, editable |
-| `scripts/glyph-data.js` · `glyph-expansions.json` | **generated** |
+| `rules.json` · `templates.json` | stores, editable |
+| `scripts/glyph-data.js` · `expansions.json` | **generated** |
 
 Edited a `.json`, the `.txt` or `GLOSSARY.md`? Run
 `node scripts/build-templates.js`. Verify with `node scripts/test-corpus.js`

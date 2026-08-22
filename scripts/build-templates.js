@@ -15,13 +15,15 @@ const fs = require("fs");
 const path = require("path");
 const X = require("./read-expansions.js");
 
-/* Two roots since the granulation: scripts hold JavaScript, the repository
-   root holds the data a human edits (.json, .txt) and the app itself. The
-   generated glyph-data.js is JavaScript, so it lands here; the generated
-   glyph-expansions.json is data, so it lands at the root, next to the other
-   stores. The rule is the file's kind, not who wrote it. */
+/* Three roots since v1.3.4.01. `/scripts` holds JavaScript, `.guidelines`
+   holds everything normative a human edits (the docs and the .json/.txt
+   stores), and the repository root keeps only the entry points: README,
+   CHANGELOG and the app itself. The rule is still the file's kind, not who
+   wrote it — which is why the generated glyph-data.js is JavaScript and lands
+   in HERE, while the generated expansions.json is data and lands in GUIDE
+   beside expansions.txt, the source it is compiled from. */
 const HERE = __dirname;
-const ROOT = path.join(__dirname, "..");
+const GUIDE = path.join(__dirname, "..", ".guidelines");
 
 /* The definitions live in GLOSSARY.md, in prose, and until v1.2.1.0 the engine
    could not reach them. That left the message unable to explain itself where it
@@ -46,7 +48,7 @@ function stripMd(s) {
 }
 
 function readGlossary() {
-  const src = path.join(ROOT, "GLOSSARY.md");
+  const src = path.join(GUIDE, "GLOSSARY.md");
   if (!fs.existsSync(src)) { console.error("  ! GLOSSARY.md not found."); return {}; }
   const defs = {};
   fs.readFileSync(src, "utf8").split(/\r?\n/).forEach(ln => {
@@ -64,11 +66,11 @@ function readGlossary() {
 }
 
 /* expansions.txt is not JSON, so unlike the other two stores it cannot just be
-   copied — it is compiled into glyph-expansions.json first, and THAT is what
+   copied — it is compiled into expansions.json first, and THAT is what
    both Node and the browser load. The .txt stays the source a human edits:
    one entry per line beats hand-maintaining nested JSON. */
 function buildExpansions() {
-  const src = path.join(ROOT, "expansions.txt");
+  const src = path.join(GUIDE, "expansions.txt");
   if (!fs.existsSync(src)) { console.error("  ! expansions.txt not found."); return null; }
 
   const { parsed, analysis, commands } = X.build(fs.readFileSync(src, "utf8"));
@@ -79,7 +81,7 @@ function buildExpansions() {
   if (analysis.undefinedDeps.length || analysis.cycles.length) {
     console.error("  ! expansions.txt does not close — " +
       analysis.undefinedDeps.length + " undefined, " + analysis.cycles.length + " cycles.");
-    console.error("    run: node dag.js expansions.txt");
+    console.error("    run: node scripts/dag.js");
     process.exit(1);
   }
 
@@ -114,9 +116,9 @@ function buildExpansions() {
     commands: commands
   };
 
-  const out = path.join(ROOT, "glyph-expansions.json");
+  const out = path.join(GUIDE, "expansions.json");
   fs.writeFileSync(out, JSON.stringify(store, null, 2) + "\n");
-  console.log("  ✓ expansions.txt -> glyph-expansions.json (" +
+  console.log("  ✓ expansions.txt -> expansions.json (" +
     store.atoms + " atoms, " + store.composites + " composites, depth " + store.maxDepth + ")");
   return store;
 }
@@ -124,9 +126,10 @@ function buildExpansions() {
 buildExpansions();
 
 const SOURCES = [
-  { file: "glyph-templates.json",   global: "GlyphTemplates" },
-  { file: "glyph-rules.json",       global: "GlyphRules" },
-  { file: "glyph-expansions.json",  global: "GlyphExpansions" }
+  { file: "templates.json",   global: "GlyphTemplates" },
+  { file: "rules.json",       global: "GlyphRules" },
+  { file: "expansions.json",  global: "GlyphExpansions" },
+  { file: "targets.json",     global: "GlyphTargets" }
 ];
 
 const parts = [
@@ -138,7 +141,7 @@ const parts = [
 
 let missing = 0;
 SOURCES.forEach(({ file, global }) => {
-  const full = path.join(ROOT, file);
+  const full = path.join(GUIDE, file);
   if (!fs.existsSync(full)) {
     console.error("  ! " + file + " not found — " + global + " will be null.");
     parts.push("  root." + global + " = null;");

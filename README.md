@@ -36,7 +36,28 @@ node scripts/glyph-parser.js "[crit[ctx'the parser']]" --xml
 
 Modes: `--xml` (default, the deliverable) · `--ast` (JSON inspection panel) ·
 `--diag` (diagnostics only) · `--hgml` (the atomic burn) · `--expand` (what a
-command is made of).
+command is made of) · `--from-xml` (the way back).
+
+### `--from-xml` — the way back
+
+The chain runs both ways since v1.2.3.00. `fromXML()` reads the emitter's own
+output back into bracket source, which is what makes the XML panel in the app
+editable rather than a display.
+
+```bash
+node scripts/glyph-parser.js "$(node scripts/glyph-parser.js "[crit'teste']" --xml)" --from-xml
+```
+```
+[crit'teste']
+```
+
+It never throws: bad XML comes back as diagnostics, the way `parse()` answers
+bad Glyph with gaps. Three things do not survive the trip and are pinned by
+tests so none gets "fixed" silently — `[tpl:name]` always returns as the
+`[--name` invocation, content appended past a template's declared params is
+dropped, and text holding `' \` [ ]` is substituted rather than preserved.
+`<needs>` written by `FRAMES`/`SLOTS` deliberately returns as *nothing* and is
+regenerated: it is the engine's question, not the human's answer.
 
 ### `.hgml` — the atomic burn
 
@@ -98,10 +119,10 @@ Serves at `http://localhost:8731`. Nothing in the app depends on it.
 `GLYPH_ASSET_VERSION` at the top of `glyph-engine-alias.html` and reload — that
 is what it exists for.
 
-**Touched `glyph-rules.json`, `glyph-templates.json`, `expansions.txt` or
-`GLOSSARY.md`?** Run the build. Those are the sources;
-`scripts/glyph-data.js` and `glyph-expansions.json` are the copies the engine
-loads.
+**Touched anything in `.guidelines/`** — `rules.json`, `templates.json`,
+`expansions.txt` or `GLOSSARY.md`? Run the build. Those are the sources;
+`scripts/glyph-data.js` and `.guidelines/expansions.json` are the copies the
+engine loads.
 
 ```bash
 node scripts/build-templates.js
@@ -116,7 +137,7 @@ opaque command is how drift gets in.
 ## Verify
 
 ```bash
-node scripts/test-corpus.js     # suite — 154 cases
+node scripts/test-corpus.js     # suite — 173 cases
 node scripts/dag.js             # composition table — 0 cycles, 0 undefined
 ```
 
@@ -126,34 +147,50 @@ Both exit non-zero on failure, so they work in CI.
 
 ## Where things live
 
-`/scripts` holds **JavaScript**; data, the app and the documents stay at the
-root. The criterion is the file's kind, not who wrote it — which is why the
-generated `glyph-data.js` (JS) sits in `/scripts` and the generated
-`glyph-expansions.json` (data) sits at the root beside the other stores.
+Three places, by kind. `/scripts` holds **JavaScript**. `.guidelines/` holds
+everything **normative** a human edits — the documents and the data stores. The
+root keeps only the **entry points**: this file, the changelog and the app.
+
+The criterion is the file's kind, not who wrote it — which is why the generated
+`glyph-data.js` (JS) sits in `/scripts`, while the generated `expansions.json`
+(data) sits in `.guidelines/` beside `expansions.txt`, the source it is compiled
+from. Same base name, different extension: the `.txt` is written, the `.json` is
+built.
 
 | file | role |
 |---|---|
 | `glyph-engine-alias.html` + `glyph-engine.css` | the app — interface only |
 | `scripts/glyph-parser.js` | the core: lexer, tree, rules, emitters |
 | `scripts/glyph-ui.js` · `glyph-moldes.js` | interface and forms (pt-BR) |
-| `glyph-rules.json` · `glyph-templates.json` | data stores, hand-editable |
-| `expansions.txt` | composition table: atoms and formulas |
-| `scripts/glyph-data.js` · `glyph-expansions.json` | **generated** — do not edit |
+| `scripts/serve-dev.js` | static server, for driving the app in a real browser |
+| `.guidelines/rules.json` · `templates.json` | data stores, hand-editable |
+| `.guidelines/expansions.txt` | composition table: atoms and formulas |
+| `.guidelines/history/` | superseded records, kept for provenance |
+| `scripts/glyph-data.js` · `.guidelines/expansions.json` | **generated** — do not edit |
 
 ## Documentation
 
 | document | answers |
 |---|---|
-| [`GLOSSARY.md`](GLOSSARY.md) | **what** each command is — the normative reference |
-| [`SIGNATURES.md`](SIGNATURES.md) | **how many** operands each one asks for |
-| [`glyph-grammar.ebnf`](glyph-grammar.ebnf) | the syntax, formally |
+| [`GLOSSARY.md`](.guidelines/GLOSSARY.md) | **what** each command is — the normative reference |
+| [`SIGNATURES.md`](.guidelines/SIGNATURES.md) | **how many** operands each one asks for |
+| [`glyph-grammar.ebnf`](.guidelines/glyph-grammar.ebnf) | the syntax, formally |
 | [`CHANGELOG.md`](CHANGELOG.md) | what changed and why |
-| [`HGML_PLAN.md`](HGML_PLAN.md) | where this is going — the `.hgml` format |
+| [`XML_REFERENCE.md`](.guidelines/XML_REFERENCE.md) | **bracket → XML**, element by element — checked by the suite |
+| [`HGML_PLAN.md`](.guidelines/HGML_PLAN.md) | where this is going — the `.hgml` format |
 
 The engine derives from `GLOSSARY.md`, not the other way round, and the suite
 has checks (`X-01`, `X-14`) that fail if the two ever drift apart.
+`XML_REFERENCE.md` is held to the emitter the same way (`D-03`, `D-06`): its
+tables are parsed and every row compared against `elName(classify(x))`, so the
+reference cannot quietly fall behind the engine.
 
-## Versioning — `a.b.c.d`
+## Versioning — `app.front.rules.content`
 
-`a` frontend · `b` backend (the parser) · `c` business rules · `d` data and
-constants. A digit that moves resets every digit to its right.
+`app` the application as a whole · `front` the interface · `rules` the business
+rules · `content` data, constants and where things live.
+
+**No digit resets any other.** Digits move independently and keep their place —
+touching the interface alone must not discard the number the engine earned. See
+the versioning note at the top of [`CHANGELOG.md`](CHANGELOG.md) for why the
+earlier resetting scheme was dropped.

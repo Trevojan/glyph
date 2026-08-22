@@ -24,8 +24,8 @@ const G = require("./glyph-parser.js");
 
 /* Stores travel through opts in the cases that need them, so the suite
    doesn't depend on the module's global state or on test order. */
-const TPL = require("../glyph-templates.json");
-const RULESTORE = require("../glyph-rules.json");
+const TPL = require("../.guidelines/templates.json");
+const RULESTORE = require("../.guidelines/rules.json");
 const WITH_TPL = { templates: TPL.templates };
 const WITH_RULES = { rules: RULESTORE };
 /* Template constraints naming a class ("@coarsen") resolve it through the
@@ -450,7 +450,7 @@ function runExpansionChecks() {
     else { console.log("  ✓ " + id + ": " + name); X.push(id); }
   };
 
-  const store = require("../glyph-expansions.json");
+  const store = require("../.guidelines/expansions.json");
   const opts = { expansions: store };
 
   // every command the parser knows, from every bucket that yields a canonical
@@ -567,7 +567,7 @@ function runHgmlChecks() {
     else { console.log("  ✓ " + id + ": " + name); H.push(id); }
   };
 
-  const store = require("../glyph-expansions.json");
+  const store = require("../.guidelines/expansions.json");
   const opts = { expansions: store };
 
   /** re-parses .hgml and reports what survived */
@@ -639,6 +639,190 @@ function runHgmlChecks() {
 }
 const rH = runHgmlChecks();
 
+/* ------------------------------------------------------------------ *
+ * F — fromXML, the inverse (v1.4.0.0)
+ *
+ * The oracle is the same one the burn uses, turned around: the XML is
+ * regenerated from the reconstructed source and compared against the XML
+ * it came from. String equality on the SOURCE is the wrong test — aliases
+ * normalise ([rw → [rwk), positional template fills come back named, and
+ * `;;` moves to the end of its segment. All of those are the same message.
+ * Equality on the XML is the real invariant, because the XML is what the
+ * deliverable is.
+ * ------------------------------------------------------------------ */
+
+function runFromXmlChecks() {
+  console.log("\n--- fromXML — the inverse ---");
+  const F = [];
+  const ok = (id, name, why) => {
+    if (why) { console.log("  ✗ " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  ✓ " + id + ": " + name); F.push(id); }
+  };
+
+  const opts = { expansions: require("../.guidelines/expansions.json") };
+
+  /** src → xml → src → xml, and the two XMLs must agree */
+  const trip = src => {
+    const x1 = G.toXML(src, opts);
+    const back = G.fromXML(x1, opts);
+    const x2 = G.toXML(back.src, opts);
+    return { x1, x2, back, stable: x1 === x2 };
+  };
+
+  const crit = trip("[crit'o parser']");
+  ok("F-01", "a command with a literal survives the round trip",
+     crit.stable && /o parser/.test(crit.back.src) ? null
+       : "unstable, or the literal was lost: " + JSON.stringify(crit.back.src));
+
+  /* <needs> is written in three shapes and only one of them is source. The
+     FRAMES filler must come back as nothing and be REGENERATED — writing it
+     back would turn the engine's question into the human's answer. */
+  const needs = trip("[ins]");
+  ok("F-02", "a synthetic <needs> regenerates instead of becoming an answer",
+     needs.stable && /<needs>what to do<\/needs>/.test(needs.x2) &&
+     !/what to do/.test(needs.back.src)
+       ? null : "the filler leaked into the source: " + JSON.stringify(needs.back.src));
+
+  const hole = trip("[--t=[ph-x`a pergunta`]]");
+  const holeRe = G.parse(hole.back.src, opts);
+  let phNames = [];
+  holeRe.segments.forEach(s => G.walk(s.children, n => {
+    if (n.slotName) phNames.push(String(n.raw));
+  }));
+  ok("F-03", "a real [ph- hole keeps its name and its question",
+     hole.stable && phNames.indexOf("x") !== -1 ? null
+       : "hole lost: " + JSON.stringify(hole.back.src) + " names=" + JSON.stringify(phNames));
+
+  const multi = trip("[ins'x'];[=[ctx'y']");
+  ok("F-04", "segments, chaining and moods keep their shape",
+     multi.stable && /continues="previous"/.test(multi.x2) ? null
+       : "chain lost: " + JSON.stringify(multi.back.src));
+
+  const mood = trip("/frs/[crit'venceu']");
+  ok("F-05", "a mood comes back as the emotion that wrote it",
+     mood.stable && /^\/frs\//.test(mood.back.src) ? null
+       : "mood lost: " + JSON.stringify(mood.back.src));
+
+  /* <block> is written by the segment wrapper AND by the STRUCT command.
+     Only position plus `once` separate them; get this wrong and a nested
+     [block silently becomes an extra segment, or vice versa. */
+  const blk = trip("[crit[block'nested']]");
+  const blkRe = G.parse(blk.back.src, opts);
+  let sawBlock = false;
+  blkRe.segments.forEach(s => G.walk(s.children, n => { if (n.canonical === "BLOCK") sawBlock = true; }));
+  ok("F-06", "a nested [block stays a command, not a segment",
+     blk.stable && sawBlock && blkRe.segments.length === 1 ? null
+       : "segments=" + blkRe.segments.length + " sawBlock=" + sawBlock);
+
+  const lg = trip("[go[logic-dano]\ntier = pc[attr/4] <5\nroll = 4d6kh3\n[/logic]]");
+  ok("F-07", "<logic> rebuilds from the authored <source>, not from <reads>",
+     lg.stable && /4d6kh3/.test(lg.back.src) ? null
+       : "logic lost: " + JSON.stringify(lg.back.src));
+
+  const unk = trip("[zzzz'x']");
+  ok("F-08", "an unknown command stays unknown instead of vanishing",
+     unk.stable && /zzzz/.test(unk.back.src) ? null
+       : "unresolved lost: " + JSON.stringify(unk.back.src));
+
+  /* PINNED, documented loss. [tpl:name'…'] and [--name…] emit the same
+     <template name="…"> and nothing separates them, so the invocation is
+     the reading. If this ever changes, the docs change with it. */
+  const tplColon = trip("[crit[tpl:somename'body text']]");
+  ok("F-09", "[tpl: comes back as a [-- invocation — pinned, not a bug",
+     /\[--somename/.test(tplColon.back.src) ? null
+       : "expected a [--somename invocation, got " + JSON.stringify(tplColon.back.src));
+
+  /* A standing guard: editing the vocabulary must not introduce two
+     different commands that kebab to one element name. */
+  ok("F-10", "no two commands collapse to the same element name",
+     G.glossCollisions.length === 0 ? null
+       : "collisions: " + JSON.stringify(G.glossCollisions));
+
+  const junk = G.fromXML("<glyph><block once=\"true\"><criticize>");
+  ok("F-11", "malformed xml answers with diagnostics, never an exception",
+     junk.diag.some(d => d.sev === "fix") ? null : "no fix-level diagnostic was raised");
+
+  const notXml = G.fromXML("isto nao e xml nenhum");
+  ok("F-12", "input that is not this engine's xml is refused cleanly",
+     notXml.src === "" && notXml.diag.some(d => d.code === "NoGlyphRoot")
+       ? null : "expected NoGlyphRoot, got " + JSON.stringify(notXml.diag));
+
+  return F.length;
+}
+const rF = runFromXmlChecks();
+
+/* ------------------------------------------------------------------ *
+ * D — XML_REFERENCE.md, kept honest (v1.3.4.00)
+ *
+ * A reference nobody tests goes stale in silence. The draft this file was
+ * reconciled from still listed [BASE] as a command two versions after the
+ * glossary made it a keyword — nothing was there to notice. These checks
+ * read the reference's own tables and hold every row against the emitter,
+ * the same way X-01/X-14 hold GLOSSARY.md against the vocabulary.
+ * ------------------------------------------------------------------ */
+
+function runReferenceChecks() {
+  console.log("\n--- XML_REFERENCE.md — the doc against the engine ---");
+  const D = [];
+  const ok = (id, name, why) => {
+    if (why) { console.log("  ✗ " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  ✓ " + id + ": " + name); D.push(id); }
+  };
+
+  const fs = require("fs");
+  const path = require("path");
+  const refPath = path.resolve(__dirname, "../.guidelines/XML_REFERENCE.md");
+  let md = "";
+  try { md = fs.readFileSync(refPath, "utf8"); }
+  catch (e) { ok("D-01", "the reference exists", "XML_REFERENCE.md not found"); return D.length; }
+  ok("D-01", "the reference exists", null);
+
+  /* every `[x` | `<y>` row in the vocabulary tables */
+  const rows = [];
+  const re = /^\|\s*`\[([a-z0-9_.-]+)`\s*\|\s*`<([a-z0-9-]+)>`\s*\|/gm;
+  let m;
+  while ((m = re.exec(md))) rows.push({ bracket: m[1], element: m[2] });
+
+  ok("D-02", "the vocabulary tables were found and parsed",
+     rows.length > 100 ? null : "only " + rows.length + " rows parsed — the table shape changed");
+
+  /* the load-bearing one: every documented element is what the engine emits */
+  const wrong = [];
+  rows.forEach(r => {
+    const cl = G.classify(r.bracket, {});
+    if (cl.tier === "unknown") { wrong.push(r.bracket + ": not in the vocabulary at all"); return; }
+    const el = G.elName(cl.canonical, cl.tier, cl.gloss);
+    if (el !== r.element) wrong.push(r.bracket + ": doc says <" + r.element + ">, engine emits <" + el + ">");
+  });
+  ok("D-03", "every documented bracket→element pair matches the emitter",
+     wrong.length ? wrong.slice(0, 6).join(" | ") + (wrong.length > 6 ? " (+" + (wrong.length - 6) + " more)" : "") : null);
+
+  /* the reverse gap: a command in the engine that the reference never mentions */
+  const documented = {};
+  rows.forEach(r => { documented[G.classify(r.bracket, {}).canonical] = 1; });
+  const undocumented = []
+    .concat(Object.keys(G.INSTR), Object.keys(G.STRUCT), Object.keys(G.META))
+    .filter(c => !documented[c]);
+  ok("D-04", "no command in the engine is missing from the reference",
+     undocumented.length ? "undocumented: " + undocumented.join(", ") : null);
+
+  /* aliases must not be listed as elements of their own — the reference says
+     so in §2, and a row claiming otherwise would contradict its own rule */
+  const aliasRows = rows.filter(r => G.ALIAS[r.bracket.toUpperCase()]);
+  ok("D-05", "no alias is documented as an element in its own right",
+     aliasRows.length ? aliasRows.map(r => r.bracket).join(", ") : null);
+
+  /* BASE is the specific stale row that motivated these checks: the glossary
+     made it a keyword and the draft kept calling it a command */
+  ok("D-06", "BASE is not documented as a command (GLOSSARY.md §0.2)",
+     rows.some(r => r.bracket === "base") ? "the reference lists [base as a command again" : null);
+
+  return D.length;
+}
+const rD = runReferenceChecks();
+
+
+
 console.log("\n=================================================");
 console.log(" Positive     " + rP + "/" + POSITIVE.length);
 console.log(" Incomplete   " + rI + "/" + INCOMPLETE.length);
@@ -651,6 +835,8 @@ console.log(" Constraints  " + rK + "/" + CONSTRAINTS.length);
 console.log(" Guard        " + rG + "/" + POSITIVE_WITH_RULES.length);
 console.log(" Composition  " + rX + "/17");
 console.log(" .hgml burn   " + rH + "/9");
+console.log(" fromXML      " + rF + "/12");
+console.log(" reference    " + rD + "/6");
 console.log("=================================================");
 
 if (failures.length) {

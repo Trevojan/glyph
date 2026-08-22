@@ -9,12 +9,23 @@
  * only one able to emit XML). v1.0.9 unified them: this file is the reference
  * implementation, and the HTML is a consumer of it.
  *
- * VERSION SCHEME — a.b.c.d, each digit naming the layer that moved:
- *   a  frontend        the HTML/CSS/UI consumer
- *   b  backend         this parser: lexer, tree, emitters
- *   c  business rules  glyph-rules.json, template constraints, valency
- *   d  data fixes      vocabulary tables, constants, glosses
- * A digit moving resets every digit to its right.
+ * VERSION SCHEME — release.frontend.rules.minor, from v1.2.3.00 onward:
+ *   1st  release   the line itself; moves when the whole thing is another thing
+ *   2nd  frontend  the HTML/CSS/UI consumer
+ *   3rd  rules     rules.json, template constraints, valency, vocabulary
+ *   4th  minor     two digits (00, 11, 24, 42) for everything small
+ * No digit resets any other. That is the whole point of the change: under the
+ * old a.b.c.d, where a digit moving reset everything to its right, touching the
+ * interface alone threw away the number the engine had earned — v1.3.0.0 plus a
+ * batch of panels would have read v2.0.0.0, which says "new product" about an
+ * afternoon of buttons. Digits now move on their own and stay where they are.
+ *
+ * The backend has no digit of its own. Parser work rides in `release` when it
+ * changes what Glyph IS (v1.2.3.00 added fromXML, the inverse) and in `minor`
+ * when it does not.
+ *
+ * Versions through v1.3.0.0 used the old a.b.c.d scheme and keep their numbers;
+ * they are not renumbered, because a changelog records what happened.
  *
  * v1.1.0.0 — the vocabulary is now aligned to GLOSSARY.md, which is the
  * normative reference from here on. Three changes, all backend:
@@ -32,7 +43,7 @@
  *      of comparison) — see GLOSSARY.md §6.5.
  *
  * UMD: works in Node (require) and in the browser (window.GlyphCore).
- * As a CLI:  node glyph-parser.js "[crit[ctx]]" [--ast|--xml|--diag]
+ * As a CLI:  node glyph-parser.js "[crit[ctx]]" [--ast|--xml|--diag|--hgml|--from-xml]
  */
 
 (function (root, factory) {
@@ -42,7 +53,7 @@
 })(typeof self !== "undefined" ? self : this, function () {
   "use strict";
 
-  var VERSION = "1.3.0.0";
+  var VERSION = "1.4.4.01";
 
   /* ======================================================
      1. VOCABULARY — Appendix A, one slot per command
@@ -322,7 +333,7 @@
   };
 
   /* ---- template registry ----------------------------------------------
-     Filled by useTemplates(). Node loads it from glyph-templates.json;
+     Filled by useTemplates(). Node loads it from templates.json;
      the browser, from the generated glyph-data.js (file:// blocks fetch). */
   var TEMPLATES = {};
   function useTemplates(store) {
@@ -338,7 +349,7 @@
      hieroglyphs (atoms, they do not decompose) and which are glyphs
      (composites, with a formula that reduces them to atoms).
 
-     Generated from expansions.txt into glyph-expansions.json by
+     Generated from expansions.txt into expansions.json by
      build-templates.js. Optional, exactly like the template and rule stores:
      with no store loaded the engine parses and emits the same as before, it
      just cannot say what anything is made of.
@@ -920,7 +931,8 @@
       if (chain.indexOf(key) !== -1) {
         G("fix", "ciclo",
           "<code>[--" + esc(inv.template) + "</code> se expande dentro de si mesmo (" +
-          esc(chain.concat(key).join(" → ")) + "). Expansão interrompida.", "TemplateCycle");
+          esc(chain.concat(key).join(" → ")) + "). Expansão interrompida.", "TemplateCycle",
+            "cycle", "<code>[--" + esc(inv.template) + "</code> expands inside itself (" + esc(chain.concat(key).join(" → ")) + "). Expansion stopped.");
         return;
       }
 
@@ -958,7 +970,7 @@
      3c. CONTRADICTIONS
 
      The criterion that was missing for "commands don't contradict each
-     other". Finite, external table (glyph-rules.json): editing the file
+     other". Finite, external table (rules.json): editing the file
      changes the rule, without touching code. `hard` becomes `fix`, `tension`
      becomes `ask`.
      ====================================================== */
@@ -1188,7 +1200,13 @@
     function newSeg() { return { children:[], mood:[], autoClosed:0, breaks:0 }; }
     function top() { return stack.length ? stack[stack.length-1] : null; }
     function attach(nd) { var t = top(); if (t) { t.children.push(nd); nd.parent = t; } else seg.children.push(nd); }
-    function G(sev, lab, msg, code) { gaps.push({ sev:sev, lab:lab, msg:msg, code:code || "Note" }); }
+    /* Duas línguas por diagnóstico. O rótulo e a mensagem em inglês chegam
+       como 5º e 6º argumentos; faltando, fica o pt-BR — um sítio esquecido
+       aparece na língua errada, que é melhor que aparecer vazio. */
+    function G(sev, lab, msg, code, enLab, enMsg) {
+      var en = opts.lang === "en";
+      gaps.push({ sev:sev, lab:(en && enLab) || lab, msg:(en && enMsg) || msg, code:code || "Note" });
+    }
     function closeSeg(cause) {
       var names = [];
       while (stack.length) {
@@ -1200,8 +1218,8 @@
         G("note", "fecha tudo",
           "<code>;</code> fechou " + seg.autoClosed + " comandos de uma vez (" +
           names.map(function (x) { return "<code>[" + esc(x) + "</code>"; }).join(", ") +
-          "…). Em bloco longo isso costuma fechar mais do que se pretendia — feche com <code>]</code> o que for parcial.",
-          "MassAutoClose");
+          "…). Em bloco longo isso costuma fechar mais do que se pretendia — feche com <code>]</code> o que for parcial.", "MassAutoClose",
+            "closed everything", "<code>;</code> closed " + seg.autoClosed + " commands at once (" + names.map(function (x) { return "<code>[" + esc(x) + "</code>"; }).join(", ") + "…). In a long block that usually closes more than intended — close what is partial with <code>]</code>.");
       seg.cause = cause;
       if (seg.children.length || seg.mood.length || seg.breaks) segments.push(seg);
       seg = newSeg(); pendingOrigin = null;
@@ -1215,7 +1233,8 @@
         var parentNode = top();
         var inPH = !!(parentNode && parentNode.canonical === "PH");
         if (tk.k === "open" && !tk.v)
-          G("fix", "sem nome", "<code>[</code> sem nome. Um <code>[</code> = um comando.", "EmptyCommandName");
+          G("fix", "sem nome", "<code>[</code> sem nome. Um <code>[</code> = um comando.", "EmptyCommandName",
+            "no name", "<code>[</code> with no name. One <code>[</code> is one command.");
         var nd = {
           id:++uid, raw:tk.v, tier:cl.tier, canonical:cl.canonical, gloss:cl.gloss,
           alias:!!cl.alias, children:[], emotions:[], colon:null, autoClosed:false, tok:tk,
@@ -1231,8 +1250,8 @@
           G("fix", "não existe",
             "<code>[" + esc(tk.v) + "</code> fora do vocabulário." +
             (sg ? " → <code>[" + sg.name.toLowerCase() + "</code>" +
-                  (PTBR[sg.name] ? " (" + PTBR[sg.name] + ")" : "") + "?" : " Veja a tabela."),
-            "UnknownCommand");
+                  (PTBR[sg.name] ? " (" + PTBR[sg.name] + ")" : "") + "?" : " Veja a tabela."), "UnknownCommand",
+            "does not exist", "<code>[" + esc(tk.v) + "</code> is outside the vocabulary." + (sg ? " → <code>[" + sg.name.toLowerCase() + "</code>" + (INSTR[sg.name] ? " (" + INSTR[sg.name] + ")" : "") + "?" : " See the table."));
         }
         attach(nd);
         if (tk.k === "open") stack.push(nd);
@@ -1245,7 +1264,8 @@
           var lg = parseLogic(tk.v, tk.body);
           attach({ logic:lg, children:[], tok:tk, origin: pendingOrigin || "nest" });
           lg.gaps.forEach(function (g) { gaps.push(g); });
-          if (!tk.closed) G("fix", "não fechou", "<code>[logic]</code> sem <code>[/logic]</code>.", "UnclosedLogic");
+          if (!tk.closed) G("fix", "não fechou", "<code>[logic]</code> sem <code>[/logic]</code>.", "UnclosedLogic",
+            "not closed", "<code>[logic]</code> without <code>[/logic]</code>.");
           pendingOrigin = null;
           break;
         }
@@ -1258,7 +1278,8 @@
         case "chain": seg.continues = true; break;
 
         case "close":
-          if (!stack.length) G("fix", "sobrando", "<code>]</code> sem comando aberto.", "UnmatchedCloseBracket");
+          if (!stack.length) G("fix", "sobrando", "<code>]</code> sem comando aberto.", "UnmatchedCloseBracket",
+            "spare", "<code>]</code> with no command open.");
           else stack.pop();
           pendingOrigin = null;
           break;
@@ -1267,7 +1288,8 @@
           var found = -1;
           for (var s2 = stack.length-1; s2 >= 0; s2--)
             if (String(stack[s2].canonical).toUpperCase() === String(tk.v).toUpperCase()) { found = s2; break; }
-          if (found === -1) G("fix", "sobrando", "<code>[/" + esc(tk.v) + "]</code> fecha comando não aberto.", "UnmatchedCloseTag");
+          if (found === -1) G("fix", "sobrando", "<code>[/" + esc(tk.v) + "]</code> fecha comando não aberto.", "UnmatchedCloseTag",
+            "spare", "<code>[/" + esc(tk.v) + "]</code> closes a command that never opened.");
           else stack.length = found;
           break;
         }
@@ -1289,7 +1311,8 @@
           t2.colon = parts.join(" ").replace(/\s+,/g, ",").trim();
           if (sawComma && !STRUCT[t2.canonical])
             G("ask", "ordem incerta",
-              "<code>[" + esc(t2.raw) + ": a,b,c]</code> ordem não inferível. Aninhe.", "AmbiguousSlotOrder");
+              "<code>[" + esc(t2.raw) + ": a,b,c]</code> ordem não inferível. Aninhe.", "AmbiguousSlotOrder",
+            "order unclear", "<code>[" + esc(t2.raw) + ": a,b,c]</code> order cannot be inferred. Nest them.");
           i = j5 - 1;
           break;
         }
@@ -1301,17 +1324,21 @@
           if (tk.closedBy === "bracket" || tk.closedBy === "semi")
             G("fix", "texto cortado",
               "literal cortado no <code>" + (tk.closedBy === "bracket" ? "]" : ";") +
-              "</code>. Feche com <code>`</code> antes.", "TruncatedLiteral");
-          if (tk.closedBy === "eof") G("fix", "texto aberto", "<code>`</code> sem fechar.", "UnterminatedLiteral");
+              "</code>. Feche com <code>`</code> antes.", "TruncatedLiteral",
+            "text cut", "literal cut at <code>" + (tk.closedBy === "bracket" ? "]" : ";") + "</code>. Close it with <code>`</code> first.");
+          if (tk.closedBy === "eof") G("fix", "texto aberto", "<code>`</code> sem fechar.", "UnterminatedLiteral",
+            "text left open", "<code>`</code> never closed.");
           if (tk.form === "quote" && tk.closedBy === "unterminated")
-            G("fix", "texto aberto", "<code>'</code> sem fechar.", "UnterminatedLiteral");
+            G("fix", "texto aberto", "<code>'</code> sem fechar.", "UnterminatedLiteral",
+            "text left open", "<code>'</code> never closed.");
           pendingOrigin = null;
           break;
         }
 
         case "emotion": {
           var key = tk.v.toLowerCase();
-          if (!EMO[key]) G("note", "humor externo", "<code>/" + esc(tk.v) + "/</code> fora da tabela. Ignorado.", "UnknownEmotion");
+          if (!EMO[key]) G("note", "humor externo", "<code>/" + esc(tk.v) + "/</code> fora da tabela. Ignorado.", "UnknownEmotion",
+            "mood off-table", "<code>/" + esc(tk.v) + "/</code> is not in the table. Ignored.");
           var rec = { name:key, gloss:EMO[key] || "?", order:tk.order };
           var t4 = top(); if (t4) t4.emotions.push(rec);
           seg.mood.push(rec);
@@ -1322,11 +1349,13 @@
           pendingOrigin = "extend";
           var nx2 = tokens[i+1];
           if (!nx2 || (nx2.k !== "open" && nx2.k !== "bareTag" && nx2.k !== "divide" && nx2.k !== "literal" && nx2.k !== "text"))
-            G("fix", "pendurado", "<code>-</code> sem cadeia. Ex.: <code>[rw-cr</code>.", "DanglingChain");
+            G("fix", "pendurado", "<code>-</code> sem cadeia. Ex.: <code>[rw-cr</code>.", "DanglingChain",
+            "dangling", "<code>-</code> with no chain. E.g. <code>[rw-cr</code>.");
           if (nx2 && nx2.k === "divide") {
             var nx3 = tokens[i+2];
             if (!nx3 || (nx3.k !== "open" && nx3.k !== "bareTag" && nx3.k !== "literal" && nx3.k !== "text"))
-              G("fix", "pendurado", "cadeia vazia. Ex.: <code>[in-rw,fm,im</code>.", "DanglingChain");
+              G("fix", "pendurado", "cadeia vazia. Ex.: <code>[in-rw,fm,im</code>.", "DanglingChain",
+            "dangling", "empty chain. E.g. <code>[in-rw,fm,im</code>.");
           }
           break;
         }
@@ -1340,8 +1369,8 @@
           if (stack.length)
             G("note", "quebra visual",
               "<code>;;</code> não fecha bloco, só <code>;</code> fecha. Segue aberto: " +
-              stack.map(function (x) { return "<code>[" + esc(String(x.canonical || x.template || "?").toLowerCase()) + "</code>"; }).join(", ") + ".",
-              "LinebreakInsideBlock");
+              stack.map(function (x) { return "<code>[" + esc(String(x.canonical || x.template || "?").toLowerCase()) + "</code>"; }).join(", ") + ".", "LinebreakInsideBlock",
+            "visual break", "<code>;;</code> does not close a block, only <code>;</code> does. Still open: " + stack.map(function (x) { return "<code>[" + esc(String(x.canonical || x.template || "?").toLowerCase()) + "</code>"; }).join(", ") + ".");
           break;
         }
 
@@ -1354,7 +1383,8 @@
           break;
         }
         case "modeUnclosed":
-          G("note", "modo texto", "<code>[off]</code> sem <code>[on]</code>. Resto lido como prosa.", "UnclosedOffMode");
+          G("note", "modo texto", "<code>[off]</code> sem <code>[on]</code>. Resto lido como prosa.", "UnclosedOffMode",
+            "text mode", "<code>[off]</code> without <code>[on]</code>. The rest is read as prose.");
           break;
         case "raw": {
           var rawNode = { literal:true, v:tk.v, form:"raw", tok:tk };
@@ -1371,8 +1401,8 @@
           if (t7) t7.children.push(txt); else seg.children.push(txt);
           if (/^(if|or|else|and|then|unless|se|ou|senao|entao)$/i.test(v))
             G("note", "palavra solta",
-              "<code>" + esc(v) + "</code> solto. Lógica: <code>[if</code> <code>[unls</code> <code>[logic]</code>.",
-              "LooseKeyword");
+              "<code>" + esc(v) + "</code> solto. Lógica: <code>[if</code> <code>[unls</code> <code>[logic]</code>.", "LooseKeyword",
+            "loose word", "<code>" + esc(v) + "</code> on its own. Logic: <code>[if</code> <code>[unls</code> <code>[logic]</code>.");
           /* A loose word that exists in the vocabulary is almost always a
              command written without `[`. Without this it becomes <off>,
              inert prose: the `rd` in a long query vanishes with no warning
@@ -1384,13 +1414,13 @@
             if (known)
               G("ask", "comando solto",
                 "<code>" + esc(v) + "</code> está no vocabulário mas foi escrito sem <code>[</code> — " +
-                "virou prosa (<code>&lt;off&gt;</code>), não comando. Queria <code>[" + esc(lw) + "</code>?",
-                "LooseCommandWord");
+                "virou prosa (<code>&lt;off&gt;</code>), não comando. Queria <code>[" + esc(lw) + "</code>?", "LooseCommandWord",
+            "loose command", "<code>" + esc(v) + "</code> is in the vocabulary but was written without <code>[</code> — " + "it became prose (<code>&lt;off&gt;</code>), not a command. Did you mean <code>[" + esc(lw) + "</code>?");
           }
           if (/^\.+$/.test(v))
             G("note", "ponto solto",
-              "<code>.</code> sem função. Separadores: <code>,</code> <code>;</code> <code>;;</code>.",
-              "LooseDots");
+              "<code>.</code> sem função. Separadores: <code>,</code> <code>;</code> <code>;;</code>.", "LooseDots",
+            "loose dot", "<code>.</code> has no function here. Separators: <code>,</code> <code>;</code> <code>;;</code>.");
           break;
         }
       }
@@ -1410,7 +1440,8 @@
         var q = (nd2.children || []).filter(function (c) { return c.literal; })[0];
         G("ask", "casa vazia",
           (nameNode ? "<code>" + esc(nameNode.raw) + "</code> " : "") +
-          (q ? esc(q.v) : "sem resposta"), "PlaceholderPending");
+          (q ? esc(q.v) : "sem resposta"), "PlaceholderPending",
+            "empty field", (nameNode ? "<code>" + esc(nameNode.raw) + "</code> " : "") + (q ? esc(q.v) : "no answer"));
       });
     });
 
@@ -1430,8 +1461,8 @@
           (deepest.depth + 1) + " níveis de aninhamento (…" +
           chain.map(function (x) { return "<code>[" + esc(x) + "</code>"; }).join(" › ") +
           "). Cada <code>[</code> sem <code>]</code> entra dentro do anterior — se a intenção era " +
-          "sequência e não escopo, feche com <code>]</code> ou separe com <code>,</code>.",
-          "DeepNesting");
+          "sequência e não escopo, feche com <code>]</code> ou separe com <code>,</code>.", "DeepNesting",
+            "very deep", (deepest.depth + 1) + " levels of nesting (…" + chain.map(function (x) { return "<code>[" + esc(x) + "</code>"; }).join(" › ") + "). Every <code>[</code> without <code>]</code> goes inside the previous one — if you meant a sequence and not a scope, close it with <code>]</code> or separate with <code>,</code>.");
       }
     });
 
@@ -1445,7 +1476,8 @@
         if (!firstReal || !firstReal.literal)
           G("fix", "sem nome",
             "<code>[" + esc(String(nd2.canonical).toLowerCase()) + "</code> exige um nome literal como primeiro slot. Ex.: <code>[" +
-            esc(String(nd2.canonical).toLowerCase()) + "'nome',…</code>.", "MissingStructName");
+            esc(String(nd2.canonical).toLowerCase()) + "'nome',…</code>.", "MissingStructName",
+            "no name", "<code>[" + esc(String(nd2.canonical).toLowerCase()) + "</code> needs a literal name as its first slot. E.g. <code>[" + esc(String(nd2.canonical).toLowerCase()) + "'name',…</code>.");
       });
     });
 
@@ -1464,8 +1496,8 @@
             for (var k = got; k < slots.length; k++)
               G("ask", "falta operando",
                 "<code>[" + esc(String(nd2.canonical).toLowerCase()) + "</code> exige " +
-                slots.length + " termos, recebeu " + got + ". Falta <strong>" + esc(slots[k]) + "</strong>.",
-                "MissingOperand");
+                slots.length + " termos, recebeu " + got + ". Falta <strong>" + esc(slots[k]) + "</strong>.", "MissingOperand",
+            "operand missing", "<code>[" + esc(String(nd2.canonical).toLowerCase()) + "</code> takes " + slots.length + " terms, got " + got + ". Missing <strong>" + esc(slots[k]) + "</strong>.");
             return;
           }
 
@@ -1477,11 +1509,12 @@
             G("ask", "sem alvo",
               "<code>[" + esc(String(nd2.canonical).toLowerCase()) + "</code>" +
               (PTBR[nd2.canonical] ? " (" + PTBR[nd2.canonical] + ")" : "") +
-              ": <strong>" + esc(want.replace("*", "")) + "</strong>?", "UnfilledSlot");
+              ": <strong>" + esc(want.replace("*", "")) + "</strong>?", "UnfilledSlot",
+            "no target", "<code>[" + esc(String(nd2.canonical).toLowerCase()) + "</code>" + (INSTR[nd2.canonical] ? " (" + INSTR[nd2.canonical] + ")" : "") + ": <strong>" + esc(want.replace("*", "")) + "</strong>?");
           else if (want.slice(-1) === "*" && filled === 1)
             G("note", "lista de um",
-              "<code>[" + esc(String(nd2.canonical).toLowerCase()) + "</code> aceita n itens, recebeu 1. Liste com <code>,</code>.",
-              "SingletonList");
+              "<code>[" + esc(String(nd2.canonical).toLowerCase()) + "</code> aceita n itens, recebeu 1. Liste com <code>,</code>.", "SingletonList",
+            "list of one", "<code>[" + esc(String(nd2.canonical).toLowerCase()) + "</code> takes n items, got 1. List them with <code>,</code>.");
         });
       });
     }
@@ -1517,7 +1550,8 @@
           defd[nd3.template.toLowerCase()] = true;
           if (!(nd3.children || []).length)
             G("fix", "tpl vazio",
-              "<code>[--" + esc(nd3.template) + "=</code> sem corpo.", "EmptyTemplateDefinition");
+              "<code>[--" + esc(nd3.template) + "=</code> sem corpo.", "EmptyTemplateDefinition",
+            "empty tpl", "<code>[--" + esc(nd3.template) + "=</code> has no body.");
         } else invoked.push(nd3.template);
       });
     });
@@ -1526,7 +1560,8 @@
       if (!defd[nm.toLowerCase()] && !known[nm.toLowerCase()] && !known[nm])
         G("note", "tpl indefinido",
           "<code>[--" + esc(nm) + "</code> não definido aqui. TPL não persiste entre sessões. Redefina: <code>[--" +
-          esc(nm) + "=…</code>.", "UndefinedTemplate");
+          esc(nm) + "=…</code>.", "UndefinedTemplate",
+            "tpl undefined", "<code>[--" + esc(nm) + "</code> is not defined here. TPL does not persist between sessions. Redefine it: <code>[--" + esc(nm) + "=…</code>.");
     });
 
     var rank = { fix:0, ask:1, note:2 };
@@ -2034,7 +2069,7 @@
   function toHGML(src, opts) {
     opts = opts || {};
     if (!expansionRegistry(opts))
-      return "# sem tabela de composição: carregue glyph-expansions.json (useExpansions)";
+      return "# sem tabela de composição: carregue expansions.json (useExpansions)";
     var b = burn(parse(src, opts).segments, opts);
     var L = [];
     b.segments.forEach(function (sg, i) {
@@ -2042,6 +2077,311 @@
       hgmlLines(sg.children, 0, L);
     });
     return L.join("\n");
+  }
+
+
+  /* ======================================================
+     7. XML → GLYPH — the inverse
+
+     The pipeline was one-way until here ("human → glyph → xml → machine"),
+     so editing the XML meant editing the deliverable and abandoning the
+     source. fromXML() reads the emitter's own output back into bracket
+     source, and the normal parse/emit path takes over again.
+
+     Three things do NOT come back, and each is pinned by a test in
+     test-corpus.js so none of them gets "fixed" silently:
+
+     - `<template name="X">` is written both by [tpl:X'…'] and by [--X…],
+       and nothing in the output separates the two. This always rebuilds
+       the [--X invocation: a repo-wide grep found no [tpl: in real use.
+     - Content appended to an invocation beyond its declared params
+       (collectFills' `extra`) carries no slot marker once expanded, so it
+       cannot be told from the template's own body.
+     - esc()/xesc() leave ' ` [ ] alone and the literal grammar ends on
+       exactly those characters, so such text returns through litSafeXml(),
+       the same substitution the interface already makes for form fields.
+     ====================================================== */
+
+  /* classify() probes MODE → STRUCT → META → ALIAS → INSTR; the reverse map is
+     built in that same order with the first writer winning, which is what
+     makes it the inverse of classify() rather than a lookup that merely
+     agrees with it. PH, TPL and UNLS sit in two tables each and resolve to
+     STRUCT for precisely this reason. ALIAS needs no entry: an alias carries
+     the canonical's own gloss, so elName() already lands on the same element.
+     GLOSS_COLLISIONS should stay empty — a test asserts it, so that editing
+     the vocabulary later cannot introduce an ambiguity in silence. */
+  var GLOSS_REVERSE = {}, GLOSS_COLLISIONS = [];
+  [["mode", MODE], ["struct", STRUCT], ["meta", META], ["instr", INSTR]]
+    .forEach(function (pair) {
+      var tier = pair[0], table = pair[1];
+      Object.keys(table).forEach(function (canon) {
+        var el = elName(canon, tier, table[canon]);
+        if (GLOSS_REVERSE[el]) {
+          if (GLOSS_REVERSE[el].canonical !== canon)
+            GLOSS_COLLISIONS.push({ element:el, kept:GLOSS_REVERSE[el].canonical, dropped:canon });
+          return;
+        }
+        GLOSS_REVERSE[el] = { canonical:canon, tier:tier };
+      });
+    });
+
+  var EMO_REVERSE = {};
+  Object.keys(EMO).forEach(function (k) { EMO_REVERSE[String(EMO[k]).toLowerCase()] = k; });
+
+  function xmlUnescape(s) {
+    return String(s).replace(/&(#x[0-9a-fA-F]+|#[0-9]+|amp|lt|gt|quot|apos);/g, function (m, e) {
+      if (e === "amp") return "&";
+      if (e === "lt") return "<";
+      if (e === "gt") return ">";
+      if (e === "quot") return '"';
+      if (e === "apos") return "'";
+      var code = e.charAt(1) === "x" ? parseInt(e.slice(2), 16) : parseInt(e.slice(1), 10);
+      return isNaN(code) ? m : String.fromCharCode(code);
+    });
+  }
+
+  function xmlTagName(s) { var m = /^\s*([A-Za-z_][\w.:-]*)/.exec(s); return m ? m[1] : ""; }
+
+  function xmlAttrs(raw) {
+    var out = {}, m, re = /([A-Za-z_][\w.:-]*)\s*=\s*"([^"]*)"/g;
+    while ((m = re.exec(raw))) out[m[1]] = xmlUnescape(m[2]);
+    return out;
+  }
+
+  /* Hand-written, like tokenize(), and for the same reason the rest of this
+     file is: the CLI and the test suite run on plain Node with no
+     dependencies, and DOMParser exists only in the browser. Using it would
+     put the inverse behind a wall the tests cannot reach and split the engine
+     in two again, which is the divergence v1.0.9 closed. The dialect to read
+     is small and self-imposed — buildXml escapes & < > " and writes no
+     namespaces, CDATA or DTD — so this stays a reader for that dialect, not
+     an XML parser in general. */
+  function xmlTokenize(xml) {
+    var T = [], i = 0, n = xml.length;
+    function pushText(raw) { if (raw && raw.trim()) T.push({ k:"text", v:xmlUnescape(raw) }); }
+    while (i < n) {
+      var lt = xml.indexOf("<", i);
+      if (lt === -1) { pushText(xml.slice(i)); break; }
+      if (lt > i) pushText(xml.slice(i, lt));
+      if (xml.substr(lt, 4) === "<!--") {
+        var ce = xml.indexOf("-->", lt + 4);
+        i = ce === -1 ? n : ce + 3;
+        continue;
+      }
+      var gt = xml.indexOf(">", lt);
+      if (gt === -1) { T.push({ k:"truncated" }); break; }
+      var inner = xml.slice(lt + 1, gt);
+      if (inner.charAt(0) === "/") T.push({ k:"close", tag:xmlTagName(inner.slice(1)) });
+      else if (inner.charAt(inner.length - 1) === "/") {
+        var body = inner.slice(0, -1);
+        T.push({ k:"selfclose", tag:xmlTagName(body), attrs:xmlAttrs(body) });
+      } else T.push({ k:"open", tag:xmlTagName(inner), attrs:xmlAttrs(inner) });
+      i = gt + 1;
+    }
+    return T;
+  }
+
+  /* Never throws: a hand-edited panel is one of the inputs, so malformed XML
+     has to come back as diagnostics the interface can show, the same way
+     parse() answers bad Glyph with gaps instead of an exception. */
+  function xmlParseTree(xml) {
+    var toks = xmlTokenize(xml), diag = [];
+    var root = { tag:"#root", attrs:{}, children:[] };
+    var stack = [root];
+    toks.forEach(function (tk) {
+      var top = stack[stack.length - 1];
+      if (tk.k === "text") { top.children.push({ tag:"#text", v:tk.v, attrs:{}, children:[] }); return; }
+      if (tk.k === "selfclose") { top.children.push({ tag:tk.tag, attrs:tk.attrs, children:[] }); return; }
+      if (tk.k === "open") {
+        var el = { tag:tk.tag, attrs:tk.attrs, children:[] };
+        top.children.push(el); stack.push(el); return;
+      }
+      if (tk.k === "close") {
+        for (var d = stack.length - 1; d > 0; d--) {
+          if (stack[d].tag === tk.tag) {
+            if (d < stack.length - 1)
+              diag.push({ sev:"note", code:"XmlAutoClose",
+                msg:"<code>&lt;/" + esc(tk.tag) + "&gt;</code> fechou " + (stack.length - 1 - d) +
+                    " elemento(s) que seguiam abertos." });
+            stack.length = d;
+            return;
+          }
+        }
+        diag.push({ sev:"fix", code:"XmlUnmatchedClose",
+          msg:"<code>&lt;/" + esc(tk.tag) + "&gt;</code> fecha um elemento que nunca abriu." });
+        return;
+      }
+      if (tk.k === "truncated")
+        diag.push({ sev:"fix", code:"XmlTruncated",
+          msg:"<code>&lt;</code> sem <code>&gt;</code>: o xml está cortado." });
+    });
+    if (stack.length > 1)
+      diag.push({ sev:"fix", code:"XmlUnclosed",
+        msg:"sem fechamento: " + stack.slice(1).map(function (e) {
+          return "<code>&lt;" + esc(e.tag) + "&gt;</code>"; }).join(", ") + "." });
+    return { root:root, diag:diag };
+  }
+
+  function xmlChild(el, tag) {
+    var kids = el.children || [];
+    for (var i = 0; i < kids.length; i++) if (kids[i].tag === tag) return kids[i];
+    return null;
+  }
+  function xmlText(el) {
+    var s = "";
+    (el.children || []).forEach(function (c) { if (c.tag === "#text") s += c.v; });
+    return s;
+  }
+
+  /* A literal ends at the next ' ] or newline, so those characters cannot
+     travel inside one. esc()/xesc() do not escape them on the way out, which
+     is why the trip back needs this: the same substitution glyph-ui.js has
+     always made for what a human types into a form field. */
+  function litSafeXml(s) {
+    return String(s == null ? "" : s)
+      .replace(/'/g, "’").replace(/`/g, "’")
+      .replace(/\[/g, "(").replace(/\]/g, ")")
+      .replace(/\r?\n/g, " ").trim();
+  }
+  function asLiteral(s) { return "'" + litSafeXml(s) + "'"; }
+
+  function xmlKids(el, diag) {
+    var out = "";
+    (el.children || []).forEach(function (c) { out += fromXmlNode(c, diag); });
+    return out;
+  }
+
+  function fromXmlLogic(el, diag) {
+    var lines = [];
+    (el.children || []).forEach(function (c) {
+      if (c.tag !== "rule") return;
+      var srcEl = xmlChild(c, "source");
+      if (srcEl) lines.push(xmlText(srcEl));
+    });
+    /* <source> is the authored expression, untouched by expandExpr — so the
+       block comes back as it was written, not as it was read back to the
+       human. <needs var> is regenerated by parseLogic on the next pass. */
+    var nm = el.attrs.name ? ":" + litSafeXml(el.attrs.name) : "";
+    return "[logic" + nm + "]\n" + lines.join("\n") + "\n[/logic]";
+  }
+
+  function fromXmlTemplate(el, diag) {
+    var nm = el.attrs.name || "";
+    var head = "[--" + nm + (el.attrs.define ? "=" : "");
+    if (el.attrs.expanded) {
+      /* An expanded invocation holds the template's body, not the call. The
+         bound values are the ones carrying a slot, and rebuilding them as
+         named [ph-x'v'] fills is exactly what collectFills reads back — so
+         the call survives even though the expansion it produced is discarded
+         and regenerated. What the caller appended beyond the declared params
+         has no slot and cannot be recovered; see the section note. */
+      var fills = "";
+      (function scan(list) {
+        (list || []).forEach(function (c) {
+          if (c.tag === "user-input" && c.attrs && c.attrs.slot && /^[A-Za-z]/.test(c.attrs.slot)) {
+            fills += "[ph-" + c.attrs.slot + asLiteral(xmlText(c)) + "]";
+            return;
+          }
+          scan(c.children);
+        });
+      })(el.children);
+      return head + fills + "]";
+    }
+    return head + xmlKids(el, diag) + "]";
+  }
+
+  function fromXmlNode(el, diag) {
+    var tag = el.tag;
+    if (tag === "#text") return "";
+    if (tag === "user-input") return asLiteral(xmlText(el));
+    if (tag === "off") return " " + litSafeXml(xmlText(el)) + " ";
+    if (tag === "mood" || tag === "break") return "";   /* handled per block */
+    if (tag === "logic") return fromXmlLogic(el, diag);
+    if (tag === "template") return fromXmlTemplate(el, diag);
+    if (tag === "unresolved") return "[" + litSafeXml(el.attrs.tag || "") + xmlKids(el, diag) + "]";
+    if (tag === "needs") {
+      /* Three shapes share this element, and one attribute tells them apart:
+         a real [ph-name] hole carries an alpha slot, while the FRAMES and
+         SLOTS fillers carry none or a bare number. Only the hole is source;
+         the fillers are the engine asking a question, and buildXml asks it
+         again from the vocabulary on the next pass. Writing them back would
+         turn a prompt into an answer. */
+      var slot = el.attrs.slot;
+      if (slot && /^[A-Za-z]/.test(slot))
+        return "[ph-" + slot + "`" + litSafeXml(xmlText(el)) + "`]";
+      return "";
+    }
+
+    var hit = GLOSS_REVERSE[tag];
+    var name = hit ? hit.canonical.toLowerCase() : (SESSION[tag] ? tag : null);
+    if (!name) {
+      diag.push({ sev:"note", code:"XmlUnknownElement",
+        msg:"<code>&lt;" + esc(tag) + "&gt;</code> não corresponde a nenhum comando — " +
+            "o conteúdo foi mantido, a marca não." });
+      return xmlKids(el, diag);
+    }
+    /* `force="editorial"` is not read back: nd.editorial comes from
+       EDITORIAL_ONLY keyed by the canonical, so it returns on its own. */
+    var head = "[" + name + (el.attrs.name ? ":" + litSafeXml(el.attrs.name) : "");
+    return head + xmlKids(el, diag) + "]";
+  }
+
+  function fromXmlBlock(el, diag) {
+    var pre = "";
+    var mood = xmlChild(el, "mood");
+    if (mood) {
+      var keys = [];
+      [mood.attrs.dominant].concat(String(mood.attrs.also || "").split(","))
+        .forEach(function (g) {
+          var k = EMO_REVERSE[String(g || "").trim().toLowerCase()];
+          if (k) keys.push(k);
+        });
+      if (keys.length) pre += "/" + keys.join("/") + "/";
+    }
+    var exp = xmlChild(el, "user-expectative");
+    /* `expects` is only the flattened summary of what the body already says,
+       so the body is what gets rebuilt — the attribute regenerates from it. */
+    if (exp) return pre + "r-" + xmlKids(exp, diag);
+    var body = "";
+    (el.children || []).forEach(function (c) {
+      if (c.tag === "mood" || c.tag === "#text") return;
+      body += fromXmlNode(c, diag);
+    });
+    return pre + body;
+  }
+
+  /** xml → glyph. The inverse of toXML, within the limits noted above. */
+  function fromXML(xmlString, opts) {
+    opts = opts || {};
+    var pt = xmlParseTree(String(xmlString == null ? "" : xmlString));
+    var diag = pt.diag.slice();
+    var glyphEl = xmlChild(pt.root, "glyph");
+    if (!glyphEl) {
+      diag.push({ sev:"fix", code:"NoGlyphRoot",
+        msg:"não há <code>&lt;glyph&gt;</code> na raiz — isto não é xml deste motor." });
+      return { src:"", diag:diag };
+    }
+    var parts = [];
+    (glyphEl.children || []).forEach(function (el) {
+      if (el.tag === "#text") return;
+      /* <block> is written by two different things: the wrapper buildXml puts
+         around every segment, and the STRUCT command [block'…']. They are the
+         same element name, and only position plus the `once` attribute
+         separate them — the wrapper is always a direct child of <glyph> and
+         always carries `once`, because blockAttrs() runs nowhere else. A
+         nested [block reaches fromXmlNode instead, through GLOSS_REVERSE. */
+      if (el.tag === "block" && el.attrs.once) {
+        parts.push({ src:(el.attrs.continues ? "[=" : "") + fromXmlBlock(el, diag), brk:false });
+        return;
+      }
+      if (el.tag === "break") { if (parts.length) parts[parts.length - 1].brk = true; return; }
+      diag.push({ sev:"note", code:"XmlUnexpectedTop",
+        msg:"<code>&lt;" + esc(el.tag) + "&gt;</code> fora de um bloco — ignorado." });
+    });
+    var src = parts.map(function (p, i) {
+      return p.src + (p.brk ? ";;" : "") + (i < parts.length - 1 ? ";" : "");
+    }).join("");
+    return { src:src, diag:diag };
   }
 
   return {
@@ -2060,6 +2400,7 @@
     defOf: defOf,
     buildXml: buildXml, toXML: toXML, toAST: toAST, serializeAST: serializeAST,
     burn: burn, toHGML: toHGML,
+    fromXML: fromXML, elementCanonicalMap: GLOSS_REVERSE, glossCollisions: GLOSS_COLLISIONS,
     esc: esc, xesc: xesc
   };
 });
@@ -2068,9 +2409,9 @@
 if (typeof require === "function" && typeof module === "object" && require.main === module) {
   var G = module.exports;
   // optional stores: if absent, the engine still runs, just without expansion/contradiction checks
-  [["../glyph-templates.json", G.useTemplates],
-   ["../glyph-rules.json", G.useRules],
-   ["../glyph-expansions.json", G.useExpansions]].forEach(function (pair) {
+  [["../.guidelines/templates.json", G.useTemplates],
+   ["../.guidelines/rules.json", G.useRules],
+   ["../.guidelines/expansions.json", G.useExpansions]].forEach(function (pair) {
     try {
       pair[1](require(require("path").resolve(__dirname, pair[0])));
     } catch (e) { /* missing store is a valid situation */ }
@@ -2080,16 +2421,26 @@ if (typeof require === "function" && typeof module === "object" && require.main 
   var src = [];
   argv.forEach(function (a) {
     if (a === "--ast" || a === "--xml" || a === "--diag" ||
-        a === "--expand" || a === "--hgml") mode = a.slice(2);
+        a === "--expand" || a === "--hgml" || a === "--from-xml") mode = a.slice(2);
     else src.push(a);
   });
   var input = src.join(" ");
   if (!input) {
     console.error("uso: node scripts/glyph-parser.js \"[crit[ctx]]\" [--xml|--ast|--diag|--hgml]");
+    console.error("     node scripts/glyph-parser.js \"<glyph>…</glyph>\" --from-xml");
     console.error("     node scripts/glyph-parser.js CRIT --expand");
     process.exit(2);
   }
   if (mode === "hgml") console.log(G.toHGML(input));
+  else if (mode === "from-xml") {
+    /* the inverse, for checking by hand what the XML panel does on apply */
+    var back = G.fromXML(input);
+    console.log(back.src);
+    back.diag.forEach(function (d) {
+      /* the messages carry <code> for the panel; the terminal wants them bare */
+      console.error("[" + d.sev + "] " + d.code + " — " + String(d.msg).replace(/<[^>]+>/g, "").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&"));
+    });
+  }
   else if (mode === "expand") {
     /* --expand takes a COMMAND NAME, not Glyph source: it answers "what is
        this made of", which is the question the .hgml emitter will ask. */

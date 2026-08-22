@@ -8,15 +8,358 @@ All notable changes to Glyph are documented here, most recent first.
 > were written — a changelog is a record of what happened, and rewriting it
 > after the fact would make it a worse record, not a better one.
 
-> **Versioning.** Since `1.1.0.0` each digit of `a.b.c.d` names the layer that
-> moved — `a` frontend (HTML/CSS/UI), `b` backend (the parser), `c` business rules
-> (`glyph-rules.json`, constraints, valency), `d` data (vocabulary tables,
-> constants, glosses). A digit that moves resets every digit to its right.
+> **Versioning.** From `1.2.3.00` onward the number is
+> `release.frontend.rules.minor` — the 1st digit the release line, the 2nd the
+> frontend (HTML/CSS/UI), the 3rd the rules (`.guidelines/rules.json`, constraints,
+> valency, vocabulary), and the 4th a two-digit counter (`00`, `11`, `24`, `42`)
+> for everything small. **No digit resets any other.**
+>
+> That last rule is why the scheme changed. Under the old `a.b.c.d`, a digit
+> that moved reset every digit to its right, so touching the interface alone
+> discarded the number the engine had earned: this release would have read
+> `2.0.0.0`, announcing a new product line for what is a batch of panels and one
+> new function. Digits now move independently and keep their place.
+>
+> The backend has no digit of its own. Parser work rides in `release` when it
+> changes what Glyph *is* — `1.2.3.00` added `fromXML`, the inverse of the
+> emitter — and in `minor` when it does not.
+>
+> Versions through `1.3.0.0` used the old `a.b.c.d` scheme (`a` frontend, `b`
+> backend, `c` business rules, `d` data) and keep the numbers they were released
+> under. They are not renumbered: a changelog records what happened, and
+> rewriting it after the fact makes it a worse record, not a better one — the
+> same reason the pt-BR entries below were left as they were written.
 >
 > The `1.0.9.x` versions were previously identified as `1.9`, `1.9.1`, `1.9.2` and
 > `1.9.3`; the content is the same, only the numbering changed. Earlier versions
 > (`v1.7`, `v1.8`) keep their historical numbering — see
-> `GLYPH_v1.7_CHANGELIST.md` and `GLYPH_v1.8_CHANGELIST.md`.
+> `.guidelines/history/`.
+
+---
+
+## [1.4.4.01] — four formats, one card, and the engine says where it is going
+
+The four output formats lived in four places. `.xml` sat in the right column,
+`.json` under it, `.hgml` under that, and `.pgml` was not with them at all — its
+download button hung off the source card, on the other side of the page.
+Finding a format meant hunting the screen, and each card repeated its own
+copy/download pair.
+
+### One card, four tabs, one action bar
+
+`.pgml · .xml · .json · .hgml` are now tabs of a single card. The action bar has
+**one** copy and **one** download, and they ask the active tab what to hand
+over — the button *is* that tab's button without needing to exist four times.
+Eight per-format buttons became two.
+
+`edit` shows only on `.xml`, because it is the only format with a way back
+(`fromXML()`). Switching away mid-edit keeps the edit: the textarea persists and
+returns as it was.
+
+`what is left to say` deliberately did **not** become a tab. It is diagnostics,
+not an artifact, and it has to stay readable *while* a format is on screen.
+
+### Painting became lazy
+
+`run()` painted all three panels on every keystroke. Computing the four formats
+is cheap; `colorize()` and a large `innerHTML` are not. Now the formats are all
+computed, the panels are marked dirty, and **only the visible one gets ink** —
+the rest wait for the tab switch.
+
+### `destination` — the engine stops emitting into the dark
+
+Harness, model and role decide which file a bundle will be written to, and they
+lived only in a plan document. They are now three selects above the output card,
+showing the exact path (`.claude/agents/dv.md`) and the header the bundle will
+carry, before anything is emitted.
+
+The roster is data — `.guidelines/targets.json`, the same pattern as `rules.json`
+and `templates.json`. Model ids change on someone else's schedule, so they are
+not compiled into the engine. A harness marked `available:false` is listed and
+disabled: **a listed-and-off harness informs, an invented one lies.**
+
+The card states plainly that the selection does not yet change `.xml`, `.json` or
+`.hgml` — the bundle emitter is what will read it. A control that pretends to act
+is worse than no control.
+
+### Housekeeping
+
+Seven i18n keys (`copyXml`, `dlXml`, `copyAst`, `dlAst`, `copyHgml`, `dlHgml`,
+`dlPgml`) collapsed into two (`copy`, `download`) plus four tab labels — the tab
+label already says which format it is. Three panel-title keys went with the
+panels.
+
+---
+
+## [1.3.4.01] — the root holds entry points only
+
+Thirteen files sat loose in the repository root. The rule now: the root keeps
+`README.md`, `CHANGELOG.md` and the app; `/scripts` keeps JavaScript;
+`.guidelines/` keeps everything normative — the documents and the data stores.
+
+Moved with `git mv`, so every one is recorded as a rename and `git log --follow`
+still reaches its history. Superseded records (the v1.7/v1.8 changelists, the
+triage material) went to `.guidelines/history/`.
+
+The stores dropped the `glyph-` prefix on the way in — the folder supplies the
+context that the prefix used to. `expansions.txt` now sits beside
+`expansions.json`: same base name, and the extension says which one is written
+and which one is built.
+
+`build-templates.js` traded its `ROOT` for a `GUIDE` constant; the suite, the
+parser CLI and `dag.js` had their paths repointed. No logic changed, and the
+173-case suite proves it.
+
+**One correction on the way through.** The versioning definition was restated as
+`app.front.rules.content`, and both `README.md` and `GLOSSARY.md` still carried
+the abandoned rule that *a digit resets every digit to its right*. That rule was
+dropped for a reason recorded at the top of this file — under it, a batch of
+panels would have announced itself as `2.0.0.0`. Both documents now say what
+this one says: **no digit resets any other.**
+
+---
+
+## [1.3.4.00] — the XML has a reference, and the reference has a test
+
+Reconciled from a hand-written draft of the bracket→XML mapping. The repository
+had `GLOSSARY.md` for *what a command is* and `SIGNATURES.md` for *how many
+operands it takes*, but nothing said *what it becomes in the XML* — the one
+question the deliverable actually turns on.
+
+### The draft was 89/91 right
+
+Of 91 bracket→element pairs, 89 matched the engine exactly, and **no element
+name disagreed**. The two that failed are both instructive:
+
+- **`[BASE]` → `<base>`.** Stale by two versions. `GLOSSARY.md` §0.2 is
+  normative and says `BASE` is *only* the `expansions.txt` keyword meaning "this
+  one is an atom"; the command was renamed **`CORE`** in `1.1.0.0` precisely to
+  end the collision where one word was both. The draft was written before that
+  and nothing had told it since. **Not** resurrected as an alias — doing so
+  would re-open the collision the rename closed, and contradict the document the
+  engine derives from.
+- **`R:` → `<return>`.** The engine emits `<user-expectative expects="…">`, and
+  the draft's own §8 already listed `<user-expectative>` as the form in use — it
+  disagreed with itself, one section to the next.
+
+Four structural disagreements resolved in the engine's favour and recorded in
+§9 of the new file rather than left to be rediscovered: `<literal>` vs
+`<user-input>`, `<emotion tone="eth prd">` vs `<mood dominant="enthusiasm"
+also="pride">`, `<item>` wrappers for comma-separated operands, and the
+`<plain>`/`<br/>` spellings of `<off>`/`<break/>`.
+
+### The test is the point
+
+`XML_REFERENCE.md` would go stale the same way the draft did, so the suite reads
+it. `D-03` parses the vocabulary tables and holds every row against
+`elName(classify(x))`; `D-04` catches the reverse gap, a command in the engine
+that the reference never mentions; `D-06` pins `BASE` by name so the specific
+stale row cannot come back. This is the guard `GLOSSARY.md` already has from
+`X-01`/`X-14`, pointed at the other end of the pipeline.
+
+Checked by breaking it on purpose: renaming one element in the file and adding a
+`[base` row makes `D-03` and `D-06` fail and the suite exit non-zero.
+
+### Two things the draft got right that are not built
+
+Both improve the deliverable and both would need `fromXML()` changed in step, so
+they are recorded in §9 and left for a decision rather than folded in quietly:
+
+- `[pt'1.1'` → `<part n="1.1">`, instead of the number arriving as `<user-input>`.
+- `[if'cond'…` → `<if cond="…">`, instead of the condition arriving as `<user-input>`.
+
+### Corrected while writing it
+
+Two examples in the new reference were wrong when first drafted and were caught
+by running them, which is the only reason they are not wrong now:
+
+- `[in-rwk/fmt/impr` does **not** chain three siblings. `/` opens a chain after
+  `-` but does not repeat as a separator, so `rwk` binds and `/fmt/impr` falls
+  through to prose as `<off>`. The chaining operator is `,` — `[in-rwk,fmt,impr`.
+- `[ins[rwk][fmt][impr]]` is not equivalent to the chain either: each bracketed
+  command asks for its own operand, so it yields three `<needs>` where the chain
+  yields three bare elements.
+
+---
+
+## [1.3.3.00] — EN-EU does something now
+
+The `EN-EU` chip had been in the header since the beginning with nobody
+listening to the click: the markup was there, the listener never was, and a
+half-filled `I18N` table with four keys sat next to it. Switching language did
+nothing. It does now, and the second digit moves alone — the frontend changed,
+so nothing to its right resets.
+
+### The part that did not need translating
+
+`INSTR`, `STRUCT`, `META`, `EMO` and `SESSION` are **already English**, because
+they reach the deliverable — an `INSTR` gloss is what becomes `<criticize>` in
+the XML. So in EN the command browser stops showing the pt-BR gloss from `CATS`
+and shows the engine's own, through `classify()`. That is 104 command glosses
+that never had to be written twice, and it means the table on screen says
+exactly what the XML will say.
+
+Only the twelve `CATS` category labels and notes needed an English side, and
+they live in the interface layer where `CATS` already belonged.
+
+### The part that reaches the deliverable
+
+A form's field question becomes `<needs>` in the XML, so it was pt-BR text
+crossing into an English artefact — an inconsistency the language boundary
+of `1.3.0.0` named but did not reach. In EN it now comes out English, along
+with `[nt'target']`, the step and error-condition placeholders, and the `[rev]`
+/ `[scru]` texts. Same for the form's `title` and `hint`.
+
+The English form data is an **overlay keyed by id** (`MOLDES_EN`), not `_en`
+fields threaded through the pt-BR structure: the original table is untouched,
+and a missing key falls back to pt-BR for that piece alone instead of blanking
+it.
+
+### The engine's own diagnostics
+
+`G()` takes a second language. The English label and message arrive as the 5th
+and 6th arguments and `opts.lang` picks; with no English twin the pt-BR one
+still shows, so a call site missed in some future edit surfaces in the wrong
+language rather than empty. All 27 diagnostics have both, and the UI passes
+`OPTS.lang` so the "what is left to say" panel follows the chip.
+
+### Mechanics
+
+- Static screen text is tagged in the HTML (`data-i18n`, `-html`, `-ph`) and
+  filled by one loop, so the dictionary does not keep a list of element ids
+  that drifts from the markup.
+- The choice persists (`glyph.ui.lang.v1`) and is restored **before the first
+  paint** — restored after, the screen would be built in pt-BR and flash into
+  English in front of someone who had already chosen English.
+- `t()` falls back to pt-BR for a missing key, then to the key itself: a raw
+  key on screen is easier to find than a blank.
+- Preset chips and the open editor's parameter summary are redrawn on switch.
+  Both were rendered once and would otherwise have kept the language they were
+  born in — the preset row was doing exactly that until it was caught.
+
+The preset examples are translated **source and all**. A pt-BR example under an
+English screen teaches the syntax and obstructs the reading at the same time.
+What does not change is the shape: same commands, same order, same diagnostics
+— only the human words move (the block name, the literals, and the two
+Portuguese variable names, `marg`/`dif`, which became `margin`/`difficulty`).
+Checked rather than assumed: all four parse to an identical command sequence and
+an identical set of diagnostic codes in both languages, so each example still
+demonstrates precisely what it demonstrated.
+
+---
+
+## [1.2.3.00] — the XML comes back, and the screen learns to keep things
+
+The panels stopped being a one-way display. The XML is editable and returns to
+source, the burn has its own panel, every representation can be saved to a file,
+and the templates and moulds a person writes survive the reload.
+
+**The version scheme changed with this release**, and this release is why. Under
+the old `a.b.c.d` a moving digit reset everything to its right, so a batch of
+buttons would have carried `1.3.0.0` to `2.0.0.0` — a number that announces a
+new product line for an afternoon of interface work. The number now reads
+`release.frontend.rules.minor`, no digit resets any other, and the frontend
+moving from `1` to `2` costs the engine nothing it had earned. See the note at
+the top of this file.
+
+### The inverse — `fromXML()`
+
+The chain was `human → glyph → xml → machine` and it only ran one way. Editing
+the XML meant editing the deliverable and abandoning the source that produced
+it. `fromXML(xml, opts)` reads the emitter's own output back into bracket
+source and returns `{ src, diag }`, never throwing — a hand-edited panel is one
+of its inputs, so malformed XML has to answer with diagnostics the way `parse()`
+answers bad Glyph with gaps.
+
+Two pieces make it work, and both are consequences of how `buildXml` already
+writes:
+
+- **A reverse vocabulary map.** `elName()` kebab-cases the English *gloss*, not
+  the canonical, so `<criticize>` has to find its way back to `CRIT`. The map
+  is built by walking `MODE → STRUCT → META → INSTR` in the same order
+  `classify()` probes them, first writer winning. That order is not a detail:
+  `PH`, `TPL` and `UNLS` each sit in two tables, and `classify()` can never
+  reach the `INSTR` copy. `glossCollisions` is exported and asserted empty, so
+  a later vocabulary edit cannot introduce a real ambiguity in silence.
+- **A hand-written XML reader.** `DOMParser` exists only in the browser, and the
+  CLI and the test suite run on plain Node with no dependencies — using it would
+  put the inverse behind a wall the tests cannot reach and split the engine in
+  two again, which is what v1.0.9 closed. The dialect is small and self-imposed
+  (`buildXml` escapes `& < > "`, writes no namespaces, CDATA or DTD), so this
+  reads that dialect and says so, rather than pretending to be an XML parser.
+
+**Three things do not come back, each pinned by a test so none is "fixed" by
+accident:**
+
+| what | why | reading chosen |
+|---|---|---|
+| `[tpl:name'…']` vs `[--name…]` | both emit `<template name="…">`, nothing separates them | always the `[--` invocation — a repo-wide grep found no `[tpl:` in real use |
+| content appended past a template's declared params | `collectFills`' `extra` carries no slot once expanded | dropped; the declared fills return by name |
+| text holding `' \` [ ]` or newlines | `esc`/`xesc` never escaped them and the literal grammar ends on them | `litSafeXml()`, the same substitution the interface already made for form fields |
+
+`<needs>` is written in three shapes and only one of them is source: a real
+`[ph-name]` hole carries an alpha `slot`, while the `FRAMES` and `SLOTS` fillers
+carry none or a bare number. The fillers rebuild to **nothing** and are
+regenerated by the next pass — writing them back would turn the engine's
+question into the human's answer.
+
+`<block>` is the other trap: the segment wrapper and the `STRUCT` command
+`[block'…']` share an element name, and only position plus the `once` attribute
+tell them apart. Case `F-06` holds that line.
+
+Also new: `--from-xml` on the CLI, and 12 cases under `fromXML` in
+`test-corpus.js`. The oracle is the `.hgml` one turned around — the XML is
+regenerated from the reconstructed source and compared against the XML it came
+from. Equality on the *source* would be the wrong test, because aliases
+normalise (`[rw` → `[rwk`), positional template fills return named, and `;;`
+moves to the end of its segment. All of those are the same message.
+
+### The screen
+
+- **The XML panel edits.** A toggle swaps it for a textarea; applying runs
+  `fromXML` and, on success, replaces the source and detaches the mould. That
+  is deliberately the *same* authority "soltar do molde" already granted the
+  source box — one concept with two doors, rather than a second, competing idea
+  of which panel is in charge. A `fix`-level diagnostic refuses the apply and
+  says why, instead of trading working source for broken XML.
+- **A `.hgml` panel**, fed live from the same `run()` pass as the XML and the AST.
+- **Download** for `.pgml`, `.xml`, `.json` and `.hgml`, off one `downloadText()`
+  helper that the Markdown exports reuse.
+- **Every card folds.** `<section class="card">` became
+  `<details class="card">` and `.hd` became `<summary class="hd">` — the same
+  first child, so `.card > .hd` and `.card > .bd` never had to change. Open and
+  closed persists. A guard on the summary cancels the fold when the click landed
+  on a button, since the buttons live in the header.
+- **`copiar ast` works.** It had been markup with no listener since it was
+  written: it clicked and did nothing. The clipboard logic is now one
+  `wireCopyButton()` shared by all three copy buttons.
+
+### Kept things
+
+Templates and moulds a person writes now persist, in `localStorage`, layered
+over the built-ins at load — the committed `glyph-templates.json` and
+`glyph-moldes.js` stay the source of truth and are never written to, so **no
+`build-templates.js` rebuild is part of this change.** A user template shadows a
+built-in of the same name, and `refreshTemplates()` re-registers the merged set
+with the *engine*, not just the list, or `[--my-template` would look right on
+screen and refuse to expand.
+
+Import and export are Markdown: a `#` name, a paragraph, and the body in a
+fenced block. **The parameters are not written in the file.** They are read out
+of the body by `extractPlaceholders()`, which parses it with the real parser and
+collects the `PH` nodes — whoever writes `[ph-alvo` has already said the name,
+and a header repeating it is the same list in two places, which is how two
+copies of one thing drift apart. For a mould the wrapping command comes along
+too, because a mould's slot *is* `[tgt[ph-x`…`]]`; `## Rótulo` starts a phase,
+and fences are tolerated so one text serves both the editor and the file.
+
+Three `localStorage` keys, not one: the fold writes on every click, and the kept
+things write rarely and carry their own schema. Bundled, a schema change in
+either would drag the other through a migration it did not need.
+
+**Known limit, stated rather than discovered later:** a mould written this way
+is fixed-phase. The built-in `fluxo` mould's open-ended step sequence is a
+bespoke piece of the interface and is not representable from generic Markdown.
 
 ---
 
