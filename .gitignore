@@ -1,2 +1,7 @@
 # Obsidian editor state — local, not project content
 .obsidian/
+
+# Per-machine Claude Code state: accumulates whatever a session happened to
+# run, so it is the file that would eventually carry something local into a
+# public history. The durable, shareable rules live in .claude/settings.json.
+.claude/settings.local.json
