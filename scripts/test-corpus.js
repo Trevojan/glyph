@@ -47,8 +47,11 @@ const POSITIVE = [
     cmds:["CRIT","CTX","ASK"] },
   { id:"P-05", name:"Compare two terms.", src:"[CMP'termo1','termo2']",
     clean:true, xml:["<compare>"] },
+  /* the two bare links now say which operator attached them; before, the XML
+     could not tell `-impr-fmt` from `-impr,fmt` and neither could fromXML */
   { id:"P-06", name:"Review, improve and format.", src:"[REV-IMPR-FMT]",
-    clean:true, cmds:["REV","IMPR","FMT"], xml:["<review>","<improve/>","<format/>"] },
+    clean:true, cmds:["REV","IMPR","FMT"],
+    xml:["<review>", '<improve chain="extend"/>', '<format chain="extend"/>'] },
   { id:"P-07", name:"Section A: criticize and propose.", src:"[SECTION'sectA',[CRIT],[PROP[ALT]]]",
     cmds:["SECTION","CRIT","PROP","ALT"] },
   { id:"P-08", name:"Prefix comparison gt.", src:"[COND[gt[VAR'A'],[VAR'B']],[INSTOF[SUM],[ASK;",
@@ -747,6 +750,68 @@ function runFromXmlChecks() {
      notXml.src === "" && notXml.diag.some(d => d.code === "NoGlyphRoot")
        ? null : "expected NoGlyphRoot, got " + JSON.stringify(notXml.diag));
 
+  /* ---- the chain operator, from OPERATOR_TARGET §8.1 -------------------
+     Every one of these forbids a specific way the operator can go back to
+     being unrecoverable. The bucket had no extend case at all before, which
+     is why the inverse could break and still read 12/12. */
+
+  const fab = trip("[in[rtnl-go`cover X`]]");
+  ok("F-13", "an extend does not fabricate a <needs> on the way back",
+     fab.stable && !/what to execute/.test(fab.x1) && !/what to execute/.test(fab.x2)
+       ? null : "fabricated: " + JSON.stringify(fab.back.src));
+
+  const ext = trip("[a-b-c]"), itm = trip("[a-b,c]");
+  ok("F-14", "extend and item stay distinct through the round trip",
+     ext.stable && itm.stable && ext.x1 !== itm.x1 ? null
+       : "collapsed: " + JSON.stringify(ext.back.src) + " vs " + JSON.stringify(itm.back.src));
+
+  const brk = trip("[in-[rwk]]");
+  ok("F-15", "chain does not leak onto a bracketed child",
+     brk.stable && !/<rework[^>]*chain=/.test(brk.x1) && /<needs>what to rework<\/needs>/.test(brk.x1)
+       ? null : "leaked, or the <needs> is missing: " + brk.x1.replace(/\s+/g, " "));
+
+  ok("F-16", "`-[` is a synonym of `[`",
+     G.toXML("[in-[rwk]]", opts) === G.toXML("[in[rwk]]", opts) ? null
+       : "the two forms diverged");
+
+  const germ = trip("[--germinate]");
+  ok("F-17", "chain never reaches a placeholder name",
+     !/<needs[^>]*chain=/.test(germ.x1) ? null : "chain on a <needs slot>");
+
+  const kids = G.fromXML('<glyph><block once="true"><instruction>' +
+    '<rework chain="extend"><user-input>x</user-input></rework></instruction></block></glyph>', opts);
+  ok("F-18", "a chain element with children is named, not silently repaired",
+     (kids.diag || []).some(d => d.code === "XmlChainHasChildren" && d.sev === "fix") ? null
+       : "no XmlChainHasChildren at fix");
+
+  const first = G.fromXML('<glyph><block once="true"><instruction>' +
+    '<rework chain="item"/><format chain="item"/></instruction></block></glyph>', opts);
+  ok("F-19", "a run starting with `,` is promoted and reported",
+     (first.diag || []).some(d => d.code === "XmlChainStartsWithItem" && d.sev === "fix") &&
+     G.parse(first.src, opts).gaps.every(g => g.sev !== "fix")
+       ? null : "not reported, or the reconstruction is not valid Glyph: " + JSON.stringify(first.src));
+
+  const edit = G.toXML("[ins-alw,nev]", opts);
+  ok("F-20", "force=\"editorial\" keeps its place beside chain",
+     /<always force="editorial" chain="extend"\/>/.test(edit) ? null
+       : "attribute order or presence changed: " + edit.replace(/\s+/g, " "));
+
+  const seg = trip("[in-rwk;[in-fmt]");
+  ok("F-21", "a chain does not cross a segment boundary",
+     seg.stable && (seg.x1.match(/<block once="true">/g) || []).length === 2 &&
+     !/<instruction[^>]*chain=/.test(seg.x1)
+       ? null : "the chain crossed the `;`: " + seg.x1.replace(/\s+/g, " "));
+
+  const bareUnk = trip("[in-zzz]");
+  ok("F-22", "an unknown bare tag keeps its chain",
+     bareUnk.stable && /<unresolved tag="zzz" chain="extend"\/>/.test(bareUnk.x1) ? null
+       : "lost: " + bareUnk.x1.replace(/\s+/g, " "));
+
+  const emo = trip("/eth/[crit'x']");
+  ok("F-23", "the inverse writes the slash spelling, never the backslash",
+     emo.stable && /\/eth\//.test(emo.back.src) && emo.back.src.indexOf("\\") === -1
+       ? null : "the abandoned spelling came back: " + JSON.stringify(emo.back.src));
+
   return F.length;
 }
 const rF = runFromXmlChecks();
@@ -1086,7 +1151,7 @@ console.log(" Constraints  " + rK + "/" + CONSTRAINTS.length);
 console.log(" Guard        " + rG + "/" + POSITIVE_WITH_RULES.length);
 console.log(" Composition  " + rX + "/17");
 console.log(" .hgml burn   " + rH + "/9");
-console.log(" fromXML      " + rF + "/12");
+console.log(" fromXML      " + rF + "/23");
 console.log(" reference    " + rD + "/8");
 console.log(" snapshot     " + rSN + "/4");
 console.log(" global store " + rGS + "/3");

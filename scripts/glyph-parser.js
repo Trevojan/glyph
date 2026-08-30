@@ -1235,13 +1235,28 @@
         if (tk.k === "open" && !tk.v)
           G("fix", "sem nome", "<code>[</code> sem nome. Um <code>[</code> = um comando.", "EmptyCommandName",
             "no name", "<code>[</code> with no name. One <code>[</code> is one command.");
+        /* `[ph-alvo` uses `-` as a name binder, not a chain operator: the bare
+           tag becomes the placeholder's name and is consumed by the PH branch
+           rather than emitted as an element. Its origin would read "extend",
+           which is an artefact of the shared lexer path — so it is suppressed
+           and no chain attribute can reach a <needs slot="…">. */
+        var isSlotName = inPH && tk.k === "bareTag";
         var nd = {
           id:++uid, raw:tk.v, tier:cl.tier, canonical:cl.canonical, gloss:cl.gloss,
           alias:!!cl.alias, children:[], emotions:[], colon:null, autoClosed:false, tok:tk,
           editorial:!!EDITORIAL_ONLY[cl.canonical],
-          origin: pendingOrigin || (tk.k === "bareTag" ? "extend" : (parentNode ? "nest" : "root")),
-          chainElement: tk.k === "bareTag" || pendingOrigin === "extend" || pendingOrigin === "divide",
-          slotName: inPH && tk.k === "bareTag",
+          /* which operator produced the edge to this node's parent */
+          origin: isSlotName ? null
+                : (pendingOrigin || (tk.k === "bareTag" ? "extend" : (parentNode ? "nest" : "root"))),
+          /* Narrowed to the one question it is actually asked: was this written
+             BARE, with no `[` of its own, and therefore cannot hold an operand?
+             It used to answer that *and* "which operator attached it", and the
+             two are independent — `[in-rwk]` and `[in-[rwk]]` share an origin
+             and differ in bareness. Conflating them is why an extend could not
+             be recovered from the XML, and why `-[` silently cancelled the
+             <needs> a bracketed command asks for. */
+          chainElement: tk.k === "bareTag",
+          slotName: isSlotName,
           depth: stack.length
         };
         if (cl.tier === "unknown" && !nd.slotName) {
@@ -1683,9 +1698,19 @@
       }
 
       var open, closeName;
+      /* `chain` records the operator that attached a BARE element, and only a
+         bare one. A bracketed child already announces its own scope, so marking
+         it too would force fromXML() to decide whether chain="extend" meant
+         `-rwk` or `-[rwk]` — a second bit smuggled into one attribute. `-[`
+         normalises to `[` instead, and the attribute means exactly one thing:
+         this element was written bare, by this operator. */
+      var chainAttr = (nd.chainElement && (nd.origin === "extend" || nd.origin === "item"))
+        ? 'chain="' + nd.origin + '"' : null;
+
       if (nd.tier === "unknown" || nd.tier === "empty") {
         var at = ['tag="' + xesc(nd.raw || "") + '"'];
         if (nd.suggestion) at.push('nearest="' + xesc(nd.suggestion.name.toLowerCase()) + '"');
+        if (chainAttr) at.push(chainAttr);   /* so [in-zzz reads back as a chain link */
         open = "<unresolved " + at.join(" ");
         closeName = "unresolved";
       } else {
@@ -1693,6 +1718,7 @@
         var attrs = [];
         if (nd.editorial) attrs.push('force="editorial"');
         if (nd.colon) attrs.push('name="' + xesc(nd.colon) + '"');
+        if (chainAttr) attrs.push(chainAttr);
         /* `describe` makes the message carry its own semantics, so whoever
            reads it does not need the Glyph vocabulary loaded to know what
            `<scrutinize>` means. Nothing here is invented: `means` is the gloss
@@ -1804,6 +1830,11 @@
       element: (nd.tier === "unknown" || nd.tier === "empty") ? null : elName(nd.canonical, nd.tier, nd.gloss),
       isAlias: !!nd.alias,
       chainElement: !!nd.chainElement,
+      /* The operator that produced the edge to the parent. The parser has
+         always computed it; it was simply never exported, which is what made
+         `[a-b,c]` and `[a-b-c]` serialise to one identical AST and left
+         fromXML() unable to tell them apart. */
+      origin: nd.origin || null,
       slotName: !!nd.slotName,
       editorial: !!nd.editorial,
       name: nd.colon || null,
@@ -1841,6 +1872,13 @@
       if (v === null || v === false || v === "" || (Array.isArray(v) && !v.length)) continue;
       if (k === "raw" && o.canonical && String(v).toUpperCase() === o.canonical) continue;
       if (k === "compositionDepth" && o.species === "atom") continue;   // átomo é sempre 0
+      /* `origin` is a non-empty string on every node, so exporting it naively
+         would put "root" or "nest" on the great majority of them and undo the
+         thinning this function exists for. Both are derivable from position —
+         root is a child of the segment, nest is a child of a command — while
+         `extend` and `item` are not, and they are the whole reason the field
+         is exported. `{verbose:true}` keeps them, as it keeps everything. */
+      if (k === "origin" && (v === "root" || v === "nest")) continue;
       out[k] = v;
     }
     return out;
@@ -2247,8 +2285,36 @@
 
   function xmlKids(el, diag) {
     var out = "";
-    (el.children || []).forEach(function (c) { out += fromXmlNode(c, diag); });
+    /* `chain="item"` is the `,` of a run and cannot be the run's first link:
+       `[in,rwk` does not open a chain. The XML panel is hand-editable, so this
+       arrives from a human rather than from the emitter, and the choice is
+       between repairing it in silence and saying so. It is promoted to `-`
+       and reported — the same rule the rest of this work is built on. */
+    var firstChain = true;
+    (el.children || []).forEach(function (c) {
+      if (c.tag === "#text" || c.tag === "mood" || c.tag === "break") { out += fromXmlNode(c, diag); return; }
+      var op = c.attrs && c.attrs.chain;
+      if (op === "extend" || op === "item") {
+        if (firstChain && op === "item") {
+          diag.push({ sev:"fix", code:"XmlChainStartsWithItem",
+            msg:"o primeiro elo de uma cadeia não pode ser <code>chain=\"item\"</code> — " +
+                "<code>,</code> continua uma cadeia, não a abre. Promovido a <code>-</code>." });
+          c = { tag:c.tag, attrs:cloneWithChain(c.attrs, "extend"), children:c.children };
+        }
+        firstChain = false;
+      } else if (c.tag !== "user-input") {
+        firstChain = true;   /* a bracketed sibling ends the run */
+      }
+      out += fromXmlNode(c, diag);
+    });
     return out;
+  }
+
+  function cloneWithChain(attrs, v) {
+    var o = {}, k;
+    for (k in attrs) if (Object.prototype.hasOwnProperty.call(attrs, k)) o[k] = attrs[k];
+    o.chain = v;
+    return o;
   }
 
   function fromXmlLogic(el, diag) {
@@ -2298,7 +2364,11 @@
     if (tag === "mood" || tag === "break") return "";   /* handled per block */
     if (tag === "logic") return fromXmlLogic(el, diag);
     if (tag === "template") return fromXmlTemplate(el, diag);
-    if (tag === "unresolved") return "[" + litSafeXml(el.attrs.tag || "") + xmlKids(el, diag) + "]";
+    if (tag === "unresolved") {
+      var uop = chainOpOf(el, diag, litSafeXml(el.attrs.tag || ""));
+      if (uop) return uop + litSafeXml(el.attrs.tag || "");
+      return "[" + litSafeXml(el.attrs.tag || "") + xmlKids(el, diag) + "]";
+    }
     if (tag === "needs") {
       /* Three shapes share this element, and one attribute tells them apart:
          a real [ph-name] hole carries an alpha slot, while the FRAMES and
@@ -2320,10 +2390,39 @@
             "o conteúdo foi mantido, a marca não." });
       return xmlKids(el, diag);
     }
+    /* A bare link carries no scope, so it rebuilds as the operator plus the
+       name — no brackets, no recursion into children. Writing `[name…]` here is
+       exactly what fabricated a <needs>: the bracket gave the command a scope
+       to want an operand in, and the engine duly asked for one the author had
+       never omitted. Writing `-name` instead lets the following <user-input>
+       land on the parent, where the author put it.
+
+       It runs after GLOSS_REVERSE, so an alias rebuilds under its canonical
+       name like the bracketed path, and it is the only writer of `-` and `,`,
+       so a run comes back in source order with no reordering pass. */
+    var op = chainOpOf(el, diag, name);
+    if (op) return op + name;
+
     /* `force="editorial"` is not read back: nd.editorial comes from
        EDITORIAL_ONLY keyed by the canonical, so it returns on its own. */
     var head = "[" + name + (el.attrs.name ? ":" + litSafeXml(el.attrs.name) : "");
     return head + xmlKids(el, diag) + "]";
+  }
+
+  /* Shared by the resolved and unresolved branches. Returns "-" or "," for a
+     chain link, or null. A chain element with children is malformed — a bare
+     tag cannot hold any — so the children are re-attached to the parent, which
+     is what the bracket form would have done, and the reader says so rather
+     than repairing it quietly. */
+  function chainOpOf(el, diag, name) {
+    var op = el.attrs && el.attrs.chain;
+    if (op !== "extend" && op !== "item") return null;
+    var kids = (el.children || []).filter(function (c) { return c.tag !== "#text"; });
+    if (kids.length)
+      diag.push({ sev:"fix", code:"XmlChainHasChildren",
+        msg:"<code>&lt;" + esc(el.tag) + " chain&gt;</code> tem filhos — um elo escrito sem " +
+            "<code>[</code> não tem escopo para segurá-los. Reanexados ao pai." });
+    return op === "item" ? "," : "-";
   }
 
   function fromXmlBlock(el, diag) {
