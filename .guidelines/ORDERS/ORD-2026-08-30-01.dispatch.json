@@ -182,6 +182,13 @@
       "finding": "parse() returns {segments, gaps, tokens} and exposes diagnostics as `gaps`, while serializeAST projects them under the name `diagnostics`. A consumer reading parse().diagnostics gets undefined and sees an empty result rather than an error",
       "severity": "medium",
       "consequence": "the same silent-wrong-answer class the order exists to remove, one level up: a caller asking the wrong question is told nothing is wrong. It cost a wrong finding in this very order. Under T23 the AST projection name and the parse return name should agree, or the mismatch should be documented in XML_REFERENCE §11"
+    },
+    {
+      "id": "A25",
+      "finding": "toHGML has no depth guard. It survives 1600 levels of nesting and overflows the stack between 1600 and 3200, while toXML survives 8000 and toAST truncates at LIMITS.astDepth with an explicit marker",
+      "severity": "medium",
+      "consequence": "the two hardened projections each have a vector saying so — L-01 for the XML at 8000 levels, L-02 for the AST truncation. The burn was given neither, and nothing ever crossed the LONG sources with the .hgml projection, so the gap was invisible. Pinned in KNOWN_THROWS with its reason rather than hidden: a new throw fails SN-01, and closing this one means deleting the entry, not regenerating the snapshot",
+      "found_by": "the projection snapshot, on its first run"
     }
   ],
   "four_guarantees": {
@@ -307,6 +314,10 @@
     {
       "id": "K17",
       "expected": "the diagnostics channel has one name across parse(), serializeAST() and the documentation, or the mismatch is stated in the reference and covered by a vector"
+    },
+    {
+      "id": "K18",
+      "expected": "toHGML has the same depth treatment as the other two projections — a ceiling with a diagnostic, or an iterative writer — and a LONG vector that says which, so the three projections stop disagreeing about what deep nesting means"
     }
   ],
   "locks": [
@@ -336,7 +347,8 @@
     "T24: completeness outranks size on the source of truth; thinning belongs to the panel projection alone",
     "T25: serializeAST projects diagnostic positions — a refusal without a coordinate is not verifiable by a reader without the engine",
     "T26: a generated document without a consumer is a document whose consumer has not been built yet. It is improved until it has one, never deleted for being unused",
-    "T27: the source extension is .pgml; .glyph is taken in another context and is never used for Glyph source"
+    "T27: the source extension is .pgml; .glyph is taken in another context and is never used for Glyph source",
+    "T28: a known loss is pinned with its reason and a new one fails the gate; a snapshot is never regenerated to make a red suite green"
   ],
   "assumptions": [],
   "cascade": {
