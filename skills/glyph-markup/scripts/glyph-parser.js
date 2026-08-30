@@ -1926,7 +1926,32 @@
      downstream may switch on them — thinning a payload is not worth breaking
      a consumer over.
 
-     `{verbose:true}` restores the old shape. */
+     The thinning applies to the `panel` projection only; the exported
+     `full` projection keeps every field. See projectionOf(). */
+  /* Two named projections, replacing a boolean.
+   *
+   *   full   every declared field, always present, no drop rules
+   *   panel  the thinned shape, for the screen
+   *
+   * The distinction is load-bearing now that the AST is the source of truth
+   * (T23). Under thinning, a field's ABSENCE means null, false, "" or [] — and
+   * also "dropped because it repeated the canonical", and also "dropped because
+   * this is an atom", and also "an older engine never had it". Six states in
+   * one signal. That is survivable in a panel a human skims and fatal in a
+   * payload that must be diffed against another machine's, or read back into
+   * source: a reconstructor cannot tell a missing operand from a dropped one.
+   *
+   * So the EXPORT is `full` by default and `panel` is asked for explicitly, by
+   * the screen, which is the only consumer that ever wanted it. `verbose:true`
+   * kept as an alias for one release. */
+  function projectionOf(opts) {
+    if (opts && opts.projection === "panel") return "panel";
+    if (opts && opts.projection === "full") return "full";
+    if (opts && opts.verbose === true) return "full";   /* deprecated alias */
+    if (opts && opts.verbose === false) return "panel"; /* deprecated alias */
+    return "full";
+  }
+
   function astLean(o) {
     var out = {}, k, v;
     for (k in o) {
@@ -1940,7 +1965,7 @@
          thinning this function exists for. Both are derivable from position —
          root is a child of the segment, nest is a child of a command — while
          `extend` and `item` are not, and they are the whole reason the field
-         is exported. `{verbose:true}` keeps them, as it keeps everything. */
+         is exported. The `full` projection keeps them, as it keeps everything. */
       if (k === "origin" && (v === "root" || v === "nest")) continue;
       out[k] = v;
     }
@@ -1969,7 +1994,7 @@
       }
 
       var obj = astShallow(f.nd);
-      if (!(opts && opts.verbose)) obj = astLean(obj);
+      if (projectionOf(opts) === "panel") obj = astLean(obj);
       f.arr.push(obj);
       if (astHasBody(f.nd)) {
         obj.body = [];
@@ -1987,6 +2012,10 @@
     var out = {
       type: "GlyphAST",
       version: VERSION,
+      /* A reader must never have to infer which projection it was handed by
+         noticing which fields happen to be absent — that inference is exactly
+         what the thinning made impossible. The envelope says so. */
+      projection: projectionOf(opts),
       segments: segments.map(function (s) {
         var seg = {
           type: "Segment",
@@ -1996,7 +2025,7 @@
           breaks: s.breaks,
           autoClosedCount: s.autoClosed
         };
-        if (!(opts && opts.verbose)) seg = astLean(seg);
+        if (projectionOf(opts) === "panel") seg = astLean(seg);
         // not map(astNode) directly: map passes the index as the 2nd argument
         seg.body = s.children.map(function (nd) { return astNode(nd, stats, opts); });
         return seg;

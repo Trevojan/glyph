@@ -456,7 +456,9 @@
 
     // v1.0.9: os nós crus têm `parent`/`tok` e fechavam ciclo — JSON.stringify
     // estourava aqui e matava o resto de run(). O módulo serializa direito.
-    lastAst = JSON.stringify(Core.serializeAST(res.segments, res.gaps), null, 2);
+    /* the panel projection: thinned for a human skimming it. The export is
+         `full` and never passes through here. */
+      lastAst = JSON.stringify(Core.serializeAST(res.segments, res.gaps, { projection:"panel" }), null, 2);
 
     /* a queima roda com a mesma fonte; sem a tabela de composição carregada
        toHGML devolve o aviso em vez de quebrar, e o painel mostra o aviso. */

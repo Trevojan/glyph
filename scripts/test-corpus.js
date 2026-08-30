@@ -516,20 +516,27 @@ function runExpansionChecks() {
   ok("X-07", "with no store loaded, species is null and nothing breaks",
      (bare.segments[0].body[0].species == null) ? null : "species não got null sem store");
 
-  /* v1.2.0.1 — the AST used to carry all sixteen fields on every node whether
-     or not they said anything, and 43% of them were false/null/[]. */
-  const lean = G.toAST("[crit'x']", opts);
-  const verbose = G.toAST("[crit'x']", { ...opts, verbose: true });
+  /* v1.2.0.1 thinned the AST because 43% of every node was false/null/[] and
+     nobody reads a 23 KB panel. v2.4.5.01 keeps the thinning and moves it: the
+     AST is the source of truth now, so completeness outranks size on what is
+     EXPORTED and the thinning belongs to the screen. Hence two named
+     projections instead of a boolean, and `full` as the default — a payload
+     that must be diffed or read back cannot afford a field's absence to mean
+     six different things. */
+  const lean = G.toAST("[crit'x']", { ...opts, projection: "panel" });
+  const verbose = G.toAST("[crit'x']", opts);
   const leanNode = lean.segments[0].body[0];
-  ok("X-08", "the AST no longer carries empty fields",
+  ok("X-08", "the panel projection carries no empty fields",
      (!("isAlias" in leanNode) && !("autoClosed" in leanNode) && !("suggestion" in leanNode))
        ? null : "empties left: " + JSON.stringify(Object.keys(leanNode)));
   ok("X-09", "whatever says something is still there",
      (leanNode.canonical === "CRIT" && leanNode.gloss && leanNode.species === "composite")
        ? null : "dropped a field with content: " + JSON.stringify(leanNode));
-  ok("X-10", "`verbose` restores the whole old shape",
+  ok("X-10", "the full projection is the whole shape, and is the default",
      ("isAlias" in verbose.segments[0].body[0] &&
-      JSON.stringify(verbose).length > JSON.stringify(lean).length)
+      JSON.stringify(verbose).length > JSON.stringify(lean).length &&
+      verbose.projection === "full" && lean.projection === "panel" &&
+      G.toAST("[crit'x']", { ...opts, verbose: true }).projection === "full")
        ? null : "verbose did not bring the fields back");
 
   /* v1.2.0.1 — `describe` carries the semantics into the message, so whoever
