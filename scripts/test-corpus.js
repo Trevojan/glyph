@@ -1001,6 +1001,77 @@ function runReferenceChecks() {
 const rD = runReferenceChecks();
 
 /* ------------------------------------------------------------------ *
+ * the AST schema — the two directions that hold each other
+ *
+ * `.guidelines/ast-schema.json` is hand-authored, deliberately: a schema
+ * generated from the engine would agree with it by construction and catch
+ * nothing. So glyph-check validates envelopes against the declaration, and
+ * this bucket asserts the other direction — that what the engine emits
+ * conforms. Drift in either one is then a failure, the same way
+ * XML_REFERENCE and D-03 hold each other.
+ *
+ * Acceptance is the mutation criterion from BUNDLE_TARGET §5: break ten
+ * things, catch at least nine. A validator nobody has broken is a validator
+ * nobody knows the shape of.
+ * ------------------------------------------------------------------ */
+function runSchemaChecks() {
+  console.log("\n--- the AST schema — glyph-check against the engine ---");
+  const D = [];
+  const ok = (id, name, why) => {
+    if (why) { console.log("  ✗ " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  ✓ " + id + ": " + name); D.push(id); }
+  };
+
+  let check = null;
+  try { check = require("./glyph-check.js"); }
+  catch (e) { ok("SC-01", "glyph-check loads", e.message); return D.length; }
+
+  const opts = { templates: TPL.templates, rules: RULESTORE,
+                 expansions: require("../.guidelines/expansions.json") };
+  const CORPUS = [].concat(POSITIVE, INCOMPLETE, INVALID, REGRESSION, LONG,
+                           TEMPLATES, CONSTRAINTS, RULE_CASES);
+
+  const bad = [];
+  CORPUS.forEach(c => {
+    if (!c || !c.id || typeof c.src !== "string") return;
+    let env;
+    try { env = G.toAST(c.src, opts); } catch (e) { bad.push(c.id + ": threw"); return; }
+    const errs = check.validate(env);
+    if (errs.length) bad.push(c.id + ": " + errs[0]);
+  });
+  ok("SC-01", "every corpus envelope conforms to the declared schema",
+     bad.length ? bad.slice(0, 4).join(" | ") + (bad.length > 4 ? " (+" + (bad.length - 4) + ")" : "") : null);
+
+  /* ten mutations, one per rule the schema states, applied to a real envelope */
+  const clone = () => JSON.parse(JSON.stringify(G.toAST("[in-rwk,fmt`x`];/eth/[crit`y`]", opts)));
+  const MUTANTS = [
+    ["envelope type",        e => { e.type = "NotGlyph"; }],
+    ["envelope version",     e => { delete e.version; }],
+    ["envelope projection",  e => { e.projection = "panel"; }],
+    ["undeclared envelope key", e => { e.smuggled = 1; }],
+    ["missing node key",     e => { delete e.segments[0].body[0].origin; }],
+    ["undeclared node key",  e => { e.segments[0].body[0].chainOp = "extend"; }],
+    ["unknown node type",    e => { e.segments[0].body[0].type = "Whatever"; }],
+    ["origin off the list",  e => { e.segments[0].body[0].body[0].origin = "divide"; }],
+    ["literal form off the list", e => {
+       (function f(l){ (l||[]).forEach(n => { if (n.type === "Literal") n.form = "curly"; if (n.body) f(n.body); }); })
+       (e.segments[0].body); }],
+    ["diagnostic at without e", e => {
+       e.diagnostics.push({ code:"X", severity:"fix", label:"l", message:"m", at:{ s:0 } }); }]
+  ];
+  const missed = MUTANTS.filter(m => {
+    const e = clone(); m[1](e);
+    return check.validate(e).length === 0;
+  }).map(m => m[0]);
+  ok("SC-02", "the schema catches at least 9 of 10 mutations",
+     (MUTANTS.length - missed.length) >= 9 ? null
+       : "caught " + (MUTANTS.length - missed.length) + "/10; missed: " + missed.join(", "));
+
+  return D.length;
+}
+const rSC = runSchemaChecks();
+
+/* ------------------------------------------------------------------ *
  * the five authored examples — conformance, not illustration
  *
  * These are the input→XML pairs the Regent wrote by hand: the instrument the
@@ -1276,6 +1347,7 @@ console.log(" Composition  " + rX + "/17");
 console.log(" .hgml burn   " + rH + "/9");
 console.log(" fromXML      " + rF + "/23");
 console.log(" reference    " + rD + "/10");
+console.log(" ast schema   " + rSC + "/2");
 console.log(" examples     " + rE + "/5");
 console.log(" snapshot     " + rSN + "/4");
 console.log(" global store " + rGS + "/3");
