@@ -1108,6 +1108,47 @@ function runAstInvariant() {
      (x1 === x2 && meaning(off) !== meaning(G.fromXML(x1, opts).src)) ? null
        : "the case that justified moving the invariant no longer demonstrates it");
 
+  /* fromAST over the whole corpus. The oracle is toXML on both sides, so the
+     expectations are free — the same shape bucket F uses, pointed at the other
+     inverse. This is what proves the AST is complete: a field the projection
+     forgot shows up here as a reconstruction that does not re-emit. Two did —
+     `expanded` on a template and `slot` on a bound literal, both present in the
+     XML and absent from a projection called `full`. */
+  const astBroke = [];
+  /* the same classification RT-01 uses: a refused source has no meaning to
+     preserve, and the template overflow is a loss README:58 already pins.
+     Applying one rule in one place and not the other is how a suite starts
+     disagreeing with itself. */
+  const notAsked = src => PINNED[src]
+    || (/^\[--[a-z-]+/.test(src) && /\[[a-z]/i.test(src.slice(3)))
+    || (G.parse(src, opts).gaps || []).some(g => g.sev === "fix");
+  CASES.filter(src => !notAsked(src)).forEach(src => {
+    let a, b;
+    try {
+      a = G.toXML(src, opts);
+      const r = G.fromAST(G.toAST(src, opts), opts);
+      b = G.toXML(r.src, opts);
+    } catch (e) { astBroke.push(JSON.stringify(src).slice(0, 40) + ": threw"); return; }
+    if (a !== b) astBroke.push(JSON.stringify(src).slice(0, 55));
+  });
+  ok("RT-04", "fromAST reconstructs every corpus source to the same XML",
+     astBroke.length ? astBroke.slice(0, 5).join(" | ") +
+       (astBroke.length > 5 ? " (+" + (astBroke.length - 5) + ")" : "") : null);
+
+  /* the comma that XML cannot carry, and the AST can */
+  const comma = "[crit[ctx],[ask]]";
+  const viaAst = G.fromAST(G.toAST(comma, opts), opts).src;
+  const viaXml = G.fromXML(G.toXML(comma, opts), opts).src;
+  ok("RT-05", "the AST path keeps a comma the XML path cannot",
+     (/,\s*\[/.test(viaAst) && !/,\s*\[/.test(viaXml)) ? null
+       : "via AST: " + JSON.stringify(viaAst) + " | via XML: " + JSON.stringify(viaXml));
+
+  /* a thinned envelope is refused rather than half-read */
+  const thin = G.fromAST(G.toAST("[in-rwk]", { ...opts, projection: "panel" }), opts);
+  ok("RT-06", "a panel envelope is refused, not guessed at",
+     (thin.src === "" && (thin.diag || []).some(d => d.code === "ThinnedAST" && d.sev === "fix"))
+       ? null : "it tried: " + JSON.stringify(thin.src));
+
   return D.length;
 }
 const rRT = runAstInvariant();
@@ -1459,7 +1500,7 @@ console.log(" Composition  " + rX + "/17");
 console.log(" .hgml burn   " + rH + "/9");
 console.log(" fromXML      " + rF + "/23");
 console.log(" reference    " + rD + "/10");
-console.log(" round trip   " + rRT + "/3");
+console.log(" round trip   " + rRT + "/6");
 console.log(" ast schema   " + rSC + "/2");
 console.log(" examples     " + rE + "/5");
 console.log(" snapshot     " + rSN + "/4");

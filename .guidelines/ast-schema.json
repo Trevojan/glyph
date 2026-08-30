@@ -2,48 +2,150 @@
   "schema": 1,
   "note": "The declared shape of a Glyph AST envelope. HAND-AUTHORED, deliberately: a schema derived from the engine cannot catch the engine, and the whole reason the AST was promoted to source of truth is that another machine must be able to read it without this implementation. glyph-check.js validates envelopes against this file, and the corpus asserts that what the engine emits conforms — so a drift in either direction is caught, the same way XML_REFERENCE and D-03 hold each other.",
   "appliesTo": "the `full` projection. The `panel` projection is thinned for the screen and is deliberately NOT validated: absence there is meaningless, which is exactly why it never leaves the browser.",
-
   "envelope": {
-    "required": ["type", "version", "projection", "segments", "diagnostics"],
-    "optional": ["truncatedNodes"],
-    "constants": { "type": "GlyphAST", "projection": "full" }
+    "required": [
+      "type",
+      "version",
+      "projection",
+      "segments",
+      "diagnostics"
+    ],
+    "optional": [
+      "truncatedNodes"
+    ],
+    "constants": {
+      "type": "GlyphAST",
+      "projection": "full"
+    }
   },
-
   "diagnostic": {
-    "required": ["code", "severity", "label", "message"],
-    "optional": ["at"],
+    "required": [
+      "code",
+      "severity",
+      "label",
+      "message"
+    ],
+    "optional": [
+      "at"
+    ],
     "at": {
-      "required": ["s", "e"],
+      "required": [
+        "s",
+        "e"
+      ],
       "note": "the character span in the source that caused the refusal. Optional because not every diagnostic has a token to point at; required to be well-formed when present, because a coordinate that lies is worse than none."
     },
-    "severity": ["fix", "ask", "note"]
+    "severity": [
+      "fix",
+      "ask",
+      "note"
+    ]
   },
-
   "nodes": {
     "Segment": {
-      "required": ["type", "mood", "isReturn", "continues", "breaks", "autoClosedCount", "body"]
+      "required": [
+        "type",
+        "mood",
+        "isReturn",
+        "continues",
+        "breaks",
+        "autoClosedCount",
+        "body"
+      ]
     },
     "Command": {
       "required": [
-        "type", "raw", "canonical", "tier", "gloss", "element", "isAlias",
-        "chainElement", "origin", "slotName", "editorial", "name", "depth",
-        "autoClosed", "suggestion", "emotions", "species", "compositionDepth", "body"
+        "type",
+        "raw",
+        "canonical",
+        "tier",
+        "gloss",
+        "element",
+        "isAlias",
+        "chainElement",
+        "origin",
+        "slotName",
+        "editorial",
+        "name",
+        "depth",
+        "autoClosed",
+        "suggestion",
+        "emotions",
+        "species",
+        "compositionDepth",
+        "body"
       ],
-      "origin": ["root", "nest", "extend", "item", null],
+      "origin": [
+        "root",
+        "nest",
+        "extend",
+        "item",
+        null
+      ],
       "note": "`origin` records which operator produced the edge to the parent and `chainElement` records whether the node was written bare. They are independent: `[in-rwk]` and `[in-[rwk]]` share an origin and differ in bareness. Conflating them is the defect release 2.4.5.01 exists to close."
     },
-    "Literal": { "required": ["type", "value", "form"], "form": ["quote", "tick", "raw"] },
-    "Raw":     { "required": ["type", "value", "form"] },
-    "Text":    { "required": ["type", "value"] },
-    "ModeOff": { "required": ["type", "body"] },
-    "Template":{ "required": ["type", "name", "isDefinition", "body"] },
-    "Logic":   { "required": ["type", "name", "rules", "missing"] },
+    "Literal": {
+      "required": [
+        "type",
+        "value",
+        "form",
+        "slot"
+      ],
+      "form": [
+        "quote",
+        "tick",
+        "raw"
+      ],
+      "note": "`slot` is the template parameter this literal was bound to, or null. It reached the XML as <user-input slot=\"…\"> long before it reached the AST; writing fromAST is what proved it missing."
+    },
+    "Raw": {
+      "required": [
+        "type",
+        "value",
+        "form",
+        "slot"
+      ]
+    },
+    "Text": {
+      "required": [
+        "type",
+        "value"
+      ]
+    },
+    "ModeOff": {
+      "required": [
+        "type",
+        "body"
+      ]
+    },
+    "Template": {
+      "required": [
+        "type",
+        "name",
+        "isDefinition",
+        "expanded",
+        "body"
+      ],
+      "note": "`expanded` distinguishes an invocation that carries its expansion from a definition body. Without it a reconstruction writes the expansion where the author typed the call."
+    },
+    "Logic": {
+      "required": [
+        "type",
+        "name",
+        "rules",
+        "missing"
+      ]
+    },
     "Truncated": {
-      "required": ["type", "reason", "atDepth", "omittedNodes"],
+      "required": [
+        "type",
+        "reason",
+        "atDepth",
+        "omittedNodes"
+      ],
       "note": "the AST used to truncate silently past a depth ceiling on the grounds that it was only an inspection panel. It is the source of truth now, so a truncated envelope must be unmistakable to a reader who did not produce it."
     }
   },
-
   "rules": [
     "1. every key declared `required` for a node's type is present, whatever its value",
     "2. no key appears that is not declared `required` or `optional` for that type",

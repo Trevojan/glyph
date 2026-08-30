@@ -1867,7 +1867,12 @@
 
   /* The shallow node, without `body` — the body gets filled by the iterative loop below. */
   function astShallow(nd) {
-    if (nd.literal) return { type: nd.form === "raw" ? "Raw" : "Literal", value: nd.v, form: nd.form };
+    /* `slot` is the template parameter this literal was bound to. It reached
+       the XML as `<user-input slot="…">` and never reached the AST, so an
+       expanded invocation could not be told from its own expansion — the second
+       field fromAST proved missing from a projection called `full`. */
+    if (nd.literal) return { type: nd.form === "raw" ? "Raw" : "Literal", value: nd.v,
+                             form: nd.form, slot: nd.boundSlot || null };
     if (nd.text) return { type:"Text", value:nd.v };
     if (nd.mode) return { type:"ModeOff" };
     if (nd.logic) {
@@ -1881,7 +1886,13 @@
         missing: nd.logic.missing
       };
     }
-    if (nd.template) return { type:"Template", name:nd.template, isDefinition:!!nd.isDef };
+    /* `expanded` was in the XML and not in the AST, which made an expanded
+       invocation indistinguishable from a definition body — writing fromAST is
+       what surfaced it: the reconstruction wrote out the whole expansion where
+       the author had typed `[--germinate]`. A projection called `full` that is
+       missing a field the XML carries is not full. */
+    if (nd.template) return { type:"Template", name:nd.template,
+                              isDefinition:!!nd.isDef, expanded:!!nd.expanded };
     return {
       type:"Command",
       raw: nd.raw,
@@ -2515,6 +2526,143 @@
     return op === "item" ? "," : "-";
   }
 
+
+  /* ------------------------------------------------------------------ *
+   * fromAST — the path the promotion of the AST implies and never had
+   *
+   * There was no AST-to-source path in this engine at all: fromXML was the
+   * only inverse, so reconstructing source meant going through the XML. That
+   * was coherent while the XML was the deliverable. Under T23 it is not, and
+   * it costs something concrete — `[A],[B]` and `[A][B]` emit IDENTICAL XML,
+   * because the chain attribute marks bare links only, so a comma between
+   * bracketed commands cannot come back that way. The AST records it as
+   * `origin: "item"` and always did.
+   *
+   * So the fix is not to make the XML carry it — that needs a second attribute
+   * and reopens the ambiguity §3.2 closed. It is to read the source of truth
+   * directly. The XML→source path stays as a convenience, one-way in the same
+   * sense toHGML is, and nothing that matters depends on it any more.
+   *
+   * Reads the `full` projection only. A `panel` envelope is refused rather
+   * than half-read: thinning makes a field's absence mean six different things,
+   * and a reconstructor that guesses is worse than one that stops.
+   * ------------------------------------------------------------------ */
+  function fromAST(env, opts) {
+    opts = opts || {};
+    var diag = [];
+    if (!env || typeof env !== "object" || env.type !== "GlyphAST") {
+      diag.push({ sev:"fix", code:"NotAnAST",
+        msg:"não é um envelope <code>GlyphAST</code>." });
+      return { src:"", diag:diag };
+    }
+    if (env.projection && env.projection !== "full") {
+      diag.push({ sev:"fix", code:"ThinnedAST",
+        msg:"projeção <code>" + esc(String(env.projection)) + "</code> — só a projeção " +
+            "<code>full</code> pode ser reconstruída. Na projeção de painel a ausência de um " +
+            "campo não distingue vazio de descartado." });
+      return { src:"", diag:diag };
+    }
+
+    function lit(v, form) {
+      var t = String(v == null ? "" : v);
+      /* the backtick form is preserved when it was used and is still safe;
+         otherwise the quote form, escaped the way fromXML escapes it */
+      if (form === "tick" && t.indexOf("`") === -1) return "`" + t + "`";
+      return asLiteral(t);
+    }
+
+    function kids(list) {
+      var out = "";
+      (list || []).forEach(function (n) { out += node(n); });
+      return out;
+    }
+
+    function node(n) {
+      if (!n || typeof n !== "object") return "";
+      switch (n.type) {
+        /* `form:"raw"` is unquoted prose, not a literal: quoting it would put
+           delimiters into text the author never delimited */
+        case "Raw":     return n.form === "raw" ? String(n.value == null ? "" : n.value)
+                                                : lit(n.value, n.form);
+        case "Literal": return lit(n.value, n.form);
+        case "Text":    return String(n.value == null ? "" : n.value);
+        case "ModeOff": return "[off]" + kids(n.body) + "[on]";
+        case "Template": {
+          /* An expanded invocation holds the template's BODY, not the call.
+             Writing the body back would replace what the author typed with
+             what it expanded to — the same trap fromXmlTemplate avoids. The
+             bound values are the ones carrying a slot; everything else is
+             regenerated from the store on the next pass. */
+          if (n.expanded) {
+            var fills = "";
+            (function scan(list) {
+              (list || []).forEach(function (c) {
+                if (c && c.type === "Command" && c.slotName) return;   /* the binder itself */
+                /* a BOUND value is the call; an unbound one is the template's
+                   own prompt, and writing that back turns a question into an
+                   answer — the same rule <needs> follows */
+                if (c && (c.type === "Literal" || c.type === "Raw") && c.slot &&
+                    /^[A-Za-z]/.test(c.slot)) {
+                  fills += "[ph-" + c.slot + lit(c.value, c.form) + "]";
+                  return;
+                }
+                if (c && c.body) scan(c.body);
+              });
+            })(n.body);
+            return "[--" + String(n.name || "") + fills + "]";
+          }
+          return "[--" + String(n.name || "") + (n.isDefinition ? "=" : "") + kids(n.body) + "]";
+        }
+        case "Logic": {
+          var lines = (n.rules || []).map(function (r) { return String(r.source || ""); });
+          return "[logic" + (n.name ? ":" + n.name : "") + "]\n" + lines.join("\n") + "\n[/logic]";
+        }
+        case "Truncated":
+          diag.push({ sev:"fix", code:"TruncatedAST",
+            msg:"o envelope foi truncado na profundidade " + n.atDepth + " e omitiu " +
+                n.omittedNodes + " nós — não há o que reconstruir a partir dele." });
+          return "";
+        case "Command": {
+          /* `raw` as written: an unresolved tag keeps its case, because
+             `<unresolved tag="A">` is what the author typed and lowercasing it
+             would make the reconstruction a different unknown command */
+          var name = String(n.raw || n.canonical || "");
+          /* the placeholder's name is bound by `-`, which is a name binder here
+             and not a chain operator — §2.5 is why its origin is suppressed */
+          if (n.slotName) return "-" + name;
+          /* a bare link carries no scope: the operator plus the name, no
+             brackets, exactly as fromXML writes it — writing [name…] here is
+             what fabricates a <needs> */
+          if (n.chainElement)
+            return (n.origin === "item" ? "," : "-") + name;
+          var lead = n.origin === "item" ? "," : "";
+          return lead + "[" + name + (n.name ? ":" + litSafeXml(n.name) : "") + kids(n.body) + "]";
+        }
+        default:
+          diag.push({ sev:"note", code:"AstUnknownNode",
+            msg:"nó <code>" + esc(String(n.type)) + "</code> não é do vocabulário do AST — ignorado." });
+          return "";
+      }
+    }
+
+    var parts = [];
+    (env.segments || []).forEach(function (seg) {
+      var pre = "";
+      if (seg.mood && seg.mood.length)
+        pre += "/" + seg.mood.map(function (m) { return m.name; }).join("/") + "/";
+      if (seg.continues) pre += "[=";
+      if (seg.isReturn) pre += "r-";
+      parts.push(pre + kids(seg.body) + (seg.breaks ? ";;" : ""));
+    });
+    /* `;;` already closed its segment, so it must not be followed by `;` */
+    var src = parts.reduce(function (acc, cur, i) {
+      if (i === 0) return cur;
+      return acc + (/;;$/.test(acc) ? "" : ";") + cur;
+    }, "");
+
+    return { src:src, diag:diag };
+  }
+
   function fromXmlBlock(el, diag) {
     var pre = "";
     var mood = xmlChild(el, "mood");
@@ -2589,7 +2737,7 @@
     defOf: defOf,
     buildXml: buildXml, toXML: toXML, toAST: toAST, serializeAST: serializeAST,
     burn: burn, toHGML: toHGML,
-    fromXML: fromXML, elementCanonicalMap: GLOSS_REVERSE, glossCollisions: GLOSS_COLLISIONS,
+    fromXML: fromXML, fromAST: fromAST, elementCanonicalMap: GLOSS_REVERSE, glossCollisions: GLOSS_COLLISIONS,
     esc: esc, xesc: xesc
   };
 });
