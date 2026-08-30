@@ -1011,9 +1011,28 @@
   }
 
   function compileRules(store) {
-    var c = { pairs:{}, order:[], pre:[] };
+    var c = { pairs:{}, order:[], pre:[], blends:[] };
     (store.rules || []).forEach(function (r) {
       if (r.kind === "pair") { c.pairs[pairKey(r.a, r.b)] = r; return; }
+      /* `blend` is the pattern layer: co-occurrence in the BURNT form maps to
+         one richer element. It matches the way `pair` does and emits instead
+         of diagnosing, and it is written over the 88 atoms — so a pattern is
+         invariant to which surface synonym the author happened to type, which
+         is the property that makes it tractable at all.
+
+         HGML_PLAN names one trap: an invented element that cannot say what it
+         means moves the interpretation problem one step along instead of
+         solving it. So a blend with no `means` is REFUSED at compile time
+         rather than warned about. A trap you can walk into is not closed. */
+      if (r.kind === "blend") {
+        if (!r.means || !r.emit || !(r.when && r.when.length >= 2)) return;
+        var when = [];
+        r.when.forEach(function (nm) {
+          expandNames(store, nm).forEach(function (x) { when.push(x); });
+        });
+        c.blends.push({ rule:r, when:when, emit:r.emit, means:r.means });
+        return;
+      }
       if (r.kind === "order") {
         /* `first` must not match itself: it is usually a member of the very
            class named in `then` (ELAB is part of @thinking). */
@@ -2211,6 +2230,36 @@
   }
 
   var burnTruncated = false;
+  var burnBlends = [];        /* what fired, so the output can declare itself */
+
+  /* Co-occurrence among siblings in the burnt form. The burn is a canonical
+     form, so this asks a question about MEANING and not about spelling. */
+  function applyBlends(list, opts) {
+    var store = (opts && opts.rules) || RULES;
+    if (!store) return list;
+    var comp = store.__compiled || (store.__compiled = compileRules(store));
+    if (!comp || !comp.blends.length || !list.length) return list;
+    var out = list, i;
+    for (i = 0; i < comp.blends.length; i++) {
+      var b = comp.blends[i];
+      var present = b.when.every(function (c) {
+        return out.some(function (n) { return n.canonical === c; });
+      });
+      if (!present) continue;
+      var kids = [];
+      var kept = out.filter(function (n) {
+        if (b.when.indexOf(n.canonical) !== -1) {
+          (n.children || []).forEach(function (k) { kids.push(k); });
+          return false;
+        }
+        return true;
+      });
+      if (burnBlends.indexOf(b) === -1) burnBlends.push(b);
+      kept.push({ canonical: b.emit, blended: true, children: kids });
+      out = kept;
+    }
+    return out;
+  }
 
   function burnList(list, opts, chain, depth) {
     var out = [];
@@ -2273,7 +2322,7 @@
       var burnedBody = burnList(body, opts, chain.concat(key));
       out = out.concat(injectSubject(burnedBody, operands));
     });
-    return out;
+    return applyBlends(out, opts);
   }
 
   /* Walks the burnt tree and reports what came out of it. Counted here rather
@@ -2334,12 +2383,26 @@
     if (!expansionRegistry(opts))
       return "# sem tabela de composição: carregue expansions.json (useExpansions)";
     burnTruncated = false;
+    burnBlends = [];
     var b = burn(parse(src, opts).segments, opts);
     var L = [];
     b.segments.forEach(function (sg, i) {
       if (i) L.push("");
       hgmlLines(sg.children, 0, L);
     });
+    /* An invented element that cannot say what it means moves the
+       interpretation problem one step along instead of solving it — the trap
+       HGML_PLAN names. A blend is refused at compile time without a `means`,
+       and the burn that used one declares it here, so the output explains
+       itself to a reader who does not have rules.json. */
+    if (burnBlends.length) {
+      var decl = ["# patterns applied to this burn:"];
+      burnBlends.forEach(function (b) {
+        decl.push("#   [" + b.emit + "  <- " + b.when.join(" + ") + "  " + b.means);
+      });
+      decl.push("#");
+      L = decl.concat(L);
+    }
     if (burnTruncated)
       L.unshift("# truncated at " + LIMITS.astDepth + " levels — this burn is incomplete.");
     return L.join("\n");

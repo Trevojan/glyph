@@ -659,6 +659,33 @@ function runHgmlChecks() {
      JSON.stringify(failing) === JSON.stringify(KNOWN)
        ? null : "expected " + JSON.stringify(KNOWN) + ", got " + JSON.stringify(failing));
 
+  /* the pattern layer — L6a. The .hgml had no consumer, and T26 says a format
+     without one is a format whose consumer has not been built yet. This is it:
+     co-occurrence in the BURNT form maps to one richer element, matched over
+     atoms so it is invariant to which surface synonym the author typed. */
+  const blendSrc = "[in[rev`o fluxo`][scru`a logica`]]";
+  const BLEND_OPTS = { expansions: require("../.guidelines/expansions.json"), rules: RULESTORE };
+  const blended = G.toHGML(blendSrc, BLEND_OPTS);
+  ok("H-10", "a blend folds co-occurring atoms into one element",
+     /\[heavy-review/.test(blended) && /'o fluxo'/.test(blended) && /'a logica'/.test(blended)
+       ? null : "did not fire, or lost a literal: " + blended.slice(0, 120));
+
+  /* the trap HGML_PLAN names: an invented element that cannot say what it means
+     has moved the interpretation problem, not solved it */
+  ok("H-11", "the burn declares every pattern it applied, with its meaning",
+     /^# patterns applied to this burn:/m.test(blended) &&
+     /heavy-review  <- REV \+ DIST  one deep review/.test(blended)
+       ? null : "the invented element does not explain itself");
+
+  ok("H-12", "a blend with no `means` is refused at compile time",
+     (function () {
+       const store = JSON.parse(JSON.stringify(RULESTORE));
+       store.rules.push({ id:"no-means", kind:"blend", when:["REV","DIST"], emit:"x" });
+       delete store.__compiled;
+       const out = G.toHGML(blendSrc, { expansions:require("../.guidelines/expansions.json"), rules:store });
+       return /\[x/.test(out) ? "it emitted an element that cannot say what it means" : null;
+     })());
+
   return H.length;
 }
 const rH = runHgmlChecks();
@@ -1533,7 +1560,7 @@ console.log(" Rules        " + rC + "/" + RULE_CASES.length);
 console.log(" Constraints  " + rK + "/" + CONSTRAINTS.length);
 console.log(" Guard        " + rG + "/" + POSITIVE_WITH_RULES.length);
 console.log(" Composition  " + rX + "/17");
-console.log(" .hgml burn   " + rH + "/9");
+console.log(" .hgml burn   " + rH + "/12");
 console.log(" fromXML      " + rF + "/23");
 console.log(" reference    " + rD + "/10");
 console.log(" round trip   " + rRT + "/6");
