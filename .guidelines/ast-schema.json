@@ -170,7 +170,8 @@
     "7. `version` is present and non-empty: an envelope that will not say which engine produced it cannot be checked against anything",
     "8. every node of the `full` projection carries `at`, well-formed or null; a Segment does not, because its span is its body's",
     "9. `schema` matches the declared constant: an envelope of another shape is refused, not read leniently",
-    "10. `stores` names all three fingerprints, each a checksum or null"
+    "10. `stores` names all three fingerprints, each a checksum or null",
+    "11. an envelope carrying `truncatedNodes` is refused: it is incomplete by its own admission, and a source of truth that omits part of itself is not one"
   ],
   "at": {
     "required": [

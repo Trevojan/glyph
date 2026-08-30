@@ -1197,16 +1197,28 @@ function runSchemaChecks() {
   const CORPUS = [].concat(POSITIVE, INCOMPLETE, INVALID, REGRESSION, LONG,
                            TEMPLATES, CONSTRAINTS, RULE_CASES);
 
-  const bad = [];
+  const bad = [], truncated = [], acceptedAnyway = [];
   CORPUS.forEach(c => {
     if (!c || !c.id || typeof c.src !== "string") return;
     let env;
     try { env = G.toAST(c.src, opts); } catch (e) { bad.push(c.id + ": threw"); return; }
     const errs = check.validate(env);
+    /* A truncated envelope SHOULD be refused — rule 11, and the deep-nesting
+       stress vectors are the only sources that produce one. Asserting that
+       every envelope conforms would have made correct behaviour look like a
+       failure; asserting nothing would let a real violation hide behind it. */
+    if (env.truncatedNodes) {
+      truncated.push(c.id);
+      if (!errs.length) acceptedAnyway.push(c.id);
+      return;
+    }
     if (errs.length) bad.push(c.id + ": " + errs[0]);
   });
-  ok("SC-01", "every corpus envelope conforms to the declared schema",
+  ok("SC-01", "every complete corpus envelope conforms to the declared schema",
      bad.length ? bad.slice(0, 4).join(" | ") + (bad.length > 4 ? " (+" + (bad.length - 4) + ")" : "") : null);
+  ok("SC-03", "a truncated envelope is refused, not accepted as complete",
+     acceptedAnyway.length ? "accepted despite being truncated: " + acceptedAnyway.join(", ")
+       : truncated.length ? null : "no corpus source produced a truncated envelope — the check proves nothing");
 
   /* ten mutations, one per rule the schema states, applied to a real envelope */
   const clone = () => JSON.parse(JSON.stringify(G.toAST("[in-rwk,fmt`x`];/eth/[crit`y`]", opts)));
@@ -1380,7 +1392,14 @@ function runSnapshotChecks() {
 
      Pinned rather than hidden: a NEW throw fails this check, and closing this
      one means deleting its entry, not regenerating the snapshot. */
-  const KNOWN_THROWS = ["L-01.hgml: Maximum call stack size exceeded"];
+  /* Emptied by K18. It held `L-01.hgml: Maximum call stack size exceeded` from
+     the day this bucket was written: the burn was the one projection with
+     neither a ceiling nor a vector, while the XML emitter is hardened to 8000
+     levels and the AST truncates with a marker. The burn now stops at the same
+     ceiling the AST uses and says so in its own output, so the three
+     projections finally agree on what deep means — and SN-01 required the pin
+     to be removed rather than letting it outlive its reason. */
+  const KNOWN_THROWS = [];
   const unexpected = threw.filter(t => KNOWN_THROWS.indexOf(t) === -1);
   const fixed = KNOWN_THROWS.filter(k => threw.indexOf(k) === -1);
   ok("SN-01", "the only projections that throw are the pinned ones",
@@ -1518,7 +1537,7 @@ console.log(" .hgml burn   " + rH + "/9");
 console.log(" fromXML      " + rF + "/23");
 console.log(" reference    " + rD + "/10");
 console.log(" round trip   " + rRT + "/6");
-console.log(" ast schema   " + rSC + "/2");
+console.log(" ast schema   " + rSC + "/3");
 console.log(" examples     " + rE + "/5");
 console.log(" snapshot     " + rSN + "/4");
 console.log(" global store " + rGS + "/3");

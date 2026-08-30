@@ -2140,7 +2140,24 @@
         return d;
       })
     };
-    if (stats.truncated) out.truncatedNodes = stats.truncated;
+    if (stats.truncated) {
+      out.truncatedNodes = stats.truncated;
+      /* The ceiling was justified in-comment by the AST being "an inspection
+         panel": truncating a panel with a marker beats bringing the whole
+         serialisation down. T23 retired that premise. A source of truth that
+         silently omits part of itself is not one, and the marker sits deep in
+         the tree where a reader has to already suspect it to find it.
+         So in `full` the omission is announced at the envelope, at `fix`,
+         where glyph-check refuses it and a human sees it first. `panel` keeps
+         the quiet marker: the screen has the source next to it. */
+      if (projectionOf(opts) === "full")
+        out.diagnostics.push({
+          code: "DepthExceeded", severity: "fix", label: "profundidade",
+          message: "a árvore passa de " + LIMITS.astDepth + " níveis e " + stats.truncated +
+                   " nós foram omitidos — este envelope não está completo e não deve ser " +
+                   "carregado como se estivesse."
+        });
+    }
     return out;
   }
 
@@ -2193,18 +2210,25 @@
     return operands.concat(body);   // formula with no command head: prepend
   }
 
-  function burnList(list, opts, chain) {
+  var burnTruncated = false;
+
+  function burnList(list, opts, chain, depth) {
     var out = [];
+    depth = depth || 0;
+    /* the same ceiling the AST uses, so the three projections agree on what
+       deep means. Announced rather than survived: a burn that stops silently
+       is the class of defect this release exists to remove. */
+    if (depth > LIMITS.astDepth) { burnTruncated = true; return out; }
     (list || []).forEach(function (nd) {
       /* Literals are what the human actually said — they survive. Free prose
          does not: it is not vocabulary, and .hgml is hieroglyphs only. */
       if (nd.literal) { if (nd.form !== "raw") out.push(nd); return; }
       if (nd.text)    { if (opts && opts.keepText) out.push(nd); return; }
-      if (nd.mode)    { out = out.concat(burnList(nd.children, opts, chain)); return; }
+      if (nd.mode)    { out = out.concat(burnList(nd.children, opts, chain, depth + 1)); return; }
       if (nd.logic)   { out.push(nd); return; }
       /* A template invocation already expanded during parse(); what is left
          is the shell, so the burn walks straight through it. */
-      if (nd.template) { out = out.concat(burnList(nd.children, opts, chain)); return; }
+      if (nd.template) { out = out.concat(burnList(nd.children, opts, chain, depth + 1)); return; }
       if (!nd.canonical) return;
 
       var e = entryOf(nd.canonical, opts);
@@ -2220,7 +2244,7 @@
          the guard read a cycle that is not there — HYP → RMBR → FBK → RMBR —
          and stopped with RMBR unreduced. Burning arguments first keeps the two
          relationships apart: containment extends the chain, argument does not. */
-      var operands = burnList(nd.children || [], opts, chain);
+      var operands = burnList(nd.children || [], opts, chain, depth + 1);
 
       if (!e || e.species === "atom") {
         out.push({ canonical: nd.canonical, children: operands });
@@ -2309,12 +2333,15 @@
     opts = opts || {};
     if (!expansionRegistry(opts))
       return "# sem tabela de composição: carregue expansions.json (useExpansions)";
+    burnTruncated = false;
     var b = burn(parse(src, opts).segments, opts);
     var L = [];
     b.segments.forEach(function (sg, i) {
       if (i) L.push("");
       hgmlLines(sg.children, 0, L);
     });
+    if (burnTruncated)
+      L.unshift("# truncated at " + LIMITS.astDepth + " levels — this burn is incomplete.");
     return L.join("\n");
   }
 

@@ -46,6 +46,11 @@ function validate(env) {
     errs.push("<envelope>: projection is " + JSON.stringify(env.projection) +
               ", and only `full` is validated — the panel projection is thinned for the screen");
 
+  /* rule 11 — incomplete by its own admission */
+  if (env.truncatedNodes)
+    errs.push("<envelope>: truncatedNodes is " + env.truncatedNodes +
+              " — the envelope omits part of the tree and cannot stand as a source of truth");
+
   /* rule 9 — a different shape is refused rather than read leniently */
   if (env.schema !== SCHEMA.envelope.constants.schema)
     errs.push("<envelope>: schema is " + JSON.stringify(env.schema) + ", this validator declares " +
