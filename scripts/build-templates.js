@@ -25,6 +25,51 @@ const X = require("./read-expansions.js");
 const HERE = __dirname;
 const GUIDE = path.join(__dirname, "..", ".guidelines");
 
+/* --check: build everything in memory and compare, write nothing.
+ *
+ *   node build-templates.js --check
+ *
+ * Both outputs carry DO-NOT-EDIT banners and, until now, nothing enforced
+ * them: no checksum, no staleness gate, and `fs.writeFileSync` overwriting
+ * unconditionally. A banner nobody checks is a comment.
+ *
+ * Regenerating and comparing rather than stamping a checksum in the banner:
+ * a checksum only catches a hand-edit of the thing it covers, and it is one
+ * more piece of metadata that can itself go stale. Rebuilding answers the
+ * question that actually matters — *would a build change anything right now* —
+ * and catches the hand-edited file and the output left behind by a changed
+ * source with one mechanism and no new state.
+ *
+ * PENDING exists because the build has two phases and the second reads what
+ * the first wrote: expansions.json is an output, then an input. In check mode
+ * nothing reaches disk, so phase two must see phase one's in-memory result or
+ * it would validate glyph-data.js against a stale store and call it clean. */
+const CHECK = process.argv.indexOf("--check") !== -1;
+const PENDING = {};
+const STALE = [];
+
+function emit(full, content) {
+  const name = path.basename(full);
+  PENDING[name] = content;
+  if (!CHECK) { fs.writeFileSync(full, content); return; }
+  let disk = null;
+  try { disk = fs.readFileSync(full, "utf8"); }
+  catch (e) { STALE.push(name + ": missing"); return; }
+  if (disk !== content) {
+    /* say which kind of difference it is: a size change reads as a stale
+       source, an equal-size change reads as a hand edit */
+    STALE.push(name + (disk.length === content.length
+      ? ": differs from a fresh build (same length — an edit in place)"
+      : ": differs from a fresh build (" + disk.length + " on disk, " + content.length + " fresh)"));
+  }
+}
+
+function readSource(full) {
+  const name = path.basename(full);
+  return Object.prototype.hasOwnProperty.call(PENDING, name)
+    ? PENDING[name] : fs.readFileSync(full, "utf8");
+}
+
 /* The definitions live in GLOSSARY.md, in prose, and until v1.2.1.0 the engine
    could not reach them. That left the message unable to explain itself where it
    matters most: `made-of` describes a composite for free, but the 88
@@ -117,7 +162,7 @@ function buildExpansions() {
   };
 
   const out = path.join(GUIDE, "expansions.json");
-  fs.writeFileSync(out, JSON.stringify(store, null, 2) + "\n");
+  emit(out, JSON.stringify(store, null, 2) + "\n");
   console.log("  ✓ expansions.txt -> expansions.json (" +
     store.atoms + " atoms, " + store.composites + " composites, depth " + store.maxDepth + ")");
   return store;
@@ -148,7 +193,7 @@ SOURCES.forEach(({ file, global }) => {
     missing++;
     return;
   }
-  const raw = fs.readFileSync(full, "utf8");
+  const raw = readSource(full);
   JSON.parse(raw); // fail fast on malformed JSON
   /* Normalise CRLF: on Windows the .json files usually carry system line
      endings, and embedding the raw content made the GENERATED file come out
@@ -163,6 +208,22 @@ SOURCES.forEach(({ file, global }) => {
 parts.push("})(typeof self !== \"undefined\" ? self : this);");
 
 const out = path.join(HERE, "glyph-data.js");
-fs.writeFileSync(out, parts.join("\n") + "\n");
-console.log("generated: glyph-data.js (" + fs.statSync(out).size + " bytes)" +
-            (missing ? "  [" + missing + " source(s) missing]" : ""));
+const generated = parts.join("\n") + "\n";
+emit(out, generated);
+
+if (CHECK) {
+  console.log("checked: expansions.json, glyph-data.js" +
+              (missing ? "  [" + missing + " source(s) missing]" : ""));
+  if (STALE.length) {
+    console.error("\nFAILED: a generated file does not match a fresh build.");
+    STALE.forEach(s => console.error("  ✗ " + s));
+    console.error("\nBoth files say DO NOT EDIT BY HAND. Either a source moved and the");
+    console.error("build was never re-run, or the generated file was edited directly.");
+    console.error("Run: node scripts/build-templates.js");
+    process.exit(1);
+  }
+  console.log("Every generated file matches a fresh build.");
+} else {
+  console.log("generated: glyph-data.js (" + fs.statSync(out).size + " bytes)" +
+              (missing ? "  [" + missing + " source(s) missing]" : ""));
+}
