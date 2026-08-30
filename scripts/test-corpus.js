@@ -817,6 +817,66 @@ function runReferenceChecks() {
   ok("D-06", "BASE is not documented as a command (GLOSSARY.md §0.2)",
      rows.some(r => r.bracket === "base") ? "the reference lists [base as a command again" : null);
 
+  /* §4 — operators and delimiters. D-03 and D-04 only ever looked at the
+     vocabulary tables, so §4 is the one table in the reference that nothing
+     asserted. That blind spot is why `/` could be documented as an operator
+     while the engine dropped it into <off>, and why the C-01 resolution could
+     reach glyph-grammar.ebnf and stop there.
+
+     A token check would not catch it: the lexer DOES emit a `divide` token.
+     What fails is the documented behaviour, so each row gets a probe and an
+     expectation. `expect` is what the reference promises; when it does not
+     hold, the row and the engine disagree and one of them is wrong. */
+  const SECTION4 = [
+    { id: "4-01", src: "[ins'x'][ins`y`]",
+      expect: x => /<user-input>x<\/user-input>/.test(x) && /<user-input>y<\/user-input>/.test(x) },
+    { id: "4-02", src: "[ins'a','b']",
+      expect: x => /<instruction>\s*<user-input>a<\/user-input>\s*<user-input>b<\/user-input>/.test(x) },
+    { id: "4-03", src: "[ins'a'];[ins'b']",
+      expect: x => (x.match(/<block /g) || []).length === 2 },
+    { id: "4-04", src: "[ins'a'];;[ins'b']",       expect: x => /<break\/>/.test(x) },
+    { id: "4-05", src: "[ins'a'];[=[ins'b']",      expect: x => /continues="previous"/.test(x) },
+    { id: "4-06", src: "[in-rwk]",
+      expect: x => /<instruction>\s*<rework\/>\s*<\/instruction>/.test(x) },
+    { id: "4-07", src: "[in-rwk,ctx]",
+      expect: x => /<instruction>\s*<rework\/>\s*<context\/>\s*<\/instruction>/.test(x) },
+    /* the reference says `/` opens the chain after `-`, so ctx must land
+       inside <instruction> exactly as the `,` of 4-07 does */
+    { id: "4-08", src: "[in-rwk/ctx]",
+      expect: x => /<instruction>\s*<rework\/>\s*<context\/>\s*<\/instruction>/.test(x) },
+    { id: "4-09", src: "[off]hello [ins'x'][on]", expect: x => /<off>hello \[ins'x'\]<\/off>/.test(x) },
+    { id: "4-10", src: "[ins'a']r-'a list'",       expect: x => /<user-expectative expects="/.test(x) },
+    { id: "4-11", src: "[logic]let a = 1[/logic]",
+      expect: x => /<logic>/.test(x) && /<rule kind="/.test(x) },
+    /* the row reads "*not applicable* (§1)" because auto-close maps to no
+       operator of its own — but the behaviour is testable and this is the case
+       GLYPH-COMO-COMECAR named explicitly, so it gets a probe rather than an
+       exemption: an unclosed source must emit what the closed one emits */
+    { id: "4-12", src: "[in[rwk]",
+      expect: x => x === G.toXML("[in[rwk]]", WITH_BOTH) }
+  ];
+
+  const broken = [];
+  SECTION4.forEach(p => {
+    let xml = "";
+    try { xml = G.toXML(p.src, WITH_BOTH); }
+    catch (e) { broken.push(p.id + ": threw — " + e.message); return; }
+    if (!p.expect(xml))
+      broken.push(p.id + " (" + p.src + "): the engine does not do what §4 documents"
+                  + (/<off>/.test(xml) ? " — it fell into <off>, which is the documented behaviour of a DIFFERENT row" : ""));
+  });
+  ok("D-07", "every operator documented in §4 behaves as documented",
+     broken.length ? broken.join(" | ") : null);
+
+  /* the reverse gap, the same shape as D-04: a §4 row nobody probes is a row
+     that can go stale in silence, which is the defect this check exists for */
+  const s4 = md.split(/^## 4\. /m)[1];
+  const s4rows = s4 ? (s4.split(/^## /m)[0].match(/^\|(?!\s*-)(?!\s*Bracket).*\|$/gm) || []) : [];
+  ok("D-08", "every §4 row has a probe in D-07",
+     s4rows.length === SECTION4.length ? null
+       : "§4 has " + s4rows.length + " rows and D-07 has " + SECTION4.length
+         + " probes — a documented operator with no probe cannot be caught when it goes stale");
+
   return D.length;
 }
 const rD = runReferenceChecks();
@@ -836,7 +896,7 @@ console.log(" Guard        " + rG + "/" + POSITIVE_WITH_RULES.length);
 console.log(" Composition  " + rX + "/17");
 console.log(" .hgml burn   " + rH + "/9");
 console.log(" fromXML      " + rF + "/12");
-console.log(" reference    " + rD + "/6");
+console.log(" reference    " + rD + "/8");
 console.log("=================================================");
 
 if (failures.length) {

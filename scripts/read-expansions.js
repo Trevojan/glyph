@@ -18,13 +18,20 @@
  * used to be called BASE is `CORE` since v1.1.0.0, precisely so this word can
  * mean only one thing here.
  *
- * UMD: Node (require) and browser (window.GlyphExpansions).
+ * UMD: Node (require) and browser (window.GlyphExpansionsReader).
+ *
+ * The browser name was `GlyphExpansions` until check-globals.js caught it:
+ * build-templates.js writes the parsed *store* into glyph-data.js under that
+ * exact name, so two unrelated objects — a reader and a table — claimed one
+ * identifier. Nothing collided only because this file has never been in the
+ * HTML's script list, which is an accident rather than a guarantee. The name
+ * now says which of the two it is.
  */
 
 (function (root, factory) {
   "use strict";
   if (typeof module === "object" && module.exports) module.exports = factory();
-  else root.GlyphExpansions = factory();
+  else root.GlyphExpansionsReader = factory();
 })(typeof self !== "undefined" ? self : this, function () {
   "use strict";
 
