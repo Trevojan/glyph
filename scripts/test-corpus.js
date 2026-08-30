@@ -1044,7 +1044,13 @@ function runAstInvariant() {
 
      Everything semantic stays in, `origin` and `chainElement` included. A
      lazier exclusion set would give away exactly what E0 was for. */
-  const SPELLING = { raw: 1, isAlias: 1, form: 1, autoClosed: 1, autoClosedCount: 1 };
+  const SPELLING = { raw: 1, isAlias: 1, form: 1, autoClosed: 1, autoClosedCount: 1,
+                     /* `at` is a coordinate INTO the source text, so the
+                        reconstruction necessarily carries different ones: an
+                        alias that normalises or a bracket the engine supplied
+                        moves every position after it. It records where, never
+                        what — the same class as the rest of this set. */
+                     at: 1 };
 
   const strip = o => {
     if (Array.isArray(o)) return o.map(strip);

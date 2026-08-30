@@ -92,6 +92,14 @@ function validate(env) {
         errs.push(here + ": origin " + JSON.stringify(n.origin) + " is not declared");
       if (spec.form && "form" in n && spec.form.indexOf(n.form) === -1)
         errs.push(here + ": form " + JSON.stringify(n.form) + " is not declared");
+      /* rule 8 — a span that lies is worse than no span, so when `at` is
+         present it must be well-formed */
+      if ("at" in n && n.at !== null) {
+        if (typeof n.at !== "object") errs.push(here + ".at: not an object and not null");
+        else SCHEMA.at.required.forEach(k => {
+          if (typeof n.at[k] !== "number") errs.push(here + ".at: `" + k + "` is not a number");
+        });
+      }
       if (Array.isArray(n.body)) walk(n.body, here + ".body");
     });
   })(env.segments, "segments");

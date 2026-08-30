@@ -51,7 +51,8 @@
         "breaks",
         "autoClosedCount",
         "body"
-      ]
+      ],
+      "note": "a Segment carries no `at`: it is a container and its span is the span of its body. Every node inside it carries one."
     },
     "Command": {
       "required": [
@@ -73,7 +74,8 @@
         "emotions",
         "species",
         "compositionDepth",
-        "body"
+        "body",
+        "at"
       ],
       "origin": [
         "root",
@@ -89,7 +91,8 @@
         "type",
         "value",
         "form",
-        "slot"
+        "slot",
+        "at"
       ],
       "form": [
         "quote",
@@ -103,19 +106,22 @@
         "type",
         "value",
         "form",
-        "slot"
+        "slot",
+        "at"
       ]
     },
     "Text": {
       "required": [
         "type",
-        "value"
+        "value",
+        "at"
       ]
     },
     "ModeOff": {
       "required": [
         "type",
-        "body"
+        "body",
+        "at"
       ]
     },
     "Template": {
@@ -124,7 +130,8 @@
         "name",
         "isDefinition",
         "expanded",
-        "body"
+        "body",
+        "at"
       ],
       "note": "`expanded` distinguishes an invocation that carries its expansion from a definition body. Without it a reconstruction writes the expansion where the author typed the call."
     },
@@ -133,7 +140,8 @@
         "type",
         "name",
         "rules",
-        "missing"
+        "missing",
+        "at"
       ]
     },
     "Truncated": {
@@ -141,7 +149,8 @@
         "type",
         "reason",
         "atDepth",
-        "omittedNodes"
+        "omittedNodes",
+        "at"
       ],
       "note": "the AST used to truncate silently past a depth ceiling on the grounds that it was only an inspection panel. It is the source of truth now, so a truncated envelope must be unmistakable to a reader who did not produce it."
     }
@@ -153,6 +162,14 @@
     "4. the envelope declares `projection: \"full\"` — a `panel` envelope is refused rather than validated leniently",
     "5. `origin` is one of the declared values, or null",
     "6. a diagnostic carrying `at` carries both `s` and `e`",
-    "7. `version` is present and non-empty: an envelope that will not say which engine produced it cannot be checked against anything"
-  ]
+    "7. `version` is present and non-empty: an envelope that will not say which engine produced it cannot be checked against anything",
+    "8. every node of the `full` projection carries `at`, well-formed or null; a Segment does not, because its span is its body's"
+  ],
+  "at": {
+    "required": [
+      "s",
+      "e"
+    ],
+    "note": "the span in the source that produced the node, or null when the node was synthesised rather than written (a Truncated marker has no author). Present on every node of the `full` projection. It is what lets a reader without the engine locate a refusal, and it is the substrate a trace is built on: given a span, which command; given a command, which span."
+  }
 }

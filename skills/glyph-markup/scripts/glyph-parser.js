@@ -1999,13 +1999,27 @@
       if (f.d >= LIMITS.astDepth) {
         var omitted = 0;
         walk([f.nd], function () { omitted++; });
-        f.arr.push({ type:"Truncated", reason:"depth", atDepth:LIMITS.astDepth, omittedNodes:omitted });
+        f.arr.push({ type:"Truncated", reason:"depth", atDepth:LIMITS.astDepth, omittedNodes:omitted, at:null });
         if (stats) stats.truncated += omitted;
         continue;
       }
 
       var obj = astShallow(f.nd);
       if (projectionOf(opts) === "panel") obj = astLean(obj);
+      else {
+        /* The span in the source that produced this node. Every token has
+           carried `s`/`e` since the lexer was written and every node has
+           carried its token — this is the same shape as `origin`: computed
+           from the start, discarded at serialisation, and missed only once
+           something outside the engine needed to read the result.
+
+           It is what makes a diagnostic locatable by a reader who does not
+           have the engine, and it is the substrate a trace is built on: given
+           a span, which command; given a command, which span. `panel` does not
+           get it, because the screen has the source in front of it. */
+        obj.at = (f.nd.tok && typeof f.nd.tok.s === "number")
+          ? { s: f.nd.tok.s, e: f.nd.tok.e } : null;
+      }
       f.arr.push(obj);
       if (astHasBody(f.nd)) {
         obj.body = [];
@@ -2042,7 +2056,15 @@
         return seg;
       }),
       diagnostics: (gaps || []).map(function (g) {
-        return { code:g.code, severity:g.sev, label:g.lab, message:g.plain };
+        /* `at` was added to the gap record and stopped here, which is the same
+           shape as `origin` and the same shape as the propagation failure this
+           whole release is named after: the value existed, one consumer did not
+           carry it, and the omission was invisible because nothing downstream
+           could ask. A refusal a reader cannot locate is a refusal they cannot
+           act on. */
+        var d = { code:g.code, severity:g.sev, label:g.lab, message:g.plain };
+        if (g.at && typeof g.at.s === "number") d.at = { s:g.at.s, e:g.at.e };
+        return d;
       })
     };
     if (stats.truncated) out.truncatedNodes = stats.truncated;
