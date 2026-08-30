@@ -22,7 +22,19 @@
 
 "use strict";
 
-const G = require("./glyph-parser.js");
+
+import { createRequire } from "node:module";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
+const require = createRequire(import.meta.url);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+/* "was this file run, or imported?" — `require.main === module` in the
+   other module system. process.argv[1] is undefined under an import, so
+   the check has to tolerate that rather than throw on it. */
+const isMain = (u) => !!process.argv[1] &&
+  u === "file://" + process.argv[1].replace(/\\/g, "/").replace(/^([A-Za-z]:)/, "/$1");
+import G from "./glyph-parser.js";
 
 /* Given a source, an index in both directions.
  *
@@ -72,9 +84,9 @@ function trace(src, opts) {
   };
 }
 
-module.exports = { trace: trace };
+export { trace };
 
-if (require.main === module) {
+if (isMain(import.meta.url)) {
   const argv = process.argv.slice(2);
   const src = argv[0];
   if (!src) { console.error('usage: node glyph-trace.js "<glyph source>" [--at N]'); process.exit(2); }

@@ -46,11 +46,16 @@
  * As a CLI:  node glyph-parser.js "[crit[ctx]]" [--ast|--xml|--diag|--hgml|--from-xml]
  */
 
-(function (root, factory) {
-  "use strict";
-  if (typeof module === "object" && module.exports) module.exports = factory();
-  else root.GlyphCore = factory();
-})(typeof self !== "undefined" ? self : this, function () {
+/* The UMD wrapper is gone. It existed so one file could serve Node through
+   `require` and the browser through a bare `<script src>`, and the price was
+   that the core had to stay ONE file — the browser has no `require`, so a
+   split needed a bundler. That is D1 in HGML_PLAN, open since v1.1.
+
+   ESM removes the reason for the bundler: the same `import` works in Node and
+   in the browser. The global assignment below is kept anyway, because
+   glyph-ui.js finds the core that way and rewriting the interface is not this
+   change. */
+const GlyphCore = (function () {
   "use strict";
 
   var VERSION = "2.4.5.01";
@@ -2930,11 +2935,22 @@
     fromXML: fromXML, fromAST: fromAST, elementCanonicalMap: GLOSS_REVERSE, glossCollisions: GLOSS_COLLISIONS,
     esc: esc, xesc: xesc
   };
-});
+})();
+
+export default GlyphCore;
+/* the browser reads it as a global, and check-globals.js knows this shape */
+globalThis.GlyphCore = GlyphCore;
+
 
 /* ---------- CLI ---------- */
-if (typeof require === "function" && typeof module === "object" && require.main === module) {
-  var G = module.exports;
+if (typeof process !== "undefined" && process.argv && process.argv[1] &&
+    import.meta.url === "file://" + process.argv[1].replace(/\\/g, "/").replace(/^([A-Za-z]:)/, "/$1")) {
+  /* an async IIFE and not a top-level await: awaiting at the top would make
+     this an async module, and nothing can require() an async module. */
+  (async function () {
+  var G = GlyphCore;
+  var require = (await import("node:module")).createRequire(import.meta.url);
+  var __dirname = (await import("node:path")).dirname((await import("node:url")).fileURLToPath(import.meta.url));
   // optional stores: if absent, the engine still runs, just without expansion/contradiction checks
   [["../.guidelines/templates.json", G.useTemplates],
    ["../.guidelines/rules.json", G.useRules],
@@ -2992,4 +3008,5 @@ if (typeof require === "function" && typeof module === "object" && require.main 
     if (!gaps.length) console.log("sem diagnósticos.");
     gaps.forEach(function (g) { console.log("[" + g.sev + "] " + g.code + " — " + g.plain); });
   } else console.log(G.toXML(input));
+  })();
 }

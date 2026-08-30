@@ -1,0 +1,17 @@
+{
+  "name": "glyph",
+  "version": "2.4.5.01",
+  "private": true,
+  "type": "module",
+  "description": "A shorthand command notation that compiles to structured XML. The AST is the source of truth; the XML is a projection of it.",
+  "license": "SEE LICENSE IN README.md",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "test": "node scripts/test-corpus.js",
+    "build": "node scripts/build-templates.js && node scripts/build-skill.js",
+    "check": "node scripts/build-templates.js --check && node scripts/build-skill.js --check && node scripts/check-globals.js && node scripts/dag.js && node scripts/test-corpus.js",
+    "serve": "node scripts/serve-dev.js",
+    "snapshot": "node scripts/test-corpus.js --update-snapshot"
+  },
+  "note": "`type: module` exists so the core can be split into files the browser can load without a bundler — see .guidelines/HGML_PLAN.md D1, open since v1.1. There are no `dependencies` and there never will be: zero-dependency is a property of this repository, not an accident of it. This file adds scripts and a module system, nothing else."
+}

@@ -25,12 +25,23 @@
 
 "use strict";
 
+
+import { createRequire } from "node:module";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
+const require = createRequire(import.meta.url);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const fs = require("fs");
-const path = require("path");
 
 const DIR = __dirname;
 
-/* `root.Name =` is the shape every UMD/IIFE wrapper in scripts/ uses to
+/* `root.Name =` is the shape the remaining IIFE wrappers use; the core
+   moved to `globalThis.Name =` when it became an ESM module, and the check
+   has to follow or it starts passing by looking at nothing. Both shapes
+   publish to the same place and collide the same way.
+
+   Originally:
    publish. Assignments to a local `root` variable inside a factory would be a
    false positive, but no file does that and the check is cheap enough that a
    false positive is better than a missed clobber. */

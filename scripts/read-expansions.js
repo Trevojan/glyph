@@ -28,11 +28,20 @@
  * now says which of the two it is.
  */
 
-(function (root, factory) {
-  "use strict";
-  if (typeof module === "object" && module.exports) module.exports = factory();
-  else root.GlyphExpansionsReader = factory();
-})(typeof self !== "undefined" ? self : this, function () {
+
+import { createRequire } from "node:module";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
+const require = createRequire(import.meta.url);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+/* The browser branch is gone rather than fixed. It published a global that
+   nothing in the browser ever read — check-globals.js found it colliding with
+   the expansions STORE under one name, and it was renamed then rather than
+   removed because a rename was the smaller change. Under ESM it stops being
+   inert and starts throwing: the module-top `this` is undefined. A branch with
+   no consumer that now breaks on load has run out of reasons to exist. */
+const GlyphExpansionsReader = (function () {
   "use strict";
 
   /* Dependency extraction from a formula.
@@ -162,4 +171,7 @@
   }
 
   return { read: read, analyse: analyse, build: build, depsOf: depsOf };
-});
+})();
+
+export default GlyphExpansionsReader;
+export const { read, analyse, build, depsOf } = GlyphExpansionsReader;

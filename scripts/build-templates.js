@@ -11,9 +11,15 @@
 
 "use strict";
 
+
+import { createRequire } from "node:module";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
+const require = createRequire(import.meta.url);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const fs = require("fs");
-const path = require("path");
-const X = require("./read-expansions.js");
+import X from "./read-expansions.js";
 
 /* Three roots since v1.3.4.01. `/scripts` holds JavaScript, `.guidelines`
    holds everything normative a human edits (the docs and the .json/.txt

@@ -24,8 +24,19 @@
 
 "use strict";
 
+
+import { createRequire } from "node:module";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
+const require = createRequire(import.meta.url);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+/* "was this file run, or imported?" — `require.main === module` in the
+   other module system. process.argv[1] is undefined under an import, so
+   the check has to tolerate that rather than throw on it. */
+const isMain = (u) => !!process.argv[1] &&
+  u === "file://" + process.argv[1].replace(/\\/g, "/").replace(/^([A-Za-z]:)/, "/$1");
 const fs = require("fs");
-const path = require("path");
 
 const SCHEMA = JSON.parse(
   fs.readFileSync(path.resolve(__dirname, "../.guidelines/ast-schema.json"), "utf8"));
@@ -141,9 +152,9 @@ function validate(env) {
   return errs;
 }
 
-module.exports = { validate: validate, schema: SCHEMA };
+export { validate, SCHEMA };
 
-if (require.main === module) {
+if (isMain(import.meta.url)) {
   const argv = process.argv.slice(2);
   const mode = argv[0];
   if (mode !== "--ast" || !argv[1]) {

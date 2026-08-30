@@ -21,7 +21,19 @@
 
 "use strict";
 
-const G = require("./glyph-parser.js");
+
+import { createRequire } from "node:module";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
+const require = createRequire(import.meta.url);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+/* "was this file run, or imported?" — `require.main === module` in the
+   other module system. process.argv[1] is undefined under an import, so
+   the check has to tolerate that rather than throw on it. */
+const isMain = (u) => !!process.argv[1] &&
+  u === "file://" + process.argv[1].replace(/\\/g, "/").replace(/^([A-Za-z]:)/, "/$1");
+import G from "./glyph-parser.js";
 
 /* Fields that record HOW a source was written rather than what it says. Same
    set the round-trip invariant excludes, and for the same reason. */
@@ -119,9 +131,9 @@ function diff(srcA, srcB, opts) {
            counts: sites.reduce((m, s) => { m[s.cls] = (m[s.cls] || 0) + 1; return m; }, {}) };
 }
 
-module.exports = { diff: diff, generality: generality, strip: strip };
+export { diff, generality, strip };
 
-if (require.main === module) {
+if (isMain(import.meta.url)) {
   let opts = {};
   try {
     opts = { templates: require("../.guidelines/templates.json").templates,

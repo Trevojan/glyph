@@ -1,4 +1,11 @@
 #!/usr/bin/env node
+
+import { createRequire } from "node:module";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
+const require = createRequire(import.meta.url);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 /**
  * serve-dev.js — static server for checking the web app in a real browser.
  *
@@ -16,7 +23,6 @@
 
 const http = require("http");
 const fs = require("fs");
-const path = require("path");
 
 const PORT = Number(process.argv[2]) || 8731;
 const ROOT = path.join(__dirname, "..");   // serve o repo inteiro, nao so scripts/

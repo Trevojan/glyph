@@ -20,7 +20,15 @@
 
 "use strict";
 
-const G = require("./glyph-parser.js");
+
+import { createRequire } from "node:module";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
+const require = createRequire(import.meta.url);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+import G from "./glyph-parser.js";
+import * as CHECK_MOD from "./glyph-check.js";
 
 /* Stores travel through opts in the cases that need them, so the suite
    doesn't depend on the module's global state or on test order. */
@@ -1215,9 +1223,7 @@ function runSchemaChecks() {
     else { console.log("  ✓ " + id + ": " + name); D.push(id); }
   };
 
-  let check = null;
-  try { check = require("./glyph-check.js"); }
-  catch (e) { ok("SC-01", "glyph-check loads", e.message); return D.length; }
+  const check = CHECK_MOD;
 
   const opts = { templates: TPL.templates, rules: RULESTORE,
                  expansions: require("../.guidelines/expansions.json") };
