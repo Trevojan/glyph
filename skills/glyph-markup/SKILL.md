@@ -1,16 +1,23 @@
 ---
 name: glyph-markup
-description: Glyph Shorthand Markup Language v1.3.0.0 Specification & Parser Integration. Use when writing or reading Glyph compact structured notation.
+description: Glyph Shorthand Markup Language v2.4.5.01 Specification & Parser Integration. Use when writing or reading Glyph compact structured notation.
 ---
 
-# Glyph Shorthand Markup Language (v1.3.0.0)
+# Glyph Shorthand Markup Language (v2.4.5.01)
 
 Glyph is a shorthand command notation, between delimiters, describing a logical
 flow scalable to the smallest detail. The reference implementation is
 `scripts/glyph-parser.js`: a single core (Node via `require`, browser via
 `window.GlyphCore`) doing lexing, parsing, arity checking, semantic rules and
-**XML** emission — the XML is the deliverable, not the AST (which is only an
-inspection panel).
+**XML** emission.
+
+**The AST is the source of truth**, and the XML is a projection of it. That
+reverses what this document said through v1.4: the AST was called an inspection
+panel and thinned by 45% on the strength of it. It is the format any model can
+read without the engine, which is what makes it portable and checkable — so
+completeness outranks size on it, and the thinning now belongs to the panel
+projection alone. The XML remains the artefact you paste; it is no longer the
+thing everything else is derived from.
 
 `GLOSSARY.md` is the normative reference for the vocabulary. The engine derives
 from it, and the suite fails (`X-01`, `X-14`) if the two drift apart.
@@ -101,7 +108,8 @@ Four constructions, each with exactly one reading:
 | `[A[B]]` | nesting — B is A's operand |
 | `[A],[B]` | conjunction — A and B hold together, no order between them |
 | `[A][B]` | sequence — A, then B |
-| `[A-B]` | chain — A and B applied to the same operand |
+| `[A-B]` | chain — A and B applied to the same operand; B carries `chain="extend"` |
+| `[A-B,C]` | the chain continues — C carries `chain="item"` |
 
 **Operand binding** (`GLOSSARY.md` §0.3): the human's operand is the **subject
 of the whole formula**. A comma does not change the subject; juxtaposition
@@ -163,8 +171,8 @@ Short forms (the long one is canonical): `[IN]`→`[INS]`, `[AS]`→`[ASSM]`,
 `[CN]`→`[CNST]`, `[WN]`→`[WARN]`, `[SM]`→`[SUM]`
 
 **The seven v1.7 fusions were undone.** `[EVAL]`, `[REV]`, `[SPEC]`, `[SIMP]`,
-`[QST]`, `[FOREX]` and `[ONLYIF]` are commands in their own right again — see
-the axis table in `glyph-markup-commons`.
+`[QST]`, `[FOREX]` and `[ONLYIF]` are commands in their own right again — the
+full vocabulary with every alias is in `references/GLOSSARY.md`.
 
 ## `[ctx]` — three positions
 
@@ -194,3 +202,27 @@ and `node scripts/dag.js`.
 
 `a` frontend · `b` backend (parser) · `c` business rules · `d` data and
 constants. A digit that moves resets every digit to its right.
+
+---
+
+## Refusals — malformed is not incomplete
+
+An empty slot does not block: it becomes `<needs>` and the input stays usable.
+That protects information that is **missing**. It has never protected
+information that is **malformed**, and five constructs are refused at `fix`
+severity, each naming what to write instead and each preserving the characters
+you typed as `<off>`:
+
+| Code | You wrote | Write instead |
+|---|---|---|
+| `SlashInChain` | `[in-rwk/ctx]` | close the chain first: `[in-rwk]/eth/` |
+| `BackslashMood` | `\eth\` | `/eth/` |
+| `UnknownEmotion` | `/eth/xyz/` | a code from the mood table |
+| `XmlChainHasChildren` | a `chain` element with children, in the XML panel | remove them, or drop the attribute |
+| `XmlChainStartsWithItem` | a run whose first link is `chain="item"` | `,` continues a chain, `-` opens it |
+
+A diagnostic may carry `at: {s, e}` — the span in your source that caused it.
+
+Nothing is ever repaired in silence, and **no placeholder character reaches the
+XML**: either the engine resolves a value and emits it, or it refuses and says
+so. `references/XML_REFERENCE.md` §11 is the normative statement of all of this.

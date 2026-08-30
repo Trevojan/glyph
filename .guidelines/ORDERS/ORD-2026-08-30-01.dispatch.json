@@ -94,7 +94,8 @@
     {
       "id": "A8",
       "finding": "the installed glyph-markup skill has 99 lines, declares no version, and teaches [SECTION: n], which the engine rejects at fix severity",
-      "consequence": "the stale decoder is loaded in the harness, not in _ORBITAL"
+      "consequence": "the stale decoder is loaded in the harness, not in _ORBITAL",
+      "correction": "the propagation map for C-01 and I-19 was richer than first recorded. The repository skill ALREADY carried both resolutions correctly — it states that the backslash was removed and that chaining is by hyphen alone. So the decisions reached the grammar AND the repository skill, and stopped before the engine, the reference and the installed skill. Two destinations right, three wrong; the installed copy predates all of it"
     },
     {
       "id": "A9",
@@ -189,6 +190,18 @@
       "severity": "medium",
       "consequence": "the two hardened projections each have a vector saying so — L-01 for the XML at 8000 levels, L-02 for the AST truncation. The burn was given neither, and nothing ever crossed the LONG sources with the .hgml projection, so the gap was invisible. Pinned in KNOWN_THROWS with its reason rather than hidden: a new throw fails SN-01, and closing this one means deleting the entry, not regenerating the snapshot",
       "found_by": "the projection snapshot, on its first run"
+    },
+    {
+      "id": "A25",
+      "finding": "toHGML has no depth guard. It survives 1600 levels of nesting and overflows the stack between 1600 and 3200, while toXML survives 8000 and toAST truncates at LIMITS.astDepth with an explicit marker",
+      "severity": "medium",
+      "consequence": "the two hardened projections each have a vector saying so — L-01 for the XML at 8000 levels, L-02 for the AST truncation. The burn was given neither, and nothing ever crossed the LONG sources with the .hgml projection, so the gap was invisible. Pinned in KNOWN_THROWS with its reason rather than hidden: a new throw fails SN-01, and closing this one means deleting the entry, not regenerating the snapshot",
+      "found_by": "the projection snapshot, on its first run"
+    },
+    {
+      "id": "A26",
+      "finding": "the repository skill declared v1.3.0.0 and described the AST as an inspection panel, which T23 reverses",
+      "consequence": "K15 required both; the skill now declares the engine version and states the reversal with its reason, and build-skill.js --check refuses to publish a skill whose declared version does not match the engine"
     }
   ],
   "four_guarantees": {
@@ -318,6 +331,10 @@
     {
       "id": "K18",
       "expected": "toHGML has the same depth treatment as the other two projections — a ceiling with a diagnostic, or an iterative writer — and a LONG vector that says which, so the three projections stop disagreeing about what deep nesting means"
+    },
+    {
+      "id": "K18",
+      "expected": "toHGML has the same depth treatment as the other two projections — a ceiling with a diagnostic, or an iterative writer — and a LONG vector that says which, so the three projections stop disagreeing about what deep nesting means"
     }
   ],
   "locks": [
@@ -348,7 +365,9 @@
     "T25: serializeAST projects diagnostic positions — a refusal without a coordinate is not verifiable by a reader without the engine",
     "T26: a generated document without a consumer is a document whose consumer has not been built yet. It is improved until it has one, never deleted for being unused",
     "T27: the source extension is .pgml; .glyph is taken in another context and is never used for Glyph source",
-    "T28: a known loss is pinned with its reason and a new one fails the gate; a snapshot is never regenerated to make a red suite green"
+    "T28: a known loss is pinned with its reason and a new one fails the gate; a snapshot is never regenerated to make a red suite green",
+    "T28: a known loss is pinned with its reason and a new one fails the gate; a snapshot is never regenerated to make a red suite green",
+    "T29: everything in the published skill except SKILL.md is generated and checkable; SKILL.md is authored, and only the version it declares is enforced"
   ],
   "assumptions": [],
   "cascade": {
