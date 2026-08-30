@@ -1,0 +1,44 @@
+{
+  "note": "The five input->XML pairs the Regent authored by hand. They are the conformance vectors the handoff asked for, and under T4 the golden derives from these and from the specification, never from an implementation. Hand-authored SOURCES with engine-produced XML: the source is the claim, the XML is what the engine currently answers, and a change to the XML is a release decision that must be explained rather than absorbed. `roundTrips` is pinned per case: a pair that does not survive its own inverse must say why, or a real regression would hide behind a known loss.",
+  "authored": "2026-08-30",
+  "engine": "2.4.5.01",
+  "count": 5,
+  "cases": [
+    {
+      "id": "E-01",
+      "src": "[in\r\n  [tgt`phonema-orbital`]\r\n  [rtnl-go`cover cases where 2 vowels cost -0.1 when repeated`]\r\n  [nt`start`]\r\n  [ctx-ref`now: aa -> 0.9 + 0.9 | expected: aa -> 0.9 + 0.8`]\r\n  [alw-true`alphanumeric inputs in the app's CLI.`]\r\n  [nt`path`]\r\n  [instof-add`no need to change anything besides adding this rule. try to change the code as less as possible.`]]",
+      "xml": "<glyph>\n  <block once=\"true\">\n    <instruction>\n      <target>\n        <user-input>phonema-orbital</user-input>\n      </target>\n      <rationale>\n        <go chain=\"extend\"/>\n        <user-input>cover cases where 2 vowels cost -0.1 when repeated</user-input>\n      </rationale>\n      <note>\n        <user-input>start</user-input>\n      </note>\n      <context>\n        <reference chain=\"extend\"/>\n        <user-input>now: aa -&gt; 0.9 + 0.9 | expected: aa -&gt; 0.9 + 0.8</user-input>\n      </context>\n      <always force=\"editorial\">\n        <true chain=\"extend\"/>\n        <user-input>alphanumeric inputs in the app's CLI.</user-input>\n      </always>\n      <note>\n        <user-input>path</user-input>\n      </note>\n      <instead-of>\n        <add chain=\"extend\"/>\n        <user-input>no need to change anything besides adding this rule. try to change the code as less as possible.</user-input>\n      </instead-of>\n    </instruction>\n  </block>\n</glyph>",
+      "changed_since_authored": true,
+      "roundTrips": false,
+      "roundTripNote": "pinned, not a defect: the source holds an apostrophe, and the README documents that text holding an apostrophe, a backslash, a backtick or a bracket is substituted rather than preserved. The substitution reaches the XML, so this pair is XML-unstable by design. Recorded per case so a real regression cannot hide behind a known loss."
+    },
+    {
+      "id": "E-02",
+      "src": "[in\r\n  [tgt`combat-system`]\r\n  [rtnl-go`determine whether damage should be applied before armor reduction`]\r\n  [cond-if`the attack is physical`]\r\n  [alw-true`only when the attacker has a valid target`]\r\n  [instof-add`keep the existing damage pipeline intact.`]]",
+      "xml": "<glyph>\n  <block once=\"true\">\n    <instruction>\n      <target>\n        <user-input>combat-system</user-input>\n      </target>\n      <rationale>\n        <go chain=\"extend\"/>\n        <user-input>determine whether damage should be applied before armor reduction</user-input>\n      </rationale>\n      <condition>\n        <if chain=\"extend\"/>\n        <user-input>the attack is physical</user-input>\n      </condition>\n      <always force=\"editorial\">\n        <true chain=\"extend\"/>\n        <user-input>only when the attacker has a valid target</user-input>\n      </always>\n      <instead-of>\n        <add chain=\"extend\"/>\n        <user-input>keep the existing damage pipeline intact.</user-input>\n      </instead-of>\n    </instruction>\n  </block>\n</glyph>",
+      "changed_since_authored": true,
+      "roundTrips": true
+    },
+    {
+      "id": "E-03",
+      "src": "[in\r\n  [tgt`TurnService.Resolve`]\r\n  [rev-cmp`compare the current resolution order against the expected combat order`]\r\n  [ctx-ref`current: defense resolves before attack | expected: attack resolves before defense`]\r\n  [prop`identify the smallest correction necessary`]\r\n  [instof-add`do not redesign TurnService.`]]",
+      "xml": "<glyph>\n  <block once=\"true\">\n    <instruction>\n      <target>\n        <user-input>TurnService.Resolve</user-input>\n      </target>\n      <review>\n        <compare chain=\"extend\"/>\n        <user-input>compare the current resolution order against the expected combat order</user-input>\n      </review>\n      <context>\n        <reference chain=\"extend\"/>\n        <user-input>current: defense resolves before attack | expected: attack resolves before defense</user-input>\n      </context>\n      <propose>\n        <user-input>identify the smallest correction necessary</user-input>\n      </propose>\n      <instead-of>\n        <add chain=\"extend\"/>\n        <user-input>do not redesign TurnService.</user-input>\n      </instead-of>\n    </instruction>\n  </block>\n</glyph>",
+      "changed_since_authored": true,
+      "roundTrips": true
+    },
+    {
+      "id": "E-04",
+      "src": "[in\r\n  [tgt`Player.Lives`]\r\n  [ask-clar`is an unrevealed Life always worth 2 points?`]\r\n  [ctx-ref`current scoring rule`]\r\n  [conf`required before implementation`]]",
+      "xml": "<glyph>\n  <block once=\"true\">\n    <instruction>\n      <target>\n        <user-input>Player.Lives</user-input>\n      </target>\n      <ask>\n        <clarification chain=\"extend\"/>\n        <user-input>is an unrevealed Life always worth 2 points?</user-input>\n      </ask>\n      <context>\n        <reference chain=\"extend\"/>\n        <user-input>current scoring rule</user-input>\n      </context>\n      <confirmation>\n        <user-input>required before implementation</user-input>\n      </confirmation>\n    </instruction>\n  </block>\n</glyph>",
+      "changed_since_authored": true,
+      "roundTrips": true
+    },
+    {
+      "id": "E-05",
+      "src": "[in\r\n  [tgt`input-parser`]\r\n  [lim`do not modify tokenization`]\r\n  [req`the existing syntax must remain valid`]\r\n  [mand`the new rule must apply to CLI input`]\r\n  [avd`avoid introducing a new parser stage`]\r\n  [dont`change unrelated commands`]]",
+      "xml": "<glyph>\n  <block once=\"true\">\n    <instruction>\n      <target>\n        <user-input>input-parser</user-input>\n      </target>\n      <limitation>\n        <user-input>do not modify tokenization</user-input>\n      </limitation>\n      <requirement>\n        <user-input>the existing syntax must remain valid</user-input>\n      </requirement>\n      <mandatory>\n        <user-input>the new rule must apply to CLI input</user-input>\n      </mandatory>\n      <avoid>\n        <user-input>avoid introducing a new parser stage</user-input>\n      </avoid>\n      <do-not>\n        <user-input>change unrelated commands</user-input>\n      </do-not>\n    </instruction>\n  </block>\n</glyph>",
+      "changed_since_authored": false,
+      "roundTrips": true
+    }
+  ]
+}

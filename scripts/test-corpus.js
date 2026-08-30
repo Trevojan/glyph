@@ -994,6 +994,66 @@ function runReferenceChecks() {
 const rD = runReferenceChecks();
 
 /* ------------------------------------------------------------------ *
+ * the five authored examples — conformance, not illustration
+ *
+ * These are the input→XML pairs the Regent wrote by hand: the instrument the
+ * documentation calls the most reliable one there is, and the thing the handoff
+ * had been asking for. They are held apart from the buckets above because they
+ * are the only sources here whose *source* was authored as a claim rather than
+ * as a test — under T4 the golden derives from these and from the
+ * specification, never from an implementation.
+ *
+ * The XML in conformance/examples.json is what the engine answers. A change to
+ * it is therefore a release decision, not a regression to absorb quietly: four
+ * of the five moved when `chain` was introduced, and each moved by exactly the
+ * lines that carry a bare link.
+ * ------------------------------------------------------------------ */
+function runExampleChecks() {
+  console.log("\n--- the five authored examples ---");
+  const D = [];
+  const ok = (id, name, why) => {
+    if (why) { console.log("  ✗ " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  ✓ " + id + ": " + name); D.push(id); }
+  };
+
+  let store = null;
+  try { store = require("../conformance/examples.json"); }
+  catch (e) { ok("E-00", "the examples exist", "conformance/examples.json not found"); return D.length; }
+
+  const opts = { templates: TPL.templates, rules: RULESTORE,
+                 expansions: require("../.guidelines/expansions.json") };
+
+  store.cases.forEach(c => {
+    const got = G.toXML(c.src, opts).trim();
+    if (got !== c.xml) {
+      const a = c.xml.split("\n"), b = got.split("\n");
+      let first = "";
+      for (let i = 0; i < Math.max(a.length, b.length); i++)
+        if (a[i] !== b[i]) { first = "line " + (i + 1) + ": expected " + JSON.stringify(a[i]) +
+                                     ", got " + JSON.stringify(b[i]); break; }
+      ok(c.id, "authored pair still holds", first || "length differs");
+      return;
+    }
+    /* Round-trip status is PINNED per case rather than demanded of all five.
+       E-01 holds an apostrophe, and the README documents that text carrying
+       one is substituted rather than preserved — the substitution reaches the
+       XML, so that pair is XML-unstable by design. Asserting stability for
+       everyone would have made a documented loss look like a defect; asserting
+       nothing would let a real regression hide behind it. So each case says
+       which it is, and a case that CHANGES its answer fails either way. */
+    const back = G.fromXML(got, opts);
+    const trips = G.toXML(back.src, opts).trim() === got;
+    ok(c.id, "authored pair still holds", trips === !!c.roundTrips ? null
+       : c.roundTrips
+         ? "was round-trip stable and no longer is: " + JSON.stringify(back.src).slice(0, 80)
+         : "is pinned as not round-tripping and now does — remove the pin and its note");
+  });
+
+  return D.length;
+}
+const rE = runExampleChecks();
+
+/* ------------------------------------------------------------------ *
  * projection snapshot — the net under the split
  *
  * The 173 assertions above say the engine still satisfies 173 claims. They do
@@ -1209,6 +1269,7 @@ console.log(" Composition  " + rX + "/17");
 console.log(" .hgml burn   " + rH + "/9");
 console.log(" fromXML      " + rF + "/23");
 console.log(" reference    " + rD + "/10");
+console.log(" examples     " + rE + "/5");
 console.log(" snapshot     " + rSN + "/4");
 console.log(" global store " + rGS + "/3");
 console.log("=================================================");
