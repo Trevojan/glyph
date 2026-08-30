@@ -1,0 +1,382 @@
+{
+  "schema": 1,
+  "id": "ORD-2026-08-30-01",
+  "version": 3,
+  "language": "en-EU",
+  "home": "'.guidelines/ORDERS/' in the glyph repository — .scope is excluded by the ignore rules as client material, so an order placed there would not survive",
+  "supersedes": [
+    {
+      "version": 1,
+      "reason": "class promotion C1 -> C2, not a competing order"
+    },
+    {
+      "version": 2,
+      "reason": "S7 was knocked down by the Regent; by the order's own rule a knocked assumption produces the next version"
+    }
+  ],
+  "immutable": true,
+  "release": "2.4.5.01",
+  "class": {
+    "from": "C1",
+    "to": "C2",
+    "label": "building on a prior contract — the emitted format, the 173 vectors and fromXML are already contract",
+    "question_cap": 4,
+    "spent": 2,
+    "remaining": 2,
+    "remainder_converted_to": "assumption S10"
+  },
+  "regent_decisions": {
+    "format": "adopt glyph-package now",
+    "skill_folder": [
+      "the parser inside the folder",
+      "examples/ with the five pairs",
+      "retire glyph-markup-commons"
+    ],
+    "S5_release_digit": "accepted — 2.4.5.01",
+    "S6_empty_schema": "accepted — the five examples serve as its base",
+    "S7_source_raw": "REJECTED — carried only by examples and by teaching models of Glyph itself; the surface where the XML is pasted does not necessarily read Glyph",
+    "S8_references": "accepted, with a refinement: normative material must outrank example material, because model authored examples rot fast",
+    "S9_order_as_vector": "accepted",
+    "language": "en-EU across the system, always",
+    "S10_language_sweep": "CONFIRMED — promoted from assumption to lock T13",
+    "order_home": "the guidelines directory, deliberately not ignored; .scope would make the change disappear",
+    "skill_layout": "SKILL.md at the root, scripts/glyph-parser.js beside it, references/ at source level holding the generic official pattern of the XML output with everything needed to explain it including the failure treatments, and references/examples/ nested below it. The generic pattern does not rot because it describes the shape rather than an instance; examples are fridge items, bound to one input and one engine version",
+    "divide_operator": "DELETED — the slash belongs solely to the emotion delimiter. The architect's positioned-diagnostic recommendation is superseded; the removal must take the machinery out too, not only the documentation row",
+    "malformed_input": "an unparseable operator run is deliberately incomprehensible to Glyph and gets an error treatment: bucket N at fix severity, no fabricated mood element, the discarded token reported, a position carried",
+    "duplication_resolved": "references/ and the conformance vectors are not two copies of one truth: the vectors are specific input-to-output pairs living in the repository and are the test, while references/ sits one level of abstraction above them and is generic. D9 and E2 point at the vectors, not at the reference",
+    "backslash": "ABANDONED, per I-19. Removed from the engine in this release alongside the divider",
+    "source_of_truth": "the resulting AST is, from here forward, officially and immutably the source of truth. It is parseable and readable by every generative model that receives text, which is what makes it portable and internally verifiable. The .json serves as the directive export, carrying the structure and significance of the whole project; the .xml carries the real instructions. The XML remains the pasted deliverable, but it is a projection of the AST rather than a peer of it",
+    "Q2_diagnostic_positions": "ANSWERED by implication of the source-of-truth decision: serializeAST projects diagnostic positions. A refusal with no coordinate is not verifiable by a reader who does not have the engine, and verification by other models is the reason the AST was promoted"
+  },
+  "verified_findings": [
+    {
+      "id": "A1",
+      "finding": "all five 'actual xml' blocks in the examples match v1.4.4.01 byte for byte, zero diagnostics",
+      "consequence": "the examples' baseline is trustworthy and becomes a vector"
+    },
+    {
+      "id": "A2",
+      "finding": "four of the five examples fail the round trip; only example5, which uses no operator, survives",
+      "consequence": "the operator is the boundary of the defect"
+    },
+    {
+      "id": "A3",
+      "finding": "fromXML of [rtnl-go'X'] re-emits with a needs element that did not exist",
+      "severity": "high",
+      "consequence": "a fourth, undocumented non survivor of the trip, and the only one that invents rather than loses"
+    },
+    {
+      "id": "A4",
+      "finding": "the parser DOES record which operator produced a child: origin at glyph-parser.js:1242 yields extend for a hyphen and item for a comma. What discards it is serializeAST, which does not export origin, and buildXml, which never reads it",
+      "consequence": "the repair is cheaper than briefed: stop dropping an existing field in two consumers, rather than thread a new one from the lexer. The chainOp field in the architecture is probably unnecessary",
+      "status": "CORRECTED — the original claim was wrong",
+      "superseded_claim": "the parser discards which operator produced a child — false, and it was briefed to the architect as the load-bearing premise",
+      "how_the_error_happened": "the exported AST is genuinely identical for both, and the conclusion was drawn from that symptom without opening the internal tree; the grep that would have found it filtered on extend, divide, chain and op, and origin matches none of those"
+    },
+    {
+      "id": "A5",
+      "finding": "[a-b-c'X'] emits flat siblings, not a nested pipeline",
+      "consequence": "the proposal's third invariant describes behaviour the engine does not have"
+    },
+    {
+      "id": "A6",
+      "finding": "the divide operator is documented at XML_REFERENCE.md line 101 and the engine emits it as an off element, with no diagnostic",
+      "severity": "high",
+      "consequence": "a phantom operator; D-03 and D-04 do not cover operators"
+    },
+    {
+      "id": "A7",
+      "finding": "[val'a','b','c'] passes clean against a declared arity of 2",
+      "consequence": "over-arity is never checked"
+    },
+    {
+      "id": "A8",
+      "finding": "the installed glyph-markup skill has 99 lines, declares no version, and teaches [SECTION: n], which the engine rejects at fix severity",
+      "consequence": "the stale decoder is loaded in the harness, not in _ORBITAL"
+    },
+    {
+      "id": "A9",
+      "finding": "inspection.pgml cites a Plans directory while the directory is PLAN",
+      "consequence": "a cited path is checked by nobody"
+    },
+    {
+      "id": "A10",
+      "finding": "four deliverable element names use US spelling: criticize, categorize, generalize, scrutinize; engine prose runs 14 -ize against 3 -ise",
+      "consequence": "en-EU is declared and unenforced, the same way the EN-EU chip was clickable and dead before 1.3.3.00"
+    },
+    {
+      "id": "A11",
+      "finding": "the divide operator collides with the emotion table: [in-rwk/ins/fmt] fabricates <mood dominant=\"insecurity\" also=\"?\"/> at block level and silently drops fmt",
+      "severity": "high",
+      "consequence": "a literal question mark is printed into the deliverable, and the only diagnostic is a [note] reporting the wrong thing — a misleading note rather than the absence of one"
+    },
+    {
+      "id": "A12",
+      "finding": "a hyphen before a bracket cancels the engine question: [in[rwk]] emits <needs>what to rework</needs> while [in-[rwk]] emits <rework/>",
+      "severity": "high",
+      "consequence": "one character silently deletes a needs element"
+    },
+    {
+      "id": "A13",
+      "finding": "chainElement at glyph-parser.js:1243 answers two questions at once — whether a child was written bare, and which operator attached it",
+      "consequence": "the fix splits the flag rather than adding an attribute; a design that only added an attribute would leave the round trip broken for the very inputs it was written to repair"
+    },
+    {
+      "id": "A14",
+      "finding": "the backslash emotion delimiter is not an undocumented alternative but an ABANDONED one: resolution I-19 replaced it with the slash, the grammar carries only the slash, and the engine still accepts both",
+      "consequence": "removal, same class as the divider, and the installed skill teaches the abandoned form because it predates the resolution"
+    },
+    {
+      "id": "A15",
+      "finding": "XML_REFERENCE.md has no section on failure. Ten sections cover what works; malformed input is undocumented, while incomplete input is documented at section 5",
+      "consequence": "the only document mechanically tested against the engine cannot catch a fabrication, because it never states what malformed input must produce"
+    },
+    {
+      "id": "A16",
+      "finding": "the divide operator was already removed by resolution C-01, recorded at glyph-grammar.ebnf line 37 and in the conflict register as a blocking item resolved in favour of the emotion delimiter",
+      "consequence": "the Regent's decision ratifies an existing resolution rather than making a new one. The work is finishing a propagation, not removing a live feature, which lowers the risk profile"
+    },
+    {
+      "id": "A17",
+      "finding": "XML_REFERENCE.md line 101 contradicts glyph-grammar.ebnf line 37 and has done so since C-01. The doc test D-01 to D-06 did not catch it because those tests check bracket-to-element pairs and never operators or delimiters",
+      "consequence": "the same blind spot that let A3, A11 and A12 live. Extending the doc test to operators is load-bearing, not tidiness"
+    },
+    {
+      "id": "A18",
+      "finding": "every unrecognised shape in the operator and delimiter region fails silently. [in-/rwk] emits <rework/> with no diagnostic, /zzz/ falls to <off>/zzz/</off> with no diagnostic, and \\zzz\\ emits <mood dominant=\"?\"/> with no diagnostic",
+      "severity": "high",
+      "consequence": "removing recognition without adding refusal keeps the silence and only changes the shape of the rubbish. This is why the removals and the error treatment cannot ship separately",
+      "note": "the architect predicted [in-/rwk] would fall to <off>/rwk</off>; verified, it already emits <rework/> today. The silence is the point; the predicted shape is not what happens"
+    },
+    {
+      "id": "A19",
+      "finding": "an invalid backslash emotion emits <mood dominant=\"?\"/> — a third site printing a literal placeholder into the deliverable, after also=\"?\" and alongside the fabricated mood of A11",
+      "consequence": "the abandoned spelling fabricates more aggressively than the official one, which at least degrades to prose. Removing it is a defect removal, not only a tidy-up"
+    },
+    {
+      "id": "A20",
+      "finding": "the divide branch at glyph-parser.js:1307 is dead code: a divide token requires prev.k === extend, and after a colon the hyphen lexes as text",
+      "consequence": "one of the six inventoried sites needs no migration reasoning, only deletion"
+    },
+    {
+      "id": "A21",
+      "finding": "origin is a non-empty string on every node, so exporting it unconditionally re-weights the AST. Measured on the order itself: 47 of 47 nodes carry root or nest; the architect measured 244 of 267 across the corpus",
+      "consequence": "astLean must drop root and nest, or the export undoes the thinning the header comment at glyph-parser.js:1825 defends"
+    },
+    {
+      "id": "A22",
+      "finding": "the promotion contradicts the documented design. skills/glyph-markup/SKILL.md line 12 states that the XML is the deliverable and the AST is only an inspection panel, and the 45% AST slimming of release 1.2.0.1 was justified at glyph-parser.js:1825 by the premise that a long panel is a panel nobody reads",
+      "consequence": "the premise behind astLean inverts. Under the promotion, completeness outranks size on the source of truth, and the architect's recommendation to drop root and nest from the export is correct only under the retired premise"
+    }
+  ],
+  "four_guarantees": {
+    "note": "what the current XML guarantees and the proposed glyph-package does not carry. They survive the new format or the format is rejected.",
+    "items": [
+      "editorial force on ALW BYP OVR NEV FRGT",
+      "block once and the segment separator",
+      "the needs element — 'an empty slot does not block' has nowhere to live in the proposal",
+      "exact string fidelity: a pretty-printed text element changes the value"
+    ],
+    "why_they_were_missing": "the photograph sent to the external model was of vocabulary; all four are properties of operators, of the emitter and of the engine, and none fits in a table of commands"
+  },
+  "deliverables": [
+    {
+      "id": "E0",
+      "what": "the operator from lexer to XML: extend distinct from comma, divide implemented or diagnosed",
+      "precondition_of": [
+        "E1",
+        "E2",
+        "E3"
+      ],
+      "architecture": "`.guidelines/OPERATOR_TARGET.md`"
+    },
+    {
+      "id": "E1",
+      "what": "the glyph-package golden, derived from the specification and the five examples"
+    },
+    {
+      "id": "E2",
+      "what": "the 173 vectors rederived against the new format, thirteen buckets"
+    },
+    {
+      "id": "E3",
+      "what": "glyph-check validating the new format, written before the emitter"
+    },
+    {
+      "id": "E4",
+      "what": "the fromXML decision: a second reader, or the inverse declared dead in writing",
+      "note": "reframed by T23: the question is no longer whether the inverse is worth keeping, but what the round-trip invariant is measured against. Under the promotion the candidate invariant is AST equality rather than XML equality, which is what test-corpus.js:647 currently asserts"
+    },
+    {
+      "id": "E5",
+      "what": "XML_REFERENCE rewritten for the new format, D-03/D-04 extended to operators, AND a new section 11 on failure treatment, which the document does not have today",
+      "section_11": "the reference has ten sections and none covers malformed input: three incidental mentions of error across 424 lines. It documents the incomplete path (needs, section 5) and has nowhere to state the invalid path (fix severity). That asymmetry is why A3, A11 and A12 survived — the document tested against the engine could not contradict a fabrication it had no place to describe"
+    },
+    {
+      "id": "E6",
+      "what": "glyph-markup republished as SKILL.md + scripts/glyph-parser.js + references/ + references/examples/, with a declared version; commons retired",
+      "single_source": "the five examples live once, as the repository conformance vectors; references/examples/ is GENERATED at publish time with a banner declaring origin and engine version, so validator rule 10 of BUNDLE_TARGET catches a hand-edited copy",
+      "references_content": "a publish-time projection of XML_REFERENCE.md, which is the only document in the repository already tested against the engine (D-01 to D-06). Downstream of E5: the skill's references/ cannot be written before E5 rewrites the reference for the new format"
+    },
+    {
+      "id": "E7",
+      "what": "the language sweep: prose to en-EU, and a decision on the four US-spelled element names"
+    }
+  ],
+  "done_when": [
+    {
+      "id": "K1",
+      "expected": "the five examples emit the expected glyph-package, byte for byte"
+    },
+    {
+      "id": "K2",
+      "expected": "extend and comma return distinct from the XML and re-emit identically; no needs element is ever fabricated"
+    },
+    {
+      "id": "K3",
+      "expected": "the divide operator works or fails with a position, and never lands silently in an off element"
+    },
+    {
+      "id": "K4",
+      "command": "node scripts/test-corpus.js",
+      "expected": "all thirteen buckets green, rederived"
+    },
+    {
+      "id": "K5",
+      "expected": "XML_REFERENCE matches the emitter, and the doc test covers operators"
+    },
+    {
+      "id": "K6",
+      "expected": "the installed glyph-markup equals the repository's, with a declared version; commons absent"
+    },
+    {
+      "id": "K7",
+      "expected": "no Portuguese reaches the deliverable, and the -ize/-ise decision is applied uniformly"
+    },
+    {
+      "id": "K8",
+      "expected": "references/examples/ regenerates byte for byte from the conformance vectors, and a hand edit to it is caught by glyph-check"
+    },
+    {
+      "id": "K9",
+      "expected": "no input produces a fabricated mood element, and no literal placeholder character reaches the XML"
+    },
+    {
+      "id": "K10",
+      "expected": "the divide machinery is absent from the lexer, the parser and XML_REFERENCE, with no dead token left unnamed"
+    },
+    {
+      "id": "K11",
+      "expected": "XML_REFERENCE carries a failure section stating, for every malformed construct, the severity and the emitted result, and the doc test exercises it the way D-03 exercises the vocabulary"
+    },
+    {
+      "id": "K12",
+      "expected": "the grammar, the reference, the engine and the published skill agree on the divider and on the emotion delimiter, verified mechanically rather than by reading"
+    },
+    {
+      "id": "K13",
+      "expected": "every retired construct produces a fix diagnostic naming its replacement, and no retired construct degrades silently into prose or into a fabricated element"
+    },
+    {
+      "id": "K14",
+      "expected": "the AST carries every field needed to reconstruct the XML and to locate every diagnostic, and a second model reading only the .json can say what the source meant and where it failed"
+    },
+    {
+      "id": "K15",
+      "expected": "SKILL.md no longer states that the AST is only an inspection panel, and the CHANGELOG records the reversal with its reason"
+    }
+  ],
+  "locks": [
+    "T1: the operator reaches the XML before any chain element is emitted",
+    "T2: the gate before the topology — glyph-check before the new emitter",
+    "T3: single source of truth is the glyph repository",
+    "T4: the golden derives from the specification and the examples, never from an implementation",
+    "T5: the cond A to B lines are L5, gate",
+    "T6: no self attested gate; no format without a consumer",
+    "T7: no acceptance criterion is rewritten so the code passes",
+    "T8: the four guarantees survive or the format is rejected",
+    "T9: glyph-markup-commons is retired",
+    "T10: the release is 2.4.5.01",
+    "T11: normative material outranks example material; every example declares the engine version that produced it and is marked perishable",
+    "T12: source raw is carried by examples and teaching models only, never by the general export",
+    "T13: the language sweep rides in 2.4.5.01, including the four US-spelled element names",
+    "T14: orders live in .guidelines/ORDERS/, never in .scope",
+    "T15: references/examples/ is generated from the conformance vectors, never hand-maintained; the banner is what rule 10 checks",
+    "T16: the slash is the emotion delimiter and nothing else; the divide operator is removed from the grammar, the engine and the documentation",
+    "T17: malformed input is bucket N at fix severity — an empty slot does not block protects missing information, never malformed information",
+    "T18: no placeholder character ever reaches the deliverable; a literal question mark in an attribute is a defect, not a fallback",
+    "T19: references/ holds the generic pattern at source level and does not rot; examples are perishable and sit below it, never beside it",
+    "T20: the backslash emotion delimiter is removed from the engine; the slash is the only spelling, as I-19 resolved",
+    "T21: the removals and the failure treatment ship together, never in separate commits — deleting recognition without adding refusal re-creates the silent failure the deletion exists to remove",
+    "T22: a retired construct is demoted to a recogniser that refuses it by name, never deleted into silence",
+    "T23: the AST is the source of truth, officially and immutably. The XML is a projection of it, never a peer",
+    "T24: completeness outranks size on the source of truth; thinning belongs to the panel projection alone",
+    "T25: serializeAST projects diagnostic positions — a refusal without a coordinate is not verifiable by a reader without the engine"
+  ],
+  "assumptions": [],
+  "cascade": {
+    "correction_loop": {
+      "rounds": 2,
+      "direction": "QA -> DV",
+      "escalation": "a third rejection of the same criterion goes to the Regent"
+    },
+    "subagents": [
+      {
+        "order": 1,
+        "skill": "suba-architect",
+        "delivers": "where the operator enters the lexer, the AST and the emitter",
+        "status": "returned — architecture settled, one Regent item open"
+      },
+      {
+        "order": 2,
+        "skill": "suba-implementer",
+        "delivers": "E0, then E1 and E3"
+      },
+      {
+        "order": 3,
+        "skill": "suba-tester",
+        "delivers": "E2 and the negative operator vectors"
+      },
+      {
+        "order": 4,
+        "skill": "suba-validator",
+        "delivers": "K1 to K7 executed, not estimated"
+      },
+      {
+        "order": 5,
+        "skill": "suba-scribe",
+        "delivers": "E5, E6, E7 and the changelog entry"
+      }
+    ]
+  },
+  "open_regent_questions": [],
+  "blast_radius": {
+    "measured": true,
+    "method": "every src in the corpus was parsed, not estimated",
+    "vectors_failing": 1,
+    "which": "P-06 at test-corpus.js:50",
+    "shape_changed_still_passing": [
+      "R-01",
+      "L-04"
+    ],
+    "untouched": 170,
+    "reference_edits": "one new attribute row in section 3, three restated rows in section 4, one chain example in section 10"
+  },
+  "root_cause": {
+    "name": "propagation failure — a decision taken in one place and never carried to the others",
+    "note": "this is the pattern behind every blocker in the session. E0 to E7 are not seven unrelated repairs; they are the propagation of decisions already taken",
+    "instances": [
+      "C-01 resolved the slash collision in favour of the emotion delimiter and removed the divider. It reached glyph-grammar.ebnf lines 12 and 37 and stopped there: XML_REFERENCE.md line 101 still documents the divider and glyph-parser.js still implements it at six sites",
+      "I-19 replaced the backslash emotion delimiter with the slash. It reached the grammar, where the backslash appears nowhere, and stopped there: the engine still accepts the backslash and the installed skill still teaches it",
+      "the v1.7 changelist stated that active skill packages stay at v1.6 until reinstalled. The reinstall never happened, so the harness has been reading Glyph through a v1.6 decoder ever since",
+      "the HANDOFF searched for the specification under a different root and concluded it did not exist, while the repository was at v1.4.4.01 with 173 green vectors"
+    ]
+  },
+  "architecture_resolved": {
+    "chainOp": "WITHDRAWN — origin is the field, as the correction established. But origin alone is insufficient: [in-rwk] and [in-[rwk]] both carry origin=extend and chainElement=true today, differing only in tok.k. Verified",
+    "shape": "origin exported in astShallow, read in emit, chainElement narrowed to tk.k === bareTag, astLean dropping root and nest. Two export lines and a narrowing. No new field anywhere",
+    "blast_radius": "1 vector with BOTH removals in place — P-06 at test-corpus.js:50. Measured across all 98 src strings plus a textual sweep for the inline buckets. The suite holds two emotion usages, both slash form, zero divide tokens and zero hyphen-slash sequences",
+    "backslash_treatment": "the branch at :547-564 is DEMOTED TO A RECOGNISER rather than deleted: it refuses the shape with a fix diagnostic naming the slash form. The lone-backslash-to-prose fallback at :562 is deliberately kept so a stray backslash in prose is not caught up in it",
+    "astLean_reversal": "the architect's advice to drop root and nest was right under the old premise and is wrong under the new one. Resolution: astShallow, the source of truth, carries origin on every node including root and nest; astLean stays thin and keeps serving the panel. Two projections, not one compromise — the same split the Regent described for the two file uses"
+  }
+}

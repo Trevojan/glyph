@@ -1,0 +1,157 @@
+<glyph>
+  <block once="true">
+    <section>
+      <user-input>root</user-input>
+      <problem>
+        <user-input>the emitted format is being replaced by glyph-package, and the parser discards the operator that the new format exists to record, so chain cannot be emitted faithfully today</user-input>
+      </problem>
+      <context>
+        <user-input>the AST of a-b-c and of a-b,c is byte identical, both children carry chainElement true and neither records which operator produced it</user-input>
+      </context>
+      <context>
+        <user-input>fromXML fabricates a needs element on the return trip of any extend, which is invention rather than loss, and is worse than the three documented non survivors</user-input>
+      </context>
+    </section>
+  </block>
+  <block once="true">
+    <section>
+      <user-input>trunk</user-input>
+      <instruction>
+        <user-input>step 1, precondition: carry the operator from the lexer to the XML, distinguish extend from comma, and give the divide operator either an implementation or a diagnostic with position</user-input>
+      </instruction>
+      <instruction>
+        <user-input>step 2: derive the glyph-package golden from the specification and the five examples, never from the current emitter</user-input>
+      </instruction>
+      <instruction>
+        <user-input>step 3: rederive the 173 vectors against the new format, keeping the thirteen buckets</user-input>
+      </instruction>
+      <instruction>
+        <user-input>step 4: glyph-check validates the new format, written before the new emitter</user-input>
+      </instruction>
+      <instruction>
+        <user-input>step 5: decide fromXML, either a second reader for glyph-package or the inverse is declared dead in writing</user-input>
+      </instruction>
+      <instruction>
+        <user-input>step 6: rewrite XML_REFERENCE against the new emitter, and extend the D-03 and D-04 tests to cover operators, which they do not cover today</user-input>
+      </instruction>
+      <instruction>
+        <user-input>step 7: republish glyph-markup carrying the parser and the five examples, and retire glyph-markup-commons</user-input>
+      </instruction>
+    </section>
+  </block>
+  <block once="true">
+    <section>
+      <user-input>branches</user-input>
+      <reference>
+        <user-input>the five examples, pure glyph plus verified engine output, which are the conformance pairs the handoff asked for</user-input>
+      </reference>
+      <reference>
+        <user-input>.guidelines/BUNDLE_TARGET.md, still the specification for the six layers, unchanged by this promotion</user-input>
+      </reference>
+      <reference>
+        <user-input>.guidelines/XML_REFERENCE.md lines 99 to 101, where extend, comma and divide are documented</user-input>
+      </reference>
+      <reference>
+        <user-input>scripts/glyph-parser.js chainElement, the marker the engine already computes and never serialises</user-input>
+      </reference>
+      <reference>
+        <user-input>the _ORBITAL guidelines flow.pgml and inspection.pgml, the regression corpus</user-input>
+      </reference>
+    </section>
+  </block>
+  <block once="true">
+    <section>
+      <user-input>limits</user-input>
+      <positive>
+        <user-input>in scope: the operator, the glyph-package format, the golden, the rederived vectors, glyph-check, XML_REFERENCE, the language sweep, and the two skills</user-input>
+      </positive>
+      <restriction>
+        <user-input>out of scope: the six layer bundle emitters, the agent file writer, the _ORBITAL runtime, and the retrieval engine of RAG_para_Glyph.md</user-input>
+      </restriction>
+      <limitation>
+        <user-input>the four guarantees the current XML makes must survive the new format or the format is rejected: editorial force, block segmentation, needs, and exact string fidelity</user-input>
+      </limitation>
+      <limitation>
+        <user-input>source raw is carried only by examples and by teaching models of Glyph itself, never by the general export, because the surface where the XML is pasted does not necessarily read Glyph</user-input>
+      </limitation>
+    </section>
+  </block>
+  <block once="true">
+    <section>
+      <user-input>locks</user-input>
+      <constraint>
+        <user-input>the operator reaches the XML before any chain element is emitted, because a discarded operator cannot be serialised</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the gate comes before the topology: glyph-check validates the new format before the new emitter is written</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the golden derives from the specification and the five examples, never from an implementation</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the single source of truth is the glyph repository; the other roots declare the version, never the content</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the release is 2.4.5.01, because the emitted format changes and the scheme puts parser work that changes what Glyph is in the release digit</user-input>
+      </constraint>
+      <constraint>
+        <user-input>normative material outranks example material everywhere: every example declares the engine version that produced it and is marked perishable, because model authored examples rot fast</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the schema element of glyph-package stays empty in this release, the five examples serving as its base</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the language sweep rides in this release: prose moves to en-EU, and the four element names spelled criticize, categorize, generalize and scrutinize are decided now, because the vectors, the reference and both skills are already being rewritten and doing it afterwards breaks the same files twice</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the order lives in the guidelines directory, which is deliberately not ignored, and never in scope, which the ignore rules exclude as client material</user-input>
+      </constraint>
+      <never force="editorial">
+        <user-input>no self attested gate, and no format without a consumer that parses it</user-input>
+      </never>
+      <never force="editorial">
+        <user-input>no acceptance criterion is rewritten so the code passes; a wrong criterion produces a new version of the specification</user-input>
+      </never>
+    </section>
+  </block>
+  <block once="true">
+    <section>
+      <user-input>fruit</user-input>
+      <target>
+        <user-input>a compiler whose emitted format records the operator it was given, and whose inverse returns what went in</user-input>
+      </target>
+      <ready>
+        <user-input>the five examples emit the expected glyph-package, byte for byte</user-input>
+      </ready>
+      <ready>
+        <user-input>extend and comma return distinct from the XML and re emit identically, and no needs element is ever fabricated on the return trip</user-input>
+      </ready>
+      <ready>
+        <user-input>the divide operator either works or fails with a position, and never lands silently in an off element</user-input>
+      </ready>
+      <ready>
+        <user-input>the 173 vectors are rederived against the new format and all thirteen buckets are green</user-input>
+      </ready>
+      <ready>
+        <user-input>XML_REFERENCE matches the emitter, and the doc test covers operators rather than bracket to element pairs alone</user-input>
+      </ready>
+      <ready>
+        <user-input>glyph-markup is published carrying the parser and the examples, declaring its version, and commons no longer exists</user-input>
+      </ready>
+      <ready>
+        <user-input>the order itself, re emitted under glyph-package, is registered as the first conformance vector of the new format</user-input>
+      </ready>
+    </section>
+  </block>
+  <block once="true">
+    <section>
+      <user-input>assumptions</user-input>
+      <assumption>
+        <user-input>the language sweep is part of this release: prose moves to en-EU, and the four element names spelled criticize, categorize, generalize and scrutinize are decided now rather than later, because the vectors, the reference and both skills are already being rewritten and doing it afterwards breaks the same files twice</user-input>
+      </assumption>
+      <question>
+        <user-input>knock this down in one line and the order becomes version 4</user-input>
+      </question>
+    </section>
+  </block>
+</glyph>
