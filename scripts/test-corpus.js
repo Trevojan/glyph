@@ -41,9 +41,9 @@ const POSITIVE = [
     xml:["<summary>", "<needs>what to summarise</needs>"] },
   { id:"P-02", name:"Summarize this, step by step.", src:"[SUM'step by step']",
     xml:["<summary>", "<user-input>step by step</user-input>"], clean:true },
-  { id:"P-03", name:"Criticize, considering the context.", src:"[CRIT[CTX]]",
+  { id:"P-03", name:"Criticise, considering the context.", src:"[CRIT[CTX]]",
     cmds:["CRIT","CTX"] },
-  { id:"P-04", name:"Criticize and ask.", src:"[CRIT[CTX],[ASK;",
+  { id:"P-04", name:"Criticise and ask.", src:"[CRIT[CTX],[ASK;",
     cmds:["CRIT","CTX","ASK"] },
   { id:"P-05", name:"Compare two terms.", src:"[CMP'termo1','termo2']",
     clean:true, xml:["<compare>"] },
@@ -52,7 +52,7 @@ const POSITIVE = [
   { id:"P-06", name:"Review, improve and format.", src:"[REV-IMPR-FMT]",
     clean:true, cmds:["REV","IMPR","FMT"],
     xml:["<review>", '<improve chain="extend"/>', '<format chain="extend"/>'] },
-  { id:"P-07", name:"Section A: criticize and propose.", src:"[SECTION'sectA',[CRIT],[PROP[ALT]]]",
+  { id:"P-07", name:"Section A: criticise and propose.", src:"[SECTION'sectA',[CRIT],[PROP[ALT]]]",
     cmds:["SECTION","CRIT","PROP","ALT"] },
   { id:"P-08", name:"Prefix comparison gt.", src:"[COND[gt[VAR'A'],[VAR'B']],[INSTOF[SUM],[ASK;",
     cmds:["COND","GT","VAR","VAR","INSTOF","SUM","ASK"] },
@@ -206,7 +206,7 @@ const LONG = [
     src:"[ins".repeat(400) + ";", maxXmlBytes:40000 },
   { id:"L-04", name:"r- block preserves the content, not just the summary",
     src:"r-[tgt`user command blocks`[skep[crit-[scru",
-    xml:["<user-input>user command blocks</user-input>", 'expects="target,skeptic,criticize,scrutinize"'] },
+    xml:["<user-input>user command blocks</user-input>", 'expects="target,skeptic,criticise,scrutinise"'] },
   { id:"L-05", name:"deep nesting gets flagged",
     src:"[ins".repeat(12) + ";", code:"DeepNesting" },
   { id:"L-06", name:"`;` closing a lot at once gets flagged",
@@ -548,7 +548,7 @@ function runExpansionChecks() {
      (!/means=/.test(plain) && !/made-of=/.test(plain)) ? null : "describe leaked into the plain XML");
   ok("X-12", "with `describe`, a composite carries what it is made of",
      (/means="[^"]+"/.test(rich) && /made-of="[a-z ]+"/.test(rich))
-       ? null : "means/made-of missing on <scrutinize>");
+       ? null : "means/made-of missing on <scrutinise>");
   ok("X-13", "a hieroglyph gets no `made-of` — it does not decompose",
      !/made-of=/.test(G.toXML("[ctx'x']", { ...opts, describe: true }))
        ? null : "atom came with made-of");
@@ -762,7 +762,7 @@ function runFromXmlChecks() {
      G.glossCollisions.length === 0 ? null
        : "collisions: " + JSON.stringify(G.glossCollisions));
 
-  const junk = G.fromXML("<glyph><block once=\"true\"><criticize>");
+  const junk = G.fromXML("<glyph><block once=\"true\"><criticise>");
   ok("F-11", "malformed xml answers with diagnostics, never an exception",
      junk.diag.some(d => d.sev === "fix") ? null : "no fix-level diagnostic was raised");
 

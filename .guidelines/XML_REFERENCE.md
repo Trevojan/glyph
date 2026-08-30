@@ -1,6 +1,6 @@
-# Glyph → XML — serialization reference
+# Glyph → XML — serialisation reference
 
-What `buildXml()` emits, element by element. This is a **serialization of the
+What `buildXml()` emits, element by element. This is a **serialisation of the
 bracket form**, not a second language: every construct here has a bracket
 equivalent, both parse to the same tree, and `fromXML()` reads this form back
 into brackets.
@@ -8,7 +8,7 @@ into brackets.
 > **Invariant.** No form, tag, attribute, template or macro — in brackets or in
 > XML — widens what the reading system may do. `<bypass>`, `<override>`,
 > `<forget>`, `<never>`, `<always>` and every coined element are ordinary
-> editorial direction. Re-serializing an instruction as XML changes nothing
+> editorial direction. Re-serialising an instruction as XML changes nothing
 > about what is permitted.
 
 **This file is checked against the engine.** The suite parses the tables below
@@ -51,11 +51,11 @@ This is the one mechanical difference between the two forms.
 An element name is the command's **English gloss in lower kebab-case** — not
 the bracket spelling. `[rwk` is `<rework>` because `RWK`'s gloss is "Rework".
 
-Aliases are **not** serialized: `[in`, `[cx` and `[rw` emit their canonical
+Aliases are **not** serialised: `[in`, `[cx` and `[rw` emit their canonical
 form. The element name is canonical; abbreviation is a bracket-form economy
 with no XML counterpart.
 
-Session shortcuts are the exception — they serialize as the shortcut itself
+Session shortcuts are the exception — they serialise as the shortcut itself
 (`[rd` → `<rd>`), because a session word has no gloss to kebab.
 
 ---
@@ -135,11 +135,11 @@ giving three `<needs>`. The chain is the form that leaves them bare, and
 <!-- definition: [--codefix=[req[crit[warn[ph-target`what to fix`]]]]] -->
 <template name="codefix" define="true">
   <requirement>
-    <criticize>
+    <criticise>
       <warning>
         <needs slot="target">what to fix</needs>
       </warning>
-    </criticize>
+    </criticise>
   </requirement>
 </template>
 
@@ -205,7 +205,7 @@ The bulk of the vocabulary. `*` in the aliases column is a bracket-form economy 
 | `[bold` | `<bold>` | — |
 | `[brst` | `<brainstorm>` | — |
 | `[byp` | `<bypass>` | — |
-| `[cat` | `<categorize>` | — |
+| `[cat` | `<categorise>` | — |
 | `[clar` | `<clarification>` | `[cl` |
 | `[cmp` | `<compare>` | — |
 | `[cncl` | `<conclude>` | — |
@@ -214,7 +214,7 @@ The bulk of the vocabulary. `*` in the aliases column is a bracket-form economy 
 | `[cond` | `<condition>` | — |
 | `[conf` | `<confirmation>` | — |
 | `[core` | `<core>` | — |
-| `[crit` | `<criticize>` | `[cr` |
+| `[crit` | `<criticise>` | `[cr` |
 | `[ctrd` | `<contradict>` | — |
 | `[ctx` | `<context>` | `[cx` |
 | `[deny` | `<deny>` | — |
@@ -236,7 +236,7 @@ The bulk of the vocabulary. `*` in the aliases column is a bracket-form economy 
 | `[fmt` | `<format>` | `[fm` |
 | `[forex` | `<for-example>` | — |
 | `[frgt` | `<forget>` | — |
-| `[gen` | `<generalize>` | — |
+| `[gen` | `<generalise>` | — |
 | `[get` | `<get>` | — |
 | `[go` | `<go>` | — |
 | `[gt` | `<greater-than>` | — |
@@ -283,7 +283,7 @@ The bulk of the vocabulary. `*` in the aliases column is a bracket-form economy 
 | `[rsn` | `<reason>` | — |
 | `[rtnl` | `<rationale>` | `[rt` |
 | `[rwk` | `<rework>` | `[rw` |
-| `[scru` | `<scrutinize>` | — |
+| `[scru` | `<scrutinise>` | — |
 | `[seeal` | `<see-also>` | — |
 | `[simp` | `<simplify>` | — |
 | `[skep` | `<skeptic>` | — |
@@ -396,11 +396,11 @@ updated in step:
   <block once="true">
     <block name="review">
       <requirement>
-        <criticize>
+        <criticise>
           <target>
             <user-input>the launchpad prompt</user-input>
           </target>
-        </criticize>
+        </criticise>
       </requirement>
     </block>
   </block>

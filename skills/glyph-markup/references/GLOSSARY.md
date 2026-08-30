@@ -479,7 +479,7 @@ reader does not need the Glyph vocabulary loaded:
 
 ```xml
 <review means="A reading sweep looking for error or inconsistency, with no formal comparison.">
-<scrutinize means="Examine the context under verification, criticise and question."
+<scrutinise means="Examine the context under verification, criticise and question."
             made-of="ask cmp cnst conf core ctx dist elab eq fin find go logic mand neq real ref rev rsn rwk sub switch tgt true whr">
 ```
 

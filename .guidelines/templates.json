@@ -70,7 +70,7 @@
       "constraints": [
         { "id": "no-coarsen", "forbid": "@coarsen", "severity": "ask", "label": "regride o detalhe",
           "why": "o laço existe para aprofundar a cada passagem, e generalizar ou resumir desfaz o detalhe que a passagem anterior ganhou",
-          "suggest": "elabore dentro da passagem; resuma ou generalize depois que [cond] fechar o laço, não no meio dele" },
+          "suggest": "elabore dentro da passagem; resuma ou generalise depois que [cond] fechar o laço, não no meio dele" },
         { "id": "no-exit", "forbid": "@exit", "severity": "ask", "label": "abandona o laço",
           "why": "trocar o alvo, cair no plano B ou esquecer o que veio antes dissolve a iteração que o preset abriu, em vez de completá-la",
           "suggest": "se a condição de parada é que está errada, corrija [cond]; trocar o alvo no meio começa um laço novo, não termina este" }

@@ -151,10 +151,10 @@
     SKEP:"Skeptic", IMAG:"Imagine", RMBR:"Remember", FRGT:"Forget",
     ITR:"Iterate", CMP:"Compare", CTRD:"Contradict", SIMP:"Simplify", ELAB:"Elaborate",
     HYP:"Hypothesis", EVAL:"Evaluate", BRST:"Brainstorm", RTNL:"Rationale", ALT:"Alternative",
-    LIM:"Limitation", VRFY:"Verify", CNSD:"Consider", GEN:"Generalize", SPEC:"Specify",
-    CNCL:"Conclude", PROP:"Propose", JUST:"Justify", DIST:"Distinguish", CAT:"Categorize",
+    LIM:"Limitation", VRFY:"Verify", CNSD:"Consider", GEN:"Generalise", SPEC:"Specify",
+    CNCL:"Conclude", PROP:"Propose", JUST:"Justify", DIST:"Distinguish", CAT:"Categorise",
     POS:"Positive", NGT:"Negative", REAL:"Realistic", FIN:"Finally", RWK:"Rework",
-    CRIT:"Criticize", SCRU:"Scrutinize", NEV:"Never", ALW:"Always", RDY:"Ready",
+    CRIT:"Criticise", SCRU:"Scrutinise", NEV:"Never", ALW:"Always", RDY:"Ready",
     INTN:"Intention", IMPR:"Improve", REV:"Review", LRN:"Learn", DRVF:"Derive From",
     FLS:"False", TRUE:"True", ERROR:"Error", ASSM:"Assumption", VAL:"Validate", ASK:"Ask",
     DENY:"Deny", CORE:"Core", DFN:"Define Symbol",
@@ -1784,7 +1784,7 @@
         if (chainAttr) attrs.push(chainAttr);
         /* `describe` makes the message carry its own semantics, so whoever
            reads it does not need the Glyph vocabulary loaded to know what
-           `<scrutinize>` means. Nothing here is invented: `means` is the gloss
+           `<scrutinise>` means. Nothing here is invented: `means` is the gloss
            and `made-of` is the composition table, both already in the engine.
 
            Off by default — it changes the deliverable, and the plain form is
@@ -2174,7 +2174,7 @@
   /* ======================================================
      7. .hgml — HIEROGLYPH MARKDOWN, the atomic burn
 
-     What the XML emitter does NOT do: reduce. `<criticize>` travels as one
+     What the XML emitter does NOT do: reduce. `<criticise>` travels as one
      tag, and whatever CRIT is *made of* stays implicit. .hgml burns the tree
      down to pure matter — every composite replaced by its formula, over and
      over, until only hieroglyphs are left.

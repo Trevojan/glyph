@@ -1514,7 +1514,7 @@
   function catNote(c)  { var e = enOn() && CATS_EN[c.id]; return e ? e[1] : c.note; }
 
   /* Em EN a glosa vem do próprio motor: classify() devolve o texto que já
-     virou <criticize> no XML, então a tabela de comandos passa a falar a
+     virou <criticise> no XML, então a tabela de comandos passa a falar a
      mesma língua que o entregável. Em pt-BR segue PTBR, que é CATS. */
   function cmdGloss(canonical) {
     if (!enOn()) return PTBR[canonical] || "";
