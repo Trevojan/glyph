@@ -881,6 +881,67 @@ function runReferenceChecks() {
 }
 const rD = runReferenceChecks();
 
+/* ------------------------------------------------------------------ *
+ * global store registration — the tripwire for splitting the core
+ *
+ * Every bucket above routes its stores through `opts`, deliberately, so the
+ * suite does not depend on module global state or on test order. That is the
+ * right call for those buckets and it leaves one path with no coverage at all:
+ * `useTemplates` / `useRules` / `useExpansions` register into closure-private
+ * state that the emitters read, and nothing here ever exercised it.
+ *
+ * Which matters because that closure is about to be cut into modules. If the
+ * split ever produces two copies of it, a global registration lands in one and
+ * the emitter reads the other — silently, because an unregistered store is a
+ * valid situation, not an error. The engine would simply stop seeing rules and
+ * report nothing. Every bucket above would stay green.
+ *
+ * So this runs LAST, after every opts-routed bucket, because it is the only
+ * thing here that mutates global state on purpose.
+ * ------------------------------------------------------------------ */
+function runRegistryGuard() {
+  console.log("\n--- global store registration — the seam the split must not break ---");
+  const D = [];
+  const ok = (id, name, why) => {
+    if (why) { console.log("  ✗ " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  ✓ " + id + ": " + name); D.push(id); }
+  };
+
+  const EXPSTORE = require("../.guidelines/expansions.json");
+
+  /* each probe reads a different store, so a half-registered engine cannot
+     pass by accident: species comes from expansions, the diagnostic from
+     rules, the expansion from templates */
+  const species = o => { const n = G.toAST("[crit]", o).segments[0].body[0];
+                         return n.species + "/" + n.compositionDepth; };
+  const ruleHit = o => (G.parse("[mand'x'][opt'x']", o).gaps || [])
+                         .map(g => g.sev + ":" + g.code).join(",") || "-";
+  const expanded = o => /expanded/.test(G.toXML("[--germinate]", o));
+
+  /* the reference reading, taken the way every other bucket takes it */
+  const viaOpts = { species: species({ expansions: EXPSTORE }),
+                    rule: ruleHit(WITH_RULES),
+                    tpl: expanded(WITH_TPL) };
+
+  G.useExpansions(EXPSTORE);
+  G.useRules(RULESTORE);
+  G.useTemplates(TPL.templates);
+
+  /* …and now with no opts at all: only the global registration can supply it */
+  ok("GS-01", "expansions registered globally reach the AST",
+     species({}) === viaOpts.species ? null
+       : "opts gave " + viaOpts.species + ", global registration gave " + species({}));
+  ok("GS-02", "rules registered globally reach the diagnostics",
+     ruleHit({}) === viaOpts.rule ? null
+       : "opts gave " + viaOpts.rule + ", global registration gave " + ruleHit({}));
+  ok("GS-03", "templates registered globally reach the emitter",
+     expanded({}) === viaOpts.tpl ? null
+       : "opts expanded=" + viaOpts.tpl + ", global registration expanded=" + expanded({}));
+
+  return D.length;
+}
+const rGS = runRegistryGuard();
+
 
 
 console.log("\n=================================================");
@@ -897,6 +958,7 @@ console.log(" Composition  " + rX + "/17");
 console.log(" .hgml burn   " + rH + "/9");
 console.log(" fromXML      " + rF + "/12");
 console.log(" reference    " + rD + "/8");
+console.log(" global store " + rGS + "/3");
 console.log("=================================================");
 
 if (failures.length) {

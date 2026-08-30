@@ -145,15 +145,17 @@
     },
     {
       "id": "A18",
-      "finding": "every unrecognised shape in the operator and delimiter region fails silently. [in-/rwk] emits <rework/> with no diagnostic, /zzz/ falls to <off>/zzz/</off> with no diagnostic, and \\zzz\\ emits <mood dominant=\"?\"/> with no diagnostic",
+      "finding": "unrecognised shapes in the operator and delimiter region fail without a usable diagnostic. [in-/rwk] emits <rework/> with NO diagnostic and /zzz/ falls to <off>/zzz/</off> with NO diagnostic; the backslash forms emit a [note] that reports the wrong thing",
       "severity": "high",
       "consequence": "removing recognition without adding refusal keeps the silence and only changes the shape of the rubbish. This is why the removals and the error treatment cannot ship separately",
-      "note": "the architect predicted [in-/rwk] would fall to <off>/rwk</off>; verified, it already emits <rework/> today. The silence is the point; the predicted shape is not what happens"
+      "note": "the architect predicted [in-/rwk] would fall to <off>/rwk</off>; verified, it already emits <rework/> today. The silence is the point; the predicted shape is not what happens",
+      "correction": "an earlier version of this finding said the backslash form was silent as well. It is not — it emits [note] UnknownEmotion. The error was mine: the probe read parse().diagnostics, which is always undefined because parse() returns {segments, gaps, tokens} and the diagnostics live in gaps. Every 'no diagnostic' reading taken through that field was vacuous rather than measured, and the ones that survive here were re-confirmed through the CLI --diag"
     },
     {
       "id": "A19",
-      "finding": "an invalid backslash emotion emits <mood dominant=\"?\"/> — a third site printing a literal placeholder into the deliverable, after also=\"?\" and alongside the fabricated mood of A11",
-      "consequence": "the abandoned spelling fabricates more aggressively than the official one, which at least degrades to prose. Removing it is a defect removal, not only a tidy-up"
+      "finding": "an invalid backslash emotion emits <mood dominant=\"?\"/> — a literal placeholder in the deliverable — accompanied by a [note] UnknownEmotion that names the emotion table rather than the real fault",
+      "consequence": "the abandoned spelling fabricates more aggressively than the official one, which at least degrades to prose. Removing it is a defect removal, not only a tidy-up",
+      "corrected_from": "previously recorded as emitting no diagnostic at all. It emits a note; the note is misleading, not absent. The defect class is A11's, not A18's"
     },
     {
       "id": "A20",
@@ -174,6 +176,12 @@
       "id": "A23",
       "finding": "BUNDLE_TARGET.md line 168 asserts that .pgml and .hgml both already have a consumer. The harness does not consume .hgml, so the claim is aspirational rather than factual",
       "consequence": "the same declared-and-unenforced pattern as C-01 and I-19, in the document that is supposed to gate new formats. It must state which consumers exist and which are still to be built"
+    },
+    {
+      "id": "A24",
+      "finding": "parse() returns {segments, gaps, tokens} and exposes diagnostics as `gaps`, while serializeAST projects them under the name `diagnostics`. A consumer reading parse().diagnostics gets undefined and sees an empty result rather than an error",
+      "severity": "medium",
+      "consequence": "the same silent-wrong-answer class the order exists to remove, one level up: a caller asking the wrong question is told nothing is wrong. It cost a wrong finding in this very order. Under T23 the AST projection name and the parse return name should agree, or the mismatch should be documented in XML_REFERENCE §11"
     }
   ],
   "four_guarantees": {
@@ -295,6 +303,10 @@
     {
       "id": "K16",
       "expected": "each of the four formats names its consumer and whether that consumer exists today; no format is described as having a consumer it does not have"
+    },
+    {
+      "id": "K17",
+      "expected": "the diagnostics channel has one name across parse(), serializeAST() and the documentation, or the mismatch is stated in the reference and covered by a vector"
     }
   ],
   "locks": [
