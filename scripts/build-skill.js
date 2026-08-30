@@ -51,6 +51,12 @@ function banner(source, comment) {
 }
 
 function emit(rel, content) {
+  /* Normalise CRLF for the same reason build-templates.js does: the sources
+     carry system line endings on Windows, the generated file then comes out
+     mixed, and `git status` starts lying about a file nobody is supposed to
+     edit. A --check that fails because git rewrote the line endings is a check
+     people learn to ignore. */
+  content = content.replace(/\r\n/g, "\n");
   const full = path.join(SKILL, rel);
   if (!CHECK) {
     fs.mkdirSync(path.dirname(full), { recursive: true });
