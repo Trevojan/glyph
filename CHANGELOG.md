@@ -37,6 +37,124 @@ All notable changes to Glyph are documented here, most recent first.
 
 ---
 
+## [2.4.5.01] — the operator reaches the XML, and two removals finally land
+
+The release digit moves because the emitted XML changed shape and two constructs
+left the grammar. Under `release.frontend.rules.minor`, parser work rides in
+`release` when it changes what Glyph *is* — the same reason `1.2.3.00` earned it
+for `fromXML`. No digit resets any other, so the counter stays at `01`.
+
+### The defect, and why it was invisible
+
+`[in[rtnl-go`cover X`]]` emitted `<rationale><go/><user-input>…`, came back
+from `fromXML` as `[ins[rtnl[go]'cover X']]`, and re-emitted with
+`<needs>what to execute</needs>` — **a question the author had never been asked**,
+appearing on the second lap. In an engine whose founding rule is that an empty
+slot becomes a question, a spontaneously generated one is indistinguishable from
+a legitimate one. That is the worst defect class the design admits.
+
+The cause was one field going unexported. `origin` at `:1242` has always recorded
+which operator produced each edge — `extend` for a hyphen, `item` for a comma —
+and two consumers dropped it: `astShallow` never wrote it out and `buildXml`
+never read it. So `[a-b-c]` and `[a-b,c]` serialised to one identical AST, and
+nothing downstream could tell them apart.
+
+Nothing new was threaded from the lexer. The repair is to stop discarding what
+was already computed.
+
+### `chainElement` answered two questions and could only carry one
+
+It meant "written bare" *and* "attached by an operator". Those are independent:
+`[in-rwk]` and `[in-[rwk]]` share an `origin` and differ in bareness. Conflated,
+a hyphen before a bracket silently cancelled the `<needs>` a bracketed command
+asks for — `[in[rwk]]` gave `<needs>what to rework</needs>` while `[in-[rwk]]`
+gave `<rework/>`. It now answers bareness alone, and the `<needs>` is back.
+
+### `chain="extend" | "item"`, on bare elements only
+
+A bracketed child announces its own scope, so marking it too would force the
+inverse to decide whether `chain="extend"` meant `-rwk` or `-[rwk]` — a second
+bit smuggled into one attribute. `-[` normalises to `[` instead. `fromXML`
+returns `-` or `,` plus the name, with no brackets and no recursion: writing
+`[name…]` is exactly what fabricated the `<needs>`, because the bracket gave the
+command a scope to want an operand in.
+
+The AST carries `origin` on every node; the XML marks only the bare ones. Of the
+corpus sources that moved, all use `,` or `-`, and only one moved in `xml` — the
+rest use `,` between bracketed siblings, which is AST-visible and XML-silent by
+design.
+
+### Two removals, seven versions late
+
+Resolution **C-01** removed the `/` divider and **I-19** replaced `\emo\` with
+`/emo/`. Both reached `glyph-grammar.ebnf` and stopped there. The engine went on
+implementing the first at six sites and accepting the second; `XML_REFERENCE`
+went on documenting both. This release is the propagation, not a new decision.
+
+Neither could simply be deleted. `/` is not a free character — `EMO` holds `ins`
+and `cmp` while `INSTR` holds `INS` and `CMP` — so `[in-rwk/ins/fmt]` fabricated
+`<mood dominant="insecurity" also="?"/>`, hoisted it to block level and dropped
+`fmt`. And deleting the backslash branch would have made `\eth\` fall to
+`<off>` in silence: the defect abolished here, re-created in the act of removing
+a different instance of it. So the branch is **demoted to a recogniser** — it
+refuses the abandoned shape by name and lets the characters survive as `<off>`.
+
+### No placeholder character reaches the deliverable
+
+`also="?"` printed a literal question mark into the XML whenever a mood code was
+off-table, announced by a `note` that said the code had been *ignored* — while
+it had reached the output. A misleading low-severity diagnostic is worse than an
+absent one, because it reads as handled. Off-table codes are now discarded at
+`fix`, with a position.
+
+### Diagnostics can say where
+
+`at: {s, e}`, optional and additive. Every token already carried the span, and a
+refusal without a coordinate cannot be located by a reader who does not have the
+engine.
+
+### The gate came first, and it found things
+
+Written before any of the above, and each observed failing before it counted:
+
+- **`D-07`/`D-08`** probe every operator row in `XML_REFERENCE` §4 — the one
+  table nothing asserted, which is why a documented operator could contradict
+  the grammar for seven versions. `D-08` found a twelfth row on its first run:
+  auto-close, which had no probe.
+- **`check-globals.js`** found `GlyphExpansions` published by two files — the
+  expansions *store* and the expansions *reader*. They had never collided only
+  because the reader was never loaded in a browser.
+- **The projection snapshot** (101 sources × 3) found `toHGML` overflowing the
+  stack past ~1600 levels of nesting, while the XML emitter is hardened to 8000
+  and the AST truncates with a marker. Nothing had ever crossed the `LONG`
+  sources with the `.hgml` projection. Pinned with its reason, not hidden.
+- **`build-templates --check`** makes the DO-NOT-EDIT banner mean something: it
+  rebuilds in memory and compares, catching both a hand-edited generated file
+  and one left stale by a changed source.
+- **`GS-01`…`GS-03`** exercise global store registration, which no bucket
+  touched because they all route stores through `opts` — the seam a future
+  split of the core is most likely to break silently.
+
+### `XML_REFERENCE` §11 — failure
+
+The reference had ten sections and all of them described what works. Three
+defects lived for versions in the space where §11 should have been: a document
+tested against the engine cannot catch a fabrication it has no place to
+describe. §11 states the distinction the defects came from — **an empty slot
+does not block** protects information that is *missing*, never information that
+is *malformed* — lists the five refusals with their repairs, and is held to the
+engine by `D-09` and `D-10` the way §7 is held by `D-03` and `D-04`.
+
+### Vectors
+
+`fromXML` goes from 12 to 23. The bucket had no extend case at all, which is how
+the inverse could break mid-release and still read 12/12 — it did, between two
+commits, and `F-13` is the vector that catches it. Bucket `N` gains four
+refusals. Blast radius on the existing suite: **one**, `P-06`, which asserted
+the literal string `<improve/>`.
+
+---
+
 ## [1.4.4.01] — four formats, one card, and the engine says where it is going
 
 The four output formats lived in four places. `.xml` sat in the right column,

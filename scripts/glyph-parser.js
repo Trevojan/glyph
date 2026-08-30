@@ -53,7 +53,7 @@
 })(typeof self !== "undefined" ? self : this, function () {
   "use strict";
 
-  var VERSION = "1.4.4.01";
+  var VERSION = "2.4.5.01";
 
   /* ======================================================
      1. VOCABULARY — Appendix A, one slot per command

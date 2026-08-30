@@ -1043,8 +1043,17 @@ function runSnapshotChecks() {
   CORPUS.forEach(c => {
     if (!c || !c.id || typeof c.src !== "string") return;
     const one = {};
+    /* the AST envelope stamps the engine version, so hashing it whole made
+       every version bump invalidate all 101 entries at once and bury real
+       drift in the noise. The snapshot measures SHAPE; the stamp is recorded
+       once in the file's own `engine` field, where it belongs. */
+    const astShape = s => {
+      const a = G.toAST(s, SNAP_OPTS);
+      delete a.version;
+      return JSON.stringify(a);
+    };
     [["xml", s => G.toXML(s, SNAP_OPTS)],
-     ["ast", s => JSON.stringify(G.toAST(s, SNAP_OPTS))],
+     ["ast", astShape],
      ["hgml", s => G.toHGML(s, SNAP_OPTS)]].forEach(pair => {
       try { one[pair[0]] = sum(pair[1](c.src)); }
       catch (e) { one[pair[0]] = "THREW"; threw.push(c.id + "." + pair[0] + ": " + e.message); }
