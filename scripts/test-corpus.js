@@ -950,6 +950,40 @@ function runReferenceChecks() {
      that can go stale in silence, which is the defect this check exists for */
   const s4 = md.split(/^## 4\. /m)[1];
   const s4rows = s4 ? (s4.split(/^## /m)[0].match(/^\|(?!\s*-)(?!\s*Bracket).*\|$/gm) || []) : [];
+  /* §11 — the failure section. It was written after three defects had lived
+     for versions in the space where it should have been: the document had no
+     place to state what a malformed construct produces, so nothing written
+     here could contradict an engine that fabricated one. Prose alone would
+     re-create that, so §11.3 is held to the engine exactly as §7 is by D-03. */
+  const REFUSALS = [
+    { code: "SlashInChain",           run: () => G.parse("[in-rwk/ctx]", WITH_BOTH).gaps },
+    { code: "BackslashMood",          run: () => G.parse("\\eth\\[ins`x`]", WITH_BOTH).gaps },
+    { code: "UnknownEmotion",         run: () => G.parse("/eth/xyz/[ins`x`]", WITH_BOTH).gaps },
+    { code: "XmlChainHasChildren",    run: () => G.fromXML('<glyph><block once="true"><instruction>' +
+        '<rework chain="extend"><user-input>x</user-input></rework></instruction></block></glyph>', WITH_BOTH).diag },
+    { code: "XmlChainStartsWithItem", run: () => G.fromXML('<glyph><block once="true"><instruction>' +
+        '<rework chain="item"/><format chain="item"/></instruction></block></glyph>', WITH_BOTH).diag }
+  ];
+
+  const notRaised = REFUSALS.filter(r => {
+    const g = r.run() || [];
+    return !g.some(x => x.code === r.code && x.sev === "fix");
+  }).map(r => r.code);
+  ok("D-09", "every refusal documented in §11.3 is raised at fix by its trigger",
+     notRaised.length ? "documented but not raised: " + notRaised.join(", ") : null);
+
+  /* the reverse gap, the shape D-04 is to D-03 */
+  const s11 = md.split(/^### 11\.3 /m)[1];
+  const s11codes = s11 ? (s11.split(/^### /m)[0].match(/^\| `([A-Za-z]+)`/gm) || [])
+                           .map(r => r.replace(/^\| `|`$/g, "")) : [];
+  const undocRefusal = REFUSALS.map(r => r.code).filter(c => s11codes.indexOf(c) === -1);
+  const unprobed = s11codes.filter(c => !REFUSALS.some(r => r.code === c));
+  ok("D-10", "§11.3 and the probes name the same refusals",
+     (undocRefusal.length || unprobed.length)
+       ? (undocRefusal.length ? "raised but not in §11.3: " + undocRefusal.join(", ") + ". " : "") +
+         (unprobed.length ? "in §11.3 but never probed: " + unprobed.join(", ") : "")
+       : null);
+
   ok("D-08", "every §4 row has a probe in D-07",
      s4rows.length === SECTION4.length ? null
        : "§4 has " + s4rows.length + " rows and D-07 has " + SECTION4.length
@@ -1165,7 +1199,7 @@ console.log(" Guard        " + rG + "/" + POSITIVE_WITH_RULES.length);
 console.log(" Composition  " + rX + "/17");
 console.log(" .hgml burn   " + rH + "/9");
 console.log(" fromXML      " + rF + "/23");
-console.log(" reference    " + rD + "/8");
+console.log(" reference    " + rD + "/10");
 console.log(" snapshot     " + rSN + "/4");
 console.log(" global store " + rGS + "/3");
 console.log("=================================================");

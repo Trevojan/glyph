@@ -429,3 +429,70 @@ operand and none was given: the empty field does not block, it asks.
 ```bash
 node scripts/glyph-parser.js "<the xml above>" --from-xml
 ```
+
+---
+
+## 11. Failure — what a malformed construct produces
+
+Sections 1 to 10 describe what works. Until this one existed there was nowhere
+in this document to state what happens when the input is broken, and that
+absence had a cost: three defects lived for versions because nothing written
+here could contradict them. `D-07` now probes every operator in §4 against the
+engine, and this section is what `D-07`'s expectations are read against.
+
+### 11.1 Missing is not malformed
+
+The engine's founding rule — **an empty slot does not block** — protects
+information that is **missing**. It has never protected information that is
+**malformed**, and conflating the two is what produced every defect listed
+below.
+
+| | Meaning | Result | Severity |
+|---|---|---|---|
+| **incomplete** | the author left a slot empty | `<needs>`, and the input stays usable | none, or `note` |
+| **invalid** | the author wrote something the grammar does not have | a refusal naming what to write instead | **`fix`** |
+
+A refusal never repairs silently and never invents. The characters the author
+typed survive as `<off>`; nothing is fabricated from them.
+
+### 11.2 Every refusal carries a position
+
+A diagnostic may carry `at: {s, e}` — the character span in the source that
+caused it. Optional and additive: consumers reading `{sev, lab, msg}` are
+unaffected. It exists because a refusal with no coordinate cannot be located by
+a reader who does not have the engine, and the AST is meant to travel.
+
+### 11.3 The refusals
+
+| Code | Trigger | Emitted | Repair named |
+|---|---|---|---|
+| `SlashInChain` | `/` reached inside a chain — `[in-rwk/ctx]` | `<off>/ctx</off>`, the whole run | close the chain first: `[in-rwk]/eth/` |
+| `BackslashMood` | the abandoned `\emo\` spelling — `\eth\` | `<off>\eth\</off>` | write `/eth/` |
+| `UnknownEmotion` | a mood code outside the table — `/eth/xyz/` | the code is **discarded**; the valid ones stand | use a code from §6 |
+| `XmlChainHasChildren` | `fromXML` given a `chain` element with children | children re-attached to the parent | remove them, or drop the attribute |
+| `XmlChainStartsWithItem` | `fromXML` given a run whose first link is `chain="item"` | promoted to `chain="extend"` | `,` continues a chain, `-` opens it |
+
+Two of the five are reached only through `fromXML`, because the XML panel is
+editable and the reader is handed input this emitter never wrote.
+
+### 11.4 What is deliberately not refused
+
+- **A lone `\` in prose**, and a backslash inside a literal such as `c:\temp`.
+  The refusal targets the abandoned *delimiter shape*, never the character.
+- **An unknown command.** `[zzz` is `<unresolved tag="zzz">` with a `nearest`
+  suggestion when one is close — the vocabulary is open at the edges, and a
+  command the engine does not know is not the same as a construct the grammar
+  forbids.
+- **Deep nesting.** It is flagged (`DeepNesting`) and still emitted.
+
+### 11.5 No placeholder character reaches the deliverable
+
+`also="?"` used to appear when a mood code was outside the table: a literal
+question mark, printed into the XML, announced by a `note` that said the code
+had been *ignored* — while it had in fact reached the output. A misleading
+low-severity diagnostic is worse than an absent one, because it reads as
+handled.
+
+The rule that replaced it holds for the whole emitter: **the XML never carries a
+character standing in for something the engine could not resolve.** Either the
+value is known and emitted, or the input is refused and the author is told.
