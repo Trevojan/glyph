@@ -46,7 +46,9 @@
     "duplication_resolved": "references/ and the conformance vectors are not two copies of one truth: the vectors are specific input-to-output pairs living in the repository and are the test, while references/ sits one level of abstraction above them and is generic. D9 and E2 point at the vectors, not at the reference",
     "backslash": "ABANDONED, per I-19. Removed from the engine in this release alongside the divider",
     "source_of_truth": "the resulting AST is, from here forward, officially and immutably the source of truth. It is parseable and readable by every generative model that receives text, which is what makes it portable and internally verifiable. The .json serves as the directive export, carrying the structure and significance of the whole project; the .xml carries the real instructions. The XML remains the pasted deliverable, but it is a projection of the AST rather than a peer of it",
-    "Q2_diagnostic_positions": "ANSWERED by implication of the source-of-truth decision: serializeAST projects diagnostic positions. A refusal with no coordinate is not verifiable by a reader who does not have the engine, and verification by other models is the reason the AST was promoted"
+    "Q2_diagnostic_positions": "ANSWERED by implication of the source-of-truth decision: serializeAST projects diagnostic positions. A refusal with no coordinate is not verifiable by a reader who does not have the engine, and verification by other models is the reason the AST was promoted",
+    "extension": "the source extension is .pgml — pure glyph markup language — never .glyph, which is already taken in another context. The repository already uses .pgml throughout the CHANGELOG and BUNDLE_TARGET; the .glyph naming in version 3 of this order was an error and has been renamed",
+    "no_format_is_dropped": "a generated document is never dropped for lacking a consumer. It is improved until it has one. If the harness does not exploit .hgml, .hgml is improved so the harness can; the same holds for .pgml and model tracing"
   },
   "verified_findings": [
     {
@@ -167,6 +169,11 @@
       "id": "A22",
       "finding": "the promotion contradicts the documented design. skills/glyph-markup/SKILL.md line 12 states that the XML is the deliverable and the AST is only an inspection panel, and the 45% AST slimming of release 1.2.0.1 was justified at glyph-parser.js:1825 by the premise that a long panel is a panel nobody reads",
       "consequence": "the premise behind astLean inverts. Under the promotion, completeness outranks size on the source of truth, and the architect's recommendation to drop root and nest from the export is correct only under the retired premise"
+    },
+    {
+      "id": "A23",
+      "finding": "BUNDLE_TARGET.md line 168 asserts that .pgml and .hgml both already have a consumer. The harness does not consume .hgml, so the claim is aspirational rather than factual",
+      "consequence": "the same declared-and-unenforced pattern as C-01 and I-19, in the document that is supposed to gate new formats. It must state which consumers exist and which are still to be built"
     }
   ],
   "four_guarantees": {
@@ -284,6 +291,10 @@
     {
       "id": "K15",
       "expected": "SKILL.md no longer states that the AST is only an inspection panel, and the CHANGELOG records the reversal with its reason"
+    },
+    {
+      "id": "K16",
+      "expected": "each of the four formats names its consumer and whether that consumer exists today; no format is described as having a consumer it does not have"
     }
   ],
   "locks": [
@@ -292,7 +303,7 @@
     "T3: single source of truth is the glyph repository",
     "T4: the golden derives from the specification and the examples, never from an implementation",
     "T5: the cond A to B lines are L5, gate",
-    "T6: no self attested gate; no format without a consumer",
+    "T6: no self attested gate; and no NEW format is added without a consumer that parses it — superseded in the other direction for formats that already exist, which are improved into usefulness rather than dropped (T26)",
     "T7: no acceptance criterion is rewritten so the code passes",
     "T8: the four guarantees survive or the format is rejected",
     "T9: glyph-markup-commons is retired",
@@ -311,7 +322,9 @@
     "T22: a retired construct is demoted to a recogniser that refuses it by name, never deleted into silence",
     "T23: the AST is the source of truth, officially and immutably. The XML is a projection of it, never a peer",
     "T24: completeness outranks size on the source of truth; thinning belongs to the panel projection alone",
-    "T25: serializeAST projects diagnostic positions — a refusal without a coordinate is not verifiable by a reader without the engine"
+    "T25: serializeAST projects diagnostic positions — a refusal without a coordinate is not verifiable by a reader without the engine",
+    "T26: a generated document without a consumer is a document whose consumer has not been built yet. It is improved until it has one, never deleted for being unused",
+    "T27: the source extension is .pgml; .glyph is taken in another context and is never used for Glyph source"
   ],
   "assumptions": [],
   "cascade": {
@@ -378,5 +391,30 @@
     "blast_radius": "1 vector with BOTH removals in place — P-06 at test-corpus.js:50. Measured across all 98 src strings plus a textual sweep for the inline buckets. The suite holds two emotion usages, both slash form, zero divide tokens and zero hyphen-slash sequences",
     "backslash_treatment": "the branch at :547-564 is DEMOTED TO A RECOGNISER rather than deleted: it refuses the shape with a fix diagnostic naming the slash form. The lone-backslash-to-prose fallback at :562 is deliberately kept so a stray backslash in prose is not caught up in it",
     "astLean_reversal": "the architect's advice to drop root and nest was right under the old premise and is wrong under the new one. Resolution: astShallow, the source of truth, carries origin on every node including root and nest; astLean stays thin and keeps serving the panel. Two projections, not one compromise — the same split the Regent described for the two file uses"
+  },
+  "consumer_map": {
+    "purpose": "four projections of one AST, each with a distinct consumer, so alignment is proven rather than assumed. This is what makes resuming work cheap and what context engineering in Glyph is for",
+    "formats": [
+      {
+        "format": ".pgml",
+        "consumer": "the human writes it; model tracing",
+        "state": "source exists, tracing consumer to be built"
+      },
+      {
+        "format": ".json",
+        "consumer": "any generative model that receives text — portability and internal verification",
+        "state": "promoted to source of truth by T23"
+      },
+      {
+        "format": ".xml",
+        "consumer": "the surface where the instructions are pasted",
+        "state": "the deliverable; being replaced by glyph-package"
+      },
+      {
+        "format": ".hgml",
+        "consumer": "the harness",
+        "state": "atomic burn exists, harness consumer to be built"
+      }
+    ]
   }
 }
