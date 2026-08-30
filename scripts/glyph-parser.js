@@ -544,23 +544,29 @@
         i = e4; continue;
       }
 
+      /* The backslash emotion delimiter was replaced by the slash at resolution
+         I-19. The grammar carries only the slash (glyph-grammar.ebnf:13) and
+         the inverse has only ever written the slash — but the lexer still
+         accepted both, so an abandoned spelling stayed alive and undocumented,
+         and the installed skill still taught it.
+
+         DEMOTED TO A RECOGNISER, not deleted. Deleting the branch makes `\eth\`
+         fall through to addText and emit <off>\eth\</off> in silence — the very
+         defect this work exists to abolish, re-created in the act of removing a
+         different instance of it. So the shape is still matched, still refused
+         by name, and the characters survive as <off>. Nothing is fabricated,
+         nothing vanishes, and the author is told which spelling to use. */
       if (c === "\\") {
-        flushText();
-        var start = i; i++;
-        var order = 0, guard = 0;
-        while (i < n && guard++ < 64) {
-          var es = i;
-          while (i < n && /[A-Za-z]/.test(src[i])) i++;
-          var ename = src.slice(es, i);
-          if (!ename) break;
-          var had = src[i] === "\\";
-          var ord = order++;
-          T.push({ k:"emotion", v:ename, s: ord === 0 ? start : es - 1,
-                   e:i + (had?1:0), order:ord, unterminated:!had, delim:"\\" });
-          if (had) { i++; if (!(i < n && /[A-Za-z]/.test(src[i]))) break; } else break;
+        var bs = i, bj = i + 1;
+        while (bj < n && /[A-Za-z\\]/.test(src[bj])) bj++;
+        if (bj > bs + 1) {
+          addText(src.slice(bs, bj));
+          flushText();
+          T.push({ k:"badmood", v:src.slice(bs, bj), s:bs, e:bj });
+          i = bj; continue;
         }
-        if (i === start + 1) addText("\\");
-        continue;
+        /* a lone `\` in prose is not a delimiter and must stay prose */
+        addText("\\"); i++; continue;
       }
 
       if (c === ";") {
@@ -603,8 +609,26 @@
 
       if (c === "/") {
         var prevT = T[T.length-1];
-        if (!textBuf.length && prevT && prevT.k === "extend") {
-          flushText(); T.push({ k:"divide", v:"/", s:i, e:i+1 }); i++; expectBare = true; continue;
+        /* The divide operator was removed by resolution C-01 — the grammar has
+           said so since v1.7 (glyph-grammar.ebnf:37) while the engine went on
+           emitting a `divide` token and XML_REFERENCE went on documenting it.
+           This is the propagation, not a new decision.
+
+           Deleting the branch outright would not be safe, because `/` is not a
+           free character: EMO holds `ins` and `cmp`, INSTR holds INS and CMP,
+           and the emotion branch below fires on /name/ regardless of what
+           precedes it. So `[in-rwk/ins/fmt]` fabricated a <mood> from a chain,
+           hoisted it to block level, and dropped `fmt`. In a chain position the
+           emotion branch must not be entered at all. */
+        var inChain = !textBuf.length && prevT &&
+                      (prevT.k === "extend" || prevT.k === "bareTag" || prevT.k === "comma");
+        if (inChain) {
+          var rs = i, rj = i + 1;
+          while (rj < n && /[A-Za-z\/]/.test(src[rj])) rj++;   /* the whole run, so nothing is left for EMO */
+          addText(src.slice(rs, rj));
+          flushText();
+          T.push({ k:"badslash", v:src.slice(rs, rj), s:rs, e:rj });
+          i = rj; continue;
         }
         var pb2 = i + 1, ps2 = pb2;
         while (pb2 < n && /[A-Za-z]/.test(src[pb2])) pb2++;
@@ -1203,9 +1227,16 @@
     /* Duas línguas por diagnóstico. O rótulo e a mensagem em inglês chegam
        como 5º e 6º argumentos; faltando, fica o pt-BR — um sítio esquecido
        aparece na língua errada, que é melhor que aparecer vazio. */
-    function G(sev, lab, msg, code, enLab, enMsg) {
+    function G(sev, lab, msg, code, enLab, enMsg, tk) {
       var en = opts.lang === "en";
-      gaps.push({ sev:sev, lab:(en && enLab) || lab, msg:(en && enMsg) || msg, code:code || "Note" });
+      var g = { sev:sev, lab:(en && enLab) || lab, msg:(en && enMsg) || msg, code:code || "Note" };
+      /* Additive, and optional. A refusal with no coordinate cannot be located
+         by a reader who does not have the engine — which is the whole point of
+         carrying the AST between machines. Every token already holds s/e, so
+         this costs a field and no plumbing, and the existing consumers read
+         { sev, lab, msg } and are unaffected. */
+      if (tk && typeof tk.s === "number") g.at = { s:tk.s, e:tk.e };
+      gaps.push(g);
     }
     function closeSeg(cause) {
       var names = [];
@@ -1319,7 +1350,6 @@
             if (nx.k === "comma") { sawComma = true; parts.push(","); j5++; continue; }
             if (nx.k === "literal" || nx.k === "text") { parts.push(String(nx.v).trim()); j5++; continue; }
             if (nx.k === "equals") { parts.push("="); j5++; continue; }
-            if (nx.k === "divide") { parts.push("/"); j5++; continue; }
             if (nx.k === "extend") { parts.push("-"); j5++; continue; }
             break;
           }
@@ -1352,9 +1382,23 @@
 
         case "emotion": {
           var key = tk.v.toLowerCase();
-          if (!EMO[key]) G("note", "humor externo", "<code>/" + esc(tk.v) + "/</code> fora da tabela. Ignorado.", "UnknownEmotion",
-            "mood off-table", "<code>/" + esc(tk.v) + "/</code> is not in the table. Ignored.");
-          var rec = { name:key, gloss:EMO[key] || "?", order:tk.order };
+          if (!EMO[key]) {
+            /* It said "Ignorado" and it was not ignored: the code went on into
+               seg.mood carrying the gloss "?", and buildXml joined those
+               glosses into also="?" — a literal question mark printed into the
+               deliverable, announced by a `note` saying the opposite. A
+               misleading low-severity diagnostic is worse than none, because it
+               reads as handled. Now it is discarded here, at `fix`, with a
+               position, and no `?` can reach the XML under any input. */
+            G("fix", "humor fora da tabela",
+              "<code>/" + esc(tk.v) + "/</code> não está na tabela de emoções. Descartado.",
+              "UnknownEmotion",
+              "mood off-table",
+              "<code>/" + esc(tk.v) + "/</code> is not in the emotion table. Discarded.",
+              tk);
+            break;
+          }
+          var rec = { name:key, gloss:EMO[key], order:tk.order };
           var t4 = top(); if (t4) t4.emotions.push(rec);
           seg.mood.push(rec);
           break;
@@ -1363,18 +1407,35 @@
         case "extend": {
           pendingOrigin = "extend";
           var nx2 = tokens[i+1];
-          if (!nx2 || (nx2.k !== "open" && nx2.k !== "bareTag" && nx2.k !== "divide" && nx2.k !== "literal" && nx2.k !== "text"))
+          if (!nx2 || (nx2.k !== "open" && nx2.k !== "bareTag" && nx2.k !== "literal" && nx2.k !== "text"))
             G("fix", "pendurado", "<code>-</code> sem cadeia. Ex.: <code>[rw-cr</code>.", "DanglingChain",
             "dangling", "<code>-</code> with no chain. E.g. <code>[rw-cr</code>.");
-          if (nx2 && nx2.k === "divide") {
-            var nx3 = tokens[i+2];
-            if (!nx3 || (nx3.k !== "open" && nx3.k !== "bareTag" && nx3.k !== "literal" && nx3.k !== "text"))
-              G("fix", "pendurado", "cadeia vazia. Ex.: <code>[in-rw,fm,im</code>.", "DanglingChain",
-            "dangling", "empty chain. E.g. <code>[in-rw,fm,im</code>.");
-          }
           break;
         }
-        case "divide": pendingOrigin = "divide"; break;
+        /* `/` in a chain position, and the abandoned `\emo\` spelling. Both
+           are refused by name rather than swallowed: an empty slot does not
+           block, but that protects information that is MISSING, never
+           information that is MALFORMED. Bucket N, `fix`, with a position. */
+        case "badslash":
+          G("fix", "barra na cadeia",
+            "<code>/</code> dentro de uma cadeia. O divisor foi removido em v1.7 (C-01) e " +
+            "<code>/</code> agora delimita apenas emoção. Feche a cadeia antes: <code>[in-rwk]/eth/</code>.",
+            "SlashInChain",
+            "slash in chain",
+            "<code>/</code> inside a chain. The divider was removed in v1.7 (C-01) and " +
+            "<code>/</code> now delimits emotion only. Close the chain first: <code>[in-rwk]/eth/</code>.",
+            tk);
+          break;
+        case "badmood":
+          G("fix", "grafia abandonada",
+            "<code>\emo\</code> foi substituída por <code>/emo/</code> em v1.7 (I-19). " +
+            "Escreva <code>/eth/</code>.",
+            "BackslashMood",
+            "abandoned spelling",
+            "<code>\emo\</code> was replaced by <code>/emo/</code> in v1.7 (I-19). " +
+            "Write <code>/eth/</code>.",
+            tk);
+          break;
         case "comma":  pendingOrigin = "item"; break;
         case "equals": { var t5 = top(); if (t5) t5.isDefinition = true; break; }
         case "semi":   closeSeg("semi"); break;

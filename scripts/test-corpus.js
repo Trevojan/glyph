@@ -163,7 +163,21 @@ const INVALID = [
   { id:"N-16", name:"[ with no name", src:"[ ]",
     code:"EmptyCommandName" },
   { id:"N-17", name:"Template definition with no body", src:"[--t=",
-    code:"EmptyTemplateDefinition" }
+    code:"EmptyTemplateDefinition" },
+
+  /* OPERATOR_TARGET §8.2. Three constructs that used to be swallowed in
+     silence or, worse, announced by a diagnostic that reported the wrong
+     thing. Bucket N and not bucket I, because "an empty slot does not block"
+     protects information that is MISSING and never information that is
+     MALFORMED — conflating the two is what produced all three. */
+  { id:"N-18", name:"`/` inside a chain is refused, not read as a mood",
+    src:"[in-rwk/ctx]", code:"SlashInChain" },
+  { id:"N-19", name:"a chain `/` run whose head is a real emotion code",
+    src:"[in-rwk/ins/fmt]", code:"SlashInChain" },
+  { id:"N-20", name:"the abandoned \\emo\\ spelling is refused by name",
+    src:"\\eth\\[ins`x`]", code:"BackslashMood" },
+  { id:"N-21", name:"an off-table mood code is discarded at fix, not noted",
+    src:"/eth/xyz/[ins`x`]", code:"UnknownEmotion" }
 ];
 
 /* The four v1.8 gaps: tokens the standalone parser silently dropped, plus
@@ -902,13 +916,12 @@ function runReferenceChecks() {
     { id: "4-04", src: "[ins'a'];;[ins'b']",       expect: x => /<break\/>/.test(x) },
     { id: "4-05", src: "[ins'a'];[=[ins'b']",      expect: x => /continues="previous"/.test(x) },
     { id: "4-06", src: "[in-rwk]",
-      expect: x => /<instruction>\s*<rework\/>\s*<\/instruction>/.test(x) },
+      expect: x => /<instruction>\s*<rework chain="extend"\/>\s*<\/instruction>/.test(x) },
     { id: "4-07", src: "[in-rwk,ctx]",
-      expect: x => /<instruction>\s*<rework\/>\s*<context\/>\s*<\/instruction>/.test(x) },
-    /* the reference says `/` opens the chain after `-`, so ctx must land
-       inside <instruction> exactly as the `,` of 4-07 does */
-    { id: "4-08", src: "[in-rwk/ctx]",
-      expect: x => /<instruction>\s*<rework\/>\s*<context\/>\s*<\/instruction>/.test(x) },
+      expect: x => /<instruction>\s*<rework chain="extend"\/>\s*<context chain="item"\/>\s*<\/instruction>/.test(x) },
+    /* 4-08 was the `/` divide row. It is gone from the reference because it is
+       gone from the grammar (C-01) and now from the engine; the refusal that
+       replaced it lives in bucket N, where a malformed construct belongs. */
     { id: "4-09", src: "[off]hello [ins'x'][on]", expect: x => /<off>hello \[ins'x'\]<\/off>/.test(x) },
     { id: "4-10", src: "[ins'a']r-'a list'",       expect: x => /<user-expectative expects="/.test(x) },
     { id: "4-11", src: "[logic]let a = 1[/logic]",

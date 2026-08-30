@@ -96,9 +96,8 @@ in children.
 | `;` | closes the segment — the next `<block>` |
 | `;;` | `<break/>` after the block |
 | `[=` | `continues="previous"` on the next block |
-| `-` extend | parent-child nesting: `[in-rwk` puts `<rework/>` inside `<instruction>` |
-| `,` after an extend | the next sibling under the same parent |
-| `/` divide | opens the chain after `-`; it does **not** repeat as a separator |
+| `-` extend | parent-child nesting: `[in-rwk` puts `<rework chain="extend"/>` inside `<instruction>` |
+| `,` after an extend | the next sibling under the same parent, as `chain="item"` |
 | `[off]` … `[on]` | `<off>` — read as prose, token parsing suspended |
 | `r-` / `R:` | `<user-expectative expects="…">` |
 | `[logic]` … `[/logic]` | `<logic>` with a `<rule>` per line |
@@ -117,11 +116,16 @@ Worked equivalence — the chain is comma-separated, and `,` is what repeats:
 </instruction>
 ```
 
-Writing `[in-rwk/fmt/impr` does **not** do this: `/` opens the chain but does
-not separate it, so `rwk` binds and `/fmt/impr` falls through to prose as
-`<off>`. The nested form `[ins[rwk][fmt][impr]]` is not equivalent either —
-each command there is written with its own brackets and so each asks for its own
-operand, giving three `<needs>`. The chain is the form that leaves them bare.
+Writing `[in-rwk/fmt/impr` is **invalid**. The `/` divider was removed by
+resolution C-01 and `/` now delimits emotion only, so a `/` reached inside a
+chain is refused as `SlashInChain` at `fix` severity, with its position; the
+characters survive as `<off>` and nothing is fabricated from them. Close the
+chain first: `[in-rwk]/eth/`.
+
+The nested form `[ins[rwk][fmt][impr]]` is not equivalent either — each command
+there is written with its own brackets and so each asks for its own operand,
+giving three `<needs>`. The chain is the form that leaves them bare, and
+`chain="extend"` on each bare element is what records it.
 
 ---
 
@@ -175,7 +179,10 @@ the whole segment, not one command. The attributes carry the English gloss, not
 the code — the code is bracket-form shorthand, and what reaches the deliverable
 is the word. Mood colours tone only; it never alters permissions.
 
-Both `/eth/` and `\eth\` are accepted on input.
+Only `/eth/` is accepted. The `\eth\` spelling was replaced by resolution
+I-19 and is refused as `BackslashMood` at `fix` severity, naming `/eth/` as the
+replacement; the characters survive as `<off>`. A lone `\` in prose, and a
+backslash inside a literal such as `c:	emp`, are untouched.
 
 ---
 
