@@ -31,7 +31,7 @@ All it needs is a browser.
 ### The command line — needs Node
 
 ```bash
-node scripts/glyph-parser.js "[crit[ctx'the parser']]" --xml
+node scripts/glyph-cli.js "[crit[ctx'the parser']]" --xml
 ```
 
 Modes: `--xml` (default, the deliverable) · `--ast` (JSON inspection panel) ·
@@ -45,7 +45,7 @@ output back into bracket source, which is what makes the XML panel in the app
 editable rather than a display.
 
 ```bash
-node scripts/glyph-parser.js "$(node scripts/glyph-parser.js "[crit'teste']" --xml)" --from-xml
+node scripts/glyph-cli.js "$(node scripts/glyph-cli.js "[crit'teste']" --xml)" --from-xml
 ```
 ```
 [crit'teste']
@@ -65,7 +65,7 @@ Reduces everything to pure hieroglyphs: each composite replaced by its formula
 until nothing decomposable is left.
 
 ```bash
-node scripts/glyph-parser.js "[prob'timeout']" --hgml
+node scripts/glyph-cli.js "[prob'timeout']" --hgml
 ```
 ```
 [error
@@ -79,7 +79,7 @@ hieroglyphs and `[hyp]` reaches 97. The output is still valid Glyph, so it can
 be fed back in.
 
 ```bash
-node scripts/glyph-parser.js CRIT --expand
+node scripts/glyph-cli.js CRIT --expand
 ```
 ```
 CRIT  [composite]  level 2
