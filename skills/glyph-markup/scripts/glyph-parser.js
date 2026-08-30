@@ -1868,6 +1868,55 @@
      ====================================================== */
 
   /* The shallow node, without `body` — the body gets filled by the iterative loop below. */
+  /* ------------------------------------------------------------------ *
+   * ck — a 64-bit checksum, in-core and declared
+   *
+   * Node's crypto is not reachable from the browser half of this engine, and
+   * SubtleCrypto is async, which fights a synchronous serialiser. A hand-rolled
+   * hash deserves a conscious yes, and this is it: two independent FNV-1a runs
+   * over UTF-16 code units, different offset bases, concatenated. Declared here
+   * so a port reproduces it bit for bit rather than inventing its own and
+   * silently disagreeing about whether two stores are the same.
+   * ------------------------------------------------------------------ */
+  /* the AST envelope's own shape version, moved independently of the engine.
+     Bumped when a field is added, removed or changes meaning — 2 because the
+     `full`/`panel` split, `origin`, `at`, `slot` and `expanded` all landed at
+     once and a reader of a v1 envelope must not be told it understands them. */
+  var AST_SCHEMA = 2;
+
+  /* A store is fingerprinted by its serialised form. Deterministic because the
+     stores are parsed from files and JSON.stringify preserves that order; null
+     when no store is loaded, which is itself the fact a receiver needs. */
+  function storeCk(store) { return store ? ck(JSON.stringify(store)) : null; }
+
+  function srcDescriptor(opts) {
+    var t = (opts && typeof opts.__source === "string") ? opts.__source : null;
+    if (t === null) return null;          /* serializeAST called without a source */
+    var d = {
+      length: t.length,
+      checksum: ck(t),
+      encoding: "utf-8",
+      /* a receiver that rewrites line endings on the way in would invalidate
+         every offset in the envelope, so the descriptor records which it was */
+      newline: (t.indexOf("\r\n") !== -1)
+        ? (new RegExp("[^\r]\n").test(t) ? "mixed" : "crlf") : "lf",
+      uri: (opts && opts.uri) || null
+    };
+    if (opts && opts.embedSource === true) d.text = t;
+    return d;
+  }
+
+  function ck(str) {
+    var s = String(str == null ? "" : str);
+    var a = 0x811c9dc5, b = 0x01000193, i, c;
+    for (i = 0; i < s.length; i++) {
+      c = s.charCodeAt(i);
+      a ^= c; a = (a * 0x01000193) >>> 0;
+      b ^= c + i; b = (b * 0x85ebca6b) >>> 0;
+    }
+    return ("00000000" + a.toString(16)).slice(-8) + ("00000000" + b.toString(16)).slice(-8);
+  }
+
   function astShallow(nd) {
     /* `slot` is the template parameter this literal was bound to. It reached
        the XML as `<user-input slot="…">` and never reached the AST, so an
@@ -2036,7 +2085,33 @@
     var stats = { truncated: 0 };
     var out = {
       type: "GlyphAST",
+      /* `schema` is the SHAPE of this envelope; `version` is the engine that
+         produced it. They were one field, and a reader had to pin an engine
+         build to say "I understand this" — which is the wrong question. The
+         repository already separates them elsewhere: expansions.json carries
+         `schema: 2`, the dispatch carries `schema: 1`. */
+      schema: AST_SCHEMA,
       version: VERSION,
+      /* Store fingerprints, and this is the field most easily forgotten and
+         the one that breaks a hand-off outright. `species`, `compositionDepth`
+         and `def` are FUNCTIONS of expansions.json; `name` resolution is a
+         function of templates.json. Re-import against a different store yields
+         a different meaning for the same tree, silently — the exact defect
+         class this order is named after. A receiver compares these and refuses,
+         instead of discovering it later by being wrong. */
+      /* A DESCRIPTOR, never the text. T12 keeps the source out of the general
+         export — the surface where the XML is pasted does not read Glyph — but
+         offsets with no anchor are unresolvable on arrival: a receiver cannot
+         tell whether `at: {s:11,e:16}` belongs to the source in front of it.
+         The descriptor lets it assert that and refuse otherwise, which makes
+         T12's carve-out mechanical instead of a convention. `{embedSource:true}`
+         adds the text, for the examples and teaching models T12 allows. */
+      source: srcDescriptor(opts),
+      stores: {
+        templates: storeCk(opts && opts.templates ? opts.templates : TEMPLATES),
+        rules: storeCk(opts && opts.rules ? opts.rules : RULES),
+        expansions: storeCk(opts && opts.expansions ? opts.expansions : EXPANSIONS)
+      },
       /* A reader must never have to infer which projection it was handed by
          noticing which fields happen to be absent — that inference is exactly
          what the thinning made impossible. The envelope says so. */
@@ -2073,7 +2148,10 @@
 
   function toAST(src, opts) {
     var r = parse(src, opts);
-    return serializeAST(r.segments, r.gaps, opts);
+    var o = {};
+    for (var k in (opts || {})) if (Object.prototype.hasOwnProperty.call(opts, k)) o[k] = opts[k];
+    o.__source = String(src == null ? "" : src);
+    return serializeAST(r.segments, r.gaps, o);
   }
 
   /* ======================================================

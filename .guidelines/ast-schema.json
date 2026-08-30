@@ -1,12 +1,15 @@
 {
-  "schema": 1,
+  "schema": 2,
   "note": "The declared shape of a Glyph AST envelope. HAND-AUTHORED, deliberately: a schema derived from the engine cannot catch the engine, and the whole reason the AST was promoted to source of truth is that another machine must be able to read it without this implementation. glyph-check.js validates envelopes against this file, and the corpus asserts that what the engine emits conforms — so a drift in either direction is caught, the same way XML_REFERENCE and D-03 hold each other.",
   "appliesTo": "the `full` projection. The `panel` projection is thinned for the screen and is deliberately NOT validated: absence there is meaningless, which is exactly why it never leaves the browser.",
   "envelope": {
     "required": [
       "type",
+      "schema",
       "version",
       "projection",
+      "source",
+      "stores",
       "segments",
       "diagnostics"
     ],
@@ -15,8 +18,10 @@
     ],
     "constants": {
       "type": "GlyphAST",
-      "projection": "full"
-    }
+      "projection": "full",
+      "schema": 2
+    },
+    "note": "`schema` is the shape of this envelope; `version` is the engine that produced it. They were one field, and a reader had to pin an engine build to say it understood the shape. `stores` fingerprints templates, rules and expansions: species, compositionDepth and def are FUNCTIONS of the expansions store, so re-importing against a different one changes meaning silently — the defect class this whole order is named after. `source` is a DESCRIPTOR and not the text (T12), because offsets with no anchor are unresolvable on arrival."
   },
   "diagnostic": {
     "required": [
@@ -163,7 +168,9 @@
     "5. `origin` is one of the declared values, or null",
     "6. a diagnostic carrying `at` carries both `s` and `e`",
     "7. `version` is present and non-empty: an envelope that will not say which engine produced it cannot be checked against anything",
-    "8. every node of the `full` projection carries `at`, well-formed or null; a Segment does not, because its span is its body's"
+    "8. every node of the `full` projection carries `at`, well-formed or null; a Segment does not, because its span is its body's",
+    "9. `schema` matches the declared constant: an envelope of another shape is refused, not read leniently",
+    "10. `stores` names all three fingerprints, each a checksum or null"
   ],
   "at": {
     "required": [
@@ -171,5 +178,31 @@
       "e"
     ],
     "note": "the span in the source that produced the node, or null when the node was synthesised rather than written (a Truncated marker has no author). Present on every node of the `full` projection. It is what lets a reader without the engine locate a refusal, and it is the substrate a trace is built on: given a span, which command; given a command, which span."
+  },
+  "source": {
+    "required": [
+      "length",
+      "checksum",
+      "encoding",
+      "newline",
+      "uri"
+    ],
+    "optional": [
+      "text"
+    ],
+    "newline": [
+      "lf",
+      "crlf",
+      "mixed"
+    ],
+    "note": "null when serializeAST was called without a source. `text` appears only under {embedSource:true}, which T12 allows for examples and teaching models and forbids in the general export."
+  },
+  "stores": {
+    "required": [
+      "templates",
+      "rules",
+      "expansions"
+    ],
+    "note": "each is a 64-bit checksum of the store's serialised form, or null when that store was not loaded — which is itself the fact a receiver needs. The function is declared in the engine (`ck`) rather than taken from a platform library, so a port reproduces it bit for bit instead of inventing its own and disagreeing about whether two stores are the same."
   }
 }

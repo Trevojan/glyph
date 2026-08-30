@@ -46,6 +46,35 @@ function validate(env) {
     errs.push("<envelope>: projection is " + JSON.stringify(env.projection) +
               ", and only `full` is validated — the panel projection is thinned for the screen");
 
+  /* rule 9 — a different shape is refused rather than read leniently */
+  if (env.schema !== SCHEMA.envelope.constants.schema)
+    errs.push("<envelope>: schema is " + JSON.stringify(env.schema) + ", this validator declares " +
+              SCHEMA.envelope.constants.schema + " — an envelope of another shape is refused, not guessed at");
+
+  /* rule 10 — the fingerprints that stop a silent re-import against another store */
+  if (env.stores && typeof env.stores === "object") {
+    SCHEMA.stores.required.forEach(k => {
+      if (!(k in env.stores)) errs.push("<envelope>.stores: missing `" + k + "`");
+      else if (env.stores[k] !== null && typeof env.stores[k] !== "string")
+        errs.push("<envelope>.stores." + k + ": not a checksum and not null");
+    });
+  }
+
+  if (env.source !== null && env.source !== undefined) {
+    if (typeof env.source !== "object") errs.push("<envelope>.source: not an object and not null");
+    else {
+      SCHEMA.source.required.forEach(k => {
+        if (!(k in env.source)) errs.push("<envelope>.source: missing `" + k + "`");
+      });
+      Object.keys(env.source).forEach(k => {
+        if (SCHEMA.source.required.indexOf(k) === -1 && SCHEMA.source.optional.indexOf(k) === -1)
+          errs.push("<envelope>.source: undeclared key `" + k + "`");
+      });
+      if (SCHEMA.source.newline.indexOf(env.source.newline) === -1)
+        errs.push("<envelope>.source: newline " + JSON.stringify(env.source.newline) + " is not declared");
+    }
+  }
+
   SCHEMA.envelope.required.forEach(k => {
     if (!(k in env)) errs.push("<envelope>: missing required key `" + k + "`");
   });

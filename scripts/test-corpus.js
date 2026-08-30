@@ -1050,7 +1050,14 @@ function runAstInvariant() {
                         alias that normalises or a bracket the engine supplied
                         moves every position after it. It records where, never
                         what — the same class as the rest of this set. */
-                     at: 1 };
+                     at: 1,
+                     /* the descriptor describes the TEXT — its length and its
+                        checksum — so a reconstruction necessarily carries a
+                        different one. Same class as `at`: it records which
+                        source, never what the source says. `stores` stays in,
+                        because a reconstruction parsed against a different
+                        store would be a real difference. */
+                     source: 1 };
 
   const strip = o => {
     if (Array.isArray(o)) return o.map(strip);
@@ -1215,6 +1222,10 @@ function runSchemaChecks() {
     ["literal form off the list", e => {
        (function f(l){ (l||[]).forEach(n => { if (n.type === "Literal") n.form = "curly"; if (n.body) f(n.body); }); })
        (e.segments[0].body); }],
+    ["schema off the declared one", e => { e.schema = 99; }],
+    ["a store fingerprint dropped",  e => { delete e.stores.expansions; }],
+    ["source newline off the list",  e => { e.source.newline = "cr"; }],
+    ["undeclared key in source",     e => { e.source.mtime = 1; }],
     ["diagnostic at without e", e => {
        e.diagnostics.push({ code:"X", severity:"fix", label:"l", message:"m", at:{ s:0 } }); }]
   ];
@@ -1222,9 +1233,9 @@ function runSchemaChecks() {
     const e = clone(); m[1](e);
     return check.validate(e).length === 0;
   }).map(m => m[0]);
-  ok("SC-02", "the schema catches at least 9 of 10 mutations",
-     (MUTANTS.length - missed.length) >= 9 ? null
-       : "caught " + (MUTANTS.length - missed.length) + "/10; missed: " + missed.join(", "));
+  ok("SC-02", "the schema catches at least 13 of 14 mutations",
+     (MUTANTS.length - missed.length) >= MUTANTS.length - 1 ? null
+       : "caught " + (MUTANTS.length - missed.length) + "/" + MUTANTS.length + "; missed: " + missed.join(", "));
 
   return D.length;
 }
