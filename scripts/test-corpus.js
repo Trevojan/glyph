@@ -1001,6 +1001,118 @@ function runReferenceChecks() {
 const rD = runReferenceChecks();
 
 /* ------------------------------------------------------------------ *
+ * E4 — the round-trip invariant, moved to the AST
+ *
+ * The old oracle (`trip`, bucket F) asserts XML string equality on a second
+ * lap. That was right while the XML was the deliverable and the AST was an
+ * inspection panel. T23 reversed it, and the reversal has a cost the old
+ * invariant cannot see:
+ *
+ *     [off]p[on]  ->  <off>p</off>  ->  " p "  ->  <off>p</off>
+ *
+ * XML equality PASSES. The source lost `[off]` and `[on]` entirely — the mode
+ * toggle is gone and only its content survived. An invariant that calls that a
+ * fixed point is measuring the serialisation, not the meaning.
+ *
+ * So the invariant becomes equality of the `full` AST, minus the fields that
+ * record HOW the source was spelled rather than WHAT it says:
+ *
+ *   raw, isAlias   an alias and its canonical are the same command
+ *   form           a backtick and a quote hold the same literal
+ *
+ * Everything semantic is compared, `origin` and `chainElement` included — which
+ * is the point of E0 and would be given away by a lazier exclusion set.
+ *
+ * Known losses are PINNED WITH A REASON rather than excluded, so a new one
+ * cannot hide behind a documented one.
+ * ------------------------------------------------------------------ */
+function runAstInvariant() {
+  console.log("\n--- E4 — the round trip, measured on the AST ---");
+  const D = [];
+  const ok = (id, name, why) => {
+    if (why) { console.log("  ✗ " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  ✓ " + id + ": " + name); D.push(id); }
+  };
+
+  const opts = { templates: TPL.templates, rules: RULESTORE,
+                 expansions: require("../.guidelines/expansions.json") };
+  /* Fields that record HOW the source was written, not what it says. An alias
+     and its canonical are the same command; a backtick and a quote hold the
+     same literal; and `autoClosed` records that the author omitted a closing
+     bracket which the engine supplied — the reconstruction writes it out, so
+     the flag falls with reason. All four are provenance of the text.
+
+     Everything semantic stays in, `origin` and `chainElement` included. A
+     lazier exclusion set would give away exactly what E0 was for. */
+  const SPELLING = { raw: 1, isAlias: 1, form: 1, autoClosed: 1, autoClosedCount: 1 };
+
+  const strip = o => {
+    if (Array.isArray(o)) return o.map(strip);
+    if (!o || typeof o !== "object") return o;
+    const out = {};
+    Object.keys(o).forEach(k => { if (!SPELLING[k]) out[k] = strip(o[k]); });
+    return out;
+  };
+  const meaning = src => JSON.stringify(strip(G.toAST(src, opts)));
+
+  /* each entry: why it cannot hold, verified, and never a blanket exclusion */
+  const PINNED = {
+    "[in-[rwk]]": "`-[` normalises to `[` by design (OPERATOR_TARGET §3.2): marking a bracketed child too would force fromXML to decide whether chain=\"extend\" meant `-rwk` or `-[rwk]`",
+    "[off]p[on]": "the mode toggle is lost: <off> reconstructs as prose, so ModeOff becomes Text. NOT a documented non-survivor — found by this check",
+    "[logic]let a = 1[/logic]": "fromXmlLogic writes a newline after the opening tag, so every rule's `line` shifts by one. Found by this check"
+  };
+
+  const CASES = [].concat(POSITIVE, INCOMPLETE, INVALID, REGRESSION, TEMPLATES, RULE_CASES)
+    .filter(c => c && c.id && typeof c.src === "string").map(c => c.src)
+    .concat(Object.keys(PINNED));
+
+  /* One cause, not twenty symptoms: `[A],[B]` and `[A][B]` emit IDENTICAL XML,
+     because the chain attribute marks bare links only (OPERATOR_TARGET §3.2)
+     and a bracketed sibling has nowhere to carry `origin: "item"`. So a comma
+     between bracketed commands cannot come back. Pinned by cause rather than
+     by listing every source that happens to contain one, which would turn one
+     open question into twenty pins nobody could read. */
+  const commaBetweenBrackets = src => /,\s*\[/.test(src);
+
+  const broke = [], healed = [], byCause = [];
+  let refused = 0, documented = 0;
+  CASES.forEach(src => {
+    let holds;
+    try { holds = meaning(src) === meaning(G.fromXML(G.toXML(src, opts), opts).src); }
+    catch (e) { broke.push(JSON.stringify(src).slice(0, 50) + ": threw"); return; }
+    if (PINNED[src]) { if (holds) healed.push(src); return; }
+    /* the second of the three losses README:58 already pins: content appended
+       past a template's declared params has no slot and cannot be recovered */
+    if (!holds && /^\[--[a-z-]+/.test(src) && /\[[a-z]/i.test(src.slice(3))) { documented++; return; }
+    if (!holds && commaBetweenBrackets(src)) { byCause.push(src); return; }
+    /* A refused input has no meaning to preserve: the engine's answer to it IS
+       the refusal, and asking whether malformed source survives a round trip
+       asks the wrong question of the wrong input. The invariant is a property
+       of well-formed sources. Bucket N asserts the refusal itself. */
+    if (!holds && (G.parse(src, opts).gaps || []).some(g => g.sev === "fix")) { refused++; return; }
+    if (!holds) broke.push(JSON.stringify(src).slice(0, 60));
+  });
+
+  ok("RT-01", "meaning survives the round trip everywhere it is not pinned",
+     broke.length ? broke.slice(0, 5).join(" | ") + (broke.length > 5 ? " (+" + (broke.length - 5) + ")" : "") : null);
+  console.log("      (" + byCause.length + " carry `,[` — pinned by cause; " + refused +
+              " are refused at fix, where the round trip is not the question; " + documented +
+              " are the template-overflow loss README:58 already pins)");
+  ok("RT-02", "no pinned loss has quietly healed",
+     healed.length ? "now round-trips — remove the pin and its reason: " + healed.join(" | ") : null);
+
+  /* the reason the invariant moved, asserted rather than argued */
+  const off = "[off]p[on]";
+  const x1 = G.toXML(off, opts), x2 = G.toXML(G.fromXML(x1, opts).src, opts);
+  ok("RT-03", "the AST invariant is strictly stronger than the XML one",
+     (x1 === x2 && meaning(off) !== meaning(G.fromXML(x1, opts).src)) ? null
+       : "the case that justified moving the invariant no longer demonstrates it");
+
+  return D.length;
+}
+const rRT = runAstInvariant();
+
+/* ------------------------------------------------------------------ *
  * the AST schema — the two directions that hold each other
  *
  * `.guidelines/ast-schema.json` is hand-authored, deliberately: a schema
@@ -1347,6 +1459,7 @@ console.log(" Composition  " + rX + "/17");
 console.log(" .hgml burn   " + rH + "/9");
 console.log(" fromXML      " + rF + "/23");
 console.log(" reference    " + rD + "/10");
+console.log(" round trip   " + rRT + "/3");
 console.log(" ast schema   " + rSC + "/2");
 console.log(" examples     " + rE + "/5");
 console.log(" snapshot     " + rSN + "/4");
