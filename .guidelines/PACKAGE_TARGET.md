@@ -130,50 +130,90 @@ wrapped. A `chain="item"` with no `chain="extend"` before it is malformed (§6,
 
 ---
 
-## 4. `<invoke>`
+## 4. `<invoke>` — the command call
 
-> **Architect inference, not a delivered decision.** `OPERATOR_TARGET.md` names
-> `<invoke>` as a child of the root and defines it nowhere; there is no other
-> occurrence in the repository. §8 records this as Q10. What follows is the
-> reading with a structural argument behind it; knock it down and the order
-> becomes v6.
+> **Delivered decision (Q10).** `<invoke>` is the **command call**, and to the
+> model receiving the document it must mean **function**.
 
-Today `<template>` answers two independent questions with one element name:
+### 4.1 A command is a function, and the XML never said so
 
-```xml
-<template name="codefix" define="true">   <!-- this is a definition -->
-<template name="codefix" expanded="true"> <!-- this is a call -->
+The system already treats commands as functions everywhere except in what it
+emits.
+
+- `SIGNATURES.md` is a table of **arities**: 8 commands of strict arity 2, 6
+  N-ary, 60 taking one slot, 44 of zero arity. That is a signature table.
+- `GLOSSARY.md` §0.2 gives, under the heading **`| invocation | reading |`**, the
+  body each composite decomposes into: `[prob'timeout']` reads `[ERROR[CTX]]`;
+  `[vrfy'x']` reads `[CMP-TRUE[[CORE],[TGT]]]`.
+- The parser computes `species` (`atom` or `composite`) and `compositionDepth`
+  on every command, and `expansions.json` holds `atoms`, `composites` and
+  `maxDepth`. `node scripts/glyph-cli.js PROB --expand` answers today:
+  `PROB [composite] level 1, formula [ERROR[CTX]]`.
+
+And the emitter drops all of it:
+
+```
+[prob'timeout']  →  <problem><user-input>timeout</user-input></problem>
 ```
 
-A reader must inspect an attribute to learn which kind of thing it is holding.
-That is the `chainElement` defect in another place, and the release has already
-paid to remove it once.
+`species`, `compositionDepth` and the formula are computed and never serialised.
+**This is the `origin` defect exactly** — the engine knows, the document does
+not, and the model downstream is left to infer what the engine already decided.
+E0 repaired that for the operator; `<invoke>` repairs it for the function.
 
-**Therefore:** the call becomes `<invoke>`, the definition keeps `<template>`.
+### 4.2 Shape
+
+`<invoke>` is a **leaf, first child of the element whose call it describes**:
 
 ```xml
-<template name="codefix">
-  <requirement>…<needs slot="target">what to fix</needs>…</requirement>
-</template>
-
-<invoke name="codefix" means="…">
-  <requirement>…<user-input slot="target">the login handler</user-input>…</requirement>
-</invoke>
+<problem>
+  <invoke reads="[ERROR[CTX]]" species="composite" depth="1"/>
+  <user-input>timeout</user-input>
+</problem>
 ```
 
-- `define="true"` and `expanded="true"` both disappear; the element name carries
-  what they carried.
-- `means` stays on `<invoke>` only, because only a call has one — and it is
-  **optional**, because only a *registered* template expands. Verified:
-  `[--insight'the billing bug']` emits `expanded="true"` and `means`, while a
-  template defined locally with `[--name=…]` and called in the same source emits
-  neither. An `<invoke>` without `means` is a call the engine could not expand,
-  which is a legitimate document and not a refusal.
-- Slot binding is unchanged: an unbound hole is `<needs slot="name">` carrying
-  its question, a bound one is `<user-input slot="name">` carrying the answer,
-  and that attribute is still what lets the inverse rebuild the call
-  (`XML_REFERENCE.md` §5).
-- The three shapes of `<needs>` and their read-back rules are unchanged.
+The precedent is `<mood>`, which is already a first-child leaf carrying a
+property of its parent (`XML_REFERENCE.md` §6). Adopting the same shape means:
+
+- the **naming rule survives** — `<problem>` is still the gloss of `PROB`, and
+  §2 of the reference is untouched;
+- **G1 survives** — `force="editorial"` stays on the named element, since the
+  element is not replaced;
+- **the inverse survives** — `<invoke>` is derived, carries no authored content,
+  and is dropped on the return trip exactly as the engine-authored shapes of
+  `<needs>` are (`XML_REFERENCE.md` §5). It is never read back into a bracket;
+- **no depth is added to the content tree**, which a wrapping element would cost.
+
+### 4.3 Emitted for composites only
+
+`<invoke>` is emitted where `species="composite"`. An atom is a primitive: its
+reading is its own name, and `reads="[CTX]"` inside `<context>` is a tautology
+that costs tokens on every element in the document. In the handoff source, 4
+commands of roughly 40 are composite, so the cost is bounded and falls exactly
+where the information is non-obvious.
+
+`depth` is `compositionDepth` verbatim — `PROB` is 1, `LRN` and `ASSM` are 2.
+
+### 4.4 `<template>` is unchanged
+
+An earlier draft of this section read `<invoke>` as the *template* call and
+proposed retiring `expanded="true"`. That was wrong and is withdrawn.
+`<template>`, `define`, `expanded`, `means` and every slot rule of
+`XML_REFERENCE.md` §5 stay exactly as they are. A template is a macro over
+source; a command is a function in the vocabulary. They are different things and
+the format keeps them apart.
+
+### 4.5 Divergence from `OPERATOR_TARGET.md`
+
+That document says the root *carries* `<invoke>` and `<chain>`, which reads as
+direct children of `<glyph-package>`. Neither is placed there here: both are
+placed where they apply — `<chain>` around the run, `<invoke>` inside the call it
+describes. A single root-level `<invoke>` has no determinate referent, because a
+source has many segments and many top-level commands.
+
+`OPERATOR_TARGET.md` §3.4 is explicit that it *"deliberately stops short"* of
+designing the format, so this is read as loose phrasing rather than a competing
+constraint. Recorded so the divergence is deliberate rather than silent.
 
 ---
 
@@ -210,17 +250,31 @@ construct is named, never absorbed into `<off>`.
 | 4 | a `chain` attribute occurs outside a `<chain>` | `ChainUngrouped` |
 | 5 | a `<chain>` with no members | `ChainEmpty` |
 | 6 | a `<chain>` whose first member came from an item operator | `ChainWithoutHead` |
-| 7 | `<invoke>` carrying `define`, or `<template>` carrying `means` | `InvocationConfused` |
-| 8 | a `<block>` that is a direct child of the root without `once` | `SegmentUnmarked` |
-| 9 | `<mood>` that is not the first child of its `<block>` | `MoodMisplaced` |
-| 10 | a text-bearing element whose content was pretty-printed | `TextReflowed` |
+| 7 | `<invoke>` that is not the first child of its element | `InvokeMisplaced` |
+| 8 | `<invoke>` on an element whose command is an atom | `InvokeOnAtom` |
+| 9 | `<invoke reads>` disagreeing with the expansion store for that command | `ReadingUnfaithful` |
+| 10 | a `<block>` that is a direct child of the root without `once` | `SegmentUnmarked` |
+| 11 | `<mood>` that is not the first child of its `<block>` | `MoodMisplaced` |
+| 12 | a text-bearing element whose content was pretty-printed | `TextReflowed` |
 
-**Acceptance is a mutation test.** Break ten things in the golden and catch at
-least nine. Zero catches means the validator is decorative — the standard
+**Acceptance is a mutation test:** one mutation per clause, and at most one may
+escape. Zero catches means the validator is decorative — the standard
 `BUNDLE_TARGET.md` §5 sets, and the reason `glyph-check` is written before the
 emitter it gates (lock T4).
 
-Refusal 10 is the mechanical face of guarantee G4 (§7) and is the one most easily
+> The order's `K8` wording says *"break ten things and catch at least nine"*,
+> written when the clause list was assumed to be `BUNDLE_TARGET.md` §5's ten.
+> This specification has twelve clauses, so the criterion is stated per clause
+> rather than by count. Lock T17 forbids rewriting a criterion so the code
+> passes — this is the opposite case, a criterion whose count was fixed before
+> the clauses existed, and it is flagged rather than quietly widened.
+
+Clause 9 is the one that makes `reads` worth emitting at all: an `<invoke>` whose
+formula is not checked against `expansions.json` is decoration, and the document
+would carry a second, drifting copy of the composition table — the defect that
+produced version 5 of the order.
+
+Refusal 12 is the mechanical face of guarantee G4 (§7) and is the one most easily
 lost: it is violated by an emitter that indents, not by a source that is wrong.
 
 ---
@@ -235,7 +289,7 @@ one of them fails to survive — this is not a wish list.
 | **G1** | editorial force on `ALW BYP OVR NEV FRGT` | the elements keep emitting `force="editorial"` — verified: `[alw'x']` → `<always force="editorial">`. The attribute is carried, not relocated and not dropped |
 | **G2** | block segmentation: `once`, the segment separator, `<break/>`, `continues="previous"` | §2 changes the root only; every block rule is carried verbatim |
 | **G3** | the `needs` element — *an empty slot does not block* | §4 changes the element that holds slots, never the slot encoding |
-| **G4** | exact string fidelity, no pretty-printing inside text nodes | refusal 10; `<user-input>`, `<off>` and `<source>` are emitted by branches this format does not touch |
+| **G4** | exact string fidelity, no pretty-printing inside text nodes | refusal 12; `<user-input>`, `<off>` and `<source>` are emitted by branches this format does not touch |
 
 G3 is the one the external proposal had nowhere to put, and it is the reason
 `<invoke>` inherits slot handling unchanged rather than redesigning it.
@@ -275,11 +329,20 @@ return distinct and re-emit identically (K2).
 
 ## 10. Open
 
-**Q10 — is `<invoke>` the template call?** §4 is an architect inference with a
-structural argument, not a delivered decision. The alternative readings are that
-`<invoke>` denotes a tool call, or an agent invocation belonging to the bundle
-rather than to this document. Knocking §4 down changes §4 and refusal 7, and
-nothing else in this specification.
+**Q10 is closed.** `<invoke>` is the command call and means *function* to the
+model (§4). What remains open from it is narrow and structural, not product:
+
+**Q11 — does `<invoke>` need a precondition deliverable of its own?** `species`,
+`compositionDepth` and the formula are computed by the engine and dropped by the
+emitter, which is the shape E0 existed to repair for the operator. Emitting
+`<invoke>` therefore requires the same kind of carry, and the order currently
+commissions no step for it. Architect reading: it is inside E1, because unlike
+the operator it needs no lexer change — the store is already loaded and
+`--expand` already answers. If that is wrong, it is a second precondition and
+the order needs it named.
+
+**Q12 — the order's `K8` says ten mutations and nine catches** (§6). Twelve
+clauses exist. Stated per clause here; the order should say so too.
 
 **Q9 — when the six-layer bundle is built, and under what name.** The name is now
 free. Blocks nothing here.

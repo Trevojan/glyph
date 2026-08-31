@@ -65,7 +65,8 @@
     "branch": "claude/reload-skills-3059f5, fast forwarded to 4fdd668; the work no longer lives on claude/reload-skills-f5b866 and that branch is not advanced in parallel",
     "cadence": "one step per commit, npm run check exiting zero before the next step opens",
     "glyph_package_referent": "RESOLVED (Q7) - glyph-package is the emitted document root, succeeding <glyph> and carrying <invoke> and <chain>, per OPERATOR_TARGET.md sections 3.4 and 9. The six-layer bundle of BUNDLE_TARGET.md is a different artefact and keeps its own name. scripts/glyph-check.js line 20 misnames it and is corrected in this release.",
-    "root_replacement": "unconditional: <glyph-package> replaces <glyph> for every emission, not only where a chain or invoke occurs. Declared as assumption S18, architect recommendation on Q8"
+    "root_replacement": "unconditional: <glyph-package> replaces <glyph> for every emission, not only where a chain or invoke occurs. Declared as assumption S18, architect recommendation on Q8",
+    "invoke_element": "RESOLVED (Q10) - <invoke> is the COMMAND call, and must mean 'function' to the model receiving the document. Not the template call: <template>, define, expanded and means are unchanged. Specified in PACKAGE_TARGET.md section 4"
   },
   "verified_findings": [
     {
@@ -532,6 +533,19 @@
       "question": "when the six-layer bundle is built, and under what name",
       "why_not_assumed": "the order puts its emitters out of scope; the name is now free",
       "blocks": "nothing in this order"
+    },
+    {
+      "id": "Q11",
+      "question": "does <invoke> need a precondition deliverable of its own, as E0 was for the operator",
+      "why_not_assumed": "species, compositionDepth and the formula are computed by the engine and dropped by the emitter - the same defect E0 repaired for the operator",
+      "architect_reading": "inside E1: unlike the operator it needs no lexer change, the expansions store is already loaded and --expand already answers",
+      "blocks": "E1 scope, not E1 start"
+    },
+    {
+      "id": "Q12",
+      "question": "K8 says ten mutations and nine catches; the specification has twelve clauses",
+      "why_not_assumed": "lock T17 forbids rewriting a criterion so the code passes; a count fixed before the clauses existed is flagged, not widened",
+      "blocks": "nothing"
     }
   ],
   "blast_radius": {
@@ -617,6 +631,12 @@
       "question": "conditional or unconditional root replacement",
       "answer": "unconditional",
       "resolved_in": "v5, as assumption S18"
+    },
+    {
+      "id": "Q10",
+      "question": "what <invoke> denotes",
+      "answer": "the command call; 'function' to the model",
+      "resolved_in": "E0b, by the Regent"
     }
   ]
 }
