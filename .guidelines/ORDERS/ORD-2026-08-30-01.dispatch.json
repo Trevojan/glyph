@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "id": "ORD-2026-08-30-01",
-  "version": 3,
+  "version": 5,
   "language": "en-EU",
   "home": "'.guidelines/ORDERS/' in the glyph repository — .scope is excluded by the ignore rules as client material, so an order placed there would not survive",
   "supersedes": [
@@ -12,6 +12,14 @@
     {
       "version": 2,
       "reason": "S7 was knocked down by the Regent; by the order's own rule a knocked assumption produces the next version"
+    },
+    {
+      "version": 3,
+      "reason": "E1 and E3 derive from a specification that no deliverable commissions; the missing precondition enters as E0b and the order stops looking complete"
+    },
+    {
+      "version": 4,
+      "reason": "S11 and S12 were written against the wrong referent of glyph-package; the Regent resolved Q7 to the emitted document root, and the six-layer bundle is a different artefact"
     }
   ],
   "immutable": true,
@@ -21,9 +29,13 @@
     "to": "C2",
     "label": "building on a prior contract — the emitted format, the 173 vectors and fromXML are already contract",
     "question_cap": 4,
-    "spent": 2,
-    "remaining": 2,
-    "remainder_converted_to": "assumption S10"
+    "spent": 4,
+    "remaining": 0,
+    "remainder_converted_to": "assumptions S11 to S17",
+    "questions_spent_in_v4": [
+      "where the order runs, since 2.4.5.01 was on a branch this session did not hold",
+      "where the order stops, which is the cadence lock T32"
+    ]
   },
   "regent_decisions": {
     "format": "adopt glyph-package now",
@@ -48,7 +60,12 @@
     "source_of_truth": "the resulting AST is, from here forward, officially and immutably the source of truth. It is parseable and readable by every generative model that receives text, which is what makes it portable and internally verifiable. The .json serves as the directive export, carrying the structure and significance of the whole project; the .xml carries the real instructions. The XML remains the pasted deliverable, but it is a projection of the AST rather than a peer of it",
     "Q2_diagnostic_positions": "ANSWERED by implication of the source-of-truth decision: serializeAST projects diagnostic positions. A refusal with no coordinate is not verifiable by a reader who does not have the engine, and verification by other models is the reason the AST was promoted",
     "extension": "the source extension is .pgml — pure glyph markup language — never .glyph, which is already taken in another context. The repository already uses .pgml throughout the CHANGELOG and BUNDLE_TARGET; the .glyph naming in version 3 of this order was an error and has been renamed",
-    "no_format_is_dropped": "a generated document is never dropped for lacking a consumer. It is improved until it has one. If the harness does not exploit .hgml, .hgml is improved so the harness can; the same holds for .pgml and model tracing"
+    "no_format_is_dropped": "a generated document is never dropped for lacking a consumer. It is improved until it has one. If the harness does not exploit .hgml, .hgml is improved so the harness can; the same holds for .pgml and model tracing",
+    "target_of_v4": "the glyph-package specification, chosen over the remaining split and the descriptive comparison report; it is the item the handoff marked blocked",
+    "branch": "claude/reload-skills-3059f5, fast forwarded to 4fdd668; the work no longer lives on claude/reload-skills-f5b866 and that branch is not advanced in parallel",
+    "cadence": "one step per commit, npm run check exiting zero before the next step opens",
+    "glyph_package_referent": "RESOLVED (Q7) - glyph-package is the emitted document root, succeeding <glyph> and carrying <invoke> and <chain>, per OPERATOR_TARGET.md sections 3.4 and 9. The six-layer bundle of BUNDLE_TARGET.md is a different artefact and keeps its own name. scripts/glyph-check.js line 20 misnames it and is corrected in this release.",
+    "root_replacement": "unconditional: <glyph-package> replaces <glyph> for every emission, not only where a chain or invoke occurs. Declared as assumption S18, architect recommendation on Q8"
   },
   "verified_findings": [
     {
@@ -226,8 +243,33 @@
       "architecture": "`.guidelines/OPERATOR_TARGET.md`"
     },
     {
+      "id": "E0b",
+      "what": "the glyph-package specification: a normative grammar of the emitted document that succeeds the <glyph> root, written against XML_REFERENCE.md and the decisions already recorded here",
+      "precondition_of": [
+        "E1",
+        "E3"
+      ],
+      "why_it_is_new": "version 3 named the specification in lock T4 and in E1 and never commissioned it; scripts/glyph-check.js line 21 records the same gap in the code, where the glyph-package branch is a declared stub",
+      "owes": [
+        "the root element, its version attribute, and the unconditional replacement of <glyph>",
+        "<chain>: the grouping rule, derivable from the chain attribute and sibling order alone, with no re-parse and no source access",
+        "<invoke>: what it denotes and what it may contain",
+        "the four guarantees of the current XML, carried or the format is rejected",
+        "the empty schema element of this release, with the five examples as its base",
+        "the refusals: what a conforming reader must reject, and with what position"
+      ],
+      "does_not_own": [
+        "the six-layer bundle and its emitters, which are out of scope by the order",
+        "what production level means for _ORBITAL"
+      ],
+      "architecture": ".guidelines/ORDERS/E0b-ARCHITECT-RETURN.md",
+      "delivered": ".guidelines/PACKAGE_TARGET.md",
+      "status": "RETURNED by suba-architect - specification written; Q10 preserved as a decision frontier"
+    },
+    {
       "id": "E1",
-      "what": "the glyph-package golden, derived from the specification and the five examples"
+      "what": "the glyph-package golden, derived from the specification and the five examples",
+      "blocked_by": "E0b"
     },
     {
       "id": "E2",
@@ -235,7 +277,9 @@
     },
     {
       "id": "E3",
-      "what": "glyph-check validating the new format, written before the emitter"
+      "what": "glyph-check validating the new format, written before the emitter",
+      "blocked_by": "E0b",
+      "clarified_in_v5": "glyph-check gains a mode validating the glyph-package DOCUMENT, not the bundle; its line-20 comment is corrected in the same commit"
     },
     {
       "id": "E4",
@@ -259,6 +303,11 @@
     }
   ],
   "done_when": [
+    {
+      "id": "K0b",
+      "expected": "the glyph-package specification exists as a normative document defining the emitted root, its children, its attributes and its refusals, and no clause of it is derived from the emitter",
+      "verified_by": "reading, by QA; the mechanical half is K8 onwards, once glyph-check implements the clauses"
+    },
     {
       "id": "K1",
       "expected": "the five examples emit the expected glyph-package, byte for byte"
@@ -333,11 +382,18 @@
       "expected": "toHGML has the same depth treatment as the other two projections — a ceiling with a diagnostic, or an iterative writer — and a LONG vector that says which, so the three projections stop disagreeing about what deep nesting means"
     },
     {
-      "id": "K18",
-      "expected": "toHGML has the same depth treatment as the other two projections — a ceiling with a diagnostic, or an iterative writer — and a LONG vector that says which, so the three projections stop disagreeing about what deep nesting means"
+      "id": "K19",
+      "expected": "toHGML has the same depth treatment as the other two projections — a ceiling with a diagnostic, or an iterative writer — and a LONG vector that says which, so the three projections stop disagreeing about what deep nesting means",
+      "note": "renumbered in v4: v3 carried two criteria under K18"
+    },
+    {
+      "id": "K20",
+      "expected": "scripts/glyph-check.js no longer calls the six-layer bundle a glyph-package; its comment names the artefact its mode actually validates",
+      "verified_by": "reading, and by grep: no occurrence of glyph-package denotes a file tree"
     }
   ],
   "locks": [
+    "T0: glyph-package is the emitted document root succeeding <glyph>, carrying <invoke> and <chain>; the six-layer bundle of BUNDLE_TARGET is a different artefact and the two never share a name again",
     "T1: the operator reaches the XML before any chain element is emitted",
     "T2: the gate before the topology — glyph-check before the new emitter",
     "T3: single source of truth is the glyph repository",
@@ -367,9 +423,49 @@
     "T27: the source extension is .pgml; .glyph is taken in another context and is never used for Glyph source",
     "T28: a known loss is pinned with its reason and a new one fails the gate; a snapshot is never regenerated to make a red suite green",
     "T28: a known loss is pinned with its reason and a new one fails the gate; a snapshot is never regenerated to make a red suite green",
-    "T29: everything in the published skill except SKILL.md is generated and checkable; SKILL.md is authored, and only the version it declares is enforced"
+    "T29: everything in the published skill except SKILL.md is generated and checkable; SKILL.md is authored, and only the version it declares is enforced",
+    "T31: the specification comes before the golden and before the validator, because a golden derived from an implementation records what the code does rather than what the format is",
+    "T32: one step closes per commit and npm run check exits zero before the next step opens, so every step is a stopping point and no step hides behind another",
+    "T33: the work lives on claude/reload-skills-3059f5 and claude/reload-skills-f5b866 is not advanced in parallel, because a decision carried to one destination and not the others is the root cause this release exists to remove",
+    "T34: no deliverable derives from a document the order does not commission, which is the defect that produced this version",
+    "T35: a chain is derivable from the chain attribute and sibling order alone, with no re-parse and no access to the source, because a format that needs the source to be understood is not a deliverable",
+    "T36: no name denotes two artefacts, which is the defect that produced version 5"
   ],
-  "assumptions": [],
+  "assumptions": [
+    {
+      "id": "S11",
+      "claim": "the specification is written against the emitted document and XML_REFERENCE.md, and BUNDLE_TARGET.md is consulted for method rather than for shape",
+      "because": "the six layers describe the other artefact",
+      "replaces": "S11 of v4, which framed the specification on the six layers"
+    },
+    {
+      "id": "S12",
+      "claim": "glyph-package is one document per source, not a file tree",
+      "because": "the five examples are input-to-XML pairs and the golden derives from them",
+      "replaces": "S12 of v4, which called it a directory projection"
+    },
+    {
+      "id": "S18",
+      "claim": "the glyph-package root replaces the glyph root unconditionally, not only where a chain or an invoke occurs",
+      "because": "a conditional root forces every consumer to branch on shape before it can read anything, and the empty case is the cheaper degenerate one",
+      "answers": "Q8, on the architect's recommendation"
+    },
+    {
+      "id": "S16",
+      "claim": "what production level means for _ORBITAL stays outside this order",
+      "because": "BUNDLE_TARGET section 7 says it is ratified by reading, and the reading is not an agent task"
+    },
+    {
+      "id": "S17",
+      "claim": "f5b866 is abandoned rather than merged back later",
+      "because": "two live branches carrying one release is the root cause of this order restated as a branch"
+    },
+    {
+      "id": "S10",
+      "claim": "the language sweep is part of this release, and the four US-spelled element names are decided now",
+      "because": "the vectors, the reference and both skills are already being rewritten, and doing it afterwards breaks the same files twice"
+    }
+  ],
   "cascade": {
     "correction_loop": {
       "rounds": 2,
@@ -385,27 +481,59 @@
       },
       {
         "order": 2,
+        "skill": "suba-architect",
+        "delivers": "E0b, the glyph-package specification",
+        "note": "the architect returned once already for E0; the format itself is the same kind of artefact and the four forks it must close are declared as S11 to S17",
+        "status": "returned - PACKAGE_TARGET.md written, one inference flagged as Q10"
+      },
+      {
+        "order": 3,
         "skill": "suba-implementer",
         "delivers": "E0, then E1 and E3"
       },
       {
-        "order": 3,
+        "order": 4,
         "skill": "suba-tester",
         "delivers": "E2 and the negative operator vectors"
       },
       {
-        "order": 4,
+        "order": 5,
         "skill": "suba-validator",
         "delivers": "K1 to K7 executed, not estimated"
       },
       {
-        "order": 5,
+        "order": 6,
         "skill": "suba-scribe",
         "delivers": "E5, E6, E7 and the changelog entry"
       }
     ]
   },
-  "open_regent_questions": [],
+  "open_regent_questions": [
+    {
+      "id": "Q4",
+      "question": "ratifying PROMOTION_BOUNDARY.md",
+      "why_not_assumed": "an agent may not ratify a norm it wrote",
+      "blocks": "nothing here"
+    },
+    {
+      "id": "Q5",
+      "question": "the tracing format to stack on glyph-trace.js",
+      "why_not_assumed": "the substrate exists and the shape is a product decision",
+      "blocks": "nothing here"
+    },
+    {
+      "id": "Q6",
+      "question": "what production level means for _ORBITAL",
+      "why_not_assumed": "BUNDLE_TARGET section 7 item 4: it is the P0 gate, ratified by reading",
+      "blocks": "the _ORBITAL rollout, not this order"
+    },
+    {
+      "id": "Q9",
+      "question": "when the six-layer bundle is built, and under what name",
+      "why_not_assumed": "the order puts its emitters out of scope; the name is now free",
+      "blocks": "nothing in this order"
+    }
+  ],
   "blast_radius": {
     "measured": true,
     "method": "every src in the corpus was parsed, not estimated",
@@ -459,5 +587,36 @@
         "state": "atomic burn exists, harness consumer to be built"
       }
     ]
-  }
+  },
+  "retired_assumptions": [
+    {
+      "id": "S13",
+      "was": "the minimum layers stay L0 and L3",
+      "why_retired": "a property of the six-layer bundle, not of the document format"
+    },
+    {
+      "id": "S14",
+      "was": "failure transitions belong to L5 and not L3",
+      "why_retired": "a property of the six-layer bundle, not of the document format"
+    },
+    {
+      "id": "S15",
+      "was": "the role roster is targets.json as it stands",
+      "why_retired": "a property of the six-layer bundle, not of the document format"
+    }
+  ],
+  "resolved_questions": [
+    {
+      "id": "Q7",
+      "question": "which artefact is glyph-package",
+      "answer": "the emitted document root",
+      "resolved_in": "v5"
+    },
+    {
+      "id": "Q8",
+      "question": "conditional or unconditional root replacement",
+      "answer": "unconditional",
+      "resolved_in": "v5, as assumption S18"
+    }
+  ]
 }
