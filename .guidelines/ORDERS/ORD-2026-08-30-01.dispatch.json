@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "id": "ORD-2026-08-30-01",
-  "version": 6,
+  "version": 7,
   "language": "en-EU",
   "home": "'.guidelines/ORDERS/' in the glyph repository — .scope is excluded by the ignore rules as client material, so an order placed there would not survive",
   "supersedes": [
@@ -24,6 +24,10 @@
     {
       "version": 5,
       "reason": "a deferred queue is recorded after E7; no deliverable is commissioned, no step is reordered, and E2 to E7 are untouched"
+    },
+    {
+      "version": 6,
+      "reason": "no deliverable wrote the emitter, while E3 is defined as coming before it and K1 requires the examples to emit; the third occurrence of this release's root cause, commissioned as E3b"
     }
   ],
   "immutable": true,
@@ -246,6 +250,12 @@
       "id": "G4",
       "finding": "XML_REFERENCE.md 11.2 heading says every refusal carries a position while its body says `at` is optional and additive",
       "consequence": "an internal inconsistency in the only document held to the engine by tests; E5 territory"
+    },
+    {
+      "id": "G5",
+      "finding": "no deliverable commissioned the glyph-package emitter, though E3 is defined relative to it and K1 requires it",
+      "severity": "high",
+      "consequence": "K1, K2 and K3 were unreachable and a cascade running E2 to E7 would have improvised the missing step, which lock T34 forbids. Commissioned as E3b in v7"
     }
   ],
   "four_guarantees": {
@@ -312,6 +322,36 @@
       "clarified_in_v5": "glyph-check gains a mode validating the glyph-package DOCUMENT, not the bundle; its line-20 comment is corrected in the same commit"
     },
     {
+      "id": "E3b",
+      "what": "the glyph-package emitter: the projection that produces the document PACKAGE_TARGET.md defines",
+      "why_it_is_new": "E3 is worded 'written before the emitter' and K1 says the five examples emit the expected glyph-package byte for byte, yet no deliverable wrote one. Same shape as E0b and as the glyph-package name collision: a thing referenced everywhere and commissioned nowhere",
+      "blocked_by": [
+        "E0b",
+        "E1",
+        "E3"
+      ],
+      "position_reason": "after E3, because lock T3 puts the gate before the topology: glyph-check validates the format before the emitter is written",
+      "precondition_of": [
+        "K1",
+        "K2",
+        "K3",
+        "E5"
+      ],
+      "owes": [
+        "the root and its engine attribute, unconditionally (specification section 2)",
+        "the empty <schema/> (section 5)",
+        "the <chain> grouping, with the chain attribute not surviving it (section 3)",
+        "<invoke> on composites only, first child, reads agreeing with the expansion store (section 4)",
+        "the four guarantees carried, or the format is rejected (section 7)"
+      ],
+      "does_not_own": [
+        "fromXML for the new format, which is E4",
+        "the six-layer bundle emitters, out of scope by the order"
+      ],
+      "specification": ".guidelines/PACKAGE_TARGET.md",
+      "verified_against": "conformance/golden.json, which exists first and is not derived from it"
+    },
+    {
       "id": "E4",
       "what": "the fromXML decision: a second reader, or the inverse declared dead in writing",
       "note": "reframed by T23: the question is no longer whether the inverse is worth keeping, but what the round-trip invariant is measured against. Under the promotion the candidate invariant is AST equality rather than XML equality, which is what test-corpus.js:647 currently asserts"
@@ -319,7 +359,8 @@
     {
       "id": "E5",
       "what": "XML_REFERENCE rewritten for the new format, D-03/D-04 extended to operators, AND a new section 11 on failure treatment, which the document does not have today",
-      "section_11": "the reference has ten sections and none covers malformed input: three incidental mentions of error across 424 lines. It documents the incomplete path (needs, section 5) and has nowhere to state the invalid path (fix severity). That asymmetry is why A3, A11 and A12 survived — the document tested against the engine could not contradict a fabrication it had no place to describe"
+      "section_11": "the reference has ten sections and none covers malformed input: three incidental mentions of error across 424 lines. It documents the incomplete path (needs, section 5) and has nowhere to state the invalid path (fix severity). That asymmetry is why A3, A11 and A12 survived — the document tested against the engine could not contradict a fabrication it had no place to describe",
+      "blocked_by": "E3b"
     },
     {
       "id": "E6",
@@ -523,16 +564,22 @@
       },
       {
         "order": 4,
+        "skill": "suba-implementer",
+        "delivers": "E3b, the glyph-package emitter",
+        "note": "after E3 by lock T3; verified against the golden, which exists first and is not derived from it"
+      },
+      {
+        "order": 5,
         "skill": "suba-tester",
         "delivers": "E2 and the negative operator vectors"
       },
       {
-        "order": 5,
+        "order": 6,
         "skill": "suba-validator",
         "delivers": "K1 to K7 executed, not estimated"
       },
       {
-        "order": 6,
+        "order": 7,
         "skill": "suba-scribe",
         "delivers": "E5, E6, E7 and the changelog entry"
       }
@@ -562,13 +609,6 @@
       "question": "when the six-layer bundle is built, and under what name",
       "why_not_assumed": "the order puts its emitters out of scope; the name is now free",
       "blocks": "nothing in this order"
-    },
-    {
-      "id": "Q11",
-      "question": "does <invoke> need a precondition deliverable of its own, as E0 was for the operator",
-      "why_not_assumed": "species, compositionDepth and the formula are computed by the engine and dropped by the emitter - the same defect E0 repaired for the operator",
-      "architect_reading": "inside E1: unlike the operator it needs no lexer change, the expansions store is already loaded and --expand already answers",
-      "blocks": "E1 scope, not E1 start"
     },
     {
       "id": "Q12",
@@ -672,6 +712,12 @@
       "question": "what <invoke> denotes",
       "answer": "the command call; 'function' to the model",
       "resolved_in": "E0b, by the Regent"
+    },
+    {
+      "id": "Q11",
+      "question": "does <invoke> need a precondition deliverable of its own",
+      "answer": "no separate precondition: <invoke> emission belongs to E3b, the emitter, which was itself the missing deliverable. The architect reading that it fitted inside E1 was wrong - E1 is the expectation, not the producer",
+      "resolved_in": "v7"
     }
   ],
   "deferred": {

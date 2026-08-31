@@ -9,6 +9,10 @@
     [ctx[/ctx]
   [/error]
   [error
+    'no deliverable wrote the emitter, while E3 was defined as coming before it and K1 required the five examples to emit: the third occurrence of one decision referenced everywhere and commissioned nowhere'
+    [ctx[/ctx]
+  [/error]
+  [error
     'the name glyph-package denoted two artefacts at once: the emitted document root in OPERATOR_TARGET and the six layer file bundle in glyph-check, which is the root cause of this release restated on the word the order is named after'
     [ctx[/ctx]
   [/error]
@@ -42,6 +46,9 @@
   [/ins]
   [ins
     'step 4: glyph-check validates the new format, written before the new emitter'
+  [/ins]
+  [ins
+    'step 4b: write the glyph-package emitter, after the validator and never before it, because the gate comes before the topology; it is verified against the golden, which exists first and is not derived from it'
   [/ins]
   [ins
     'step 5: decide fromXML, either a second reader for glyph-package or the inverse is declared dead in writing'
