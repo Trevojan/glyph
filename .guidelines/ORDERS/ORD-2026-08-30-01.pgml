@@ -68,6 +68,16 @@
   [rdy'glyph-markup is published carrying the parser and the examples, declaring its version, and commons no longer exists']
   [rdy'the order itself, re emitted under glyph-package, is registered as the first conformance vector of the new format']];
 
+[section'deferred'
+  [nt'read of the dmh-protocol repository against 2.4.5.01, recorded so it is not rediscovered; nothing here is commissioned and nothing starts before E7 closes']
+  [ref'.guidelines/DMHP_IMPORTS.md, the analysis and the reasons']
+  [add'D-01, atomic writes and an all or nothing build: build-templates emits two artefacts and phase two reads what phase one wrote, through a bare writeFileSync, so a crash leaves a state no commit represents']
+  [add'D-02, content addressed identity for conformance vectors, so a pin binds to the digest of its source rather than to the position E-01 and cannot migrate to another case']
+  [add'D-03, a generated and authored split at field level rather than only at file level, because the first human annotation on a generated store has nowhere to live']
+  [add'D-04, separating duplicate from conflicting, because same id with same content is idempotence and only same id with different content is a defect']
+  [add'D-05, an output diff across the corpus before the emitter changes, because glyph-diff compares two sources and nothing compares two emitter versions']
+  [restr'not taken: the capability index, the level graph, the worker queue and the effort transfer, which solve another problem; and the command parser, which has no position, no code and no repair, where Glyph is strictly ahead']];
+
 [section'assumptions'
   [nt'the question budget of class C2 is spent, so what was not asked is written here as an affirmation with its reason, to be knocked down in one line']
   [assm'the specification is written against the emitted document and XML_REFERENCE, and BUNDLE_TARGET is consulted for method rather than for shape, because the six layers describe the other artefact']

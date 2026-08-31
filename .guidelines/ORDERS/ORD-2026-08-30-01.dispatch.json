@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "id": "ORD-2026-08-30-01",
-  "version": 5,
+  "version": 6,
   "language": "en-EU",
   "home": "'.guidelines/ORDERS/' in the glyph repository — .scope is excluded by the ignore rules as client material, so an order placed there would not survive",
   "supersedes": [
@@ -20,6 +20,10 @@
     {
       "version": 4,
       "reason": "S11 and S12 were written against the wrong referent of glyph-package; the Regent resolved Q7 to the emitted document root, and the six-layer bundle is a different artefact"
+    },
+    {
+      "version": 5,
+      "reason": "a deferred queue is recorded after E7; no deliverable is commissioned, no step is reordered, and E2 to E7 are untouched"
     }
   ],
   "immutable": true,
@@ -669,5 +673,67 @@
       "answer": "the command call; 'function' to the model",
       "resolved_in": "E0b, by the Regent"
     }
-  ]
+  ],
+  "deferred": {
+    "note": "NOT commissioned. Read of erosbnk/dmh-protocol against 2.4.5.01, recorded so it is not rediscovered. Analysis: .guidelines/DMHP_IMPORTS.md. Nothing here starts before E7 closes.",
+    "position": "after E7",
+    "items": [
+      {
+        "id": "D-01",
+        "what": "atomic writes and an all-or-nothing build: stage both build-templates outputs to .tmp and rename both, so a crash leaves the old pair or the new pair",
+        "value": "high",
+        "cost": "low",
+        "why": "build-templates.js emits two artefacts and phase two reads what phase one wrote; emit() is a bare writeFileSync. --check answers staleness, which is a different question",
+        "sites": [
+          "scripts/build-templates.js:60",
+          "scripts/build-skill.js:70",
+          "scripts/test-corpus.js:1450"
+        ]
+      },
+      {
+        "id": "D-02",
+        "what": "content-addressed identity for conformance vectors: the pin binds to the digest of the source, not to the position E-01",
+        "value": "medium-high",
+        "cost": "low",
+        "why": "a pin that migrates to another case does not outlive its reason, it acquires a false one, and lock T10 does not catch that",
+        "touches": "E2, which rederives 173 vectors"
+      },
+      {
+        "id": "D-03",
+        "what": "a generated/authored split at field level, not only at file level",
+        "value": "medium",
+        "cost": "none today - a rule, not code",
+        "why": "I1 is file-granular; the first human annotation on a generated store has no place to live"
+      },
+      {
+        "id": "D-04",
+        "what": "separate `duplicate` from `conflicting`: same id and same content is idempotence, same id and different content is a collision",
+        "value": "medium",
+        "cost": "low",
+        "why": "collapsing them makes a re-run indistinguishable from a real clash"
+      },
+      {
+        "id": "D-05",
+        "what": "an output diff across the corpus before the emitter changes: what each of the 98 sources emits before and after, grouped by kind of divergence",
+        "value": "high",
+        "cost": "largest here",
+        "position": "last",
+        "why": "glyph-diff compares two sources; nothing compares two emitter versions. The blast radius was measured once by hand and is re-improvised per release"
+      }
+    ],
+    "rejected": [
+      {
+        "what": "the capability index, the D3/D2/D1 graph, the worker queue, effort transfer",
+        "why": "they solve DMHP's problem; Glyph has no capability-discovery problem"
+      },
+      {
+        "what": "the command parser",
+        "why": "twenty-two regexes with no position, no code and no repair; Glyph's refusals are strictly ahead and there is nothing to take"
+      },
+      {
+        "what": "PREVIEW/APPROVAL as a whole",
+        "why": "Glyph emits documents rather than applying mutations, so approval has nothing to gate; only the diff half transfers, as D-05"
+      }
+    ]
+  }
 }

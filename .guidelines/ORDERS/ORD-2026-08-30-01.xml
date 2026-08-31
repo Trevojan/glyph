@@ -205,6 +205,35 @@
   </block>
   <block once="true">
     <section>
+      <user-input>deferred</user-input>
+      <note>
+        <user-input>read of the dmh-protocol repository against 2.4.5.01, recorded so it is not rediscovered; nothing here is commissioned and nothing starts before E7 closes</user-input>
+      </note>
+      <reference>
+        <user-input>.guidelines/DMHP_IMPORTS.md, the analysis and the reasons</user-input>
+      </reference>
+      <add>
+        <user-input>D-01, atomic writes and an all or nothing build: build-templates emits two artefacts and phase two reads what phase one wrote, through a bare writeFileSync, so a crash leaves a state no commit represents</user-input>
+      </add>
+      <add>
+        <user-input>D-02, content addressed identity for conformance vectors, so a pin binds to the digest of its source rather than to the position E-01 and cannot migrate to another case</user-input>
+      </add>
+      <add>
+        <user-input>D-03, a generated and authored split at field level rather than only at file level, because the first human annotation on a generated store has nowhere to live</user-input>
+      </add>
+      <add>
+        <user-input>D-04, separating duplicate from conflicting, because same id with same content is idempotence and only same id with different content is a defect</user-input>
+      </add>
+      <add>
+        <user-input>D-05, an output diff across the corpus before the emitter changes, because glyph-diff compares two sources and nothing compares two emitter versions</user-input>
+      </add>
+      <restriction>
+        <user-input>not taken: the capability index, the level graph, the worker queue and the effort transfer, which solve another problem; and the command parser, which has no position, no code and no repair, where Glyph is strictly ahead</user-input>
+      </restriction>
+    </section>
+  </block>
+  <block once="true">
+    <section>
       <user-input>assumptions</user-input>
       <note>
         <user-input>the question budget of class C2 is spent, so what was not asked is written here as an affirmation with its reason, to be knocked down in one line</user-input>
