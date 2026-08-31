@@ -1,0 +1,112 @@
+{
+  "schema": 1,
+  "note": "E1 of ORD-2026-08-30-01. The expected glyph-package for each of the five conformance examples, DERIVED BY HAND from `.guidelines/PACKAGE_TARGET.md` applied to `conformance/examples.json`, never from an emitter (locks T4, T5, T31). No glyph-package emitter exists at the time of writing; that is the point. `package` is the claim, and an emitter that disagrees with it is wrong until this file is revised for a stated reason.",
+  "derived_from": [
+    ".guidelines/PACKAGE_TARGET.md",
+    "conformance/examples.json",
+    ".guidelines/expansions.json (for `reads`, per clause 9)"
+  ],
+  "authored": "2026-08-31",
+  "engine_at_derivation": "2.4.5.01",
+  "count": 5,
+  "derivation_rules": [
+    "S2: the root becomes <glyph-package engine=\"2.4.5.01\">, unconditionally",
+    "S5: <schema/> is emitted empty as the first child of the root",
+    "S3: each maximal run of siblings starting at chain=\"extend\" becomes a <chain>; the attribute does not survive the grouping; a run of one is still a run",
+    "S4: an element whose command is `composite` gains <invoke reads species depth/> as its FIRST child, before any <chain>; atoms gain nothing"
+  ],
+  "diagnostics_are_not_in_the_document": "The emitted document carries no diagnostic content and never has: a refusal reaches it as <off> (XML_REFERENCE.md 11.3) and an advisory rule diagnostic reaches it not at all. Diagnostics travel beside the document, in the AST envelope glyph-check validates. They are recorded per case here because a golden blind to them would let a regression that silences the contradiction rules pass unseen.",
+  "cases": [
+    {
+      "id": "E-01",
+      "src": "[in\r\n  [tgt`phonema-orbital`]\r\n  [rtnl-go`cover cases where 2 vowels cost -0.1 when repeated`]\r\n  [nt`start`]\r\n  [ctx-ref`now: aa -> 0.9 + 0.9 | expected: aa -> 0.9 + 0.8`]\r\n  [alw-true`alphanumeric inputs in the app's CLI.`]\r\n  [nt`path`]\r\n  [instof-add`no need to change anything besides adding this rule. try to change the code as less as possible.`]]",
+      "package": "<glyph-package engine=\"2.4.5.01\">\n  <schema/>\n  <block once=\"true\">\n    <instruction>\n      <target>\n        <user-input>phonema-orbital</user-input>\n      </target>\n      <rationale>\n        <invoke reads=\"[ELAB[RSN]],[REF[CNST]]\" species=\"composite\" depth=\"1\"/>\n        <chain>\n          <go/>\n        </chain>\n        <user-input>cover cases where 2 vowels cost -0.1 when repeated</user-input>\n      </rationale>\n      <note>\n        <user-input>start</user-input>\n      </note>\n      <context>\n        <chain>\n          <reference/>\n        </chain>\n        <user-input>now: aa -&gt; 0.9 + 0.9 | expected: aa -&gt; 0.9 + 0.8</user-input>\n      </context>\n      <always force=\"editorial\">\n        <chain>\n          <true/>\n        </chain>\n        <user-input>alphanumeric inputs in the app's CLI.</user-input>\n      </always>\n      <note>\n        <user-input>path</user-input>\n      </note>\n      <instead-of>\n        <chain>\n          <add/>\n        </chain>\n        <user-input>no need to change anything besides adding this rule. try to change the code as less as possible.</user-input>\n      </instead-of>\n    </instruction>\n  </block>\n</glyph-package>",
+      "invokes": [
+        {
+          "element": "rationale",
+          "canonical": "RTNL",
+          "depth": 1
+        }
+      ],
+      "chains": 4,
+      "diagnostics": [],
+      "roundTrips": false,
+      "roundTripNote": "pinned, not a defect, and carried unchanged from examples.json: the source holds an apostrophe, and text holding an apostrophe, a backslash, a backtick or a bracket is substituted rather than preserved. The substitution reaches the document, so this pair is unstable by design. The pin is per case so a real regression cannot hide behind a known loss."
+    },
+    {
+      "id": "E-02",
+      "src": "[in\r\n  [tgt`combat-system`]\r\n  [rtnl-go`determine whether damage should be applied before armor reduction`]\r\n  [cond-if`the attack is physical`]\r\n  [alw-true`only when the attacker has a valid target`]\r\n  [instof-add`keep the existing damage pipeline intact.`]]",
+      "package": "<glyph-package engine=\"2.4.5.01\">\n  <schema/>\n  <block once=\"true\">\n    <instruction>\n      <target>\n        <user-input>combat-system</user-input>\n      </target>\n      <rationale>\n        <invoke reads=\"[ELAB[RSN]],[REF[CNST]]\" species=\"composite\" depth=\"1\"/>\n        <chain>\n          <go/>\n        </chain>\n        <user-input>determine whether damage should be applied before armor reduction</user-input>\n      </rationale>\n      <condition>\n        <chain>\n          <if/>\n        </chain>\n        <user-input>the attack is physical</user-input>\n      </condition>\n      <always force=\"editorial\">\n        <chain>\n          <true/>\n        </chain>\n        <user-input>only when the attacker has a valid target</user-input>\n      </always>\n      <instead-of>\n        <chain>\n          <add/>\n        </chain>\n        <user-input>keep the existing damage pipeline intact.</user-input>\n      </instead-of>\n    </instruction>\n  </block>\n</glyph-package>",
+      "invokes": [
+        {
+          "element": "rationale",
+          "canonical": "RTNL",
+          "depth": 1
+        }
+      ],
+      "chains": 4,
+      "diagnostics": [],
+      "roundTrips": true
+    },
+    {
+      "id": "E-03",
+      "src": "[in\r\n  [tgt`TurnService.Resolve`]\r\n  [rev-cmp`compare the current resolution order against the expected combat order`]\r\n  [ctx-ref`current: defense resolves before attack | expected: attack resolves before defense`]\r\n  [prop`identify the smallest correction necessary`]\r\n  [instof-add`do not redesign TurnService.`]]",
+      "package": "<glyph-package engine=\"2.4.5.01\">\n  <schema/>\n  <block once=\"true\">\n    <instruction>\n      <target>\n        <user-input>TurnService.Resolve</user-input>\n      </target>\n      <review>\n        <chain>\n          <compare/>\n        </chain>\n        <user-input>compare the current resolution order against the expected combat order</user-input>\n      </review>\n      <context>\n        <chain>\n          <reference/>\n        </chain>\n        <user-input>current: defense resolves before attack | expected: attack resolves before defense</user-input>\n      </context>\n      <propose>\n        <invoke reads=\"[GO[ALT[RTNL]]],[ASK[CONF]]\" species=\"composite\" depth=\"2\"/>\n        <user-input>identify the smallest correction necessary</user-input>\n      </propose>\n      <instead-of>\n        <chain>\n          <add/>\n        </chain>\n        <user-input>do not redesign TurnService.</user-input>\n      </instead-of>\n    </instruction>\n  </block>\n</glyph-package>",
+      "invokes": [
+        {
+          "element": "propose",
+          "canonical": "PROP",
+          "depth": 2
+        }
+      ],
+      "chains": 3,
+      "diagnostics": [],
+      "roundTrips": true,
+      "note": "the only case where an <invoke> stands with no <chain> beside it, and the only depth-2 composite in the set"
+    },
+    {
+      "id": "E-04",
+      "src": "[in\r\n  [tgt`Player.Lives`]\r\n  [ask-clar`is an unrevealed Life always worth 2 points?`]\r\n  [ctx-ref`current scoring rule`]\r\n  [conf`required before implementation`]]",
+      "package": "<glyph-package engine=\"2.4.5.01\">\n  <schema/>\n  <block once=\"true\">\n    <instruction>\n      <target>\n        <user-input>Player.Lives</user-input>\n      </target>\n      <ask>\n        <chain>\n          <clarification/>\n        </chain>\n        <user-input>is an unrevealed Life always worth 2 points?</user-input>\n      </ask>\n      <context>\n        <chain>\n          <reference/>\n        </chain>\n        <user-input>current scoring rule</user-input>\n      </context>\n      <confirmation>\n        <user-input>required before implementation</user-input>\n      </confirmation>\n    </instruction>\n  </block>\n</glyph-package>",
+      "invokes": [],
+      "chains": 2,
+      "diagnostics": [],
+      "roundTrips": true
+    },
+    {
+      "id": "E-05",
+      "src": "[in\r\n  [tgt`input-parser`]\r\n  [lim`do not modify tokenization`]\r\n  [req`the existing syntax must remain valid`]\r\n  [mand`the new rule must apply to CLI input`]\r\n  [avd`avoid introducing a new parser stage`]\r\n  [dont`change unrelated commands`]]",
+      "package": "<glyph-package engine=\"2.4.5.01\">\n  <schema/>\n  <block once=\"true\">\n    <instruction>\n      <target>\n        <user-input>input-parser</user-input>\n      </target>\n      <limitation>\n        <user-input>do not modify tokenization</user-input>\n      </limitation>\n      <requirement>\n        <user-input>the existing syntax must remain valid</user-input>\n      </requirement>\n      <mandatory>\n        <user-input>the new rule must apply to CLI input</user-input>\n      </mandatory>\n      <avoid>\n        <user-input>avoid introducing a new parser stage</user-input>\n      </avoid>\n      <do-not>\n        <user-input>change unrelated commands</user-input>\n      </do-not>\n    </instruction>\n  </block>\n</glyph-package>",
+      "invokes": [],
+      "chains": 0,
+      "diagnostics": [
+        {
+          "code": "Rule:mand-dont",
+          "severity": "fix",
+          "label": "contradiction",
+          "hasPosition": false
+        },
+        {
+          "code": "Rule:req-dont",
+          "severity": "ask",
+          "label": "redundancy",
+          "hasPosition": false
+        },
+        {
+          "code": "Rule:mand-avd",
+          "severity": "ask",
+          "label": "redundancy",
+          "hasPosition": false
+        },
+        {
+          "code": "Rule:req-avd",
+          "severity": "ask",
+          "label": "tension",
+          "hasPosition": false
+        }
+      ],
+      "roundTrips": true,
+      "note": "the degenerate case for both new constructs: no chain and no invoke, so it is what proves <glyph-package> and <schema/> are unconditional (S18) rather than triggered by a feature. It is also the case that contradicts finding A1: the order records zero diagnostics across all five examples, and this one produces four at 2.4.5.01."
+    }
+  ]
+}

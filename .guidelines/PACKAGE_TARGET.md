@@ -349,7 +349,53 @@ free. Blocks nothing here.
 
 ---
 
-## 11. Status
+## 11. Diagnostics are not carried in the document
+
+Writing the golden (E1) proved this section missing. The method predicted it:
+*writing the consumer is what proves the producer complete.*
+
+**The document carries no diagnostic content, and never has.** Two paths exist
+and neither puts a diagnostic inside the emitted tree:
+
+- a **refusal** reaches the document as `<off>`, holding the characters the
+  author typed (`XML_REFERENCE.md` §11.3), and the diagnostic itself travels
+  beside it;
+- an **advisory rule diagnostic** — a contradiction, a redundancy, a tension —
+  reaches the document not at all.
+
+Diagnostics travel in the AST envelope, which is the source of truth and which
+`glyph-check` already validates. Putting them in the document as well would be a
+second encoding of one fact, which §3.2 rejects for the operator and lock T36
+forbids generally.
+
+**This is a claim about the format, not permission to lose them.** A golden blind
+to diagnostics would let a regression that silences the contradiction rules pass
+unseen, so `golden.json` records the expected diagnostics per case beside the
+expected document. E-05 carries four.
+
+### 11.1 Two findings this section is built on
+
+**Finding G1 — `A1` is stale.** The order records *"all five actual xml blocks
+match v1.4.4.01 byte for byte, zero diagnostics"*. At 2.4.5.01, E-05 produces
+four: `Rule:mand-dont` at `fix`, and `Rule:req-dont`, `Rule:mand-avd`,
+`Rule:req-avd` at `ask`. The finding was true when measured and is not true now.
+
+**Finding G2 — rule diagnostics carry no position.** `Rule:*` diagnostics arrive
+with `code`, `severity`, `label` and `message`, and **no `at`**, while parse
+diagnostics such as `SlashInChain` carry `at: {s, e}`. The order's
+`Q2_diagnostic_positions` decision says a refusal with no coordinate is not
+verifiable by a reader who does not have the engine. A contradiction rule fires
+on two commands and therefore has two positions available to it; emitting none is
+a gap, not a property of the rule. Recorded here, out of scope for E1, and named
+so E5 cannot rewrite `XML_REFERENCE.md` §11 without meeting it.
+
+> `XML_REFERENCE.md` §11.2 is also internally inconsistent: the heading says
+> *"Every refusal carries a position"* while the body says `at` is *"optional and
+> additive"*. E5's territory, recorded here so it is not rediscovered.
+
+---
+
+## 12. Status
 
 Nothing here is implemented. It exists so the golden (E1) can be written against
 something and so `glyph-check` (E3) has a specification before it has code —

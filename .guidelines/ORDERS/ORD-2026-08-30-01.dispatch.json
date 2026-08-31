@@ -220,6 +220,28 @@
       "id": "A26",
       "finding": "the repository skill declared v1.3.0.0 and described the AST as an inspection panel, which T23 reverses",
       "consequence": "K15 required both; the skill now declares the engine version and states the reversal with its reason, and build-skill.js --check refuses to publish a skill whose declared version does not match the engine"
+    },
+    {
+      "id": "G1",
+      "finding": "E-05 produces four rule diagnostics at 2.4.5.01: Rule:mand-dont at fix, Rule:req-dont, Rule:mand-avd and Rule:req-avd at ask",
+      "consequence": "finding A1, which records zero diagnostics across all five examples, was true when measured and is stale now; the golden records diagnostics per case",
+      "status": "SUPERSEDES A1 in part"
+    },
+    {
+      "id": "G2",
+      "finding": "Rule:* diagnostics carry no `at`, while parse diagnostics such as SlashInChain do",
+      "severity": "medium",
+      "consequence": "the Q2_diagnostic_positions decision says a refusal with no coordinate is not verifiable by a reader without the engine; a contradiction rule fires on two commands and has two positions available. Out of scope for E1, named so E5 must meet it"
+    },
+    {
+      "id": "G3",
+      "finding": "conformance/examples.json stores its sources with CRLF, while .gitattributes sets eol=lf for the repository and the AST source descriptor reports newline lf",
+      "consequence": "K1 is a byte-for-byte criterion; the golden carries the sources verbatim rather than normalising them, so the decision stays open rather than being made by transcription"
+    },
+    {
+      "id": "G4",
+      "finding": "XML_REFERENCE.md 11.2 heading says every refusal carries a position while its body says `at` is optional and additive",
+      "consequence": "an internal inconsistency in the only document held to the engine by tests; E5 territory"
     }
   ],
   "four_guarantees": {
@@ -270,7 +292,10 @@
     {
       "id": "E1",
       "what": "the glyph-package golden, derived from the specification and the five examples",
-      "blocked_by": "E0b"
+      "blocked_by": "E0b",
+      "delivered": "conformance/golden.json",
+      "status": "RETURNED by suba-implementer - five expected documents, hand-derived from PACKAGE_TARGET.md, verified against examples.json and the expansion store",
+      "method": "hand derivation, not emitter output: no glyph-package emitter exists. Transcription checked against the examples for text content, element sequence, chain-run count from the AST, invoke placement and formula agreement with the store"
     },
     {
       "id": "E2",
@@ -546,6 +571,12 @@
       "question": "K8 says ten mutations and nine catches; the specification has twelve clauses",
       "why_not_assumed": "lock T17 forbids rewriting a criterion so the code passes; a count fixed before the clauses existed is flagged, not widened",
       "blocks": "nothing"
+    },
+    {
+      "id": "Q13",
+      "question": "line endings: examples.json holds CRLF sources, .gitattributes sets eol=lf",
+      "why_not_assumed": "K1 is byte-for-byte, so normalising during transcription would decide it silently",
+      "blocks": "K1 verification, not E1"
     }
   ],
   "blast_radius": {
