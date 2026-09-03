@@ -288,6 +288,16 @@
       "id": "G11",
       "finding": "adding `element` to the expansion store moved the ast projection hash of all 101 snapshot cases, and no xml or hgml hash",
       "consequence": "the AST envelope carries store fingerprints, so a store change is visible there and nowhere else. Snapshot regenerated; the xml hashes stay pinned to the current emitter"
+    },
+    {
+      "id": "G12",
+      "finding": "the E2 survey of the D bucket reported one XML-asserting vector and there were two: 4-06 was missed and only surfaced when the emitter landed",
+      "consequence": "rederived late. A survey is not a proof of coverage; the emitter is. Recorded because the same shape could hide a third"
+    },
+    {
+      "id": "G13",
+      "finding": "packagePass initially read the expansion store from the global registry while buildXml receives it through opts, so <invoke> vanished wherever the corpus passed stores per call",
+      "consequence": "caught by the authored examples, not by the golden - the golden test had registered the store globally. Two call paths for one store is the defect class GS-01..GS-03 exist to watch"
     }
   ],
   "four_guarantees": {
@@ -400,7 +410,10 @@
         "the six-layer bundle emitters, out of scope by the order"
       ],
       "specification": ".guidelines/PACKAGE_TARGET.md",
-      "verified_against": "conformance/golden.json, which exists first and is not derived from it"
+      "verified_against": "conformance/golden.json, which exists first and is not derived from it",
+      "delivered": "scripts/glyph-parser.js (packagePass in buildXml)",
+      "status": "RETURNED - K1 met: the emitter reproduces all five hand-derived golden documents byte for byte",
+      "cross_checked": "105 corpus sources emitted and passed through glyph-check --package: zero throws, zero refusals. The gate written first now validates the topology it gated"
     },
     {
       "id": "E4",
@@ -432,15 +445,18 @@
     },
     {
       "id": "K1",
-      "expected": "the five examples emit the expected glyph-package, byte for byte"
+      "expected": "the five examples emit the expected glyph-package, byte for byte",
+      "status": "MET"
     },
     {
       "id": "K2",
-      "expected": "extend and comma return distinct from the XML and re-emit identically; no needs element is ever fabricated"
+      "expected": "extend and comma return distinct from the XML and re-emit identically; no needs element is ever fabricated",
+      "status": "MET via the emitter; the inverse half belongs to E4"
     },
     {
       "id": "K3",
-      "expected": "the divide operator works or fails with a position, and never lands silently in an off element"
+      "expected": "the divide operator works or fails with a position, and never lands silently in an off element",
+      "status": "MET via the emitter; the inverse half belongs to E4"
     },
     {
       "id": "K4",
@@ -849,5 +865,34 @@
       "idiom": "the same bidirectional shape as RT-02, SN-01 and the examples' roundTrips pin",
       "observed_failing": "both directions, before it counted: red while unpinned, and red when made to pass while still pinned"
     }
-  ]
+  ],
+  "blast_radius_E3b": {
+    "measured": true,
+    "method": "the full suite run after the emitter changed, then every corpus source emitted and validated",
+    "green_immediately": [
+      "Positive 31/31",
+      "Incomplete",
+      "Invalid",
+      "Regressions",
+      "Long",
+      "Templates",
+      "Rules",
+      "Constraints",
+      "Guard",
+      "Composition",
+      "hgml",
+      "ast schema",
+      "glyph-package",
+      "global store"
+    ],
+    "pinned_awaiting_E4": 22,
+    "which": "the 16 fromXML vectors, RT-01, RT-03, and the four authored pairs that round-tripped; fromXML reads <glyph> and what replaces it is E4's decision, not a regression",
+    "rederived_late": [
+      "4-06"
+    ],
+    "regenerated": [
+      "corpus-snapshot.json (xml and ast projections)",
+      "the published skill"
+    ]
+  }
 }

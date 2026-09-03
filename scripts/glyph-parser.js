@@ -1682,7 +1682,7 @@ const GlyphCore = (function () {
 
   function buildXml(segments, opts) {
     if (!segments.length) return "<!-- escolha um molde ou escreva do lado esquerdo -->";
-    var L = ["<glyph>"];
+    var L = ["<glyph-package engine=\"" + VERSION + "\">", pad(1) + "<schema/>"];
     segments.forEach(function (sg) {
       if (sg.isReturn) {
         var exp = [], bad = [];
@@ -1716,9 +1716,56 @@ const GlyphCore = (function () {
       L.push(pad(1) + "</block>");
       if (sg.breaks) L.push(pad(1) + "<break/>");
     });
-    L.push("</glyph>");
-    return L.join("\n");
+    L.push("</glyph-package>");
+    return packagePass(L, opts).join("\n");
   }
+
+
+  /* ---- glyph-package, the structural pass (E3b) ------------------------
+     Sections 3 and 4 of PACKAGE_TARGET.md are shape, not content, so they run
+     as one pass over the emitted lines rather than threading through `emit`.
+     The same algorithm was validated against the hand-derived golden byte for
+     byte BEFORE any emitter existed, which is the direction lock T5 demands.  */
+  function packageIndent(s) { return s.length - s.replace(/^ +/, "").length; }
+
+  function packagePass(L, opts) {
+    /* 3 — a maximal run of siblings, first `extend` then `item`s, is one
+       <chain>, and the attribute does not survive it: position carries it.
+       A second `extend` opens a NEW run (3.4), which is what keeps `-`
+       distinguishable from `,`. */
+    var out = [];
+    for (var i = 0; i < L.length; i++) {
+      var line = L[i];
+      if (!/\schain="extend"\s*\/>/.test(line)) { out.push(line); continue; }
+      var ind = packageIndent(line), run = [line], j = i + 1;
+      while (j < L.length && packageIndent(L[j]) === ind && /\schain="item"\s*\/>/.test(L[j])) {
+        run.push(L[j]); j++;
+      }
+      var padding = new Array(ind + 1).join(" ");
+      out.push(padding + "<chain>");
+      for (var r = 0; r < run.length; r++)
+        out.push("  " + run[r].replace(/\schain="(extend|item)"/, ""));
+      out.push(padding + "</chain>");
+      i = j - 1;
+    }
+    /* 4 — <invoke> is a leaf, first child of the element whose call it
+       describes, and only where the command is composite: an atom's reading is
+       its own name, and saying so on every element is a tautology with a cost. */
+    var withInvokes = [];
+    for (var m = 0; m < out.length; m++) {
+      var l = out[m], t = l.replace(/^ +/, "");
+      withInvokes.push(l);
+      if (t.charAt(0) !== "<" || t.indexOf("</") === 0 || /\/>$/.test(t)) continue;
+      var nm = (t.match(/^<([a-z-]+)[\s>]/) || [])[1];
+      var hit = nm && GLOSS_REVERSE[nm];
+      if (!hit || speciesOf(hit.canonical, opts) !== "composite") continue;
+      withInvokes.push(new Array(packageIndent(l) + 3).join(" ") +
+        '<invoke reads="' + xesc(formulaOf(hit.canonical, opts)) + '" species="composite" depth="' +
+        depthOf(hit.canonical, opts) + '"/>');
+    }
+    return withInvokes;
+  }
+
 
   function blockAttrs(sg) {
     return ' once="true"' + (sg.continues ? ' continues="previous"' : "");

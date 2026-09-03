@@ -26,37 +26,47 @@ disagree, the reference is right and this file needs regenerating.
 ```
 
 ```xml
-<glyph>
+<glyph-package engine="2.4.5.01">
+  <schema/>
   <block once="true">
     <instruction>
       <target>
         <user-input>phonema-orbital</user-input>
       </target>
       <rationale>
-        <go chain="extend"/>
+        <invoke reads="[ELAB[RSN]],[REF[CNST]]" species="composite" depth="1"/>
+        <chain>
+          <go/>
+        </chain>
         <user-input>cover cases where 2 vowels cost -0.1 when repeated</user-input>
       </rationale>
       <note>
         <user-input>start</user-input>
       </note>
       <context>
-        <reference chain="extend"/>
+        <chain>
+          <reference/>
+        </chain>
         <user-input>now: aa -&gt; 0.9 + 0.9 | expected: aa -&gt; 0.9 + 0.8</user-input>
       </context>
       <always force="editorial">
-        <true chain="extend"/>
+        <chain>
+          <true/>
+        </chain>
         <user-input>alphanumeric inputs in the app's CLI.</user-input>
       </always>
       <note>
         <user-input>path</user-input>
       </note>
       <instead-of>
-        <add chain="extend"/>
+        <chain>
+          <add/>
+        </chain>
         <user-input>no need to change anything besides adding this rule. try to change the code as less as possible.</user-input>
       </instead-of>
     </instruction>
   </block>
-</glyph>
+</glyph-package>
 ```
 
 > Does not survive `fromXML`, by design — see `roundTripNote` in the vector.
@@ -75,31 +85,41 @@ disagree, the reference is right and this file needs regenerating.
 ```
 
 ```xml
-<glyph>
+<glyph-package engine="2.4.5.01">
+  <schema/>
   <block once="true">
     <instruction>
       <target>
         <user-input>combat-system</user-input>
       </target>
       <rationale>
-        <go chain="extend"/>
+        <invoke reads="[ELAB[RSN]],[REF[CNST]]" species="composite" depth="1"/>
+        <chain>
+          <go/>
+        </chain>
         <user-input>determine whether damage should be applied before armor reduction</user-input>
       </rationale>
       <condition>
-        <if chain="extend"/>
+        <chain>
+          <if/>
+        </chain>
         <user-input>the attack is physical</user-input>
       </condition>
       <always force="editorial">
-        <true chain="extend"/>
+        <chain>
+          <true/>
+        </chain>
         <user-input>only when the attacker has a valid target</user-input>
       </always>
       <instead-of>
-        <add chain="extend"/>
+        <chain>
+          <add/>
+        </chain>
         <user-input>keep the existing damage pipeline intact.</user-input>
       </instead-of>
     </instruction>
   </block>
-</glyph>
+</glyph-package>
 ```
 
 ---
@@ -116,30 +136,38 @@ disagree, the reference is right and this file needs regenerating.
 ```
 
 ```xml
-<glyph>
+<glyph-package engine="2.4.5.01">
+  <schema/>
   <block once="true">
     <instruction>
       <target>
         <user-input>TurnService.Resolve</user-input>
       </target>
       <review>
-        <compare chain="extend"/>
+        <chain>
+          <compare/>
+        </chain>
         <user-input>compare the current resolution order against the expected combat order</user-input>
       </review>
       <context>
-        <reference chain="extend"/>
+        <chain>
+          <reference/>
+        </chain>
         <user-input>current: defense resolves before attack | expected: attack resolves before defense</user-input>
       </context>
       <propose>
+        <invoke reads="[GO[ALT[RTNL]]],[ASK[CONF]]" species="composite" depth="2"/>
         <user-input>identify the smallest correction necessary</user-input>
       </propose>
       <instead-of>
-        <add chain="extend"/>
+        <chain>
+          <add/>
+        </chain>
         <user-input>do not redesign TurnService.</user-input>
       </instead-of>
     </instruction>
   </block>
-</glyph>
+</glyph-package>
 ```
 
 ---
@@ -155,18 +183,23 @@ disagree, the reference is right and this file needs regenerating.
 ```
 
 ```xml
-<glyph>
+<glyph-package engine="2.4.5.01">
+  <schema/>
   <block once="true">
     <instruction>
       <target>
         <user-input>Player.Lives</user-input>
       </target>
       <ask>
-        <clarification chain="extend"/>
+        <chain>
+          <clarification/>
+        </chain>
         <user-input>is an unrevealed Life always worth 2 points?</user-input>
       </ask>
       <context>
-        <reference chain="extend"/>
+        <chain>
+          <reference/>
+        </chain>
         <user-input>current scoring rule</user-input>
       </context>
       <confirmation>
@@ -174,7 +207,7 @@ disagree, the reference is right and this file needs regenerating.
       </confirmation>
     </instruction>
   </block>
-</glyph>
+</glyph-package>
 ```
 
 ---
@@ -192,7 +225,8 @@ disagree, the reference is right and this file needs regenerating.
 ```
 
 ```xml
-<glyph>
+<glyph-package engine="2.4.5.01">
+  <schema/>
   <block once="true">
     <instruction>
       <target>
@@ -215,5 +249,5 @@ disagree, the reference is right and this file needs regenerating.
       </do-not>
     </instruction>
   </block>
-</glyph>
+</glyph-package>
 ```

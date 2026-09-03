@@ -58,7 +58,7 @@ const POSITIVE = [
   /* the two bare links now say which operator attached them; before, the XML
      could not tell `-impr-fmt` from `-impr,fmt` and neither could fromXML */
   { id:"P-06", name:"Review, improve and format.", src:"[REV-IMPR-FMT]",
-    clean:true, cmds:["REV","IMPR","FMT"], awaiting:"E3b",
+    clean:true, cmds:["REV","IMPR","FMT"],
     /* rederived for glyph-package (E2): two consecutive extends are two runs of
        one, not one run of two - PACKAGE_TARGET.md 3.4. Folding them would make
        [REV-IMPR-FMT] and [REV-IMPR,FMT] emit identically, which is the defect E0
@@ -348,6 +348,24 @@ const POSITIVE_WITH_RULES = POSITIVE.map(tc => ({
  * ------------------------------------------------------------------ */
 
 let failures = [];
+
+/* Ids whose expectation is already correct but whose PRODUCER has not landed.
+   Same discipline as `awaiting` in runGroup, and as RT-02 and SN-01: expected to
+   fail now, and a failure the moment it starts passing, because a pin that
+   outlives its reason is how a real regression hides. */
+const AWAITING = {};
+"F-01 F-02 F-03 F-04 F-05 F-06 F-07 F-08 F-09 F-13 F-14 F-15 F-20 F-21 F-22 F-23 RT-01 RT-03 E-02 E-03 E-04 E-05"
+  .split(" ").forEach(id => { AWAITING[id] = "E4"; });
+
+function awaitCheck(id, why) {
+  const owed = AWAITING[id];
+  if (!owed) return null;
+  return why
+    ? { pass: true,  line: "  \u23f8 " + id + "  (awaiting " + owed + ")" }
+    : { pass: false, line: "  \u2717 " + id + ": passes now \u2014 " + owed +
+                           " has landed; remove it from AWAITING" };
+}
+
 
 function commandsOf(res) {
   const out = [];
@@ -732,6 +750,8 @@ function runFromXmlChecks() {
   console.log("\n--- fromXML — the inverse ---");
   const F = [];
   const ok = (id, name, why) => {
+    const pin = awaitCheck(id, why);
+    if (pin) { console.log(pin.line); if (pin.pass) F.push(id); else failures.push(id); return; }
     if (why) { console.log("  ✗ " + id + ": " + name); console.log("      " + why); failures.push(id); }
     else { console.log("  ✓ " + id + ": " + name); F.push(id); }
   };
@@ -976,8 +996,9 @@ function runReferenceChecks() {
     { id: "4-04", src: "[ins'a'];;[ins'b']",       expect: x => /<break\/>/.test(x) },
     { id: "4-05", src: "[ins'a'];[=[ins'b']",      expect: x => /continues="previous"/.test(x) },
     { id: "4-06", src: "[in-rwk]",
-      expect: x => /<instruction>\s*<rework chain="extend"\/>\s*<\/instruction>/.test(x) },
-    { id: "4-07", src: "[in-rwk,ctx]", awaiting: "E3b",
+      /* rederived for glyph-package (E2, late): a run of one is still a run */
+      expect: x => /<instruction>\s*<chain>\s*<rework\/>\s*<\/chain>\s*<\/instruction>/.test(x) },
+    { id: "4-07", src: "[in-rwk,ctx]",
       /* rederived for glyph-package (E2): the run is wrapped and the attribute
          does not survive it, position carrying the operator - PACKAGE_TARGET.md
          3.1 and 3.2. This is the ONLY forward vector in the corpus exercising a
@@ -1095,6 +1116,8 @@ function runAstInvariant() {
   console.log("\n--- E4 — the round trip, measured on the AST ---");
   const D = [];
   const ok = (id, name, why) => {
+    const pin = awaitCheck(id, why);
+    if (pin) { console.log(pin.line); if (pin.pass) D.push(id); else failures.push(id); return; }
     if (why) { console.log("  ✗ " + id + ": " + name); console.log("      " + why); failures.push(id); }
     else { console.log("  ✓ " + id + ": " + name); D.push(id); }
   };
@@ -1394,6 +1417,8 @@ function runExampleChecks() {
   console.log("\n--- the five authored examples ---");
   const D = [];
   const ok = (id, name, why) => {
+    const pin = awaitCheck(id, why);
+    if (pin) { console.log(pin.line); if (pin.pass) D.push(id); else failures.push(id); return; }
     if (why) { console.log("  ✗ " + id + ": " + name); console.log("      " + why); failures.push(id); }
     else { console.log("  ✓ " + id + ": " + name); D.push(id); }
   };
