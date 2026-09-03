@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "id": "ORD-2026-08-30-01",
-  "version": 7,
+  "version": 8,
   "language": "en-EU",
   "home": "'.guidelines/ORDERS/' in the glyph repository — .scope is excluded by the ignore rules as client material, so an order placed there would not survive",
   "supersedes": [
@@ -28,6 +28,10 @@
     {
       "version": 6,
       "reason": "no deliverable wrote the emitter, while E3 is defined as coming before it and K1 requires the examples to emit; the third occurrence of this release's root cause, commissioned as E3b"
+    },
+    {
+      "version": 7,
+      "reason": "seven open questions answered in one sitting; E4 becomes executable and the line-ending decision lands"
     }
   ],
   "immutable": true,
@@ -74,7 +78,13 @@
     "cadence": "one step per commit, npm run check exiting zero before the next step opens",
     "glyph_package_referent": "RESOLVED (Q7) - glyph-package is the emitted document root, succeeding <glyph> and carrying <invoke> and <chain>, per OPERATOR_TARGET.md sections 3.4 and 9. The six-layer bundle of BUNDLE_TARGET.md is a different artefact and keeps its own name. scripts/glyph-check.js line 20 misnames it and is corrected in this release.",
     "root_replacement": "unconditional: <glyph-package> replaces <glyph> for every emission, not only where a chain or invoke occurs. Declared as assumption S18, architect recommendation on Q8",
-    "invoke_element": "RESOLVED (Q10) - <invoke> is the COMMAND call, and must mean 'function' to the model receiving the document. Not the template call: <template>, define, expanded and means are unchanged. Specified in PACKAGE_TARGET.md section 4"
+    "invoke_element": "RESOLVED (Q10) - <invoke> is the COMMAND call, and must mean 'function' to the model receiving the document. Not the template call: <template>, define, expanded and means are unchanged. Specified in PACKAGE_TARGET.md section 4",
+    "fromXML": "SECOND READER (Q15). fromXML learns glyph-package: the new root, <chain> and <invoke>. The 22 pinned assertions are repaired rather than removed, and the XML panel stays editable. Constraint carried from finding A3: <invoke> is DERIVED and must be discarded on the return trip, never read back, or the inverse fabricates what A3 condemned",
+    "line_endings": "NORMALISE TO LF (Q13). The conformance sources move to \n, matching .gitattributes eol=lf and every file in the repository. Measured: the XML is identical either way so K1 is untouched; the AST checksum, length and positions change, which is what makes the envelope travel identically between machines",
+    "six_layer_bundle": "ITS OWN ORDER (Q9), opened after this one closes. Name, layers and emitters are decided there. T0 keeps the two artefacts apart in the meantime",
+    "promotion_boundary": "Q4: the agent prepares a reading of what PROMOTION_BOUNDARY.md normatises and where it bites; the Regent ratifies. Ratification stays the Regent’s",
+    "tracing": "Q5: DEFERRED until this order closes, with the format already stable",
+    "orbital_production_level": "Q6: OUTSIDE this order. S16 is promoted from assumption to decision; it blocks the _ORBITAL rollout, never this release"
   },
   "verified_findings": [
     {
@@ -418,7 +428,15 @@
     {
       "id": "E4",
       "what": "the fromXML decision: a second reader, or the inverse declared dead in writing",
-      "note": "reframed by T23: the question is no longer whether the inverse is worth keeping, but what the round-trip invariant is measured against. Under the promotion the candidate invariant is AST equality rather than XML equality, which is what test-corpus.js:647 currently asserts"
+      "note": "reframed by T23: the question is no longer whether the inverse is worth keeping, but what the round-trip invariant is measured against. Under the promotion the candidate invariant is AST equality rather than XML equality, which is what test-corpus.js:647 currently asserts",
+      "decided": "a second reader (Q15)",
+      "owes": [
+        "read <glyph-package> as the root, and refuse <glyph> by name with a position",
+        "turn <chain> back into the operators: first member `-`, every other `,`",
+        "DISCARD <invoke> on the return trip - it is derived, and reading it back is exactly the fabrication finding A3 condemned",
+        "ignore <schema/>, which carries no authored content",
+        "unpin the 22 assertions now awaiting E4"
+      ]
     },
     {
       "id": "E5",
@@ -658,37 +676,13 @@
     {
       "id": "Q4",
       "question": "ratifying PROMOTION_BOUNDARY.md",
-      "why_not_assumed": "an agent may not ratify a norm it wrote",
-      "blocks": "nothing here"
-    },
-    {
-      "id": "Q5",
-      "question": "the tracing format to stack on glyph-trace.js",
-      "why_not_assumed": "the substrate exists and the shape is a product decision",
-      "blocks": "nothing here"
-    },
-    {
-      "id": "Q6",
-      "question": "what production level means for _ORBITAL",
-      "why_not_assumed": "BUNDLE_TARGET section 7 item 4: it is the P0 gate, ratified by reading",
-      "blocks": "the _ORBITAL rollout, not this order"
-    },
-    {
-      "id": "Q9",
-      "question": "when the six-layer bundle is built, and under what name",
-      "why_not_assumed": "the order puts its emitters out of scope; the name is now free",
-      "blocks": "nothing in this order"
-    },
-    {
-      "id": "Q13",
-      "question": "line endings: examples.json holds CRLF sources, .gitattributes sets eol=lf",
-      "why_not_assumed": "K1 is byte-for-byte, so normalising during transcription would decide it silently",
-      "blocks": "K1 verification, not E1"
+      "state": "the agent owes a reading; the Regent owes the ratification",
+      "blocks": "nothing"
     },
     {
       "id": "Q14",
-      "question": "a sixth authored example exercising a two-member chain",
-      "why_not_assumed": "examples.json sources are authored claims, not agent output",
+      "question": "the sixth authored example, exercising a two-member chain",
+      "state": "a base was supplied and its derivation shown; the Regent authors the source",
       "blocks": "nothing; it widens what K1 can prove"
     }
   ],
@@ -793,6 +787,36 @@
       "question": "K8 says ten mutations and nine catches; the specification has twelve clauses",
       "answer": "K8 restated per clause, following the specification rather than the count",
       "resolved_in": "E3"
+    },
+    {
+      "id": "Q15",
+      "question": "what happens to fromXML under glyph-package",
+      "answer": "a second reader",
+      "resolved_in": "v8"
+    },
+    {
+      "id": "Q13",
+      "question": "line endings of the conformance sources",
+      "answer": "normalise to LF",
+      "resolved_in": "v8"
+    },
+    {
+      "id": "Q9",
+      "question": "when the six-layer bundle is built and under what name",
+      "answer": "its own order, after this one",
+      "resolved_in": "v8"
+    },
+    {
+      "id": "Q5",
+      "question": "the tracing format",
+      "answer": "deferred until this order closes",
+      "resolved_in": "v8"
+    },
+    {
+      "id": "Q6",
+      "question": "production level for _ORBITAL",
+      "answer": "outside this order; S16 promoted to a decision",
+      "resolved_in": "v8"
     }
   ],
   "deferred": {
