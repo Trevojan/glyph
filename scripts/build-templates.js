@@ -20,6 +20,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const fs = require("fs");
 import X from "./read-expansions.js";
+import G from "./glyph-parser.js";
 
 /* Three roots since v1.3.4.01. `/scripts` holds JavaScript, `.guidelines`
    holds everything normative a human edits (the docs and the .json/.txt
@@ -143,6 +144,20 @@ function buildExpansions() {
   const defs = readGlossary();
   const semDef = Object.keys(commands).filter(c => !defs[c]).sort();
   Object.keys(commands).forEach(c => { if (defs[c]) commands[c].def = defs[c]; });
+
+  /* `element` — the name this command wears in the emitted document. It is put
+     in the store because glyph-check must validate a glyph-package on a machine
+     that does not have this engine (glyph-check.js:7-12), and clauses 8 and 9 of
+     PACKAGE_TARGET.md 6 key on element -> species and element -> formula. Without
+     it the validator would have to import the parser, which is the one thing its
+     rationale forbids. Derived here, where the engine IS present. */
+  const byElement = G.elementCanonicalMap || {};
+  const toElement = {};
+  Object.keys(byElement).forEach(el => { toElement[byElement[el].canonical] = el; });
+  const noElement = Object.keys(commands).filter(c => !toElement[c]).sort();
+  Object.keys(commands).forEach(c => { if (toElement[c]) commands[c].element = toElement[c]; });
+  if (noElement.length)
+    console.log("  · " + noElement.length + " command(s) with no element name: " + noElement.join(" "));
 
   /* Same gate as the cycle check: a command with no definition goes back to
      being opaque in the message, and silent opacity is how drift gets in. */

@@ -268,13 +268,23 @@ construct is named, never absorbed into `<off>`.
 | 3 | a `chain` attribute survives on a member of a `<chain>` | `ChainDoubleEncoded` |
 | 4 | a `chain` attribute occurs outside a `<chain>` | `ChainUngrouped` |
 | 5 | a `<chain>` with no members | `ChainEmpty` |
-| 6 | a `<chain>` whose first member came from an item operator | `ChainWithoutHead` |
+| 6 | the root has no empty `<schema/>` as its first child | `SchemaMissing` |
 | 7 | `<invoke>` that is not the first child of its element | `InvokeMisplaced` |
 | 8 | `<invoke>` on an element whose command is an atom | `InvokeOnAtom` |
 | 9 | `<invoke reads>` disagreeing with the expansion store for that command | `ReadingUnfaithful` |
 | 10 | a `<block>` that is a direct child of the root without `once` | `SegmentUnmarked` |
 | 11 | `<mood>` that is not the first child of its `<block>` | `MoodMisplaced` |
 | 12 | a text-bearing element whose content was pretty-printed | `TextReflowed` |
+
+`ChainWithoutHead` is **not** in this table, and the omission is deliberate. An
+earlier draft listed it, carried over from `XML_REFERENCE.md` §11.3. Writing the
+validator proved it undecidable here: §3.2 removes the very attribute it keys on,
+so no conforming document can express it and no malformed one can be caught by it.
+It is a **reader** refusal — `fromXML` is handed input the emitter never wrote —
+and it belongs to `E4`, which decides whether that reader exists at all.
+
+Clause 6 replaces it with the one §5 requires and this table had omitted: `<schema/>`
+is mandatory and empty, and nothing checked it.
 
 **Acceptance is a mutation test:** one mutation per clause, and at most one may
 escape. Zero catches means the validator is decorative — the standard

@@ -454,442 +454,530 @@
     "TRUE": {
       "species": "atom",
       "depth": 0,
-      "def": "Comparison base: true."
+      "def": "Comparison base: true.",
+      "element": "true"
     },
     "FLS": {
       "species": "atom",
       "depth": 0,
-      "def": "Comparison base: false."
+      "def": "Comparison base: false.",
+      "element": "false"
     },
     "POS": {
       "species": "atom",
       "depth": 0,
-      "def": "Positive polarity, assertion or agreement."
+      "def": "Positive polarity, assertion or agreement.",
+      "element": "positive"
     },
     "NGT": {
       "species": "atom",
       "depth": 0,
-      "def": "Negative polarity, negation or disagreement."
+      "def": "Negative polarity, negation or disagreement.",
+      "element": "negative"
     },
     "DONT": {
       "species": "atom",
       "depth": 0,
-      "def": "Negates doing something: a direct prohibition on an action."
+      "def": "Negates doing something: a direct prohibition on an action.",
+      "element": "do-not"
     },
     "DENY": {
       "species": "atom",
       "depth": 0,
-      "def": "Rejects what leads to a result: refusal of the route, not of the act itself."
+      "def": "Rejects what leads to a result: refusal of the route, not of the act itself.",
+      "element": "deny"
     },
     "PRIO": {
       "species": "atom",
       "depth": 0,
-      "def": "Element that takes precedence over others in the context."
+      "def": "Element that takes precedence over others in the context.",
+      "element": "priority"
     },
     "OVR": {
       "species": "atom",
       "depth": 0,
-      "def": "Suspends a prior rule and writes over it."
+      "def": "Suspends a prior rule and writes over it.",
+      "element": "override"
     },
     "DFN": {
       "species": "atom",
       "depth": 0,
-      "def": "Establishes a definition, creates a semantic binding, introduces new concepts."
+      "def": "Establishes a definition, creates a semantic binding, introduces new concepts.",
+      "element": "define-symbol"
     },
     "CMP": {
       "species": "atom",
       "depth": 0,
-      "def": "Evaluates the relation between values in the context."
+      "def": "Evaluates the relation between values in the context.",
+      "element": "compare"
     },
     "CNST": {
       "species": "atom",
       "depth": 0,
-      "def": "A testable rule, used as the target of a comparison."
+      "def": "A testable rule, used as the target of a comparison.",
+      "element": "constraint"
     },
     "ASK": {
       "species": "atom",
       "depth": 0,
-      "def": "The act of requesting an answer from someone; raises a question."
+      "def": "The act of requesting an answer from someone; raises a question.",
+      "element": "ask"
     },
     "ELAB": {
       "species": "atom",
       "depth": 0,
-      "def": "Expands with detail; develops an idea."
+      "def": "Expands with detail; develops an idea.",
+      "element": "elaborate"
     },
     "CLAR": {
       "species": "atom",
       "depth": 0,
-      "def": "Makes clear; removes ambiguity."
+      "def": "Makes clear; removes ambiguity.",
+      "element": "clarification"
     },
     "COND": {
       "species": "atom",
       "depth": 0,
-      "def": "Logical gate for conditional execution."
+      "def": "Logical gate for conditional execution.",
+      "element": "condition"
     },
     "FMT": {
       "species": "atom",
       "depth": 0,
-      "def": "Specifies output shape; presentation pattern."
+      "def": "Specifies output shape; presentation pattern.",
+      "element": "format"
     },
     "ITR": {
       "species": "atom",
       "depth": 0,
-      "def": "Controlled repetition of a process."
+      "def": "Controlled repetition of a process.",
+      "element": "iterate"
     },
     "CONF": {
       "species": "atom",
       "depth": 0,
-      "def": "Validates a decision already taken."
+      "def": "Validates a decision already taken.",
+      "element": "confirmation"
     },
     "UNLS": {
       "species": "atom",
       "depth": 0,
-      "def": "Negated conditional; excludes execution under a given condition."
+      "def": "Negated conditional; excludes execution under a given condition.",
+      "element": "unless"
     },
     "ONLYIF": {
       "species": "atom",
       "depth": 0,
-      "def": "Necessary condition for execution."
+      "def": "Necessary condition for execution.",
+      "element": "only-if"
     },
     "ONLYW": {
       "species": "atom",
       "depth": 0,
-      "def": "Temporal restriction on execution."
+      "def": "Temporal restriction on execution.",
+      "element": "only-when"
     },
     "INSTOF": {
       "species": "atom",
       "depth": 0,
-      "def": "Substitution of one action for another."
+      "def": "Substitution of one action for another.",
+      "element": "instead-of"
     },
     "AVD": {
       "species": "atom",
       "depth": 0,
-      "def": "Recommendation to steer clear where possible (weak degree)."
+      "def": "Recommendation to steer clear where possible (weak degree).",
+      "element": "avoid"
     },
     "RDY": {
       "species": "atom",
       "depth": 0,
-      "def": "State of being ready to execute."
+      "def": "State of being ready to execute.",
+      "element": "ready"
     },
     "INS": {
       "species": "atom",
       "depth": 0,
-      "def": "Direct command to execute."
+      "def": "Direct command to execute.",
+      "element": "instruction"
     },
     "WARN": {
       "species": "atom",
       "depth": 0,
-      "def": "Flags a relevant condition without blocking execution."
+      "def": "Flags a relevant condition without blocking execution.",
+      "element": "warning"
     },
     "BYP": {
       "species": "atom",
       "depth": 0,
-      "def": "Goes around a step without executing it."
+      "def": "Goes around a step without executing it.",
+      "element": "bypass"
     },
     "FIND": {
       "species": "atom",
       "depth": 0,
-      "def": "Looks a value up in the context and sets it as target or context object."
+      "def": "Looks a value up in the context and sets it as target or context object.",
+      "element": "find"
     },
     "GT": {
       "species": "atom",
       "depth": 0,
-      "def": "Numeric comparison: greater than."
+      "def": "Numeric comparison: greater than.",
+      "element": "greater-than"
     },
     "GTE": {
       "species": "atom",
       "depth": 0,
-      "def": "Greater or equal than. Numeric comparison: greater or equal."
+      "def": "Greater or equal than. Numeric comparison: greater or equal.",
+      "element": "greater-than-equal"
     },
     "LT": {
       "species": "atom",
       "depth": 0,
-      "def": "Numeric comparison: less than."
+      "def": "Numeric comparison: less than.",
+      "element": "less-than"
     },
     "LTE": {
       "species": "atom",
       "depth": 0,
-      "def": "Lesser or equal than. Numeric comparison: less or equal."
+      "def": "Lesser or equal than. Numeric comparison: less or equal.",
+      "element": "less-than-equal"
     },
     "EQ": {
       "species": "atom",
       "depth": 0,
-      "def": "Equality comparison."
+      "def": "Equality comparison.",
+      "element": "equal"
     },
     "NEQ": {
       "species": "atom",
       "depth": 0,
-      "def": "Inequality comparison."
+      "def": "Inequality comparison.",
+      "element": "not-equal"
     },
     "GET": {
       "species": "atom",
       "depth": 0,
-      "def": "Reads a value from the context and holds it until the next interaction."
+      "def": "Reads a value from the context and holds it until the next interaction.",
+      "element": "get"
     },
     "SUB": {
       "species": "atom",
       "depth": 0,
-      "def": "Removes an explicit value from the context."
+      "def": "Removes an explicit value from the context.",
+      "element": "subtract"
     },
     "ADD": {
       "species": "atom",
       "depth": 0,
-      "def": "Adds a value to the context, respecting its type."
+      "def": "Adds a value to the context, respecting its type.",
+      "element": "add"
     },
     "SWITCH": {
       "species": "atom",
       "depth": 0,
-      "def": "Alternation between states by conditional selection."
+      "def": "Alternation between states by conditional selection.",
+      "element": "switch"
     },
     "GO": {
       "species": "atom",
       "depth": 0,
-      "def": "Executes; proceeds with the pending action."
+      "def": "Executes; proceeds with the pending action.",
+      "element": "go"
     },
     "ERROR": {
       "species": "atom",
       "depth": 0,
-      "def": "Marks or signals a failure or exception."
+      "def": "Marks or signals a failure or exception.",
+      "element": "error"
     },
     "MAND": {
       "species": "atom",
       "depth": 0,
-      "def": "Required, not optional."
+      "def": "Required, not optional.",
+      "element": "mandatory"
     },
     "OPT": {
       "species": "atom",
       "depth": 0,
-      "def": "Optional element, may be omitted."
+      "def": "Optional element, may be omitted.",
+      "element": "optional"
     },
     "ALW": {
       "species": "atom",
       "depth": 0,
-      "def": "Permanent behaviour, no exceptions."
+      "def": "Permanent behaviour, no exceptions.",
+      "element": "always"
     },
     "NEV": {
       "species": "atom",
       "depth": 0,
-      "def": "Permanence modifier applied to another rule (e.g. NEV DONT X = never do X)."
+      "def": "Permanence modifier applied to another rule (e.g. NEV DONT X = never do X).",
+      "element": "never"
     },
     "PT": {
       "species": "atom",
       "depth": 0,
-      "def": "Membership relation of an object within a context."
+      "def": "Membership relation of an object within a context.",
+      "element": "part"
     },
     "VAR": {
       "species": "atom",
       "depth": 0,
-      "def": "Mutable element, ready to be defined or reused."
+      "def": "Mutable element, ready to be defined or reused.",
+      "element": "variable"
     },
     "PARAM": {
       "species": "atom",
       "depth": 0,
-      "def": "Configurable input to a command."
+      "def": "Configurable input to a command.",
+      "element": "parameter"
     },
     "PH": {
       "species": "atom",
       "depth": 0,
-      "def": "A reserved position in an object, awaiting a value."
+      "def": "A reserved position in an object, awaiting a value.",
+      "element": "placeholder"
     },
     "DEF": {
       "species": "atom",
       "depth": 0,
-      "def": "Default value, base behaviour."
+      "def": "Default value, base behaviour.",
+      "element": "define"
     },
     "TPL": {
       "species": "atom",
       "depth": 0,
-      "def": "Named mould, defined with [--name= and invoked with [--name."
+      "def": "Named mould, defined with [--name= and invoked with [--name.",
+      "element": "template"
     },
     "CORE": {
       "species": "atom",
       "depth": 0,
-      "def": "Structural foundation of a context object."
+      "def": "Structural foundation of a context object.",
+      "element": "core"
     },
     "CTX": {
       "species": "atom",
       "depth": 0,
-      "def": "Declared scope."
+      "def": "Declared scope.",
+      "element": "context"
     },
     "TGT": {
       "species": "atom",
       "depth": 0,
-      "def": "Aim, destination or objective."
+      "def": "Aim, destination or objective.",
+      "element": "target"
     },
     "SPEC": {
       "species": "atom",
       "depth": 0,
-      "def": "Detailed technical description of a requirement."
+      "def": "Detailed technical description of a requirement.",
+      "element": "specify"
     },
     "LOGIC": {
       "species": "atom",
       "depth": 0,
-      "def": "Block of mathematical or boolean operations."
+      "def": "Block of mathematical or boolean operations.",
+      "element": "logic"
     },
     "WHR": {
       "species": "atom",
       "depth": 0,
-      "def": "Place marker; spatial context of reference."
+      "def": "Place marker; spatial context of reference.",
+      "element": "where"
     },
     "HGH": {
       "species": "atom",
       "depth": 0,
-      "def": "High intensity; raised priority."
+      "def": "High intensity; raised priority.",
+      "element": "high"
     },
     "LOW": {
       "species": "atom",
       "depth": 0,
-      "def": "Low intensity; reduced priority."
+      "def": "Low intensity; reduced priority.",
+      "element": "low"
     },
     "BOLD": {
       "species": "atom",
       "depth": 0,
-      "def": "Strong emphasis; prominence in the output."
+      "def": "Strong emphasis; prominence in the output.",
+      "element": "bold"
     },
     "LIGHT": {
       "species": "atom",
       "depth": 0,
-      "def": "Soft emphasis; reduced tone in the output."
+      "def": "Soft emphasis; reduced tone in the output.",
+      "element": "light"
     },
     "ATC": {
       "species": "atom",
       "depth": 0,
-      "def": "Attaches auxiliary context or reference to a command."
+      "def": "Attaches auxiliary context or reference to a command.",
+      "element": "attachment"
     },
     "EX": {
       "species": "atom",
       "depth": 0,
-      "def": "The example itself — the datum, the concrete case."
+      "def": "The example itself — the datum, the concrete case.",
+      "element": "example"
     },
     "RWK": {
       "species": "atom",
       "depth": 0,
-      "def": "Rebuilds the structure while keeping the original intent."
+      "def": "Rebuilds the structure while keeping the original intent.",
+      "element": "rework"
     },
     "IMPR": {
       "species": "atom",
       "depth": 0,
-      "def": "Raises quality without changing the structure (incremental polish)."
+      "def": "Raises quality without changing the structure (incremental polish).",
+      "element": "improve"
     },
     "REV": {
       "species": "atom",
       "depth": 0,
-      "def": "A reading sweep looking for error or inconsistency, with no formal comparison."
+      "def": "A reading sweep looking for error or inconsistency, with no formal comparison.",
+      "element": "review"
     },
     "SKEP": {
       "species": "atom",
       "depth": 0,
-      "def": "Takes a sceptical stance towards a proposition."
+      "def": "Takes a sceptical stance towards a proposition.",
+      "element": "skeptic"
     },
     "DIST": {
       "species": "atom",
       "depth": 0,
-      "def": "Marks the difference between two elements."
+      "def": "Marks the difference between two elements.",
+      "element": "distinguish"
     },
     "REAL": {
       "species": "atom",
       "depth": 0,
-      "def": "The practical quality standard EVAL measures against."
+      "def": "The practical quality standard EVAL measures against.",
+      "element": "realistic"
     },
     "REF": {
       "species": "atom",
       "depth": 0,
-      "def": "Points at an external source."
+      "def": "Points at an external source.",
+      "element": "reference"
     },
     "SEEAL": {
       "species": "atom",
       "depth": 0,
-      "def": "Suggests a relation to another element."
+      "def": "Suggests a relation to another element.",
+      "element": "see-also"
     },
     "NT": {
       "species": "atom",
       "depth": 0,
-      "def": "Annotation; marks a relevant point."
+      "def": "Annotation; marks a relevant point.",
+      "element": "note"
     },
     "EXC": {
       "species": "atom",
       "depth": 0,
-      "def": "Explicit departure from the general rule."
+      "def": "Explicit departure from the general rule.",
+      "element": "exception"
     },
     "LIM": {
       "species": "atom",
       "depth": 0,
-      "def": "Observation that a limit exists (not an imposition)."
+      "def": "Observation that a limit exists (not an imposition).",
+      "element": "limitation"
     },
     "REQ": {
       "species": "atom",
       "depth": 0,
-      "def": "Positive demand — what has to exist."
+      "def": "Positive demand — what has to exist.",
+      "element": "requirement"
     },
     "EXT": {
       "species": "atom",
       "depth": 0,
-      "def": "Marks an element outside the document's scope."
+      "def": "Marks an element outside the document's scope.",
+      "element": "external"
     },
     "RSN": {
       "species": "atom",
       "depth": 0,
-      "def": "The motive underlying a decision."
+      "def": "The motive underlying a decision.",
+      "element": "reason"
     },
     "FIN": {
       "species": "atom",
       "depth": 0,
-      "def": "Closing or termination marker."
+      "def": "Closing or termination marker.",
+      "element": "finally"
     },
     "IF": {
       "species": "atom",
       "depth": 0,
-      "def": "Logical conditional; execution gate."
+      "def": "Logical conditional; execution gate.",
+      "element": "if"
     },
     "SECTION": {
       "species": "atom",
       "depth": 0,
-      "def": "Named structural division grouping related commands."
+      "def": "Named structural division grouping related commands.",
+      "element": "section"
     },
     "BLOCK": {
       "species": "atom",
       "depth": 0,
-      "def": "Atomic unit of execution; groups commands read as a single step."
+      "def": "Atomic unit of execution; groups commands read as a single step.",
+      "element": "block"
     },
     "SKL": {
       "species": "atom",
       "depth": 0,
-      "def": "Marks an installed skill, invocable inside the Glyph document."
+      "def": "Marks an installed skill, invocable inside the Glyph document.",
+      "element": "skill"
     },
     "NONE": {
       "species": "atom",
       "depth": 0,
-      "def": "Absence of value; the empty return of engine operations."
+      "def": "Absence of value; the empty return of engine operations.",
+      "element": "none"
     },
     "TOBLOCK": {
       "species": "atom",
       "depth": 0,
-      "def": "Converts a section or a loose set of commands into a BLOCK."
+      "def": "Converts a section or a loose set of commands into a BLOCK.",
+      "element": "to-block"
     },
     "TOSECTION": {
       "species": "atom",
       "depth": 0,
-      "def": "Converts a block or a loose set of commands into a SECTION."
+      "def": "Converts a block or a loose set of commands into a SECTION.",
+      "element": "to-section"
     },
     "HMN": {
       "species": "atom",
       "depth": 0,
-      "def": "Represents the user as a referenceable object."
+      "def": "Represents the user as a referenceable object.",
+      "element": "human"
     },
     "QUICK": {
       "species": "atom",
       "depth": 0,
-      "def": "Condensed execution directive: expands an abbreviated command into a full canonical instruction."
+      "def": "Condensed execution directive: expands an abbreviated command into a full canonical instruction.",
+      "element": "quick"
     },
     "OFF": {
       "species": "atom",
       "depth": 0,
-      "def": "Disables Glyph interpretation from this point on."
+      "def": "Disables Glyph interpretation from this point on.",
+      "element": "mode-off"
     },
     "ON": {
       "species": "atom",
       "depth": 0,
-      "def": "Re-enables Glyph interpretation after an OFF."
+      "def": "Re-enables Glyph interpretation after an OFF.",
+      "element": "mode-on"
     },
     "VRFY": {
       "species": "composite",
@@ -901,7 +989,8 @@
         "TGT"
       ],
       "depth": 1,
-      "def": "Compare against truth or fact."
+      "def": "Compare against truth or fact.",
+      "element": "verify"
     },
     "VAL": {
       "species": "composite",
@@ -918,7 +1007,8 @@
         "EQ"
       ],
       "depth": 5,
-      "def": "Compare against the constraint or rule."
+      "def": "Compare against the constraint or rule.",
+      "element": "validate"
     },
     "CRIT": {
       "species": "composite",
@@ -932,7 +1022,8 @@
         "ERROR"
       ],
       "depth": 2,
-      "def": "Compare against the declared context or objective."
+      "def": "Compare against the declared context or objective.",
+      "element": "criticise"
     },
     "EVAL": {
       "species": "composite",
@@ -950,7 +1041,8 @@
         "CTX"
       ],
       "depth": 1,
-      "def": "Compare against a realistic standard of practical quality."
+      "def": "Compare against a realistic standard of practical quality.",
+      "element": "evaluate"
     },
     "SCRU": {
       "species": "composite",
@@ -976,7 +1068,8 @@
         "REAL"
       ],
       "depth": 5,
-      "def": "Examine the context under verification, criticise and question."
+      "def": "Examine the context under verification, criticise and question.",
+      "element": "scrutinise"
     },
     "TRYFR": {
       "species": "composite",
@@ -993,7 +1086,8 @@
         "LOGIC"
       ],
       "depth": 4,
-      "def": "Attempt to reach the target with verification."
+      "def": "Attempt to reach the target with verification.",
+      "element": "try-for-result"
     },
     "PROB": {
       "species": "composite",
@@ -1003,7 +1097,8 @@
         "CTX"
       ],
       "depth": 1,
-      "def": "An error situated inside a specific context."
+      "def": "An error situated inside a specific context.",
+      "element": "problem"
     },
     "SIMP": {
       "species": "composite",
@@ -1014,7 +1109,8 @@
         "CTX"
       ],
       "depth": 2,
-      "def": "Reduce complexity — cut, do not add."
+      "def": "Reduce complexity — cut, do not add.",
+      "element": "simplify"
     },
     "GEN": {
       "species": "composite",
@@ -1026,7 +1122,8 @@
         "CTX"
       ],
       "depth": 1,
-      "def": "Categorise instances into a base pattern."
+      "def": "Categorise instances into a base pattern.",
+      "element": "generalise"
     },
     "SUM": {
       "species": "composite",
@@ -1036,7 +1133,8 @@
         "CORE"
       ],
       "depth": 3,
-      "def": "Simplify while keeping the essential foundation."
+      "def": "Simplify while keeping the essential foundation.",
+      "element": "summary"
     },
     "CAT": {
       "species": "composite",
@@ -1047,7 +1145,8 @@
         "ELAB"
       ],
       "depth": 4,
-      "def": "Organise into classes."
+      "def": "Organise into classes.",
+      "element": "categorise"
     },
     "QST": {
       "species": "composite",
@@ -1062,7 +1161,8 @@
         "ASK"
       ],
       "depth": 1,
-      "def": "Structural typing: marks a block as interrogative (not necessarily aimed at anyone — see ASK)."
+      "def": "Structural typing: marks a block as interrogative (not necessarily aimed at anyone — see ASK).",
+      "element": "question"
     },
     "DRVF": {
       "species": "composite",
@@ -1077,7 +1177,8 @@
         "SWITCH"
       ],
       "depth": 2,
-      "def": "Draw a conclusion from a principle."
+      "def": "Draw a conclusion from a principle.",
+      "element": "derive-from"
     },
     "FOREX": {
       "species": "composite",
@@ -1095,7 +1196,8 @@
         "EXC"
       ],
       "depth": 2,
-      "def": "The discourse connective that introduces an EX in the flow of text."
+      "def": "The discourse connective that introduces an EX in the flow of text.",
+      "element": "for-example"
     },
     "FBK": {
       "species": "composite",
@@ -1112,7 +1214,8 @@
         "ALT"
       ],
       "depth": 5,
-      "def": "Alternative plan of action on failure."
+      "def": "Alternative plan of action on failure.",
+      "element": "fallback"
     },
     "RESTR": {
       "species": "composite",
@@ -1129,7 +1232,8 @@
         "CNST"
       ],
       "depth": 1,
-      "def": "The act of limiting the scope of application."
+      "def": "The act of limiting the scope of application.",
+      "element": "restriction"
     },
     "DEPR": {
       "species": "composite",
@@ -1142,7 +1246,8 @@
         "INSTOF"
       ],
       "depth": 1,
-      "def": "Avoid executing; a replacement may exist."
+      "def": "Avoid executing; a replacement may exist.",
+      "element": "deprecated"
     },
     "HYP": {
       "species": "composite",
@@ -1162,7 +1267,8 @@
         "FBK"
       ],
       "depth": 6,
-      "def": "A testable, unconfirmed proposition."
+      "def": "A testable, unconfirmed proposition.",
+      "element": "hypothesis"
     },
     "IMAG": {
       "species": "composite",
@@ -1174,7 +1280,8 @@
         "REAL"
       ],
       "depth": 1,
-      "def": "Adds a non-real context."
+      "def": "Adds a non-real context.",
+      "element": "imagine"
     },
     "ALT": {
       "species": "composite",
@@ -1186,7 +1293,8 @@
         "TGT"
       ],
       "depth": 1,
-      "def": "Differs in means, agrees in end."
+      "def": "Differs in means, agrees in end.",
+      "element": "alternative"
     },
     "ASSM": {
       "species": "composite",
@@ -1198,7 +1306,8 @@
         "VRFY"
       ],
       "depth": 2,
-      "def": "Enters as foundation, never verified."
+      "def": "Enters as foundation, never verified.",
+      "element": "assumption"
     },
     "RTNL": {
       "species": "composite",
@@ -1210,7 +1319,8 @@
         "CNST"
       ],
       "depth": 1,
-      "def": "A reason elaborated and tied to a criterion."
+      "def": "A reason elaborated and tied to a criterion.",
+      "element": "rationale"
     },
     "BRST": {
       "species": "composite",
@@ -1224,7 +1334,8 @@
         "CNST"
       ],
       "depth": 2,
-      "def": "Iterates imagined alternatives, unconstrained."
+      "def": "Iterates imagined alternatives, unconstrained.",
+      "element": "brainstorm"
     },
     "CNSD": {
       "species": "composite",
@@ -1238,7 +1349,8 @@
         "CNCL"
       ],
       "depth": 4,
-      "def": "Weighs each alternative against the rule without concluding."
+      "def": "Weighs each alternative against the rule without concluding.",
+      "element": "consider"
     },
     "PROP": {
       "species": "composite",
@@ -1251,7 +1363,8 @@
         "CONF"
       ],
       "depth": 2,
-      "def": "Puts forward an alternative with its rationale and asks for assent."
+      "def": "Puts forward an alternative with its rationale and asks for assent.",
+      "element": "propose"
     },
     "CTRD": {
       "species": "composite",
@@ -1263,7 +1376,8 @@
         "DIST"
       ],
       "depth": 2,
-      "def": "Negates the target and supports it with the difference."
+      "def": "Negates the target and supports it with the difference.",
+      "element": "contradict"
     },
     "CNCL": {
       "species": "composite",
@@ -1275,7 +1389,8 @@
         "CTX"
       ],
       "depth": 3,
-      "def": "Final derivation from the context's foundation."
+      "def": "Final derivation from the context's foundation.",
+      "element": "conclude"
     },
     "JUST": {
       "species": "composite",
@@ -1287,7 +1402,8 @@
         "CNCL"
       ],
       "depth": 4,
-      "def": "Deploys the rationale in favour of a conclusion."
+      "def": "Deploys the rationale in favour of a conclusion.",
+      "element": "justify"
     },
     "INTN": {
       "species": "composite",
@@ -1298,7 +1414,8 @@
         "RSN"
       ],
       "depth": 1,
-      "def": "Declares the target together with its motive."
+      "def": "Declares the target together with its motive.",
+      "element": "intention"
     },
     "RMBR": {
       "species": "composite",
@@ -1309,7 +1426,8 @@
         "CTX"
       ],
       "depth": 1,
-      "def": "Permanent retrieval from the context."
+      "def": "Permanent retrieval from the context.",
+      "element": "remember"
     },
     "FRGT": {
       "species": "composite",
@@ -1320,7 +1438,8 @@
         "CTX"
       ],
       "depth": 1,
-      "def": "Never retrieved from the context again."
+      "def": "Never retrieved from the context again.",
+      "element": "forget"
     },
     "LRN": {
       "species": "composite",
@@ -1332,7 +1451,8 @@
         "CORE"
       ],
       "depth": 2,
-      "def": "Generalises what was retained and folds it into the foundation."
+      "def": "Generalises what was retained and folds it into the foundation.",
+      "element": "learn"
     }
   }
 };

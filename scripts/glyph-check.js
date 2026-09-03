@@ -17,9 +17,13 @@
  * vectors. The corpus asserts the other direction, that what the engine emits
  * conforms, so the two hold each other the way XML_REFERENCE and D-03 do.
  *
- * The bundle mode that BUNDLE_TARGET §5 specifies is NOT here. It validates a
- * `glyph-package` bundle, and that format has no specification yet; a stub
- * would be the decorative gate this phase exists to avoid. It lands with E1.
+ * Two things are validated, and they are different artefacts. `--ast` checks an
+ * AST envelope against ast-schema.json. `--package` checks an emitted
+ * glyph-package DOCUMENT against the twelve clauses of PACKAGE_TARGET.md 6.
+ *
+ * The six-layer BUNDLE of BUNDLE_TARGET.md 5 is NOT here and is NOT a
+ * glyph-package. An earlier version of this comment called it one; lock T0
+ * separates them permanently, and its emitters are out of scope by the order.
  */
 
 "use strict";
@@ -152,19 +156,161 @@ function validate(env) {
   return errs;
 }
 
-export { validate, SCHEMA };
+
+/* ------------------------------------------------------------------ *
+ * glyph-package — the DOCUMENT validator (E3)
+ *
+ * Written before the emitter it gates (lock T3). It reads
+ * `.guidelines/PACKAGE_TARGET.md` §6 and nothing else: twelve clauses, each
+ * carrying a position, because a refusal a reader cannot locate is not
+ * verifiable by someone who does not have this engine.
+ *
+ * It does NOT import the parser, for the same reason the AST validator does
+ * not: the receiving end may have the store and not the engine. Clauses 8 and
+ * 9 need element -> species and element -> formula, and `element` is recorded
+ * in expansions.json by build-templates.js precisely so this file can stay
+ * standalone.
+ * ------------------------------------------------------------------ */
+
+const EXPANSIONS = (() => {
+  try { return JSON.parse(fs.readFileSync(
+    path.resolve(__dirname, "../.guidelines/expansions.json"), "utf8")).commands; }
+  catch (e) { return null; }
+})();
+
+const BY_ELEMENT = (() => {
+  if (!EXPANSIONS) return null;
+  const m = {};
+  Object.keys(EXPANSIONS).forEach(c => {
+    const e = EXPANSIONS[c].element;
+    if (e && !m[e]) m[e] = { canonical: c, ...EXPANSIONS[c] };
+  });
+  return m;
+})();
+
+/* text-bearing elements: their content is the author's, character for character */
+const TEXT_BEARING = ["user-input", "off", "source", "needs", "rule"];
+
+/** Tolerant scan: a tree of {name, attrs, children, text, line}. Malformed
+ *  input is the point of this function, so it never throws. */
+function scan(xml) {
+  const root = { name: "#document", attrs: {}, children: [], line: 0 };
+  const stack = [root];
+  const re = /<(\/?)([a-zA-Z][\w-]*)((?:\s+[\w-]+="[^"]*")*)\s*(\/?)>|([^<]+)/g;
+  const lineAt = i => xml.slice(0, i).split("\n").length;
+  let m;
+  while ((m = re.exec(xml))) {
+    const top = stack[stack.length - 1];
+    if (m[5] !== undefined) { if (m[5].trim()) top.text = (top.text || "") + m[5]; else top.ws = true; continue; }
+    const [, closing, name, rawAttrs, selfClose] = m;
+    if (closing) { if (stack.length > 1) stack.pop(); continue; }
+    const attrs = {};
+    (rawAttrs || "").replace(/([\w-]+)="([^"]*)"/g, (_, k, v) => (attrs[k] = v, ""));
+    const node = { name, attrs, children: [], line: lineAt(m.index), raw: m[0] };
+    top.children.push(node);
+    if (!selfClose) stack.push(node);
+  }
+  return root;
+}
+
+/** Validate a glyph-package DOCUMENT. Returns a list of refusals, each
+ *  `Code @line N: what` — the twelve clauses of PACKAGE_TARGET.md §6. */
+function validatePackage(xml) {
+  const errs = [];
+  const say = (code, line, what) => errs.push(code + " @line " + line + ": " + what);
+  const doc = scan(String(xml));
+  const root = doc.children[0];
+
+  if (!root) return ["NotAPackage @line 1: the document has no element at all"];
+  if (root.name !== "glyph-package")
+    say("NotAPackage", root.line, "the root is <" + root.name + ">, not <glyph-package>");
+  if (!root.attrs.engine)
+    say("EngineUnstated", root.line,
+        "the root carries no `engine`; a document that will not say what produced it cannot be judged perishable");
+
+  const first = root.children[0];
+  if (!first || first.name !== "schema" || first.children.length || (first.text || "").trim())
+    say("SchemaMissing", first ? first.line : root.line,
+        "the first child of the root must be an empty <schema/> (§5), found " +
+        (first ? "<" + first.name + ">" + (first.children.length ? " with children" : "") : "nothing"));
+
+  (function walk(node, inChain, parent) {
+    node.children.forEach((c, i) => {
+      /* 3 / 4 — the attribute must not survive the grouping, and cannot occur outside it */
+      if ("chain" in c.attrs)
+        inChain ? say("ChainDoubleEncoded", c.line,
+                      "<" + c.name + "> carries chain=\"" + c.attrs.chain + "\" inside a <chain>; position already says it (§3.2)")
+                : say("ChainUngrouped", c.line,
+                      "<" + c.name + "> carries chain=\"" + c.attrs.chain + "\" outside a <chain>; a run of one is still a run (§3.3)");
+
+      if (c.name === "chain") {
+        if (!c.children.length) say("ChainEmpty", c.line, "a <chain> with no members");
+        walk(c, true, c);
+        return;
+      }
+
+      if (c.name === "invoke") {
+        if (i !== 0)
+          say("InvokeMisplaced", c.line,
+              "<invoke> is child " + (i + 1) + " of <" + node.name + ">; it must be the first (§4.2)");
+        const known = BY_ELEMENT && BY_ELEMENT[node.name];
+        if (known && known.species === "atom")
+          say("InvokeOnAtom", c.line,
+              "<" + node.name + "> is " + known.canonical + ", an atom; only composites carry <invoke> (§4.3)");
+        if (known && known.species === "composite" && "reads" in c.attrs && c.attrs.reads !== known.formula)
+          say("ReadingUnfaithful", c.line,
+              "reads=" + JSON.stringify(c.attrs.reads) + " but the store says " +
+              JSON.stringify(known.formula) + " for " + known.canonical);
+        return;
+      }
+
+      /* 10 — a segment wrapper is a direct child of the root and always says so */
+      if (c.name === "block" && node === root && c.attrs.once !== "true")
+        say("SegmentUnmarked", c.line, "a <block> directly under the root without once=\"true\"");
+
+      /* 11 — a mood colours its whole segment, so it comes first */
+      if (c.name === "mood" && i !== 0)
+        say("MoodMisplaced", c.line,
+            "<mood> is child " + (i + 1) + " of <" + node.name + ">; it must be the first (XML_REFERENCE §6)");
+
+      /* 12 — exact string fidelity: the author's text is never reflowed */
+      if (TEXT_BEARING.indexOf(c.name) !== -1 && c.text !== undefined &&
+          (c.text !== c.text.trim() || /\n/.test(c.text)))
+        say("TextReflowed", c.line,
+            "<" + c.name + "> content was pretty-printed; guarantee G4 is exact string fidelity");
+
+      walk(c, inChain && c.name === "chain", c);
+    });
+  })(root, false, root);
+
+  return errs;
+}
+
+export { validate, validatePackage, scan, SCHEMA };
 
 if (isMain(import.meta.url)) {
   const argv = process.argv.slice(2);
   const mode = argv[0];
-  if (mode !== "--ast" || !argv[1]) {
-    console.error("usage: node glyph-check.js --ast <file.json|->");
-    console.error("       the bundle mode of BUNDLE_TARGET §5 lands with E1, when the format has a specification.");
+  if ((mode !== "--ast" && mode !== "--package") || !argv[1]) {
+    console.error("usage: node glyph-check.js --ast     <file.json|->   an AST envelope");
+    console.error("       node glyph-check.js --package <file.xml|->    an emitted glyph-package");
     process.exit(2);
   }
   let raw;
   try { raw = argv[1] === "-" ? fs.readFileSync(0, "utf8") : fs.readFileSync(argv[1], "utf8"); }
   catch (e) { console.error("cannot read " + argv[1] + ": " + e.message); process.exit(2); }
+  if (mode === "--package") {
+    const errs = validatePackage(raw);
+    if (errs.length) {
+      console.error("FAILED: " + errs.length + " refusal" + (errs.length > 1 ? "s" : "") +
+                    " under .guidelines/PACKAGE_TARGET.md §6");
+      errs.slice(0, 20).forEach(e => console.error("  ✗ " + e));
+      if (errs.length > 20) console.error("  … and " + (errs.length - 20) + " more");
+      process.exit(1);
+    }
+    console.log("conforms to PACKAGE_TARGET.md §6 (twelve clauses)");
+    process.exit(0);
+  }
   let env;
   try { env = JSON.parse(raw); }
   catch (e) { console.error("not JSON: " + e.message); process.exit(1); }

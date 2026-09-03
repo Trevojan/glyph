@@ -278,6 +278,16 @@
       "finding": "D-4-07 [in-rwk,ctx] at test-corpus.js:963 is the ONLY forward vector in the corpus exercising a chain of more than one member",
       "severity": "medium",
       "consequence": "the proof of the central mechanism of this release rests on one vector; a sixth authored example with a two-member chain would be cheap insurance, and the sources are the Regent's to write"
+    },
+    {
+      "id": "G10",
+      "finding": "clause 6 of PACKAGE_TARGET.md 6, ChainWithoutHead, is undecidable from a conforming document: section 3.2 removes the very attribute it keys on",
+      "consequence": "it is a READER refusal inherited from XML_REFERENCE 11.3 and belongs to E4. Replaced by SchemaMissing, the clause section 5 requires and the table had omitted. Found by writing the validator, which is what writing the gate first is for"
+    },
+    {
+      "id": "G11",
+      "finding": "adding `element` to the expansion store moved the ast projection hash of all 101 snapshot cases, and no xml or hgml hash",
+      "consequence": "the AST envelope carries store fingerprints, so a store change is visible there and nowhere else. Snapshot regenerated; the xml hashes stay pinned to the current emitter"
     }
   ],
   "four_guarantees": {
@@ -354,7 +364,13 @@
       "id": "E3",
       "what": "glyph-check validating the new format, written before the emitter",
       "blocked_by": "E0b",
-      "clarified_in_v5": "glyph-check gains a mode validating the glyph-package DOCUMENT, not the bundle; its line-20 comment is corrected in the same commit"
+      "clarified_in_v5": "glyph-check gains a mode validating the glyph-package DOCUMENT, not the bundle; its line-20 comment is corrected in the same commit",
+      "delivered": [
+        "scripts/glyph-check.js (validatePackage, --package)",
+        "scripts/test-corpus.js (PK-01..PK-03)"
+      ],
+      "status": "RETURNED - twelve clauses, each carrying a position; 12/12 mutations caught; observed failing before it counted",
+      "standalone": "does not import the parser, for the same reason the AST validator does not: the receiving end may have the store and not the engine. build-templates.js now records `element` on all 120 commands so clauses 8 and 9 can key on it"
     },
     {
       "id": "E3b",
@@ -445,7 +461,8 @@
     },
     {
       "id": "K8",
-      "expected": "references/examples/ regenerates byte for byte from the conformance vectors, and a hand edit to it is caught by glyph-check"
+      "expected": "the mutation set breaks one thing per refusal clause of PACKAGE_TARGET.md 6 and at most one escapes",
+      "note": "was \"ten things, nine caught\", a count fixed before the clause list existed. Aligned to the specification, which is normative - not widened so code passes (lock T17). Implemented as PK-03; twelve clauses, 12/12 caught"
     },
     {
       "id": "K9",
@@ -495,7 +512,8 @@
     {
       "id": "K20",
       "expected": "scripts/glyph-check.js no longer calls the six-layer bundle a glyph-package; its comment names the artefact its mode actually validates",
-      "verified_by": "reading, and by grep: no occurrence of glyph-package denotes a file tree"
+      "verified_by": "reading, and by grep: no occurrence of glyph-package denotes a file tree",
+      "status": "DONE - glyph-check.js no longer calls the six-layer bundle a glyph-package"
     }
   ],
   "locks": [
@@ -646,12 +664,6 @@
       "blocks": "nothing in this order"
     },
     {
-      "id": "Q12",
-      "question": "K8 says ten mutations and nine catches; the specification has twelve clauses",
-      "why_not_assumed": "lock T17 forbids rewriting a criterion so the code passes; a count fixed before the clauses existed is flagged, not widened",
-      "blocks": "nothing"
-    },
-    {
       "id": "Q13",
       "question": "line endings: examples.json holds CRLF sources, .gitattributes sets eol=lf",
       "why_not_assumed": "K1 is byte-for-byte, so normalising during transcription would decide it silently",
@@ -759,6 +771,12 @@
       "question": "does <invoke> need a precondition deliverable of its own",
       "answer": "no separate precondition: <invoke> emission belongs to E3b, the emitter, which was itself the missing deliverable. The architect reading that it fitted inside E1 was wrong - E1 is the expectation, not the producer",
       "resolved_in": "v7"
+    },
+    {
+      "id": "Q12",
+      "question": "K8 says ten mutations and nine catches; the specification has twelve clauses",
+      "answer": "K8 restated per clause, following the specification rather than the count",
+      "resolved_in": "E3"
     }
   ],
   "deferred": {

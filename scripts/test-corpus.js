@@ -1317,6 +1317,65 @@ function runSchemaChecks() {
 const rSC = runSchemaChecks();
 
 /* ------------------------------------------------------------------ *
+ * the glyph-package document validator (E3)
+ *
+ * Written before the emitter it gates, and held to the same standard the AST
+ * schema is: acceptance is a mutation test, one per clause of
+ * PACKAGE_TARGET.md section 6, at most one escaping. A validator that catches
+ * nothing is decorative, and the golden is the only thing it can be pointed at
+ * until E3b exists.
+ * ------------------------------------------------------------------ */
+function runPackageChecks() {
+  console.log("\n--- glyph-package — the document validator ---");
+  const D = [];
+  const ok = (id, name, why) => {
+    if (why) { console.log("  \u2717 " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  \u2713 " + id + ": " + name); D.push(id); }
+  };
+  let GOLD = null;
+  try { GOLD = require("../conformance/golden.json"); }
+  catch (e) { ok("PK-00", "the golden exists", "conformance/golden.json not found"); return D.length; }
+
+  const refused = GOLD.cases.filter(c => CHECK_MOD.validatePackage(c.package).length);
+  ok("PK-01", "every golden document is accepted",
+     refused.length ? refused.map(c => c.id + ": " + CHECK_MOD.validatePackage(c.package).join(" | ")).join("  ||  ") : null);
+
+  const E01 = GOLD.cases.find(c => c.id === "E-01").package;
+  const E05 = GOLD.cases.find(c => c.id === "E-05").package;
+  const PKM = [
+    ["NotAPackage",        E01, d => d.replace("<glyph-package", "<glyph").replace("</glyph-package>", "</glyph>")],
+    ["EngineUnstated",     E01, d => d.replace(' engine="2.4.5.01"', "")],
+    ["ChainDoubleEncoded", E01, d => d.replace("<go/>", '<go chain="extend"/>')],
+    ["ChainUngrouped",     E01, d => d.replace("<note>", '<note chain="item">')],
+    ["ChainEmpty",         E01, d => d.replace("<chain>\n          <go/>\n        </chain>", "<chain>\n        </chain>")],
+    ["SchemaMissing",      E01, d => d.replace("  <schema/>\n", "")],
+    ["InvokeMisplaced",    E01, d => d.replace(
+        '<invoke reads="[ELAB[RSN]],[REF[CNST]]" species="composite" depth="1"/>\n        <chain>\n          <go/>\n        </chain>',
+        '<chain>\n          <go/>\n        </chain>\n        <invoke reads="[ELAB[RSN]],[REF[CNST]]" species="composite" depth="1"/>')],
+    ["InvokeOnAtom",       E01, d => d.replace("<note>", '<note>\n        <invoke reads="[X]" species="composite" depth="1"/>')],
+    ["ReadingUnfaithful",  E01, d => d.replace('reads="[ELAB[RSN]],[REF[CNST]]"', 'reads="[ELAB[RSN]]"')],
+    ["SegmentUnmarked",    E05, d => d.replace('<block once="true">', "<block>")],
+    ["MoodMisplaced",      E05, d => d.replace("<instruction>", '<instruction/>\n    <mood dominant="joy"/>\n    <instruction>')],
+    ["TextReflowed",       E01, d => d.replace("<user-input>start</user-input>", "<user-input>\n          start\n        </user-input>")],
+  ];
+  const inert = PKM.filter(m => m[2](m[1]) === m[1]).map(m => m[0]);
+  ok("PK-02", "every mutation actually mutates",
+     inert.length ? "these left the document unchanged, so they prove nothing: " + inert.join(", ") : null);
+
+  const missed = PKM.filter(m => {
+    const doc = m[2](m[1]);
+    return doc === m[1] || !CHECK_MOD.validatePackage(doc).some(e => e.indexOf(m[0]) === 0);
+  }).map(m => m[0]);
+  ok("PK-03", "one mutation per clause, at most one escapes",
+     (PKM.length - missed.length) >= PKM.length - 1 ? null
+       : "caught " + (PKM.length - missed.length) + "/" + PKM.length + "; missed: " + missed.join(", "));
+
+  return D.length;
+}
+const rPK = runPackageChecks();
+
+
+/* ------------------------------------------------------------------ *
  * the five authored examples — conformance, not illustration
  *
  * These are the input→XML pairs the Regent wrote by hand: the instrument the
@@ -1601,6 +1660,7 @@ console.log(" fromXML      " + rF + "/23");
 console.log(" reference    " + rD + "/10");
 console.log(" round trip   " + rRT + "/6");
 console.log(" ast schema   " + rSC + "/3");
+console.log(" glyph-package" + String(rPK).padStart(4) + "/3");
 console.log(" examples     " + rE + "/5");
 console.log(" snapshot     " + rSN + "/4");
 console.log(" global store " + rGS + "/3");
