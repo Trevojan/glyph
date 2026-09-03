@@ -122,7 +122,26 @@ answering two independent questions and now answers one.
 length would reintroduce exactly the shape-branching that §2 rejects for the
 root, and would make the length-1 case unrepresentable as a group.
 
-### 3.4 What is not a chain
+### 3.4 Consecutive extends open separate runs
+
+`[rev-impr-fmt]` emits `improve` and `format` as flat siblings, both carrying
+`chain="extend"` — the engine does not build a nested pipeline (finding A5). A run
+is *first `extend`, remainder `item`*, so a second `extend` cannot continue the
+first: it **opens a new run**.
+
+```xml
+<review>
+  <chain><improve/></chain>
+  <chain><format/></chain>
+</review>
+```
+
+Two adjacent single-member chains looks odd, and it is correct. The alternative —
+folding consecutive extends into one `<chain>` — would make `[rev-impr-fmt]` and
+`[rev-impr,fmt]` emit identically, which is precisely the defect E0 was built to
+remove. The shape is the price of keeping `-` distinguishable from `,`.
+
+### 3.5 What is not a chain
 
 Consecutive siblings that carry no `chain` attribute are not a run and are not
 wrapped. A `chain="item"` with no `chain="extend"` before it is malformed (§6,

@@ -256,6 +256,28 @@
       "finding": "no deliverable commissioned the glyph-package emitter, though E3 is defined relative to it and K1 requires it",
       "severity": "high",
       "consequence": "K1, K2 and K3 were unreachable and a cascade running E2 to E7 would have improvised the missing step, which lock T34 forbids. Commissioned as E3b in v7"
+    },
+    {
+      "id": "G6",
+      "finding": "across 71 assertions on the emitted document, exactly two change, both in P-06",
+      "consequence": "independently reproduces the blast-radius measurement in OPERATOR_TARGET 7.1 by a different route; E2 is surgical, not a sweep"
+    },
+    {
+      "id": "G7",
+      "finding": "the corpus asserts by substring containment, not document equality",
+      "consequence": "S2 and S5 touch every document and move no assertion, because no fragment reaches the root line. This is why a format change of this size costs two lines"
+    },
+    {
+      "id": "G8",
+      "finding": "the five authored examples carry zero origin=item and cover none of mood, break, continues, off, template, logic, needs, unresolved or a multi-segment document",
+      "severity": "medium",
+      "consequence": "K1 is a SHAPE check and cannot reach G2 (block segmentation) or G3 (needs), two of the four named guarantees; their coverage lives in K4. The two criteria are not redundant and the order does not say so"
+    },
+    {
+      "id": "G9",
+      "finding": "D-4-07 [in-rwk,ctx] at test-corpus.js:963 is the ONLY forward vector in the corpus exercising a chain of more than one member",
+      "severity": "medium",
+      "consequence": "the proof of the central mechanism of this release rests on one vector; a sixth authored example with a two-member chain would be cheap insurance, and the sources are the Regent's to write"
     }
   ],
   "four_guarantees": {
@@ -313,7 +335,20 @@
     },
     {
       "id": "E2",
-      "what": "the 173 vectors rederived against the new format, thirteen buckets"
+      "what": "the 173 vectors rederived against the new format, thirteen buckets",
+      "delivered": [
+        "scripts/test-corpus.js (P-06, D-4-07)",
+        ".guidelines/ORDERS/E2-PLAN.md"
+      ],
+      "status": "RETURNED - two fragments rederived, both pinned `awaiting: E3b` until the emitter exists",
+      "method": "a document-to-document migration written from PACKAGE_TARGET.md, NOT an emitter. Its fidelity is proven rather than asserted: it reproduces all five hand-derived golden documents byte for byte. Only then applied to the corpus",
+      "measured": {
+        "vectors_read": 102,
+        "assertions_on_the_document": 71,
+        "survive_unchanged": 69,
+        "rederived": 2,
+        "agrees_with": "OPERATOR_TARGET.md 7.1, which recorded 1 failing vector (P-06) by another method"
+      }
     },
     {
       "id": "E3",
@@ -621,6 +656,12 @@
       "question": "line endings: examples.json holds CRLF sources, .gitattributes sets eol=lf",
       "why_not_assumed": "K1 is byte-for-byte, so normalising during transcription would decide it silently",
       "blocks": "K1 verification, not E1"
+    },
+    {
+      "id": "Q14",
+      "question": "a sixth authored example exercising a two-member chain",
+      "why_not_assumed": "examples.json sources are authored claims, not agent output",
+      "blocks": "nothing; it widens what K1 can prove"
     }
   ],
   "blast_radius": {
@@ -781,5 +822,14 @@
         "why": "Glyph emits documents rather than applying mutations, so approval has nothing to gate; only the diff half transfers, as D-05"
       }
     ]
-  }
+  },
+  "mechanisms": [
+    {
+      "name": "awaiting",
+      "added_in": "E2",
+      "what": "a vector rederived ahead of the deliverable that makes it pass is pinned `awaiting: \"<id>\"`. It is EXPECTED to fail until then, and the suite fails the moment it passes - the pin has outlived its reason",
+      "idiom": "the same bidirectional shape as RT-02, SN-01 and the examples' roundTrips pin",
+      "observed_failing": "both directions, before it counted: red while unpinned, and red when made to pass while still pinned"
+    }
+  ]
 }

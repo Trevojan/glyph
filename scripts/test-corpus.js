@@ -58,8 +58,12 @@ const POSITIVE = [
   /* the two bare links now say which operator attached them; before, the XML
      could not tell `-impr-fmt` from `-impr,fmt` and neither could fromXML */
   { id:"P-06", name:"Review, improve and format.", src:"[REV-IMPR-FMT]",
-    clean:true, cmds:["REV","IMPR","FMT"],
-    xml:["<review>", '<improve chain="extend"/>', '<format chain="extend"/>'] },
+    clean:true, cmds:["REV","IMPR","FMT"], awaiting:"E3b",
+    /* rederived for glyph-package (E2): two consecutive extends are two runs of
+       one, not one run of two - PACKAGE_TARGET.md 3.4. Folding them would make
+       [REV-IMPR-FMT] and [REV-IMPR,FMT] emit identically, which is the defect E0
+       removed. */
+    xml:["<review>", "<chain>", "<improve/>", "<format/>"] },
   { id:"P-07", name:"Section A: criticise and propose.", src:"[SECTION'sectA',[CRIT],[PROP[ALT]]]",
     cmds:["SECTION","CRIT","PROP","ALT"] },
   { id:"P-08", name:"Prefix comparison gt.", src:"[COND[gt[VAR'A'],[VAR'B']],[INSTOF[SUM],[ASK;",
@@ -427,9 +431,22 @@ function check(tc, rules) {
 
 function runGroup(title, cases, rules) {
   console.log("\n--- " + title + " ---");
-  let passed = 0;
+  let passed = 0, pinned = 0;
   cases.forEach(tc => {
     const why = check(tc, rules);
+    /* `awaiting: "E3b"` - the expectation was rederived (E2) against a format no
+       emitter produces yet, so it MUST fail until that deliverable lands. Pinned
+       rather than reverted, and bidirectional the way RT-02 and SN-01 are: the
+       moment it passes, the pin has outlived its reason and the suite says so. */
+    if (tc.awaiting) {
+      if (why.length) { console.log("  ⏸ " + tc.id + ": " + tc.name + "  (awaiting " + tc.awaiting + ")"); pinned++; }
+      else {
+        console.log("  ✗ " + tc.id + ": " + tc.name);
+        console.log("      passes now - " + tc.awaiting + " has landed; remove `awaiting` and its note");
+        failures.push(tc.id);
+      }
+      return;
+    }
     if (!why.length) {
       console.log("  ✓ " + tc.id + ": " + tc.name);
       passed++;
@@ -439,7 +456,8 @@ function runGroup(title, cases, rules) {
       failures.push(tc.id);
     }
   });
-  return passed;
+  if (pinned) console.log("  (" + pinned + " pinned, awaiting a deliverable)");
+  return passed + pinned;
 }
 
 console.log("=================================================");
@@ -959,8 +977,12 @@ function runReferenceChecks() {
     { id: "4-05", src: "[ins'a'];[=[ins'b']",      expect: x => /continues="previous"/.test(x) },
     { id: "4-06", src: "[in-rwk]",
       expect: x => /<instruction>\s*<rework chain="extend"\/>\s*<\/instruction>/.test(x) },
-    { id: "4-07", src: "[in-rwk,ctx]",
-      expect: x => /<instruction>\s*<rework chain="extend"\/>\s*<context chain="item"\/>\s*<\/instruction>/.test(x) },
+    { id: "4-07", src: "[in-rwk,ctx]", awaiting: "E3b",
+      /* rederived for glyph-package (E2): the run is wrapped and the attribute
+         does not survive it, position carrying the operator - PACKAGE_TARGET.md
+         3.1 and 3.2. This is the ONLY forward vector in the corpus exercising a
+         chain of more than one member. */
+      expect: x => /<instruction>\s*<chain>\s*<rework\/>\s*<context\/>\s*<\/chain>\s*<\/instruction>/.test(x) },
     /* 4-08 was the `/` divide row. It is gone from the reference because it is
        gone from the grammar (C-01) and now from the engine; the refusal that
        replaced it lives in bucket N, where a malformed construct belongs. */
@@ -981,7 +1003,15 @@ function runReferenceChecks() {
     let xml = "";
     try { xml = G.toXML(p.src, WITH_BOTH); }
     catch (e) { broken.push(p.id + ": threw — " + e.message); return; }
-    if (!p.expect(xml))
+    const holds = p.expect(xml);
+    if (p.awaiting) {
+      /* same pin as runGroup: rederived ahead of the emitter, unpinned the
+         moment it starts holding */
+      if (holds) broken.push(p.id + ": passes now - " + p.awaiting +
+                             " has landed; remove `awaiting` and its note");
+      return;
+    }
+    if (!holds)
       broken.push(p.id + " (" + p.src + "): the engine does not do what §4 documents"
                   + (/<off>/.test(xml) ? " — it fell into <off>, which is the documented behaviour of a DIFFERENT row" : ""));
   });
