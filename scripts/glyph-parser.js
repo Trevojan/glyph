@@ -2930,16 +2930,77 @@ const GlyphCore = (function () {
   }
 
   /** xml → glyph. The inverse of toXML, within the limits noted above. */
+  /* ---- glyph-package, the inverse of packagePass (E4) ------------------
+     The reader is given a document, not an AST, and the shape sections 3 to 5
+     added is undone here so every rule below it keeps working unchanged.
+
+     <invoke> is DISCARDED and never read back. It is derived from the store,
+     so reconstructing a command from it would be the engine answering its own
+     question - which is finding A3, the defect where the inverse INVENTED a
+     <needs> the author was never asked for. A loss can be pinned; an invention
+     cannot. <schema/> goes the same way: it carries no authored content.  */
+  function packageUnpass(el, diag) {
+    if (!el || !el.children) return el;
+    var out = [];
+    el.children.forEach(function (c) {
+      if (c.tag === "schema" || c.tag === "invoke") return;
+      if (c.tag === "chain") {
+        /* position carried the operator, so position gives it back:
+           the first member came from `-`, every other from `,` (3.2) */
+        var first = true;
+        (c.children || []).forEach(function (m) {
+          if (m.tag === "#text") return;
+          /* The panel is hand-editable, so a <chain> can arrive carrying things
+             the emitter never writes. Position decides the operator (3.2) and
+             overwriting whatever is there would be repairing in silence, which
+             is the one thing this reader refuses to do. Both refusals keep the
+             names XML_REFERENCE 11.3 documents; only their trigger moved. */
+          if (m.attrs && m.attrs.chain)
+            diag.push({ sev:"fix", code:"XmlChainStartsWithItem",
+              msg:"membro de <code>&lt;chain&gt;</code> carrega <code>chain=\"" + esc(m.attrs.chain) +
+                  "\"</code>. Dentro de um <code>&lt;chain&gt;</code> a posição já diz o operador — " +
+                  "remova o atributo." });
+          /* a member with children is caught downstream by the existing
+             XmlChainHasChildren check, which sees the `chain` this function
+             assigns; raising it here as well would report one fault twice */
+          var mm = {}, mk;
+          for (mk in m) if (Object.prototype.hasOwnProperty.call(m, mk)) mm[mk] = m[mk];
+          mm.attrs = cloneWithChain(m.attrs || {}, first ? "extend" : "item");
+          out.push(packageUnpass(mm, diag));
+          first = false;
+        });
+        return;
+      }
+      out.push(packageUnpass(c, diag));
+    });
+    /* copy the node whole and swap only its children: a text node carries its
+       content in a property this function must not know the name of */
+    var copy = {}, k;
+    for (k in el) if (Object.prototype.hasOwnProperty.call(el, k)) copy[k] = el[k];
+    copy.children = out;
+    return copy;
+  }
+
+
   function fromXML(xmlString, opts) {
     opts = opts || {};
     var pt = xmlParseTree(String(xmlString == null ? "" : xmlString));
     var diag = pt.diag.slice();
-    var glyphEl = xmlChild(pt.root, "glyph");
+    var glyphEl = xmlChild(pt.root, "glyph-package");
     if (!glyphEl) {
+      /* the retired root is refused BY NAME, never absorbed in silence - the
+         same treatment the divide operator and the backslash mood got */
+      if (xmlChild(pt.root, "glyph")) {
+        diag.push({ sev:"fix", code:"XmlLegacyRoot",
+          msg:"<code>&lt;glyph&gt;</code> foi substituída por <code>&lt;glyph-package&gt;</code> nesta " +
+              "versão. Reemita o documento pelo motor 2.4.5.01." });
+        return { src:"", diag:diag };
+      }
       diag.push({ sev:"fix", code:"NoGlyphRoot",
-        msg:"não há <code>&lt;glyph&gt;</code> na raiz — isto não é xml deste motor." });
+        msg:"não há <code>&lt;glyph-package&gt;</code> na raiz — isto não é xml deste motor." });
       return { src:"", diag:diag };
     }
+    glyphEl = packageUnpass(glyphEl, diag);
     var parts = [];
     (glyphEl.children || []).forEach(function (el) {
       if (el.tag === "#text") return;

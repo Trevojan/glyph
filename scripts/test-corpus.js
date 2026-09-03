@@ -354,7 +354,7 @@ let failures = [];
    fail now, and a failure the moment it starts passing, because a pin that
    outlives its reason is how a real regression hides. */
 const AWAITING = {};
-"F-01 F-02 F-03 F-04 F-05 F-06 F-07 F-08 F-09 F-13 F-14 F-15 F-20 F-21 F-22 F-23 RT-01 RT-03 E-02 E-03 E-04 E-05"
+""
   .split(" ").forEach(id => { AWAITING[id] = "E4"; });
 
 function awaitCheck(id, why) {
@@ -872,14 +872,16 @@ function runFromXmlChecks() {
   ok("F-17", "chain never reaches a placeholder name",
      !/<needs[^>]*chain=/.test(germ.x1) ? null : "chain on a <needs slot>");
 
-  const kids = G.fromXML('<glyph><block once="true"><instruction>' +
-    '<rework chain="extend"><user-input>x</user-input></rework></instruction></block></glyph>', opts);
+  const kids = G.fromXML('<glyph-package engine="2.4.5.01"><schema/><block once="true"><instruction>' +
+    '<chain><rework><user-input>x</user-input></rework></chain>' +
+    '</instruction></block></glyph-package>', opts);
   ok("F-18", "a chain element with children is named, not silently repaired",
      (kids.diag || []).some(d => d.code === "XmlChainHasChildren" && d.sev === "fix") ? null
        : "no XmlChainHasChildren at fix");
 
-  const first = G.fromXML('<glyph><block once="true"><instruction>' +
-    '<rework chain="item"/><format chain="item"/></instruction></block></glyph>', opts);
+  const first = G.fromXML('<glyph-package engine="2.4.5.01"><schema/><block once="true"><instruction>' +
+    '<chain><rework chain="item"/><format/></chain>' +
+    '</instruction></block></glyph-package>', opts);
   ok("F-19", "a run starting with `,` is promoted and reported",
      (first.diag || []).some(d => d.code === "XmlChainStartsWithItem" && d.sev === "fix") &&
      G.parse(first.src, opts).gaps.every(g => g.sev !== "fix")
@@ -887,7 +889,7 @@ function runFromXmlChecks() {
 
   const edit = G.toXML("[ins-alw,nev]", opts);
   ok("F-20", "force=\"editorial\" keeps its place beside chain",
-     /<always force="editorial" chain="extend"\/>/.test(edit) ? null
+     /<chain>\s*<always force="editorial"\/>/.test(edit) ? null
        : "attribute order or presence changed: " + edit.replace(/\s+/g, " "));
 
   const seg = trip("[in-rwk;[in-fmt]");
@@ -898,7 +900,7 @@ function runFromXmlChecks() {
 
   const bareUnk = trip("[in-zzz]");
   ok("F-22", "an unknown bare tag keeps its chain",
-     bareUnk.stable && /<unresolved tag="zzz" chain="extend"\/>/.test(bareUnk.x1) ? null
+     bareUnk.stable && /<chain>\s*<unresolved tag="zzz"\/>/.test(bareUnk.x1) ? null
        : "lost: " + bareUnk.x1.replace(/\s+/g, " "));
 
   const emo = trip("/eth/[crit'x']");
@@ -1052,10 +1054,12 @@ function runReferenceChecks() {
     { code: "SlashInChain",           run: () => G.parse("[in-rwk/ctx]", WITH_BOTH).gaps },
     { code: "BackslashMood",          run: () => G.parse("\\eth\\[ins`x`]", WITH_BOTH).gaps },
     { code: "UnknownEmotion",         run: () => G.parse("/eth/xyz/[ins`x`]", WITH_BOTH).gaps },
-    { code: "XmlChainHasChildren",    run: () => G.fromXML('<glyph><block once="true"><instruction>' +
-        '<rework chain="extend"><user-input>x</user-input></rework></instruction></block></glyph>', WITH_BOTH).diag },
-    { code: "XmlChainStartsWithItem", run: () => G.fromXML('<glyph><block once="true"><instruction>' +
-        '<rework chain="item"/><format chain="item"/></instruction></block></glyph>', WITH_BOTH).diag }
+    { code: "XmlChainHasChildren",    run: () => G.fromXML('<glyph-package engine="2.4.5.01"><schema/><block once="true"><instruction>' +
+        '<chain><rework><user-input>x</user-input></rework></chain>' +
+        '</instruction></block></glyph-package>', WITH_BOTH).diag },
+    { code: "XmlChainStartsWithItem", run: () => G.fromXML('<glyph-package engine="2.4.5.01"><schema/><block once="true"><instruction>' +
+        '<chain><rework chain="item"/><format/></chain>' +
+        '</instruction></block></glyph-package>', WITH_BOTH).diag }
   ];
 
   const notRaised = REFUSALS.filter(r => {

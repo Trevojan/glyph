@@ -308,6 +308,16 @@
       "id": "G13",
       "finding": "packagePass initially read the expansion store from the global registry while buildXml receives it through opts, so <invoke> vanished wherever the corpus passed stores per call",
       "consequence": "caught by the authored examples, not by the golden - the golden test had registered the store globally. Two call paths for one store is the defect class GS-01..GS-03 exist to watch"
+    },
+    {
+      "id": "G14",
+      "finding": "the retired <glyph> root is refused by name (XmlLegacyRoot) rather than read leniently or ignored",
+      "consequence": "the same treatment the divide operator and the backslash mood got; a retired construct is demoted to a recogniser, never deleted into silence"
+    },
+    {
+      "id": "G15",
+      "finding": "XmlChainHasChildren and XmlChainStartsWithItem kept their documented names and changed trigger: inside a <chain> the position decides the operator, so a member carrying the attribute is reported rather than overwritten",
+      "consequence": "the reader still refuses to repair in silence, which is the rule the original comment stated and the new shape would otherwise have quietly dropped"
     }
   ],
   "four_guarantees": {
@@ -436,7 +446,11 @@
         "DISCARD <invoke> on the return trip - it is derived, and reading it back is exactly the fabrication finding A3 condemned",
         "ignore <schema/>, which carries no authored content",
         "unpin the 22 assertions now awaiting E4"
-      ]
+      ],
+      "delivered": "scripts/glyph-parser.js (packageUnpass in fromXML)",
+      "status": "RETURNED - a second reader; all 22 pinned assertions repaired, none removed",
+      "method": "the exact inverse of packagePass: <schema/> and <invoke> are dropped, <chain> is expanded and position gives the operator back. Every reconstruction rule below it runs unchanged, so the diff is small and the tested logic is reused",
+      "A3_honoured": "<invoke> is derived and is DISCARDED on the return trip, never read back. Reading it would be the engine answering its own question, which is the fabrication finding A3 condemned"
     },
     {
       "id": "E5",
@@ -469,7 +483,7 @@
     {
       "id": "K2",
       "expected": "extend and comma return distinct from the XML and re-emit identically; no needs element is ever fabricated",
-      "status": "MET via the emitter; the inverse half belongs to E4"
+      "status": "MET - extend and item return distinct and re-emit identically"
     },
     {
       "id": "K3",
