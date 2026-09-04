@@ -84,7 +84,8 @@
     "six_layer_bundle": "ITS OWN ORDER (Q9), opened after this one closes. Name, layers and emitters are decided there. T0 keeps the two artefacts apart in the meantime",
     "promotion_boundary": "Q4: the agent prepares a reading of what PROMOTION_BOUNDARY.md normatises and where it bites; the Regent ratifies. Ratification stays the Regent’s",
     "tracing": "Q5: DEFERRED until this order closes, with the format already stable",
-    "orbital_production_level": "Q6: OUTSIDE this order. S16 is promoted from assumption to decision; it blocks the _ORBITAL rollout, never this release"
+    "orbital_production_level": "Q6: OUTSIDE this order. S16 is promoted from assumption to decision; it blocks the _ORBITAL rollout, never this release",
+    "language_sweep_scope": "artefacts in en-EU, interface stays pt-BR. The lock said \"en-EU across the system, always\"; the PTBR gloss table is a deliberate interface feature, not drift, and the sweep goes where the language travels"
   },
   "verified_findings": [
     {
@@ -334,6 +335,11 @@
       "id": "G18",
       "finding": "D-11 failed on its first run because WITH_BOTH carries templates and rules but not expansions, so the comparison document had no <invoke>",
       "consequence": "finding G13 a second time, from the other side: one store reached by two paths. The probe caught it immediately, which is the argument for probing a hand-written example at all"
+    },
+    {
+      "id": "G19",
+      "finding": "rules.json already held `why` and `suggest` in English; the pt-BR came from the assembly in the parser, which is why a rule diagnostic read half in each language",
+      "consequence": "one template string rather than 26 store entries. The mixed-language message was a defect under either reading of the lock"
     }
   ],
   "four_guarantees": {
@@ -495,7 +501,11 @@
     },
     {
       "id": "E7",
-      "what": "the language sweep: prose to en-EU, and a decision on the four US-spelled element names"
+      "what": "the language sweep: prose to en-EU, and a decision on the four US-spelled element names",
+      "delivered": "scripts/glyph-parser.js",
+      "status": "RETURNED - the artefact speaks en-EU; the interface keeps pt-BR",
+      "element_names_already_done": "criticise, categorise, generalise and scrutinise landed earlier in the release; only the prose half was open",
+      "split": "the AST envelope defaults to lang en because it travels - read on another machine by something without this engine. parse() keeps pt-BR for the interface, which is not the deliverable. A caller wanting either asks by name"
     }
   ],
   "done_when": [
@@ -969,5 +979,6 @@
       "corpus-snapshot.json (xml and ast projections)",
       "the published skill"
     ]
-  }
+  },
+  "status": "ALL DELIVERABLES RETURNED - E0, E0b, E1, E2, E3, E3b, E4, E5, E6, E7"
 }

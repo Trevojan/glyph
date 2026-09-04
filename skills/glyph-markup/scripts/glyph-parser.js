@@ -799,9 +799,10 @@ const GlyphCore = (function () {
 
       if (!capNoted && /\s[<>]\s*\d+\s*$/.test(rule.expr)) {
         capNoted = true;
-        gaps.push({ sev:"note", lab:"li assim", code:"CapFloorNotice",
+        gaps.push({ sev:"note", lab:"read as", code:"CapFloorNotice",
           msg:"<code>" + (/\s<\s*\d+\s*$/.test(rule.expr) ? "&lt;" : "&gt;") +
-              "</code> posfixo lido como teto/piso, não comparação. Comparar: <code>&lt;=</code> <code>&gt;=</code>." });
+              "</code> in postfix reads as a cap or a floor, not a comparison. " +
+              "To compare, write <code>&lt;=</code> or <code>&gt;=</code>." });
       }
       rules.push(rule);
     });
@@ -810,10 +811,10 @@ const GlyphCore = (function () {
     rules.forEach(function (r) { (r.uses || []).forEach(function (v) { if (!defined[v]) used[v] = true; }); });
     var missing = Object.keys(used);
     if (missing.length)
-      gaps.push({ sev:"ask", lab:"indefinido", code:"UndefinedVariable",
+      gaps.push({ sev:"ask", lab:"undefined", code:"UndefinedVariable",
         msg: missing.map(function (v) { return "<code>" + esc(v) + "</code>"; }).join(", ") +
-            (missing.length === 1 ? " usado, nunca definido." : " usados, nunca definidos.") +
-            " Entrada externa ou linha faltando?" });
+            (missing.length === 1 ? " used and never defined." : " used and never defined.") +
+            " External input, or a missing line?" });
 
     return { name:name, rules:rules, gaps:gaps, missing:missing };
   }
@@ -1073,20 +1074,27 @@ const GlyphCore = (function () {
       return false;
     }
 
-    function fire(r, id, msg) {
+    /* `why` and `suggest` are already en-EU in rules.json; only this assembly
+       was pt-BR, which is why a rule diagnostic read half in each language.
+       Both are built, and `opts.lang` picks — the artefact travels in en-EU
+       while the interface keeps pt-BR. */
+    function fire(r, id, msg, enMsg) {
       if (seen[id]) return;
       seen[id] = 1;
       G(r.severity || "ask", r.label || "regra",
         msg + (r.suggest ? " <em>Sugestão: " + esc(r.suggest) + "</em>" : ""),
-        "Rule:" + r.id);
+        "Rule:" + r.id, r.label || "rule",
+        (enMsg || msg) + (r.suggest ? " <em>Suggestion: " + esc(r.suggest) + "</em>" : ""));
     }
 
     function reportPair(x, y) {
       var r = C.pairs[pairKey(x.canonical, y.canonical)];
       if (!r || underExempt(x) || underExempt(y)) return;
+      var a = "<code>[" + esc(String(x.canonical).toLowerCase()) + "</code>",
+          b = "<code>[" + esc(String(y.canonical).toLowerCase()) + "</code>";
       fire(r, r.id + "@" + (x.id || 0) + "-" + (y.id || 0),
-        "<code>[" + esc(String(x.canonical).toLowerCase()) + "</code> com <code>[" +
-        esc(String(y.canonical).toLowerCase()) + "</code> no mesmo alvo — " + esc(r.why) + ".");
+        a + " com " + b + " no mesmo alvo — " + esc(r.why) + ".",
+        a + " with " + b + " on the same target — " + esc(r.why) + ".");
     }
 
     segments.forEach(function (sg) {
@@ -1121,9 +1129,11 @@ const GlyphCore = (function () {
           if (o.then.indexOf(flat[j].canonical) === -1) continue;
           if (firstAt !== -1 && j > firstAt) continue;      // correct order, nothing to say
           if (firstAt === -1) return;                        // `first` absent: rule does not apply
+          var la = "<code>[" + esc(String(flat[j].canonical).toLowerCase()) + "</code>",
+              lb = "<code>[" + esc(String(o.first).toLowerCase()) + "</code>";
           fire(o.rule, o.rule.id + "@" + (flat[j].id || 0),
-            "<code>[" + esc(String(flat[j].canonical).toLowerCase()) + "</code> vem antes de <code>[" +
-            esc(String(o.first).toLowerCase()) + "</code> — " + esc(o.rule.why) + ".");
+            la + " vem antes de " + lb + " — " + esc(o.rule.why) + ".",
+            la + " comes before " + lb + " — " + esc(o.rule.why) + ".");
           return;
         }
       });
@@ -1135,9 +1145,10 @@ const GlyphCore = (function () {
           var framed = false;
           for (var k = 0; k < i; k++) if (p.accept[flat[k].canonical]) { framed = true; break; }
           if (framed) continue;
+          var t = "<code>[" + esc(String(p.target).toLowerCase()) + "</code>";
           fire(p.rule, p.rule.id + "@" + (flat[i].id || 0),
-            "<code>[" + esc(String(p.target).toLowerCase()) + "</code> sem enquadramento antes — " +
-            esc(p.rule.why) + ".");
+            t + " sem enquadramento antes — " + esc(p.rule.why) + ".",
+            t + " with no framing before it — " + esc(p.rule.why) + ".");
         }
       });
     });
@@ -2235,6 +2246,14 @@ const GlyphCore = (function () {
   }
 
   function toAST(src, opts) {
+    /* The envelope TRAVELS: it is read on another machine, by something that
+       does not have this engine. So its diagnostics default to en-EU, and a
+       caller that wants the pt-BR interface strings asks for them by name.
+       The interface keeps pt-BR; the artefact does not. */
+    var o0 = {};
+    for (var k0 in (opts || {})) if (Object.prototype.hasOwnProperty.call(opts, k0)) o0[k0] = opts[k0];
+    if (!o0.lang) o0.lang = "en";
+    opts = o0;
     var r = parse(src, opts);
     var o = {};
     for (var k in (opts || {})) if (Object.prototype.hasOwnProperty.call(opts, k)) o[k] = opts[k];
@@ -2584,23 +2603,23 @@ const GlyphCore = (function () {
           if (stack[d].tag === tk.tag) {
             if (d < stack.length - 1)
               diag.push({ sev:"note", code:"XmlAutoClose",
-                msg:"<code>&lt;/" + esc(tk.tag) + "&gt;</code> fechou " + (stack.length - 1 - d) +
+                msg:"<code>&lt;/" + esc(tk.tag) + "&gt;</code> closed " + (stack.length - 1 - d) +
                     " elemento(s) que seguiam abertos." });
             stack.length = d;
             return;
           }
         }
         diag.push({ sev:"fix", code:"XmlUnmatchedClose",
-          msg:"<code>&lt;/" + esc(tk.tag) + "&gt;</code> fecha um elemento que nunca abriu." });
+          msg:"<code>&lt;/" + esc(tk.tag) + "&gt;</code> closes an element that never opened." });
         return;
       }
       if (tk.k === "truncated")
         diag.push({ sev:"fix", code:"XmlTruncated",
-          msg:"<code>&lt;</code> sem <code>&gt;</code>: o xml está cortado." });
+          msg:"<code>&lt;</code> with no <code>&gt;</code>: the xml is truncated." });
     });
     if (stack.length > 1)
       diag.push({ sev:"fix", code:"XmlUnclosed",
-        msg:"sem fechamento: " + stack.slice(1).map(function (e) {
+        msg:"never closed: " + stack.slice(1).map(function (e) {
           return "<code>&lt;" + esc(e.tag) + "&gt;</code>"; }).join(", ") + "." });
     return { root:root, diag:diag };
   }
@@ -2642,7 +2661,7 @@ const GlyphCore = (function () {
       if (op === "extend" || op === "item") {
         if (firstChain && op === "item") {
           diag.push({ sev:"fix", code:"XmlChainStartsWithItem",
-            msg:"o primeiro elo de uma cadeia não pode ser <code>chain=\"item\"</code> — " +
+            msg:"the first link of a chain cannot be <code>chain=\"item\"</code> — " +
                 "<code>,</code> continua uma cadeia, não a abre. Promovido a <code>-</code>." });
           c = { tag:c.tag, attrs:cloneWithChain(c.attrs, "extend"), children:c.children };
         }
@@ -2731,7 +2750,7 @@ const GlyphCore = (function () {
     var name = hit ? hit.canonical.toLowerCase() : (SESSION[tag] ? tag : null);
     if (!name) {
       diag.push({ sev:"note", code:"XmlUnknownElement",
-        msg:"<code>&lt;" + esc(tag) + "&gt;</code> não corresponde a nenhum comando — " +
+        msg:"<code>&lt;" + esc(tag) + "&gt;</code> matches no command — " +
             "o conteúdo foi mantido, a marca não." });
       return xmlKids(el, diag);
     }
@@ -2765,7 +2784,7 @@ const GlyphCore = (function () {
     var kids = (el.children || []).filter(function (c) { return c.tag !== "#text"; });
     if (kids.length)
       diag.push({ sev:"fix", code:"XmlChainHasChildren",
-        msg:"<code>&lt;" + esc(el.tag) + " chain&gt;</code> tem filhos — um elo escrito sem " +
+        msg:"<code>&lt;" + esc(el.tag) + " chain&gt;</code> has children — a link written without " +
             "<code>[</code> não tem escopo para segurá-los. Reanexados ao pai." });
     return op === "item" ? "," : "-";
   }
@@ -2796,12 +2815,12 @@ const GlyphCore = (function () {
     var diag = [];
     if (!env || typeof env !== "object" || env.type !== "GlyphAST") {
       diag.push({ sev:"fix", code:"NotAnAST",
-        msg:"não é um envelope <code>GlyphAST</code>." });
+        msg:"not a <code>GlyphAST</code> envelope." });
       return { src:"", diag:diag };
     }
     if (env.projection && env.projection !== "full") {
       diag.push({ sev:"fix", code:"ThinnedAST",
-        msg:"projeção <code>" + esc(String(env.projection)) + "</code> — só a projeção " +
+        msg:"projection <code>" + esc(String(env.projection)) + "</code> — only the projection " +
             "<code>full</code> pode ser reconstruída. Na projeção de painel a ausência de um " +
             "campo não distingue vazio de descartado." });
       return { src:"", diag:diag };
@@ -2863,7 +2882,7 @@ const GlyphCore = (function () {
         }
         case "Truncated":
           diag.push({ sev:"fix", code:"TruncatedAST",
-            msg:"o envelope foi truncado na profundidade " + n.atDepth + " e omitiu " +
+            msg:"the envelope was truncated at depth " + n.atDepth + " and omitted " +
                 n.omittedNodes + " nós — não há o que reconstruir a partir dele." });
           return "";
         case "Command": {
@@ -2884,7 +2903,7 @@ const GlyphCore = (function () {
         }
         default:
           diag.push({ sev:"note", code:"AstUnknownNode",
-            msg:"nó <code>" + esc(String(n.type)) + "</code> não é do vocabulário do AST — ignorado." });
+            msg:"node <code>" + esc(String(n.type)) + "</code> is not in the AST vocabulary — ignored." });
           return "";
       }
     }
@@ -2959,7 +2978,7 @@ const GlyphCore = (function () {
              names XML_REFERENCE 11.3 documents; only their trigger moved. */
           if (m.attrs && m.attrs.chain)
             diag.push({ sev:"fix", code:"XmlChainStartsWithItem",
-              msg:"membro de <code>&lt;chain&gt;</code> carrega <code>chain=\"" + esc(m.attrs.chain) +
+              msg:"a <code>&lt;chain&gt;</code> member carries <code>chain=\"" + esc(m.attrs.chain) +
                   "\"</code>. Dentro de um <code>&lt;chain&gt;</code> a posição já diz o operador — " +
                   "remova o atributo." });
           /* a member with children is caught downstream by the existing
@@ -2994,12 +3013,12 @@ const GlyphCore = (function () {
          same treatment the divide operator and the backslash mood got */
       if (xmlChild(pt.root, "glyph")) {
         diag.push({ sev:"fix", code:"XmlLegacyRoot",
-          msg:"<code>&lt;glyph&gt;</code> foi substituída por <code>&lt;glyph-package&gt;</code> nesta " +
+          msg:"<code>&lt;glyph&gt;</code> was replaced by <code>&lt;glyph-package&gt;</code> in this " +
               "versão. Reemita o documento pelo motor 2.4.5.01." });
         return { src:"", diag:diag };
       }
       diag.push({ sev:"fix", code:"NoGlyphRoot",
-        msg:"não há <code>&lt;glyph-package&gt;</code> na raiz — isto não é xml deste motor." });
+        msg:"no <code>&lt;glyph-package&gt;</code> at the root — this is not xml from this engine." });
       return { src:"", diag:diag };
     }
     glyphEl = packageUnpass(glyphEl, diag);
@@ -3018,7 +3037,7 @@ const GlyphCore = (function () {
       }
       if (el.tag === "break") { if (parts.length) parts[parts.length - 1].brk = true; return; }
       diag.push({ sev:"note", code:"XmlUnexpectedTop",
-        msg:"<code>&lt;" + esc(el.tag) + "&gt;</code> fora de um bloco — ignorado." });
+        msg:"<code>&lt;" + esc(el.tag) + "&gt;</code> outside a block — ignored." });
     });
     var src = parts.map(function (p, i) {
       return p.src + (p.brk ? ";;" : "") + (i < parts.length - 1 ? ";" : "");
