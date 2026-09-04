@@ -1665,9 +1665,28 @@ function runSnapshotChecks() {
          (extra.length ? "in the snapshot but no longer declared: " + extra.join(", ") : "")
        : null);
 
+  /* D-05, the half that was missing. The snapshot already answers WHICH sources
+     moved; what it never said is WHAT KIND of change it was, and that is the
+     first question every time. A run where only `ast` moved is a store or a
+     diagnostic; one where `xml` moved is the emitter; one where all three moved
+     is the parser. Counted here rather than by hand, which is how it was done
+     three times over this release. */
+  const byKind = { xml: [], ast: [], hgml: [] };
+  drift.forEach(id => ["xml", "ast", "hgml"].forEach(k => {
+    if (stored.cases[id][k] !== now[id][k]) byKind[k].push(id);
+  }));
+  const shape = ["xml", "ast", "hgml"]
+    .filter(k => byKind[k].length)
+    .map(k => byKind[k].length + " " + k).join(", ");
+  const reads = byKind.xml.length && byKind.ast.length && byKind.hgml.length
+      ? "all three projections moved, which reads as the parser"
+    : byKind.xml.length ? "the emitted document moved, which reads as the emitter"
+    : byKind.ast.length ? "only the envelope moved, which reads as a store or a diagnostic"
+    : "only the burn moved";
   ok("SN-04", "every projection is byte-identical to the snapshot",
      drift.length
-       ? drift.slice(0, 8).map(id => id + " (" +
+       ? shape + " \u2014 " + reads + ". " +
+         drift.slice(0, 8).map(id => id + " (" +
            ["xml", "ast", "hgml"].filter(k => stored.cases[id][k] !== now[id][k]).join(", ") + ")")
            .join(" | ") + (drift.length > 8 ? " (+" + (drift.length - 8) + " more)" : "")
        : null);

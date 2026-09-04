@@ -923,7 +923,10 @@
         "what": "a generated/authored split at field level, not only at file level",
         "value": "medium",
         "cost": "none today - a rule, not code",
-        "why": "I1 is file-granular; the first human annotation on a generated store has no place to live"
+        "why": "I1 is file-granular; the first human annotation on a generated store has no place to live",
+        "status": "DONE after E7 - recorded as a rule, not built",
+        "delivered": ".guidelines/BUNDLE_TARGET.md, invariant I1b",
+        "note": "no store carries an authored field today; it is written so the answer is not improvised"
       },
       {
         "id": "D-04",
@@ -941,7 +944,11 @@
         "value": "high",
         "cost": "largest here",
         "position": "last",
-        "why": "glyph-diff compares two sources; nothing compares two emitter versions. The blast radius was measured once by hand and is re-improvised per release"
+        "why": "glyph-diff compares two sources; nothing compares two emitter versions. The blast radius was measured once by hand and is re-improvised per release",
+        "status": "DONE after E7, and re-scoped by measurement",
+        "delivered": "scripts/test-corpus.js (SN-04 classifies the drift)",
+        "rescoped": "the deferred note asked for an output diff across the corpus. Measuring found the snapshot already IS that diff: it records xml, ast and hgml per source and reports which moved. The half genuinely missing was WHAT KIND of change it was, which was computed by hand three times over this release. SN-04 now names it: all three projections reads as the parser, xml as the emitter, ast alone as a store or a diagnostic",
+        "not_done": "showing the before/after CONTENT of a changed case still needs stored content rather than hashes, which would grow the snapshot by orders of magnitude. Left undone deliberately; git history holds the before"
       },
       {
         "id": "D-06",
@@ -965,7 +972,8 @@
         "what": "PREVIEW/APPROVAL as a whole",
         "why": "Glyph emits documents rather than applying mutations, so approval has nothing to gate; only the diff half transfers, as D-05"
       }
-    ]
+    ],
+    "status": "D-01 to D-05 done after E7; D-06 (effects) awaits the Regent on the restore fork"
   },
   "mechanisms": [
     {
