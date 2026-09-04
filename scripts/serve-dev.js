@@ -7,15 +7,17 @@ const require = createRequire(import.meta.url);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 /**
- * serve-dev.js — static server for checking the web app in a real browser.
+ * serve-dev.js — how the app is opened, and how it is checked in a browser.
  *
- * The app is built to be opened by double-click over file://, and that is how
- * it ships. But file:// cannot be driven by an automated browser (scripts do
- * not run in a static snapshot), so verifying a UI change meant taking it on
- * faith. This serves the same directory over http so the page can actually be
- * loaded, clicked and read.
+ * It used to say the app opens by double-click over file:// and that nothing
+ * depended on this file. That stopped being true when the module system moved
+ * to ESM: `glyph-engine-alias.html` loads the parser and the UI as
+ * `type="module"`, and a browser refuses a module over file:// on CORS. The page
+ * still draws, so the failure looks like a frozen app rather than a load error.
  *
- * Development only — nothing in the app depends on it.
+ * The decision was to keep ESM and make serving the way in, not to walk the
+ * module system back. So this file is no longer development-only: it IS the app
+ * launcher, and `glyph.cmd` at the repository root is the single click.
  *   node serve-dev.js [port]
  */
 
@@ -51,4 +53,15 @@ http.createServer((req, res) => {
     });
     res.end(data);
   });
-}).listen(PORT, () => console.log("glyph dev server: http://localhost:" + PORT + "/"));
+}).listen(PORT, () => {
+  const url = "http://localhost:" + PORT + "/glyph-engine-alias.html";
+  console.log("glyph: " + url);
+  /* one click means the browser opens itself. Zero dependencies, so this is
+     the platform's own opener rather than a package. */
+  if (process.argv.indexOf("--no-open") === -1) {
+    const cmd = process.platform === "win32" ? 'start ""'
+              : process.platform === "darwin" ? "open" : "xdg-open";
+    import("node:child_process").then(cp =>
+      cp.exec(cmd + ' "' + url + '"', () => {}));
+  }
+});

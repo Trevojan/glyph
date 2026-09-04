@@ -1696,6 +1696,64 @@ function runSnapshotChecks() {
 const rSN = runSnapshotChecks();
 
 /* ------------------------------------------------------------------ *
+ * the app — the deliverable nothing was checking
+ *
+ * The README promised the app opens by double-clicking the HTML over file://.
+ * That stopped being true when the module system moved to ESM, because a
+ * browser refuses a `type="module"` script over file:// on CORS — and since the
+ * HTML and CSS still load, the page draws and nothing responds, so it reads as
+ * a frozen app rather than as a load error. Five gates were green throughout.
+ *
+ * These do not drive a browser; that would cost a dependency this repository
+ * does not have. They check the cheaper thing that actually broke: whether the
+ * documented way in still matches what the page requires.
+ * ------------------------------------------------------------------ */
+function runAppChecks() {
+  console.log("\n--- the app — the documented way in ---");
+  const D = [];
+  const fsx = require("fs"), px = require("path");
+  const ok = (id, name, why) => {
+    if (why) { console.log("  \u2717 " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  \u2713 " + id + ": " + name); D.push(id); }
+  };
+  const ROOT = px.resolve(__dirname, "..");
+  let html = null, readme = null;
+  try { html = fsx.readFileSync(px.join(ROOT, "glyph-engine-alias.html"), "utf8"); } catch (e) {}
+  try { readme = fsx.readFileSync(px.join(ROOT, "README.md"), "utf8"); } catch (e) {}
+  if (html === null || readme === null) {
+    ok("AP-00", "the app and its README exist", "glyph-engine-alias.html or README.md not found");
+    return D.length;
+  }
+
+  /* every script the page asks for is actually there */
+  const srcs = [...html.matchAll(/<script[^>]*\ssrc="([^"]+)"/g)].map(m => m[1]);
+  const absent = srcs.filter(s => !fsx.existsSync(px.join(ROOT, s)));
+  ok("AP-01", "every script the page loads exists",
+     absent.length ? "referenced and missing: " + absent.join(", ") : null);
+
+  /* the one that would have caught it: modules and file:// cannot both be true */
+  const usesModules = /<script[^>]*type="module"/.test(html);
+  const tellsFileProtocol =
+    /double-click\s+`?glyph-engine-alias\.html`?/i.test(readme) ||
+    /built to open\s*\n?\s*over `file:\/\//i.test(readme);
+  ok("AP-02", "the documented way in matches what the page requires",
+     usesModules && tellsFileProtocol
+       ? "the page loads ES modules, which a browser refuses over file://, while the README still says to open the HTML directly"
+       : null);
+
+  /* and the click the README promises has something behind it */
+  const launcher = (readme.match(/Double-click `([^`]+)`/) || [])[1];
+  ok("AP-03", "the launcher the README names exists",
+     !launcher ? "the README names no launcher to double-click"
+       : fsx.existsSync(px.join(ROOT, launcher)) ? null
+       : "README says to double-click `" + launcher + "`, which is not in the repository");
+
+  return D.length;
+}
+const rAP = runAppChecks();
+
+
+/* ------------------------------------------------------------------ *
  * global store registration — the tripwire for splitting the core
  *
  * Every bucket above routes its stores through `opts`, deliberately, so the
@@ -1777,6 +1835,7 @@ console.log(" ast schema   " + rSC + "/3");
 console.log(" glyph-package" + String(rPK).padStart(4) + "/6");
 console.log(" examples     " + rE + "/5");
 console.log(" snapshot     " + rSN + "/4");
+console.log(" app          " + String(rAP).padStart(4) + "/3");
 console.log(" global store " + rGS + "/3");
 console.log("=================================================");
 

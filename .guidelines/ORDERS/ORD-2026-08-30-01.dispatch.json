@@ -348,6 +348,14 @@
       "finding": "N-13 named two different corpus vectors, and the snapshot is keyed by id, so one replaced the other and [BASE'…'] had no byte-for-byte coverage at all",
       "severity": "medium",
       "consequence": "the count said 102 vectors and 101 snapshot cases and nothing compared the two. Found by D-04, the import that separates `duplicate` from `conflicting`; SN-03 then fired on its own terms - a source was gained - which is the proof the collision had been hiding one"
+    },
+    {
+      "id": "G21",
+      "finding": "the README promised the app opens by double-clicking the HTML over file://, and that stopped being true when the module system moved to ESM: a browser refuses a type=\"module\" script over file:// on CORS",
+      "severity": "high",
+      "consequence": "because the HTML and CSS still load, the page draws and nothing responds - it reads as a frozen app rather than a load error. Five gates were green throughout, because none of them loads the app at all. The Regent found it by trying to use it",
+      "reported_by": "the Regent",
+      "fixed": "serving is the way in now, glyph.cmd is the single click, and AP-01 to AP-03 check that the documented way in matches what the page requires"
     }
   ],
   "four_guarantees": {
@@ -1018,6 +1026,7 @@
   },
   "status": "ALL DELIVERABLES RETURNED - E0, E0b, E1, E2, E3, E3b, E4, E5, E6, E7",
   "post_release": {
-    "Q4": "the premise was false: PROMOTION_BOUNDARY.md did not exist. It was listed in PROMOTION_MEASUREMENT.md as a deliverable to be written, and the open question read as though it had been written and merely awaited ratification. Fourth occurrence of the release root cause. Drafted at .guidelines/PROMOTION_BOUNDARY.md with section 5 left empty; an agent may not ratify a norm it wrote"
+    "Q4": "the premise was false: PROMOTION_BOUNDARY.md did not exist. It was listed in PROMOTION_MEASUREMENT.md as a deliverable to be written, and the open question read as though it had been written and merely awaited ratification. Fourth occurrence of the release root cause. Drafted at .guidelines/PROMOTION_BOUNDARY.md with section 5 left empty; an agent may not ratify a norm it wrote",
+    "app_launch": "Regent decision: the server is the future, no walking ESM back, but opening must cost one click. serve-dev.js now opens the browser and glyph.cmd wraps it; the README and the serve-dev header no longer claim file:// works or that nothing depends on the server"
   }
 }

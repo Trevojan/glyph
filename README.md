@@ -16,17 +16,25 @@ back filled in.
 
 ## Run it
 
-### The app — nothing to install
+### The app — one click
 
-**Double-click `glyph-engine-alias.html`.** That is all. It is built to open
-over `file://`, with no server and no build step: the data is already embedded
-in `scripts/glyph-data.js` precisely because `file://` blocks `fetch` of
-`.json`.
+**Double-click `glyph.cmd`.** It starts the server and opens the browser. That
+is the whole procedure; there is still nothing to install and no build step.
 
-All it needs is a browser.
+Or, the same thing by hand:
 
-> If the page comes up blank, see **After editing** below — it is almost always
-> the cache. If that does not fix it, use the dev server.
+```bash
+node scripts/serve-dev.js
+```
+
+> **`file://` no longer works, and this is the one thing to know.** The app used
+> to open by double-clicking `glyph-engine-alias.html`. That stopped when the
+> module system moved to ESM: `glyph-engine-alias.html` loads the parser and the
+> UI as `type="module"`, and a browser refuses a module over `file://` on CORS.
+>
+> Because the HTML and the CSS still load, the page draws and nothing responds —
+> **it looks like a frozen app rather than a load error.** If you see that, you
+> opened the file instead of serving it.
 
 ### The command line — needs Node
 
@@ -100,24 +108,26 @@ not need the Glyph vocabulary loaded:
 
 Off by default — it changes the deliverable and costs about 59% more XML.
 
-### The dev server
+### The server
 
-Useful when the `file://` cache gets in the way, or to open the app from another
-device on the same network:
+Not development-only any more: it is how the app is opened, for the reason above.
+`glyph.cmd` is a two-line wrapper around it.
 
 ```bash
-node scripts/serve-dev.js
+node scripts/serve-dev.js            # serves and opens the browser
+node scripts/serve-dev.js --no-open  # serves only
 ```
 
-Serves at `http://localhost:8731`. Nothing in the app depends on it.
+Serves at `http://localhost:8731`, and reaches another device on the same
+network.
 
 ---
 
 ## After editing
 
-**Touched a `.js`?** `file://` does not revalidate `<script src>` on edit. Bump
-`GLYPH_ASSET_VERSION` at the top of `glyph-engine-alias.html` and reload — that
-is what it exists for.
+**Touched a `.js`?** Just reload. The server sends `Cache-Control: no-store`, so
+there is nothing to bust — `GLYPH_ASSET_VERSION` in `glyph-engine-alias.html` is
+a leftover from the `file://` days and no longer earns a bump.
 
 **Touched anything in `.guidelines/`** — `rules.json`, `templates.json`,
 `expansions.txt` or `GLOSSARY.md`? Run the build. Those are the sources;
