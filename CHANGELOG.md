@@ -37,10 +37,16 @@ All notable changes to Glyph are documented here, most recent first.
 
 ---
 
-## [2.4.5.02] — the build lands whole, and an id stops hiding a vector
+## [2.4.6.04] — the store gained a field after the digit that covers it had moved
 
-Small by the scheme and not by consequence. No parser change, no vocabulary
-change, no frontend: `minor` moves and nothing else does.
+`rules` moves because `expansions.json` gained an `element` on all 120 commands, and it landed
+*after* `2.4.5.01` was set — the vocabulary store changed once the digit that covers it had
+already been spent. `release` does not move again: `glyph-package` and `<invoke>` are exactly what
+took it from 1 to 2, and effects are designed rather than built. `minor` carries the rest.
+
+> Corrects an earlier reading that put this at `2.4.5.02` on the grounds that nothing but small
+> things had changed since the release closed. That was measured from the wrong boundary: the
+> `element` field landed inside the release, after its number was fixed.
 
 ### The build is all-or-nothing
 

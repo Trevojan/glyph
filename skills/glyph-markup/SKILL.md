@@ -1,9 +1,9 @@
 ---
 name: glyph-markup
-description: Glyph Shorthand Markup Language v2.4.5.02 Specification & Parser Integration. Use when writing or reading Glyph compact structured notation.
+description: Glyph Shorthand Markup Language v2.4.6.04 Specification & Parser Integration. Use when writing or reading Glyph compact structured notation.
 ---
 
-# Glyph Shorthand Markup Language (v2.4.5.02)
+# Glyph Shorthand Markup Language (v2.4.6.04)
 
 Glyph is a shorthand command notation, between delimiters, describing a logical
 flow scalable to the smallest detail. The reference implementation is
@@ -114,7 +114,7 @@ Four constructions, each with exactly one reading:
 ### What the emitted document looks like
 
 ```xml
-<glyph-package engine="2.4.5.02">
+<glyph-package engine="2.4.6.04">
   <schema/>
   <block once="true">
     <criticise>
@@ -250,7 +250,7 @@ you typed as `<off>`:
 | `UnknownEmotion` | `/eth/xyz/` | a code from the mood table |
 | `XmlChainHasChildren` | a `<chain>` member with children of its own | remove them, or take it out of the `<chain>` |
 | `XmlChainStartsWithItem` | a `<chain>` member still carrying a `chain` attribute | remove it: inside a `<chain>` the position already says the operator |
-| `XmlLegacyRoot` | `<glyph>` as the root, the shape through 2.4.4 | re-emit the document with 2.4.5.02 |
+| `XmlLegacyRoot` | `<glyph>` as the root, the shape through 2.4.4 | re-emit the document with 2.4.6.04 |
 
 A diagnostic may carry `at: {s, e}` — the span in your source that caused it.
 
