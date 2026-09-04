@@ -324,6 +324,11 @@
       "finding": "`->` does not exist and is dropped in silence: [a]->[b] parses as two root commands and the arrow vanishes with no diagnostic",
       "severity": "medium",
       "consequence": "a character sequence that disappears without a refusal is the also=\"?\" shape section 11.5 removed. Unrelated to the effects feature; it should be refused by name"
+    },
+    {
+      "id": "G17",
+      "finding": "the worked chain example in XML_REFERENCE section 4 was already stale before this release: it showed flat bare siblings, which predates the chain attribute E0 added",
+      "consequence": "a documented example nothing probed. D-07 probes the section 4 ROWS, not the worked example beneath them, so it drifted for a release without a red gate"
     }
   ],
   "four_guarantees": {
@@ -462,7 +467,14 @@
       "id": "E5",
       "what": "XML_REFERENCE rewritten for the new format, D-03/D-04 extended to operators, AND a new section 11 on failure treatment, which the document does not have today",
       "section_11": "the reference has ten sections and none covers malformed input: three incidental mentions of error across 424 lines. It documents the incomplete path (needs, section 5) and has nowhere to state the invalid path (fix severity). That asymmetry is why A3, A11 and A12 survived — the document tested against the engine could not contradict a fabrication it had no place to describe",
-      "blocked_by": "E3b"
+      "blocked_by": "E3b",
+      "delivered": [
+        ".guidelines/XML_REFERENCE.md (sections 1, 4, 10, 11.2, 11.3)",
+        "scripts/test-corpus.js (the XmlLegacyRoot probe)"
+      ],
+      "status": "RETURNED - the reference describes the emitted format again; all ten D checks green",
+      "criterion_named_the_wrong_ids": "E5 asked to extend D-03 and D-04 to operators. Those two check the VOCABULARY table. Operator coverage exists in both directions under D-07 (every section 4 row behaves as documented) and D-08 (every section 4 row has a probe), which landed earlier in this release. The clause was written before that coverage had names",
+      "section_11_already_existed": "E5 also asked for \"a new section 11 on failure treatment, which the document does not have today\". It has one; only 11.2 and 11.3 needed correcting"
     },
     {
       "id": "E6",

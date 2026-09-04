@@ -1059,7 +1059,10 @@ function runReferenceChecks() {
         '</instruction></block></glyph-package>', WITH_BOTH).diag },
     { code: "XmlChainStartsWithItem", run: () => G.fromXML('<glyph-package engine="2.4.5.01"><schema/><block once="true"><instruction>' +
         '<chain><rework chain="item"/><format/></chain>' +
-        '</instruction></block></glyph-package>', WITH_BOTH).diag }
+        '</instruction></block></glyph-package>', WITH_BOTH).diag },
+    /* the root retired in 2.4.5.01: refused by name rather than read leniently */
+    { code: "XmlLegacyRoot",          run: () => G.fromXML('<glyph><block once="true">' +
+        '<instruction/></block></glyph>', WITH_BOTH).diag }
   ];
 
   const notRaised = REFUSALS.filter(r => {

@@ -22,23 +22,37 @@ was reconciled from (see §9).
 ## 1. Document shape
 
 ```xml
-<glyph>
+<glyph-package engine="2.4.5.01">
+  <schema/>
   <block once="true">
     <!-- one segment -->
   </block>
-</glyph>
+</glyph-package>
 ```
 
-- `<glyph>` — root, always present.
+- `<glyph-package>` — root, always present, and **unconditional**: it is emitted
+  for every source, not only where a chain or a composite occurs. A conditional
+  root would make every consumer branch on document shape before it could read
+  anything.
+- `engine` — the engine version that produced the document, mandatory. The
+  document travels to readers that do not have this engine, and one that will not
+  say what produced it cannot be judged perishable.
+- `<schema/>` — emitted empty, first child of the root. Empty rather than absent
+  so a consumer can tell *"this document declares no schema"* from *"this document
+  predates schemas"*.
 - `<block>` — **one segment**, not the `[block` command. Segments are separated
   by `;` in the bracket form. Always carries `once="true"`; carries
   `continues="previous"` when the segment opened with `[=`.
 - `<break/>` — a sibling of `<block>`, emitted when the segment contained `;;`.
 
 `<block>` is written by two different things and only position tells them
-apart: the segment wrapper is always a direct child of `<glyph>` and always has
+apart: the segment wrapper is always a direct child of the root and always has
 `once`, while `[block'x']` — the `STRUCT` command — nests wherever it was
 written and never has `once`. `fromXML()` disambiguates on exactly that.
+
+`<glyph>` was the root through 2.4.4. It is refused by name as `XmlLegacyRoot` at
+`fix` severity rather than read leniently — a retired construct is demoted to a
+recogniser, never deleted into silence.
 
 **Auto-close does not exist in XML.** The bracket form closes open tags LIFO at
 a segment boundary; XML is explicitly closed, so the rule has nothing to do.
@@ -96,8 +110,8 @@ in children.
 | `;` | closes the segment — the next `<block>` |
 | `;;` | `<break/>` after the block |
 | `[=` | `continues="previous"` on the next block |
-| `-` extend | parent-child nesting: `[in-rwk` puts `<rework chain="extend"/>` inside `<instruction>` |
-| `,` after an extend | the next sibling under the same parent, as `chain="item"` |
+| `-` extend | opens a chain: `[in-rwk` puts `<chain><rework/></chain>` inside `<instruction>` |
+| `,` after an extend | continues that chain — the next member of the same `<chain>` |
 | `[off]` … `[on]` | `<off>` — read as prose, token parsing suspended |
 | `r-` / `R:` | `<user-expectative expects="…">` |
 | `[logic]` … `[/logic]` | `<logic>` with a `<rule>` per line |
@@ -110,11 +124,23 @@ Worked equivalence — the chain is comma-separated, and `,` is what repeats:
 ```
 ```xml
 <instruction>
-  <rework/>
-  <format/>
-  <improve/>
+  <chain>
+    <rework/>
+    <format/>
+    <improve/>
+  </chain>
 </instruction>
 ```
+
+**The members carry no attribute, and that is deliberate.** `<chain>` groups a
+maximal run whose first member came from `-` and whose remainder came from `,`, so
+**position carries the operator** and an attribute would be a second encoding of
+one fact. The inverse reads it back from position alone.
+
+A second `-` opens a **new** run rather than continuing the first, so
+`[rev-impr-fmt]` emits two single-member chains. That looks odd and is correct:
+folding them would make `[rev-impr-fmt]` and `[rev-impr,fmt]` emit identically,
+which is the defect this release exists to remove.
 
 Writing `[in-rwk/fmt/impr` is **invalid**. The `/` divider was removed by
 resolution C-01 and `/` now delimits emotion only, so a `/` reached inside a
@@ -125,7 +151,7 @@ chain first: `[in-rwk]/eth/`.
 The nested form `[ins[rwk][fmt][impr]]` is not equivalent either — each command
 there is written with its own brackets and so each asks for its own operand,
 giving three `<needs>`. The chain is the form that leaves them bare, and
-`chain="extend"` on each bare element is what records it.
+membership of a `<chain>` is what records it.
 
 ---
 
@@ -392,11 +418,13 @@ updated in step:
 ```
 
 ```xml
-<glyph>
+<glyph-package engine="2.4.5.01">
+  <schema/>
   <block once="true">
     <block name="review">
       <requirement>
         <criticise>
+          <invoke reads="[CMP[CTX],[SPEC-CORE],[EVAL[ERROR]]]" species="composite" depth="2"/>
           <target>
             <user-input>the launchpad prompt</user-input>
           </target>
@@ -407,6 +435,7 @@ updated in step:
   <block once="true">
     <rework>
       <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
         <user-input>usefulness</user-input>
         <needs slot="2">the external criterion</needs>
       </validate>
@@ -414,10 +443,11 @@ updated in step:
   </block>
   <block once="true">
     <summary>
+      <invoke reads="[SIMP],[CORE]" species="composite" depth="3"/>
       <needs>what to summarise</needs>
     </summary>
   </block>
-</glyph>
+</glyph-package>
 ```
 
 Three segments, because `;` closes one. `<validate>` takes two operands and
@@ -458,9 +488,14 @@ typed survive as `<off>`; nothing is fabricated from them.
 ### 11.2 Every refusal carries a position
 
 A diagnostic may carry `at: {s, e}` — the character span in the source that
-caused it. Optional and additive: consumers reading `{sev, lab, msg}` are
-unaffected. It exists because a refusal with no coordinate cannot be located by
+caused it. It exists because a refusal with no coordinate cannot be located by
 a reader who does not have the engine, and the AST is meant to travel.
+
+**It is carried where there is one to carry.** A parse refusal has a span and
+emits it; a `Rule:*` diagnostic fires on the relation between two commands and
+emits none today, which is a gap rather than a property of the rule. The heading
+of this section states the intent, and the AST projection names the fields
+`severity`, `label` and `message`.
 
 ### 11.3 The refusals
 
@@ -469,8 +504,9 @@ a reader who does not have the engine, and the AST is meant to travel.
 | `SlashInChain` | `/` reached inside a chain — `[in-rwk/ctx]` | `<off>/ctx</off>`, the whole run | close the chain first: `[in-rwk]/eth/` |
 | `BackslashMood` | the abandoned `\emo\` spelling — `\eth\` | `<off>\eth\</off>` | write `/eth/` |
 | `UnknownEmotion` | a mood code outside the table — `/eth/xyz/` | the code is **discarded**; the valid ones stand | use a code from §6 |
-| `XmlChainHasChildren` | `fromXML` given a `chain` element with children | children re-attached to the parent | remove them, or drop the attribute |
-| `XmlChainStartsWithItem` | `fromXML` given a run whose first link is `chain="item"` | promoted to `chain="extend"` | `,` continues a chain, `-` opens it |
+| `XmlChainHasChildren` | a `<chain>` member with children of its own | children re-attached to the parent | remove them, or take the element out of the `<chain>` |
+| `XmlChainStartsWithItem` | a `<chain>` member still carrying a `chain` attribute | reported, never overwritten | remove the attribute: inside a `<chain>` the position already says the operator |
+| `XmlLegacyRoot` | `<glyph>` as the root, the shape through 2.4.4 | nothing is read | re-emit the document with 2.4.5.01 |
 
 Two of the five are reached only through `fromXML`, because the XML panel is
 editable and the reader is handed input this emitter never wrote.
