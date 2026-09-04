@@ -1712,7 +1712,7 @@ console.log(" Guard        " + rG + "/" + POSITIVE_WITH_RULES.length);
 console.log(" Composition  " + rX + "/17");
 console.log(" .hgml burn   " + rH + "/12");
 console.log(" fromXML      " + rF + "/23");
-console.log(" reference    " + rD + "/10");
+console.log(" reference    " + rD + "/11");
 console.log(" round trip   " + rRT + "/6");
 console.log(" ast schema   " + rSC + "/3");
 console.log(" glyph-package" + String(rPK).padStart(4) + "/3");
