@@ -318,6 +318,12 @@
       "id": "G15",
       "finding": "XmlChainHasChildren and XmlChainStartsWithItem kept their documented names and changed trigger: inside a <chain> the position decides the operator, so a member carrying the attribute is reported rather than overwritten",
       "consequence": "the reader still refuses to repair in silence, which is the rule the original comment stated and the new shape would otherwise have quietly dropped"
+    },
+    {
+      "id": "G16",
+      "finding": "`->` does not exist and is dropped in silence: [a]->[b] parses as two root commands and the arrow vanishes with no diagnostic",
+      "severity": "medium",
+      "consequence": "a character sequence that disappears without a refusal is the also=\"?\" shape section 11.5 removed. Unrelated to the effects feature; it should be refused by name"
     }
   ],
   "four_guarantees": {
@@ -878,6 +884,14 @@
         "cost": "largest here",
         "position": "last",
         "why": "glyph-diff compares two sources; nothing compares two emitter versions. The blast radius was measured once by hand and is re-improvised per release"
+      },
+      {
+        "id": "D-06",
+        "what": "effects: a value that passes through a transformation and comes out narrower",
+        "value": "high - it is disambiguation, not decoration",
+        "cost": "split in two; see .guidelines/ORDERS/INTAKE-EFFECTS.md",
+        "why": "the carrier already parses: the anonymous bracket [[A],[B]] yields subject-then-effects with the guard local to its member, and only a diagnostic stands in the way. [logic] is the precedent for fencing a sub-grammar, and templates and <invoke reads> are the precedent for substituting a named reference so the consumer never infers",
+        "open": "whether [res] is a named checkpoint (declarative, cheap) or a true rewind (needs an evaluator)"
       }
     ],
     "rejected": [

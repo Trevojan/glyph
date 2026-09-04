@@ -83,8 +83,6 @@ LOW = BASE
 BOLD = BASE
 LIGHT = BASE
 ATC = BASE
-
-# reclassified from "primitive glyph" to "hieroglyph primitive"
 EX = BASE
 RWK = BASE
 IMPR = BASE
