@@ -31,7 +31,9 @@
       "chains": 4,
       "diagnostics": [],
       "roundTrips": false,
-      "roundTripNote": "pinned, not a defect, and carried unchanged from examples.json: the source holds an apostrophe, and text holding an apostrophe, a backslash, a backtick or a bracket is substituted rather than preserved. The substitution reaches the document, so this pair is unstable by design. The pin is per case so a real regression cannot hide behind a known loss."
+      "roundTripNote": "pinned, not a defect, and carried unchanged from examples.json: the source holds an apostrophe, and text holding an apostrophe, a backslash, a backtick or a bracket is substituted rather than preserved. The substitution reaches the document, so this pair is unstable by design. The pin is per case so a real regression cannot hide behind a known loss.",
+      "digest": "e49370bca129",
+      "pinnedTo": "e49370bca129"
     },
     {
       "id": "E-02",
@@ -46,7 +48,8 @@
       ],
       "chains": 4,
       "diagnostics": [],
-      "roundTrips": true
+      "roundTrips": true,
+      "digest": "1d8283b703ef"
     },
     {
       "id": "E-03",
@@ -62,7 +65,8 @@
       "chains": 3,
       "diagnostics": [],
       "roundTrips": true,
-      "note": "the only case where an <invoke> stands with no <chain> beside it, and the only depth-2 composite in the set"
+      "note": "the only case where an <invoke> stands with no <chain> beside it, and the only depth-2 composite in the set",
+      "digest": "b598edff762a"
     },
     {
       "id": "E-04",
@@ -71,7 +75,8 @@
       "invokes": [],
       "chains": 2,
       "diagnostics": [],
-      "roundTrips": true
+      "roundTrips": true,
+      "digest": "8662afd8ee0f"
     },
     {
       "id": "E-05",
@@ -106,7 +111,9 @@
         }
       ],
       "roundTrips": true,
-      "note": "the degenerate case for both new constructs: no chain and no invoke, so it is what proves <glyph-package> and <schema/> are unconditional (S18) rather than triggered by a feature. It is also the case that contradicts finding A1: the order records zero diagnostics across all five examples, and this one produces four at 2.4.5.01."
+      "note": "the degenerate case for both new constructs: no chain and no invoke, so it is what proves <glyph-package> and <schema/> are unconditional (S18) rather than triggered by a feature. It is also the case that contradicts finding A1: the order records zero diagnostics across all five examples, and this one produces four at 2.4.5.01.",
+      "digest": "a760f4371077"
     }
-  ]
+  ],
+  "identity": "Each case carries `digest`, the first 12 hex of sha256 over its `src`. The id E-01 is a human label; the digest is the identity. A pin carries `pinnedTo` so it binds to the SOURCE it excuses rather than to a position: a pin that migrates to another case does not outlive its reason, it acquires a false one, and lock T10 does not catch that."
 }

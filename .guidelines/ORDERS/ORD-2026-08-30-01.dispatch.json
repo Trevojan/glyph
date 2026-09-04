@@ -342,6 +342,12 @@
       "id": "G19",
       "finding": "rules.json already held `why` and `suggest` in English; the pt-BR came from the assembly in the parser, which is why a rule diagnostic read half in each language",
       "consequence": "one template string rather than 26 store entries. The mixed-language message was a defect under either reading of the lock"
+    },
+    {
+      "id": "G20",
+      "finding": "N-13 named two different corpus vectors, and the snapshot is keyed by id, so one replaced the other and [BASE'…'] had no byte-for-byte coverage at all",
+      "severity": "medium",
+      "consequence": "the count said 102 vectors and 101 snapshot cases and nothing compared the two. Found by D-04, the import that separates `duplicate` from `conflicting`; SN-03 then fired on its own terms - a source was gained - which is the proof the collision had been hiding one"
     }
   ],
   "four_guarantees": {
@@ -903,7 +909,14 @@
         "value": "medium-high",
         "cost": "low",
         "why": "a pin that migrates to another case does not outlive its reason, it acquires a false one, and lock T10 does not catch that",
-        "touches": "E2, which rederives 173 vectors"
+        "touches": "E2, which rederives 173 vectors",
+        "status": "DONE after E7",
+        "delivered": [
+          "conformance/examples.json",
+          "conformance/golden.json",
+          "scripts/test-corpus.js (PK-04, PK-05)"
+        ],
+        "shape": "each case carries `digest`, sha256 over its src; a pin carries `pinnedTo` so it binds to the SOURCE it excuses rather than to a position"
       },
       {
         "id": "D-03",
@@ -917,7 +930,10 @@
         "what": "separate `duplicate` from `conflicting`: same id and same content is idempotence, same id and different content is a collision",
         "value": "medium",
         "cost": "low",
-        "why": "collapsing them makes a re-run indistinguishable from a real clash"
+        "why": "collapsing them makes a re-run indistinguishable from a real clash",
+        "status": "DONE after E7",
+        "delivered": "scripts/test-corpus.js (PK-06)",
+        "found": "a live collision: N-13 named two different vectors. Both ran and both passed, but the snapshot is keyed by id, so one silently replaced the other and [BASE…] was never covered byte for byte - 102 vectors against 101 snapshot cases. Renamed to N-22; the snapshot is 102 now"
       },
       {
         "id": "D-05",

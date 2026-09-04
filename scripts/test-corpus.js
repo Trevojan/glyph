@@ -166,7 +166,10 @@ const INVALID = [
     code:"UnknownCommand" },
   { id:"N-12", name:"ABREV outside the vocabulary", src:"[AVD[ABREV'X']]",
     code:"UnknownCommand" },
-  { id:"N-13", name:"] with no open command", src:"[SUM]]",
+    /* was a second N-13. Two different vectors under one id: both ran and both
+       passed, but the snapshot is keyed by id, so one silently replaced the
+       other and [BASE'…'] was never covered byte for byte. Found by D-04. */
+  { id:"N-22", name:"] with no open command", src:"[SUM]]",
     code:"UnmatchedCloseBracket" },
   { id:"N-14", name:"[logic] with no [/logic]", src:"[logic]a = 1",
     code:"UnclosedLogic" },
@@ -1393,6 +1396,38 @@ function runPackageChecks() {
   ok("PK-01", "every golden document is accepted",
      refused.length ? refused.map(c => c.id + ": " + CHECK_MOD.validatePackage(c.package).join(" | ")).join("  ||  ") : null);
 
+  /* D-02 - the id is a label; the digest is the identity. A pin bound to a
+     position silently starts excusing a different vector the moment a case is
+     inserted or reordered, and lock T10 only catches a pin whose REASON expired,
+     never one that changed subject. */
+  const crypto = require("crypto");
+  const digestOf = s => crypto.createHash("sha256").update(s, "utf8").digest("hex").slice(0, 12);
+  const drifted = GOLD.cases.filter(c => c.digest !== digestOf(c.src)).map(c => c.id);
+  ok("PK-04", "every case digest matches its own source",
+     drifted.length ? "source edited without the digest following it: " + drifted.join(", ") : null);
+  const migrated = GOLD.cases.filter(c => c.pinnedTo && c.pinnedTo !== digestOf(c.src)).map(c => c.id);
+  ok("PK-05", "no pin has changed subject",
+     migrated.length ? "pinned to a source this case no longer holds: " + migrated.join(", ") : null);
+
+  /* D-04 - `duplicate` and `conflicting` are different words. Same id and same
+     content is idempotence and costs nothing; same id and DIFFERENT content is a
+     collision, and it is the only one that is a defect. Collapsing them makes a
+     re-run indistinguishable from a real clash - and here it hid a vector from
+     the snapshot, which is keyed by id. */
+  const corpusText = require("fs").readFileSync(require("path").resolve(__dirname, "test-corpus.js"), "utf8");
+  const byId = {};
+  for (const m of corpusText.matchAll(/\bid:\s*"([A-Z]+-[\w+]+)"\s*,\s*name:\s*"([^"]*)"/g)) {
+    (byId[m[1]] = byId[m[1]] || []).push(m[2]);
+  }
+  const conflicting = Object.keys(byId).filter(id =>
+    byId[id].length > 1 && new Set(byId[id]).size > 1);
+  ok("PK-06", "no two vectors share an id with different content",
+     conflicting.length
+       ? "colliding ids, and the snapshot is keyed by id: " + conflicting.join(", ")
+       : null);
+
+
+
   const E01 = GOLD.cases.find(c => c.id === "E-01").package;
   const E05 = GOLD.cases.find(c => c.id === "E-05").package;
   const PKM = [
@@ -1720,7 +1755,7 @@ console.log(" fromXML      " + rF + "/23");
 console.log(" reference    " + rD + "/11");
 console.log(" round trip   " + rRT + "/6");
 console.log(" ast schema   " + rSC + "/3");
-console.log(" glyph-package" + String(rPK).padStart(4) + "/3");
+console.log(" glyph-package" + String(rPK).padStart(4) + "/6");
 console.log(" examples     " + rE + "/5");
 console.log(" snapshot     " + rSN + "/4");
 console.log(" global store " + rGS + "/3");
