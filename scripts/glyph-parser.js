@@ -58,7 +58,7 @@
 const GlyphCore = (function () {
   "use strict";
 
-  var VERSION = "2.4.5.01";
+  var VERSION = "2.4.5.02";
 
   /* ======================================================
      1. VOCABULARY — Appendix A, one slot per command
@@ -3012,7 +3012,7 @@ const GlyphCore = (function () {
       if (xmlChild(pt.root, "glyph")) {
         diag.push({ sev:"fix", code:"XmlLegacyRoot",
           msg:"<code>&lt;glyph&gt;</code> was replaced by <code>&lt;glyph-package&gt;</code> in this " +
-              "versão. Reemita o documento pelo motor 2.4.5.01." });
+              "version. Re-emit the document with engine " + VERSION + "." });
         return { src:"", diag:diag };
       }
       diag.push({ sev:"fix", code:"NoGlyphRoot",

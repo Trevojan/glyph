@@ -37,6 +37,65 @@ All notable changes to Glyph are documented here, most recent first.
 
 ---
 
+## [2.4.5.02] — the build lands whole, and an id stops hiding a vector
+
+Small by the scheme and not by consequence. No parser change, no vocabulary
+change, no frontend: `minor` moves and nothing else does.
+
+### The build is all-or-nothing
+
+`build-templates.js` emits two artefacts where phase two reads what phase one
+wrote, and every write site was a bare `writeFileSync`. Two exposures neither
+`--check` nor the DO-NOT-EDIT banner covers: a torn write leaves a truncated
+store the next run reads as *content* rather than as damage, and a crash between
+the two leaves the repository in a state no commit represents.
+
+All three sites now stage to a sibling `.tmp` and rename together — the build (2
+files), the skill (4 files) and the corpus snapshot. Observed rather than
+claimed: a disk failure simulated on the second staged file left both outputs
+unchanged and no stray `.tmp`.
+
+### The id is a label; the digest is the identity
+
+Conformance cases carry a `digest` over their source, and a pin carries
+`pinnedTo` so it binds to the **source it excuses** rather than to a position. A
+pin bound to a position starts excusing a different vector the moment a case is
+inserted, and the existing rule only catches a pin whose *reason* expired, never
+one that changed subject.
+
+Separating **duplicate** (same id, same content — idempotence) from
+**conflicting** (same id, different content — a collision) found a live one on
+its first run. `N-13` named two different vectors. Both ran and both passed, but
+the snapshot is keyed by id, so one silently replaced the other and
+`[BASE'…']` had **no byte-for-byte coverage at all** — 102 vectors against 101
+snapshot cases, with nothing comparing the two. Renamed to `N-22`; the snapshot
+is 102 now.
+
+### The snapshot says what kind of change it was
+
+It already answered *which* sources moved. It never said *what kind*, which is
+the first question every time — and was computed by hand three separate times
+over the previous release. `SN-04` now names it: all three projections moved
+reads as the parser, `xml` as the emitter, `ast` alone as a store or a
+diagnostic.
+
+### Also
+
+- `PROMOTION_BOUNDARY.md` drafted from the measurement, with the ratification
+  block left empty. An agent may not ratify a norm it wrote.
+- A finding retracted: `->` is **not** dropped in silence. It reaches the
+  deliverable as `<off>-&gt;</off>`, which is the documented treatment of prose
+  between commands. `XML_REFERENCE` §11.4 now says so — the omission is what
+  produced the false finding.
+- The corpus no longer hardcodes the engine version in live expectations; they
+  derive it, so a bump costs nothing.
+- `I1b` recorded beside `I1`: when a generated file first needs an authored
+  field, regeneration refreshes the machine-derived ones and preserves the
+  human-owned ones by content identity. No store needs it yet.
+
+---
+
+
 ## [2.4.5.01] — the operator reaches the XML, and two removals finally land
 
 The release digit moves because the emitted XML changed shape and two constructs
@@ -152,6 +211,78 @@ the inverse could break mid-release and still read 12/12 — it did, between two
 commits, and `F-13` is the vector that catches it. Bucket `N` gains four
 refusals. Blast radius on the existing suite: **one**, `P-06`, which asserted
 the literal string `<improve/>`.
+
+### The format itself — `glyph-package`
+
+The entry above records the precondition. This is what it was a precondition
+*for*: `<glyph>` is retired and the emitted document is now
+`<glyph-package engine="…">`, unconditionally — a conditional root would make
+every consumer branch on shape before it could read anything.
+
+- **`<schema/>`**, empty, first child. Empty rather than absent so a consumer can
+  tell *"declares no schema"* from *"predates schemas"*.
+- **`<chain>`** groups the run, and **its members carry no attribute**. The first
+  came from `-` and the rest from `,`, so position carries the operator and an
+  attribute would be a second encoding of one fact. A second `-` opens a **new**
+  run, which is what keeps `[a-b-c]` distinct from `[a-b,c]` — folding them would
+  re-create the defect this release opened to remove.
+- **`<invoke>`** on composites only, first child, carrying the formula the command
+  decomposes into. The system already treated commands as functions everywhere
+  except in what it emitted: `SIGNATURES.md` is an arity table, `GLOSSARY.md`
+  heads its decomposition table *invocation | reading*, and the parser computed
+  `species` and `compositionDepth` while the emitter dropped all of it. That is
+  the `origin` defect one level up, and `<invoke>` is its repair.
+
+Declared, never executed — the document says *which* function, it does not run
+it, which is what keeps the round trip and the validator possible.
+
+### The order in which it was built, because it is the part that transfers
+
+The specification was written first, by hand. The **golden was derived from it by
+hand before any emitter existed** — a golden derived from an implementation
+records what the code does rather than what the format is. Then the validator,
+then the emitter, which had to *meet* the golden: 5/5 byte for byte, plus 105
+corpus sources emitted and accepted by `glyph-check --package`.
+
+`glyph-check` gains a `--package` mode: twelve clauses, each refusal carrying a
+line. It does not import the parser, for the same reason the AST validator does
+not — the receiving end may have the store and not the engine — so
+`build-templates.js` now records an `element` field on all 120 commands.
+Acceptance is a mutation test: one per clause, 12/12 caught, and it was observed
+failing on two blinded clauses before it counted.
+
+### `fromXML` gets a second reader
+
+The exact inverse: `<schema/>` and `<invoke>` are dropped, `<chain>` is expanded,
+and position gives the operator back. **`<invoke>` is never read back** —
+reconstructing a command from it would be the engine answering its own question,
+which is the fabrication the entry above describes. A loss can be pinned; an
+invention cannot.
+
+`<glyph>` is refused by name as `XmlLegacyRoot`, the treatment the divide operator
+and the backslash mood got. `XmlChainHasChildren` and `XmlChainStartsWithItem`
+keep their documented names and change trigger: inside a `<chain>` position
+decides, so a member still carrying the attribute is **reported, not
+overwritten** — the reader does not repair in silence.
+
+### Language
+
+The boundary this release drew, and the one the note at the top of this file
+follows: **what travels is en-EU, the interface stays pt-BR.** The AST envelope
+is read on another machine by something without this engine, so its diagnostics
+default to English; `parse()` keeps pt-BR for the panel. `rules.json` already
+held `why` and `suggest` in English — the pt-BR came from the assembly in the
+parser, which is why a rule diagnostic used to read half in each language.
+
+### What the order found in itself
+
+Four times, the same shape: **a decision referenced everywhere and commissioned
+nowhere.** The specification `E1` derived from was never ordered. The name
+`glyph-package` meant two different artefacts in two normative documents. The
+emitter every criterion depended on had no deliverable. And
+`PROMOTION_BOUNDARY.md`, listed as awaiting ratification, had never been written.
+
+Each was found by a gate written before the thing it gates.
 
 ---
 

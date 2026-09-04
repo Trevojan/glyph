@@ -875,14 +875,14 @@ function runFromXmlChecks() {
   ok("F-17", "chain never reaches a placeholder name",
      !/<needs[^>]*chain=/.test(germ.x1) ? null : "chain on a <needs slot>");
 
-  const kids = G.fromXML('<glyph-package engine="2.4.5.01"><schema/><block once="true"><instruction>' +
+  const kids = G.fromXML('<glyph-package engine="' + G.VERSION + '"><schema/><block once="true"><instruction>' +
     '<chain><rework><user-input>x</user-input></rework></chain>' +
     '</instruction></block></glyph-package>', opts);
   ok("F-18", "a chain element with children is named, not silently repaired",
      (kids.diag || []).some(d => d.code === "XmlChainHasChildren" && d.sev === "fix") ? null
        : "no XmlChainHasChildren at fix");
 
-  const first = G.fromXML('<glyph-package engine="2.4.5.01"><schema/><block once="true"><instruction>' +
+  const first = G.fromXML('<glyph-package engine="' + G.VERSION + '"><schema/><block once="true"><instruction>' +
     '<chain><rework chain="item"/><format/></chain>' +
     '</instruction></block></glyph-package>', opts);
   ok("F-19", "a run starting with `,` is promoted and reported",
@@ -1057,10 +1057,10 @@ function runReferenceChecks() {
     { code: "SlashInChain",           run: () => G.parse("[in-rwk/ctx]", WITH_BOTH).gaps },
     { code: "BackslashMood",          run: () => G.parse("\\eth\\[ins`x`]", WITH_BOTH).gaps },
     { code: "UnknownEmotion",         run: () => G.parse("/eth/xyz/[ins`x`]", WITH_BOTH).gaps },
-    { code: "XmlChainHasChildren",    run: () => G.fromXML('<glyph-package engine="2.4.5.01"><schema/><block once="true"><instruction>' +
+    { code: "XmlChainHasChildren",    run: () => G.fromXML('<glyph-package engine="' + G.VERSION + '"><schema/><block once="true"><instruction>' +
         '<chain><rework><user-input>x</user-input></rework></chain>' +
         '</instruction></block></glyph-package>', WITH_BOTH).diag },
-    { code: "XmlChainStartsWithItem", run: () => G.fromXML('<glyph-package engine="2.4.5.01"><schema/><block once="true"><instruction>' +
+    { code: "XmlChainStartsWithItem", run: () => G.fromXML('<glyph-package engine="' + G.VERSION + '"><schema/><block once="true"><instruction>' +
         '<chain><rework chain="item"/><format/></chain>' +
         '</instruction></block></glyph-package>', WITH_BOTH).diag },
     /* the root retired in 2.4.5.01: refused by name rather than read leniently */
@@ -1432,7 +1432,7 @@ function runPackageChecks() {
   const E05 = GOLD.cases.find(c => c.id === "E-05").package;
   const PKM = [
     ["NotAPackage",        E01, d => d.replace("<glyph-package", "<glyph").replace("</glyph-package>", "</glyph>")],
-    ["EngineUnstated",     E01, d => d.replace(' engine="2.4.5.01"', "")],
+    ["EngineUnstated",     E01, d => d.replace(' engine="' + G.VERSION + '"', "")],
     ["ChainDoubleEncoded", E01, d => d.replace("<go/>", '<go chain="extend"/>')],
     ["ChainUngrouped",     E01, d => d.replace("<note>", '<note chain="item">')],
     ["ChainEmpty",         E01, d => d.replace("<chain>\n          <go/>\n        </chain>", "<chain>\n        </chain>")],
