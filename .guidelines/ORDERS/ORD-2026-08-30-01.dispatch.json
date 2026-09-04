@@ -888,7 +888,14 @@
           "scripts/build-templates.js:60",
           "scripts/build-skill.js:70",
           "scripts/test-corpus.js:1450"
-        ]
+        ],
+        "status": "DONE after E7",
+        "delivered": [
+          "scripts/build-templates.js",
+          "scripts/build-skill.js",
+          "scripts/test-corpus.js"
+        ],
+        "observed": "a disk failure simulated on the second staged file: both build outputs unchanged, zero stray .tmp. The property is demonstrated rather than asserted"
       },
       {
         "id": "D-02",

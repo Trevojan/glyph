@@ -57,6 +57,30 @@ function banner(source, comment) {
   return "<!-- " + line1 + "\n     " + line2 + " -->\n\n";
 }
 
+/* D-01 - every published file lands together or none does. Same discipline as
+   build-templates.js: write each to a sibling .tmp first, then rename them all,
+   so a crash leaves the skill wholly old or wholly new. */
+const WRITES = [];
+
+function commitWrites() {
+  const staged = [];
+  try {
+    WRITES.forEach(w => {
+      fs.mkdirSync(path.dirname(w.full), { recursive: true });
+      const tmp = w.full + ".tmp";
+      fs.writeFileSync(tmp, w.content);
+      staged.push({ tmp: tmp, full: w.full, rel: w.rel, len: w.content.length });
+    });
+  } catch (e) {
+    staged.forEach(t => { try { fs.unlinkSync(t.tmp); } catch (e2) {} });
+    throw e;
+  }
+  staged.forEach(t => {
+    fs.renameSync(t.tmp, t.full);
+    console.log("  ✓ " + t.rel + " (" + t.len + " bytes)");
+  });
+}
+
 function emit(rel, content) {
   /* Normalise CRLF for the same reason build-templates.js does: the sources
      carry system line endings on Windows, the generated file then comes out
@@ -66,9 +90,10 @@ function emit(rel, content) {
   content = content.replace(/\r\n/g, "\n");
   const full = path.join(SKILL, rel);
   if (!CHECK) {
-    fs.mkdirSync(path.dirname(full), { recursive: true });
-    fs.writeFileSync(full, content);
-    console.log("  ✓ " + rel + " (" + content.length + " bytes)");
+    /* D-01: staged, not written. A published skill half of one version and
+       half of another is worse than one that failed to publish, because the
+       harness reads it either way and nothing says which halves are which. */
+    WRITES.push({ full: full, rel: rel, content: content });
     return;
   }
   let disk = null;
@@ -128,5 +153,7 @@ if (CHECK) {
   }
   console.log("\nThe skill matches a fresh build.");
 } else {
-  console.log("\nskills/glyph-markup is built at " + VERSION + ". Reinstall it for the harness to see it.");
+  commitWrites();
+  console.log("\nskills/glyph-markup is built at " + VERSION + " (" + WRITES.length +
+              " file(s) committed together). Reinstall it for the harness to see it.");
 }

@@ -55,10 +55,36 @@ const CHECK = process.argv.indexOf("--check") !== -1;
 const PENDING = {};
 const STALE = [];
 
+/* D-01 - the build emits TWO artefacts and phase two reads what phase one
+   wrote, so a bare writeFileSync per file has two failure modes neither
+   --check nor the DO-NOT-EDIT banner covers: a torn write leaves a truncated
+   store that the next run reads as content rather than as damage, and a crash
+   between the two leaves the repository in a state no commit represents.
+   Staged here and committed together at the end: a crash leaves the old pair
+   or the new pair, never a mixture. */
+const WRITES = [];
+
+function commitWrites() {
+  const staged = [];
+  try {
+    WRITES.forEach(w => {
+      const tmp = w.full + ".tmp";
+      fs.writeFileSync(tmp, w.content);
+      staged.push({ tmp: tmp, full: w.full });
+    });
+  } catch (e) {
+    staged.forEach(t => { try { fs.unlinkSync(t.tmp); } catch (e2) {} });
+    throw e;
+  }
+  /* rename is atomic per file; every byte is already on disk by here, so the
+     window where the pair can disagree is the rename loop and nothing wider */
+  staged.forEach(t => fs.renameSync(t.tmp, t.full));
+}
+
 function emit(full, content) {
   const name = path.basename(full);
   PENDING[name] = content;
-  if (!CHECK) { fs.writeFileSync(full, content); return; }
+  if (!CHECK) { WRITES.push({ full: full, content: content }); return; }
   let disk = null;
   try { disk = fs.readFileSync(full, "utf8"); }
   catch (e) { STALE.push(name + ": missing"); return; }
@@ -245,6 +271,8 @@ if (CHECK) {
   }
   console.log("Every generated file matches a fresh build.");
 } else {
+  commitWrites();
   console.log("generated: glyph-data.js (" + fs.statSync(out).size + " bytes)" +
-              (missing ? "  [" + missing + " source(s) missing]" : ""));
+              (missing ? "  [" + missing + " source(s) missing]" : "") +
+              "  [" + WRITES.length + " file(s) committed together]");
 }
