@@ -1089,6 +1089,29 @@ function runReferenceChecks() {
        : "§4 has " + s4rows.length + " rows and D-07 has " + SECTION4.length
          + " probes — a documented operator with no probe cannot be caught when it goes stale");
 
+  /* G17: the worked example in section 4 was stale for a whole release because
+     D-07 probes the ROWS and nobody probed the example beneath them. The skill
+     carries a hand-written example of the emitted document with the same
+     exposure, so it gets a probe rather than a promise. */
+  const SKILL = path.resolve(__dirname, "../skills/glyph-markup/SKILL.md");
+  let skillText = null;
+  try { skillText = fs.readFileSync(SKILL, "utf8"); } catch (e) {}
+  if (skillText === null) ok("D-11", "the published skill exists", "skills/glyph-markup/SKILL.md not found");
+  else {
+    const shown = (skillText.match(/<glyph-package engine="[^"]*">[\s\S]*?<\/glyph-package>/) || [])[0];
+    /* expansions included deliberately: without it no <invoke> is emitted and
+       the probe would compare against a document the engine never ships.
+       That is finding G13, one store reached by two paths. */
+    const real = G.toXML("[crit-ctx,ex'X']",
+      { templates: TPL.templates, rules: RULESTORE,
+        expansions: require("../.guidelines/expansions.json") }).trim();
+    ok("D-11", "the worked document in the skill is what the engine emits",
+       !shown ? "no worked <glyph-package> example found in SKILL.md"
+              : shown === real ? null
+              : "the skill shows a document the engine does not emit");
+  }
+
+
   return D.length;
 }
 const rD = runReferenceChecks();

@@ -9,7 +9,7 @@ Glyph is a shorthand command notation, between delimiters, describing a logical
 flow scalable to the smallest detail. The reference implementation is
 `scripts/glyph-parser.js`: a single core (Node via `require`, browser via
 `window.GlyphCore`) doing lexing, parsing, arity checking, semantic rules and
-**XML** emission.
+**glyph-package** emission.
 
 **The AST is the source of truth**, and the XML is a projection of it. That
 reverses what this document said through v1.4: the AST was called an inspection
@@ -108,8 +108,38 @@ Four constructions, each with exactly one reading:
 | `[A[B]]` | nesting — B is A's operand |
 | `[A],[B]` | conjunction — A and B hold together, no order between them |
 | `[A][B]` | sequence — A, then B |
-| `[A-B]` | chain — A and B applied to the same operand; B carries `chain="extend"` |
-| `[A-B,C]` | the chain continues — C carries `chain="item"` |
+| `[A-B]` | chain — A and B applied to the same operand; B becomes a `<chain>` member |
+| `[A-B,C]` | the chain continues — C is the next member of that same `<chain>` |
+
+### What the emitted document looks like
+
+```xml
+<glyph-package engine="2.4.5.01">
+  <schema/>
+  <block once="true">
+    <criticise>
+      <invoke reads="[CMP[CTX],[SPEC-CORE],[EVAL[ERROR]]]" species="composite" depth="2"/>
+      <chain>
+        <context/>
+        <example/>
+      </chain>
+      <user-input>X</user-input>
+    </criticise>
+  </block>
+</glyph-package>
+```
+
+Three things the document says that you never wrote, because the engine works
+them out and states them rather than leaving you to infer:
+
+- **`<chain>`** groups the run. Its members carry no attribute: the first came
+  from `-` and the rest from `,`, so **position carries the operator**. A second
+  `-` opens a NEW run, which is what keeps `[a-b-c]` distinct from `[a-b,c]`.
+- **`<invoke>`** appears on a composite only, first child, and carries the
+  formula the command decomposes into. A command is a function; this is its
+  reading, declared and not executed.
+- **`<schema/>`** is empty in this release, and `engine` says what produced the
+  document so it can be judged perishable.
 
 **Operand binding** (`GLOSSARY.md` §0.3): the human's operand is the **subject
 of the whole formula**. A comma does not change the subject; juxtaposition
@@ -218,8 +248,9 @@ you typed as `<off>`:
 | `SlashInChain` | `[in-rwk/ctx]` | close the chain first: `[in-rwk]/eth/` |
 | `BackslashMood` | `\eth\` | `/eth/` |
 | `UnknownEmotion` | `/eth/xyz/` | a code from the mood table |
-| `XmlChainHasChildren` | a `chain` element with children, in the XML panel | remove them, or drop the attribute |
-| `XmlChainStartsWithItem` | a run whose first link is `chain="item"` | `,` continues a chain, `-` opens it |
+| `XmlChainHasChildren` | a `<chain>` member with children of its own | remove them, or take it out of the `<chain>` |
+| `XmlChainStartsWithItem` | a `<chain>` member still carrying a `chain` attribute | remove it: inside a `<chain>` the position already says the operator |
+| `XmlLegacyRoot` | `<glyph>` as the root, the shape through 2.4.4 | re-emit the document with 2.4.5.01 |
 
 A diagnostic may carry `at: {s, e}` — the span in your source that caused it.
 

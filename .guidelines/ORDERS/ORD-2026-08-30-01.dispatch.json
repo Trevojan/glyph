@@ -329,6 +329,11 @@
       "id": "G17",
       "finding": "the worked chain example in XML_REFERENCE section 4 was already stale before this release: it showed flat bare siblings, which predates the chain attribute E0 added",
       "consequence": "a documented example nothing probed. D-07 probes the section 4 ROWS, not the worked example beneath them, so it drifted for a release without a red gate"
+    },
+    {
+      "id": "G18",
+      "finding": "D-11 failed on its first run because WITH_BOTH carries templates and rules but not expansions, so the comparison document had no <invoke>",
+      "consequence": "finding G13 a second time, from the other side: one store reached by two paths. The probe caught it immediately, which is the argument for probing a hand-written example at all"
     }
   ],
   "four_guarantees": {
@@ -480,7 +485,13 @@
       "id": "E6",
       "what": "glyph-markup republished as SKILL.md + scripts/glyph-parser.js + references/ + references/examples/, with a declared version; commons retired",
       "single_source": "the five examples live once, as the repository conformance vectors; references/examples/ is GENERATED at publish time with a banner declaring origin and engine version, so validator rule 10 of BUNDLE_TARGET catches a hand-edited copy",
-      "references_content": "a publish-time projection of XML_REFERENCE.md, which is the only document in the repository already tested against the engine (D-01 to D-06). Downstream of E5: the skill's references/ cannot be written before E5 rewrites the reference for the new format"
+      "references_content": "a publish-time projection of XML_REFERENCE.md, which is the only document in the repository already tested against the engine (D-01 to D-06). Downstream of E5: the skill's references/ cannot be written before E5 rewrites the reference for the new format",
+      "delivered": [
+        "skills/glyph-markup/SKILL.md",
+        "scripts/test-corpus.js (D-11)"
+      ],
+      "status": "RETURNED - the skill describes the emitted format, and its worked document is probed rather than promised",
+      "already_in_place": "the layout, the declared version 2.4.5.01, references/ and references/examples/ and the retirement of glyph-markup-commons all landed earlier; only the hand-authored prose was stale"
     },
     {
       "id": "E7",
