@@ -324,7 +324,9 @@
       "id": "G16",
       "finding": "`->` does not exist and is dropped in silence: [a]->[b] parses as two root commands and the arrow vanishes with no diagnostic",
       "severity": "medium",
-      "consequence": "a character sequence that disappears without a refusal is the also=\"?\" shape section 11.5 removed. Unrelated to the effects feature; it should be refused by name"
+      "consequence": "a character sequence that disappears without a refusal is the also=\"?\" shape section 11.5 removed. Unrelated to the effects feature; it should be refused by name",
+      "status": "RETRACTED - the finding was wrong",
+      "correction": "`->` is NOT dropped. It reaches the deliverable as <off>-&gt;</off>, verbatim, which is the documented treatment of prose between commands. The original claim came from reading AST origins without looking at the emitted document. Section 11.4 now lists the case, because the reference did not say it and that omission is what produced the false finding"
     },
     {
       "id": "G17",
@@ -980,5 +982,8 @@
       "the published skill"
     ]
   },
-  "status": "ALL DELIVERABLES RETURNED - E0, E0b, E1, E2, E3, E3b, E4, E5, E6, E7"
+  "status": "ALL DELIVERABLES RETURNED - E0, E0b, E1, E2, E3, E3b, E4, E5, E6, E7",
+  "post_release": {
+    "Q4": "the premise was false: PROMOTION_BOUNDARY.md did not exist. It was listed in PROMOTION_MEASUREMENT.md as a deliverable to be written, and the open question read as though it had been written and merely awaited ratification. Fourth occurrence of the release root cause. Drafted at .guidelines/PROMOTION_BOUNDARY.md with section 5 left empty; an agent may not ratify a norm it wrote"
+  }
 }

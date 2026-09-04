@@ -522,6 +522,11 @@ editable and the reader is handed input this emitter never wrote.
   suggestion when one is close — the vocabulary is open at the edges, and a
   command the engine does not know is not the same as a construct the grammar
   forbids.
+- **Prose between commands.** Any run of characters outside a bracket is
+  `<off>`, verbatim — `[ins`a`]->[ins`b`]` emits `<off>-&gt;</off>` between the
+  two. It is not malformed, so there is no refusal: the author wrote text and
+  the text reaches the deliverable unchanged. A sequence that *looks* like an
+  operator and is not one is covered by this rule and not by §11.3.
 - **Deep nesting.** It is flagged (`DeepNesting`) and still emitted.
 
 ### 11.5 No placeholder character reaches the deliverable
