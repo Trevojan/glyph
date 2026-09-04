@@ -956,7 +956,10 @@
         "value": "high - it is disambiguation, not decoration",
         "cost": "split in two; see .guidelines/ORDERS/INTAKE-EFFECTS.md",
         "why": "the carrier already parses: the anonymous bracket [[A],[B]] yields subject-then-effects with the guard local to its member, and only a diagnostic stands in the way. [logic] is the precedent for fencing a sub-grammar, and templates and <invoke reads> are the precedent for substituting a named reference so the consumer never infers",
-        "open": "whether [res] is a named checkpoint (declarative, cheap) or a true rewind (needs an evaluator)"
+        "open": "RESOLVED - named checkpoint, not rewind",
+        "status": "UNBLOCKED - ready to become an order",
+        "decision": "[res] references a declared point, never a computed state. The document records restore-to-X and does not perform it, so declared-never-applied holds and Glyph gains no evaluator",
+        "work_the_decision_creates": "the points already exist - <apply order> numbers every step, so a checkpoint addresses an ordinal with no new mechanism. What is open is how a NAME binds to a point, because an ordinal is a position and D-02 already established that a position is a label and not an identity"
       }
     ],
     "rejected": [

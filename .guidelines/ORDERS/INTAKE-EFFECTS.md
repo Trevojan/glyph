@@ -104,12 +104,30 @@ one. Rejection with a reason, which the engine already expresses as a diagnostic
 with severity and position, and which `<logic>` already emits as
 `<needs var="adult">`.
 
-**The fork, and it is the Regent's:**
+**RESOLVED by the Regent: named checkpoint.**
 
-- **named checkpoint** — `[res'before-validation']` references a *declared* point,
-  not a computed state. Declarative, fits the fence, cheap.
-- **true rewind** — needs history, and Glyph gains an evaluator. A product
-  decision, not a syntax one.
+`[res'before-validation']` references a **declared** point, never a computed
+state. The document records *restore to X*; it does not perform the restoration.
+The consumer applies, exactly as it does for `<invoke>`. So the line in §4 holds
+and Glyph gains no evaluator.
+
+Two consequences, and the second is the only work the decision creates:
+
+1. **The points already exist.** `<apply order="1|2|3">` numbers every step of an
+   effect series, so a checkpoint has something to address without any new
+   mechanism. A restore is a reference to an ordinal.
+2. **Naming one is the open piece.** An ordinal is positional, and this intake
+   already argued (D-02, and the `N-13` collision it found) that a position is a
+   label and not an identity: insert a step and every reference after it means
+   something else. So a checkpoint needs a **name bound to a point**, and what
+   binds it is not decided. The cheapest candidate is that a member may carry its
+   own name — `[cond'C'[e3]]` becoming nameable — which costs an attribute and no
+   new command.
+
+**Not resolved here, and deliberately:** whether `[blk]`'s conditional half
+survives. *"Strips all effects"* is a declaration; *"strip specific effects under
+condition"* needs to know which ones applied, which is the evaluator again by
+another door.
 
 ## 5. The precedent: `[logic]` was underestimated
 
