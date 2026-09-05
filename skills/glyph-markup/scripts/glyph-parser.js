@@ -676,6 +676,17 @@ const GlyphCore = (function () {
     if (ALIAS[U]) { var f = ALIAS[U];
       return { tier:"instr", canonical:f, alias:true, aliasOf:f, gloss:INSTR[f], merged: !!INSTR[U] }; }
     if (INSTR[U]) return { tier:"instr", canonical:U, gloss:INSTR[U] };
+    /* The element's own name, read back as input. Consulted AFTER every
+       existing table so nothing already recognised shifts meaning, and marked
+       as an alias so the round trip returns the canonical spelling — the same
+       treatment `[in` already gets on its way back as `[ins`. */
+    var byEl = ELEMENT_INPUT[U.replace(/[^A-Z0-9]+/g, "")];
+    if (byEl) {
+      var tb = byEl.tier === "mode" ? MODE : byEl.tier === "struct" ? STRUCT
+             : byEl.tier === "meta" ? META : INSTR;
+      return { tier:byEl.tier, canonical:byEl.canonical, alias:true, aliasOf:byEl.canonical,
+               gloss:tb[byEl.canonical] };
+    }
     if (opts.session !== false && SESSION[L]) return { tier:"session", canonical:L, gloss:SESSION[L] };
     return { tier:"unknown", canonical:U, gloss:"" };
   }
@@ -2533,6 +2544,44 @@ const GlyphCore = (function () {
         GLOSS_REVERSE[el] = { canonical:canon, tier:tier };
       });
     });
+
+  /* ------------------------------------------------------------------ *
+   * ELEMENT_INPUT — the element's own name, accepted as an input spelling
+   *
+   * The inverse accepts `<note>` and answers NT. The forward parser refused
+   * `[NOTE` — and not as one oversight: measured, ALL 98 element names whose
+   * spelling differs from the canonical were refused. So the author who read
+   * the emitted document and wrote back what they saw was refused by an
+   * asymmetry rather than by a decision.
+   *
+   * This is derived from GLOSS_REVERSE rather than typed out as 98 alias
+   * lines, so the two directions cannot drift apart: they are the same table
+   * read from both ends.
+   *
+   * Keyed on the element name with its separators SQUASHED, because `-` is the
+   * chain operator — `[instead-of` is a chain of INSTEAD and OF, and always
+   * will be. `[insteadof` is the spelling this opens.
+   *
+   * A name that any existing table already claims is left alone: MODE, STRUCT,
+   * META, ALIAS and INSTR all win, and a key two elements would share is
+   * dropped rather than resolved by luck.
+   * ------------------------------------------------------------------ */
+  var ELEMENT_INPUT = {}, ELEMENT_INPUT_COLLISIONS = [];
+  Object.keys(GLOSS_REVERSE).forEach(function (el) {
+    var key = el.toUpperCase().replace(/[^A-Z0-9]+/g, "");
+    var hit = GLOSS_REVERSE[el];
+    if (!key || key === hit.canonical) return;
+    if (MODE[key] || STRUCT[key] || META[key] || ALIAS[key] || INSTR[key]) return;
+    if (ELEMENT_INPUT[key]) {
+      if (ELEMENT_INPUT[key].canonical !== hit.canonical)
+        ELEMENT_INPUT_COLLISIONS.push({ spelling:key, kept:ELEMENT_INPUT[key].canonical, dropped:hit.canonical });
+      return;
+    }
+    ELEMENT_INPUT[key] = { canonical:hit.canonical, tier:hit.tier };
+  });
+  Object.keys(ELEMENT_INPUT).forEach(function (k) {
+    if (ELEMENT_INPUT_COLLISIONS.some(function (c) { return c.spelling === k; })) delete ELEMENT_INPUT[k];
+  });
 
   var EMO_REVERSE = {};
   Object.keys(EMO).forEach(function (k) { EMO_REVERSE[String(EMO[k]).toLowerCase()] = k; });

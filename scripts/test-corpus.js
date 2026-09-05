@@ -1847,6 +1847,56 @@ const rDG = runDiagWordingChecks();
 
 
 /* ------------------------------------------------------------------ *
+ * spellings — the two directions read the same table
+ *
+ * The inverse accepted `<note>` and answered NT while the forward parser
+ * refused `[NOTE`. Measured before the fix: all 98 element names whose
+ * spelling differs from the canonical were refused, so an author who read the
+ * emitted document and wrote back what they saw was refused by an asymmetry
+ * rather than by a decision. This gate is the whole class, not the two
+ * instances that were reported.
+ * ------------------------------------------------------------------ */
+function runSpellingChecks() {
+  console.log("\n--- spellings — forward and inverse read one table ---");
+  const D = [];
+  const ok = (id, name, why) => {
+    if (why) { console.log("  ✗ " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  ✓ " + id + ": " + name); D.push(id); }
+  };
+  const opts = { templates: TPL.templates, rules: RULESTORE,
+                 expansions: require("../.guidelines/expansions.json") };
+  const rev = G.elementCanonicalMap || {};
+
+  /* SP-01 — every element the inverse emits is a spelling the parser takes */
+  const refused = [];
+  for (const el of Object.keys(rev)) {
+    const spelled = el.toUpperCase().replace(/[^A-Z0-9]+/g, "");
+    if (!spelled) continue;
+    const c = G.classify(spelled);
+    if (c.tier === "unknown" || c.canonical !== rev[el].canonical) refused.push(el + "->" + rev[el].canonical);
+  }
+  ok("SP-01", "every emitted element name is accepted as input",
+     refused.length ? refused.length + " refused, e.g. " + refused.slice(0, 5).join(", ") : null);
+
+  /* SP-02 — and nothing that already meant something changed meaning */
+  const held = [["NT", "NT"], ["IN", "INS"], ["CRIT", "CRIT"], ["SUM", "SUM"], ["EX", "EX"]];
+  const moved = held.filter(([input, want]) => G.classify(input).canonical !== want);
+  ok("SP-02", "the spellings that already worked still mean the same",
+     moved.length ? "moved: " + moved.map(m => m[0]).join(", ") : null);
+
+  /* SP-03 — the hyphen stays the chain operator, and this must not steal it */
+  const chained = G.toAST("[instead-of`x`]", opts).segments.flatMap(s => s.body)[0];
+  ok("SP-03", "a hyphenated element name does not become one command",
+     chained && chained.canonical === "INSTOF"
+       ? "[instead-of] now parses as INSTOF; the hyphen is the chain operator and must stay one"
+       : null);
+
+  return D.length;
+}
+const rSP = runSpellingChecks();
+
+
+/* ------------------------------------------------------------------ *
  * global store registration — the tripwire for splitting the core
  *
  * Every bucket above routes its stores through `opts`, deliberately, so the
@@ -1931,6 +1981,7 @@ console.log(" snapshot     " + rSN + "/4");
 console.log(" app          " + String(rAP).padStart(4) + "/3");
 console.log(" cli          " + String(rCL).padStart(4) + "/3");
 console.log(" diag wording " + String(rDG).padStart(4) + "/3");
+console.log(" spellings    " + String(rSP).padStart(4) + "/3");
 console.log(" global store " + rGS + "/3");
 console.log("=================================================");
 
