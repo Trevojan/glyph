@@ -733,6 +733,27 @@ function runHgmlChecks() {
        return /\[x/.test(out) ? "it emitted an element that cannot say what it means" : null;
      })());
 
+  /* H-13 -- the burn said more than the source did.
+     [CRIT[CTX]] burnt to `[cmp [ctx] [ctx] ...]`: the author's operand plus the
+     one CRIT's own formula produces. The document asserted the context is
+     consulted twice, which the source never said -- the glyphs said A and the
+     hieroglyphs said B. The `uniq` half of the made-of rule, applied where
+     operands are injected into a burnt formula. */
+  {
+    const one = G.toHGML("[CRIT[CTX]]", opts);
+    const ctxAtTop = one.split("\n").filter(l => l === "  [ctx[/ctx]").length;
+    ok("H-13", "an operand the formula also produces is written once, not twice",
+       ctxAtTop === 1 ? null
+         : "[ctx] appears " + ctxAtTop + " times at the top level of CRIT's burn");
+  }
+
+  /* H-14 -- and the fix must not flatten order, because order is meaning.
+     GLOSSARY 0.1 changed on 2026-09-05: `,` carries order, so [rmbr'X'] and
+     [rmbr[get[ctx]]'X'] are different statements and must stay different. */
+  ok("H-14", "deduplication does not collapse two orders into one",
+     G.toHGML("[rmbr`X`]", opts) !== G.toHGML("[rmbr[get[ctx]]`X`]", opts) ? null
+       : "the two orders now burn the same, which trades a duplication for a different lie");
+
   return H.length;
 }
 const rH = runHgmlChecks();
@@ -1984,7 +2005,7 @@ console.log(" Rules        " + rC + "/" + RULE_CASES.length);
 console.log(" Constraints  " + rK + "/" + CONSTRAINTS.length);
 console.log(" Guard        " + rG + "/" + POSITIVE_WITH_RULES.length);
 console.log(" Composition  " + rX + "/17");
-console.log(" .hgml burn   " + rH + "/12");
+console.log(" .hgml burn   " + rH + "/14");
 console.log(" fromXML      " + rF + "/23");
 console.log(" reference    " + rD + "/11");
 console.log(" round trip   " + rRT + "/7");

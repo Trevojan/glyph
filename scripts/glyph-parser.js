@@ -2371,11 +2371,38 @@ const GlyphCore = (function () {
   /* The human's operand is the subject of the whole formula (GLOSSARY.md §0.3).
      Concretely: it becomes the first child of the formula's head command. The
      rule has to be mechanical or the burn cannot be automated at all. */
+  /* Structural equality on BURNT nodes — after reduction, so it compares
+     meaning and not spelling. Two nodes are the same when they are the same
+     atom carrying the same operands in the same order, or the same literal. */
+  function burnSame(a, b) {
+    if (!a || !b) return false;
+    if (a.literal || b.literal) return !!(a.literal && b.literal) && a.v === b.v;
+    if (a.canonical !== b.canonical) return false;
+    var ac = a.children || [], bc = b.children || [];
+    if (ac.length !== bc.length) return false;
+    for (var i = 0; i < ac.length; i++) if (!burnSame(ac[i], bc[i])) return false;
+    return true;
+  }
+
   function injectSubject(body, operands) {
     if (!operands || !operands.length) return body;
     for (var i = 0; i < body.length; i++) {
       if (body[i].canonical) {
-        body[i].children = operands.concat(body[i].children || []);
+        /* An operand the formula ALSO produces is written once, not twice.
+           `[rmbr[get[ctx]]'X']` burnt to `[alw [get[ctx]] 'X' [get[ctx]]]` —
+           the author's copy plus RMBR's own `[ALW[GET[CTX]]]` — so the burn
+           asserted the context is fetched twice, which the source never said.
+           The glyphs said A and the hieroglyphs said B.
+
+           Only the formula's copy is dropped, and the operands keep their
+           position: `,` carries order (GLOSSARY §0.1, changed 2026-09-05), so
+           collapsing two orders into one would trade a duplication for a
+           different lie. This is the `uniq` half of the `made-of` rule at
+           buildXml; the `sort` half deliberately does NOT apply here. */
+        body[i].children = operands.concat(
+          (body[i].children || []).filter(function (k) {
+            return !operands.some(function (o) { return burnSame(o, k); });
+          }));
         return body;
       }
     }
