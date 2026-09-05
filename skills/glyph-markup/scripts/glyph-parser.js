@@ -502,6 +502,28 @@ const GlyphCore = (function () {
           continue;
         }
 
+        /* The verbatim fence. `[logic]` proved the shape: fence a region and
+           read it under a different grammar. This one reads it under NO
+           grammar — the body is carried as written.
+
+           It exists because a Glyph document cannot quote Glyph: `]` ends a
+           literal from inside, under either quote, and no escape exists
+           (backslash, doubling and `&#93;` were each measured and each
+           refused; the entity dies on the `;`, which is a separator). So the
+           only construct that could carry a bracket was `[logic]`, which then
+           misread the content as an expression and reported its commands as
+           undefined variables. */
+        var mRaw = /^\[\s*raw\s*\]/i.exec(rest);
+        if (mRaw) {
+          var rBodyStart = i + mRaw[0].length;
+          var mRawClose = /\[\s*\/\s*raw\s*\]/i.exec(src.slice(rBodyStart));
+          var rBodyEnd = mRawClose ? rBodyStart + mRawClose.index : n;
+          T.push({ k:"rawfence", body:src.slice(rBodyStart, rBodyEnd), s:i,
+                   e: mRawClose ? rBodyEnd + mRawClose[0].length : n, closed:!!mRawClose });
+          i = mRawClose ? rBodyEnd + mRawClose[0].length : n;
+          continue;
+        }
+
         var mOff = /^\[\s*off\s*\]/i.exec(rest);
         if (mOff) { T.push({ k:"mode", v:"OFF", s:i, e:i+mOff[0].length }); i += mOff[0].length; off = true; continue; }
         var mOn = /^\[\s*on\s*\]/i.exec(rest);
@@ -1354,6 +1376,14 @@ const GlyphCore = (function () {
       }
 
       switch (tk.k) {
+        case "rawfence": {
+          /* No sub-grammar at all: the body is what the author wrote. */
+          attach({ rawFence:true, v:tk.body, children:[], tok:tk, origin: pendingOrigin || "nest" });
+          if (!tk.closed) G("fix", "não fechou", "<code>[raw]</code> sem <code>[/raw]</code>.", "UnclosedRaw",
+            "not closed", "<code>[raw]</code> without <code>[/raw]</code>.");
+          pendingOrigin = null;
+          break;
+        }
         case "logic": {
           var lg = parseLogic(tk.v, tk.body);
           attach({ logic:lg, children:[], tok:tk, origin: pendingOrigin || "nest" });
@@ -1888,6 +1918,8 @@ const GlyphCore = (function () {
       }
       if (nd.text) { L.push(pad(d) + "<off>" + xesc(nd.v) + "</off>"); continue; }
       if (nd.mode) { pushKids(nd.children || [], d); continue; }
+      /* verbatim: the body is text, and the element carries no children */
+      if (nd.rawFence) { L.push(pad(d) + "<raw>" + xesc(nd.v || "") + "</raw>"); continue; }
       if (nd.logic) { emitLogic(nd.logic, d, L); continue; }
 
       if (nd.template) {
@@ -2090,6 +2122,7 @@ const GlyphCore = (function () {
                              form: nd.form, slot: nd.boundSlot || null };
     if (nd.text) return { type:"Text", value:nd.v };
     if (nd.mode) return { type:"ModeOff" };
+    if (nd.rawFence) return { type:"Verbatim", value:String(nd.v == null ? "" : nd.v) };
     if (nd.logic) {
       return {
         type:"Logic",
@@ -2138,7 +2171,7 @@ const GlyphCore = (function () {
   }
 
   /* Nodes that carry `body`. Logic holds rules, not children. */
-  function astHasBody(nd) { return !!(nd.mode || nd.template || (!nd.literal && !nd.text && !nd.logic)); }
+  function astHasBody(nd) { return !!(nd.mode || nd.template || (!nd.literal && !nd.text && !nd.logic && !nd.rawFence)); }
 
   /* Every node used to carry all sixteen fields whether or not they said
      anything: 43% of them were `false`, `null` or `[]`. A 321-character input
@@ -2456,6 +2489,7 @@ const GlyphCore = (function () {
       if (nd.literal) { if (nd.form !== "raw") out.push(nd); return; }
       if (nd.text)    { if (opts && opts.keepText) out.push(nd); return; }
       if (nd.mode)    { out = out.concat(burnList(nd.children, opts, chain, depth + 1)); return; }
+      if (nd.rawFence){ out.push(nd); return; }
       if (nd.logic)   { out.push(nd); return; }
       /* A template invocation already expanded during parse(); what is left
          is the shell, so the burn walks straight through it. */
@@ -2535,6 +2569,7 @@ const GlyphCore = (function () {
     (list || []).forEach(function (nd) {
       if (nd.literal) { L.push(pad(d) + "'" + hgmlLit(nd.v) + "'"); return; }
       if (nd.text)    { L.push(pad(d) + "'" + hgmlLit(nd.v) + "'"); return; }
+      if (nd.rawFence){ L.push(pad(d) + "[raw[/raw]"); return; }
       if (nd.logic)   { L.push(pad(d) + "[logic" + (nd.logic.name ? "-" + nd.logic.name : "") + "[/logic]"); return; }
       var name = String(nd.canonical || "?").toLowerCase();
       var kids = nd.children || [];
@@ -2873,6 +2908,10 @@ const GlyphCore = (function () {
     if (tag === "user-input") return asLiteral(xmlText(el));
     if (tag === "off") return " " + litSafeXml(xmlText(el)) + " ";
     if (tag === "mood" || tag === "break") return "";   /* handled per block */
+    /* the verbatim fence returns verbatim: it is the one element whose
+       content must NOT be re-read, because carrying it unread is the whole
+       reason it exists */
+    if (tag === "raw") return "[raw]" + xmlText(el) + "[/raw]";
     if (tag === "logic") return fromXmlLogic(el, diag);
     if (tag === "template") return fromXmlTemplate(el, diag);
     if (tag === "unresolved") {
@@ -3027,6 +3066,11 @@ const GlyphCore = (function () {
           }
           return "[--" + String(n.name || "") + (n.isDefinition ? "=" : "") + kids(n.body) + "]";
         }
+        /* verbatim in, verbatim out: lit() would substitute exactly the
+           characters this fence exists to carry. NOT `Raw`, which this AST
+           already uses for unquoted prose. */
+        case "Verbatim":
+          return "[raw]" + String(n.value == null ? "" : n.value) + "[/raw]";
         case "Logic": {
           var lines = (n.rules || []).map(function (r) { return String(r.source || ""); });
           return "[logic" + (n.name ? ":" + n.name : "") + "]\n" + lines.join("\n") + "\n[/logic]";

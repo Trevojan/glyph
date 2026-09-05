@@ -1034,6 +1034,13 @@ function runReferenceChecks() {
        gone from the grammar (C-01) and now from the engine; the refusal that
        replaced it lives in bucket N, where a malformed construct belongs. */
     { id: "4-09", src: "[off]hello [ins'x'][on]", expect: x => /<off>hello \[ins'x'\]<\/off>/.test(x) },
+    /* the two rows added on 2026-09-05: `,` between bracketed siblings, and
+       the verbatim fence. D-08 requires a probe per documented row, which is
+       what keeps §4 from drifting away from the engine. */
+    { id: "4-13", src: "[simp`X`],[core]",
+      expect: x => /<holds>/.test(x) && x.indexOf("join=") === -1 },
+    { id: "4-14", src: "[raw][a[b]][/raw]",
+      expect: x => /<raw>\[a\[b\]\]<\/raw>/.test(x) },
     { id: "4-10", src: "[ins'a']r-'a list'",       expect: x => /<user-expectative expects="/.test(x) },
     { id: "4-11", src: "[logic]let a = 1[/logic]",
       expect: x => /<logic>/.test(x) && /<rule kind="/.test(x) },
@@ -1932,6 +1939,57 @@ const rSP = runSpellingChecks();
 
 
 /* ------------------------------------------------------------------ *
+ * [raw] -- the verbatim fence, so Glyph can quote Glyph
+ *
+ * Measured: `]` ends a literal from inside, under EITHER quote, and no
+ * escape exists -- backslash, doubling and &#93; were each tried and each
+ * refused (the entity dies on the `;`, which is a separator). So a document
+ * that quotes Glyph could not be written in Glyph. [logic] was the only
+ * construct that carried a bracket through, and it then misread the content
+ * as an expression and reported the commands inside as undefined variables.
+ * ------------------------------------------------------------------ */
+function runRawFenceChecks() {
+  console.log("\n--- [raw] -- Glyph quoting Glyph ---");
+  const D = [];
+  const ok = (id, name, why) => {
+    if (why) { console.log("  \u2717 " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  \u2713 " + id + ": " + name); D.push(id); }
+  };
+  const opts = { templates: TPL.templates, rules: RULESTORE,
+                 expansions: require("../.guidelines/expansions.json") };
+
+  const quoted = "[sum`organized`[itr-core[ctx]]]";
+  const src = "[raw]" + quoted + "[/raw]";
+  const xml = G.toXML(src, opts);
+
+  ok("RW-01", "a bracket survives the fence into the document",
+     xml.indexOf("<raw>" + quoted.replace(/&/g, "&amp;").replace(/</g, "&lt;")) !== -1 ? null
+       : "the quoted source is not carried verbatim: " + JSON.stringify(xml));
+
+  const gaps = G.parse(src, opts).gaps;
+  ok("RW-02", "the content is carried, not read",
+     gaps.length === 0 && xml.indexOf("<needs") === -1 ? null
+       : "diagnostics: " + gaps.map(g => g.sev + "/" + g.code).join(",") + " | " + JSON.stringify(xml));
+
+  ok("RW-03", "it survives the XML round trip byte for byte",
+     G.fromXML(xml, opts).src === src ? null
+       : "came back as " + JSON.stringify(G.fromXML(xml, opts).src));
+
+  ok("RW-04", "and the AST round trip too",
+     G.fromAST(G.toAST(src, opts), opts).src === src ? null
+       : "came back as " + JSON.stringify(G.fromAST(G.toAST(src, opts), opts).src));
+
+  /* the refusal half: a fence left open is a fault, not a fence */
+  ok("RW-05", "an unclosed fence is refused",
+     G.parse("[raw][a]", opts).gaps.some(g => g.code === "UnclosedRaw" && g.sev === "fix") ? null
+       : "no UnclosedRaw for a [raw] with no [/raw]");
+
+  return D.length;
+}
+const rRW = runRawFenceChecks();
+
+
+/* ------------------------------------------------------------------ *
  * global store registration — the tripwire for splitting the core
  *
  * Every bucket above routes its stores through `opts`, deliberately, so the
@@ -2017,6 +2075,7 @@ console.log(" app          " + String(rAP).padStart(4) + "/3");
 console.log(" cli          " + String(rCL).padStart(4) + "/3");
 console.log(" diag wording " + String(rDG).padStart(4) + "/3");
 console.log(" spellings    " + String(rSP).padStart(4) + "/3");
+console.log(" raw fence    " + String(rRW).padStart(4) + "/5");
 console.log(" global store " + rGS + "/3");
 console.log("=================================================");
 

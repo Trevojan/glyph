@@ -115,9 +115,11 @@ in children.
 | `[=` | `continues="previous"` on the next block |
 | `-` extend | opens a chain: `[in-rwk` puts `<chain><rework/></chain>` inside `<instruction>` |
 | `,` after an extend | continues that chain — the next member of the same `<chain>` |
+| `,` between bracketed siblings | opens a `<holds>`: `[a],[b]` puts both inside one `<holds>` |
 | `[off]` … `[on]` | `<off>` — read as prose, token parsing suspended |
 | `r-` / `R:` | `<user-expectative expects="…">` |
 | `[logic]` … `[/logic]` | `<logic>` with a `<rule>` per line |
+| `[raw]` … `[/raw]` | `<raw>` — carried verbatim, no grammar at all, brackets included |
 | auto-close | *not applicable* (§1) |
 
 Worked equivalence — the chain is comma-separated, and `,` is what repeats:
