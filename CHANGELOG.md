@@ -37,6 +37,103 @@ All notable changes to Glyph are documented here, most recent first.
 
 ---
 
+## [3.4.7.05] — o documento reescrevia conjunção como sequência, e ninguém via
+
+`release` move porque o documento emitido mudou de forma **e** a gramática ganhou um
+construto: `<holds>`, `binds`, `ref`, `role` e a cerca `[raw]`. É a mesma razão que levou
+`1.2.3.00` e `2.4.5.01` a moverem esse dígito. `rules` move porque `GLOSSARY.md` §0.1 —
+texto normativo — perdeu uma cláusula, e porque 98 grafias entraram no vocabulário de
+entrada. `minor` carrega `--file` e a redação de um diagnóstico. Nenhum dígito zera outro.
+
+### O defeito central, e por que nenhum portão o via
+
+`GLOSSARY.md` §0.1 dá leituras **diferentes** a `[A],[B]` e `[A][B]` — conjunção contra
+sequência — e §0.3 acrescenta que numa sequência o sujeito do segundo é o *resultado* do
+primeiro. Medido em 2.4.6.04, só uma projeção distinguia as duas:
+
+| projeção | distingue? |
+|---|---|
+| AST | **sim**, `origin: "item"` contra `origin: "root"` |
+| `glyph-package` | não, byte a byte idêntico |
+| `.hgml` | não, byte a byte idêntico |
+
+O documento entregue reescrevia conjunção como sequência, em silêncio. `RT-05` tinha isso
+**fixado como perda conhecida** desde antes do trabalho de pacote — *"o caminho do AST
+guarda uma vírgula que o do XML não guarda"*. `<holds>` fecha, e a asserção foi invertida
+em vez de apagada: uma suíte que descarta um pino aposentado perde a memória do que ele
+protegia.
+
+### A ordem passa a ser significado
+
+§0.1 dizia *"sem ordem entre eles"*. O Regente aposentou a cláusula: *"antigamente eu dizia
+que não havia diferença na ordem. isso se provou ineficaz."* A razão é gramatical e
+generaliza — **o que se faz é declarado antes do sujeito**, *red ball*, *thin air*. Então
+`[simp'X'],[core]` é "simplifique X e trate como núcleo" e `[core],[simp'X']` é "em núcleo,
+simplifique X". Duas intenções, não uma dita duas vezes.
+
+Consequência na queima: some o `sort`, **fica o `uniq`**. `[CRIT[CTX]]` queimava para
+`[cmp [ctx] [ctx] …]` — o operando do autor mais o que a própria fórmula do CRIT produz —
+e portanto **afirmava que o contexto é consultado duas vezes**, coisa que a fonte nunca
+disse. Os glifos diziam A e os hieróglifos diziam B.
+
+### Glyph não conseguia citar Glyph
+
+`]` encerra um literal por dentro, sob **as duas** aspas, e não há escape: contrabarra,
+duplicação e `&#93;` foram medidos um a um e recusados — a entidade morre no `;`, que é
+separador. Um documento *sobre* Glyph era, por isso, impossível de escrever em Glyph.
+`[logic]` era o único construto que carregava um colchete, e então lia o conteúdo como
+expressão e reportava os comandos de dentro como variáveis indefinidas.
+
+`[raw]…[/raw]` é a mesma cerca sem gramática nenhuma. E o diagnóstico deixou de dar um
+conselho já seguido: `TruncatedLiteral` dizia *"Feche com ` antes"* num ponto onde a crase
+de fechamento **já estava lá**, um caractere à direita.
+
+### O nome e o valor eram o mesmo elemento
+
+`[var'get_data'[…]]` e um caminho de arquivo emitiam o mesmo `<user-input>`: nada no
+documento dizia que `get_data` ligava coisa alguma, e nada ligava um uso à sua definição.
+A regra é do Regente — *"o resultado é nomeado a partir do texto de entrada"* — e é
+decidível: um comando liga quando tem operando literal **e** aninhado entre colchetes.
+
+Um nome tem **forma de nome**. A primeira tentativa ligava o que fosse, e `[--germinate]`
+expande para `[skill'tree logic structure'[…]]` — uma frase virou pseudo-nome. `T-01` pegou.
+
+E o literal ganhou papel: `[alw'X'[get[ctx]]]` contra `[alw[get[ctx]]'X']` emitiam o mesmo
+`<user-input>` e diferiam só por ordem de irmãos, obrigando o consumidor a **inferir**
+"antes do aninhado = operando, depois = resultado". Uma cadeia não conta — §0.1 diz que
+`[A-B]` aplica os dois ao **mesmo** operando —, e foi `E-01`..`E-04` que pegaram isso.
+
+### Duas colisões, ambas minhas, ambas da mesma forma
+
+Reusar um nome que já significava algo:
+
+- `k:"raw"` **já era** o tipo de token da prosa dentro de `[off]…[on]`, então a cerca nova
+  sequestrou o modo off e `[off]hello[on]` emitia `<raw></raw>`. Pego pelo probe `4-09`.
+- `"Raw"` **já era** o tipo de nó do AST para prosa sem aspas, então o escritor da cerca
+  ficou sombreado e `fromAST` substituía exatamente os caracteres que ela existe para levar.
+
+### E o motor não lia arquivo
+
+`glyph-cli.js` recebia fonte por argv e nada mais, então `glyph-cli.js order.pgml` compilava
+a string de dez caracteres `"order.pgml"` e respondia, com confiança, sobre um nome de
+arquivo. `--file` é a entrada; um caminho nu é **recusado**, nunca adivinhado.
+
+### Portões
+
+`CL-01..03` (linha de comando), `DG-01..03` (o diagnóstico nomeia a causa), `SP-01..03`
+(grafias), `RW-01..05` (cerca verbatim), `RO-01..05` (papel do literal), `BD-01..06`
+(ligações), `RT-07` e `H-13..14`. `CL-02` e `DG-03` foram **observados falhando** contra o
+comportamento antigo antes de serem mantidos.
+
+### A assimetria que ninguém tinha contado
+
+O inverso aceitava `<note>` e devolvia `NT`; o parser direto recusava `[NOTE`. Medido:
+**98 de 98** nomes de elemento cuja grafia difere do canônico eram recusados. Fechado como
+classe — `ELEMENT_INPUT` é *derivado* de `GLOSS_REVERSE`, então as duas direções não podem
+divergir: são a mesma tabela lida pelas duas pontas.
+
+---
+
 ## [2.4.6.04] — the store gained a field after the digit that covers it had moved
 
 `rules` moves because `expansions.json` gained an `element` on all 120 commands, and it landed

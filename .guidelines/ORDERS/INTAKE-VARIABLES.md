@@ -214,7 +214,29 @@ exists in current glyph-package"*, a scope rule stated in one line and costing a
 design. `INTAKE-EFFECTS.md` §9 split its cost the same way and put the semantic
 half in a second order. This belongs beside it.
 
-## 5. The open decision, and it is the Regent's
+## 5. Delivered — 3.4.7.05
+
+> The Regent chose the whole batch, D included: *"Sim, e também ligar nome a valor."*
+
+| item | shipped |
+|---|---|
+| **A** the engine could not read a file | `--file`, and a bare path is refused rather than guessed. `CL-01..03` |
+| **B** the diagnostic named the wrong character | `TruncatedLiteral` names `]` and no longer prescribes a fix already applied. `DG-01..03`, `DG-03` observed failing first |
+| **C** Glyph could not quote Glyph | `[raw]…[/raw]`, the `[logic]` contract with no sub-grammar. `RW-01..05` |
+| §1.5 spellings | closed as a class: all **98** refused element names now parse, derived from `GLOSS_REVERSE` so the two directions cannot drift. `SP-01..03` |
+| §1.2b README wrong on two characters | corrected: `\` is preserved, `]` is refused at parse |
+| **D** bindings outside the fence | `binds`, `ref`, `role`, `DuplicateBinding`. `BD-01..06`, `RO-01..05` |
+
+### What D did not deliver, and why
+
+**`<needs var>` outside the `[logic]` fence has nothing to fire on.** A reference
+is recognised *because* its text matches a bound name, so an unresolved one is
+indistinguishable from ordinary prose. Reporting it would require a reference
+**syntax** — a way to write "this literal is a use" — which is vocabulary and
+therefore the Regent's to decide. Everything else in D shipped.
+
+Scope is the whole `glyph-package`, as the Regent's file specifies. Nested
+scopes were not built and were not asked for.
 
 **A + B + C together are the literal reading of `[rsn]`** — after them the engine
 reads a file, says what is actually wrong, and can hold a document that quotes

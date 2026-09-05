@@ -109,13 +109,23 @@ num segundo comando: `` [vrfy[cmp[true]]`y`] `` sai com `[true]` duplicado e
 Isto é literalmente *os glifos dizem A e os hieróglifos dizem B* — e é o único
 achado aqui que é defeito puro, sem decisão pendente.
 
-### 2.3 A posição do literal decide a convergência, e nada avisa
+### 2.3 A posição do literal — retificado: não era defeito
 
-`` [alw`X`[get[ctx]]] `` converge com `` [rmbr`X`] ``.
-`` [alw[get[ctx]]`X`] `` não converge.
+> **Corrigido em 2026-09-05, pelo Regente.** Esta seção dizia que a posição do
+> literal "decide a convergência e nada avisa", tratando a divergência como
+> defeito. Está errado.
 
-A regra real é **literal primeiro**. Ela não está escrita em lugar nenhum, e o
-autor não tem como descobrir sem queimar as duas formas e comparar.
+`` [alw`X`[get[ctx]]] `` e `` [alw[get[ctx]]`X`] `` **não devem** convergir: são
+declarações diferentes, pela mesma regra de §5 — a ordem é significado.
+
+| fonte | leitura |
+|---|---|
+| `` [alw`X`[get[ctx]]] `` | sempre X, pegue o contexto |
+| `` [alw[get[ctx]]`X`] `` | sempre, pegue o contexto, e o resultado é X |
+
+O que faltava não era convergência: era **nome**. Os dois emitiam o mesmo
+`<user-input>` e diferiam só por ordem de irmãos, então o consumidor tinha de
+*inferir* qual era qual. Fechado por `role="result"` — ver §9.
 
 ## 3. O precedente já está no código
 
@@ -261,3 +271,22 @@ Todos os pares acima foram rodados contra o motor em **2.4.6.04** com os três
 stores carregados, comparando `toHGML` normalizado por espaço em branco. Nenhum
 exemplo foi escrito para ilustrar uma conclusão: os quatro primeiros pares
 testados produziram três divergências, e as classes de §2 saíram delas.
+
+---
+
+## 9. O que foi implementado — 3.4.7.05
+
+Esta medição virou release. O que dela saiu:
+
+| medição | o que foi feito |
+|---|---|
+| §2.1 a ordem é significado | `GLOSSARY.md` §0.1 perdeu *"sem ordem entre eles"* |
+| §2.1b conjunção some do XML | `<holds>` agrupa a conjunção de topo; `RT-05` invertido, `RT-07` novo |
+| §2.2 duplicação na queima | `uniq` na injeção de operandos; `H-13`, `H-14` |
+| §2.3 posição sem nome | `role="operand"`/`role="result"`; `RO-01..05` |
+| §3 o `sort` do `made-of` | **não** aplicado à queima, por §5 |
+| §6 AST como fonte de verdade | confirmado: `.hgml` não consegue vir antes, porque não expressa o que o AST distingue |
+| §7 operando contra resultado | `role`, e `binds`/`ref` do lado das variáveis |
+
+O que **não** foi feito, e por quê: a queima continua sem ordenar conjunção —
+§5 decidiu que ordenar seria trocar uma duplicação por uma mentira diferente.
