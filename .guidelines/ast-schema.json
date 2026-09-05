@@ -97,6 +97,7 @@
         "value",
         "form",
         "slot",
+        "role",
         "at"
       ],
       "form": [
@@ -104,7 +105,12 @@
         "tick",
         "raw"
       ],
-      "note": "`slot` is the template parameter this literal was bound to, or null. It reached the XML as <user-input slot=\"…\"> long before it reached the AST; writing fromAST is what proved it missing."
+      "role": [
+        "operand",
+        "result",
+        null
+      ],
+      "note": "`slot` is the template parameter this literal was bound to, or null. It reached the XML as <user-input slot=\"…\"> long before it reached the AST; writing fromAST is what proved it missing. `role` is decided by position: a literal written before any BRACKETED nested command is what the command operates on (`operand`), one written after such a nest names what came back (`result`). A chain link does not count — §0.1 says `[A-B]` applies both to the same operand. It is null only at the top of a segment, where there is no command to be operand of."
     },
     "Raw": {
       "required": [

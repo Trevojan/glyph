@@ -1443,6 +1443,29 @@ const GlyphCore = (function () {
         case "literal": {
           var t3 = top();
           var lit = { literal:true, v:tk.v, form:tk.form, tok:tk };
+          /* The literal's ROLE, decided by position and nothing else.
+
+             `[alw`X`[get[ctx]]]` and `[alw[get[ctx]]`X`]` emitted the same
+             <user-input> and differed only by sibling order, so a consumer had
+             to INFER "before the nest = operand, after = result" from position.
+             That is the inference the Regent ruled out: a variable must arrive
+             substituted, not deduced.
+
+             The rule is the Regent's own reading: a literal written before any
+             nested command is what the command operates ON; one written after a
+             nest has closed names what came BACK. `operand` is the default and
+             is not written; `result` is.
+
+             It is derived from position, so the inverse rebuilds it for free
+             and it costs the round trip nothing.
+
+             A CHAIN LINK does not count: GLOSSARY §0.1 says `[A-B]` is A and B
+             applied to the SAME operand, so the literal after `[rtnl-go`x`]` is
+             what both links operate on, not something `go` handed back. Only a
+             BRACKETED nest closes and yields. */
+          if (t3) lit.role = (t3.children || []).some(function (c) {
+            return !!c.canonical && !c.chainElement;
+          }) ? "result" : "operand";
           if (t3) t3.children.push(lit); else seg.children.push(lit);
           /* The message used to read "Feche com ``` antes." — advice the author has
              already followed, because the closing backtick IS there, just after
@@ -1913,7 +1936,9 @@ const GlyphCore = (function () {
         if (nd.form === "raw") { L.push(pad(d) + "<off>" + xesc(nd.v.trim()) + "</off>"); continue; }
         // value bound to a template slot: the slot's name travels along with it
         var slotAt = nd.boundSlot ? ' slot="' + xesc(nd.boundSlot) + '"' : "";
-        L.push(pad(d) + "<user-input" + slotAt + ">" + xesc(nd.v) + "</user-input>");
+        var roleAt = nd.role === "result" ? ' role="result"' : "";
+
+        L.push(pad(d) + "<user-input" + slotAt + roleAt + ">" + xesc(nd.v) + "</user-input>");
         continue;
       }
       if (nd.text) { L.push(pad(d) + "<off>" + xesc(nd.v) + "</off>"); continue; }
@@ -2118,8 +2143,12 @@ const GlyphCore = (function () {
        the XML as `<user-input slot="…">` and never reached the AST, so an
        expanded invocation could not be told from its own expansion — the second
        field fromAST proved missing from a projection called `full`. */
+    /* `role` travels in the envelope too: the AST is the source of truth,
+       and a fact the emitted document carries must not be one the envelope
+       makes a reader re-derive. */
     if (nd.literal) return { type: nd.form === "raw" ? "Raw" : "Literal", value: nd.v,
-                             form: nd.form, slot: nd.boundSlot || null };
+                             form: nd.form, slot: nd.boundSlot || null,
+                             role: nd.role || null };
     if (nd.text) return { type:"Text", value:nd.v };
     if (nd.mode) return { type:"ModeOff" };
     if (nd.rawFence) return { type:"Verbatim", value:String(nd.v == null ? "" : nd.v) };

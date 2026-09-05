@@ -1990,6 +1990,59 @@ const rRW = runRawFenceChecks();
 
 
 /* ------------------------------------------------------------------ *
+ * the literal's role -- operand or result, said rather than inferred
+ *
+ * [alw`X`[get[ctx]]] and [alw[get[ctx]]`X`] emitted the same <user-input>
+ * and differed only by sibling order, so a consumer had to INFER "before
+ * the nest = operand, after = result" from position. The Regent ruled that
+ * out: a value must arrive substituted, not deduced.
+ * ------------------------------------------------------------------ */
+function runLiteralRoleChecks() {
+  console.log("\n--- the literal's role ---");
+  const D = [];
+  const ok = (id, name, why) => {
+    if (why) { console.log("  \u2717 " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  \u2713 " + id + ": " + name); D.push(id); }
+  };
+  const opts = { templates: TPL.templates, rules: RULESTORE,
+                 expansions: require("../.guidelines/expansions.json") };
+
+  const before = G.toXML("[alw`X`[get[ctx]]]", opts);
+  const after  = G.toXML("[alw[get[ctx]]`X`]", opts);
+
+  ok("RO-01", "a literal before a bracketed nest is the operand, and says nothing",
+     /<user-input>X<\/user-input>/.test(before) ? null
+       : "operand is not the unmarked default: " + JSON.stringify(before));
+
+  ok("RO-02", "a literal after a bracketed nest names what came back",
+     /<user-input role="result">X<\/user-input>/.test(after) ? null
+       : "no role=\"result\": " + JSON.stringify(after));
+
+  ok("RO-03", "the two positions no longer emit the same bytes",
+     before !== after ? null
+       : "operand and result still produce identical documents");
+
+  /* GLOSSARY 0.1: [A-B] applies BOTH links to the same operand, so a literal
+     after a chain link is that operand and not a result. E-01 is the vector
+     that caught this -- [rtnl-go`...`] was briefly marked result. */
+  ok("RO-04", "a chain link does not make the next literal a result",
+     G.toXML("[rtnl-go`texto`]", opts).indexOf('role="result"') === -1 ? null
+       : "a chain link is being read as a closed nest");
+
+  /* the envelope is the source of truth: a fact the document carries must not
+     be one the AST makes a reader re-derive */
+  const lit = G.toAST("[alw[get[ctx]]`X`]", opts)
+    .segments[0].body[0].body.filter(n => n.type === "Literal")[0];
+  ok("RO-05", "the role travels in the AST envelope too",
+     lit && lit.role === "result" ? null
+       : "the envelope literal carries role=" + JSON.stringify(lit && lit.role));
+
+  return D.length;
+}
+const rRO = runLiteralRoleChecks();
+
+
+/* ------------------------------------------------------------------ *
  * global store registration — the tripwire for splitting the core
  *
  * Every bucket above routes its stores through `opts`, deliberately, so the
@@ -2076,6 +2129,7 @@ console.log(" cli          " + String(rCL).padStart(4) + "/3");
 console.log(" diag wording " + String(rDG).padStart(4) + "/3");
 console.log(" spellings    " + String(rSP).padStart(4) + "/3");
 console.log(" raw fence    " + String(rRW).padStart(4) + "/5");
+console.log(" literal role " + String(rRO).padStart(4) + "/5");
 console.log(" global store " + rGS + "/3");
 console.log("=================================================");
 
