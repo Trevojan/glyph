@@ -53,12 +53,34 @@ Four constructions, each with exactly one reading:
 | form | reading |
 |---|---|
 | `[A[B]]` | **nesting** — B is A's operand |
-| `[A],[B]` | **conjunction** — A and B hold together, no order between them |
+| `[A],[B]` | **conjunction** — A and B hold together, **and the order is part of what is said** |
 | `[A][B]` | **sequence** — A, then B |
 | `[A-B]` | **chain** — A and B applied to the same operand |
 
 The algebraic `A + B` of the older formulas is **retired**: it was conjunction,
 and is rewritten in brackets so two syntaxes do not stay alive at once.
+
+### The order clause, changed
+
+This row read *"no order between them"* until 2026-09-05. The Regent retired it:
+*"antigamente eu dizia que não havia diferença na ordem. isso se provou ineficaz.
+deve ser alterado."*
+
+The reason is grammatical, and it generalises: **what is to be done is declared
+before the subject** — *red ball*, *thin air*, *heavy stuff*. So
+
+| form | reading |
+|---|---|
+| `[simp'X'],[core]` | simplify X **and treat as** core |
+| `[core],[simp'X']` | **in** core, simplify X |
+
+Two intentions, not one intention twice. Conjunction still does not change the
+**subject** (§0.3 stands, and says a different thing); it does carry order.
+
+The engine already distinguished the two and was, on this row, ahead of the
+document. What it did *not* do was distinguish conjunction from sequence in any
+projection but the AST — `.guidelines/HGML_CONVERGENCE.md` §2.1b measured it, and
+`<holds>` is the answer.
 
 ## 0.2 `BASE` and `CORE` — the disambiguation
 

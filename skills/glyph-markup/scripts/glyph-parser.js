@@ -1759,6 +1759,23 @@ const GlyphCore = (function () {
      byte BEFORE any emitter existed, which is the direction lock T5 demands.  */
   function packageIndent(s) { return s.length - s.replace(/^ +/, "").length; }
 
+  /* The last line of the element that opens at L[i]: itself when the tag is
+     self-closing, otherwise its matching close at the same indent. Used by the
+     <holds> pass, which groups elements rather than lines. */
+  function packageSpan(L, i) {
+    var t = L[i].replace(/^ +/, "");
+    if (t.charAt(0) !== "<" || t.indexOf("</") === 0 || /\/>\s*$/.test(t)) return i;
+    var m = t.match(/^<([a-z-]+)/);
+    if (!m) return i;
+    var close = "</" + m[1] + ">", ind = packageIndent(L[i]);
+    for (var j = i + 1; j < L.length; j++) {
+      var ji = packageIndent(L[j]);
+      if (ji < ind) return i;                                   /* left the element unclosed */
+      if (ji === ind && L[j].replace(/^ +/, "") === close) return j;
+    }
+    return i;
+  }
+
   function packagePass(L, opts) {
     /* 3 — a maximal run of siblings, first `extend` then `item`s, is one
        <chain>, and the attribute does not survive it: position carries it.
@@ -1779,6 +1796,40 @@ const GlyphCore = (function () {
       out.push(padding + "</chain>");
       i = j - 1;
     }
+
+    /* 3b — the same rule for `,` between BRACKETED siblings: a maximal run of
+       a head plus its `join="item"` followers is one <holds>, and the attribute
+       does not survive it because position carries the operator.
+
+       It cannot reuse the loop above. A chain link is always a bare,
+       self-closing line, so a run there is a run of LINES. A conjunction member
+       is a bracketed element and spans from its open tag to its close, so this
+       one groups SPANS. Same rule, different unit. */
+    var held = [];
+    for (var h = 0; h < out.length; h++) {
+      var headStart = h, headEnd = packageSpan(out, h);
+      var hInd = packageIndent(out[h]);
+      /* only an element can head a run, and only a following sibling at the
+         same indent carrying join="item" can continue it */
+      var members = [], k = headEnd + 1;
+      while (k < out.length && packageIndent(out[k]) === hInd && /\sjoin="item"[\s/>]/.test(out[k])) {
+        var mEnd = packageSpan(out, k);
+        members.push([k, mEnd]);
+        k = mEnd + 1;
+      }
+      if (!members.length) { held.push(out[h]); continue; }
+      var hp = new Array(hInd + 1).join(" ");
+      held.push(hp + "<holds>");
+      for (var q = headStart; q <= headEnd; q++) held.push("  " + out[q]);
+      members.forEach(function (span) {
+        for (var s = span[0]; s <= span[1]; s++)
+          held.push("  " + out[s].replace(/\sjoin="item"/, ""));
+      });
+      held.push(hp + "</holds>");
+      h = members[members.length - 1][1];
+    }
+    out = held;
+
     /* 4 — <invoke> is a leaf, first child of the element whose call it
        describes, and only where the command is composite: an atom's reading is
        its own name, and saying so on every element is a tautology with a cost. */
@@ -1870,10 +1921,22 @@ const GlyphCore = (function () {
       var chainAttr = (nd.chainElement && (nd.origin === "extend" || nd.origin === "item"))
         ? 'chain="' + nd.origin + '"' : null;
 
+      /* `join` is to `,` between BRACKETED siblings what `chain` is to `-` and
+         `,` between bare links. It existed nowhere, and the consequence was
+         measured: `[simp'X'],[core]` and `[simp'X'][core]` — conjunction and
+         sequence, which GLOSSARY §0.1 gives different readings — emitted the
+         same bytes. The AST told them apart by `origin` and both derived
+         projections threw the difference away.
+
+         Like `chain`, it does not survive packagePass: <holds> groups the run
+         and position carries the operator from there. */
+      var joinAttr = (!nd.chainElement && nd.origin === "item") ? 'join="item"' : null;
+
       if (nd.tier === "unknown" || nd.tier === "empty") {
         var at = ['tag="' + xesc(nd.raw || "") + '"'];
         if (nd.suggestion) at.push('nearest="' + xesc(nd.suggestion.name.toLowerCase()) + '"');
         if (chainAttr) at.push(chainAttr);   /* so [in-zzz reads back as a chain link */
+        if (joinAttr) at.push(joinAttr);     /* and [a],[zzz] as a conjunction member */
         open = "<unresolved " + at.join(" ");
         closeName = "unresolved";
       } else {
@@ -1882,6 +1945,7 @@ const GlyphCore = (function () {
         if (nd.editorial) attrs.push('force="editorial"');
         if (nd.colon) attrs.push('name="' + xesc(nd.colon) + '"');
         if (chainAttr) attrs.push(chainAttr);
+        if (joinAttr) attrs.push(joinAttr);
         /* `describe` makes the message carry its own semantics, so whoever
            reads it does not need the Glyph vocabulary loaded to know what
            `<scrutinise>` means. Nothing here is invented: `means` is the gloss
@@ -2825,7 +2889,11 @@ const GlyphCore = (function () {
 
     /* `force="editorial"` is not read back: nd.editorial comes from
        EDITORIAL_ONLY keyed by the canonical, so it returns on its own. */
-    var head = "[" + name + (el.attrs.name ? ":" + litSafeXml(el.attrs.name) : "");
+    /* `,` before a BRACKETED sibling — the conjunction operator, put back from
+       the position the <holds> run recorded it in. `chainOpOf` above is the
+       bare-link writer of `-` and `,`; this is the bracketed one. */
+    var lead = el.attrs.join === "item" ? "," : "";
+    var head = lead + "[" + name + (el.attrs.name ? ":" + litSafeXml(el.attrs.name) : "");
     return head + xmlKids(el, diag) + "]";
   }
 
@@ -3021,6 +3089,31 @@ const GlyphCore = (function () {
     var out = [];
     el.children.forEach(function (c) {
       if (c.tag === "schema" || c.tag === "invoke") return;
+      if (c.tag === "holds") {
+        /* the mirror of the <chain> rule one branch down: position carried the
+           operator, so position gives it back. The head came with no operator,
+           every other member from `,`. */
+        var firstHeld = true;
+        (c.children || []).forEach(function (m) {
+          if (m.tag === "#text") return;
+          if (m.attrs && m.attrs.join)
+            diag.push({ sev:"fix", code:"XmlHoldsCarriesJoin",
+              msg:"a <code>&lt;holds&gt;</code> member carries <code>join=\"" + esc(m.attrs.join) +
+                  "\"</code>. Dentro de um <code>&lt;holds&gt;</code> a posição já diz o operador — " +
+                  "remova o atributo." });
+          var hm = {}, hk;
+          for (hk in m) if (Object.prototype.hasOwnProperty.call(m, hk)) hm[hk] = m[hk];
+          if (!firstHeld) {
+            var ha = {}, hak;
+            for (hak in (m.attrs || {})) if (Object.prototype.hasOwnProperty.call(m.attrs, hak)) ha[hak] = m.attrs[hak];
+            ha.join = "item";
+            hm.attrs = ha;
+          }
+          out.push(packageUnpass(hm, diag));
+          firstHeld = false;
+        });
+        return;
+      }
       if (c.tag === "chain") {
         /* position carried the operator, so position gives it back:
            the first member came from `-`, every other from `,` (3.2) */

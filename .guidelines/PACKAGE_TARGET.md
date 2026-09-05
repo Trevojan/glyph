@@ -149,6 +149,71 @@ wrapped. A `chain="item"` with no `chain="extend"` before it is malformed (§6,
 
 ---
 
+## 3b. `<holds>` — conjunction between bracketed siblings
+
+> **Added 2026-09-05.** `<chain>` groups `-` and `,` between **bare** links.
+> `<holds>` groups `,` between **bracketed** siblings. Same rule, different unit.
+
+### 3b.1 Why it exists
+
+Measured on the engine at 2.4.6.04: `[simp'X'],[core]` and `[simp'X'][core]`
+emitted **byte-identical documents**, while `GLOSSARY.md` §0.1 gives them
+different readings — conjunction against sequence, and §0.3 adds that in a
+sequence the second item's subject is the *result* of the first.
+
+Only one projection told them apart:
+
+| projection | distinguishes conjunction from sequence? |
+|---|---|
+| AST | **yes** — `origin: "item"` against `origin: "root"` |
+| `glyph-package` | no |
+| `.hgml` | no |
+
+So the emitted document rewrote a conjunction as a sequence, in silence. That is
+the class this release exists to remove, and `RT-05` had it pinned as a known
+loss since before the package work: *"the AST path keeps a comma the XML path
+cannot."*
+
+### 3b.2 The grouping rule
+
+A maximal run of **a head plus every following sibling carrying `join="item"`**
+at the same level is one `<holds>`.
+
+```
+[simp`X`],[core]
+```
+
+```xml
+<holds>
+  <simplify>
+    <invoke reads="[RTNL-SUB],[CTX]" species="composite" depth="2"/>
+    <user-input>X</user-input>
+  </simplify>
+  <core/>
+</holds>
+```
+
+Where `<chain>` groups **lines** — a bare link is always one self-closing line —
+`<holds>` groups **spans**, because a bracketed member runs from its open tag to
+its close. The rule is the same; the unit is not.
+
+### 3b.3 The attribute does not survive the grouping
+
+`join="item"` is written by the emitter and removed by the grouping pass, for the
+same reason §3.2 gives for `chain`: **position carries the operator.** The head
+came with no operator, every later member from `,`. A `<holds>` member that
+arrives carrying `join` is refused (§6, `XmlHoldsCarriesJoin`) rather than
+repaired, because repairing it in silence is the fault being fixed.
+
+### 3b.4 What is not a `<holds>`
+
+Consecutive siblings with no `join` are a **sequence** and stay unwrapped — that
+is now the difference the document carries. A chain member is never a `<holds>`
+member: `chain` and `join` are written on disjoint sets, bare links against
+bracketed ones.
+
+---
+
 ## 4. `<invoke>` — the command call
 
 > **Delivered decision (Q10).** `<invoke>` is the **command call**, and to the

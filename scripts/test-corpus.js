@@ -1269,13 +1269,27 @@ function runAstInvariant() {
      astBroke.length ? astBroke.slice(0, 5).join(" | ") +
        (astBroke.length > 5 ? " (+" + (astBroke.length - 5) + ")" : "") : null);
 
-  /* the comma that XML cannot carry, and the AST can */
+  /* The comma both paths carry.
+     This assertion used to read "the AST path keeps a comma the XML path
+     cannot", and it was a pin on a real loss: the emitted document had no way
+     to say `,` between bracketed siblings, so `[crit[ctx],[ask]]` came back
+     from XML as `[crit[ctx][ask]]` — conjunction silently rewritten as
+     sequence, which GLOSSARY §0.1 gives a different reading.
+
+     <holds> closed it. The pin is inverted rather than deleted, because the
+     loss it described is exactly what must never come back: a suite that drops
+     a retired pin loses the memory of what the pin was for. */
   const comma = "[crit[ctx],[ask]]";
   const viaAst = G.fromAST(G.toAST(comma, opts), opts).src;
   const viaXml = G.fromXML(G.toXML(comma, opts), opts).src;
-  ok("RT-05", "the AST path keeps a comma the XML path cannot",
-     (/,\s*\[/.test(viaAst) && !/,\s*\[/.test(viaXml)) ? null
+  ok("RT-05", "both paths keep the comma, and conjunction stays conjunction",
+     (/,\s*\[/.test(viaAst) && /,\s*\[/.test(viaXml)) ? null
        : "via AST: " + JSON.stringify(viaAst) + " | via XML: " + JSON.stringify(viaXml));
+
+  /* and the difference the loss used to erase is visible in the document */
+  ok("RT-07", "conjunction and sequence do not emit the same bytes",
+     G.toXML("[simp`X`],[core]", opts) !== G.toXML("[simp`X`][core]", opts) ? null
+       : "[A],[B] and [A][B] still emit identical documents");
 
   /* a thinned envelope is refused rather than half-read */
   const thin = G.fromAST(G.toAST("[in-rwk]", { ...opts, projection: "panel" }), opts);
@@ -1973,7 +1987,7 @@ console.log(" Composition  " + rX + "/17");
 console.log(" .hgml burn   " + rH + "/12");
 console.log(" fromXML      " + rF + "/23");
 console.log(" reference    " + rD + "/11");
-console.log(" round trip   " + rRT + "/6");
+console.log(" round trip   " + rRT + "/7");
 console.log(" ast schema   " + rSC + "/3");
 console.log(" glyph-package" + String(rPK).padStart(4) + "/6");
 console.log(" examples     " + rE + "/5");
