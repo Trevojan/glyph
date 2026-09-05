@@ -97,6 +97,9 @@ Session shortcuts are the exception — they serialise as the shortcut itself
 | `force` | any element | — | `"editorial"` on `BYP OVR NEV ALW FRGT` |
 | `kind` `var` | `<rule>` | `[logic]` line | rule type and bound name |
 | `var` | `<needs>` | `[logic]` line | a name used and never defined |
+| `binds` | any command | an operand literal plus a bracketed nest | the name this command's result answers to |
+| `ref` | `<user-input>` | a literal whose text is a bound name | the binding it refers to, resolved across the whole package |
+| `role` | `<user-input>` | position | `result` when the literal follows a bracketed nest; absent means operand |
 | `means` `made-of` | any element | — | only under `toXML(src,{describe:true})` |
 
 An attribute never carries instruction content. Content goes in element text or

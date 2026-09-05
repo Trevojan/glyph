@@ -1723,6 +1723,13 @@ const GlyphCore = (function () {
     // ---- template constraints (the shape each preset promises) ----
     checkTemplateConstraints(segments, opts, G);
 
+    /* ---- bindings ----
+       One name, one result. Two commands naming the same result make every
+       later reference ambiguous, and choosing one would be the silent wrong
+       answer this release exists to remove. Raised here rather than in
+       buildXml because a diagnostic belongs to the parse. */
+    collectBindings(segments, G);
+
     // ---- templates ----
     var defd = {}, invoked = [];
     segments.forEach(function (sg3) {
@@ -1762,8 +1769,76 @@ const GlyphCore = (function () {
      structure stays readable through the tags themselves. */
   function pad(d) { return new Array(Math.min(d, LIMITS.indent) + 1).join("  "); }
 
+  /* ------------------------------------------------------------------ *
+   * Bindings — a command's operand literal NAMES the command's result
+   *
+   * The Regent's rule, from glyph-variable-naming-system.pgml: "when a
+   * command targets an object in context using text followed by orders, the
+   * result is named after the input text". `[sum`organized`[itr-core[ctx]]]`
+   * names the result `organized`; `[var`get_data`[...]]` is the explicit
+   * spelling of the same thing, not a separate mechanism.
+   *
+   * Decidable and mechanical: a command binds when it has BOTH an operand
+   * literal AND a bracketed nested command. A command carrying only a
+   * literal (`[nt`x`]`) has no result to name, so it binds nothing and the
+   * document does not fill up with names for text.
+   *
+   * Scope is the whole glyph-package, which is what the Regent's file says:
+   * "variable exists in current glyph-package". So the pass runs over every
+   * segment before a line is emitted, and a reference resolves to a binding
+   * written later just as well as to one written earlier.
+   * ------------------------------------------------------------------ */
+  var BIND_NAME = /^[A-Za-z_][A-Za-z0-9_.-]*$/;
+
+  function bindingOf(nd) {
+    if (!nd || !nd.canonical || nd.slotName) return null;
+    var kids = nd.children || [], lit = null, hasNest = false;
+    for (var i = 0; i < kids.length; i++) {
+      var c = kids[i];
+      if (c.literal && c.form !== "raw" && !lit && c.role !== "result") lit = c;
+      else if (c.canonical && !c.chainElement) hasNest = true;
+    }
+    var v = String(lit && lit.v != null ? lit.v : "").trim();
+    if (!lit || !hasNest || !v) return null;
+    /* A NAME, not prose. `[--germinate]` expands to `[skill`tree logic
+       structure`[...]]`, and binding that sentence would put a pseudo-name in
+       the document and let `ref` match on a coincidence of wording. The
+       Regent's own examples are identifier-shaped -- `organized`, `get_data`
+       -- and that is the shape a name has. */
+    if (!BIND_NAME.test(v)) return null;
+    /* the literal DECLARES the name, so it is not also a reference to it */
+    lit.isBinder = true;
+    return v;
+  }
+
+  function collectBindings(segments, G) {
+    var binds = {}, order = [];
+    (segments || []).forEach(function (sg) {
+      walk(sg.children, function (nd) {
+        var name = bindingOf(nd);
+        if (!name) return;
+        if (binds[name]) {
+          /* Two commands naming one result: the later reference cannot say
+             which it means, and picking one would be the silent wrong answer
+             this release exists to remove. */
+          if (G) G("fix", "nome repetido",
+            "<code>" + esc(name) + "</code> nomeia mais de um resultado — uma referência não pode dizer qual.",
+            "DuplicateBinding",
+            "name bound twice", "<code>" + esc(name) + "</code> names more than one result — a reference cannot say which.");
+        } else { binds[name] = true; order.push(name); }
+      });
+    });
+    return binds;
+  }
   function buildXml(segments, opts) {
     if (!segments.length) return "<!-- escolha um molde ou escreva do lado esquerdo -->";
+    /* one pass over the whole document, because the scope IS the whole
+       document: a reference resolves to a binding written later as readily
+       as to one written earlier */
+    var o2 = {}, ok2;
+    for (ok2 in (opts || {})) if (Object.prototype.hasOwnProperty.call(opts, ok2)) o2[ok2] = opts[ok2];
+    o2.__binds = collectBindings(segments, null);
+    opts = o2;
     var L = ["<glyph-package engine=\"" + VERSION + "\">", pad(1) + "<schema/>"];
     segments.forEach(function (sg) {
       if (sg.isReturn) {
@@ -1935,8 +2010,17 @@ const GlyphCore = (function () {
         // value bound to a template slot: the slot's name travels along with it
         var slotAt = nd.boundSlot ? ' slot="' + xesc(nd.boundSlot) + '"' : "";
         var roleAt = nd.role === "result" ? ' role="result"' : "";
+        /* A literal whose text IS a bound name is a reference to it. This is a
+           table lookup, not an inference: the name exists because some command
+           in this document bound it. The binding literal itself is excluded —
+           it declares the name rather than referring to it. */
+        var refAt = "";
+        if (opts && opts.__binds && !nd.isBinder) {
+          var refName = String(nd.v == null ? "" : nd.v).trim();
+          if (refName && opts.__binds[refName]) refAt = ' ref="' + xesc(refName) + '"';
+        }
 
-        L.push(pad(d) + "<user-input" + slotAt + roleAt + ">" + xesc(nd.v) + "</user-input>");
+        L.push(pad(d) + "<user-input" + slotAt + roleAt + refAt + ">" + xesc(nd.v) + "</user-input>");
         continue;
       }
       if (nd.text) { L.push(pad(d) + "<off>" + xesc(nd.v) + "</off>"); continue; }
@@ -2001,6 +2085,9 @@ const GlyphCore = (function () {
         if (nd.colon) attrs.push('name="' + xesc(nd.colon) + '"');
         if (chainAttr) attrs.push(chainAttr);
         if (joinAttr) attrs.push(joinAttr);
+        /* the name this command's result answers to, from its own operand */
+        var bindName = bindingOf(nd);
+        if (bindName) attrs.push('binds="' + xesc(bindName) + '"');
         /* `describe` makes the message carry its own semantics, so whoever
            reads it does not need the Glyph vocabulary loaded to know what
            `<scrutinise>` means. Nothing here is invented: `means` is the gloss

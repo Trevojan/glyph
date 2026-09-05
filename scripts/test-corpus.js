@@ -2043,6 +2043,66 @@ const rRO = runLiteralRoleChecks();
 
 
 /* ------------------------------------------------------------------ *
+ * bindings -- a command's operand names its result, and a reference resolves
+ *
+ * The Regent's rule, from glyph-variable-naming-system.pgml: "when a command
+ * targets an object in context using text followed by orders, the result is
+ * named after the input text". Measured before this existed: [var`get_data`]
+ * and a path emitted the SAME <user-input>, so nothing in the document said
+ * get_data bound anything, and nothing linked a use to its definition.
+ * ------------------------------------------------------------------ */
+function runBindingChecks() {
+  console.log("\n--- bindings -- name and reference ---");
+  const D = [];
+  const ok = (id, name, why) => {
+    if (why) { console.log("  \u2717 " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  \u2713 " + id + ": " + name); D.push(id); }
+  };
+  const opts = { templates: TPL.templates, rules: RULESTORE,
+                 expansions: require("../.guidelines/expansions.json") };
+
+  const named = G.toXML("[sum`organized`[itr-core[ctx]]]", opts);
+  ok("BD-01", "an operand plus a nest names the command's result",
+     /<summary binds="organized">/.test(named) ? null
+       : "no binds on a command that names its result: " + JSON.stringify(named));
+
+  ok("BD-02", "a command carrying only a literal binds nothing",
+     G.toXML("[nt`organized`]", opts).indexOf("binds=") === -1 ? null
+       : "a bare operand was read as naming a result there is none of");
+
+  /* scope is the whole glyph-package, so a reference in a LATER block
+     resolves to a binding in an earlier one -- and would resolve the other
+     way round too */
+  const pair = G.toXML("[var`get_data`[get-find`~/d.json`]];[eval`get_data`]", opts);
+  ok("BD-03", "a literal that is a bound name carries the reference",
+     /<user-input ref="get_data">get_data<\/user-input>/.test(pair) ? null
+       : "the use is not linked to the definition: " + JSON.stringify(pair));
+
+  ok("BD-04", "the binding literal is not a reference to itself",
+     (pair.match(/ref="get_data"/g) || []).length === 1 ? null
+       : "the declaration was also marked as a use");
+
+  /* [--germinate] expands to [skill`tree logic structure`[...]], and binding
+     that sentence would put a pseudo-name in the document and let `ref` match
+     on a coincidence of wording. A name has the shape of a name. */
+  ok("BD-05", "prose is not a name",
+     G.toXML("[--germinate`a`,`b`]", { ...opts, templates: TPL.templates })
+       .indexOf('binds="tree logic structure"') === -1 ? null
+       : "a sentence was bound as if it were an identifier");
+
+  /* one name, one result: choosing between two would be the silent wrong
+     answer this release exists to remove */
+  ok("BD-06", "two commands naming one result is refused",
+     G.parse("[var`x`[get[ctx]]];[sum`x`[itr[ctx]]]", opts)
+       .gaps.some(g => g.code === "DuplicateBinding" && g.sev === "fix") ? null
+       : "a name bound twice raised nothing");
+
+  return D.length;
+}
+const rBD = runBindingChecks();
+
+
+/* ------------------------------------------------------------------ *
  * global store registration — the tripwire for splitting the core
  *
  * Every bucket above routes its stores through `opts`, deliberately, so the
@@ -2130,6 +2190,7 @@ console.log(" diag wording " + String(rDG).padStart(4) + "/3");
 console.log(" spellings    " + String(rSP).padStart(4) + "/3");
 console.log(" raw fence    " + String(rRW).padStart(4) + "/5");
 console.log(" literal role " + String(rRO).padStart(4) + "/5");
+console.log(" bindings     " + String(rBD).padStart(4) + "/6");
 console.log(" global store " + rGS + "/3");
 console.log("=================================================");
 
