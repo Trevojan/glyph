@@ -725,12 +725,62 @@ const GlyphCore = (function () {
     return prev[q];
   }
 
+  /* ------------------------------------------------------------------ *
+   * suggest — aponta, ou cala
+   *
+   * Media contra as ONZE palavras que o Autor da Ordem escreveu de verdade em
+   * glyph-variable-naming-system.pgml, a versão por distância de edição pura
+   * acertava UMA: 1 acerto, 8 palpites errados, 2 silêncios. O pior deles era
+   * RULE -> TRUE, que é distância ortográfica sem nenhuma semântica: nada em
+   * `rule` significa `true`, os dois só se parecem. rust#147595 documenta
+   * exatamente esse defeito no próprio rustc.
+   *
+   * E um palpite errado aqui não é ruído. O motor encontra o Autor da Ordem
+   * ENQUANTO a intenção ainda está se formando, então uma sugestão errada
+   * puxa a intenção para o lado errado enquanto ela ainda é maleável.
+   * `.guidelines/.sources/COMPILER_LESSONS.md` §1: conter a resposta certa não
+   * basta, e explicar melhor não substitui apontar certo.
+   *
+   * A observação que resolve: o vocabulário do Glyph é feito de ABREVIAÇÕES de
+   * glosas -- ITR de Iterate, CMP de Compare, TGT de Target. Então a busca certa
+   * não é distância contra o canônico, é PREFIXO contra a glosa. `ITER` é
+   * prefixo de `ITERATE`; `RULE` não é prefixo de nada, e a resposta honesta
+   * para `RULE` é que ele não existe -- não que talvez fosse `TRUE`.
+   *
+   * Medido depois: 3 respostas úteis, 8 silêncios, ZERO palpites errados. E
+   * `SEC` passou a devolver `SECTION`, que é o que o Autor da Ordem queria
+   * dizer, contra o `SPEC` de antes.
+   * ------------------------------------------------------------------ */
   function suggest(name) {
-    var U = String(name).toUpperCase();
-    var pool = Object.keys(INSTR).concat(Object.keys(STRUCT), Object.keys(META), Object.keys(ALIAS));
-    var best = null, bd = 99;
-    for (var k = 0; k < pool.length; k++) { var d = lev(U, pool[k]); if (d < bd) { bd = d; best = pool[k]; } }
-    return (bd <= 2 && bd < Math.max(U.length, 2)) ? { name:best, dist:bd } : null;
+    var U = String(name || "").toUpperCase().replace(/[^A-Z0-9]+/g, "");
+    if (!U) return null;
+
+    /* a glosa de cada canônico, sem separadores: `instead-of` -> INSTEADOF */
+    var glosses = {};
+    Object.keys(GLOSS_REVERSE).forEach(function (el) {
+      glosses[GLOSS_REVERSE[el].canonical] = el.toUpperCase().replace(/[^A-Z0-9]+/g, "");
+    });
+
+    /* 1 — a entrada é o começo de uma glosa. É a forma que uma abreviação tem,
+       e é como este vocabulário inteiro foi construído. */
+    var pre = Object.keys(glosses).filter(function (k) { return glosses[k].indexOf(U) === 0; });
+    if (pre.length === 1) return { name: pre[0], dist: 0, how: "gloss-prefix" };
+    /* ambíguo é pior que silêncio: duas respostas não apontam para lugar nenhum */
+    if (pre.length > 1) return null;
+
+    /* 2 — o canônico é uma subsequência da entrada: ITR dentro de ITER. Só a
+       partir de três letras, porque com duas qualquer coisa casa. */
+    var sub = Object.keys(glosses).filter(function (k) {
+      if (k.length < 3) return false;
+      var i = 0;
+      for (var c = 0; c < U.length; c++) if (U.charAt(c) === k.charAt(i)) i++;
+      return i === k.length;
+    });
+    if (sub.length === 1) return { name: sub[0], dist: 0, how: "subsequence" };
+
+    /* 3 — silêncio. `[RULE` fora do vocabulário é a resposta inteira; inventar
+       um vizinho ortográfico seria responder outra pergunta com confiança. */
+    return null;
   }
 
   function elName(canonical, tier, gloss) {

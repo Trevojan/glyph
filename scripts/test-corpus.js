@@ -2103,6 +2103,50 @@ const rBD = runBindingChecks();
 
 
 /* ------------------------------------------------------------------ *
+ * suggest -- aponta, ou cala
+ *
+ * Medido contra as ONZE palavras que o Autor da Ordem escreveu de verdade:
+ * a versao por distancia de edicao acertava UMA, com oito palpites errados.
+ * O pior era RULE -> TRUE, distancia ortografica sem nenhuma semantica.
+ *
+ * Um palpite errado aqui nao e ruido. O motor encontra o Autor da Ordem
+ * ENQUANTO a intencao se forma, entao a sugestao errada puxa a intencao para
+ * o lado errado enquanto ela ainda e maleavel.
+ * ------------------------------------------------------------------ */
+function runSuggestChecks() {
+  console.log("\n--- suggest -- aponta, ou cala ---");
+  const D = [];
+  const ok = (id, name, why) => {
+    if (why) { console.log("  \u2717 " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  \u2713 " + id + ": " + name); D.push(id); }
+  };
+  const of = w => { const s = G.suggest(w); return s ? s.name : null; };
+
+  /* a abreviacao real: ITR e Iterate encurtado, e ITER e o comeco da glosa */
+  ok("SG-01", "uma abreviacao da glosa e reconhecida",
+     of("ITER") === "ITR" ? null : "ITER sugeriu " + JSON.stringify(of("ITER")));
+
+  /* e aqui a versao antiga dizia SPEC, quando o Autor da Ordem queria SECTION */
+  ok("SG-02", "e aponta para o que o autor queria dizer",
+     of("SEC") === "SECTION" ? null : "SEC sugeriu " + JSON.stringify(of("SEC")));
+
+  /* o defeito que fechou: nada em `rule` significa `true`, os dois so se parecem */
+  const guessed = ["RULE", "SCOPE", "DOC", "DESC", "CMD", "SYNTAX", "RESULT"]
+    .filter(w => of(w) !== null);
+  ok("SG-03", "uma palavra que nao existe nao ganha vizinho ortografico",
+     guessed.length ? "ainda palpita em: " + guessed.map(w => w + " -> " + of(w)).join(", ") : null);
+
+  /* ambiguo e pior que silencio: duas respostas nao apontam para lugar nenhum */
+  ok("SG-04", "um prefixo ambiguo cala em vez de escolher",
+     of("C") === null && of("RE") === null ? null
+       : "escolheu entre candidatos: C -> " + of("C") + ", RE -> " + of("RE"));
+
+  return D.length;
+}
+const rSG = runSuggestChecks();
+
+
+/* ------------------------------------------------------------------ *
  * global store registration — the tripwire for splitting the core
  *
  * Every bucket above routes its stores through `opts`, deliberately, so the
@@ -2191,6 +2235,7 @@ console.log(" spellings    " + String(rSP).padStart(4) + "/3");
 console.log(" raw fence    " + String(rRW).padStart(4) + "/5");
 console.log(" literal role " + String(rRO).padStart(4) + "/5");
 console.log(" bindings     " + String(rBD).padStart(4) + "/6");
+console.log(" suggest      " + String(rSG).padStart(4) + "/4");
 console.log(" global store " + rGS + "/3");
 console.log("=================================================");
 
