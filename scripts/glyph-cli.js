@@ -19,9 +19,15 @@
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
+import fs from "node:fs";
 import G from "./glyph-parser.js";
 const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+/* Something that carries no bracket and wears an extension or a separator is a
+   path an author meant to compile, not a source. Used only to REFUSE — the way
+   in is `--file`, and guessing is what this check exists to prevent. */
+const LOOKS_LIKE_PATH = /^[^[\]]+(\.(pgml|glyph|gly|txt|md|hgml|xml|json)|[\/\\][^[\]]*)$/i;
 
 export function main() {
   // optional stores: if absent, the engine still runs, just without expansion/contradiction checks
@@ -35,16 +41,49 @@ export function main() {
   var argv = process.argv.slice(2);
   var mode = "xml";
   var src = [];
-  argv.forEach(function (a) {
+  var file = null;
+  for (var ai = 0; ai < argv.length; ai++) {
+    var a = argv[ai];
     if (a === "--ast" || a === "--xml" || a === "--diag" ||
-        a === "--expand" || a === "--hgml" || a === "--from-xml") mode = a.slice(2);
-    else src.push(a);
-  });
+        a === "--expand" || a === "--hgml" || a === "--from-xml") { mode = a.slice(2); continue; }
+    /* `--file` is the ONLY way in from disk. Until it existed the engine had no
+       filesystem entry point at all: source arrived as argv, so
+       `glyph-cli.js order.pgml` compiled the seven-character STRING
+       "order.pgml" and answered about that. */
+    if (a === "--file" || a === "-f") { file = argv[++ai]; continue; }
+    if (a.slice(0, 7) === "--file=") { file = a.slice(7); continue; }
+    src.push(a);
+  }
   var input = src.join(" ");
+
+  if (file != null) {
+    if (input) {
+      console.error("--file e uma fonte na linha de comando ao mesmo tempo: escolha uma.");
+      process.exit(2);
+    }
+    if (!file) { console.error("--file sem caminho."); process.exit(2); }
+    try {
+      input = fs.readFileSync(file, "utf8");
+    } catch (e) {
+      console.error("não consegui ler " + file + ": " + e.message);
+      process.exit(2);
+    }
+    /* A BOM survives readFileSync and would reach the tokenizer as content. */
+    if (input.charCodeAt(0) === 0xFEFF) input = input.slice(1);
+  } else if (mode !== "expand" && input && LOOKS_LIKE_PATH.test(input) && fs.existsSync(input)) {
+    /* Refuse rather than guess. Compiling the path as source is the silent
+       wrong answer this repository exists to remove — it produces a document
+       ABOUT the filename, and nothing says so. */
+    console.error(input + " é um arquivo que existe, e uma fonte Glyph não se parece com isso.");
+    console.error("para compilar o arquivo:  node scripts/glyph-cli.js --file " + input + " --xml");
+    process.exit(2);
+  }
+
   if (!input) {
-    console.error("uso: node scripts/glyph-parser.js \"[crit[ctx]]\" [--xml|--ast|--diag|--hgml]");
-    console.error("     node scripts/glyph-parser.js \"<glyph>…</glyph>\" --from-xml");
-    console.error("     node scripts/glyph-parser.js CRIT --expand");
+    console.error("uso: node scripts/glyph-cli.js \"[crit[ctx]]\" [--xml|--ast|--diag|--hgml]");
+    console.error("     node scripts/glyph-cli.js --file caminho.pgml [--xml|--ast|--diag|--hgml]");
+    console.error("     node scripts/glyph-cli.js \"<glyph-package>…</glyph-package>\" --from-xml");
+    console.error("     node scripts/glyph-cli.js CRIT --expand");
     process.exit(2);
   }
   if (mode === "hgml") console.log(G.toHGML(input));

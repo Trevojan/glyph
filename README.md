@@ -42,6 +42,17 @@ node scripts/serve-dev.js
 node scripts/glyph-cli.js "[crit[ctx'the parser']]" --xml
 ```
 
+Or from a file, with `--file`:
+
+```bash
+node scripts/glyph-cli.js --file .guidelines/ORDERS/ORD-2026-08-30-01.pgml --xml
+```
+
+`--file` is the only way in from disk, and a bare path is **refused** rather than
+guessed. Until it existed the engine had no filesystem entry point at all, so
+`glyph-cli.js order.pgml` compiled the ten-character string `"order.pgml"` and
+answered, confidently, about a filename.
+
 Modes: `--xml` (default, the deliverable) · `--ast` (JSON inspection panel) ·
 `--diag` (diagnostics only) · `--hgml` (the atomic burn) · `--expand` (what a
 command is made of) · `--from-xml` (the way back).
@@ -63,9 +74,18 @@ It never throws: bad XML comes back as diagnostics, the way `parse()` answers
 bad Glyph with gaps. Three things do not survive the trip and are pinned by
 tests so none gets "fixed" silently — `[tpl:name]` always returns as the
 `[--name` invocation, content appended past a template's declared params is
-dropped, and text holding `' \` [ ]` is substituted rather than preserved.
-`<needs>` written by `FRAMES`/`SLOTS` deliberately returns as *nothing* and is
-regenerated: it is the engine's question, not the human's answer.
+dropped, and text holding `'`, a backtick or `[` is substituted rather than
+preserved. `<needs>` written by `FRAMES`/`SLOTS` deliberately returns as
+*nothing* and is regenerated: it is the engine's question, not the human's answer.
+
+That list used to name `\` and `]` as well, and both were wrong. Measured, one
+character at a time: `\` is **preserved**, and `]` never reaches the trip at all
+— it **ends a literal at parse time**, under either quote, with no escape of any
+kind (backslash, doubling and `&#93;` were each tried and each refused; the
+entity dies on the `;`, which is a separator). So a document that quotes Glyph
+cannot be written in Glyph. `[logic]…[/logic]` is the one construct that carries
+a bracket through, and `.guidelines/ORDERS/INTAKE-VARIABLES.md` §1.3 proposes the
+verbatim fence that generalises it.
 
 ### `.hgml` — the atomic burn
 

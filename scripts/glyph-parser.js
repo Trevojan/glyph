@@ -1401,11 +1401,18 @@ const GlyphCore = (function () {
           var t3 = top();
           var lit = { literal:true, v:tk.v, form:tk.form, tok:tk };
           if (t3) t3.children.push(lit); else seg.children.push(lit);
+          /* The message used to read "Feche com ``` antes." — advice the author has
+             already followed, because the closing backtick IS there, just after
+             the `]`. Naming the fix instead of the cause made a one-line lexer
+             rule impossible to read out of the diagnostic: the culprit is the
+             character itself, and there is no escape for it under either quote. */
           if (tk.closedBy === "bracket" || tk.closedBy === "semi")
             G("fix", "texto cortado",
-              "literal cortado no <code>" + (tk.closedBy === "bracket" ? "]" : ";") +
-              "</code>. Feche com <code>`</code> antes.", "TruncatedLiteral",
-            "text cut", "literal cut at <code>" + (tk.closedBy === "bracket" ? "]" : ";") + "</code>. Close it with <code>`</code> first.");
+              "<code>" + (tk.closedBy === "bracket" ? "]" : ";") +
+              "</code> encerra o literal aqui, e não há escape para ele. Reescreva o texto sem esse caractere.",
+              "TruncatedLiteral",
+            "text cut", "<code>" + (tk.closedBy === "bracket" ? "]" : ";") +
+              "</code> ends the literal here, and there is no escape for it. Rewrite the text without that character.");
           if (tk.closedBy === "eof") G("fix", "texto aberto", "<code>`</code> sem fechar.", "UnterminatedLiteral",
             "text left open", "<code>`</code> never closed.");
           if (tk.form === "quote" && tk.closedBy === "unterminated")

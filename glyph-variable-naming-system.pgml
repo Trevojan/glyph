@@ -1,0 +1,38 @@
+[VAR'glyph-variable-naming-system'
+  [DOC'How variable naming works in glyph'
+    [SEC'Commands Target Objects'
+      [DESC'When a command targets an object in context using text followed by orders']
+      [RULE'result is named after the input text']
+      [EX'[sum\'organized\'[iter-core[ctx]]]']
+      [NOTE'Here, result of [SUM] becomes the variable \'organized\'']
+    ]
+    [SEC'Explicit Variable Definition'
+      [VAR'var-keyword-usage'
+        [DESC'[VAR] command explicitly defines a named variable']
+        [SYNTAX'[VAR\'name\'[CMD1][CMD2]...]']
+        [SCOPE'variable exists in current glyph-package']
+      ]
+    ]
+    [SEC'Chained Commands with VAR'
+      [VAR'complex-example'
+        [RULE'When [VAR] followed by text and multiple [CMD]']
+        [RULE'the name derives from input text parameter']
+        [EX
+          [VAR'get_data'
+            [GET-FIND'~/weird_data.json']
+            [WHR
+              [TGT'data_item']
+              [NEQ-TGT'~/dumps/log.json']
+            ]
+          ]
+        ]
+        [RESULT'variable named \'get_data\' contains filtered results']
+      ]
+    ]
+    [SEC'Reference Pattern'
+      [DOC'Once defined, use the variable name anywhere in context']
+      [EX'get_data can now reference the filtered dataset']
+      [EX'organized can be iterated, summed, or piped forward']
+    ]
+  ]
+]

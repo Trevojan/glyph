@@ -1754,6 +1754,99 @@ const rAP = runAppChecks();
 
 
 /* ------------------------------------------------------------------ *
+ * the command line — the OTHER documented way in
+ *
+ * AP-01..03 gate the app. Nothing gated the CLI, and the gap was the same
+ * shape: until `--file` existed the engine had no filesystem entry point at
+ * all, so `glyph-cli.js order.pgml` compiled the STRING "order.pgml" and
+ * answered, confidently, about a filename. A silent wrong answer is the class
+ * this release exists to remove, so the refusal is gated beside the feature.
+ * ------------------------------------------------------------------ */
+function runCliChecks() {
+  console.log("\n--- the command line — the documented way in ---");
+  const D = [];
+  const fsx = require("fs"), px = require("path"), cp = require("child_process");
+  const ok = (id, name, why) => {
+    if (why) { console.log("  ✗ " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  ✓ " + id + ": " + name); D.push(id); }
+  };
+  const ROOT = px.resolve(__dirname, "..");
+  const CLI = px.join(ROOT, "scripts", "glyph-cli.js");
+  const tmp = px.join(ROOT, ".cli-gate.pgml");
+  const run = args => {
+    try {
+      return { out: cp.execFileSync(process.execPath, [CLI].concat(args),
+                                   { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }), code: 0 };
+    } catch (e) {
+      return { out: String(e.stdout || "") + String(e.stderr || ""), code: e.status == null ? -1 : e.status };
+    }
+  };
+  try {
+    fsx.writeFileSync(tmp, "[crit`from a file`]", "utf8");
+
+    /* CL-01 — the content is compiled, and it is the content and not the name */
+    const r1 = run(["--file", tmp, "--xml"]);
+    ok("CL-01", "--file compiles the file's content",
+       r1.code === 0 && /<user-input>from a file<\/user-input>/.test(r1.out)
+         ? null : "exit " + r1.code + ", output: " + JSON.stringify(r1.out.slice(0, 160)));
+
+    /* CL-02 — the refusal, which is the half that keeps the wrong answer away */
+    const r2 = run([tmp, "--xml"]);
+    ok("CL-02", "a bare existing path is refused, never compiled as source",
+       r2.code !== 0 && /--file/.test(r2.out) && !/<glyph-package/.test(r2.out)
+         ? null : "exit " + r2.code + ", output: " + JSON.stringify(r2.out.slice(0, 160)));
+
+    /* CL-03 — the old way in did not move */
+    const r3 = run(["[crit`inline`]", "--xml"]);
+    ok("CL-03", "source on the command line still compiles",
+       r3.code === 0 && /<user-input>inline<\/user-input>/.test(r3.out)
+         ? null : "exit " + r3.code + ", output: " + JSON.stringify(r3.out.slice(0, 160)));
+  } finally {
+    try { fsx.unlinkSync(tmp); } catch (e) { /* never existed, or already gone */ }
+  }
+  return D.length;
+}
+const rCL = runCliChecks();
+
+
+/* ------------------------------------------------------------------ *
+ * diagnostics that name the cause
+ *
+ * A message that describes a fix the author has already applied reads as the
+ * engine not seeing the text. `TruncatedLiteral` said "Feche com ` antes" at a
+ * point where the closing backtick was already there, one character further
+ * right — so the rule (`]` ends a literal, under either quote, with no escape)
+ * was unreadable from the only place it was reported.
+ * ------------------------------------------------------------------ */
+function runDiagWordingChecks() {
+  console.log("\n--- diagnostics name the cause ---");
+  const D = [];
+  const ok = (id, name, why) => {
+    if (why) { console.log("  ✗ " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  ✓ " + id + ": " + name); D.push(id); }
+  };
+  const bare = s => String(s).replace(/<[^>]+>/g, "");
+  const opts = { templates: TPL.templates, rules: RULESTORE,
+                 expansions: require("../.guidelines/expansions.json") };
+
+  const g = G.parse("[nt`a ] b`]", opts).gaps.filter(d => d.code === "TruncatedLiteral");
+  ok("DG-01", "TruncatedLiteral is raised for a bracket inside a literal",
+     g.length ? null : "a literal holding ] no longer reports TruncatedLiteral");
+  if (g.length) {
+    const msg = bare(g[0].msg);
+    ok("DG-02", "its message names the character that ends the literal",
+       /\]/.test(msg) ? null : "message does not mention ]: " + JSON.stringify(msg));
+    ok("DG-03", "and does not prescribe a fix the author already applied",
+       /feche com|close it with/i.test(msg)
+         ? "message still says to close the literal, which the author did: " + JSON.stringify(msg)
+         : null);
+  } else { failures.push("DG-02", "DG-03"); }
+  return D.length;
+}
+const rDG = runDiagWordingChecks();
+
+
+/* ------------------------------------------------------------------ *
  * global store registration — the tripwire for splitting the core
  *
  * Every bucket above routes its stores through `opts`, deliberately, so the
@@ -1836,6 +1929,8 @@ console.log(" glyph-package" + String(rPK).padStart(4) + "/6");
 console.log(" examples     " + rE + "/5");
 console.log(" snapshot     " + rSN + "/4");
 console.log(" app          " + String(rAP).padStart(4) + "/3");
+console.log(" cli          " + String(rCL).padStart(4) + "/3");
+console.log(" diag wording " + String(rDG).padStart(4) + "/3");
 console.log(" global store " + rGS + "/3");
 console.log("=================================================");
 
