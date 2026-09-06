@@ -549,7 +549,18 @@ const GlyphCore = (function () {
         while (j3 < n) {
           if (src[j3] === "`") { by = "tick"; break; }
           if (src[j3] === "]") { by = "bracket"; break; }
-          if (src[j3] === ";") { by = "semi"; break; }
+          /* `;` DELIBERADAMENTE ausente daqui desde 2026-09-05. Ele encerrava um
+             literal de crase e nao encerrava um de apostrofo, entao as duas aspas
+             tinham gramaticas diferentes -- e a crase existe justamente para se
+             poder escrever apostrofo dentro, e vice-versa.
+
+             A regra do Regente: "jamais algo estrutural pode causar problema na
+             escrita de literais". Lista de topicos usa `;` ao fim de cada ponto
+             por convencao, e o Autor da Ordem nao pode perder isso para um
+             separador. Dentro de um literal, so a aspa que o abriu o fecha.
+
+             Foi tambem o que matou a entidade `&#93;` quando os escapes foram
+             medidos: ela morria no `;`, e o sintoma foi visto sem a assimetria. */
           j3++;
         }
         var e3 = by === "tick" ? j3 + 1 : j3;

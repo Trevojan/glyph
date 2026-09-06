@@ -2147,6 +2147,48 @@ const rSG = runSuggestChecks();
 
 
 /* ------------------------------------------------------------------ *
+ * aspas -- as duas formas obedecem a mesma regra
+ *
+ * `;` encerrava um literal de crase e nao encerrava um de apostrofo, entao
+ * as duas aspas tinham gramaticas diferentes -- e a crase existe justamente
+ * para se poder escrever apostrofo dentro, e vice-versa.
+ *
+ * A regra do Regente: "jamais algo estrutural pode causar problema na
+ * escrita de literais". Lista de topicos usa `;` ao fim de cada ponto por
+ * convencao, e o Autor da Ordem nao pode perder isso para um separador.
+ * ------------------------------------------------------------------ */
+function runQuoteChecks() {
+  console.log("\n--- aspas -- uma regra so ---");
+  const D = [];
+  const ok = (id, name, why) => {
+    if (why) { console.log("  \u2717 " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  \u2713 " + id + ": " + name); D.push(id); }
+  };
+  const opts = { templates: TPL.templates, rules: RULESTORE,
+                 expansions: require("../.guidelines/expansions.json") };
+  const clean = src => G.parse(src, opts).gaps.filter(g => g.sev === "fix").length === 0;
+  const text = src => (G.toXML(src, opts).match(/<user-input>([^<]*)</) || [])[1];
+
+  ok("QT-01", "`;` dentro de um literal de crase e conteudo",
+     clean("[nt`a ; b`]") ? null
+       : "ainda recusa: " + G.parse("[nt`a ; b`]", opts).gaps.map(g => g.code).join(","));
+
+  ok("QT-02", "e as duas aspas dao o mesmo texto",
+     text("[nt`a ; b`]") === text("[nt'a ; b']") ? null
+       : "crase deu " + JSON.stringify(text("[nt`a ; b`]")) +
+         ", apostrofo deu " + JSON.stringify(text("[nt'a ; b']")));
+
+  /* a outra metade: fora do literal ele continua sendo o separador */
+  ok("QT-03", "`;` fora de um literal ainda separa blocos",
+     (G.toXML("[nt`a`];[nt`b`]", opts).match(/<block/g) || []).length === 2 ? null
+       : "o separador parou de separar");
+
+  return D.length;
+}
+const rQT = runQuoteChecks();
+
+
+/* ------------------------------------------------------------------ *
  * global store registration — the tripwire for splitting the core
  *
  * Every bucket above routes its stores through `opts`, deliberately, so the
@@ -2236,6 +2278,7 @@ console.log(" raw fence    " + String(rRW).padStart(4) + "/5");
 console.log(" literal role " + String(rRO).padStart(4) + "/5");
 console.log(" bindings     " + String(rBD).padStart(4) + "/6");
 console.log(" suggest      " + String(rSG).padStart(4) + "/4");
+console.log(" aspas        " + String(rQT).padStart(4) + "/3");
 console.log(" global store " + rGS + "/3");
 console.log("=================================================");
 
