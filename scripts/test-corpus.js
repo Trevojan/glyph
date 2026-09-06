@@ -2244,6 +2244,58 @@ const rTP = runTemplateParamChecks();
 
 
 /* ------------------------------------------------------------------ *
+ * imperativo -- um primitivo que recebeu operando
+ *
+ * GLOSSARY 0 declara dois eixos independentes, e o segundo -- primitivo
+ * (stands alone) contra operador (needs an operand) -- nunca virou tabela.
+ * Sem ele, [bold[ctx[var]]] saia com ZERO diagnosticos e nenhuma marca: um
+ * comando declarado a nao receber nada aceitava um filho em silencio.
+ *
+ * O eixo e DERIVADO, nao transcrito: e primitivo o atomo de que nenhuma
+ * tabela de valencia cobra operando. A prosa da GLOSSARY 2 nao serve de
+ * fonte -- 15 dos 38 comandos que ela lista como "stand on their own"
+ * exigem operando pelo FRAMES, e REQ esta nas duas secoes ao mesmo tempo.
+ * ------------------------------------------------------------------ */
+function runImperativeChecks() {
+  console.log("\n--- imperativo ---");
+  const D = [];
+  const ok = (id, name, why) => {
+    if (why) { console.log("  \u2717 " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  \u2713 " + id + ": " + name); D.push(id); }
+  };
+  const opts = { templates: TPL.templates, rules: RULESTORE,
+                 expansions: require("../.guidelines/expansions.json") };
+  const marked = src => G.toXML(src, opts).indexOf('imperative="true"') !== -1;
+
+  ok("IM-01", "um primitivo que recebe comando e imperativo",
+     marked("[bold[ctx[var]]]") ? null : "[bold[ctx]] nao foi marcado");
+
+  ok("IM-02", "um primitivo sozinho nao e",
+     !marked("[bold]") ? null : "[bold] sozinho foi marcado, e ele e so uma marca");
+
+  /* e a CONTENCAO que faz, nao a vizinhanca: [bold][ctx] sao dois irmaos */
+  ok("IM-03", "dois irmaos lado a lado nao sao imperativo",
+     !marked("[bold][ctx`x`]") ? null
+       : "vizinhanca foi lida como contencao");
+
+  /* so primitivo. um operador que recebe operando esta fazendo o seu trabalho */
+  ok("IM-04", "um operador com operando nao e imperativo",
+     !marked("[crit[ctx`x`]]") ? null
+       : "[crit] exige operando pelo FRAMES e mesmo assim foi marcado");
+
+  /* o eixo derivado tem de bater com os cinco que o comentario do FRAMES
+     nomeia -- foi a unica lista que o codigo ja carregava */
+  const five = ["WHR", "HGH", "LOW", "BOLD", "LIGHT"];
+  const wrong = five.filter(c => !G.standsAlone(c, opts));
+  ok("IM-05", "os cinco primitivos que o codigo ja nomeava continuam primitivos",
+     wrong.length ? "deixaram de ser: " + wrong.join(", ") : null);
+
+  return D.length;
+}
+const rIM = runImperativeChecks();
+
+
+/* ------------------------------------------------------------------ *
  * global store registration — the tripwire for splitting the core
  *
  * Every bucket above routes its stores through `opts`, deliberately, so the
@@ -2335,6 +2387,7 @@ console.log(" bindings     " + String(rBD).padStart(4) + "/6");
 console.log(" suggest      " + String(rSG).padStart(4) + "/4");
 console.log(" aspas        " + String(rQT).padStart(4) + "/3");
 console.log(" param molde  " + String(rTP).padStart(4) + "/4");
+console.log(" imperativo   " + String(rIM).padStart(4) + "/5");
 console.log(" global store " + rGS + "/3");
 console.log("=================================================");
 

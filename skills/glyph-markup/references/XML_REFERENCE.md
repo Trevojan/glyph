@@ -98,6 +98,7 @@ Session shortcuts are the exception — they serialise as the shortcut itself
 | `kind` `var` | `<rule>` | `[logic]` line | rule type and bound name |
 | `var` | `<needs>` | `[logic]` line | a name used and never defined |
 | `binds` | any command | an operand literal plus a bracketed nest | the name this command's result answers to |
+| `imperative` | any primitive | a primitive that received a bracketed command | it stands alone by the legend, and here it is commanding an operand |
 | `ref` | `<user-input>` | a literal whose text is a bound name | the binding it refers to, resolved across the whole package |
 | `role` | `<user-input>` | position | `result` when the literal follows a bracketed nest; absent means operand |
 | `means` `made-of` | any element | — | only under `toXML(src,{describe:true})` |

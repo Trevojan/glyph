@@ -306,6 +306,31 @@ const GlyphCore = (function () {
     SWITCH:["the states*"], GO:["what to execute"]
   };
 
+  /* ------------------------------------------------------------------ *
+   * standsAlone -- o eixo primitivo/operador, DERIVADO
+   *
+   * GLOSSARY §0 declara dois eixos independentes: hieroglifo/glifo (decompoe?)
+   * e primitivo/operador (precisa de operando?). O segundo nunca virou tabela:
+   * vive na prosa da §2 e num comentario dentro de FRAMES nomeando cinco
+   * comandos.
+   *
+   * E a prosa da §2 nao serve como fonte. Medido: dos 38 comandos que ela
+   * lista como "atoms that stand on their own, with no operand", QUINZE estao
+   * so ali e mesmo assim exigem operando pelo FRAMES -- CTX, NT, REV, RSN, REQ
+   * entre eles -- e REQ aparece nas duas secoes ao mesmo tempo. A §2 contradiz
+   * a §0 no proprio corpo do documento.
+   *
+   * Entao a tabela e DERIVADA do que o motor ja segura: e primitivo o atomo
+   * de que nenhuma tabela de valencia cobra operando. Nada de transcrever
+   * prosa -- dominio evita sintese, e derivar de FRAMES/SLOTS significa que a
+   * classificacao nao pode divergir do que o motor de fato faz.
+   * ------------------------------------------------------------------ */
+  function standsAlone(canonical, opts) {
+    var U = String(canonical || "").toUpperCase();
+    if (!U || FRAMES[U] || SLOTS[U] || NAMED_STRUCT[U]) return false;
+    return speciesOf(U, opts) === "atom";
+  }
+
   /* structural commands whose first child must be a literal (the name) */
   var NAMED_STRUCT = { SECTION:1, BLOCK:1 };
 
@@ -2195,6 +2220,22 @@ const GlyphCore = (function () {
         if (chainAttr) attrs.push(chainAttr);
         if (joinAttr) attrs.push(joinAttr);
         /* the name this command's result answers to, from its own operand */
+        /* IMPERATIVO -- um primitivo que RECEBEU operando.
+
+           Nao e especie nova: GLOSSARY §0 tem duas especies em dois eixos e
+           uma celula vazia por construcao, entao um terceiro valor quebraria a
+           legenda. E POSICAO, como `origin` e `role`.
+
+           `[bold]` sozinho e uma marca. `[bold[ctx]]` e um primitivo mandando
+           num operando, e ate agora o documento nao dizia isso -- saia com zero
+           diagnosticos e nenhuma marca, aceitando em silencio um filho que o
+           comando nunca foi declarado a receber.
+
+           A vizinhanca nao basta: `[bold][ctx]` sao dois irmaos e nao ha
+           imperativo ali. E a contencao que faz. */
+        if (standsAlone(nd.canonical, opts) &&
+            (nd.children || []).some(function (c) { return !!c.canonical && !c.chainElement; }))
+          attrs.push('imperative="true"');
         var bindName = bindingOf(nd);
         if (bindName) attrs.push('binds="' + xesc(bindName) + '"');
         /* `describe` makes the message carry its own semantics, so whoever
@@ -3504,6 +3545,7 @@ const GlyphCore = (function () {
     useRules: useRules,
     useExpansions: useExpansions, expansionRegistry: expansionRegistry,
     speciesOf: speciesOf, depthOf: depthOf, formulaOf: formulaOf, atomsOf: atomsOf,
+    standsAlone: standsAlone,
     defOf: defOf,
     buildXml: buildXml, toXML: toXML, toAST: toAST, serializeAST: serializeAST,
     burn: burn, toHGML: toHGML,
