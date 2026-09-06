@@ -28,6 +28,7 @@ const require = createRequire(import.meta.url);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 import G from "./glyph-parser.js";
+import * as G_ZIP from "./glyph-zip.js";
 import * as CHECK_MOD from "./glyph-check.js";
 
 /* Stores travel through opts in the cases that need them, so the suite
@@ -2296,6 +2297,93 @@ const rIM = runImperativeChecks();
 
 
 /* ------------------------------------------------------------------ *
+ * o bundle da Ordem -- ORD-0001, numerado como um ADR
+ *
+ * Ate aqui `baixar` entregava UMA aba por clique, com o nome `glyph.ext`.
+ * Quatro cliques e quatro renomeacoes para ter uma Ordem, que e o trabalho
+ * que esta ferramenta existe para nao criar -- e o painel de destino dizia,
+ * na propria tela, que seria lido "pelo emissor de bundle", que nunca tinha
+ * sido escrito.
+ *
+ * O ZIP e escrito aqui dentro, metodo `store`, porque zero dependencia e
+ * propriedade deste repositorio e nao acidente.
+ * ------------------------------------------------------------------ */
+function runBundleChecks() {
+  console.log("\n--- bundle da Ordem ---");
+  const D = [];
+  const ok = (id, name, why) => {
+    if (why) { console.log("  \u2717 " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  \u2713 " + id + ": " + name); D.push(id); }
+  };
+  const fsx = require("fs"), px = require("path"), cp = require("child_process");
+  const ROOT = px.resolve(__dirname, "..");
+
+  /* um leitor de zip minimo, so o suficiente para conferir o que foi escrito:
+     percorre os cabecalhos locais e recalcula o CRC de cada entrada */
+  const readZip = buf => {
+    const u = new Uint8Array(buf), out = [];
+    const r16 = o => u[o] | (u[o + 1] << 8);
+    const r32 = o => (u[o] | (u[o + 1] << 8) | (u[o + 2] << 16) | (u[o + 3] << 24)) >>> 0;
+    let i = 0;
+    while (i + 4 <= u.length && r32(i) === 0x04034B50) {
+      const crc = r32(i + 14), size = r32(i + 22), nlen = r16(i + 26), elen = r16(i + 28);
+      const name = Buffer.from(u.slice(i + 30, i + 30 + nlen)).toString("utf8");
+      const data = u.slice(i + 30 + nlen + elen, i + 30 + nlen + elen + size);
+      out.push({ name, size, crc, data });
+      i += 30 + nlen + elen + size;
+    }
+    return out;
+  };
+
+  const tmp = px.join(ROOT, ".ord-gate");
+  try {
+    fsx.mkdirSync(tmp, { recursive: true });
+    const srcFile = px.join(tmp, "fonte.pgml");
+    fsx.writeFileSync(srcFile, "[in[tgt`acentuacao e c-cedilha: fichação`]]", "utf8");
+    const run = args => cp.execFileSync(process.execPath,
+      [px.join(ROOT, "scripts", "glyph-cli.js")].concat(args),
+      { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
+
+    run(["--file", srcFile, "--bundle", "--out", tmp]);
+    const first = px.join(tmp, "ORD-0001.zip");
+    ok("ZP-01", "emite ORD-0001 na primeira vez",
+       fsx.existsSync(first) ? null : "nao escreveu " + first);
+
+    /* a numeracao de ADR: le a pasta e continua de onde parou */
+    run(["--file", srcFile, "--bundle", "--out", tmp]);
+    ok("ZP-02", "e continua em ORD-0002, lendo a pasta",
+       fsx.existsSync(px.join(tmp, "ORD-0002.zip")) ? null
+         : "o numero nao avancou -- a pasta nao foi lida");
+
+    const entries = readZip(fsx.readFileSync(first));
+    ok("ZP-03", "o bundle tem as quatro projecoes mais o manifesto",
+       entries.length === 5 &&
+       [".pgml", ".xml", ".json", ".hgml", ".manifest.json"]
+         .every(ext => entries.some(e => e.name === "ORD-0001" + ext))
+         ? null : "tem " + entries.length + ": " + entries.map(e => e.name).join(", "));
+
+    /* o CRC de cada entrada tem de bater com os bytes gravados, senao o
+       descompactador do Autor da Ordem recusa o arquivo inteiro */
+    const bad = entries.filter(e => G_ZIP.crc32(e.data) !== e.crc);
+    ok("ZP-04", "o CRC de cada entrada confere com os bytes",
+       bad.length ? "CRC errado em: " + bad.map(e => e.name).join(", ") : null);
+
+    /* acento tem de voltar identico: o nome e o conteudo vao em UTF-8 e o
+       bit 11 do cabecalho diz isso */
+    const pgml = entries.find(e => e.name === "ORD-0001.pgml");
+    const back = Buffer.from(pgml.data).toString("utf8");
+    ok("ZP-05", "o conteudo volta byte a byte, acentos incluidos",
+       back === fsx.readFileSync(srcFile, "utf8") ? null
+         : "voltou diferente: " + JSON.stringify(back.slice(0, 80)));
+  } finally {
+    try { fsx.rmSync(tmp, { recursive: true, force: true }); } catch (e) { /* ja foi */ }
+  }
+  return D.length;
+}
+const rZP = runBundleChecks();
+
+
+/* ------------------------------------------------------------------ *
  * global store registration — the tripwire for splitting the core
  *
  * Every bucket above routes its stores through `opts`, deliberately, so the
@@ -2388,6 +2476,7 @@ console.log(" suggest      " + String(rSG).padStart(4) + "/4");
 console.log(" aspas        " + String(rQT).padStart(4) + "/3");
 console.log(" param molde  " + String(rTP).padStart(4) + "/4");
 console.log(" imperativo   " + String(rIM).padStart(4) + "/5");
+console.log(" bundle ORD   " + String(rZP).padStart(4) + "/5");
 console.log(" global store " + rGS + "/3");
 console.log("=================================================");
 

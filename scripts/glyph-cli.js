@@ -21,6 +21,7 @@ import { fileURLToPath } from "node:url";
 import path from "node:path";
 import fs from "node:fs";
 import G from "./glyph-parser.js";
+import { zipStore } from "./glyph-zip.js";
 const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -41,7 +42,7 @@ export function main() {
   var argv = process.argv.slice(2);
   var mode = "xml";
   var src = [];
-  var file = null;
+  var file = null, bundle = false, outDir = null;
   for (var ai = 0; ai < argv.length; ai++) {
     var a = argv[ai];
     if (a === "--ast" || a === "--xml" || a === "--diag" ||
@@ -51,6 +52,8 @@ export function main() {
        `glyph-cli.js order.pgml` compiled the seven-character STRING
        "order.pgml" and answered about that. */
     if (a === "--file" || a === "-f") { file = argv[++ai]; continue; }
+    if (a === "--bundle") { bundle = true; continue; }
+    if (a === "--out") { outDir = argv[++ai]; continue; }
     if (a.slice(0, 7) === "--file=") { file = a.slice(7); continue; }
     src.push(a);
   }
@@ -86,6 +89,62 @@ export function main() {
     console.error("     node scripts/glyph-cli.js CRIT --expand");
     process.exit(2);
   }
+  /* ------------------------------------------------------------------ *
+   * --bundle: a Ordem inteira, numerada como um ADR
+   *
+   * Numeracao chapada e sequencial -- ORD-0001, ORD-0002 -- e AQUI ela e de
+   * verdade, porque a linha de comando enxerga a pasta: o proximo numero e o
+   * maior ORD-#### que ja existe no destino, mais um. E a mesma coisa que se
+   * faz com um ADR, e pela mesma razao.
+   *
+   * O app nao consegue fazer isso -- o navegador nao enxerga pasta -- entao la
+   * o numero vem do localStorage e o campo fica editavel. A diferenca e
+   * declarada em vez de disfarcada.
+   * ------------------------------------------------------------------ */
+  if (bundle) {
+    var dir = outDir || ".";
+    var next = 1;
+    try {
+      fs.readdirSync(dir).forEach(function (name) {
+        var m = /^ORD-(\d{4})/.exec(name);
+        if (m) next = Math.max(next, parseInt(m[1], 10) + 1);
+      });
+    } catch (e) {
+      console.error("nao consegui ler " + dir + ": " + e.message);
+      process.exit(2);
+    }
+    var id = "ORD-" + String(next).padStart(4, "0");
+    var xml, ast, hgml;
+    try {
+      xml = G.toXML(input); ast = JSON.stringify(G.toAST(input), null, 2); hgml = G.toHGML(input);
+    } catch (e) {
+      console.error("a fonte nao compilou: " + e.message);
+      process.exit(1);
+    }
+    var gaps = G.parse(input).gaps || [];
+    var refused = gaps.filter(function (g) { return g.sev === "fix"; });
+    var zip = zipStore([
+      { name: id + ".pgml", text: input },
+      { name: id + ".xml",  text: xml },
+      { name: id + ".json", text: ast },
+      { name: id + ".hgml", text: hgml },
+      { name: id + ".manifest.json", text: JSON.stringify({
+          order: id, engine: G.VERSION, emitted: new Date().toISOString(),
+          files: [id + ".pgml", id + ".xml", id + ".json", id + ".hgml"],
+          source: file || null,
+          diagnostics: { fix: refused.length, total: gaps.length }
+        }, null, 2) + String.fromCharCode(10) }
+    ]);
+    var dest = path.join(dir, id + ".zip");
+    fs.writeFileSync(dest, zip);
+    console.log(dest + "  (" + zip.length + " bytes, 5 arquivos)");
+    /* recusa nao impede emitir -- casa vazia vira <needs> e a Ordem viaja
+       incompleta de proposito -- mas o Autor da Ordem tem de saber. */
+    if (refused.length)
+      console.error(refused.length + " diagnostico(s) `fix` nesta Ordem. Rode --diag para ver.");
+    return;
+  }
+
   if (mode === "hgml") console.log(G.toHGML(input));
   else if (mode === "from-xml") {
     /* the inverse, for checking by hand what the XML panel does on apply */

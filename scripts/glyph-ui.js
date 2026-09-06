@@ -3,6 +3,8 @@
    glyph-parser.js; the rule and template stores in glyph-data.js; the form
    data in glyph-moldes.js. What is left here is only the app. */
 
+import { zipStore } from "./glyph-zip.js";
+
 (function () {
   "use strict";
 
@@ -548,6 +550,81 @@
      e o .hgml é a queima. Todos saem do mesmo estado já calculado em run(),
      nenhum recalcula nada.
      ====================================================== */
+
+  /* ======================================================
+     O BUNDLE DA ORDEM
+
+     Ate aqui `baixar` entregava UMA aba por clique, com o nome `glyph.ext`.
+     Quatro cliques e quatro renomeacoes manuais para ter uma Ordem -- que e
+     o trabalho que esta ferramenta existe para nao criar. E o painel de
+     destino dizia, na propria tela, que a selecao seria lida "pelo emissor de
+     bundle", que nunca tinha sido escrito.
+
+     Numeracao chapada e sequencial, como um ADR: ORD-0001, ORD-0002.
+
+     De onde vem o proximo numero e a unica parte que difere entre os dois
+     lados, e a diferenca e honesta: um ADR se numera olhando a pasta, e o
+     NAVEGADOR NAO ENXERGA PASTA. Entao aqui ele vem do localStorage -- o
+     ultimo que ESTE navegador emitiu, mais um -- e o campo fica editavel,
+     porque quem sabe o que ja existe em disco e o Autor da Ordem. A linha de
+     comando, que enxerga a pasta, numera de verdade.
+     ====================================================== */
+
+  var ORD_KEY = "glyph.ord.last";
+
+  function ordPad(n) { return "ORD-" + String(Math.max(0, n | 0)).padStart(4, "0"); }
+
+  function ordLast() {
+    try { return parseInt(localStorage.getItem(ORD_KEY) || "0", 10) || 0; }
+    catch (e) { return 0; }   /* aba privada, ou armazenamento bloqueado */
+  }
+
+  function ordRemember(n) {
+    try { localStorage.setItem(ORD_KEY, String(n)); } catch (e) { /* segue sem lembrar */ }
+  }
+
+  /* O que o bundle diz sobre si. O painel de destino ja prometia ser lido
+     aqui; isto e o que torna a frase verdadeira. */
+  function ordManifest(id) {
+    var h = harnessById(state.target.harness);
+    var path = String((h && h.writes) || "").replace("<role>", state.target.role);
+    return JSON.stringify({
+      order: id,
+      engine: (Core && Core.VERSION) || null,
+      emitted: new Date().toISOString(),
+      files: [id + ".pgml", id + ".xml", id + ".json", id + ".hgml"],
+      destination: {
+        harness: state.target.harness,
+        model: state.target.model,
+        role: state.target.role,
+        writes: path || null
+      },
+      note: "As quatro projecoes saem da mesma compilacao. O .pgml e a fonte e a " +
+            "unica coisa escrita a mao; as outras tres sao o que o motor responde a ela."
+    }, null, 2) + String.fromCharCode(10);
+  }
+
+  function emitOrder() {
+    var typed = String(($("ordNo") || {}).value || "").replace(/[^0-9]/g, "");
+    var n = typed ? parseInt(typed, 10) : ordLast() + 1;
+    if (!n) n = 1;
+    var id = ordPad(n);
+    var bytes = zipStore([
+      { name: id + ".pgml", text: TABS.pgml.get() },
+      { name: id + ".xml",  text: TABS.xml.get() },
+      { name: id + ".json", text: TABS.ast.get() },
+      { name: id + ".hgml", text: TABS.hgml.get() },
+      { name: id + ".manifest.json", text: ordManifest(id) }
+    ]);
+    var blob = new Blob([bytes], { type: "application/zip" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url; a.download = id + ".zip";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    ordRemember(n);
+    if ($("ordNo")) $("ordNo").value = String(n + 1);
+  }
 
   function downloadText(filename, mime, content) {
     var blob = new Blob([content], { type: mime + ";charset=utf-8" });
@@ -1305,7 +1382,7 @@
       notExist: "não existe",
 
       xmlEdit: "editar", xmlApply: "aplicar",
-      copy: "copiar", download: "baixar",
+      copy: "copiar", download: "baixar", emitOrder: "emitir ORD",
       gapsTitle: "o que falta dizer",
       targetTitle: "destino",
       fHarness: "harness", fModel: "modelo", fRole: "papel",
@@ -1402,7 +1479,7 @@
       notExist: "does not exist",
 
       xmlEdit: "edit", xmlApply: "apply",
-      copy: "copy", download: "download",
+      copy: "copy", download: "download", emitOrder: "emit ORD",
       gapsTitle: "what is left to say",
       targetTitle: "destination",
       fHarness: "harness", fModel: "model", fRole: "role",
@@ -1578,6 +1655,7 @@
      Eram oito botões, dois por formato, espalhados por três cards. O par
      agora é um só e pergunta à aba qual conteúdo entregar — o botão É o
      botão daquela aba sem precisar existir quatro vezes. */
+  onBtn("ordEmit", emitOrder);
   onBtn("outDl", function () {
     var tab = TABS[state.tab];
     downloadText(stamp(tab.ext), tab.mime, tab.get());

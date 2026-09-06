@@ -53,6 +53,24 @@ guessed. Until it existed the engine had no filesystem entry point at all, so
 `glyph-cli.js order.pgml` compiled the ten-character string `"order.pgml"` and
 answered, confidently, about a filename.
 
+### `--bundle` — a Ordem inteira, numerada como um ADR
+
+```bash
+node scripts/glyph-cli.js --file fonte.pgml --bundle --out .guidelines/ORDERS
+```
+
+Escreve `ORD-0001.zip` com as quatro projeções mais um manifesto. A numeração é
+chapada e sequencial: o próximo é o maior `ORD-####` que já existe no destino,
+mais um — a mesma regra de um ADR, e pela mesma razão.
+
+No app o botão **emitir ORD** faz o mesmo, com uma diferença declarada: o
+**navegador não enxerga pasta**, então lá o número vem do `localStorage` — o
+último que aquele navegador emitiu, mais um — e o campo fica editável, porque
+quem sabe o que já existe em disco é o Autor da Ordem.
+
+O zip é escrito pelo próprio repositório (`scripts/glyph-zip.js`, método
+`store`, sem compressão): zero dependência é propriedade daqui, não acidente.
+
 Modes: `--xml` (default, the deliverable) · `--ast` (JSON inspection panel) ·
 `--diag` (diagnostics only) · `--hgml` (the atomic burn) · `--expand` (what a
 command is made of) · `--from-xml` (the way back).

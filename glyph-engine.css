@@ -94,6 +94,14 @@
   .btn.done { color:var(--ok); border-color:var(--ok); }
   .btn.mini { font-size:10px; padding:3px 8px; text-transform:none; letter-spacing:0; }
 
+  /* o numero da Ordem: le como o botao ao lado, mas e editavel */
+  .ordno {
+    appearance:none; font-family:var(--mono); font-size:11px; letter-spacing:0.06em;
+    background:var(--surface-2); color:var(--text); text-align:center;
+    border:1px solid var(--line); border-radius:var(--r); padding:5px 6px; width:5.5ch;
+  }
+  .ordno:focus { outline:none; border-color:var(--h-op); }
+
   /* ---------- molde: onde estou ---------- */
   .where { display:flex; gap:1px; background:var(--line-soft); border:1px solid var(--line);
            border-radius:var(--r); overflow:hidden; flex-wrap:wrap; }
