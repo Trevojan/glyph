@@ -25,7 +25,7 @@ was reconciled from (see §9).
 ## 1. Document shape
 
 ```xml
-<glyph-package engine="2.4.5.01">
+<glyph-package engine="3.4.7.05">
   <schema/>
   <block once="true">
     <!-- one segment -->
@@ -151,9 +151,9 @@ A second `-` opens a **new** run rather than continuing the first, so
 folding them would make `[rev-impr-fmt]` and `[rev-impr,fmt]` emit identically,
 which is the defect this release exists to remove.
 
-Writing `[in-rwk/fmt/impr` is **invalid**. The `/` divider was removed by
-resolution C-01 and `/` now delimits emotion only, so a `/` reached inside a
-chain is refused as `SlashInChain` at `fix` severity, with its position; the
+Writing `[in-rwk/fmt/impr` is **invalid**: `/` delimits emotion and nothing
+else, so a `/` reached inside a chain is refused as `SlashInChain` at `fix`
+severity, with its position; the
 characters survive as `<off>` and nothing is fabricated from them. Close the
 chain first: `[in-rwk]/eth/`.
 
@@ -397,26 +397,13 @@ the body itself travels alongside it, so nothing is lost to the summary.
 
 ## 9. Where the draft reference diverged
 
-This file was reconciled from a hand-written draft. Of 91 bracket→element pairs
-in that draft, **89 matched the engine exactly**. The rest, and the structural
-disagreements, resolved as follows — recorded so the same drift is not
-reintroduced later:
+This file was reconciled from a hand-written draft, of which 89 of 91
+bracket→element pairs already matched the engine. The disagreements and their
+resolutions are in `.guidelines/.history/XML_REFERENCE_DRAFT.md`.
 
-| Draft said | Engine emits | Resolution |
-|---|---|---|
-| `[BASE]` → `<base>` | `[base` is **unresolved** | Draft is stale. `GLOSSARY.md` §0.2 is normative: `BASE` is only the `expansions.txt` keyword meaning "atom", and the command was renamed **`CORE`** in v1.1.0.0 precisely to end that collision. `[core` → `<core>`. |
-| `R:` → `<return>` | `<user-expectative expects="…">` | Engine. The draft's own §8 already names `<user-expectative>` as the form in use, so the draft contradicted itself. |
-| `` `literal` `` → `<literal>` | `<user-input>` | Engine, same reason: the draft's §8 lists `<user-input>` as current. |
-| `<emotion tone="eth prd">` | `<mood dominant="enthusiasm" also="pride">` | Engine. Carrying the gloss rather than the code keeps the deliverable readable without the vocabulary loaded, and `dominant`/`also` states the "first is dominant" rule instead of leaving it to word order. |
-| `,` → `<item>` elements | repeated `<user-input>` | Engine. A wrapper element per item adds a level that carries nothing. |
-| `[OFF]`→`<plain>`, `;;`→`<br/>` | `<off>`, `<break/>` | Engine — naming only, no semantic difference. |
-
-Two draft proposals are **better than what the engine does** and are not yet
-implemented, because both change the deliverable and would need `fromXML()`
-updated in step:
-
-- `[pt'1.1'` → `<part n="1.1">` instead of putting the number in `<user-input>`.
-- `[if'cond'…` → `<if cond="…">` instead of putting the condition in `<user-input>`.
+Two of the draft's proposals are better than what the engine does. Both change
+the deliverable and need `fromXML()` updated in step, so both are open in
+`.guidelines/.plan/`.
 
 ---
 
@@ -427,7 +414,7 @@ updated in step:
 ```
 
 ```xml
-<glyph-package engine="2.4.5.01">
+<glyph-package engine="3.4.7.05">
   <schema/>
   <block once="true">
     <block name="review">
@@ -511,11 +498,11 @@ of this section states the intent, and the AST projection names the fields
 | Code | Trigger | Emitted | Repair named |
 |---|---|---|---|
 | `SlashInChain` | `/` reached inside a chain — `[in-rwk/ctx]` | `<off>/ctx</off>`, the whole run | close the chain first: `[in-rwk]/eth/` |
-| `BackslashMood` | the abandoned `\emo\` spelling — `\eth\` | `<off>\eth\</off>` | write `/eth/` |
+| `BackslashMood` | `\` used as a mood delimiter — `\eth\` | `<off>\eth\</off>` | write `/eth/` |
 | `UnknownEmotion` | a mood code outside the table — `/eth/xyz/` | the code is **discarded**; the valid ones stand | use a code from §6 |
 | `XmlChainHasChildren` | a `<chain>` member with children of its own | children re-attached to the parent | remove them, or take the element out of the `<chain>` |
 | `XmlChainStartsWithItem` | a `<chain>` member still carrying a `chain` attribute | reported, never overwritten | remove the attribute: inside a `<chain>` the position already says the operator |
-| `XmlLegacyRoot` | `<glyph>` as the root, the shape through 2.4.4 | nothing is read | re-emit the document with 2.4.5.01 |
+| `XmlLegacyRoot` | `<glyph>` as the root, the shape through 2.4.4 | nothing is read | re-emit the document with 3.4.7.05 |
 
 Two of the five are reached only through `fromXML`, because the XML panel is
 editable and the reader is handed input this emitter never wrote.
@@ -523,7 +510,7 @@ editable and the reader is handed input this emitter never wrote.
 ### 11.4 What is deliberately not refused
 
 - **A lone `\` in prose**, and a backslash inside a literal such as `c:\temp`.
-  The refusal targets the abandoned *delimiter shape*, never the character.
+  The refusal targets the *delimiter shape*, never the character.
 - **An unknown command.** `[zzz` is `<unresolved tag="zzz">` with a `nearest`
   suggestion when one is close — the vocabulary is open at the edges, and a
   command the engine does not know is not the same as a construct the grammar
@@ -537,12 +524,11 @@ editable and the reader is handed input this emitter never wrote.
 
 ### 11.5 No placeholder character reaches the deliverable
 
-`also="?"` used to appear when a mood code was outside the table: a literal
-question mark, printed into the XML, announced by a `note` that said the code
-had been *ignored* — while it had in fact reached the output. A misleading
-low-severity diagnostic is worse than an absent one, because it reads as
-handled.
+**The XML never carries a character standing in for something the engine could
+not resolve.** Either the value is known and emitted, or the input is refused
+and the author is told. This holds for the whole emitter.
 
-The rule that replaced it holds for the whole emitter: **the XML never carries a
-character standing in for something the engine could not resolve.** Either the
-value is known and emitted, or the input is refused and the author is told.
+A placeholder printed into the deliverable and announced by a low-severity
+`note` is worse than an absent diagnostic, because it reads as handled. The mood
+table is the case that paid for the rule: a code outside it is **discarded**,
+and the valid codes stand.

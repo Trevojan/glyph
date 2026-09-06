@@ -154,7 +154,7 @@ if (isMain(import.meta.url)) {
       catch (e) { /* the corpus outside this repo is optional */ }
     });
     try { sources.push({ name: "ORDER", src: fs.readFileSync(
-      path.resolve(__dirname, "../.guidelines/ORDERS/ORD-2026-08-30-01.pgml"), "utf8").trim() }); } catch (e) {}
+      path.resolve(__dirname, "../.guidelines/.orders/ORD-2026-08-30-01.pgml"), "utf8").trim() }); } catch (e) {}
 
     const total = {}; let pairs = 0, withGenerality = 0;
     for (let i = 0; i < sources.length; i++)

@@ -261,7 +261,7 @@ do aninhado = resultado" a partir de posição — exatamente a inferência que 
 Regente proibiu (*"se eu chamo variável, você deve receber a informação do jeito
 fácil: substituindo, no lugar de te fazer inferir"*).
 
-E é o mesmo defeito de `ORDERS/INTAKE-VARIABLES.md` §2, visto do outro lado: lá
+E é o mesmo defeito de `.orders/INTAKE-VARIABLES.md` §2, visto do outro lado: lá
 o `<user-input>` não distingue **nome** de **valor**; aqui não distingue
 **operando** de **resultado**. Um conserto, dois sintomas.
 

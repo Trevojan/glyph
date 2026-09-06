@@ -61,10 +61,11 @@ emissor de bundle"* — que nunca foi escrito.
 | sintaxe de referência | sem ela, `<needs var>` fora da cerca `[logic]` não tem no que disparar — uma referência não resolvida é indistinguível de prosa |
 | filtro / `blend` | `blend` em `rules.json` é o precedente implementado; falta decidir *não-trabalha* contra *não-sabe* |
 | alarme de inferência profunda | medido; falta decidir severidade, onde aparece, e se profundidade é o sinal certo |
+| duas propostas do rascunho do XML | `[pt'1.1'` → `<part n="1.1">` e `[if'cond'` → `<if cond="…">`, em vez de pôr o valor em `<user-input>`. As duas são **melhores** que o que o motor faz; as duas mudam o entregável e exigem `fromXML()` no mesmo passo. Registro em [`.history/XML_REFERENCE_DRAFT.md`](../.history/XML_REFERENCE_DRAFT.md) |
 
 ## Adiado por decisão, não por esquecimento
 
-- **Efeitos** — [`ORDERS/INTAKE-EFFECTS.md`](../ORDERS/INTAKE-EFFECTS.md). A
+- **Efeitos** — [`.orders/INTAKE-EFFECTS.md`](../.orders/INTAKE-EFFECTS.md). A
   metade barata (`<effect>` declarativo) espera; a cara (objetos de contexto) é
   segunda ordem.
 - **Escopos aninhados** para variáveis. O escopo é o pacote inteiro, como o

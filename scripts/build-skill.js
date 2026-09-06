@@ -1,8 +1,13 @@
 /**
- * Builds the publishable glyph-markup skill folder from the repository.
+ * Builds the glyph-markup skill from the repository, into `.claude/skills/`.
  *
  *   node build-skill.js            write it
  *   node build-skill.js --check    verify it matches, write nothing
+ *
+ * `.claude/skills/glyph-markup` is where Claude Code loads a project skill from,
+ * so the folder that gets published and the folder the harness reads are one
+ * folder. There is no second copy to keep in step — which is the whole of the
+ * defect this script is named after.
  *
  * The Regent's layout: SKILL.md at the root, the engine beside it, the
  * normative material in `references/`, and the examples NESTED below that
@@ -42,7 +47,7 @@ const fs = require("fs");
 const HERE = __dirname;
 const ROOT = path.join(__dirname, "..");
 const GUIDE = path.join(ROOT, ".guidelines");
-const SKILL = path.join(ROOT, "skills", "glyph-markup");
+const SKILL = path.join(ROOT, ".claude", "skills", "glyph-markup");
 
 const CHECK = process.argv.indexOf("--check") !== -1;
 const STALE = [];
@@ -144,6 +149,21 @@ if (declared !== VERSION)
   STALE.push("SKILL.md: declares v" + declared + ", engine is " + VERSION);
 else console.log("  ✓ SKILL.md declares v" + VERSION);
 
+/* Same exposure one level down. XML_REFERENCE.md shows the emitted document in
+   worked examples, and its root element carries the engine version. The suite
+   probes the TABLES in that file; nothing probed the version inside the
+   examples, so three of them sat at 2.4.5.01 across two releases — stale in the
+   one place a reader copies from. */
+{
+  const ref = fs.readFileSync(path.join(GUIDE, "XML_REFERENCE.md"), "utf8");
+  const wrong = [...new Set(ref.match(/engine="[0-9.]+"/g) || [])]
+    .filter(m => m !== `engine="${VERSION}"`);
+  if (wrong.length)
+    STALE.push(".guidelines/XML_REFERENCE.md: shows " + wrong.join(", ") +
+               ", engine is " + VERSION);
+  else console.log("  ✓ .guidelines/XML_REFERENCE.md shows engine " + VERSION);
+}
+
 if (CHECK) {
   if (STALE.length) {
     console.error("\nFAILED: the published skill does not match this repository.");
@@ -154,6 +174,7 @@ if (CHECK) {
   console.log("\nThe skill matches a fresh build.");
 } else {
   commitWrites();
-  console.log("\nskills/glyph-markup is built at " + VERSION + " (" + WRITES.length +
-              " file(s) committed together). Reinstall it for the harness to see it.");
+  console.log("\n.claude/skills/glyph-markup is built at " + VERSION + " (" + WRITES.length +
+              " file(s) committed together). A new session in this repository reads\n" +
+              "it from there; an account-level copy has to be re-uploaded from it.");
 }

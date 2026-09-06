@@ -40,7 +40,7 @@
  *   3. The v1.7 fusions are undone. EVAL, REV, SPEC, SIMP, QST, FOREX and
  *      ONLYIF are commands in their own right again, each separated from the
  *      one it was folded into by a stated axis (object vs. act, or standard
- *      of comparison) — see GLOSSARY.md §6.5.
+ *      of comparison) — see .guidelines/.history/GLOSSARY_CLOSED.md §6.5.
  *
  * UMD: works in Node (require) and in the browser (window.GlyphCore).
  * As a CLI:  node glyph-parser.js "[crit[ctx]]" [--ast|--xml|--diag|--hgml|--from-xml]
@@ -190,7 +190,7 @@ const GlyphCore = (function () {
        the command. All seven already had their own INSTR entry; classify()
        consults ALIAS *before* INSTR, so merely having the line here was enough
        for the merge to win. Deleting it is the whole de-fusion.
-       GLOSSARY.md §6.5. */
+       .guidelines/.history/GLOSSARY_CLOSED.md §6.5. */
   };
   var ALIAS_OF = {};
   Object.keys(ALIAS).forEach(function (a) { (ALIAS_OF[ALIAS[a]] = ALIAS_OF[ALIAS[a]] || []).push(a); });

@@ -58,4 +58,4 @@ code points, zero test cases.
 **The v1.7 de-fusions follow a single axis**, which had been treated as seven
 separate decisions: in all seven the split is *object vs. act*, or *standard of
 comparison*. That is an argument for the de-fusion, not against it — the table
-is in `GLOSSARY.md` §6.5.
+is in `.guidelines/.history/GLOSSARY_CLOSED.md` §6.5.

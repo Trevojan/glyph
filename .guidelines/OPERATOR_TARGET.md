@@ -1,9 +1,11 @@
 # Operator target — carrying `-` and `,` from the parse tree to the XML and back
 
-> Draft, for release **2.4.5.01**. Nothing here is implemented. One decision
-> marked **[Regent]** is open. Two removals that look like new decisions are not:
-> both were taken at v1.7 and never propagated past the grammar (§5). The defects
-> this closes are verified and reproducible at `v1.4.4.01`; the repairs are not.
+> **Delivered at 2.4.5.01.** The design record for how `-` and `,` reach the XML
+> and come back, and for the two removals that landed with them (§5) — both
+> decided at v1.7 and, until this document, never propagated past the grammar.
+> One decision marked **[Regent]** is still open (§9). Every reproduction below
+> is an output of the engine at `v1.4.4.01`, which is where the defects were
+> measured.
 
 ---
 
@@ -330,7 +332,7 @@ repair this document exists to abolish:
 ### 5.1 This is propagation, not change
 
 Neither removal is a new decision. Both were taken during Etapa 1, recorded in
-`.guidelines/history/`, and carried into the grammar — and stopped there. The
+`.guidelines/.history/`, and carried into the grammar — and stopped there. The
 engine and `XML_REFERENCE.md` are the laggards.
 
 | Removal | Decided | Grammar shows it | Engine | Reference |
@@ -652,24 +654,17 @@ the Regent), and `\eth\` is an **abandoned** spelling removed in the same releas
 
 ## 10. Status
 
-Nothing in this document is implemented. `scripts/glyph-parser.js` is unmodified
-and no test was touched; every reproduction in §0, §1, §5 and §6 is an output of
-the engine at `v1.4.4.01`, run as recorded, and the counts in §7 come from
-parsing and sweeping the corpus rather than from estimation.
+**Delivered at 2.4.5.01** — CHANGELOG, *"the operator reaches the XML, and two
+removals finally land"*. The operator survives to the XML and back, and both
+removals are recognizers rather than silent deletions: `SlashInChain` and
+`BackslashMood`, `XML_REFERENCE.md` §11.3.
 
-Not yet done, in the order it has to happen:
+What the document is for now is the reasoning behind the shape and the
+reproductions that justified it. `XML_REFERENCE.md` §4 is normative for the
+result; §9 above still holds one open question for the Regent.
 
-1. `chainElement` narrowed to bareness, `origin` exported, `astLean` taught to
-   drop `root`/`nest` (§2). Nothing else works before this.
-2. `D-07` written (§5.6) and **failing** on the `/` divide row, before anything is
-   removed. The gate comes before the topology.
-3. The nineteen negative vectors of §8 written and **failing**. `P-06` is edited in
-   the same commit and not before.
-4. `chain` emitted (§3) and read back (§4).
-5. The two removals (§5.3, §5.4) **and** the §6 error treatment, in one commit —
-   §5.5 is why they cannot be split.
-6. Positions on gaps (§6.3).
-7. `XML_REFERENCE.md` updated per §7.2, respecting the `D-03` regex warning.
+The counts in §7 come from parsing and sweeping the corpus rather than from
+estimation.
 
-The `<glyph-package>` / `<chain>` output shape is a later deliverable. This
-document is its precondition and deliberately stops short of it.
+The `<glyph-package>` / `<chain>` output shape was a later deliverable, and it
+is `PACKAGE_TARGET.md`.

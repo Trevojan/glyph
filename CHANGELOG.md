@@ -33,7 +33,7 @@ All notable changes to Glyph are documented here, most recent first.
 > The `1.0.9.x` versions were previously identified as `1.9`, `1.9.1`, `1.9.2` and
 > `1.9.3`; the content is the same, only the numbering changed. Earlier versions
 > (`v1.7`, `v1.8`) keep their historical numbering — see
-> `.guidelines/history/`.
+> `.guidelines/.history/`.
 
 ---
 
@@ -451,7 +451,7 @@ Thirteen files sat loose in the repository root. The rule now: the root keeps
 
 Moved with `git mv`, so every one is recorded as a rename and `git log --follow`
 still reaches its history. Superseded records (the v1.7/v1.8 changelists, the
-triage material) went to `.guidelines/history/`.
+triage material) went to `.guidelines/.history/`.
 
 The stores dropped the `glyph-` prefix on the way in — the folder supplies the
 context that the prefix used to. `expansions.txt` now sits beside

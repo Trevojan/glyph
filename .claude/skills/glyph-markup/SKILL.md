@@ -11,13 +11,10 @@ flow scalable to the smallest detail. The reference implementation is
 `window.GlyphCore`) doing lexing, parsing, arity checking, semantic rules and
 **glyph-package** emission.
 
-**The AST is the source of truth**, and the XML is a projection of it. That
-reverses what this document said through v1.4: the AST was called an inspection
-panel and thinned by 45% on the strength of it. It is the format any model can
-read without the engine, which is what makes it portable and checkable — so
-completeness outranks size on it, and the thinning now belongs to the panel
-projection alone. The XML remains the artefact you paste; it is no longer the
-thing everything else is derived from.
+**The AST is the source of truth**, and the XML is a projection of it. The AST
+is the format any model reads without the engine, which is what makes it
+portable and checkable — so completeness outranks size on it. The XML is the
+artefact you paste.
 
 `GLOSSARY.md` is the normative reference for the vocabulary. The engine derives
 from it, and the suite fails (`X-01`, `X-14`) if the two drift apart.
@@ -29,10 +26,8 @@ and `glyph-moldes.js`.
 
 ## Normative rules
 
-1. **Emotion** uses slashes exclusively: `/eth/`, `/cnf/`, `/clm/`. Backslash
-   was removed.
-2. **Chaining** is exclusively by hyphen: `[CMD1-CMD2-CMD3]`. The old `/`
-   divider was removed.
+1. **Emotion** is delimited by slashes: `/eth/`, `/cnf/`, `/clm/`.
+2. **Chaining** is by hyphen: `[CMD1-CMD2-CMD3]`.
 3. **Symbol definition**: `[DFN'symbol','meaning']`. `[DEF]` is reserved for
    the default value.
 4. **Comparison is prefix**, always 2 arguments: `[gt'A','B']`, `[gte]`, `[lt]`,
@@ -43,8 +38,7 @@ and `glyph-moldes.js`.
    segment — and it closes **even with empty slots**, which become `<needs>`.
    `;;` only splits the reply; open commands stay open (the engine warns with
    `LinebreakInsideBlock`).
-7. **Negative polarity is `[ngt]`, not `[neg]`.** `NEG` never existed in the
-   vocabulary.
+7. **Negative polarity is `[ngt]`.**
 
 ## Severity — the contract
 
@@ -200,9 +194,9 @@ Short forms (the long one is canonical): `[IN]`→`[INS]`, `[AS]`→`[ASSM]`,
 `[IM]`→`[IMPR]`, `[FN]`→`[FIN]`, `[CL]`→`[CLAR]`, `[RT]`→`[RTNL]`,
 `[CN]`→`[CNST]`, `[WN]`→`[WARN]`, `[SM]`→`[SUM]`
 
-**The seven v1.7 fusions were undone.** `[EVAL]`, `[REV]`, `[SPEC]`, `[SIMP]`,
-`[QST]`, `[FOREX]` and `[ONLYIF]` are commands in their own right again — the
-full vocabulary with every alias is in `references/GLOSSARY.md`.
+`[EVAL]`, `[REV]`, `[SPEC]`, `[SIMP]`, `[QST]`, `[FOREX]` and `[ONLYIF]` are
+commands in their own right, not aliases of one another — the full vocabulary
+with every alias is in `references/GLOSSARY.md`.
 
 ## `[ctx]` — three positions
 

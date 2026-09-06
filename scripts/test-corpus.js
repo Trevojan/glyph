@@ -88,7 +88,7 @@ const POSITIVE = [
   /* v1.1.0.0: these two asserted the v1.7 fusion. With it undone, each side
      stands on its own — EVAL compares against a realistic quality standard,
      CRIT against the declared goal; SPEC is the detailed artefact, ELAB the
-     act of detailing. GLOSSARY.md §6.5. */
+     act of detailing. .guidelines/.history/GLOSSARY_CLOSED.md §6.5. */
   { id:"P-21", name:"EVAL is its own command, not an alias of CRIT.", src:"[EVAL'projeto']",
     clean:true, cmds:["EVAL"], xml:["<evaluate>"] },
   { id:"P-22", name:"SPEC is its own command, not an alias of ELAB.", src:"[SPEC'requisito']",
@@ -116,7 +116,7 @@ const POSITIVE = [
     xml:["<switch>","<go>"] },
 
   /* ---- v1.1.0.0: the seven v1.7 fusions, undone. Each case pins the side
-     that used to disappear into the other. GLOSSARY.md §6.5. ---- */
+     that used to disappear into the other. .guidelines/.history/GLOSSARY_CLOSED.md §6.5. ---- */
   { id:"P-30", name:"REV is a reading sweep, not CRIT's formal comparison.",
     src:"[REV'o diff']", clean:true, cmds:["REV"], xml:["<review>"] },
   { id:"P-31", name:"SIMP cuts complexity; CLAR removes ambiguity. Both survive.",
@@ -1125,10 +1125,10 @@ function runReferenceChecks() {
      D-07 probes the ROWS and nobody probed the example beneath them. The skill
      carries a hand-written example of the emitted document with the same
      exposure, so it gets a probe rather than a promise. */
-  const SKILL = path.resolve(__dirname, "../skills/glyph-markup/SKILL.md");
+  const SKILL = path.resolve(__dirname, "../.claude/skills/glyph-markup/SKILL.md");
   let skillText = null;
   try { skillText = fs.readFileSync(SKILL, "utf8"); } catch (e) {}
-  if (skillText === null) ok("D-11", "the published skill exists", "skills/glyph-markup/SKILL.md not found");
+  if (skillText === null) ok("D-11", "the published skill exists", ".claude/skills/glyph-markup/SKILL.md not found");
   else {
     const shown = (skillText.match(/<glyph-package engine="[^"]*">[\s\S]*?<\/glyph-package>/) || [])[0];
     /* expansions included deliberately: without it no <invoke> is emitted and

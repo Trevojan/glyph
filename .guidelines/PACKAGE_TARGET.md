@@ -3,7 +3,7 @@
 > **Normative.** The golden (E1) and the validator (E3) derive from this document
 > and from the five examples, never from the emitter (lock T5, T31).
 > Order `ORD-2026-08-30-01` v5, deliverable E0b. Engine 2.4.5.01.
-> Architecture: `.guidelines/ORDERS/E0b-ARCHITECT-RETURN.md`.
+> Architecture: `.guidelines/.orders/E0b-ARCHITECT-RETURN.md`.
 
 ## 0. What this is, and what it is not
 
@@ -47,7 +47,7 @@ being the single grammar.
 ## 2. The root
 
 ```xml
-<glyph-package engine="2.4.5.01">
+<glyph-package engine="3.4.7.05">
   <block once="true"> … </block>
 </glyph-package>
 ```
@@ -304,7 +304,7 @@ constraint. Recorded so the divergence is deliberate rather than silent.
 ## 5. `<schema>`
 
 ```xml
-<glyph-package engine="2.4.5.01">
+<glyph-package engine="3.4.7.05">
   <schema/>
   …
 </glyph-package>

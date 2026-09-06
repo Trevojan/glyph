@@ -4,7 +4,7 @@
 >
 > The seven aliases decided below left the engine. `[eval]`, `[rev]`, `[spec]`,
 > `[simp]`, `[qst]`, `[forex]` and `[onlyif]` are commands in their own right
-> again. See `GLOSSARY.md` §6.5.
+> again. See `.guidelines/.history/GLOSSARY_CLOSED.md` §6.5.
 >
 > The document stays as a **record of the method and of the mistake**, not as
 > norm. What holds today about each pair:

@@ -13,6 +13,19 @@
 
 ---
 
+## 2026-09-06
+
+| decisão | razão |
+|---|---|
+| **A prosa declara o estado, nunca a correção** | *"você adiciona um 'não é mais A, agora é B', quando na verdade o texto que dizia 'isto é A' deve simplesmente tornar-se 'isto é B' — para não acumular micro-correções e gerar resíduo, coisa que o modelo vai inferir e descartar por não auxiliar no estado final da resposta, que é o contexto em si"* |
+| **A skill vive em `.claude/skills/glyph-markup/`** | a pasta que o harness lê e a pasta que se publica passam a ser uma só. A causa-raiz mais repetida deste repositório é uma decisão que não chegou às outras cópias, e a skill instalada foi onde ela custou mais caro |
+| **`XML_REFERENCE.md` ganha portão de versão** | as tabelas eram provadas pela suíte e o `engine="…"` dentro dos exemplos não era. Ficou em `2.4.5.01` por duas releases, no único lugar de onde se copia |
+| **O ponto na frente do nome marca caminho de baixo nível** | lido pelo harness, não por quem abre o repositório para ver o que o projeto faz. `ORDERS/` → `.orders/` e `history/` → `.history/`. A raiz fica com as portas de entrada |
+| **`.orders` é eixo próprio**, não cabe em `.plan` nem em `.decisions` | os dois teriam de quebrar a própria regra: `.plan` apaga o que fecha, e uma Ordem fechada é o contrato do que foi entregue; `.decisions` é append-only sem estado, e exatamente uma Ordem fica aberta por vez |
+| **`.history` não é eixo** | eixo responde a uma pergunta de quem retoma o trabalho; o sótão não responde a nenhuma. Existe para que remover não seja apagar |
+| **`GLOSSARY.md` §6 e `XML_REFERENCE.md` §9 vão para o sótão** | eram 138 linhas narrando o que foi fechado, dentro das duas referências que a skill carrega inteiras a cada sessão — §6 sozinho era 20% do glossário. A numeração `§6.x` foi mantida no sótão, então os apontadores do motor resolvem |
+| **Snapshot regenerado**: 102 hashes de AST | a `note` de `req-deny` em `rules.json` narrava a própria correção e viaja no envelope de toda projeção. Reescrita para declarar o estado; o snapshot moveu por **decisão**, não para ficar verde. `xml` e `hgml` não se moveram |
+
 ## 2026-09-05
 
 | decisão | razão |

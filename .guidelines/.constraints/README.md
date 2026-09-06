@@ -34,6 +34,7 @@
 | **Nada desaparece em silêncio** | um caractere ou construto que some sem recusa é defeito, não economia |
 | **Diagnóstico nomeia a causa** | não o conserto. Medido: mensagem mais detalhada não ajuda; posição e estrutura ajudam — [`.sources/COMPILER_LESSONS.md`](../.sources/COMPILER_LESSONS.md) §2 |
 | **O índice aponta, não copia** | se um fato está em dois lugares, um dos dois está errado e ninguém sabe qual |
+| **A prosa declara o estado, nunca a correção** | o texto que dizia "isto é A" **torna-se** "isto é B"; não ganha um "não é mais A". Micro-correção acumulada é resíduo que o leitor infere e descarta, por não auxiliar o estado final. Onde a aposentadoria precisa agir, ela age na tabela de recusas |
 
 ## Do processo
 

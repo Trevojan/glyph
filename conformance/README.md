@@ -24,7 +24,7 @@ release* e precisa de explicação — não é para ser absorvido em silêncio.
 3. `npm run check`.
 
 O passo 2 é manual porque **o motor ainda não lê arquivo** — `glyph-cli.js`
-recebe fonte por argv, não caminho. É o item A da `ORDERS/INTAKE-VARIABLES.md`;
+recebe fonte por argv, não caminho. É o item A da `.orders/INTAKE-VARIABLES.md`;
 depois dele isso vira um comando.
 
 ## Os campos, e por que existem

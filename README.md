@@ -45,7 +45,7 @@ node scripts/glyph-cli.js "[crit[ctx'the parser']]" --xml
 Or from a file, with `--file`:
 
 ```bash
-node scripts/glyph-cli.js --file .guidelines/ORDERS/ORD-2026-08-30-01.pgml --xml
+node scripts/glyph-cli.js --file .guidelines/.orders/ORD-2026-08-30-01.pgml --xml
 ```
 
 `--file` is the only way in from disk, and a bare path is **refused** rather than
@@ -102,7 +102,7 @@ character at a time: `\` is **preserved**, and `]` never reaches the trip at all
 kind (backslash, doubling and `&#93;` were each tried and each refused; the
 entity dies on the `;`, which is a separator). So a document that quotes Glyph
 cannot be written in Glyph. `[logic]…[/logic]` is the one construct that carries
-a bracket through, and `.guidelines/ORDERS/INTAKE-VARIABLES.md` §1.3 proposes the
+a bracket through, and `.guidelines/.orders/INTAKE-VARIABLES.md` §1.3 proposes the
 verbatim fence that generalises it.
 
 ### `.hgml` — the atomic burn
@@ -213,7 +213,8 @@ built.
 | `scripts/serve-dev.js` | static server, for driving the app in a real browser |
 | `.guidelines/rules.json` · `templates.json` | data stores, hand-editable |
 | `.guidelines/expansions.txt` | composition table: atoms and formulas |
-| `.guidelines/history/` | superseded records, kept for provenance |
+| `.guidelines/.history/` | superseded records, kept for provenance |
+| `.claude/skills/glyph-markup/` | **generated** — the skill, built by `scripts/build-skill.js` |
 | `scripts/glyph-data.js` · `.guidelines/expansions.json` | **generated** — do not edit |
 
 ## Documentation
