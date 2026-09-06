@@ -239,3 +239,72 @@ Independente das respostas acima, sigo com:
 - a subtração `binds` − `ref`, que dá "nome ligado e nunca usado"
 - o emissor de bundle `ORD-xxxxx`, que hoje não existe em forma nenhuma
 Se preferir, responda só a **4** — é a que bloqueia mais coisa. <- respondi mais do que isso e espero ter sanado mais dúvidas do que criado. entendo que surgirão ainda outras, mas pelo menos quero que estas que eu dei possam ter dúvidas retroalimentadas pelo seu próprio conceito.
+
+---
+
+## 7. `GLOSSARY.md` §2 contradiz `GLOSSARY.md` §0 — texto normativo
+
+> Achado ao construir a tabela primitivo/operador. **Não reescrevi nada**: é
+> texto normativo, e a sua própria ressalva vale aqui — *"obsoleto às vezes é
+> reatribuído, e a razão está em outro lugar"*.
+
+### O que está escrito
+
+**§0**, normativo, declara dois eixos **independentes**:
+
+| | **primitive** — stands alone | **operator** — needs an operand |
+|---|---|---|
+| **hieroglyph** — atom | … | … |
+| **glyph** — has a formula | *(vazio por construção)* | … |
+
+E o documento tem uma seção para cada célula: **§1 Hieroglyph operators** (40
+comandos) e **§2 Hieroglyph primitives** (38), esta com o subtítulo *"Atoms
+that stand on their own, with no operand"*.
+
+### O que medi
+
+| | |
+|---|---|
+| comandos em §2 que **exigem operando** pelo `FRAMES` | **16** |
+| desses, listados **só** em §2 (arquivados na célula errada) | **15** |
+| listados nas **duas** seções ao mesmo tempo | **1** (`REQ`) |
+
+Os quinze: `CTX` `TGT` `SPEC` `EX` `RWK` `IMPR` `REV` `SKEP` `DIST` `REF`
+`SEEAL` `NT` `EXC` `LIM` `RSN` — e `REQ` é o duplicado.
+
+Não é caso de borda: `CTX`, `NT`, `REV` e `RSN` estão entre os comandos mais
+usados do corpus. E o motor **concorda com o `FRAMES`**, não com a §2:
+`[ctx]` sozinho emite `<needs>what it refers to</needs>`.
+
+### Como segui sem você
+
+A tabela do `standsAlone()` é **derivada do motor** — é primitivo o átomo de
+que nenhuma tabela de valência cobra operando — em vez de transcrita da prosa.
+Dá 38 primitivos, e os cinco que o comentário do `FRAMES` já nomeava estão
+entre eles. Então o `imperative` já funciona e está gateado.
+
+**Mas a §2 continua afirmando o contrário do que o motor faz**, e enquanto
+isso valer, qualquer um que leia o glossário para entender o eixo vai aprender
+errado.
+
+### Opções
+
+**(a) A §2 está mal-arquivada.** Os 15 mudam para §1, e `REQ` perde a entrada
+duplicada. O subtítulo da §2 fica como está.
+Custo: baixo, e é o que a medição sugere. Mas é texto normativo.
+
+**(b) O subtítulo da §2 é que está errado.** A seção lista *hieróglifos*, e
+"with no operand" foi escrito confundindo os dois eixos que a §0 separa. Então
+só o subtítulo muda, e nenhum comando se move.
+Custo: mínimo. **Mas então §1 e §2 listam a mesma coisa por critérios
+diferentes, e `REQ` aparecendo nas duas deixa de ser erro.**
+
+**(c) Alguns dos 15 foram reatribuídos de propósito** e a razão está escrita
+em outro lugar que eu não achei. Nesse caso você me diz onde, e eu leio antes
+de mexer.
+
+> **Recomendo (a)**, mas com a ressalva de que só você sabe se algum dos 15
+> mudou de função de propósito. Se a resposta for (a), eu movo os quinze e
+> escrevo a razão junto, com a data.
+
+**RESPOSTA:**
