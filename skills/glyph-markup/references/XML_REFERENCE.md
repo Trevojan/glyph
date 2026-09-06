@@ -114,7 +114,7 @@ in children.
 | `'text'` or `` `text` `` | `<user-input>text</user-input>` |
 | `,` items in one tag | repeated `<user-input>`, no wrapper element |
 | `;` | closes the segment — the next `<block>` |
-| `;;` | `<break/>` after the block |
+| `;;` | closes the block **and** puts a `<break/>` between it and the next |
 | `[=` | `continues="previous"` on the next block |
 | `-` extend | opens a chain: `[in-rwk` puts `<chain><rework/></chain>` inside `<instruction>` |
 | `,` after an extend | continues that chain — the next member of the same `<chain>` |

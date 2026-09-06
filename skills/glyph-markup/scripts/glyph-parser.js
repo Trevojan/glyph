@@ -1610,12 +1610,27 @@ const GlyphCore = (function () {
         case "semi":   closeSeg("semi"); break;
 
         case "linebreak": {
+          /* `;;` FECHA o bloco, desde 2026-09-05.
+
+             Ate aqui ele so marcava uma quebra visual e deliberadamente NAO
+             fechava -- havia ate um diagnostico, LinebreakInsideBlock, dizendo
+             isso ao Autor da Ordem. Medido, o desenho nao se sustentava: tudo
+             caia num <block> so, o <break/> ia parar DEPOIS dele em vez de
+             entre os dois, a volta reescrevia `;;` no fim do documento, e a
+             queima descartava a marca inteira. Existia no alto nivel e nao
+             significava nada no baixo.
+
+             O Regente decidiu conserta-lo em vez de aposenta-lo, e a razao e
+             o que o torna uma arteria: formatar uma Ordem longa depende de
+             quebrar blocos, e um grafo de logica longo e a utilidade publica
+             da ferramenta. `;` continua sendo o separador de segmento; `;;` e
+             o separador que tambem MARCA a quebra, e agora os dois fecham.
+
+             `seg.breaks` ja era emitido depois do bloco -- que era o lugar
+             errado enquanto o bloco nao fechava, e passa a ser o certo agora
+             que ele fecha: o <break/> cai entre um bloco e o proximo. */
           seg.breaks++;
-          if (stack.length)
-            G("note", "quebra visual",
-              "<code>;;</code> não fecha bloco, só <code>;</code> fecha. Segue aberto: " +
-              stack.map(function (x) { return "<code>[" + esc(String(x.canonical || x.template || "?").toLowerCase()) + "</code>"; }).join(", ") + ".", "LinebreakInsideBlock",
-            "visual break", "<code>;;</code> does not close a block, only <code>;</code> does. Still open: " + stack.map(function (x) { return "<code>[" + esc(String(x.canonical || x.template || "?").toLowerCase()) + "</code>"; }).join(", ") + ".");
+          closeSeg("linebreak");
           break;
         }
 
@@ -3437,7 +3452,10 @@ const GlyphCore = (function () {
         msg:"<code>&lt;" + esc(el.tag) + "&gt;</code> outside a block — ignored." });
     });
     var src = parts.map(function (p, i) {
-      return p.src + (p.brk ? ";;" : "") + (i < parts.length - 1 ? ";" : "");
+      /* `;;` fecha o bloco tanto quanto `;`, entao ele SUBSTITUI o separador
+         em vez de se somar a ele. Escrever os dois produzia `[a];;;[b]`. */
+      if (i === parts.length - 1) return p.src;
+      return p.src + (p.brk ? ";;" : ";");
     }).join("");
     return { src:src, diag:diag };
   }

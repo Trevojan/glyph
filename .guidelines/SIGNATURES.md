@@ -121,8 +121,15 @@ survived in `glyph-grammar.ebnf` and was corrected alongside it.
 ## 7. Auto-closing
 
 `;` closes every open command and ends the segment. **It closes even with empty
-slots** — each becomes a `<needs>`. `;;` closes nothing: it only splits the
-reply, and the engine warns (`LinebreakInsideBlock`) if a block is left open.
+slots** — each becomes a `<needs>`.
+
+`;;` **also closes**, and additionally marks the break: the `<break/>` lands
+between the block it ends and the next one. Until 2026-09-05 it closed
+*nothing* and only split the reply, warning with `LinebreakInsideBlock` — and
+measured, that design did not hold: everything fell into one `<block>`, the
+`<break/>` landed *after* it instead of between, the way back rewrote `;;` at
+the end of the document, and the burn dropped the mark entirely. The
+diagnostic is retired with the behaviour it described.
 
 Closing many at once earns a `note` (`MassAutoClose`): in a long block that
 usually closes more than was intended.
