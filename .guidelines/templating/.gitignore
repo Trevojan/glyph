@@ -1,7 +1,0 @@
-# Estado local do editor
-.obsidian/
-
-# Estado por-máquina do Claude Code: acumula o que a sessão por acaso rodou, e
-# é o arquivo que acabaria carregando algo local para um histórico público. As
-# regras duráveis e compartilháveis ficam em .claude/settings.json.
-.claude/settings.local.json
