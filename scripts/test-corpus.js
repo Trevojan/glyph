@@ -2189,6 +2189,61 @@ const rQT = runQuoteChecks();
 
 
 /* ------------------------------------------------------------------ *
+ * parametro de molde -- so literal conta, e o resto tem de recusar
+ *
+ * Ate 2026-09-05 um nao-literal na lista de argumentos escorregava para
+ * `extra` em silencio, reaparecia como irmao orfao depois da expansao, e
+ * empurrava todo literal seguinte uma casa a esquerda.
+ *
+ * Medido na fonte do Regente, [--reinforce[ctx]`interprete`]: o `interprete`,
+ * escrito como SEGUNDO argumento, era ligado ao PRIMEIRO buraco (`rule`), e o
+ * motor entao reclamava que faltava o `why` -- descrevendo a coisa errada
+ * enquanto escondia a que aconteceu.
+ * ------------------------------------------------------------------ */
+function runTemplateParamChecks() {
+  console.log("\n--- parametro de molde ---");
+  const D = [];
+  const ok = (id, name, why) => {
+    if (why) { console.log("  \u2717 " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  \u2713 " + id + ": " + name); D.push(id); }
+  };
+  const opts = { templates: TPL.templates, rules: RULESTORE,
+                 expansions: require("../.guidelines/expansions.json") };
+  const codes = src => G.parse(src, opts).gaps.map(g => g.code);
+  const msg = src => (G.parse(src, opts).gaps.find(g => g.code === "TemplateParamNotLiteral") || {}).plain
+                     || (G.parse(src, opts).gaps.find(g => g.code === "TemplateParamNotLiteral") || {}).msg || "";
+
+  const slid = "[--reinforce[ctx],`interprete`]";
+  ok("TP-01", "um nao-literal entre os argumentos e recusado",
+     codes(slid).indexOf("TemplateParamNotLiteral") !== -1 ? null
+       : "escorregou em silencio: " + codes(slid).join(","));
+
+  /* a mensagem tem de dizer QUAL posicao -- e a unica coisa que o autor
+     precisa saber para consertar */
+  ok("TP-02", "e a recusa nomeia a posicao",
+     /1\u00ba|argument 1/.test(String(msg(slid))) ? null
+       : "nao diz a posicao: " + JSON.stringify(String(msg(slid)).slice(0, 120)));
+
+  /* conteudo escrito DEPOIS de todos os argumentos e perda documentada, nao
+     deslize: nada foi empurrado, entao nada e recusado */
+  const after = "[--reinforce`a`,`b`[gen`x`]]";
+  ok("TP-03", "conteudo depois dos argumentos nao vira recusa",
+     codes(after).indexOf("TemplateParamNotLiteral") === -1 ? null
+       : "recusou conteudo em excesso, que e perda documentada e nao deslize");
+
+  /* e o caso certo continua ligando os dois buracos */
+  const good = "[--reinforce`a`,`b`]";
+  const x = G.toXML(good, opts);
+  ok("TP-04", "dois literais ainda preenchem os dois buracos",
+     /slot="rule">a</.test(x) && /slot="why">b</.test(x) ? null
+       : "a ligacao posicional quebrou: " + JSON.stringify(x.slice(0, 200)));
+
+  return D.length;
+}
+const rTP = runTemplateParamChecks();
+
+
+/* ------------------------------------------------------------------ *
  * global store registration — the tripwire for splitting the core
  *
  * Every bucket above routes its stores through `opts`, deliberately, so the
@@ -2279,6 +2334,7 @@ console.log(" literal role " + String(rRO).padStart(4) + "/5");
 console.log(" bindings     " + String(rBD).padStart(4) + "/6");
 console.log(" suggest      " + String(rSG).padStart(4) + "/4");
 console.log(" aspas        " + String(rQT).padStart(4) + "/3");
+console.log(" param molde  " + String(rTP).padStart(4) + "/4");
 console.log(" global store " + rGS + "/3");
 console.log("=================================================");
 

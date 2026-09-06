@@ -960,7 +960,7 @@ const GlyphCore = (function () {
      `"repeat": true` in the template store — see bindHoles below for why it
      is collected separately from the positional/named split. */
   function collectFills(inv, repeatName) {
-    var named = {}, positional = [], extra = [];
+    var named = {}, positional = [], extra = [], slid = [];
     var repeatKey = repeatName ? String(repeatName).toLowerCase() : null;
     (inv.children || []).forEach(function (c) {
       if (c.canonical === "PH") {
@@ -975,9 +975,27 @@ const GlyphCore = (function () {
         }
       }
       if (c.literal) { positional.push(c.v); return; }
+      /* Nao-literal na lista de argumentos. Ele NAO conta como parametro, e
+         ate 2026-09-05 escorregava para `extra` em silencio -- reaparecendo
+         como irmao orfao depois da expansao e empurrando todo literal seguinte
+         uma casa a esquerda.
+
+         Medido em [--reinforce[ctx]`b`]: o `b`, escrito como SEGUNDO argumento,
+         era ligado ao PRIMEIRO buraco (`rule`), e o motor entao reclamava que
+         faltava o `why` -- descrevendo a coisa errada enquanto escondia a que
+         aconteceu. Resposta errada com interface confiante.
+
+         `extra` continua sendo o destino legitimo do conteudo escrito DEPOIS
+         de todos os argumentos, que o README ja fixa como perda conhecida. A
+         diferenca e posicional e decidivel: se ainda vem literal depois dele,
+         ele deslocou algo. O indice e gravado para a mensagem poder dizer QUAL
+         posicao, que e a unica informacao que o autor precisa. */
       extra.push(c);
+      slid.push({ node:c, at:positional.length + 1 });
     });
-    return { named:named, positional:positional, extra:extra };
+    /* so e deslize o que tem literal depois: o resto e conteudo em excesso */
+    var cut = slid.filter(function (x) { return x.at <= positional.length; });
+    return { named:named, positional:positional, extra:extra, slid:cut };
   }
 
   /* A repeatable hole (at most one per template, marked `repeat` on its
@@ -1082,6 +1100,19 @@ const GlyphCore = (function () {
       var repeatDef = (def.params || []).filter(function (p) { return p && p.repeat; })[0];
       var repeatName = repeatDef ? (repeatDef.name || repeatDef) : null;
       var fills = collectFills(inv, repeatName);
+      (fills.slid || []).forEach(function (x) {
+        var what = String(x.node.canonical || x.node.template || "?").toLowerCase();
+        var shown = params.map(function (nm) { return "`" + nm + "`"; }).join(",");
+        G("fix", "parâmetro não é literal",
+          "o " + x.at + "º parâmetro de <code>[--" + esc(inv.template) +
+          "</code> recebeu <code>[" + esc(what) + "</code>. Parâmetro de molde é sempre literal: " +
+          "<code>[--" + esc(inv.template) + esc(shown) + "]</code>.",
+          "TemplateParamNotLiteral",
+          "parameter is not a literal",
+          "argument " + x.at + " of <code>[--" + esc(inv.template) +
+          "</code> got <code>[" + esc(what) + "</code>. A template parameter is always a literal: " +
+          "<code>[--" + esc(inv.template) + esc(shown) + "]</code>.");
+      });
 
       inv.children = bindHoles(body, fills, params, repeatName).concat(fills.extra);
       reparent(inv.children, inv);
