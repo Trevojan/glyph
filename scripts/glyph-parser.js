@@ -1,349 +1,80 @@
 /**
- * Glyph Core v1.2.0 (glyph-parser.js)
+ * glyph-parser.js — the public face of the core.
  *
- * Single core of the chain  human → glyph → xml → machine.
+ * Single core of the chain  human → glyph → xml → machine. The engine lives
+ * in scripts/core/, twelve ESM modules cut along the dependency graph
+ * seam-graph.js measured (.guidelines/.orders/INTAKE-PARSER-SPLIT.md); this
+ * file imports what each of them exports to the outside and assembles the
+ * one object every consumer has always reached for:
  *
- * Through v1.8 there were two divergent parsers: this module (which only
- * emitted AST and dropped free text, chains, [logic] and ;;) and the parser
- * embedded in glyph-engine-alias.html (complete, but browser-locked, the
- * only one able to emit XML). v1.0.9 unified them: this file is the reference
- * implementation, and the HTML is a consumer of it.
+ *   glyph-cli.js, glyph-diff.js, glyph-trace.js, build-templates.js,
+ *   build-skill.js            import G from "./glyph-parser.js"
+ *   glyph-engine-alias.html   <script type="module" src="scripts/glyph-parser.js">
+ *   glyph-ui.js               globalThis.GlyphCore
  *
- * VERSION SCHEME — release.frontend.rules.minor, from v1.2.3.00 onward:
- *   1st  release   the line itself; moves when the whole thing is another thing
- *   2nd  frontend  the HTML/CSS/UI consumer
- *   3rd  rules     rules.json, template constraints, valency, vocabulary
- *   4th  minor     two digits (00, 11, 24, 42) for everything small
- * No digit resets any other. That is the whole point of the change: under the
- * old a.b.c.d, where a digit moving reset everything to its right, touching the
- * interface alone threw away the number the engine had earned — v1.3.0.0 plus a
- * batch of panels would have read v2.0.0.0, which says "new product" about an
- * afternoon of buttons. Digits now move on their own and stay where they are.
+ * The dependency direction inside core/ is strict and acyclic:
  *
- * The backend has no digit of its own. Parser work rides in `release` when it
- * changes what Glyph IS (v1.2.3.00 added fromXML, the inverse) and in `minor`
- * when it does not.
+ *   util ← vocabulary ← stores ← lexer ← logic ← {templates, rules}
+ *        ← parser ← emit-xml ← {emit-ast, burn};  inverse reads util,
+ *   vocabulary and version only. parse() hands itself to the template
+ *   expander as an argument rather than being imported by it, the way it
+ *   already hands out G for diagnostics — so no module imports one that
+ *   imports it back.
  *
- * Versions through v1.3.0.0 used the old a.b.c.d scheme and keep their numbers;
- * they are not renumbered, because a changelog records what happened.
+ * Through v1.8 there were two divergent parsers: this module and the one
+ * embedded in glyph-engine-alias.html. v1.0.9 unified them; v1.1.0.0 aligned
+ * the vocabulary to GLOSSARY.md, the normative reference from then on; and
+ * until 3.5.8.06 the core stayed ONE file, because the UMD wrapper that served
+ * both Node and a bare <script src> could not be split without a bundler —
+ * D1 in HGML_PLAN, open since v1.1. ESM removed the reason: the same `import`
+ * works in Node and in the browser, and the directory travels with this file
+ * wherever build-skill.js copies it.
  *
- * v1.1.0.0 — the vocabulary is now aligned to GLOSSARY.md, which is the
- * normative reference from here on. Three changes, all backend:
- *
- *   1. `BASE` the command became `CORE`. `BASE` stayed as the keyword in
- *      expansions.txt meaning "this is an atom" — the two used to collide on
- *      the same word and no expansion table could disambiguate them.
- *   2. Twelve commands the glossary declared but the engine never knew:
- *      FIND GET ADD SUB WHR (context ops), HGH LOW BOLD LIGHT (intensity),
- *      SWITCH (condition), GO (execution). Half the composition formulas in
- *      expansions.txt referenced them and could not resolve.
- *   3. The v1.7 fusions are undone. EVAL, REV, SPEC, SIMP, QST, FOREX and
- *      ONLYIF are commands in their own right again, each separated from the
- *      one it was folded into by a stated axis (object vs. act, or standard
- *      of comparison) — see .guidelines/.history/GLOSSARY_CLOSED.md §6.5.
- *
- * UMD: works in Node (require) and in the browser (window.GlyphCore).
- * As a CLI:  node glyph-parser.js "[crit[ctx]]" [--ast|--xml|--diag|--hgml|--from-xml]
+ * VERSION SCHEME — release.frontend.rules.minor (core/version.js). No digit
+ * resets any other; the changelog moves the number and says why.
  */
-
-/* The UMD wrapper is gone. It existed so one file could serve Node through
-   `require` and the browser through a bare `<script src>`, and the price was
-   that the core had to stay ONE file — the browser has no `require`, so a
-   split needed a bundler. That is D1 in HGML_PLAN, open since v1.1.
-
-   ESM removes the reason for the bundler: the same `import` works in Node and
-   in the browser. The global assignment below is kept anyway, because
-   glyph-ui.js finds the core that way and rewriting the interface is not this
-   change. */
-import { LIMITS, esc, xesc, pad, lev, hgmlLit, walk, stripTags, valueChildren } from "./core/util.js";
-
-import { CATS, INSTR, PTBR, CAT_OF, EDITORIAL_ONLY, ALIAS, ALIAS_OF, STRUCT, META, MODE, EMO, SESSION, LOGIC_OPS, PUNCT, FRAMES, NAMED_STRUCT, SLOTS, elName, GLOSS_REVERSE, GLOSS_COLLISIONS, ELEMENT_INPUT, ELEMENT_INPUT_COLLISIONS, EMO_REVERSE } from "./core/vocabulary.js";
+import { esc, xesc, lev, walk } from "./core/util.js";
+import { CATS, INSTR, PTBR, CAT_OF, EDITORIAL_ONLY, ALIAS, ALIAS_OF, STRUCT, META, MODE, EMO,
+         SESSION, LOGIC_OPS, PUNCT, FRAMES, NAMED_STRUCT, elName, GLOSS_REVERSE, GLOSS_COLLISIONS }
+  from "./core/vocabulary.js";
 import { VERSION } from "./core/version.js";
-
+import { useTemplates, templateRegistry, useExpansions, expansionRegistry,
+         speciesOf, depthOf, formulaOf, defOf, atomsOf, standsAlone, useRules } from "./core/stores.js";
+import { tokenize, classify, suggest } from "./core/lexer.js";
+import { expandExpr, freeVars, parseLogic } from "./core/logic.js";
+import { parse } from "./core/parser.js";
+import { buildXml, toXML } from "./core/emit-xml.js";
+import { serializeAST, toAST } from "./core/emit-ast.js";
+import { burn, toHGML } from "./core/burn.js";
 import { fromXML, fromAST } from "./core/inverse.js";
-import { TEMPLATES, useTemplates, templateRegistry, EXPANSIONS, useExpansions, expansionRegistry, entryOf, speciesOf, depthOf, formulaOf, defOf, atomsOf, standsAlone, RULES, useRules } from "./core/stores.js";
-import { NAME_CH, tokenize, classify, blendOf, suggest } from "./core/lexer.js";
-import { RESERVED_WORDS, expandExpr, freeVars, parseLogic } from "./core/logic.js";
-import { phName, collectFills, bindHoles, reparent, expandInvocations, constraintNames, checkTemplateConstraints } from "./core/templates.js";
-import { pairKey, expandNames, compileRules, checkRules } from "./core/rules.js";
-import { parse, BIND_NAME, bindingOf, collectBindings } from "./core/parser.js";
-import { buildXml, packageIndent, packageSpan, packagePass, blockAttrs, emit, emitLogic, toXML } from "./core/emit-xml.js";
-import { AST_SCHEMA, storeCk, srcDescriptor, ck, astShallow, astHasBody, projectionOf, astLean, astNode, serializeAST, toAST } from "./core/emit-ast.js";
-const GlyphCore = (function () {
-  "use strict";
 
-  /* ======================================================
-     7. .hgml — HIEROGLYPH MARKDOWN, the atomic burn
-
-     What the XML emitter does NOT do: reduce. `<criticise>` travels as one
-     tag, and whatever CRIT is *made of* stays implicit. .hgml burns the tree
-     down to pure matter — every composite replaced by its formula, over and
-     over, until only hieroglyphs are left.
-
-     Two things make this cheap instead of a second language:
-
-       1. A formula IS valid Glyph, so `parse()` reads it. No second grammar.
-       2. The output is valid Glyph too, so it can be re-parsed — which gives
-          a correctness oracle for free (see the round-trip bucket in the
-          suite) instead of a hand-written expectation per case.
-
-     Form: every tag opens WITHOUT `]` and closes with `[/name]`. That is not
-     decoration — `]` already closes a command, so `[ctx][/ctx]` would emit an
-     UnmatchedCloseTag. `[ctx[/ctx]` is the closed form.
-
-     Cost: the burn is an EXPANSION, not a compression. A composite averages
-     ~15 hieroglyphs and HYP reaches 101, so a short input grows about 25x.
-     That is inherent to "100% hieroglyphs" — density and full decomposition
-     pull in opposite directions, and this format chose decomposition.
-     ====================================================== */
-
-  var BURN_LIMIT = 24;          // safety net; the build already refuses cycles
-
-  /* The human's operand is the subject of the whole formula (GLOSSARY.md §0.3).
-     Concretely: it becomes the first child of the formula's head command. The
-     rule has to be mechanical or the burn cannot be automated at all. */
-  /* Structural equality on BURNT nodes — after reduction, so it compares
-     meaning and not spelling. Two nodes are the same when they are the same
-     atom carrying the same operands in the same order, or the same literal. */
-  function burnSame(a, b) {
-    if (!a || !b) return false;
-    if (a.literal || b.literal) return !!(a.literal && b.literal) && a.v === b.v;
-    if (a.canonical !== b.canonical) return false;
-    var ac = a.children || [], bc = b.children || [];
-    if (ac.length !== bc.length) return false;
-    for (var i = 0; i < ac.length; i++) if (!burnSame(ac[i], bc[i])) return false;
-    return true;
-  }
-
-  function injectSubject(body, operands) {
-    if (!operands || !operands.length) return body;
-    for (var i = 0; i < body.length; i++) {
-      if (body[i].canonical) {
-        /* An operand the formula ALSO produces is written once, not twice.
-           `[rmbr[get[ctx]]'X']` burnt to `[alw [get[ctx]] 'X' [get[ctx]]]` —
-           the author's copy plus RMBR's own `[ALW[GET[CTX]]]` — so the burn
-           asserted the context is fetched twice, which the source never said.
-           The glyphs said A and the hieroglyphs said B.
-
-           Only the formula's copy is dropped, and the operands keep their
-           position: `,` carries order (GLOSSARY §0.1, changed 2026-09-05), so
-           collapsing two orders into one would trade a duplication for a
-           different lie. This is the `uniq` half of the `made-of` rule at
-           buildXml; the `sort` half deliberately does NOT apply here. */
-        body[i].children = operands.concat(
-          (body[i].children || []).filter(function (k) {
-            return !operands.some(function (o) { return burnSame(o, k); });
-          }));
-        return body;
-      }
-    }
-    return operands.concat(body);   // formula with no command head: prepend
-  }
-
-  var burnTruncated = false;
-  var burnBlends = [];        /* what fired, so the output can declare itself */
-
-  /* Co-occurrence among siblings in the burnt form. The burn is a canonical
-     form, so this asks a question about MEANING and not about spelling. */
-  function applyBlends(list, opts) {
-    var store = (opts && opts.rules) || RULES;
-    if (!store) return list;
-    var comp = store.__compiled || (store.__compiled = compileRules(store));
-    if (!comp || !comp.blends.length || !list.length) return list;
-    var out = list, i;
-    for (i = 0; i < comp.blends.length; i++) {
-      var b = comp.blends[i];
-      var present = b.when.every(function (c) {
-        return out.some(function (n) { return n.canonical === c; });
-      });
-      if (!present) continue;
-      var kids = [];
-      var kept = out.filter(function (n) {
-        if (b.when.indexOf(n.canonical) !== -1) {
-          (n.children || []).forEach(function (k) { kids.push(k); });
-          return false;
-        }
-        return true;
-      });
-      if (burnBlends.indexOf(b) === -1) burnBlends.push(b);
-      kept.push({ canonical: b.emit, blended: true, children: kids });
-      out = kept;
-    }
-    return out;
-  }
-
-  function burnList(list, opts, chain, depth) {
-    var out = [];
-    depth = depth || 0;
-    /* the same ceiling the AST uses, so the three projections agree on what
-       deep means. Announced rather than survived: a burn that stops silently
-       is the class of defect this release exists to remove. */
-    if (depth > LIMITS.astDepth) { burnTruncated = true; return out; }
-    (list || []).forEach(function (nd) {
-      /* Literals are what the human actually said — they survive. Free prose
-         does not: it is not vocabulary, and .hgml is hieroglyphs only. */
-      if (nd.literal) { if (nd.form !== "raw") out.push(nd); return; }
-      if (nd.text)    { if (opts && opts.keepText) out.push(nd); return; }
-      if (nd.mode)    { out = out.concat(burnList(nd.children, opts, chain, depth + 1)); return; }
-      if (nd.rawFence){ out.push(nd); return; }
-      if (nd.logic)   { out.push(nd); return; }
-      /* A template invocation already expanded during parse(); what is left
-         is the shell, so the burn walks straight through it. */
-      if (nd.template) { out = out.concat(burnList(nd.children, opts, chain, depth + 1)); return; }
-      if (!nd.canonical) return;
-
-      var e = entryOf(nd.canonical, opts);
-
-      /* The operands are burnt FIRST, under the CURRENT chain — before the
-         formula is opened. This is not an optimisation, it is the difference
-         between working and not: an operand is not part of the formula it is
-         passed to, so it must not inherit that formula's chain.
-
-         `[rmbr[fbk]]` inside HYP's formula is RMBR receiving FBK as argument.
-         Burning the argument after injecting it made FBK look like something
-         RMBR's formula contains, and since FBK's formula does mention RMBR,
-         the guard read a cycle that is not there — HYP → RMBR → FBK → RMBR —
-         and stopped with RMBR unreduced. Burning arguments first keeps the two
-         relationships apart: containment extends the chain, argument does not. */
-      var operands = burnList(nd.children || [], opts, chain, depth + 1);
-
-      if (!e || e.species === "atom") {
-        out.push({ canonical: nd.canonical, children: operands });
-        return;
-      }
-
-      var key = String(nd.canonical).toUpperCase();
-      if (chain.indexOf(key) !== -1 || chain.length >= BURN_LIMIT) {
-        /* Only reachable from a hand-edited store: build-templates.js refuses
-           to generate a table with cycles. Emitting the node unburned beats
-           looping, and the marker says the output is not fully reduced. */
-        out.push({ canonical: key, children: operands, unburned: true,
-                   via: chain.concat(key).join(" → ") });
-        return;
-      }
-
-      var sub = parse(e.formula, {
-        session: opts && opts.session,
-        valency: false,          // a formula is a definition, not a request
-        expansions: (opts && opts.expansions) || EXPANSIONS
-      });
-      var body = [];
-      sub.segments.forEach(function (s) { body = body.concat(s.children); });
-
-      /* Burn the formula body, then inject the already-atomic operands. */
-      var burnedBody = burnList(body, opts, chain.concat(key));
-      out = out.concat(injectSubject(burnedBody, operands));
-    });
-    return applyBlends(out, opts);
-  }
-
-  /* Walks the burnt tree and reports what came out of it. Counted here rather
-     than during the burn because operands are burnt before their formula, so
-     an in-flight counter double-counts them. */
-  function burnStats(list, acc) {
-    acc = acc || { atoms:0, literals:0, unburned:0, via:[] };
-    (list || []).forEach(function (nd) {
-      if (nd.literal || nd.text) acc.literals++;
-      else if (nd.canonical) {
-        if (nd.unburned) { acc.unburned++; acc.via.push(nd.via); }
-        else acc.atoms++;
-      }
-      burnStats(nd.children, acc);
-    });
-    return acc;
-  }
-
-  function hgmlLines(list, d, L) {
-    (list || []).forEach(function (nd) {
-      if (nd.literal) { L.push(pad(d) + "'" + hgmlLit(nd.v) + "'"); return; }
-      if (nd.text)    { L.push(pad(d) + "'" + hgmlLit(nd.v) + "'"); return; }
-      if (nd.rawFence){ L.push(pad(d) + "[raw[/raw]"); return; }
-      if (nd.logic)   { L.push(pad(d) + "[logic" + (nd.logic.name ? "-" + nd.logic.name : "") + "[/logic]"); return; }
-      var name = String(nd.canonical || "?").toLowerCase();
-      var kids = nd.children || [];
-      if (!kids.length) { L.push(pad(d) + "[" + name + "[/" + name + "]"); return; }
-      L.push(pad(d) + "[" + name);
-      hgmlLines(kids, d + 1, L);
-      L.push(pad(d) + "[/" + name + "]");
-    });
-  }
-
-  /**
-   * burn(segments, opts) — the tree reduced to hieroglyphs.
-   * Returns { segments:[{children}], stats }.
-   */
-  function burn(segments, opts) {
-    opts = opts || {};
-    var out = (segments || []).map(function (sg) {
-      return { children: burnList(sg.children, opts, []), isReturn: !!sg.isReturn, breaks: sg.breaks };
-    });
-    var acc = { atoms:0, literals:0, unburned:0, via:[] };
-    out.forEach(function (sg) { burnStats(sg.children, acc); });
-    return { segments: out, stats: acc };
-  }
-
-  /** human → glyph → .hgml, in one call. */
-  function toHGML(src, opts) {
-    opts = opts || {};
-    if (!expansionRegistry(opts))
-      return "# sem tabela de composição: carregue expansions.json (useExpansions)";
-    burnTruncated = false;
-    burnBlends = [];
-    var b = burn(parse(src, opts).segments, opts);
-    var L = [];
-    b.segments.forEach(function (sg, i) {
-      if (i) L.push("");
-      hgmlLines(sg.children, 0, L);
-    });
-    /* An invented element that cannot say what it means moves the
-       interpretation problem one step along instead of solving it — the trap
-       HGML_PLAN names. A blend is refused at compile time without a `means`,
-       and the burn that used one declares it here, so the output explains
-       itself to a reader who does not have rules.json. */
-    if (burnBlends.length) {
-      var decl = ["# patterns applied to this burn:"];
-      burnBlends.forEach(function (b) {
-        decl.push("#   [" + b.emit + "  <- " + b.when.join(" + ") + "  " + b.means);
-      });
-      decl.push("#");
-      L = decl.concat(L);
-    }
-    if (burnTruncated)
-      L.unshift("# truncated at " + LIMITS.astDepth + " levels — this burn is incomplete.");
-    return L.join("\n");
-  }
-
-
-
-  return {
-    VERSION: VERSION,
-    CATS: CATS, INSTR: INSTR, ALIAS: ALIAS, ALIAS_OF: ALIAS_OF, STRUCT: STRUCT,
-    META: META, MODE: MODE, EMO: EMO, SESSION: SESSION, FRAMES: FRAMES,
-    EDITORIAL_ONLY: EDITORIAL_ONLY, PTBR: PTBR, CAT_OF: CAT_OF,
-    LOGIC_OPS: LOGIC_OPS, PUNCT: PUNCT, NAMED_STRUCT: NAMED_STRUCT,
-    tokenize: tokenize, classify: classify, suggest: suggest, lev: lev, elName: elName,
-    expandExpr: expandExpr, freeVars: freeVars, parseLogic: parseLogic,
-    parse: parse, walk: walk,
-    useTemplates: useTemplates, templateRegistry: templateRegistry,
-    useRules: useRules,
-    useExpansions: useExpansions, expansionRegistry: expansionRegistry,
-    speciesOf: speciesOf, depthOf: depthOf, formulaOf: formulaOf, atomsOf: atomsOf,
-    standsAlone: standsAlone,
-    defOf: defOf,
-    buildXml: buildXml, toXML: toXML, toAST: toAST, serializeAST: serializeAST,
-    burn: burn, toHGML: toHGML,
-    fromXML: fromXML, fromAST: fromAST, elementCanonicalMap: GLOSS_REVERSE, glossCollisions: GLOSS_COLLISIONS,
-    esc: esc, xesc: xesc
-  };
-})();
+const GlyphCore = {
+  VERSION: VERSION,
+  CATS: CATS, INSTR: INSTR, ALIAS: ALIAS, ALIAS_OF: ALIAS_OF, STRUCT: STRUCT,
+  META: META, MODE: MODE, EMO: EMO, SESSION: SESSION, FRAMES: FRAMES,
+  EDITORIAL_ONLY: EDITORIAL_ONLY, PTBR: PTBR, CAT_OF: CAT_OF,
+  LOGIC_OPS: LOGIC_OPS, PUNCT: PUNCT, NAMED_STRUCT: NAMED_STRUCT,
+  tokenize: tokenize, classify: classify, suggest: suggest, lev: lev, elName: elName,
+  expandExpr: expandExpr, freeVars: freeVars, parseLogic: parseLogic,
+  parse: parse, walk: walk,
+  useTemplates: useTemplates, templateRegistry: templateRegistry,
+  useRules: useRules,
+  useExpansions: useExpansions, expansionRegistry: expansionRegistry,
+  speciesOf: speciesOf, depthOf: depthOf, formulaOf: formulaOf, atomsOf: atomsOf,
+  standsAlone: standsAlone,
+  defOf: defOf,
+  buildXml: buildXml, toXML: toXML, toAST: toAST, serializeAST: serializeAST,
+  burn: burn, toHGML: toHGML,
+  fromXML: fromXML, fromAST: fromAST, elementCanonicalMap: GLOSS_REVERSE, glossCollisions: GLOSS_COLLISIONS,
+  esc: esc, xesc: xesc
+};
 
 export default GlyphCore;
 /* the browser reads it as a global, and check-globals.js knows this shape */
 globalThis.GlyphCore = GlyphCore;
 
 /* Run directly, this file used to be the command line. The CLI moved to
-   glyph-cli.js — it was the only part of the core that touched the filesystem,
-   and the seam graph says it is the only piece nothing else depends on.
+   glyph-cli.js — it was the only part of the core that touched the filesystem.
    Delegating to it from here would import a module that imports this one, so
    the pointer is a message rather than a cycle. */
 if (typeof process !== "undefined" && process.argv && process.argv[1] &&
