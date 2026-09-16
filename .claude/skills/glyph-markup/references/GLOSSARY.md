@@ -402,7 +402,7 @@ twice.
 ### What remains
 
 A **pattern layer**: a rule kind that maps co-occurrence to a richer element
-(`REV` + `SCRU` on one target → `<heavy-review>`). It is data, like the rules
+(`REV` + `DIST` on one target → `heavyreview`; the emit is one lexable name, because the burn is read back and `-` is the chain operator). It is data, like the rules
 store, and the burn is what makes it tractable — patterns written over the 88
 atoms are invariant to which surface synonym the human typed. Every element such
 a pattern invents must carry its own `means`, or the interpretation problem just

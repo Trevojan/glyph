@@ -411,7 +411,8 @@
         "DIST"
       ],
       "scope": "sameTarget",
-      "emit": "heavy-review",
+      "emit": "heavyreview",
+      "emitNote": "The token the burn writes, and the burn is re-read: `-` is the chain operator, so an emit with a hyphen lexes as two names. `id` is free to keep it; `emit` is not. Found in the field: nine Orders whose .hgml re-parsed as `[heavy` outside the vocabulary.",
       "means": "one deep review: the result is checked and the reasoning behind it is checked, as a single act rather than two",
       "why": "reviewing and scrutinising the same target together is one deep review, not two independent ones",
       "whenNote": "`when` names ATOMS, not authored commands. The burn expands every composite, so SCRU — which HGML_PLAN used in its own example — does not survive it: SCRU burns to DIST plus five more. Writing the pattern over what the burn actually produces is what makes it invariant to which surface synonym the author typed, which was the point; writing it over authored names would make it match nothing."

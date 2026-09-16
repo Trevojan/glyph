@@ -746,7 +746,21 @@ const GlyphCore = (function () {
                gloss:tb[byEl.canonical] };
     }
     if (opts.session !== false && SESSION[L]) return { tier:"session", canonical:L, gloss:SESSION[L] };
+    var bl = blendOf(U, opts);
+    if (bl) return { tier:"blend", canonical:U, gloss:bl.means || bl.id, blendId:bl.id };
     return { tier:"unknown", canonical:U, gloss:"" };
+  }
+  /* A blend's `emit` is a name the burn writes and nothing else declares: the
+     vocabulary has atoms and composites, and the pattern layer invents a third
+     species at burn time. Re-reading a burn must know it, or every pattern that
+     fired reports as a stranger. The rules store is the only place it lives. */
+  function blendOf(U, opts) {
+    var store = (opts && opts.rules) || RULES;
+    var rs = store && store.rules;
+    if (!rs) return null;
+    for (var i = 0; i < rs.length; i++)
+      if (rs[i].kind === "blend" && String(rs[i].emit || "").toUpperCase() === U) return rs[i];
+    return null;
   }
 
   function lev(a, b) {
@@ -823,6 +837,7 @@ const GlyphCore = (function () {
 
   function elName(canonical, tier, gloss) {
     if (tier === "session") return canonical;
+    if (tier === "blend") return String(canonical).toLowerCase();
     var g = gloss || canonical;
     return g.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || String(canonical).toLowerCase();
   }

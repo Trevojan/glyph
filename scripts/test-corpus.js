@@ -715,15 +715,28 @@ function runHgmlChecks() {
   const BLEND_OPTS = { expansions: require("../.guidelines/expansions.json"), rules: RULESTORE };
   const blended = G.toHGML(blendSrc, BLEND_OPTS);
   ok("H-10", "a blend folds co-occurring atoms into one element",
-     /\[heavy-review/.test(blended) && /'o fluxo'/.test(blended) && /'a logica'/.test(blended)
+     /\[heavyreview/.test(blended) && /'o fluxo'/.test(blended) && /'a logica'/.test(blended)
        ? null : "did not fire, or lost a literal: " + blended.slice(0, 120));
 
   /* the trap HGML_PLAN names: an invented element that cannot say what it means
      has moved the interpretation problem, not solved it */
   ok("H-11", "the burn declares every pattern it applied, with its meaning",
      /^# patterns applied to this burn:/m.test(blended) &&
-     /heavy-review  <- REV \+ DIST  one deep review/.test(blended)
+     /heavyreview  <- REV \+ DIST  one deep review/.test(blended)
        ? null : "the invented element does not explain itself");
+
+  /* found in the field, 2026-09: nine Orders in a client template re-read their
+     own burn as `[heavy` — the emit carried a hyphen, and `-` is the chain
+     operator. A burn that names an element the lexer cannot read back, or that
+     the vocabulary cannot place, is not a burn the engine can consume. */
+  ok("H-10b", "a fired blend re-parses clean, as a known name",
+     (function () {
+       const h = G.toHGML("[rev'x'],[dist'y']", BLEND_OPTS);
+       const g = (G.parse(h, { rules: RULESTORE }).gaps || []).filter(x => x.sev === "fix");
+       const cl = G.classify("heavyreview", { rules: RULESTORE });
+       return !g.length && cl.tier === "blend" ? null
+            : "fix-level on re-parse: " + g.map(x => x.code).join(",") + " | tier " + cl.tier;
+     })());
 
   ok("H-12", "a blend with no `means` is refused at compile time",
      (function () {
