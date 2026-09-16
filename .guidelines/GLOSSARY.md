@@ -183,7 +183,7 @@ longer collide by construction — see `.guidelines/.history/GLOSSARY_CLOSED.md`
 Atoms that stand on their own, with no operand.
 
 `ERROR` — Error. Marks or signals a failure or exception.
-`MAND` — Mandatory. Required, not optional.
+`MAND` — Mandatory. Required, not optional — an obligation on what is produced or done. A demand on what must already exist is `REQ`.
 `OPT` — Option. Optional element, may be omitted.
 `ALW` — Always. Permanent behaviour, no exceptions.
 `NEV` — Never. Permanence modifier applied to another rule (e.g. `NEV DONT X` = never do X).
@@ -216,7 +216,7 @@ Atoms that stand on their own, with no operand.
 `NT` — Note. Annotation; marks a relevant point.
 `EXC` — Exception. Explicit departure from the general rule.
 `LIM` — Limitation. Observation that a limit exists (not an imposition).
-`REQ` — Requirement. Positive demand — what has to exist.
+`REQ` — Requirement. Positive demand — what has to exist **before** the work: an input, a precondition, a thing the reader may refuse to proceed without. What the *output* must contain is `MAND`.
 `EXT` — External. Marks an element outside the document's scope.
 `RSN` ★ — Reason. The motive underlying a decision. *(promoted from composite — §5)*
 `FIN` ★ — Finally. Closing or termination marker. *(promoted from composite — §5)*

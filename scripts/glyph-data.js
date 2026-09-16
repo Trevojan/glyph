@@ -695,7 +695,7 @@
     "MAND": {
       "species": "atom",
       "depth": 0,
-      "def": "Required, not optional.",
+      "def": "Required, not optional — an obligation on what is produced or done. A demand on what must already exist is REQ.",
       "element": "mandatory"
     },
     "OPT": {
@@ -893,7 +893,7 @@
     "REQ": {
       "species": "atom",
       "depth": 0,
-      "def": "Positive demand — what has to exist.",
+      "def": "Positive demand — what has to exist before the work: an input, a precondition, a thing the reader may refuse to proceed without. What the *output* must contain is MAND.",
       "element": "requirement"
     },
     "EXT": {
