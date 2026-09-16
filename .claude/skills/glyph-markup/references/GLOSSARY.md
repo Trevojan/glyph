@@ -233,7 +233,7 @@ explains each.
 
 `VRFY` = `[CMP-TRUE[[CORE],[TGT]]]` — Verify. Compare against truth or fact.
 `VAL` = `[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]` — Validate. Compare against the constraint or rule.
-`CRIT` = `[CMP[CTX],[SPEC-CORE],[EVAL[ERROR]]]` — Critique. Compare against the declared context or objective.
+`CRIT` = `[CMP[CTX]],[SPEC-CORE],[EVAL[ERROR]]` — Critique. Compare against the declared context or objective.
 `EVAL` = `[REAL[CORE-CTX[DIST[SKL]]]],[REF[DEF[SPEC-CORE-CTX]]]` — Evaluate. Compare against a realistic standard of practical quality.
 `SCRU` = `[DIST-RSN[TRYFR[FIND-REAL][WHR[REAL-EQ[R:[CONF]]]]][CTX-VRFY-RSN],[SUM[ASK[DIST-RSN[TRYFR[REAL]]]]]]` — Scrutinise. Examine the context under verification, criticise and question.
 `TRYFR` = `[REV[REF[TGT]]][VRFY[TGT],[TRUE[CNCL[GO-LOGIC]]]]` — Try. Attempt to reach the target with verification.

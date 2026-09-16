@@ -112,7 +112,7 @@ Four constructions, each with exactly one reading:
   <schema/>
   <block once="true">
     <criticise>
-      <invoke reads="[CMP[CTX],[SPEC-CORE],[EVAL[ERROR]]]" species="composite" depth="2"/>
+      <invoke reads="[CMP[CTX]],[SPEC-CORE],[EVAL[ERROR]]" species="composite" depth="2"/>
       <chain>
         <context/>
         <example/>

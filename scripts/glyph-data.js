@@ -1013,7 +1013,7 @@
     },
     "CRIT": {
       "species": "composite",
-      "formula": "[CMP[CTX],[SPEC-CORE],[EVAL[ERROR]]]",
+      "formula": "[CMP[CTX]],[SPEC-CORE],[EVAL[ERROR]]",
       "deps": [
         "CMP",
         "CTX",
