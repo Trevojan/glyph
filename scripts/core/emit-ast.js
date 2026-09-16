@@ -1,0 +1,337 @@
+/**
+ * core/emit-ast.js — the GlyphAST envelope: the tree serialised clean, no
+ * cycles, with a checksum of itself and of the stores it was read under.
+ *
+ * serializeAST is the projection; toAST is the one call. `ck` is two 32-bit
+ * FNV-1a runs because the browser half has no synchronous 64-bit hash and
+ * the envelope must be the same bytes on both hosts. storeCk is why the corpus
+ * snapshot moves its `ast` hashes whenever rules.json or expansions.txt move:
+ * the envelope declares what it was read under.
+ */
+
+import { LIMITS, walk } from "./util.js";
+import { elName } from "./vocabulary.js";
+import { TEMPLATES, EXPANSIONS, RULES } from "./stores.js";
+import { parse } from "./parser.js";
+import { VERSION } from "./version.js";
+
+/* ======================================================
+   6. AST JSON — clean serialization, no cycles
+   ====================================================== */
+
+/* The shallow node, without `body` — the body gets filled by the iterative loop below. */
+/* ------------------------------------------------------------------ *
+ * ck — a 64-bit checksum, in-core and declared
+ *
+ * Node's crypto is not reachable from the browser half of this engine, and
+ * SubtleCrypto is async, which fights a synchronous serialiser. A hand-rolled
+ * hash deserves a conscious yes, and this is it: two independent FNV-1a runs
+ * over UTF-16 code units, different offset bases, concatenated. Declared here
+ * so a port reproduces it bit for bit rather than inventing its own and
+ * silently disagreeing about whether two stores are the same.
+ * ------------------------------------------------------------------ */
+/* the AST envelope's own shape version, moved independently of the engine.
+   Bumped when a field is added, removed or changes meaning — 2 because the
+   `full`/`panel` split, `origin`, `at`, `slot` and `expanded` all landed at
+   once and a reader of a v1 envelope must not be told it understands them. */
+export var AST_SCHEMA = 2;
+
+/* A store is fingerprinted by its serialised form. Deterministic because the
+   stores are parsed from files and JSON.stringify preserves that order; null
+   when no store is loaded, which is itself the fact a receiver needs. */
+export function storeCk(store) { return store ? ck(JSON.stringify(store)) : null; }
+
+export function srcDescriptor(opts) {
+  var t = (opts && typeof opts.__source === "string") ? opts.__source : null;
+  if (t === null) return null;          /* serializeAST called without a source */
+  var d = {
+    length: t.length,
+    checksum: ck(t),
+    encoding: "utf-8",
+    /* a receiver that rewrites line endings on the way in would invalidate
+       every offset in the envelope, so the descriptor records which it was */
+    newline: (t.indexOf("\r\n") !== -1)
+      ? (new RegExp("[^\r]\n").test(t) ? "mixed" : "crlf") : "lf",
+    uri: (opts && opts.uri) || null
+  };
+  if (opts && opts.embedSource === true) d.text = t;
+  return d;
+}
+
+export function ck(str) {
+  var s = String(str == null ? "" : str);
+  var a = 0x811c9dc5, b = 0x01000193, i, c;
+  for (i = 0; i < s.length; i++) {
+    c = s.charCodeAt(i);
+    a ^= c; a = (a * 0x01000193) >>> 0;
+    b ^= c + i; b = (b * 0x85ebca6b) >>> 0;
+  }
+  return ("00000000" + a.toString(16)).slice(-8) + ("00000000" + b.toString(16)).slice(-8);
+}
+
+export function astShallow(nd) {
+  /* `slot` is the template parameter this literal was bound to. It reached
+     the XML as `<user-input slot="…">` and never reached the AST, so an
+     expanded invocation could not be told from its own expansion — the second
+     field fromAST proved missing from a projection called `full`. */
+  /* `role` travels in the envelope too: the AST is the source of truth,
+     and a fact the emitted document carries must not be one the envelope
+     makes a reader re-derive. */
+  if (nd.literal) return { type: nd.form === "raw" ? "Raw" : "Literal", value: nd.v,
+                           form: nd.form, slot: nd.boundSlot || null,
+                           role: nd.role || null };
+  if (nd.text) return { type:"Text", value:nd.v };
+  if (nd.mode) return { type:"ModeOff" };
+  if (nd.rawFence) return { type:"Verbatim", value:String(nd.v == null ? "" : nd.v) };
+  if (nd.logic) {
+    return {
+      type:"Logic",
+      name: nd.logic.name || null,
+      rules: nd.logic.rules.map(function (r) {
+        return { kind:r.kind, line:r.line, name:r.name || null, source:r.source,
+                 expr:r.expr, then:r.then || null, reads:r.reads, uses:r.uses || [] };
+      }),
+      missing: nd.logic.missing
+    };
+  }
+  /* `expanded` was in the XML and not in the AST, which made an expanded
+     invocation indistinguishable from a definition body — writing fromAST is
+     what surfaced it: the reconstruction wrote out the whole expansion where
+     the author had typed `[--germinate]`. A projection called `full` that is
+     missing a field the XML carries is not full. */
+  if (nd.template) return { type:"Template", name:nd.template,
+                            isDefinition:!!nd.isDef, expanded:!!nd.expanded };
+  return {
+    type:"Command",
+    raw: nd.raw,
+    canonical: nd.canonical,
+    tier: nd.tier,
+    gloss: nd.gloss || "",
+    element: (nd.tier === "unknown" || nd.tier === "empty") ? null : elName(nd.canonical, nd.tier, nd.gloss),
+    isAlias: !!nd.alias,
+    chainElement: !!nd.chainElement,
+    /* The operator that produced the edge to the parent. The parser has
+       always computed it; it was simply never exported, which is what made
+       `[a-b,c]` and `[a-b-c]` serialise to one identical AST and left
+       fromXML() unable to tell them apart. */
+    origin: nd.origin || null,
+    slotName: !!nd.slotName,
+    editorial: !!nd.editorial,
+    name: nd.colon || null,
+    depth: nd.depth,
+    autoClosed: !!nd.autoClosed,
+    suggestion: nd.suggestion ? nd.suggestion.name : null,
+    emotions: nd.emotions || [],
+    /* v1.1.0.0 — null unless the expansion store is loaded. `depth` above is
+       how deep this node sits in the USER's text; `compositionDepth` is how
+       deep the command sits in the vocabulary. Different axes, both useful. */
+    species: nd.species || null,
+    compositionDepth: (nd.compositionDepth === undefined) ? null : nd.compositionDepth
+  };
+}
+
+/* Nodes that carry `body`. Logic holds rules, not children. */
+export function astHasBody(nd) { return !!(nd.mode || nd.template || (!nd.literal && !nd.text && !nd.logic && !nd.rawFence)); }
+
+/* Every node used to carry all sixteen fields whether or not they said
+   anything: 43% of them were `false`, `null` or `[]`. A 321-character input
+   produced 23 KB of AST, and a panel that long is a panel nobody reads.
+
+   Dropped: anything empty, plus `raw` when it only repeats `canonical` in
+   lower case. NOT dropped, even though derivable: `element` (the contract
+   with the XML emitter), `depth` and `type`. Those are cheap and something
+   downstream may switch on them — thinning a payload is not worth breaking
+   a consumer over.
+
+   The thinning applies to the `panel` projection only; the exported
+   `full` projection keeps every field. See projectionOf(). */
+/* Two named projections, replacing a boolean.
+ *
+ *   full   every declared field, always present, no drop rules
+ *   panel  the thinned shape, for the screen
+ *
+ * The distinction is load-bearing now that the AST is the source of truth
+ * (T23). Under thinning, a field's ABSENCE means null, false, "" or [] — and
+ * also "dropped because it repeated the canonical", and also "dropped because
+ * this is an atom", and also "an older engine never had it". Six states in
+ * one signal. That is survivable in a panel a human skims and fatal in a
+ * payload that must be diffed against another machine's, or read back into
+ * source: a reconstructor cannot tell a missing operand from a dropped one.
+ *
+ * So the EXPORT is `full` by default and `panel` is asked for explicitly, by
+ * the screen, which is the only consumer that ever wanted it. `verbose:true`
+ * kept as an alias for one release. */
+export function projectionOf(opts) {
+  if (opts && opts.projection === "panel") return "panel";
+  if (opts && opts.projection === "full") return "full";
+  if (opts && opts.verbose === true) return "full";   /* deprecated alias */
+  if (opts && opts.verbose === false) return "panel"; /* deprecated alias */
+  return "full";
+}
+
+export function astLean(o) {
+  var out = {}, k, v;
+  for (k in o) {
+    if (!Object.prototype.hasOwnProperty.call(o, k)) continue;
+    v = o[k];
+    if (v === null || v === false || v === "" || (Array.isArray(v) && !v.length)) continue;
+    if (k === "raw" && o.canonical && String(v).toUpperCase() === o.canonical) continue;
+    if (k === "compositionDepth" && o.species === "atom") continue;   // átomo é sempre 0
+    /* `origin` is a non-empty string on every node, so exporting it naively
+       would put "root" or "nest" on the great majority of them and undo the
+       thinning this function exists for. Both are derivable from position —
+       root is a child of the segment, nest is a child of a command — while
+       `extend` and `item` are not, and they are the whole reason the field
+       is exported. The `full` projection keeps them, as it keeps everything. */
+    if (k === "origin" && (v === "root" || v === "nest")) continue;
+    out[k] = v;
+  }
+  return out;
+}
+
+/* Iterative for the same reason as emit: in a long block the tree is deep.
+
+   The depth ceiling isn't a whim: even with iterative construction, V8's
+   `JSON.stringify` recurses internally and overflows around a thousand
+   levels. Since the AST is an inspection panel (the deliverable is the
+   XML, which has no ceiling), truncating with an explicit marker beats
+   bringing down the whole serialization. */
+export function astNode(root, stats, opts) {
+  var holder = [];
+  var stack = [{ nd:root, arr:holder, d:0 }];
+  while (stack.length) {
+    var f = stack.pop();
+
+    if (f.d >= LIMITS.astDepth) {
+      var omitted = 0;
+      walk([f.nd], function () { omitted++; });
+      f.arr.push({ type:"Truncated", reason:"depth", atDepth:LIMITS.astDepth, omittedNodes:omitted, at:null });
+      if (stats) stats.truncated += omitted;
+      continue;
+    }
+
+    var obj = astShallow(f.nd);
+    if (projectionOf(opts) === "panel") obj = astLean(obj);
+    else {
+      /* The span in the source that produced this node. Every token has
+         carried `s`/`e` since the lexer was written and every node has
+         carried its token — this is the same shape as `origin`: computed
+         from the start, discarded at serialisation, and missed only once
+         something outside the engine needed to read the result.
+
+         It is what makes a diagnostic locatable by a reader who does not
+         have the engine, and it is the substrate a trace is built on: given
+         a span, which command; given a command, which span. `panel` does not
+         get it, because the screen has the source in front of it. */
+      obj.at = (f.nd.tok && typeof f.nd.tok.s === "number")
+        ? { s: f.nd.tok.s, e: f.nd.tok.e } : null;
+    }
+    f.arr.push(obj);
+    if (astHasBody(f.nd)) {
+      obj.body = [];
+      var kids = f.nd.children || [];
+      for (var i = kids.length - 1; i >= 0; i--) stack.push({ nd:kids[i], arr:obj.body, d:f.d + 1 });
+    }
+  }
+  return holder[0];
+}
+
+/* Serializes already-parsed segments. The raw nodes carry `parent` and
+   `tok`, which close cycles — JSON.stringify straight on them overflows. */
+export function serializeAST(segments, gaps, opts) {
+  var stats = { truncated: 0 };
+  var out = {
+    type: "GlyphAST",
+    /* `schema` is the SHAPE of this envelope; `version` is the engine that
+       produced it. They were one field, and a reader had to pin an engine
+       build to say "I understand this" — which is the wrong question. The
+       repository already separates them elsewhere: expansions.json carries
+       `schema: 2`, the dispatch carries `schema: 1`. */
+    schema: AST_SCHEMA,
+    version: VERSION,
+    /* Store fingerprints, and this is the field most easily forgotten and
+       the one that breaks a hand-off outright. `species`, `compositionDepth`
+       and `def` are FUNCTIONS of expansions.json; `name` resolution is a
+       function of templates.json. Re-import against a different store yields
+       a different meaning for the same tree, silently — the exact defect
+       class this order is named after. A receiver compares these and refuses,
+       instead of discovering it later by being wrong. */
+    /* A DESCRIPTOR, never the text. T12 keeps the source out of the general
+       export — the surface where the XML is pasted does not read Glyph — but
+       offsets with no anchor are unresolvable on arrival: a receiver cannot
+       tell whether `at: {s:11,e:16}` belongs to the source in front of it.
+       The descriptor lets it assert that and refuse otherwise, which makes
+       T12's carve-out mechanical instead of a convention. `{embedSource:true}`
+       adds the text, for the examples and teaching models T12 allows. */
+    source: srcDescriptor(opts),
+    stores: {
+      templates: storeCk(opts && opts.templates ? opts.templates : TEMPLATES),
+      rules: storeCk(opts && opts.rules ? opts.rules : RULES),
+      expansions: storeCk(opts && opts.expansions ? opts.expansions : EXPANSIONS)
+    },
+    /* A reader must never have to infer which projection it was handed by
+       noticing which fields happen to be absent — that inference is exactly
+       what the thinning made impossible. The envelope says so. */
+    projection: projectionOf(opts),
+    segments: segments.map(function (s) {
+      var seg = {
+        type: "Segment",
+        mood: s.mood,
+        isReturn: !!s.isReturn,
+        continues: !!s.continues,
+        breaks: s.breaks,
+        autoClosedCount: s.autoClosed
+      };
+      if (projectionOf(opts) === "panel") seg = astLean(seg);
+      // not map(astNode) directly: map passes the index as the 2nd argument
+      seg.body = s.children.map(function (nd) { return astNode(nd, stats, opts); });
+      return seg;
+    }),
+    diagnostics: (gaps || []).map(function (g) {
+      /* `at` was added to the gap record and stopped here, which is the same
+         shape as `origin` and the same shape as the propagation failure this
+         whole release is named after: the value existed, one consumer did not
+         carry it, and the omission was invisible because nothing downstream
+         could ask. A refusal a reader cannot locate is a refusal they cannot
+         act on. */
+      var d = { code:g.code, severity:g.sev, label:g.lab, message:g.plain };
+      if (g.at && typeof g.at.s === "number") d.at = { s:g.at.s, e:g.at.e };
+      return d;
+    })
+  };
+  if (stats.truncated) {
+    out.truncatedNodes = stats.truncated;
+    /* The ceiling was justified in-comment by the AST being "an inspection
+       panel": truncating a panel with a marker beats bringing the whole
+       serialisation down. T23 retired that premise. A source of truth that
+       silently omits part of itself is not one, and the marker sits deep in
+       the tree where a reader has to already suspect it to find it.
+       So in `full` the omission is announced at the envelope, at `fix`,
+       where glyph-check refuses it and a human sees it first. `panel` keeps
+       the quiet marker: the screen has the source next to it. */
+    if (projectionOf(opts) === "full")
+      out.diagnostics.push({
+        code: "DepthExceeded", severity: "fix", label: "profundidade",
+        message: "a árvore passa de " + LIMITS.astDepth + " níveis e " + stats.truncated +
+                 " nós foram omitidos — este envelope não está completo e não deve ser " +
+                 "carregado como se estivesse."
+      });
+  }
+  return out;
+}
+
+export function toAST(src, opts) {
+  /* The envelope TRAVELS: it is read on another machine, by something that
+     does not have this engine. So its diagnostics default to en-EU, and a
+     caller that wants the pt-BR interface strings asks for them by name.
+     The interface keeps pt-BR; the artefact does not. */
+  var o0 = {};
+  for (var k0 in (opts || {})) if (Object.prototype.hasOwnProperty.call(opts, k0)) o0[k0] = opts[k0];
+  if (!o0.lang) o0.lang = "en";
+  opts = o0;
+  var r = parse(src, opts);
+  var o = {};
+  for (var k in (opts || {})) if (Object.prototype.hasOwnProperty.call(opts, k)) o[k] = opts[k];
+  o.__source = String(src == null ? "" : src);
+  return serializeAST(r.segments, r.gaps, o);
+}
