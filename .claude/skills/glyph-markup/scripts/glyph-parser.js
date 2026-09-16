@@ -63,119 +63,9 @@ import { CATS, INSTR, PTBR, CAT_OF, EDITORIAL_ONLY, ALIAS, ALIAS_OF, STRUCT, MET
 import { VERSION } from "./core/version.js";
 
 import { fromXML, fromAST } from "./core/inverse.js";
+import { TEMPLATES, useTemplates, templateRegistry, EXPANSIONS, useExpansions, expansionRegistry, entryOf, speciesOf, depthOf, formulaOf, defOf, atomsOf, standsAlone, RULES, useRules } from "./core/stores.js";
 const GlyphCore = (function () {
   "use strict";
-
-  /* ------------------------------------------------------------------ *
-   * standsAlone -- o eixo primitivo/operador, DERIVADO
-   *
-   * GLOSSARY §0 declara dois eixos independentes: hieroglifo/glifo (decompoe?)
-   * e primitivo/operador (precisa de operando?). O segundo nunca virou tabela:
-   * vive na prosa da §2 e num comentario dentro de FRAMES nomeando cinco
-   * comandos.
-   *
-   * E a prosa da §2 nao serve como fonte. Medido: dos 38 comandos que ela
-   * lista como "atoms that stand on their own, with no operand", QUINZE estao
-   * so ali e mesmo assim exigem operando pelo FRAMES -- CTX, NT, REV, RSN, REQ
-   * entre eles -- e REQ aparece nas duas secoes ao mesmo tempo. A §2 contradiz
-   * a §0 no proprio corpo do documento.
-   *
-   * Entao a tabela e DERIVADA do que o motor ja segura: e primitivo o atomo
-   * de que nenhuma tabela de valencia cobra operando. Nada de transcrever
-   * prosa -- dominio evita sintese, e derivar de FRAMES/SLOTS significa que a
-   * classificacao nao pode divergir do que o motor de fato faz.
-   * ------------------------------------------------------------------ */
-  function standsAlone(canonical, opts) {
-    var U = String(canonical || "").toUpperCase();
-    if (!U || FRAMES[U] || SLOTS[U] || NAMED_STRUCT[U]) return false;
-    return speciesOf(U, opts) === "atom";
-  }
-
-  /* ---- template registry ----------------------------------------------
-     Filled by useTemplates(). Node loads it from templates.json;
-     the browser, from the generated glyph-data.js (file:// blocks fetch). */
-  var TEMPLATES = {};
-  function useTemplates(store) {
-    TEMPLATES = (store && store.templates) || store || {};
-    return TEMPLATES;
-  }
-  function templateRegistry(opts) {
-    return (opts && opts.templates) || TEMPLATES;
-  }
-
-  /* ---- composition registry (v1.1.0.0) --------------------------------
-     What GLOSSARY.md knows and the engine did not: which commands are
-     hieroglyphs (atoms, they do not decompose) and which are glyphs
-     (composites, with a formula that reduces them to atoms).
-
-     Generated from expansions.txt into expansions.json by
-     build-templates.js. Optional, exactly like the template and rule stores:
-     with no store loaded the engine parses and emits the same as before, it
-     just cannot say what anything is made of.
-
-     This is the table an .hgml emitter burns down to — the reason it exists.
-     Nothing in the XML path reads it yet: species is inspection data, and it
-     travels in the AST. */
-  var EXPANSIONS = null;
-  function useExpansions(store) {
-    EXPANSIONS = (store && store.commands) ? store : (store ? { commands: store } : null);
-    return EXPANSIONS;
-  }
-  function expansionRegistry(opts) {
-    var s = (opts && opts.expansions) || EXPANSIONS;
-    return (s && s.commands) ? s : null;
-  }
-  function entryOf(name, opts) {
-    var reg = expansionRegistry(opts);
-    if (!reg) return null;
-    return reg.commands[String(name || "").toUpperCase()] || null;
-  }
-
-  /** "atom" | "composite" | null (no store, or outside the table) */
-  function speciesOf(name, opts) {
-    var e = entryOf(name, opts);
-    return e ? e.species : null;
-  }
-  /** composition layer: 0 for an atom, 1 + the deepest dependency otherwise */
-  function depthOf(name, opts) {
-    var e = entryOf(name, opts);
-    return e && typeof e.depth === "number" ? e.depth : null;
-  }
-  /** the formula, for a composite; null for an atom */
-  function formulaOf(name, opts) {
-    var e = entryOf(name, opts);
-    return (e && e.formula) || null;
-  }
-  /** what the command MEANS — extracted from GLOSSARY.md at build time.
-      `formulaOf` says what a composite is made OF; this says what any command
-      IS, and for the 88 hieroglyphs it is the only thing there is to say. */
-  function defOf(name, opts) {
-    var e = entryOf(name, opts);
-    return (e && e.def) || null;
-  }
-
-  /**
-   * atomsOf(name) — the transitive atom closure, in formula order.
-   *
-   * Repeats are kept: a command that reaches CTX by two routes is made of it
-   * twice, and collapsing that would misreport what the composition costs.
-   * The build gate in build-templates.js already refuses a table with cycles,
-   * so `seen` here is belt-and-braces against a hand-edited store.
-   */
-  function atomsOf(name, opts) {
-    var reg = expansionRegistry(opts);
-    if (!reg) return null;
-    var out = [];
-    (function walkDown(n, seen, hops) {
-      var U = String(n).toUpperCase();
-      if (hops > 64 || seen[U]) { out.push(U); return; }
-      var e = reg.commands[U];
-      if (!e || e.species === "atom") { out.push(U); return; }
-      var next = {}; for (var k in seen) next[k] = 1; next[U] = 1;
-      (e.deps || []).forEach(function (d) { walkDown(d, next, hops + 1); });
-    })(name, {}, 0);
-    return out;
-  }
 
   /* children that count as a filled slot */
   function valueChildren(nd) {
@@ -871,9 +761,6 @@ const GlyphCore = (function () {
      changes the rule, without touching code. `hard` becomes `fix`, `tension`
      becomes `ask`.
      ====================================================== */
-
-  var RULES = null;
-  function useRules(store) { RULES = store || null; return RULES; }
 
   function pairKey(a, b) { return a < b ? a + "|" + b : b + "|" + a; }
 
