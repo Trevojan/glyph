@@ -116,7 +116,7 @@ function readSource(full) {
    Entry shape:   `NAME` [★|⚠] [= `formula`] — Label. Definition…
    Six engine entries carry no English label, and there the whole line is the
    definition. */
-const GLOSS_LINE = /^`([A-Z][A-Z0-9_]*)`\s*(?:[★⚠]\s*)*(?:=\s*`[^`]*`\s*)?—\s*(.+?)\s*$/;
+const GLOSS_LINE = /^`([A-Z][A-Z0-9_]*)`\s*(?:[★⚠]\s*)*(?:=\s*`([^`]*)`\s*)?—\s*(.+?)\s*$/;
 
 function stripMd(s) {
   return String(s)
@@ -128,11 +128,12 @@ function stripMd(s) {
 function readGlossary() {
   const src = path.join(GUIDE, "GLOSSARY.md");
   if (!fs.existsSync(src)) { console.error("  ! GLOSSARY.md not found."); return {}; }
-  const defs = {};
+  const defs = {}, spelled = {};
   fs.readFileSync(src, "utf8").split(/\r?\n/).forEach(ln => {
     const m = GLOSS_LINE.exec(ln.trim());
     if (!m) return;
-    const body = stripMd(m[2]);
+    if (m[2]) spelled[m[1]] = m[2].replace(/\s+/g, "");
+    const body = stripMd(m[3]);
     /* The English label is short ("Do not.", "See also."). A long first
        segment is not a label — it is the whole definition. */
     const dot = body.indexOf(". ");
@@ -140,6 +141,7 @@ function readGlossary() {
     const isLabel = head && head.split(/\s+/).length <= 3;
     defs[m[1]] = isLabel ? body.slice(dot + 2).trim() : body.replace(/\.$/, "").trim() + ".";
   });
+  readGlossary.spelled = spelled;
   return defs;
 }
 
@@ -170,6 +172,23 @@ function buildExpansions() {
   const defs = readGlossary();
   const semDef = Object.keys(commands).filter(c => !defs[c]).sort();
   Object.keys(commands).forEach(c => { if (defs[c]) commands[c].def = defs[c]; });
+
+  /* Where the glossary SPELLS a formula, the table carries that spelling. The
+     norm is the glossary; the table is what the burn reads; and CRIT sat for
+     a release with the head open in one and closed in the other, so the burn
+     was faithful to a formula the norm had not written. A comma inside a
+     head's brackets and a comma outside it are different trees — the same
+     gate that refuses a cycle refuses a formula the norm spells differently. */
+  const spelled = readGlossary.spelled || {};
+  const disagree = Object.keys(spelled).filter(c =>
+    commands[c] && commands[c].formula &&
+    String(commands[c].formula).replace(/\s+/g, "") !== spelled[c]).sort();
+  if (disagree.length) {
+    console.error("  ! " + disagree.length + " formula(s) spelled one way in GLOSSARY.md and another in expansions.txt:");
+    disagree.forEach(c => console.error("    " + c + "\n      glossary: " + spelled[c] +
+                                        "\n      table:    " + String(commands[c].formula).replace(/\s+/g, "")));
+    process.exit(1);
+  }
 
   /* `element` — the name this command wears in the emitted document. It is put
      in the store because glyph-check must validate a glyph-package on a machine
