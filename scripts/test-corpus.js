@@ -689,21 +689,20 @@ function runHgmlChecks() {
      (!hyp.nonAtom.length && !hyp.fix.length && hyp.cmds.length > 80)
        ? null : "sobrou " + hyp.nonAtom.join(",") + " / " + hyp.cmds.length + " tags");
 
-  /* Two formulas carry tokens the grammar cannot read inside brackets, and
-     both are DATA problems, not burn bugs:
-       SCRU  `R:` — the return token is segment-level punctuation, so `[R:`
-             parses as a command named R.
-       QST   `[LOGIC-NONE]` — the lexer claims any `[logic…]` as a calculation
-             block and then wants `[/logic]`.
-     Pinned by name: if either is fixed the count moves and this case fails,
-     which is the point — it must not be fixed silently. */
-  const KNOWN = ["QST", "SCRU"];
+  /* Two spellings the grammar cannot read inside brackets, kept OUT of the
+     table by this case: `R:` (segment-level punctuation — `[R:` parses as a
+     command named R) and `[LOGIC…]` (the lexer claims it as a calculation
+     block and wants `[/logic]`). SCRU carried the first and QST the second
+     until 2026-09, when a client kit re-read its own burns and six of
+     fifty-one Orders failed on exactly those two. Both were data. Pinned at
+     zero: a formula that brings either back moves the count, and this fails. */
+  const KNOWN = [];
   const failing = Object.keys(store.commands).filter(c => {
     if (store.commands[c].species !== "composite") return false;
     const r = reburn("[" + c.toLowerCase() + "'x']");
     return r.fix.length || r.nonAtom.length;
   }).sort();
-  ok("H-09", "30 of 32 composites burn clean; 2 known ones fail",
+  ok("H-09", "every composite burns and re-reads clean — 32 of 32",
      JSON.stringify(failing) === JSON.stringify(KNOWN)
        ? null : "expected " + JSON.stringify(KNOWN) + ", got " + JSON.stringify(failing));
 

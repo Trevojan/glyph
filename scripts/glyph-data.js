@@ -1047,7 +1047,7 @@
     },
     "SCRU": {
       "species": "composite",
-      "formula": "[DIST-RSN[TRYFR[FIND-REAL][WHR[REAL-EQ[R:[CONF]]]]][CTX-VRFY-RSN],[SUM[ASK[DIST-RSN[TRYFR[REAL]]]]]]",
+      "formula": "[DIST-RSN[TRYFR[FIND-REAL][WHR[REAL-EQ[CONF]]]][CTX-VRFY-RSN],[SUM[ASK[DIST-RSN[TRYFR[REAL]]]]]]",
       "deps": [
         "DIST",
         "RSN",
@@ -1151,13 +1151,13 @@
     },
     "QST": {
       "species": "composite",
-      "formula": "[CTX[GET[CORE],[WHR[LOGIC-NONE]]],[ASK]]",
+      "formula": "[CTX[GET[CORE],[WHR[RSN-NONE]]],[ASK]]",
       "deps": [
         "CTX",
         "GET",
         "CORE",
         "WHR",
-        "LOGIC",
+        "RSN",
         "NONE",
         "ASK"
       ],

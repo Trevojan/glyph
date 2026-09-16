@@ -43,16 +43,13 @@ hieroglyphs plus what they operate on.
 
 ## What is left
 
-### Two formulas the grammar cannot read
+### Every composite re-reads its own burn
 
-Both are data problems, not burn bugs, and both are pinned by name in case
-`H-09` so neither gets fixed silently:
-
-- **`SCRU`** uses `R:` inside brackets. The return token is segment-level
-  punctuation, so `[R:` parses as a command named `R`.
-- **`QST`** uses `[LOGIC-NONE]`. The lexer claims any `[logic…]` as a
-  calculation block and then demands `[/logic]` — meaning **the `LOGIC` command
-  is unwritable inside a formula**. A language limitation, not a formula one.
+`H-09` holds 32 of 32. Two spellings stay unwritable inside a formula — `R:`
+(segment-level punctuation) and `[LOGIC…]` (the lexer's calculation block) —
+and `SCRU` and `QST` carried one each until a client kit re-read its own burns
+(`.orders/INTAKE-FIELD-2026-09.md` §1). Both were data: `SCRU` drops the `R:`
+that `TRYFR` already means, `QST` says `RSN-NONE` for the absence it meant.
 
 ### The pattern layer
 

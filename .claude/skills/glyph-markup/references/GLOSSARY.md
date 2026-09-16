@@ -235,10 +235,10 @@ explains each.
 `VAL` = `[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]` — Validate. Compare against the constraint or rule.
 `CRIT` = `[CMP[CTX]],[SPEC-CORE],[EVAL[ERROR]]` — Critique. Compare against the declared context or objective.
 `EVAL` = `[REAL[CORE-CTX[DIST[SKL]]]],[REF[DEF[SPEC-CORE-CTX]]]` — Evaluate. Compare against a realistic standard of practical quality.
-`SCRU` = `[DIST-RSN[TRYFR[FIND-REAL][WHR[REAL-EQ[R:[CONF]]]]][CTX-VRFY-RSN],[SUM[ASK[DIST-RSN[TRYFR[REAL]]]]]]` — Scrutinise. Examine the context under verification, criticise and question.
+`SCRU` = `[DIST-RSN[TRYFR[FIND-REAL][WHR[REAL-EQ[CONF]]]][CTX-VRFY-RSN],[SUM[ASK[DIST-RSN[TRYFR[REAL]]]]]]` — Scrutinise. Examine the context under verification, criticise and question.
 `TRYFR` = `[REV[REF[TGT]]][VRFY[TGT],[TRUE[CNCL[GO-LOGIC]]]]` — Try. Attempt to reach the target with verification.
 `PROB` = `[ERROR[CTX]]` — Problem. An error situated inside a specific context.
-`QST` = `[CTX[GET[CORE],[WHR[LOGIC-NONE]]],[ASK]]` — Question. Structural typing: marks a block as interrogative (not necessarily aimed at anyone — see `ASK`).
+`QST` = `[CTX[GET[CORE],[WHR[RSN-NONE]]],[ASK]]` — Question. Structural typing: marks a block as interrogative (not necessarily aimed at anyone — see `ASK`).
 `DRVF` = `[RTNL-RWK[MAND-NEQ],[CTX[GO-SWITCH]]]` — Derive from. Draw a conclusion from a principle.
 `FOREX` = `[GO-ALT[AVD[GET[CTX-REQ],[CTX-CNST],[CTX-EXC]]]]` — For example. The discourse connective that introduces an `EX` in the flow of text.
 `FBK` = `[IF-ERROR][EQ[RMBR[CORE]],[INSTOF[TRYFR],[GO[ALT]]]]` — Fallback. Alternative plan of action on failure.
@@ -374,15 +374,18 @@ The burn is an **expansion, not a compression**: ~15 hieroglyphs per composite,
 hieroglyphs" — density and full decomposition pull in opposite directions, and
 this format chose decomposition.
 
-**Two formulas the grammar cannot read**, both data problems rather than burn
-bugs, and both pinned by name in case `H-09` so neither gets fixed silently:
-
-- **`SCRU`** uses `R:` inside brackets. The return token is segment-level
-  punctuation, so `[R:` parses as a command named `R`.
-- **`QST`** uses `[LOGIC-NONE]`. The lexer claims any `[logic…]` as a
-  calculation block and then demands `[/logic]` — meaning **the `LOGIC` command
-  is unwritable inside a formula**. That is a language limitation, not a formula
-  one.
+**Every composite burns and re-reads clean** — `H-09` holds it at 32 of 32.
+Two spellings the grammar cannot read are kept out of the table by that case
+and by the norm↔table gate in `build-templates.js`: `R:` inside brackets (the
+return token is segment-level punctuation, so `[R:` parses as a command named
+`R`) and `[LOGIC…]` inside a formula (the lexer claims it as a calculation
+block and demands `[/logic]` — the `LOGIC` command is the block, and is not
+writable as a name). `SCRU` once carried `R:` and `QST` once carried
+`[LOGIC-NONE]`; a client kit re-reading its own burns found both, six Orders
+in fifty-one. `SCRU` says "where the realistic equals a confirmation" — the
+`TRYFR` around it already means *for a result*. `QST` says "where reason:
+none" — what it meant was an absence of reasoning, and `LOGIC` in this
+glossary is arithmetic.
 
 ### Self-describing output
 
