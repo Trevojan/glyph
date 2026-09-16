@@ -1,102 +1,68 @@
 #!/usr/bin/env node
 /**
- * seam-graph — the coupling graph the split needs and nobody had.
+ * seam-graph — the dependency graph of scripts/core/, and the gate that keeps
+ * it a DAG.
  *
- *   node seam-graph.js
+ *   node seam-graph.js            print the graph: who imports whom, who is imported
+ *   node seam-graph.js --check    exit 1 on a cycle; prints nothing else on success
  *
- * HGML_PLAN's D1 has been open since v1.1 and the plan for it says the cut
- * follows DEPENDENCIES, not the comment seams. The comments say where the file
- * reads as divided; they do not say where it can be divided cheaply, and the
- * difference between those two is the whole risk of the operation.
- *
- * So this measures it. For each seam: what it declares, what it uses from
- * elsewhere, and who uses what it declares. A seam that only receives is a leaf
- * and can leave first; a seam everything reaches into is the last one to move,
- * or the one that has to become shared state on purpose rather than by accident.
- *
- * Deliberately crude — a regex over declarations and identifiers, not a parser.
- * A false edge costs a careful look; a missing edge would cost a silent break,
- * so it errs toward reporting too much.
+ * Until 3.5.8.06 the core was one file and this tool measured the coupling
+ * between its comment seams — the map the split followed (HGML_PLAN D1,
+ * INTAKE-PARSER-SPLIT.md). The split is done; the seams are files, and the
+ * coupling is now written in `import` lines rather than inferred from
+ * identifiers. What remains worth measuring is the one property the split
+ * promised and a reader cannot see from any single file: no module imports
+ * one that imports it back. parse() hands itself to the template expander as
+ * an argument for exactly that reason, and this is what refuses the day
+ * somebody replaces the argument with an import.
  */
 
 "use strict";
 
-import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
-const require = createRequire(import.meta.url);
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import fs from "node:fs";
 
-const fs = require("fs");
+const HERE = path.dirname(fileURLToPath(import.meta.url));
+const CORE = path.join(HERE, "core");
+const CHECK = process.argv.indexOf("--check") !== -1;
 
-const SRC = fs.readFileSync(path.join(__dirname, "glyph-parser.js"), "utf8").split("\n");
-
-/* the seam headers, as the file itself names them */
-const marks = [];
-SRC.forEach((l, i) => {
-  const m = l.match(/^\s{5}(\d)\.\s+(.+?)(\s+—.*)?$/);
-  if (m && SRC[i - 1] && SRC[i - 1].indexOf("=====") !== -1)
-    marks.push({ n: m[1], name: m[2].trim(), line: i - 1 });
-});
-/* The CLI left for glyph-cli.js; when its marker is absent the last seam runs
-   to the end of the file, instead of to line -1 and out of the table. */
-const cliAt = SRC.findIndex(l => l.indexOf("/* ---------- CLI") !== -1);
-if (cliAt !== -1) marks.push({ n: "-", name: "CLI", line: cliAt });
-
-const seams = marks.map((m, i) => ({
-  label: m.n + " " + m.name,
-  from: m.line,
-  to: (marks[i + 1] ? marks[i + 1].line : SRC.length)
-})).filter(s => s.to > s.from);
-
-/* what each seam declares at its own top level */
-const DECL = /^\s{2}(?:function\s+([A-Za-z_$][\w$]*)|var\s+([A-Za-z_$][\w$]*)\s*=)/;
-seams.forEach(s => {
-  s.text = SRC.slice(s.from, s.to).join("\n");
-  s.declares = new Set();
-  SRC.slice(s.from, s.to).forEach(l => {
-    const m = l.match(DECL);
-    if (m) s.declares.add(m[1] || m[2]);
-  });
+const graph = {};
+fs.readdirSync(CORE).filter(f => f.endsWith(".js")).sort().forEach(f => {
+  const src = fs.readFileSync(path.join(CORE, f), "utf8");
+  graph[f] = [...src.matchAll(/from\s+"\.\/([A-Za-z0-9_-]+\.js)"/g)].map(m => m[1]);
 });
 
-/* who references whose declarations */
-const owner = {};
-seams.forEach(s => s.declares.forEach(d => { owner[d] = s.label; }));
+/* cycle detection: DFS with a grey set */
+const colour = {}, cycles = [];
+function visit(n, trail) {
+  if (colour[n] === "grey") { cycles.push(trail.slice(trail.indexOf(n)).concat(n)); return; }
+  if (colour[n] === "black") return;
+  colour[n] = "grey";
+  (graph[n] || []).forEach(m => visit(m, trail.concat(n)));
+  colour[n] = "black";
+}
+Object.keys(graph).forEach(n => visit(n, []));
 
-seams.forEach(s => {
-  s.uses = {};
-  Object.keys(owner).forEach(name => {
-    if (owner[name] === s.label) return;
-    const re = new RegExp("\\b" + name.replace(/\$/g, "\\$") + "\\b", "g");
-    const hits = (s.text.match(re) || []).length;
-    if (hits) (s.uses[owner[name]] = s.uses[owner[name]] || []).push(name + "×" + hits);
-  });
+if (CHECK) {
+  if (cycles.length) {
+    console.error("seam-graph: " + cycles.length + " cycle(s) in scripts/core/");
+    cycles.forEach(c => console.error("  " + c.join(" → ")));
+    process.exit(1);
+  }
+  process.exit(0);
+}
+
+const importedBy = {};
+Object.keys(graph).forEach(n => graph[n].forEach(m => { (importedBy[m] = importedBy[m] || []).push(n); }));
+const lines = f => fs.readFileSync(path.join(CORE, f), "utf8").split("\n").length;
+
+console.log("module            lines  imports                                     imported by");
+console.log("-".repeat(96));
+Object.keys(graph).forEach(n => {
+  console.log("  " + n.replace(".js", "").padEnd(14) + String(lines(n)).padStart(6) + "  " +
+    (graph[n].map(m => m.replace(".js", "")).join(" ") || "—").padEnd(42) + "  " +
+    ((importedBy[n] || []).map(m => m.replace(".js", "")).join(" ") || "— (the entry only)"));
 });
-
-console.log("seam                          lines  declares  reaches into");
-console.log("-".repeat(78));
-seams.forEach(s => {
-  const into = Object.keys(s.uses).sort();
-  console.log("  " + s.label.padEnd(28) +
-              String(s.to - s.from).padStart(5) +
-              String(s.declares.size).padStart(10) + "  " +
-              (into.length ? into.map(x => x.split(" ")[0]).join(" ") : "—"));
-});
-
-console.log("\nwho reaches into each seam (the cost of moving it):\n");
-seams.forEach(s => {
-  const callers = seams.filter(o => o.uses[s.label]);
-  const names = {};
-  callers.forEach(c => s.uses && (c.uses[s.label] || []).forEach(n => {
-    const k = n.split("×")[0]; names[k] = (names[k] || 0) + Number(n.split("×")[1]);
-  }));
-  const hot = Object.keys(names).sort((a, b) => names[b] - names[a]).slice(0, 8);
-  console.log("  " + s.label.padEnd(28) + callers.length + " seam(s)   " +
-              (hot.length ? hot.map(h => h + "×" + names[h]).join("  ") : "nothing"));
-});
-
-console.log("\nleaves — reached into by nobody, so they can move first:");
-const leaves = seams.filter(s => !seams.some(o => o.uses[s.label]));
-console.log("  " + (leaves.length ? leaves.map(s => s.label).join(", ") : "none — every seam is depended on"));
+console.log("\n" + Object.keys(graph).length + " modules, " + cycles.length + " cycle(s)" +
+  (cycles.length ? ":\n  " + cycles.map(c => c.join(" → ")).join("\n  ") : "."));

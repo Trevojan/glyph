@@ -1,7 +1,9 @@
 # Preliminary intake — splitting `glyph-parser.js` into a directory
 
-> **Not an order yet; the proposal the Regent asked for before anything moves.**
-> Decided today: the parser is fragmented into a directory of its own. Measured
+> **Done — 2026-09-17, twelve cuts, one commit each, `npm run check` green at
+> every one, corpus byte-identical throughout.** §6 records what the cut
+> measured against this proposal. Decided 2026-09-16: the parser is
+> fragmented into a directory of its own. Measured
 > today: 49 of 77 re-reads across 11 sessions were windowed reads of this one
 > file (`INTAKE-VIRTUAL-PATH.md` §8.2) — the only round-trip cost that exists.
 > The cut follows **dependencies, not comment banners**, which is what
@@ -108,3 +110,54 @@ That is the change that would let two stores coexist in one process (a server
 holding several packages), and it is also the one structural fact
 `INTAKE-RUST.md` §3 names as JS's real weakness here. It is a separate step,
 proposed there, decided by the Regent.
+
+## 6. What the cut measured — the state after
+
+Thirteen modules (the twelve proposed plus `version.js`, one line, because
+the inverse compares an incoming `engine=` against it and the entry exports
+it), **zero cycles**, the largest 594 lines, the entry 85:
+
+```
+module        lines  imports                                       imported by
+burn            260  util stores parser rules                      the entry
+emit-ast        338  util vocabulary stores parser version         the entry
+emit-xml        381  util vocabulary stores parser version         the entry
+inverse         595  util vocabulary version                       the entry
+lexer           373  vocabulary stores                             parser
+logic           124  util                                          parser
+parser          585  util vocabulary stores lexer logic templates rules   burn emit-ast emit-xml
+rules           167  util stores                                   burn parser
+stores          132  vocabulary                                    seven modules
+templates       292  util stores                                   parser
+util             88  —                                             eight modules
+version          10  —                                             three modules
+vocabulary      351  —                                             six modules
+```
+
+Three things the proposal did not have and the cut found:
+
+- **The extraction order is by outgoing dependencies, not by who is reached.**
+  A module can only import what is already a module, so the bottom of the
+  graph goes first — `util`, `vocabulary`, `stores`, `lexer`, `logic` — and
+  the projections last. The inverse went third only because, with the two
+  reverse maps relocated, it reads nothing above `vocabulary`. §4's "leaves
+  first" was the right instinct in the wrong direction.
+- **Two would-be cycles, both dissolved by moving a fact to where it is
+  about.** `walk`/`stripTags`/`valueChildren` are tree helpers with no
+  dependency and went to `util`; `collectBindings` lived in the emitter's
+  section and was reached from `parse` — it is a fact about the tree, so it
+  lives in `parser.js`, and `emit-xml` imports it from there. The one true
+  cycle — the template expander must parse a template's body, and `parse`
+  runs the expander — is broken by injection: `expandInvocations(segments,
+  opts, G, parseFn)`, the shape it already had for diagnostics.
+- **The stores are live bindings.** `export var RULES` reassigned inside
+  `stores.js` by `useRules` is seen by every importer; `classify` reads
+  `RULES` to recognise a blend and sees it filled after the CLI called
+  `useRules`. That is what made the three globals movable without the context
+  refactor of §5 — which is now the next step, and cheap, because
+  `stores.js` is the only module that assigns them.
+
+`seam-graph.js` reads `import` lines instead of comment banners and refuses a
+cycle under `npm run check`. `build-skill.js` copies `scripts/core/` beside
+the entry; the skill's copy runs. The 56 field Orders re-read clean; the
+full pipeline of an Order is unchanged at ~4 ms.

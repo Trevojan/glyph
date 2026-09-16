@@ -14,8 +14,8 @@
 |---|---|
 | versão | **3.5.8.06** |
 | suíte | `npm run check` — verde, ~250 asserções em 25 baldes |
-| último marco | o motor em campo: um kit de cliente releu as próprias queimas e o `H-09` fechou; `CRIT` soletra o que o §0.3 escreve; `REQ` e `MAND` têm fronteira; o glossário e a tabela são comparados no `--check` |
-| próximo | fragmentar `glyph-parser.js` em `scripts/core/` — o corte está desenhado em [`.orders/INTAKE-PARSER-SPLIT.md`](../.orders/INTAKE-PARSER-SPLIT.md); depois, `.plan/` |
+| último marco | o núcleo em treze módulos, `scripts/core/`, zero ciclos, o maior com 594 linhas — cada um cabe num `Read`. Antes disso: `H-09` fechou pelo kit de cliente, `CRIT` soletra o §0.3, `REQ`/`MAND` com fronteira |
+| próximo | os stores como objeto de contexto ([`.orders/INTAKE-PARSER-SPLIT.md`](../.orders/INTAKE-PARSER-SPLIT.md) §5), agora que `core/stores.js` é o único lugar que os atribui; depois, `.plan/` |
 
 ## Os seis eixos
 
@@ -30,7 +30,7 @@
 
 ## O mapa do motor, em cinco linhas
 
-1. **`scripts/glyph-parser.js` é o núcleo único.** Tudo mais consome.
+1. **`scripts/glyph-parser.js` é a face pública do núcleo**, que vive em `scripts/core/` — treze módulos, direção estrita `util ← vocabulary ← stores ← lexer ← logic ← {templates, rules} ← parser ← emit-xml ← {emit-ast, burn}`, mais `inverse`; `node scripts/seam-graph.js` mostra. Tudo mais consome a face.
 2. A fonte `.pgml` vira **AST** (fonte de verdade), e dela saem três projeções:
    `glyph-package` (XML), o envelope `GlyphAST`, e a queima `.hgml`.
 3. **O `.hgml` é derivado da árvore, não anterior a ela** — e por isso não pode

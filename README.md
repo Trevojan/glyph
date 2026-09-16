@@ -208,7 +208,8 @@ built.
 | file | role |
 |---|---|
 | `glyph-engine-alias.html` + `glyph-engine.css` | the app — interface only |
-| `scripts/glyph-parser.js` | the core: lexer, tree, rules, emitters |
+| `scripts/glyph-parser.js` | the core's public face — assembles `GlyphCore` from `scripts/core/` |
+| `scripts/core/` | the engine, thirteen modules: `util vocabulary version stores lexer logic templates rules parser emit-xml emit-ast burn inverse`; `node scripts/seam-graph.js` prints who imports whom |
 | `scripts/glyph-ui.js` · `glyph-moldes.js` | interface and forms (pt-BR) |
 | `scripts/serve-dev.js` | static server, for driving the app in a real browser |
 | `.guidelines/rules.json` · `templates.json` | data stores, hand-editable |
