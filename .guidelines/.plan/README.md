@@ -46,16 +46,18 @@ semântico** — categoria, espécie, tabela de composição — não de limiar 
 | `;` é **assimétrico entre aspas** | encerra um literal de crase, não encerra um de apóstrofo. As duas formas deveriam ser intercambiáveis. |
 | param de template nu vira prosa | `[--germinate a,b]` → `PlaceholderPending` ×2 e os valores caem como `<off>`. Param de template é **sempre literal** — as duas aspas servem, a palavra nua não. |
 
-### 4. `ORD-xxxxx` como pacote de quatro formatos — **não existe**
+### 4. `ORD-xxxxx` como pacote de quatro formatos — só na CLI
 
-O botão `baixar` emite **só a aba visível**, um arquivo. Não há zip, não há
-bundle. O próprio app admite em `glyph-ui.js:1314`: *"quem passa a lê-la é o
-emissor de bundle"* — que nunca foi escrito.
+`node scripts/glyph-cli.js --file ordem.pgml --bundle` emite os quatro formatos
+e o manifesto (`order, engine, emitted, files, source, diagnostics`). O botão
+`baixar` do app emite **só a aba visível**, um arquivo: o emissor de bundle
+existe e o app ainda não o chama.
 
 ## Aberto, esperando o Regente
 
 | | |
 |---|---|
+| **estudo de setembro** | oito intakes em [`.orders/`](../.orders/): `INTAKE-VIRTUAL-PATH` (mini-repo, medido: o custo de round-trip é o tamanho de `glyph-parser.js`), `INTAKE-ORDER-COHERENCE` (`relates[]`, B antes de A), `INTAKE-BURN-INVARIANCE` (fechado), `INTAKE-FORMAL-ANALYSIS`, `INTAKE-PARSER-SPLIT` (o corte proposto, doze módulos, folhas primeiro — **próximo passo autorizado**), `INTAKE-RUST` (steelman e defeater; decisão do Regente), `INTAKE-FIELD-2026-09` (o kit de cliente; `H-09` fechou por ele). Pendentes do Regente: um esquema de ID e uma casa para as Ordens (`I_B1`); o `sameTarget` do blend que não confere o alvo; o `--check` do grafo de links |
 | **Q14** | o Regente autora o sexto exemplo de conformidade. Base verificada em [`conformance/README.md`](../../conformance/README.md) |
 | **Q4** | ratificar [`PROMOTION_BOUNDARY.md`](../PROMOTION_BOUNDARY.md) §5 |
 | sintaxe de referência | sem ela, `<needs var>` fora da cerca `[logic]` não tem no que disparar — uma referência não resolvida é indistinguível de prosa |

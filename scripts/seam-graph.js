@@ -39,7 +39,10 @@ SRC.forEach((l, i) => {
   if (m && SRC[i - 1] && SRC[i - 1].indexOf("=====") !== -1)
     marks.push({ n: m[1], name: m[2].trim(), line: i - 1 });
 });
-marks.push({ n: "-", name: "CLI", line: SRC.findIndex(l => l.indexOf("/* ---------- CLI") !== -1) });
+/* The CLI left for glyph-cli.js; when its marker is absent the last seam runs
+   to the end of the file, instead of to line -1 and out of the table. */
+const cliAt = SRC.findIndex(l => l.indexOf("/* ---------- CLI") !== -1);
+if (cliAt !== -1) marks.push({ n: "-", name: "CLI", line: cliAt });
 
 const seams = marks.map((m, i) => ({
   label: m.n + " " + m.name,

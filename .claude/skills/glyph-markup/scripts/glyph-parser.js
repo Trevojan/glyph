@@ -2906,7 +2906,7 @@ const GlyphCore = (function () {
 
 
   /* ======================================================
-     7. XML → GLYPH — the inverse
+     8. XML → GLYPH — the inverse
 
      The pipeline was one-way until here ("human → glyph → xml → machine"),
      so editing the XML meant editing the deliverable and abandoning the

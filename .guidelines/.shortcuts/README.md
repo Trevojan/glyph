@@ -14,8 +14,8 @@
 |---|---|
 | versão | **3.4.7.05** |
 | suíte | `npm run check` — verde, ~250 asserções em 25 baldes |
-| último marco | grafo de nomes: `binds` / `ref` / `role`, cerca `[raw]`, `<holds>` |
-| próximo | `.plan/` |
+| último marco | o motor em campo: um kit de cliente releu as próprias queimas e o `H-09` fechou; `CRIT` soletra o que o §0.3 escreve; `REQ` e `MAND` têm fronteira; o glossário e a tabela são comparados no `--check` |
+| próximo | fragmentar `glyph-parser.js` em `scripts/core/` — o corte está desenhado em [`.orders/INTAKE-PARSER-SPLIT.md`](../.orders/INTAKE-PARSER-SPLIT.md); depois, `.plan/` |
 
 ## Os seis eixos
 
@@ -49,6 +49,8 @@
 | "o documento emitido pode fazer isso?" | [`PACKAGE_TARGET.md`](../PACKAGE_TARGET.md) |
 | "isto é domínio ou síntese?" | [`PROMOTION_BOUNDARY.md`](../PROMOTION_BOUNDARY.md) §2 |
 | "o que o motor promete e não cumpre?" | [`.orders/INTAKE-VARIABLES.md`](../.orders/INTAKE-VARIABLES.md) |
+| "o que o estudo de setembro mediu e decidiu?" | [`.orders/INTAKE-FIELD-2026-09.md`](../.orders/INTAKE-FIELD-2026-09.md) §5 aponta os outros sete |
+| "Rust?" | [`.orders/INTAKE-RUST.md`](../.orders/INTAKE-RUST.md) — os dois lados, pesados; a decisão é do Regente |
 | "duas fontes, uma intenção?" | [`HGML_CONVERGENCE.md`](../HGML_CONVERGENCE.md) |
 | "como escrever um exemplo de conformidade?" | [`conformance/README.md`](../../conformance/README.md) |
 | "como escrevo Glyph?" | a skill em [`.claude/skills/glyph-markup/`](../../.claude/skills/glyph-markup/) — gerada, e provada contra o motor |
