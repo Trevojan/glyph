@@ -12,7 +12,7 @@
 
 | | |
 |---|---|
-| versão | **3.4.7.05** |
+| versão | **3.5.8.06** |
 | suíte | `npm run check` — verde, ~250 asserções em 25 baldes |
 | último marco | o motor em campo: um kit de cliente releu as próprias queimas e o `H-09` fechou; `CRIT` soletra o que o §0.3 escreve; `REQ` e `MAND` têm fronteira; o glossário e a tabela são comparados no `--check` |
 | próximo | fragmentar `glyph-parser.js` em `scripts/core/` — o corte está desenhado em [`.orders/INTAKE-PARSER-SPLIT.md`](../.orders/INTAKE-PARSER-SPLIT.md); depois, `.plan/` |

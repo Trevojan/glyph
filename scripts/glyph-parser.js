@@ -58,7 +58,7 @@
 const GlyphCore = (function () {
   "use strict";
 
-  var VERSION = "3.4.7.05";
+  var VERSION = "3.5.8.06";
 
   /* ======================================================
      1. VOCABULARY — Appendix A, one slot per command

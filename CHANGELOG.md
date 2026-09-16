@@ -37,6 +37,71 @@ All notable changes to Glyph are documented here, most recent first.
 
 ---
 
+## [3.5.8.06] — a queima foi lida de volta em campo, e três fórmulas não voltaram
+
+`frontend` moves because the page gained an icon (`.scope/asset/`). `rules` moves
+because `rules.json` changed its one blend, three formulas in `expansions.txt` changed
+their spelling, and two glossary entries drew a boundary — vocabulary, all of it.
+`minor` carries a new gate, a closed test case, a repaired instrument, and seven
+study documents. No digit resets any other.
+
+### What the field found
+
+A client starter kit — 22 series, 94 Orders in `.pgml` — re-parsed its own `.hgml`
+burns and 12 of 51 came back with `fix`-level diagnostics (the reported 51 counted
+`ask`, which is the burn emptying slots into `<needs>` by contract). Two causes, both
+the engine's, both reproduced here from the same files
+(`.guidelines/.orders/INTAKE-FIELD-2026-09.md`):
+
+- **`[rev]` + `[dist]` burned to `[heavy`.** The pattern layer's one blend emitted
+  `heavy-review`; `-` is the chain operator, so the lexer re-read two names. Dropping
+  the hyphen was half the fix: a blend's emit is a name the vocabulary never declares,
+  so any spelling classified `unknown`. `rules.json` emits `heavyreview`; `classify`
+  consults the rules store as a last resort and answers `tier: "blend"` with the
+  rule's `means`; `elName` gives a blend its emit. `H-10b` pins the field case.
+- **`H-09` closed.** `SCRU` carried `R:` inside brackets (segment punctuation) and
+  `QST` carried `[LOGIC-NONE]` (the lexer's calculation block); the plan had pinned
+  both by name since v1.1 so neither would be fixed silently. Both were data:
+  `SCRU` drops the `R:` that its `TRYFR` already means; `QST` says `RSN-NONE` for
+  the absence it meant — `LOGIC` in this glossary is arithmetic. `H-09` now pins at
+  **zero**. The 56 kit sources re-read clean.
+
+### What the norm decided
+
+- **`CRIT` = `[CMP[CTX]],[SPEC-CORE],[EVAL[ERROR]]`** — `GLOSSARY.md` §0.3 already
+  wrote it with the head closed and read `VRFY`'s inner comma as operands; the
+  brackets are the rule at every depth, and the table was the one place `CRIT` was
+  spelled otherwise. The hand expansion faithful to §0.3 is now byte-identical to
+  `[crit'x']`. Ten corpus cases moved, all of them invoking `CRIT`.
+- **A formula the glossary spells is the formula the table carries.**
+  `build-templates.js --check` compares the 33 formulas §2 quotes against
+  `expansions.txt` and refuses a difference, the way it refuses a cycle.
+- **`REQ` is what must exist *before* the work; `MAND` is what the output must
+  contain.** The kit used `[req]` in both senses, having learned the second from
+  this tool's own example; a verifier refusing on every `[req]` false-positives six
+  times. One sense, no new command; both entries state the boundary.
+- **Conjunction order stays.** A sibling sort in the burn was built, passed every
+  variant, and was reverted: §0.1 since 3.4.7.05 makes `[A],[B]` and `[B],[A]` two
+  intentions, and a burn that identified them would collapse a distinction the
+  emitter already carries in `<holds>`.
+
+### Instruments and study
+
+- `seam-graph.js` had lost its end marker when the CLI moved and swallowed the last
+  seam; the parser's two "7." banners are "7." and "8.". The full graph shows the
+  inverse at 680 lines, reached by three seams through two vocabulary maps declared
+  in its section — the split's move order follows from that.
+- Seven intakes in `.guidelines/.orders/`: the mini-repo measured (the round-trip
+  cost is `glyph-parser.js` at 3 569 lines, not forgotten context — 69 of 77
+  re-reads across 11 sessions were windowed reads of two files), Order coherence
+  (`relates[]`, B before A), burn invariance (closed), the formal analysis, the
+  parser split (next step, authorised), Rust (both sides priced; the Regent's call),
+  and the field report.
+- `.scope/` — the Regent's working area — is tracked; zips inside it are not.
+  Three orphan worktrees, all merged, are gone.
+
+---
+
 ## [3.4.7.05] — o documento reescrevia conjunção como sequência, e ninguém via
 
 `release` move porque o documento emitido mudou de forma **e** a gramática ganhou um
