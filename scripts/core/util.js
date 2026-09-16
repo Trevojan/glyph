@@ -53,3 +53,35 @@ export function hgmlLit(v) {
   return String(v == null ? "" : v)
     .replace(/'/g, "’").replace(/]/g, ")").replace(/\s+/g, " ").trim();
 }
+
+/* Tree helpers. `walk` is what every pass over the tree is built on — the
+   parser, the rules, the emitters — and it depends on nothing, so it lives
+   with the rest of the floor. */
+/* children that count as a filled slot */
+export function valueChildren(nd) {
+  return (nd.children || []).filter(function (ch) {
+    return ch.canonical || ch.literal || ch.logic || ch.template || (ch.text && ch.v) || ch.mode;
+  });
+}
+
+
+/* Iterative on purpose: in a long block the tree is deep, and the
+   recursive version overflowed the stack right along with the emitters. */
+export function walk(list, fn) {
+  var stack = [], i;
+  for (i = (list || []).length - 1; i >= 0; i--) stack.push(list[i]);
+  while (stack.length) {
+    var nd = stack.pop();
+    fn(nd);
+    var kids = nd.children;
+    if (kids && kids.length) for (i = kids.length - 1; i >= 0; i--) stack.push(kids[i]);
+  }
+}
+
+export function stripTags(s) {
+  return String(s == null ? "" : s)
+    .replace(/<[^>]+>/g, "")
+    .replace(/&lt;/g, "<").replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"').replace(/&amp;/g, "&")
+    .replace(/\s+/g, " ").trim();
+}
