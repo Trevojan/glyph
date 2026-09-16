@@ -116,6 +116,12 @@ function emit(rel, content) {
 emit(path.join("scripts", "glyph-parser.js"),
      banner("scripts/glyph-parser.js", "js") +
      fs.readFileSync(path.join(HERE, "glyph-parser.js"), "utf8").replace(/\r\n/g, "\n"));
+/* the modules glyph-parser.js imports: the skill's copy has to run, not just
+   read, so the directory travels with the entry — same relative paths */
+fs.readdirSync(path.join(HERE, "core")).filter(f => f.endsWith(".js")).sort().forEach(f =>
+  emit(path.join("scripts", "core", f),
+       banner("scripts/core/" + f, "js") +
+       fs.readFileSync(path.join(HERE, "core", f), "utf8").replace(/\r\n/g, "\n")));
 
 /* normative, at source level: the generic shape of the output and everything
    needed to explain it, including §11, the failure treatment */

@@ -55,6 +55,8 @@
    in the browser. The global assignment below is kept anyway, because
    glyph-ui.js finds the core that way and rewriting the interface is not this
    change. */
+import { LIMITS, esc, xesc, pad, lev, hgmlLit } from "./core/util.js";
+
 const GlyphCore = (function () {
   "use strict";
 
@@ -347,21 +349,6 @@ const GlyphCore = (function () {
     VAL:["what to validate", "the external criterion"]
   };
 
-  /* Long-block limits (v1.0.9.1).
-
-     In Glyph every `[` without a `]` nests INSIDE the previous one, so a long
-     query doesn't grow wide: it grows deep. That had three consequences, all
-     fixed here — indentation grew with the square of depth (2 KB of input
-     became 500 KB of XML), the recursive emitters overflowed the call stack,
-     and the user got no warning at all that 40 commands had turned into 40
-     levels of nested scope. */
-  var LIMITS = {
-    indent: 12,      // visual indent ceiling; past this the XML stops growing
-    nesting: 10,     // past this depth, warn that the nesting is probably unintentional
-    autoClose: 8,    // `;` closing more than this at once deserves a warning
-    astDepth: 200    // AST ceiling: V8's JSON.stringify is recursive and overflows
-  };
-
   /* ---- template registry ----------------------------------------------
      Filled by useTemplates(). Node loads it from templates.json;
      the browser, from the generated glyph-data.js (file:// blocks fetch). */
@@ -454,12 +441,6 @@ const GlyphCore = (function () {
       return ch.canonical || ch.literal || ch.logic || ch.template || (ch.text && ch.v) || ch.mode;
     });
   }
-
-  function esc(s) {
-    return String(s == null ? "" : s)
-      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-  }
-  var xesc = esc;
 
   /* ======================================================
      2. LEXER
@@ -759,20 +740,6 @@ const GlyphCore = (function () {
     for (var i = 0; i < rs.length; i++)
       if (rs[i].kind === "blend" && String(rs[i].emit || "").toUpperCase() === U) return rs[i];
     return null;
-  }
-
-  function lev(a, b) {
-    var m = a.length, q = b.length;
-    if (!m) return q; if (!q) return m;
-    var prev = [], cur = [], i, j;
-    for (j = 0; j <= q; j++) prev[j] = j;
-    for (i = 1; i <= m; i++) {
-      cur[0] = i;
-      for (j = 1; j <= q; j++)
-        cur[j] = Math.min(prev[j]+1, cur[j-1]+1, prev[j-1] + (a[i-1] === b[j-1] ? 0 : 1));
-      var t = prev; prev = cur; cur = t;
-    }
-    return prev[q];
   }
 
   /* ------------------------------------------------------------------ *
@@ -1914,8 +1881,6 @@ const GlyphCore = (function () {
      depth: 500 levels turned into ~500 KB of whitespace, and the XML is
      exactly the thing that gets copied into the chat. Past the ceiling the
      structure stays readable through the tags themselves. */
-  function pad(d) { return new Array(Math.min(d, LIMITS.indent) + 1).join("  "); }
-
   /* ------------------------------------------------------------------ *
    * Bindings — a command's operand literal NAMES the command's result
    *
@@ -2832,14 +2797,6 @@ const GlyphCore = (function () {
       burnStats(nd.children, acc);
     });
     return acc;
-  }
-
-  function hgmlLit(v) {
-    /* `'` closes a literal, `]` and a newline end one. Nothing survives them
-       intact, so they are folded rather than escaped — .hgml carries the
-       human's words to the engine, not their punctuation. */
-    return String(v == null ? "" : v)
-      .replace(/'/g, "’").replace(/]/g, ")").replace(/\s+/g, " ").trim();
   }
 
   function hgmlLines(list, d, L) {
