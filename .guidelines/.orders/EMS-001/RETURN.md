@@ -12,7 +12,7 @@
 | environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed |
 | ground | read in the order the handoff names; `npm run check` (33 buckets, 41 s) and `npm run check:rust` (20 crates, 3 s) green on the clone at `ea8fc59`, before anything was touched |
 | layout | **closed** — its val holds (below), five banks |
-| queue | ORD-0001 to ORD-0005 closed; ORD-0006 opens next. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
+| queue | ORD-0001 to ORD-0005 closed; ORD-0006 open. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
 
 ## Waiting for the Regent
 
@@ -56,6 +56,18 @@ Closed questions, none answered.
    - b. a crate of its own under every other, with an oracle entry in
      `crate-graph.js`
    - c. as it is: `glyph-stores` keeps its own `Value`
+5. **ORD-0006's val names diagnostics that `parser.js` raises.** Of the 23
+   diagnostics of the T-, C- and K-cases, `templates.js` and `rules.js` raise
+   14; `parser.js` raises the other 9 (`PlaceholderPending` six times,
+   `UndefinedTemplate` three), and every one of them needs the tree the
+   parser builds — ORD-0007, which opens only once ORD-0006 closes. Which
+   reading holds?
+   - a. as read here: the 14, each equal on the tree the JS parser builds and
+     the export records; the 9 are held by ORD-0007's val, whose envelope
+     carries them
+   - b. the spec moves: ORD-0006's val names the two modules' diagnostics,
+     and ORD-0007's names every case's
+   - c. the spec moves the other way: templates and rules enter ORD-0007
 
 ## ORDs closed
 
@@ -180,7 +192,15 @@ port from its `[logic]` token as `emit-ast.js` projects it, `at` included.
 
 ## Open, and why
 
-Nothing is open. ORD-0006, `glyph-templates` and `glyph-rules`, opens next.
+**ORD-0006, `glyph-templates` and `glyph-rules`**, open since the commit that
+carries this line. Its val — "the diagnostics of every T-, C- and K-case
+equal the oracle" — is read as the diagnostics the two modules raise: 14 of
+the 23 those 36 cases hold. The other 9 are raised by `parser.js`, and every
+diagnostic of a case needs the tree the parser builds, which is ORD-0007's.
+So the export records the trees the JS parser builds, and the port is held
+to them: the tree before expansion, each body the expander asks `parse` for,
+the tree after, and each diagnostic in the order raised. The reading is
+question 5 above.
 
 ## ORD-0005, how it was read
 
@@ -417,7 +437,8 @@ and `npm run check` passes on the commit that carries this return.
 | ORD-0002 | `3413eb5` 01:40 | `4c4743a` 01:54 | 14 min, three work banks |
 | ORD-0003 | `b05ba19` 02:02 | `51e291b` 02:30 | 28 min, four work banks |
 | ORD-0004 | `2c68949` 02:34 | `e08f1f9` 02:45 | 11 min, one work bank |
-| ORD-0005 | `2466cef` 02:49 | the commit after `12cc408` | ~10 min, one work bank |
+| ORD-0005 | `2466cef` 02:49 | `17658ec` 03:00 | 11 min, one work bank |
+| ORD-0006 | the commit after `17658ec` 03:14 | — | open |
 
 | # | commit | step | UTC | checks |
 |---|---|---|---|---|
@@ -446,4 +467,5 @@ and `npm run check` passes on the commit that carries this return.
 | 22 | `e08f1f9` | ORD-0004 closes | 02:45 | green |
 | 23 | `2466cef` | ORD-0005 emitted and open | 02:49 | green |
 | 24 | `12cc408` | ORD-0005 work — `glyph-logic`, and `logic.json` in the export | 02:57 | green at once; 7 of 8 mutations killed, then 8 of 8 with four negation probes |
-| 25 | this commit | ORD-0005 closes | 2026-09-25 | green |
+| 25 | `17658ec` | ORD-0005 closes | 03:00 | green |
+| 26 | this commit | ORD-0006 emitted and open | 2026-09-25 | green |
