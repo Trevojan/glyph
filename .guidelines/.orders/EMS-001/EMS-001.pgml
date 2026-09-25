@@ -157,6 +157,7 @@
       [ph-scope'EMS-001']
     ]
     [--track[ph-item'ORD-0001, the frozen oracle: 114 files at 030ed76, the commit tagged conformance-v0, sha256 c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828 over LC_ALL=C sha256sum *.json'][ph-scope'EMS-001']]
+    [--track[ph-item'ORD-0002, glyph-util and glyph-version: esc, xesc, lev, walk and VERSION equal the JS at 79aebbd, sha256 6fb833ec47e105cdc72fd515633597896e1e65d83730dcd157f67876cc927b5c of oracle-modules/util.json'][ph-scope'EMS-001']]
     [ins'when ORD-0014 closes, EMS-001 stays as the record of what it delivered, and the next series opens as EMS-002 under a spec of its own']
     [rdy'the Rust app replaces the browser Glyph for the Regent, and the JS engine stays as long as anything reads it']
   ]
