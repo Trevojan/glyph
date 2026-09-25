@@ -79,7 +79,9 @@ commit are byte-identical, the 114 per-case digests equal
   of `esc`, `lev` and `walk`, not their answers, and the envelope names a
   node's children `body` where `walk` follows `children`. So the export writes
   the answers of `util.js` beside the case files, over what they hold, and the
-  crates read them with a JSON reader of their own; next, one bank each.
+  crates read them with a JSON reader of their own. Banked: the export, and
+  `check:rust` writing the oracle before `cargo test`. Next: `glyph-util`,
+  then `glyph-version`.
 
 ## Measured
 
@@ -116,6 +118,18 @@ commit are byte-identical, the 114 per-case digests equal
   emits `b` alone, and `a` is gone in silence. Found while choosing how a row
   enters the track of the spec; a JS defect, left as the JS answers it. The
   track takes one `--track` invocation per row, which carries every row.
+- **The module oracle.** `--export-oracle` writes
+  `rust/target/oracle-modules/util.json` (2.3 MB) beside the case files: the
+  1 609 distinct strings the case files hold, keys included, sorted by UTF-16
+  unit; `esc` of each (`xesc` is `esc` in the JS); `lev` of each string whole
+  against the first 16 units of the next, both ways — the longest string is
+  615 925 units, so every pair of strings would cost ~10¹¹ steps; and `walk`
+  over the 116 segment trees, 1 103 visits, as the shape each tree has, since
+  the envelope names children `body`. The 114 case files keep
+  `c00119e0…d828`, byte for byte.
+- **`npm run check:rust` writes the oracle at the commit under test** before
+  `cargo test`, so a stale oracle never answers for a commit; it now takes the
+  JS suite's time (~45 s) too.
 - **The version stays `3.5.8.06`.** No emitted document changes; the
   CHANGELOG entry waits for a release, as the work of 2026-09-24 does.
 
@@ -154,4 +168,5 @@ Closed questions, none answered.
 | 6 | `02c92ee` | ORD-0001 emitted and open | 01:28 | green |
 | 7 | `030ed76`, tagged `conformance-v0` | ORD-0001 closes | 01:31 | green; the tag push: `HTTP 403` |
 | 8 | `3380a36` | ORD-0001's rows name `030ed76`, since the tag is not on the remote | 01:33 | green |
-| 9 | this commit | ORD-0002 emitted and open | 2026-09-25 | green |
+| 9 | `3413eb5` | ORD-0002 emitted and open | 01:40 | green |
+| 10 | this commit | ORD-0002 work 1/3 — the export answers `util.js`; `check:rust` writes the oracle | 2026-09-25 | green |

@@ -1715,11 +1715,11 @@ function runSnapshotChecks() {
       : path.resolve(__dirname, "../rust/target/oracle");
     fs.mkdirSync(dir, { recursive: true });
     const guard = f => { try { return f(); } catch (e) { return { threw: e.message }; } };
-    let written = 0;
+    const texts = [];
     CORPUS.forEach(c => {
       if (!c || !c.id || typeof c.src !== "string") return;
       const ast = guard(() => { const a = G.toAST(c.src, SNAP_OPTS); delete a.version; return a; });
-      fs.writeFileSync(path.join(dir, c.id + ".json"), JSON.stringify({
+      const text = JSON.stringify({
         id: c.id, engine: G.VERSION, src: c.src, digest: now[c.id],
         tokens: guard(() => G.tokenize(c.src, SNAP_OPTS)),
         diagnostics: guard(() => (G.parse(c.src, SNAP_OPTS).gaps || [])
@@ -1727,10 +1727,48 @@ function runSnapshotChecks() {
         xml: guard(() => G.toXML(c.src, SNAP_OPTS)),
         ast: ast,
         hgml: guard(() => G.toHGML(c.src, SNAP_OPTS))
-      }, null, 1) + "\n");
-      written++;
+      }, null, 1) + "\n";
+      fs.writeFileSync(path.join(dir, c.id + ".json"), text);
+      texts.push(text);
     });
-    console.log("  ! oracle written: " + written + " cases to " + dir);
+    console.log("  ! oracle written: " + texts.length + " cases to " + dir);
+
+    /* What a port compares outside the case files (EMS-001, from ORD-0002):
+       the answers of one JS module over what the case files hold, read back
+       from their text. Beside them and never inside, so the case files stay
+       the bytes ORD-0001 froze at conformance-v0. */
+    const mods = dir + "-modules";
+    fs.mkdirSync(mods, { recursive: true });
+    const held = texts.map(t => JSON.parse(t));
+    const strings = new Set();
+    const gather = v => {
+      if (typeof v === "string") strings.add(v);
+      else if (Array.isArray(v)) v.forEach(gather);
+      else if (v && typeof v === "object") Object.keys(v).forEach(k => { strings.add(k); gather(v[k]); });
+    };
+    held.forEach(gather);
+    const S = [...strings].sort();
+    /* `lev` is quadratic: each string whole against the first 16 units of the
+       next one in sorted order, both ways, so every string is measured and the
+       longest costs millions of steps rather than hundreds of billions */
+    const lev = S.map((s, i) => {
+      const t = S[(i + 1) % S.length].slice(0, 16);
+      return [i, t, G.lev(s, t), G.lev(t, s)];
+    });
+    /* `walk` follows `children`, and the envelope names them `body`: each
+       segment's tree is walked as the shape it has, and answers the paths */
+    const walks = [];
+    held.forEach(h => ((h.ast && h.ast.segments) || []).forEach((sg, k) => {
+      const shape = (nd, at) => ({ at: at,
+        children: ((nd && nd.body) || []).map((ch, i) => shape(ch, at + "/" + i)) });
+      const seen = [];
+      G.walk((sg.body || []).map((nd, i) => shape(nd, String(i))), nd => seen.push(nd.at));
+      walks.push([h.id + "#" + k, seen]);
+    }));
+    fs.writeFileSync(path.join(mods, "util.json"), JSON.stringify({
+      engine: G.VERSION, strings: S, esc: S.map(G.esc), lev: lev, walk: walks
+    }, null, 1) + "\n");
+    console.log("  ! module oracle written: util.json to " + mods);
   }
 
   if (process.argv.indexOf("--update-snapshot") !== -1) {
