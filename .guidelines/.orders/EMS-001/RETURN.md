@@ -113,7 +113,8 @@ not strings.
   place they live, and `glyph-stores`' compiles the stores from the four
   sources. The expansions store also carries `schema` and a `note` that are
   `build-templates.js`'s own words; they are read from its output rather than
-  typed a second time.
+  typed a second time. Banked: `glyph_util::json`. Next: the module answers of
+  `vocabulary.js` and `stores.js`, then `glyph-vocab`, then `glyph-stores`.
 
 ## Measured
 
@@ -177,6 +178,15 @@ not strings.
 - **`glyph-version` reads `VERSION` from `scripts/core/version.js`** in its
   `build.rs`, so the number stays in one place. Its test was red against an
   empty constant, green after, and a hard-coded `3.4.7.05` fails it.
+- **`glyph_util::json`, the platform the Rust lacks.** `JSON.parse` and
+  `JSON.stringify` as the JS has them: the escapes, the JS's placing of the
+  shortest digits, and its property order — array-index keys first, a
+  duplicate keeping its first place. The reader moved out of the testkit into
+  `glyph-util`, where the ladder's intake put it (§9.2), and the testkit reads
+  with it. Held to every file the export writes: all 115 read and write back
+  to their bytes (red against a writer that wrote nothing). Numbers and key
+  order, which the oracle's integers and fixed keys do not exercise, are held
+  to what node answers.
 - **The survivor: `lev` counting `char`s instead of UTF-16 units.** No string
   in the oracle carries a character outside the BMP, so the two countings
   answer alike on all of it. 129 strings are non-ASCII, which holds bytes
@@ -238,4 +248,5 @@ Closed questions, none answered.
 | 11 | `ecb85d5` | ORD-0002 work 2/3 — the oracle reader and `glyph-util` | 01:48 | red against `todo!()` first, then green; 3 of 4 mutations killed |
 | 12 | `79aebbd` | ORD-0002 work 3/3 — `glyph-version`, `VERSION` read from `version.js` | 01:51 | red against an empty constant first, then green |
 | 13 | `4c4743a` | ORD-0002 closes | 01:54 | green |
-| 14 | this commit | ORD-0003 emitted and open | 2026-09-25 | green |
+| 14 | `b05ba19` | ORD-0003 emitted and open | 02:02 | green |
+| 15 | this commit | ORD-0003 work 1/4 — `glyph_util::json`, the testkit reads with it | 2026-09-25 | the round trip red against an empty writer, then green on 115 files |

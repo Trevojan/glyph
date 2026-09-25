@@ -138,6 +138,9 @@ version = "0.0.0"
 [[package]]
 name = "glyph-version"
 version = "0.0.0"
+dependencies = [
+ "glyph-util",
+]
 
 [[package]]
 name = "glyph-vocab"
