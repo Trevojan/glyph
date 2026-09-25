@@ -12,7 +12,7 @@
 | environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed |
 | ground | read in the order the handoff names; `npm run check` (33 buckets, 41 s) and `npm run check:rust` (20 crates, 3 s) green on the clone at `ea8fc59`, before anything was touched |
 | layout | **closed** — its val holds (below), five banks |
-| queue | ORD-0001 to ORD-0009 closed; ORD-0010 open, and the queue ends there: its val needs the Regent's ADR. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
+| queue | ORD-0001 to ORD-0009 closed; ORD-0010 open and measured, its ADR proposed below, and the queue ends there: its val needs the Regent's signature. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
 
 ## Waiting for the Regent
 
@@ -26,6 +26,12 @@
    git tag -a conformance-v0 030ed76 -m "ORD-0001 da EMS-001: o oráculo congelado — 114 arquivos, sha256 c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828"
    git push origin conformance-v0
    ```
+
+2. **ORD-0010's ADR.** Proposed under *Open, and why*: the page reaches the
+   Rust engine through `serve-dev.js`, and the engine answers on stdio.
+   ORD-0010 closes when the ADR is signed, amended or refused, and ORD-0011,
+   the app on the Rust engine, opens only after it; questions 8 to 14 are the
+   ones the measurement raised.
 
 ## Questions for the Regent
 
@@ -88,6 +94,62 @@ Closed questions, none answered.
      the digest
    - c. `glyph-envelope` enters ORD-0007, and ORD-0009 keeps the burn and the
      inverse
+8. **Which protocol does ORD-0010's ADR sign?**
+   - a. B, as proposed: the engine on stdio, relayed by `serve-dev.js`
+   - b. A: the engine serves HTTP itself, and something launches it beside
+     the dev server
+   - c. neither yet: the same measurement from a browser first
+9. **`run()` is synchronous, and a page's HTTP is not. How do they meet?**
+   - a. a synchronous `XMLHttpRequest` inside the transport: `glyph-ui.js`
+     changes only at its transport, as ORD-0011's target says, and the page
+     waits out each round trip
+   - b. `run()` awaits the answer: `glyph-ui.js` changes beyond its transport,
+     and ORD-0011's target moves
+   - c. the page paints from the JS engine, and the Rust answer replaces it
+     when it arrives
+10. **A keystroke makes 6 calls at p50 and 8 005 for L-01, one `classify` a
+    command token. How many requests does it cost?**
+    - a. one a call, as the twelve are named
+    - b. one a keystroke: the transport asks once for everything `run()`
+      paints, and answers the calls from that answer
+    - c. one a call, and `classify` answered from the tables the page
+      already loads
+11. **The page merges the user's templates into the store (`useTemplates`,
+    `glyph-ui.js` line 1010). Where do they live once the engine is a
+    process?**
+    - a. each request carries the stores it is answered with, and the engine
+      keeps none
+    - b. a `useTemplates` request sets them in the engine for the session,
+      one page to an engine
+    - c. the engine keeps the repository's stores, and a request carries only
+      the templates that differ, named by their digest
+12. **The Rust redoes on every call what the JS does once, or cheaper.** Every
+    parse copies the rules store with its compiled cache (`with_cache`, 54% of
+    an empty parse's instructions: 95 µs against the JS's 4.5 µs, which
+    caches it on the store object), and every `toAST` digests the three
+    stores, as the JS does too (9.3 of 9.6 ms in the Rust, 0.43 of 0.46 ms in
+    the JS). Which way?
+    - a. both taken once a store loads: the digest in the JS first and then
+      in the Rust, the copy in the Rust alone; no emitted byte moves
+    - b. only the Rust changes: the rules compiled once a context, and `ck` in
+      integer arithmetic; the JS keeps digesting on every call
+    - c. as it is, until the app reaches the Rust
+13. **The JS `toXML` grows with the square of the lines.** L-03, L-02 and L-01
+    take 23 ms, 0.44 s and 6.2 s, and 84% of L-02's is the structural pass
+    (`packageSpan`, `packageIndent` and its `^ +`), which the port reads once
+    a line since ORD-0008 (L-01 in 0.13 s). The defect is the JS's, so it is
+    reported and not fixed inside an ORD. What becomes of it?
+    - a. an ORD of its own: the JS pass reads each line once, as the port
+      does, and no emitted byte moves
+    - b. pinned as known, by name, in [`.plan`](../../.plan/README.md) §3
+    - c. left: the app on the Rust engine answers the long sources
+14. **The instruments in `rust/crates/glyph-cli/examples/` — the two
+    prototypes, the relay, the baseline and the measurement — once the ADR is
+    signed:**
+    - a. they stay, so the numbers can be measured again
+    - b. they leave, and the numbers stay in this return
+    - c. the signed option's prototype becomes ORD-0011's starting point, and
+      the rest leave
 
 ## ORDs closed
 
@@ -330,14 +392,117 @@ c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828  -
 
 ## Open, and why
 
-**ORD-0010, the protocol**, open since the commit that carries this line, and
-it stays open: its val is an ADR the Regent signs, so the gate of the handoff
-ends the queue here. It is measured, and the ADR is written below as a
-proposal. The twelve calls `glyph-ui.js` makes are `parse`, `buildXml`,
-`serializeAST`, `toHGML`, `fromXML`, `tokenize`, `classify`, `suggest`,
-`parseLogic`, `expandExpr`, `freeVars` and `elName`; besides them it
-registers the three stores (`useTemplates`, `useRules`, `useExpansions`) and
-reads tables and `esc`.
+**ORD-0010, the protocol**, open since `df25609`, and it stays open: its val
+is an ADR the Regent signs, so the gate of the handoff ends the queue here.
+Both protocols are measured and the ADR is proposed below; the session does
+not sign it.
+
+### ORD-0010's ADR, proposed
+
+| date | decision | who | reason |
+|---|---|---|---|
+| 2026-09-25, proposed | **The page reaches the Rust engine through `scripts/serve-dev.js`**: the engine answers on stdio, one JSON request a line and one answer a line, and the dev server that serves the page spawns it and relays `POST /engine` to it (option B) | proposed by the session; unsigned | measured below: both options answer every call with the JS's bytes and add no crate; B is 16 lines shorter, keeps the page on its own origin and the app on one launcher, and costs about 0.1 ms more a call |
+
+**The two options.** A page cannot open stdio, so the browser reaches the
+engine by HTTP: **A**, the engine serves HTTP itself; **B**, the engine
+answers on stdio and `serve-dev.js`, which already serves the page, relays
+the page's HTTP to it. Each is a std-only prototype among `glyph-cli`'s cargo
+examples — instruments for this measurement, not part of the `glyph` binary
+— and carries the three calls that are one call in both engines, `toXML`,
+`toAST` and `toHGML`, over the repository's stores. The engine with its JSON
+and no transport is the floor both share, and B's pipe without the relay
+tells the relay's hop from the pipe's.
+
+```text
+$ cargo build --release --manifest-path rust/Cargo.toml -p glyph-cli --examples
+$ node rust/crates/glyph-cli/examples/protocol_measure.mjs
+```
+
+measured 2026-09-25T06:05:35.385Z · 114 sources × 3 calls × 5 rounds after one warm-up · median per source · node v22.22.2 · Intel(R) Xeon(R) Processor @ 2.80GHz × 4
+
+| option | call | total for the 114 (ms) | p50 (µs) | p95 (µs) | max (µs) | over the engine alone, p50 (µs) | answers unequal to the JS |
+|---|---|---|---|---|---|---|---|
+| JS in process (today) | toXML | 6577.9 | 62.6 | 271.1 | 6150167.5 | — | oracle |
+| JS in process (today) | toAST | 156.2 | 528.1 | 685.3 | 73077.3 | — | oracle |
+| JS in process (today) | toHGML | 109.6 | 74.5 | 394.7 | 75641.9 | — | oracle |
+| Rust engine alone, no transport | toXML | 178.9 | 143.1 | 421.9 | 127839.9 | — | — |
+| Rust engine alone, no transport | toAST | 1236.1 | 9593.2 | 13064.8 | 101816.3 | — | — |
+| Rust engine alone, no transport | toHGML | 138.6 | 207.6 | 1276.2 | 77558.7 | — | — |
+| A · the engine serves HTTP | toXML | 254.7 | 574.6 | 817.5 | 155145.5 | 415.1 | 0 |
+| A · the engine serves HTTP | toAST | 1270.5 | 10134.8 | 10476.1 | 97241.6 | 550.9 | 0 |
+| A · the engine serves HTTP | toHGML | 196.2 | 675.4 | 2171.7 | 78754.8 | 468.6 | 0 |
+| B · stdio, relayed by the dev server | toXML | 271.7 | 689.8 | 890.5 | 159740.9 | 524.5 | 0 |
+| B · stdio, relayed by the dev server | toAST | 1294.8 | 10301.1 | 10996.1 | 98411.0 | 716.2 | 0 |
+| B · stdio, relayed by the dev server | toHGML | 207.9 | 788.5 | 1894.8 | 78010.0 | 572.5 | 0 |
+| B's pipe alone, no relay | toXML | 224.4 | 338.0 | 578.2 | 152833.1 | 179.4 | 0 |
+| B's pipe alone, no relay | toAST | 1228.4 | 9808.3 | 10086.1 | 92520.5 | 220.0 | 0 |
+| B's pipe alone, no relay | toHGML | 155.7 | 442.8 | 1524.6 | 72133.0 | 203.5 | 0 |
+
+slowest source per call — JS: toXML L-01 6150.2 ms, toAST L-01 73.1 ms, toHGML L-01 75.6 ms · Rust alone: toXML L-01 127.8 ms, toAST L-01 101.8 ms, toHGML L-01 77.6 ms
+calls one keystroke makes, as run() makes them (five, and one classify a command token) — p50 6, p95 12, max 8005
+
+| option | spawn to first answer (ms) | files | lines | code lines | crates added |
+|---|---|---|---|---|---|
+| A | 15.7 | protocol_http.rs 56, common/mod.rs 31 | 87 | 72 | 0 |
+| B | 20.9 | protocol_stdio.rs 18, common/mod.rs 31, protocol_relay.mjs 22 | 71 | 54 | 0 |
+
+every answer is JSON.stringify's own bytes
+
+**What the numbers say.**
+
+- **Both are correct.** All 342 answers of A, of B and of the pipe equal
+  what the JS answers in the same process, each in `JSON.stringify`'s own
+  bytes.
+- **The transport costs half a millisecond a call either way.** Over the
+  engine alone, at p50: A 0.42–0.55 ms, B 0.52–0.72 ms. The relay's hop is
+  B's extra 0.1 ms, since the pipe alone costs 0.18–0.22 ms. The client is
+  node's `http` on one kept-alive socket, as a page's `fetch` holds one; a
+  browser was not measured.
+- **The count of requests weighs more than the transport.** A keystroke
+  makes 6 calls at p50, 12 at p95 and 8 005 for L-01: `run()` makes five,
+  and `renderLit` one `classify` a command token. At half a millisecond a
+  request, that is 3 ms at p50 and four seconds for L-01 (question 10).
+- **The engine weighs more than either.** `toAST` costs 9.6 ms in the Rust
+  engine alone, 9.3 of them digesting the three stores (question 12), and
+  the page's JS spends 6.2 s on L-01's XML, which the Rust writes in 0.13 s
+  (question 13).
+- **Lines: B 71, A 87** (54 and 72 of code). A's count is a floor: the page
+  sits on the dev server's origin and calls A across origins, so its
+  requests must stay simple — a `text/plain` body, which the prototype reads
+  — or A must answer a preflight; and something must still launch A beside
+  the dev server, which is what B's relay does.
+- **Crates: none either way.** `Cargo.lock` holds no entry with a `source`,
+  and the prototypes use `std` and the `glyph` crates alone, so no crate
+  came before the filter of INTAKE-RUST-LADDER §9.
+- **Spawn to first answer:** A 15.7 ms, B 20.9 ms, once a launch.
+
+**Why B.** At 0.1 ms a call the difference in time is below what a
+keystroke shows, and the rest leans one way: B is shorter; the page calls
+its own origin; `serve-dev.js` is already the app's launcher, the one click
+the decision of 2026-09-05 allows, and under B it stays the only thing to
+launch; and the engine stays what the `glyph` binary already is, a filter
+from stdin to stdout.
+
+**The twelve calls, over B.** Each already has its Rust, ported by ORD-0003
+to ORD-0009; what the protocol adds is the request that names it.
+
+| call | where `glyph-ui.js` makes it | over the protocol | the Rust that answers |
+|---|---|---|---|
+| `tokenize` | `run()`, every keystroke | the tokens | `glyph_lex::tokenize` |
+| `classify` | `renderLit`, one a command token; the command glosses | the class | `glyph_lex::classify` |
+| `parse` | `run()`; `extractPlaceholders`, on a template's body | the tree cannot travel as it is — `parent` and `tok` close a cycle — so it travels as the envelope's `full` projection, with the gaps | `glyph_parse::parse`, `glyph_envelope::serialize_ast` |
+| `buildXml` | `run()`, on the tree `parse` gave | `toXML` on the same source | `glyph_xml::to_xml` |
+| `serializeAST` | `run()`, the panel | `toAST` with `projection: "panel"` and the page's `lang` | `glyph_envelope::to_ast` |
+| `toHGML` | `run()` | `toHGML` | `glyph_burn::to_hgml` |
+| `fromXML` | `xmlApply`, the XML typed back | `fromXML` | `glyph_inverse::from_xml` |
+| `suggest`, `elName` | bound, never called | the same names | `glyph_lex::suggest`, `glyph_vocab::el_name` |
+| `parseLogic`, `expandExpr`, `freeVars` | exposed on `window.__glyph` | the same names | `glyph_logic` |
+
+The stores the page registers are question 11; the tables, `esc`, `xesc`
+and `walk` stay in the page, data it loads and helpers with no engine
+state. What the ADR leaves open is asked above: how the synchronous `run()`
+meets an HTTP answer (question 9), and how many requests a keystroke costs
+(question 10).
 
 ## ORD-0009, how it was read
 
@@ -864,6 +1029,31 @@ and `npm run check` passes on the commit that carries this return.
   parses the value as tokens. The port reads them as absent or as text. The
   repository's stores hold none, and `build-templates.js` validates neither
   templates nor rules.
+- **The protocol, measured.** Two std-only prototypes, the relay, the
+  engine's baseline and the measurement are `glyph-cli`'s cargo examples
+  (`protocol_*`), which the crate graph does not check, as it does not check
+  dev-dependencies; the `glyph` binary does not change. The numbers are in
+  the ADR, under *Open, and why*.
+- **The Rust engine is slower than the page's JS at the median of every
+  call, and faster only where the JS is quadratic.** At p50, `toXML` 143 µs
+  against 63, `toHGML` 208 against 75, `toAST` 9 593 against 528; for L-01
+  the Rust writes the XML in 0.13 s and the JS in 6.2 s.
+- **An empty parse costs the Rust 95 µs and the JS 4.5.** Under callgrind,
+  `with_cache` — the rules store copied with its compiled cache on every
+  parse, so the envelope can digest it — is 54% of the instructions; the JS
+  compiles once and keeps the cache on the store object.
+- **`toAST`'s digests.** Of an empty source's `toAST`, the three store
+  digests are 9.3 of 9.6 ms in the Rust and 0.43 of 0.46 ms in the JS: both
+  digest on every call, and the Rust's `ck` pays three float remainders a
+  UTF-16 unit — 18 258 units for the rules store with its cache, 17 112 for
+  the composition table, 7 283 for the templates.
+- **The JS `toXML` is quadratic in the lines.** L-03, L-02 and L-01 — 1 601,
+  8 001 and 32 001 characters — take 23 ms, 0.44 s and 6.2 s. Profiled on
+  L-02, 84% of the time is the structural pass: the `^ +` of
+  `packageIndent` 31%, `packageSpan` 23%, `packageIndent` 22%,
+  `packagePass` 9%. The port reads each line once since ORD-0008. The
+  defect is the JS's, so it is reported here, not fixed inside an ORD
+  (question 13).
 - **The version stays `3.5.8.06`.** No emitted document changes; the
   CHANGELOG entry waits for a release, as the work of 2026-09-24 does.
 
@@ -880,7 +1070,7 @@ and `npm run check` passes on the commit that carries this return.
 | ORD-0007 | `b145777` 03:54 | `6dcf854` 04:17 | 23 min, one work bank |
 | ORD-0008 | `aefc148` 04:21 | `a262233` 04:43 | 22 min, one work bank |
 | ORD-0009 | `e4e6a59` 04:47 | `160d43d` 05:46 | 59 min, two work banks |
-| ORD-0010 | the commit after `160d43d` | — | open, at the gate |
+| ORD-0010 | `df25609` 05:49 | — | open at the gate: measured, the ADR proposed |
 
 | # | commit | step | UTC | checks |
 |---|---|---|---|---|
@@ -923,4 +1113,5 @@ and `npm run check` passes on the commit that carries this return.
 | 36 | `54308c3` | ORD-0009 work 1/2 — `glyph-envelope` and `glyph-burn`, `ast.json` and `hgml.json` in the export | 05:08 | green at once on the 114 digests; the burn test red on a composite with no formula until the port read `undefined` as the JS does; mutations 19 of 22 (envelope) and 7 of 22 (burn), then 22 and 20 with probes; `check:rust` red once, on `ast.json` written without the one-space indent every export file keeps, which `glyph-util`'s round trip holds |
 | 37 | `9c943d3` | ORD-0009 work 2/2 — `glyph-inverse`, the round trips recorded as the suite runs (`inverse.json`) | 05:41 | the recorder red on a burn after the registry guard until it read the stores `stores.js` resolves; the depth test red on its own count until it counted the question and its text; 24 of 32 mutations killed, then 32 with the way back's probes |
 | 38 | `160d43d` | ORD-0009 closes | 05:46 | green |
-| 39 | this commit | ORD-0010 emitted and open | 2026-09-25 | green |
+| 39 | `df25609` | ORD-0010 emitted and open | 05:49 | green |
+| 40 | this commit | ORD-0010 measured — both protocols over the 114 sources, the ADR proposed | 06:13 | green, `check` 42 s and `check:rust` 95 s; nothing red — the measurement's first run showed the Rust's `toAST` at 10 ms whatever the source, which the probes and callgrind traced to the store digests and the rules copy (question 12) |
