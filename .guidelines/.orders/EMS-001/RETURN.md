@@ -12,43 +12,50 @@
 | environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed |
 | ground | read in the order the handoff names; `npm run check` (33 buckets, 41 s) and `npm run check:rust` (20 crates, 3 s) green on the clone at `ea8fc59`, before anything was touched |
 | layout | **closed** — its val holds (below), five banks |
-| queue | ORD-0001, ORD-0002 and ORD-0003 closed. **ORD-0004 open** — emitted into [`ORD-0004/`](ORD-0004/ORD-0004.xml), no diagnostics. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
+| queue | ORD-0001 to ORD-0004 closed; ORD-0005 opens next. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
 
-## The layout, built
+## Waiting for the Regent
 
-| piece | state |
-|---|---|
-| the spec | [`EMS-001.pgml`](EMS-001.pgml), moved with `git mv`; every pointer names it |
-| `--bundle` | with `--out` a folder `EMS-###`, writes the ORD as the folder `ORD-####/` holding the five files the zip holds, numbered by the ORD folders of that series alone; elsewhere, the zip. An ID is `ORD-####` followed by nothing or a dot, in every destination |
-| the plugin | `--from EMS-001/ORD-0003` and the path of an ORD folder resolve the `.pgml` inside it; `ORD-####` and a bare number still find the flat file |
-| the bundle command | its probes list each series and read the open ORD from `EMS-###/README.md` |
-| the series README | [`README.md`](README.md), with `A Ordem aberta` and `Ordens fechadas` |
-| the suite | the bundle bucket grows from 5 to 14 checks, `ZP-06` to `ZP-14`, each observed red before its code |
-| the app | the `emitir ORD` button is untouched: its number stays in `localStorage` |
+1. **The tag `conformance-v0` is not on the remote.** The branch pushes; the
+   push of the tag came back `HTTP 403` from the session's git proxy, a policy
+   refusal, so it was not retried. The tag lives only in this session's clone,
+   on `030ed76`. From any clone:
 
-**The val**, run on a replica of the series beside the real one, with the dated
-ID `ORD-2026-08-30-01` as a file and as a folder beside the ORDs:
+   ```bash
+   git fetch origin claude/laughing-archimedes-3pf0wa
+   git tag -a conformance-v0 030ed76 -m "ORD-0001 da EMS-001: o oráculo congelado — 114 arquivos, sha256 c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828"
+   git push origin conformance-v0
+   ```
 
-```
-$ ls EMS-001/   # before
-EMS-001.pgml
-ORD-2026-08-30-01
-ORD-2026-08-30-01.pgml
-README.md
-$ glyph-plugin.js --from src.pgml --bundle --out .guidelines/.orders/EMS-001   # call 1
-val/.guidelines/.orders/EMS-001/ORD-0001/  (2037 bytes, 5 arquivos)
-$ glyph-plugin.js --from src.pgml --bundle --out .guidelines/.orders/EMS-001   # call 2
-val/.guidelines/.orders/EMS-001/ORD-0002/  (2037 bytes, 5 arquivos)
-$ ls EMS-001/   # after
-EMS-001.pgml
-ORD-0001/
-ORD-0002/
-ORD-2026-08-30-01/
-ORD-2026-08-30-01.pgml
-README.md
-```
+## Questions for the Regent
 
-and `npm run check` passes on the commit that carries this return.
+Closed questions, none answered.
+
+1. **Does an ORD of a series also travel as a `.zip`?**
+   - a. the folder alone
+   - b. the folder, with the zip inside it beside the five files
+   - c. the folder, and the zip only behind a flag
+2. **The oracle holds no character outside the BMP. Does the corpus gain a
+   source that does?** The lexer's probes now hold its spans to UTF-16 units;
+   `lev` and every later projection are still held only by the corpus.
+   - a. yes: a declared source with an astral character, the snapshot moved by
+     decision
+   - b. no: the blind spot pinned by name, as a known loss
+   - c. later, when ORD-0004 opens
+3. **The envelope's `stores.rules` hashes the engine's cache with the store.
+   What does the Rust envelope (ORD-0009) answer?**
+   - a. the JS keeps its compiled rules off the store object; the envelope then
+     hashes the store, and the `ast` hashes of the snapshot move by decision
+   - b. the Rust reproduces the cache's JSON, defect included, and the
+     envelopes stay as they are
+   - c. pinned as known until ORD-0009 opens
+4. **JSON sits in `glyph-util`, which `vocabulary.js` and `stores.js` do not
+   import. Where does it belong in the crate graph?**
+   - a. the platform, reachable from every crate: `crate-graph.js` learns one
+     exception
+   - b. a crate of its own under every other, with an oracle entry in
+     `crate-graph.js`
+   - c. as it is: `glyph-stores` keeps its own `Value`
 
 ## ORDs closed
 
@@ -57,6 +64,7 @@ and `npm run check` passes on the commit that carries this return.
 | [`ORD-0001`](ORD-0001/ORD-0001.xml) | the frozen oracle: `--export-oracle` writes 114 files | `030ed76`, the tag `conformance-v0` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828` |
 | [`ORD-0002`](ORD-0002/ORD-0002.xml) | `glyph-util` and `glyph-version`: `esc`, `xesc`, `lev`, `walk` and `VERSION` equal the JS on everything the oracle holds | `79aebbd` | `6fb833ec47e105cdc72fd515633597896e1e65d83730dcd157f67876cc927b5c`, `oracle-modules/util.json` |
 | [`ORD-0003`](ORD-0003/ORD-0003.xml) | `glyph-vocab` and `glyph-stores`: the 22 tables of the vocabulary and the three stores equal the JS by digest; the composition store compiled byte for byte | `d9ea4fe` | `55ba73dad05f0811ccecf782e701e86966fe6b0ce818055cf0d99cdb2010bf25`, `oracle-modules/vocabulary.json`; `4f03181d22088569691864c88925d48bc1bbc5691df080d97d4551511541d4b1`, `oracle-modules/stores.json` |
+| [`ORD-0004`](ORD-0004/ORD-0004.xml) | `glyph-lex`: the 11 008 tokens of the 114 sources equal the oracle, spans in UTF-16; and 1 688 more sources, `classify` and `suggest` | `06989f7` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828`, the case files; `b70bb078c74ad025507d9eebbc86239068e1cc48ef678f47df4005206d6201b8`, `oracle-modules/lexer.json` |
 
 **ORD-0001, the proof**, run at `02c92ee` (the commit that emitted it; the
 closing commit changes no code):
@@ -131,10 +139,33 @@ $ the store digests
 the three stores; "the JS store" as the store read from disk — the envelope's
 rules digest also hashes the engine's cache, pinned above.
 
+**ORD-0004, the proof**, run at `06989f7`:
+
+```
+$ rm -rf rust/target/oracle* && node scripts/test-corpus.js --export-oracle
+  ! oracle written: 114 cases to rust/target/oracle
+  ! module oracle written: util.json, vocabulary.json, stores.json, lexer.json to rust/target/oracle-modules
+All green.
+$ cargo test --manifest-path rust/Cargo.toml -p glyph-lex -- --nocapture
+test the_tokens_equal_the_js_on_every_string_and_probe ... ok
+114 sources, 11008 tokens
+test the_tokens_equal_the_oracle_on_every_source ... ok
+test classify_and_suggest_equal_the_js ... ok
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+$ cd rust/target/oracle && LC_ALL=C sha256sum *.json | sha256sum
+c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828  -
+$ sha256sum rust/target/oracle-modules/lexer.json
+b70bb078c74ad025507d9eebbc86239068e1cc48ef678f47df4005206d6201b8
+```
+
 ## Open, and why
 
-- **ORD-0004, `glyph-lex`.** Two JS defects the port reproduces, measured
-  before building, and left as the JS answers them:
+Nothing is open. ORD-0005, `glyph-logic`, opens next.
+
+## ORD-0004, how it was read
+
+- **Two JS defects the port reproduces**, measured before building, and left
+  as the JS answers them:
   - **Lookups fall through to `Object.prototype`.** `EMO[x]` and `SESSION[x]`
     are plain objects, so `/constructor/` tokenizes as a mood — and the XML
     carries `<mood dominant="function Object() { [native code] }"/>`, the
@@ -144,9 +175,6 @@ rules digest also hashes the engine's cache, pinned above.
     upper case is longer (`ß` → `SS`) moves every index after it, so
     `ß[off]x[on]y` gives a raw `x[`, an `ON` spanning 8–12 in a 12-unit
     source, and loses the `y` in silence.
-- Banked: `glyph-lex` — `tokenize` over UTF-16 units, each regex of
-  `lexer.js` ported by what it matches, the two defects reproduced; `classify`
-  and `suggest`. Next: the proof, and the close.
 
 ## ORD-0003, how it was read
 
@@ -162,6 +190,42 @@ rules digest also hashes the engine's cache, pinned above.
   sources. The expansions store also carries `schema` and a `note` that are
   `build-templates.js`'s own words; they are read from its output rather than
   typed a second time.
+
+## The layout, built
+
+| piece | state |
+|---|---|
+| the spec | [`EMS-001.pgml`](EMS-001.pgml), moved with `git mv`; every pointer names it |
+| `--bundle` | with `--out` a folder `EMS-###`, writes the ORD as the folder `ORD-####/` holding the five files the zip holds, numbered by the ORD folders of that series alone; elsewhere, the zip. An ID is `ORD-####` followed by nothing or a dot, in every destination |
+| the plugin | `--from EMS-001/ORD-0003` and the path of an ORD folder resolve the `.pgml` inside it; `ORD-####` and a bare number still find the flat file |
+| the bundle command | its probes list each series and read the open ORD from `EMS-###/README.md` |
+| the series README | [`README.md`](README.md), with `A Ordem aberta` and `Ordens fechadas` |
+| the suite | the bundle bucket grows from 5 to 14 checks, `ZP-06` to `ZP-14`, each observed red before its code |
+| the app | the `emitir ORD` button is untouched: its number stays in `localStorage` |
+
+**The val**, run on a replica of the series beside the real one, with the dated
+ID `ORD-2026-08-30-01` as a file and as a folder beside the ORDs:
+
+```
+$ ls EMS-001/   # before
+EMS-001.pgml
+ORD-2026-08-30-01
+ORD-2026-08-30-01.pgml
+README.md
+$ glyph-plugin.js --from src.pgml --bundle --out .guidelines/.orders/EMS-001   # call 1
+val/.guidelines/.orders/EMS-001/ORD-0001/  (2037 bytes, 5 arquivos)
+$ glyph-plugin.js --from src.pgml --bundle --out .guidelines/.orders/EMS-001   # call 2
+val/.guidelines/.orders/EMS-001/ORD-0002/  (2037 bytes, 5 arquivos)
+$ ls EMS-001/   # after
+EMS-001.pgml
+ORD-0001/
+ORD-0002/
+ORD-2026-08-30-01/
+ORD-2026-08-30-01.pgml
+README.md
+```
+
+and `npm run check` passes on the commit that carries this return.
 
 ## Measured
 
@@ -303,49 +367,6 @@ rules digest also hashes the engine's cache, pinned above.
 - **The version stays `3.5.8.06`.** No emitted document changes; the
   CHANGELOG entry waits for a release, as the work of 2026-09-24 does.
 
-## Waiting for the Regent
-
-1. **The tag `conformance-v0` is not on the remote.** The branch pushes; the
-   push of the tag came back `HTTP 403` from the session's git proxy, a policy
-   refusal, so it was not retried. The tag lives only in this session's clone,
-   on `030ed76`. From any clone:
-
-   ```bash
-   git fetch origin claude/laughing-archimedes-3pf0wa
-   git tag -a conformance-v0 030ed76 -m "ORD-0001 da EMS-001: o oráculo congelado — 114 arquivos, sha256 c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828"
-   git push origin conformance-v0
-   ```
-
-## Questions for the Regent
-
-Closed questions, none answered.
-
-1. **Does an ORD of a series also travel as a `.zip`?**
-   - a. the folder alone
-   - b. the folder, with the zip inside it beside the five files
-   - c. the folder, and the zip only behind a flag
-2. **The oracle holds no character outside the BMP. Does the corpus gain a
-   source that does?** The lexer's probes now hold its spans to UTF-16 units;
-   `lev` and every later projection are still held only by the corpus.
-   - a. yes: a declared source with an astral character, the snapshot moved by
-     decision
-   - b. no: the blind spot pinned by name, as a known loss
-   - c. later, when ORD-0004 opens
-3. **The envelope's `stores.rules` hashes the engine's cache with the store.
-   What does the Rust envelope (ORD-0009) answer?**
-   - a. the JS keeps its compiled rules off the store object; the envelope then
-     hashes the store, and the `ast` hashes of the snapshot move by decision
-   - b. the Rust reproduces the cache's JSON, defect included, and the
-     envelopes stay as they are
-   - c. pinned as known until ORD-0009 opens
-4. **JSON sits in `glyph-util`, which `vocabulary.js` and `stores.js` do not
-   import. Where does it belong in the crate graph?**
-   - a. the platform, reachable from every crate: `crate-graph.js` learns one
-     exception
-   - b. a crate of its own under every other, with an oracle entry in
-     `crate-graph.js`
-   - c. as it is: `glyph-stores` keeps its own `Value`
-
 ## The session, measured
 
 | ORD | opened | closed | open for |
@@ -353,6 +374,7 @@ Closed questions, none answered.
 | ORD-0001 | `02c92ee` 01:28 | `030ed76` 01:31 | 3 min |
 | ORD-0002 | `3413eb5` 01:40 | `4c4743a` 01:54 | 14 min, three work banks |
 | ORD-0003 | `b05ba19` 02:02 | `51e291b` 02:30 | 28 min, four work banks |
+| ORD-0004 | `2c68949` 02:34 | the commit after `06989f7` | ~10 min, one work bank |
 
 | # | commit | step | UTC | checks |
 |---|---|---|---|---|
@@ -377,4 +399,5 @@ Closed questions, none answered.
 | 18 | `d9ea4fe` | ORD-0003 work 4/4 — `glyph-stores`: the stores compiled from the four sources, the context | 02:27 | the rules digest red first — the oracle had recorded the store with the engine's cache; 6 of 6 mutations killed |
 | 19 | `51e291b` | ORD-0003 closes | 02:30 | green |
 | 20 | `2c68949` | ORD-0004 emitted and open | 02:34 | green |
-| 21 | this commit | ORD-0004 work — `glyph-lex`, and `lexer.json` in the export | 2026-09-25 | green at once on the 114 sources; 7 mutations survived them; 9 of 9 killed against `lexer.json` |
+| 21 | `06989f7` | ORD-0004 work — `glyph-lex`, and `lexer.json` in the export | 02:42 | green at once on the 114 sources; 7 mutations survived them; 9 of 9 killed against `lexer.json` |
+| 22 | this commit | ORD-0004 closes | 2026-09-25 | green |
