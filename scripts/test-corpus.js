@@ -30,6 +30,9 @@ const __dirname = path.dirname(__filename);
 import G from "./glyph-parser.js";
 import * as G_ZIP from "./glyph-zip.js";
 import * as CHECK_MOD from "./glyph-check.js";
+import * as VOCAB from "./core/vocabulary.js";
+import * as STORES from "./core/stores.js";
+import { ck } from "./core/emit-ast.js";
 
 /* Stores travel through opts in the cases that need them, so the suite
    doesn't depend on the module's global state or on test order. */
@@ -1768,7 +1771,54 @@ function runSnapshotChecks() {
     fs.writeFileSync(path.join(mods, "util.json"), JSON.stringify({
       engine: G.VERSION, strings: S, esc: S.map(G.esc), lev: lev, walk: walks
     }, null, 1) + "\n");
-    console.log("  ! module oracle written: util.json to " + mods);
+
+    /* vocabulary.js (from ORD-0003): every table it exports, as the text
+       JSON.stringify gives and the digest the envelope's `ck` gives, so a
+       table added to the JS reaches the oracle, and the port, on its own;
+       and elName over every name of the tables it is read through */
+    const tables = {};
+    Object.keys(VOCAB).sort().forEach(k => {
+      if (typeof VOCAB[k] === "function") return;
+      const text = JSON.stringify(VOCAB[k]);
+      tables[k] = { json: text, digest: ck(text) };
+    });
+    const named = [];
+    [["mode", VOCAB.MODE], ["struct", VOCAB.STRUCT], ["meta", VOCAB.META],
+     ["instr", VOCAB.INSTR], ["session", VOCAB.SESSION]].forEach(([tier, table]) =>
+      Object.keys(table).forEach(k => {
+        named.push([k, tier, table[k], VOCAB.elName(k, tier, table[k])]);
+        named.push([k, tier, null, VOCAB.elName(k, tier)]);
+      }));
+    fs.writeFileSync(path.join(mods, "vocabulary.json"), JSON.stringify({
+      engine: G.VERSION, tables: tables, elName: named
+    }, null, 1) + "\n");
+
+    /* stores.js (from ORD-0003): the three stores as the repository loads
+       them, their digests, and what is read off them — for every name the
+       composition table and the vocabulary know, and three it does not —
+       with the stores loaded and with none */
+    const EXP = SNAP_OPTS.expansions;
+    const names = [...new Set([...Object.keys(EXP.commands),
+      ...["MODE", "STRUCT", "META", "INSTR", "ALIAS", "SESSION"].flatMap(t => Object.keys(VOCAB[t])),
+      "crit", "", "XYZ"])];
+    const readOff = opts => names.map(n => [n, G.speciesOf(n, opts), G.depthOf(n, opts),
+      G.formulaOf(n, opts), G.defOf(n, opts), G.atomsOf(n, opts), G.standsAlone(n, opts)]);
+    const digestOf = v => ck(JSON.stringify(v));
+    fs.writeFileSync(path.join(mods, "stores.json"), JSON.stringify({
+      engine: G.VERSION,
+      digests: { templates: digestOf(SNAP_OPTS.templates), rules: digestOf(SNAP_OPTS.rules),
+                 expansions: digestOf(EXP), commands: digestOf(EXP.commands) },
+      context: {
+        templatesFromWhole: digestOf(STORES.createContext({ templates: TPL }).templates),
+        templatesFromMap: digestOf(STORES.createContext({ templates: TPL.templates }).templates),
+        expansionsFromCommands: digestOf(STORES.createContext({ expansions: EXP.commands }).expansions),
+        empty: [STORES.createContext({}).templates, STORES.createContext({}).rules,
+                STORES.createContext({}).expansions]
+      },
+      loaded: readOff(G.createContext(SNAP_OPTS)),
+      bare: readOff(G.createContext({}))
+    }, null, 1) + "\n");
+    console.log("  ! module oracle written: util.json, vocabulary.json, stores.json to " + mods);
   }
 
   if (process.argv.indexOf("--update-snapshot") !== -1) {

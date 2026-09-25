@@ -113,8 +113,8 @@ not strings.
   place they live, and `glyph-stores`' compiles the stores from the four
   sources. The expansions store also carries `schema` and a `note` that are
   `build-templates.js`'s own words; they are read from its output rather than
-  typed a second time. Banked: `glyph_util::json`. Next: the module answers of
-  `vocabulary.js` and `stores.js`, then `glyph-vocab`, then `glyph-stores`.
+  typed a second time. Banked: `glyph_util::json`, and the module answers of
+  `vocabulary.js` and `stores.js`. Next: `glyph-vocab`, then `glyph-stores`.
 
 ## Measured
 
@@ -187,6 +187,16 @@ not strings.
   to their bytes (red against a writer that wrote nothing). Numbers and key
   order, which the oracle's integers and fixed keys do not exercise, are held
   to what node answers.
+- **The module answers of `vocabulary.js` and `stores.js`.** The export
+  writes `vocabulary.json` — each of the 22 tables the module exports, found
+  by walking its exports so a table added to the JS reaches the oracle on its
+  own, as `JSON.stringify` text and `ck` digest; and `elName` over the 128
+  names of the five tiers it is read through, with and without a gloss — and
+  `stores.json`: the digests of the three stores (the envelope's `d127…`,
+  `9778…`, `2549…`) and of the composition table alone, what `createContext`
+  makes of each shape it accepts, and `speciesOf`, `depthOf`, `formulaOf`,
+  `defOf`, `atomsOf` and `standsAlone` for 147 names, with the stores loaded
+  and with none. `util.json` keeps `6fb833ec…`.
 - **The survivor: `lev` counting `char`s instead of UTF-16 units.** No string
   in the oracle carries a character outside the BMP, so the two countings
   answer alike on all of it. 129 strings are non-ASCII, which holds bytes
@@ -249,4 +259,5 @@ Closed questions, none answered.
 | 12 | `79aebbd` | ORD-0002 work 3/3 — `glyph-version`, `VERSION` read from `version.js` | 01:51 | red against an empty constant first, then green |
 | 13 | `4c4743a` | ORD-0002 closes | 01:54 | green |
 | 14 | `b05ba19` | ORD-0003 emitted and open | 02:02 | green |
-| 15 | this commit | ORD-0003 work 1/4 — `glyph_util::json`, the testkit reads with it | 2026-09-25 | the round trip red against an empty writer, then green on 115 files |
+| 15 | `a6dce20` | ORD-0003 work 1/4 — `glyph_util::json`, the testkit reads with it | 02:06 | the round trip red against an empty writer, then green on 115 files |
+| 16 | this commit | ORD-0003 work 2/4 — the export answers `vocabulary.js` and `stores.js` | 2026-09-25 | green |
