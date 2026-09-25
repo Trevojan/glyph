@@ -12,7 +12,7 @@
 | environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed |
 | ground | read in the order the handoff names; `npm run check` (33 buckets, 41 s) and `npm run check:rust` (20 crates, 3 s) green on the clone at `ea8fc59`, before anything was touched |
 | layout | **closed** — its val holds (below), five banks |
-| queue | ORD-0001 to ORD-0005 closed; ORD-0006 open. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
+| queue | ORD-0001 to ORD-0006 closed; ORD-0007 opens next. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
 
 ## Waiting for the Regent
 
@@ -88,6 +88,7 @@ Closed questions, none answered.
 | [`ORD-0003`](ORD-0003/ORD-0003.xml) | `glyph-vocab` and `glyph-stores`: the 22 tables of the vocabulary and the three stores equal the JS by digest; the composition store compiled byte for byte | `d9ea4fe` | `55ba73dad05f0811ccecf782e701e86966fe6b0ce818055cf0d99cdb2010bf25`, `oracle-modules/vocabulary.json`; `4f03181d22088569691864c88925d48bc1bbc5691df080d97d4551511541d4b1`, `oracle-modules/stores.json` |
 | [`ORD-0004`](ORD-0004/ORD-0004.xml) | `glyph-lex`: the 11 008 tokens of the 114 sources equal the oracle, spans in UTF-16; and 1 688 more sources, `classify` and `suggest` | `06989f7` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828`, the case files; `b70bb078c74ad025507d9eebbc86239068e1cc48ef678f47df4005206d6201b8`, `oracle-modules/lexer.json` |
 | [`ORD-0005`](ORD-0005/ORD-0005.xml) | `glyph-logic`: the 8 Logic nodes of the oracle equal; and `parseLogic`, `expandExpr` and `freeVars` on 1 610 blocks and 1 588 strings | `12cc408` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828`, the case files; `53ec4964aca68075372dd85f38e020fa571b9c8716cae8f1db26f490f895b546`, `oracle-modules/logic.json` |
+| [`ORD-0006`](ORD-0006/ORD-0006.xml) | `glyph-templates` and `glyph-rules`: the 14 diagnostics templates and rules raise in the 36 T-, C- and K-cases equal the oracle; and 163 runs over 215 levels of expansion, the JS's defects reproduced | `ca9c1a6` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828`, the case files; `cb065d27bb54551637ccfb07ce896557f5cc5f82797a238875af0a693c631ed3`, `oracle-modules/trees.json` |
 
 **ORD-0001, the proof**, run at `02c92ee` (the commit that emitted it; the
 closing commit changes no code):
@@ -200,20 +201,46 @@ $ sha256sum rust/target/oracle-modules/logic.json
 "Every Logic node" is read as each node of the envelopes, projected by the
 port from its `[logic]` token as `emit-ast.js` projects it, `at` included.
 
+**ORD-0006, the proof**, run at `ca9c1a6`:
+
+```
+$ rm -rf rust/target/oracle* && node scripts/test-corpus.js --export-oracle
+  ! oracle written: 114 cases to rust/target/oracle
+  ! module oracle written: util, vocabulary, stores, lexer, logic, trees to rust/target/oracle-modules
+All green.
+$ cargo test --manifest-path rust/Cargo.toml -p glyph-templates -p glyph-rules -- --nocapture
+test the_pair_key_orders_by_utf16_units ... ok
+test compile_rules_equals_the_js ... ok
+160 trees, 22 diagnostics
+test every_rule_diagnostic_equals_the_js ... ok
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.81s
+36 cases, 14 diagnostics of templates and rules, of 23 in all
+test the_diagnostics_of_every_t_c_and_k_case_equal_the_oracle ... ok
+163 runs, 215 levels of expansion, 49 invocations expanded, 27 diagnostics
+test every_expansion_and_constraint_equals_the_js ... ok
+test every_dump_reads_back_to_itself ... ok
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.74s
+$ sha256sum rust/target/oracle-modules/trees.json
+cb065d27bb54551637ccfb07ce896557f5cc5f82797a238875af0a693c631ed3
+$ cd rust/target/oracle && LC_ALL=C sha256sum *.json | sha256sum
+c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828  -
+```
+
+"Every T-, C- and K-case" is read as the diagnostics `templates.js` and
+`rules.js` raise in them (ORD-0006, how it was read; question 5).
+
 ## Open, and why
 
-**ORD-0006, `glyph-templates` and `glyph-rules`**, open since `8f996df`; its
-work is banked, and the close runs the proof. Its val — "the diagnostics of every T-, C- and K-case
-equal the oracle" — is read as the diagnostics the two modules raise: 14 of
-the 23 those 36 cases hold. The other 9 are raised by `parser.js`, and every
-diagnostic of a case needs the tree the parser builds, which is ORD-0007's.
-So the export records the trees the JS parser builds, and the port is held
-to them: the tree before expansion, each body the expander asks `parse` for,
-the tree after, and each diagnostic in the order raised. The reading is
-question 5 above.
+Nothing is open. ORD-0007, `glyph-parse`, opens next.
 
 ## ORD-0006, how it was read
 
+- **The val, read.** "The diagnostics of every T-, C- and K-case equal the
+  oracle" is read as the diagnostics the two modules raise: 14 of the 23
+  those 36 cases hold. The other 9 are raised by `parser.js`, and every
+  diagnostic of a case needs the tree the parser builds, which is ORD-0007's.
+  So the export records the trees the JS parser builds, and the port is held
+  to them. The reading is question 5.
 - **Four JS defects the port reproduces**, measured before porting, and left
   as the JS answers them:
   - **A param written as a string is a repeat param.** `templates.js` names a
@@ -528,7 +555,7 @@ and `npm run check` passes on the commit that carries this return.
 | ORD-0003 | `b05ba19` 02:02 | `51e291b` 02:30 | 28 min, four work banks |
 | ORD-0004 | `2c68949` 02:34 | `e08f1f9` 02:45 | 11 min, one work bank |
 | ORD-0005 | `2466cef` 02:49 | `17658ec` 03:00 | 11 min, one work bank |
-| ORD-0006 | `8f996df` 03:15 | — | open |
+| ORD-0006 | `8f996df` 03:15 | the commit after `ca9c1a6` | ~35 min, one work bank |
 
 | # | commit | step | UTC | checks |
 |---|---|---|---|---|
@@ -559,4 +586,5 @@ and `npm run check` passes on the commit that carries this return.
 | 24 | `12cc408` | ORD-0005 work — `glyph-logic`, and `logic.json` in the export | 02:57 | green at once; 7 of 8 mutations killed, then 8 of 8 with four negation probes |
 | 25 | `17658ec` | ORD-0005 closes | 03:00 | green |
 | 26 | `8f996df` | ORD-0006 emitted and open | 03:15 | green |
-| 27 | this commit | ORD-0006 work — `glyph-templates`, `glyph-rules`, the tree in `glyph-util`, `trees.json` in the export | 2026-09-25 | green at once; 28 of 32 mutations killed, then 30 once the export recorded every level and a lower-case forbidden name; the pair-key test was red on its own expectation — by UTF-16 unit U+10000 sorts before U+FF21 — and was fixed to what node answers |
+| 27 | `ca9c1a6` | ORD-0006 work — `glyph-templates`, `glyph-rules`, the tree in `glyph-util`, `trees.json` in the export | 03:47 | green at once; 28 of 32 mutations killed, then 30 once the export recorded every level and a lower-case forbidden name; the pair-key test was red on its own expectation — by UTF-16 unit U+10000 sorts before U+FF21 — and was fixed to what node answers |
+| 28 | this commit | ORD-0006 closes | 2026-09-25 | green |
