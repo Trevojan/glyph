@@ -298,7 +298,7 @@ c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828  -
 ## Open, and why
 
 **ORD-0009, `glyph-envelope`, `glyph-burn` and `glyph-inverse`**, open since
-`e4e6a59`; the envelope and the burn are banked, the inverse is next. Its val is read as it is written: the `ast`
+`e4e6a59`; its work is banked, and the close runs the proof. Its val is read as it is written: the `ast`
 and `hgml` digests of the 114 case files, and the round trips the JS suite
 runs. Measured before opening: the snapshot's pin says `toHGML` overflows
 V8's stack on L-01, and it no longer does — the burn stops at 200 levels and
@@ -329,6 +329,45 @@ Regent answers.
 - **The envelope carries pt-BR where it travels in en-EU**: `DepthExceeded`,
   the diagnostic the envelope adds when it cuts a tree, is written in pt-BR
   only.
+- **"Every round trip the JS suite runs", read.** The suite's round trips sit
+  in six buckets — fromXML, the corpus through the XML and through the AST,
+  the examples, the raw fence, the burn re-parsed — and each compares what
+  the steps answer. So the export records, as the whole suite runs, every
+  `fromXML`, `fromAST` and `toHGML` call: its input and the source the suite
+  made the input from, what came back and what the way back said, the JS's
+  XML of what came back, and what the burn's re-parse raises at `fix`. Each
+  step made again in the port equals the JS's, so each round trip closes in
+  the port where it closes in the JS.
+- **Five JS defects of the way back the port reproduces**, measured, and left
+  as the JS answers them:
+  - **An element named after a member of the prototype throws.** The reverse
+    table is a plain object: `<constructor/>` or `<toString>` in a
+    hand-edited document makes `fromXML` throw `Cannot read properties of
+    undefined (reading 'toLowerCase')` — the reader that "never throws".
+  - **A mood the prototype answers comes back as the text of a function.**
+    `<mood dominant="constructor" also="focus,__proto__"/>` rebuilds as
+    `/function Object() { [native code] }/[object Object]/`.
+  - **A reference past U+FFFF is cut to 16 bits.** `String.fromCharCode`
+    reads `&#128512;` as U+F600; a surrogate pair written as two references
+    comes back whole.
+  - **A chain link's children vanish.** `XmlChainHasChildren` says they are
+    re-attached to the parent (*"Reanexados ao pai"*), and the way back
+    writes the link alone.
+  - **A block may open with a `,`.** A first `chain="item"` is promoted to
+    `-` and reported inside an element; at the top of a block `fromXmlBlock`
+    never looks, and `<context chain="item"/>` comes back as `,ctx`, silent.
+- **V8's stack is where `fromXML` stops, and it is not a number.** The reader
+  recurses once per level of the document, so L-01 and L-02 throw `Maximum
+  call stack size exceeded`; measured here, 1 700 levels went through, 1 800
+  threw, and 1 900 went through in the same process once it was warm. The
+  suite's round trips leave the long sources out. The port walks on a thread
+  with room for its own limit and stops past 1 800 levels of the document,
+  with the JS's words: `[ins` written 1 797 times is the first to stop, the
+  package, the block, the question and its text being the other four.
+- **One input the port cannot answer as the JS does**: a reference to a lone
+  surrogate (`&#xD800;`) makes a JS string no Rust string can hold, and the
+  port writes U+FFFD in its place. The emitter never writes a numeric
+  reference, so no round trip meets it.
 
 ## ORD-0008, how it was read
 
@@ -769,6 +808,16 @@ and `npm run check` passes on the commit that carries this return.
   two-cycle run to the limit ends on the name it began with. The two that
   live write the same `.hgml`: an atom and an unburned node upper-cased,
   which `hgmlLines` lower-cases again.
+- **`inverse.json`, and `glyph-inverse`, held.** The recorder wraps `toXML`,
+  `toAST`, `fromXML`, `fromAST` and `toHGML` while the whole suite runs —
+  resolving each call's stores as `stores.js` does, since a bucket after the
+  registry guard runs on the registered ones — and the way back's own probes,
+  22 documents and 6 envelopes, go through it: 510 distinct calls, 309 burns,
+  133 `fromXML`, 68 `fromAST`. The port makes again the 168 inputs whose
+  source the suite held, answers all 199 ways back and their 2 throws, and
+  re-parses 259 burns; 50 burns ran over a probe store the Rust cannot
+  rebuild. Mutated, 32 of 32 die; eight only once the probes arrived, one of
+  them only once its probe sat inside an element.
 - **Store shapes the JS never guards stay outside the port's contract.** A
   null param; `params`, `constraints` or `exemptUnder` that is not a list; a
   body that is not a string: the JS throws a TypeError in V8's words, or
@@ -830,4 +879,5 @@ and `npm run check` passes on the commit that carries this return.
 | 33 | `97ea472` | ORD-0008 work — `glyph-xml`, the binary `glyph`, `xml.json` in the export | 04:39 | green at once; the XML tests took 126 s until the pass read each line once, 3 s after; 28 of 32 mutations killed, then 30 with a continuing segment and a deep conjunction |
 | 34 | `a262233` | ORD-0008 closes | 04:43 | green |
 | 35 | `e4e6a59` | ORD-0009 emitted and open | 04:47 | green |
-| 36 | this commit | ORD-0009 work 1/2 — `glyph-envelope` and `glyph-burn`, `ast.json` and `hgml.json` in the export | 2026-09-25 | green at once on the 114 digests; the burn test red on a composite with no formula until the port read `undefined` as the JS does; mutations 19 of 22 (envelope) and 7 of 22 (burn), then 22 and 20 with probes; `check:rust` red once, on `ast.json` written without the one-space indent every export file keeps, which `glyph-util`'s round trip holds |
+| 36 | `54308c3` | ORD-0009 work 1/2 — `glyph-envelope` and `glyph-burn`, `ast.json` and `hgml.json` in the export | 05:08 | green at once on the 114 digests; the burn test red on a composite with no formula until the port read `undefined` as the JS does; mutations 19 of 22 (envelope) and 7 of 22 (burn), then 22 and 20 with probes; `check:rust` red once, on `ast.json` written without the one-space indent every export file keeps, which `glyph-util`'s round trip holds |
+| 37 | this commit | ORD-0009 work 2/2 — `glyph-inverse`, the round trips recorded as the suite runs (`inverse.json`) | 2026-09-25 | the recorder red on a burn after the registry guard until it read the stores `stores.js` resolves; the depth test red on its own count until it counted the question and its text; 24 of 32 mutations killed, then 32 with the way back's probes |

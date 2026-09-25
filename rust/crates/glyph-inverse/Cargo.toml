@@ -9,3 +9,10 @@ publish = false
 glyph-util = { path = "../glyph-util" }
 glyph-vocab = { path = "../glyph-vocab" }
 glyph-version = { path = "../glyph-version" }
+
+[dev-dependencies]
+glyph-stores = { path = "../glyph-stores" }
+glyph-parse = { path = "../glyph-parse" }
+glyph-xml = { path = "../glyph-xml" }
+glyph-envelope = { path = "../glyph-envelope" }
+glyph-burn = { path = "../glyph-burn" }

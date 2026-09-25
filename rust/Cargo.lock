@@ -54,9 +54,14 @@ dependencies = [
 name = "glyph-inverse"
 version = "0.0.0"
 dependencies = [
+ "glyph-burn",
+ "glyph-envelope",
+ "glyph-parse",
+ "glyph-stores",
  "glyph-util",
  "glyph-version",
  "glyph-vocab",
+ "glyph-xml",
 ]
 
 [[package]]
