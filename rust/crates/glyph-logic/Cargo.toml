@@ -1,0 +1,9 @@
+[package]
+name = "glyph-logic"
+version.workspace = true
+edition.workspace = true
+license-file.workspace = true
+publish = false
+
+[dependencies]
+glyph-util = { path = "../glyph-util" }

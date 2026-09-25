@@ -1,0 +1,9 @@
+[package]
+name = "glyph-stores"
+version.workspace = true
+edition.workspace = true
+license-file.workspace = true
+publish = false
+
+[dependencies]
+glyph-vocab = { path = "../glyph-vocab" }

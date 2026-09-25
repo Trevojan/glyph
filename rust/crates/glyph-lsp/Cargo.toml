@@ -1,0 +1,13 @@
+[package]
+name = "glyph-lsp"
+version.workspace = true
+edition.workspace = true
+license-file.workspace = true
+publish = false
+
+[dependencies]
+glyph-vocab = { path = "../glyph-vocab" }
+glyph-stores = { path = "../glyph-stores" }
+glyph-lex = { path = "../glyph-lex" }
+glyph-parse = { path = "../glyph-parse" }
+glyph-trace = { path = "../glyph-trace" }

@@ -1,0 +1,13 @@
+[package]
+name = "glyph-envelope"
+version.workspace = true
+edition.workspace = true
+license-file.workspace = true
+publish = false
+
+[dependencies]
+glyph-util = { path = "../glyph-util" }
+glyph-vocab = { path = "../glyph-vocab" }
+glyph-stores = { path = "../glyph-stores" }
+glyph-parse = { path = "../glyph-parse" }
+glyph-version = { path = "../glyph-version" }

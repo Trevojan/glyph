@@ -1,0 +1,15 @@
+[package]
+name = "glyph-parse"
+version.workspace = true
+edition.workspace = true
+license-file.workspace = true
+publish = false
+
+[dependencies]
+glyph-util = { path = "../glyph-util" }
+glyph-vocab = { path = "../glyph-vocab" }
+glyph-stores = { path = "../glyph-stores" }
+glyph-lex = { path = "../glyph-lex" }
+glyph-logic = { path = "../glyph-logic" }
+glyph-templates = { path = "../glyph-templates" }
+glyph-rules = { path = "../glyph-rules" }

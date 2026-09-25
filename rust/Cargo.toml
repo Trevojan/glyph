@@ -1,0 +1,35 @@
+# The Rust port of the Glyph engine (R-01). One crate per JS core module, each
+# checked against the module it replaces; scripts/crate-graph.js holds the arrows
+# to the JS seams. The JS engine stays: it is the reference, the skill's payload
+# and the browser app's core.
+[workspace]
+resolver = "3"
+members = [
+    "crates/glyph-util",
+    "crates/glyph-vocab",
+    "crates/glyph-version",
+    "crates/glyph-stores",
+    "crates/glyph-lex",
+    "crates/glyph-logic",
+    "crates/glyph-templates",
+    "crates/glyph-rules",
+    "crates/glyph-parse",
+    "crates/glyph-xml",
+    "crates/glyph-envelope",
+    "crates/glyph-burn",
+    "crates/glyph-inverse",
+    "crates/glyph-schema",
+    "crates/glyph-diff",
+    "crates/glyph-trace",
+    "crates/glyph-bundle",
+    "crates/glyph-cli",
+    "crates/glyph-wasm",
+    "crates/glyph-lsp",
+]
+
+[workspace.package]
+# 0.0.0 until the port passes the oracle: it does not carry the engine's number
+# (release.frontend.rules.minor) before it produces the engine's bytes.
+version = "0.0.0"
+edition = "2024"
+license-file = "../README.md"

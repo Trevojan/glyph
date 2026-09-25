@@ -1,0 +1,10 @@
+[package]
+name = "glyph-diff"
+version.workspace = true
+edition.workspace = true
+license-file.workspace = true
+publish = false
+
+[dependencies]
+glyph-stores = { path = "../glyph-stores" }
+glyph-envelope = { path = "../glyph-envelope" }

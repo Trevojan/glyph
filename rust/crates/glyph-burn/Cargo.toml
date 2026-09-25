@@ -1,0 +1,12 @@
+[package]
+name = "glyph-burn"
+version.workspace = true
+edition.workspace = true
+license-file.workspace = true
+publish = false
+
+[dependencies]
+glyph-util = { path = "../glyph-util" }
+glyph-stores = { path = "../glyph-stores" }
+glyph-parse = { path = "../glyph-parse" }
+glyph-rules = { path = "../glyph-rules" }

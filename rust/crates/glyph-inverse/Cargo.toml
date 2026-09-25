@@ -1,0 +1,11 @@
+[package]
+name = "glyph-inverse"
+version.workspace = true
+edition.workspace = true
+license-file.workspace = true
+publish = false
+
+[dependencies]
+glyph-util = { path = "../glyph-util" }
+glyph-vocab = { path = "../glyph-vocab" }
+glyph-version = { path = "../glyph-version" }

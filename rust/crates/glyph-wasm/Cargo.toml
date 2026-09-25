@@ -1,0 +1,17 @@
+[package]
+name = "glyph-wasm"
+version.workspace = true
+edition.workspace = true
+license-file.workspace = true
+publish = false
+
+[dependencies]
+glyph-util = { path = "../glyph-util" }
+glyph-vocab = { path = "../glyph-vocab" }
+glyph-stores = { path = "../glyph-stores" }
+glyph-lex = { path = "../glyph-lex" }
+glyph-parse = { path = "../glyph-parse" }
+glyph-xml = { path = "../glyph-xml" }
+glyph-envelope = { path = "../glyph-envelope" }
+glyph-burn = { path = "../glyph-burn" }
+glyph-inverse = { path = "../glyph-inverse" }

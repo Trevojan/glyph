@@ -1,0 +1,9 @@
+[package]
+name = "glyph-trace"
+version.workspace = true
+edition.workspace = true
+license-file.workspace = true
+publish = false
+
+[dependencies]
+glyph-envelope = { path = "../glyph-envelope" }

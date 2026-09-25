@@ -1,0 +1,10 @@
+[package]
+name = "glyph-lex"
+version.workspace = true
+edition.workspace = true
+license-file.workspace = true
+publish = false
+
+[dependencies]
+glyph-vocab = { path = "../glyph-vocab" }
+glyph-stores = { path = "../glyph-stores" }
