@@ -76,8 +76,10 @@ Guidelines: restrições, contadores, exceções, as ADR e DC que ela modifica, 
 como seguir depois que fecha. Uma ORD é uma pasta dentro dela com o pacote; a
 contagem reinicia em cada série. A pasta [`.orders/EMS-001/`](../.orders/EMS-001/)
 existe e guarda a spec e o [retorno](../.orders/EMS-001/RETURN.md) da sessão.
-O `--bundle` ainda escreve um `ORD-####.zip` chapado na `.orders/`, e o plugin
-acha a Ordem pelo número solto: os dois precisam aprender a série.
+Com o `--out` numa pasta `EMS-###`, o `--bundle` escreve a ORD como a pasta
+`ORD-####/` com os cinco arquivos, numerada só pelas pastas ORD da série; fora
+de uma série, o zip. O plugin ainda acha a Ordem pelo número solto, e o comando
+de bundle ainda não lê a série.
 
 ## Aberto, esperando o Regente
 

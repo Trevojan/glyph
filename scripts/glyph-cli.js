@@ -98,17 +98,22 @@ export function main() {
    * faz com um ADR, e pela mesma razao. Um ID e ORD-#### seguido de nada ou de
    * um ponto; ORD-2026-08-30-01 e um ID datado, nao o numero 2026.
    *
+   * Numa serie -- o --out e uma pasta EMS-### -- a ORD e a pasta ORD-####/
+   * com os cinco arquivos que o zip leva, e o numero conta so as pastas ORD
+   * daquela serie: a contagem reinicia em cada uma. Fora de uma serie, o zip.
+   *
    * O app nao consegue fazer isso -- o navegador nao enxerga pasta -- entao la
    * o numero vem do localStorage e o campo fica editavel. A diferenca e
    * declarada em vez de disfarcada.
    * ------------------------------------------------------------------ */
   if (bundle) {
     var dir = outDir || ".";
+    var series = /^EMS-\d{3}$/.test(path.basename(path.resolve(dir)));
     var next = 1;
     try {
-      fs.readdirSync(dir).forEach(function (name) {
-        var m = /^ORD-(\d{4})(?:\.|$)/.exec(name);
-        if (m) next = Math.max(next, parseInt(m[1], 10) + 1);
+      fs.readdirSync(dir, { withFileTypes: true }).forEach(function (ent) {
+        var m = /^ORD-(\d{4})(?:\.|$)/.exec(ent.name);
+        if (m && (!series || ent.isDirectory())) next = Math.max(next, parseInt(m[1], 10) + 1);
       });
     } catch (e) {
       console.error("nao consegui ler " + dir + ": " + e.message);
@@ -124,7 +129,7 @@ export function main() {
     }
     var gaps = G.parse(input).gaps || [];
     var refused = gaps.filter(function (g) { return g.sev === "fix"; });
-    var zip = zipStore([
+    var five = [
       { name: id + ".pgml", text: input },
       { name: id + ".xml",  text: xml },
       { name: id + ".json", text: ast },
@@ -135,10 +140,31 @@ export function main() {
           source: file || null,
           diagnostics: { fix: refused.length, total: gaps.length }
         }, null, 2) + String.fromCharCode(10) }
-    ]);
-    var dest = path.join(dir, id + ".zip");
-    fs.writeFileSync(dest, zip);
-    console.log(dest + "  (" + zip.length + " bytes, 5 arquivos)");
+    ];
+    if (series) {
+      /* escrita ao lado e depois renomeada: uma pasta ORD-####/ pela metade
+         contaria como emitida, e o nome com ponto na frente nao conta */
+      var dest = path.join(dir, id), part = path.join(dir, "." + id + "." + process.pid);
+      var bytes = 0;
+      try {
+        fs.mkdirSync(part);
+        five.forEach(function (f) {
+          fs.writeFileSync(path.join(part, f.name), f.text);
+          bytes += Buffer.byteLength(f.text, "utf8");
+        });
+        fs.renameSync(part, dest);
+      } catch (e) {
+        try { fs.rmSync(part, { recursive: true, force: true }); } catch (e2) { /* ja foi */ }
+        console.error("nao consegui escrever " + dest + ": " + e.message);
+        process.exit(2);
+      }
+      console.log(dest + path.sep + "  (" + bytes + " bytes, 5 arquivos)");
+    } else {
+      var zip = zipStore(five);
+      var dest = path.join(dir, id + ".zip");
+      fs.writeFileSync(dest, zip);
+      console.log(dest + "  (" + zip.length + " bytes, 5 arquivos)");
+    }
     /* recusa nao impede emitir -- casa vazia vira <needs> e a Ordem viaja
        incompleta de proposito -- mas o Autor da Ordem tem de saber. */
     if (refused.length)

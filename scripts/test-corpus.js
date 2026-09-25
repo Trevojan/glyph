@@ -2452,6 +2452,55 @@ function runBundleChecks() {
     ok("ZP-06", "um ID datado no destino nao vira numero",
        fsx.existsSync(px.join(tmp, "ORD-0003.zip")) ? null
          : "saiu " + fsx.readdirSync(tmp).filter(n => /\.zip$/.test(n)).join(", "));
+
+    /* a serie: --out numa pasta EMS-### escreve a ORD como a pasta ORD-####/,
+       com os cinco arquivos que o zip leva, e numera pelas pastas ORD daquela
+       serie sozinha. Ao lado delas: a spec, um rascunho ORD-0007.pgml (arquivo,
+       nao pasta) e uma pasta de ID datado -- nenhum dos tres conta */
+    const orders = px.join(tmp, ".guidelines", ".orders");
+    const ems = px.join(orders, "EMS-001");
+    fsx.mkdirSync(px.join(ems, "ORD-2026-08-30-01"), { recursive: true });
+    fsx.writeFileSync(px.join(ems, "EMS-001.pgml"), "[nt'a spec']", "utf8");
+    fsx.writeFileSync(px.join(ems, "ORD-0007.pgml"), "[nt'rascunho']", "utf8");
+    const five = id => [".pgml", ".xml", ".json", ".hgml", ".manifest.json"].map(ext => id + ext);
+    const folder = (dir, id) => {
+      const at = px.join(dir, id);
+      if (!fsx.existsSync(at) || !fsx.statSync(at).isDirectory())
+        return "nao ha pasta " + id + "/ -- a serie tem: " + fsx.readdirSync(dir).join(", ");
+      const has = fsx.readdirSync(at).sort(), want = five(id).sort();
+      return has.join() === want.join() ? null : id + "/ tem: " + has.join(", ");
+    };
+    run(["--file", srcFile, "--bundle", "--out", ems]);
+    ok("ZP-07", "numa serie, a primeira vez escreve a pasta ORD-0001/ com os cinco arquivos",
+       folder(ems, "ORD-0001"));
+
+    run(["--file", srcFile, "--bundle", "--out", ems]);
+    ok("ZP-08", "e a segunda, ORD-0002/, contando so as pastas ORD da serie",
+       folder(ems, "ORD-0002"));
+
+    /* a pasta leva o que o zip leva: a fonte byte a byte, as tres projecoes
+       iguais as do zip da mesma fonte, e o manifesto com a ORD e os arquivos */
+    const inFolder = name => {
+      const f = px.join(ems, "ORD-0001", name);
+      return fsx.existsSync(f) ? fsx.readFileSync(f, "utf8") : null;
+    };
+    const differ = [".xml", ".json", ".hgml"].filter(ext => {
+      const z = entries.find(e => e.name === "ORD-0001" + ext);
+      return inFolder("ORD-0001" + ext) !== Buffer.from(z.data).toString("utf8");
+    });
+    let man = null;
+    try { man = JSON.parse(inFolder("ORD-0001.manifest.json")); } catch (e) { /* segue nulo */ }
+    ok("ZP-09", "a pasta leva o que o zip leva: fonte, projecoes e manifesto",
+       inFolder("ORD-0001.pgml") !== fsx.readFileSync(srcFile, "utf8") ? "a fonte voltou diferente"
+         : differ.length ? "difere do zip: " + differ.join(", ")
+         : !man || man.order !== "ORD-0001" || man.files.join() !== five("ORD-0001").slice(0, 4).join()
+           ? "manifesto: " + JSON.stringify(man) : null);
+
+    /* a contagem reinicia em cada serie */
+    const ems2 = px.join(orders, "EMS-002");
+    fsx.mkdirSync(ems2);
+    run(["--file", srcFile, "--bundle", "--out", ems2]);
+    ok("ZP-10", "a contagem reinicia em cada serie", folder(ems2, "ORD-0001"));
   } finally {
     try { fsx.rmSync(tmp, { recursive: true, force: true }); } catch (e) { /* ja foi */ }
   }
@@ -2627,7 +2676,7 @@ console.log(" suggest      " + String(rSG).padStart(4) + "/4");
 console.log(" aspas        " + String(rQT).padStart(4) + "/3");
 console.log(" param template" + String(rTP).padStart(4) + "/4");
 console.log(" imperativo   " + String(rIM).padStart(4) + "/5");
-console.log(" bundle ORD   " + String(rZP).padStart(4) + "/6");
+console.log(" bundle ORD   " + String(rZP).padStart(4) + "/10");
 console.log(" global store " + rGS + "/3");
 console.log(" context      " + rCX + "/3");
 console.log(" coverage     " + String(rOC).padStart(4) + "/" + ORACLE_COVERAGE.length);
