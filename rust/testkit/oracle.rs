@@ -130,3 +130,22 @@ pub fn files() -> Vec<(PathBuf, String)> {
     }
     out
 }
+
+/// The envelope's checksum (`ck` in `scripts/core/emit-ast.js`): two FNV-1a
+/// runs over UTF-16 code units, as the JS computes them — the XOR on signed
+/// 32-bit integers and the product in a double, which drops low bits past
+/// 2⁵³ before `>>> 0` keeps 32 of them. For the digests the tests compare;
+/// glyph-envelope ports it for the engine.
+pub fn ck(s: &str) -> String {
+    fn uint32(x: f64) -> u32 {
+        let m = x.trunc() % 4294967296.0;
+        (if m < 0.0 { m + 4294967296.0 } else { m }) as u32
+    }
+    let (mut a, mut b): (u32, u32) = (0x811c9dc5, 0x01000193);
+    for (i, c) in s.encode_utf16().enumerate() {
+        let c = c as i32;
+        a = uint32(f64::from((a as i32) ^ c) * 16777619.0);
+        b = uint32(f64::from((b as i32) ^ (uint32(f64::from(c) + i as f64) as i32)) * 2246822507.0);
+    }
+    format!("{a:08x}{b:08x}")
+}

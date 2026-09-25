@@ -145,6 +145,9 @@ dependencies = [
 [[package]]
 name = "glyph-vocab"
 version = "0.0.0"
+dependencies = [
+ "glyph-util",
+]
 
 [[package]]
 name = "glyph-wasm"

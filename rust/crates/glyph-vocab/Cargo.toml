@@ -6,3 +6,6 @@ license-file.workspace = true
 publish = false
 
 [dependencies]
+
+[dev-dependencies]
+glyph-util = { path = "../glyph-util" }
