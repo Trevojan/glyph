@@ -8,7 +8,7 @@ com o pacote que o `--bundle` escreve, e a contagem é desta série.
 
 ## A Ordem aberta
 
-- [`EMS-001/ORD-0010`](ORD-0010/ORD-0010.xml) — o protocolo; aberta em 2026-09-25, e fica aberta: o val pede o ADR do Regente
+- [`EMS-001/ORD-0010`](ORD-0010/ORD-0010.xml) — o protocolo; aberta em 2026-09-25 e medida, e fica aberta até o Regente assinar o ADR que o [retorno](RETURN.md) propõe
 
 ## Ordens fechadas
 
