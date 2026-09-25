@@ -2137,8 +2137,44 @@ function runSnapshotChecks() {
       }
       xmlRuns.push(run);
     };
+    /* emit-ast.js (from ORD-0009): toAST over the same sources and options,
+       the envelope whole; for the probes, the panel projection, pt-BR, and a
+       source carried with its uri */
+    const astRuns = [];
+    const runAst = (id, src, opts, probe) => {
+      const run = { id: id, src: src };
+      if (opts.templates !== SNAP_OPTS.templates) run.probeTemplates = true;
+      if (opts.rules !== SNAP_OPTS.rules) run.withRules = false;
+      if (opts.expansions !== SNAP_OPTS.expansions) run.expansions = opts.expansions;
+      if (opts.session === false) run.session = false;
+      if (opts.valency === false) run.valency = false;
+      const variants = [["full", opts]];
+      if (probe) variants.push(["panel", { ...opts, projection: "panel" }], ["pt", { ...opts, lang: "pt" }],
+                               ["embed", { ...opts, uri: "file:///x.pgml", embedSource: true }]);
+      for (const [k, o] of variants) {
+        try { run[k] = G.toAST(src, o); } catch (e) { run[k] = { thrown: e.message }; }
+      }
+      astRuns.push(run);
+    };
+    /* burn.js (from ORD-0009): toHGML over the same sources and options, and
+       for the probes with the prose kept */
+    const hgmlRuns = [];
+    const runHgml = (id, src, opts, probe) => {
+      const run = { id: id, src: src };
+      if (opts.templates !== SNAP_OPTS.templates) run.probeTemplates = true;
+      if (opts.rules !== SNAP_OPTS.rules) run.withRules = false;
+      if (opts.expansions !== SNAP_OPTS.expansions) run.expansions = opts.expansions;
+      if (opts.session === false) run.session = false;
+      if (opts.valency === false) run.valency = false;
+      for (const [k, o] of probe ? [["hgml", opts], ["keepText", { ...opts, keepText: true }]] : [["hgml", opts]]) {
+        try { run[k] = G.toHGML(src, o); } catch (e) { run[k] = { thrown: e.message }; }
+      }
+      hgmlRuns.push(run);
+    };
     const runParse = (id, src, opts) => {
       runXml(id, src, opts);
+      runHgml(id, src, opts, !/^[A-Z]+-\d+$/.test(id));
+      runAst(id, src, opts, !/^[A-Z]+-\d+$/.test(id));
       const run = { id: id, src: src };
       if (opts.templates !== SNAP_OPTS.templates) run.probeTemplates = true;
       if (opts.rules !== SNAP_OPTS.rules) run.withRules = false;
@@ -2180,7 +2216,31 @@ function runSnapshotChecks() {
       "[ctx'a'];[=[sum'b']", ...["[a[x]],[b[y]]", "[a[a]],[b]", "[a[a[x]]],[b]"].map(t => "[ctx".repeat(13) + t)];
     XML_PROBES.forEach((src, k) => runXml("xml-" + (k + 1), src, SNAP_OPTS));
     fs.writeFileSync(path.join(mods, "xml.json"), JSON.stringify({ engine: G.VERSION, runs: xmlRuns }, null, 1) + "\n");
-    console.log("  ! module oracle written: util, vocabulary, stores, lexer, logic, trees, parse, xml to " + mods);
+    /* and the envelope's own: line endings, a tree cut in the panel, the
+       prototype's gloss where no rules store stops the parse */
+    ["[ctx'a']\r\n[sum'b']", "[ctx'a']\r\n[sum'b']\n[nt'c']", "\n[ctx]\r\n", "[ins".repeat(210)]
+      .forEach((src, k) => runAst("ast-" + (k + 1), src, SNAP_OPTS, true));
+    ["[__proto__'x']/constructor/", "[constructor[ctx]]"].forEach((src, k) =>
+      runAst("ast-bare-" + (k + 1), src, { ...SNAP_OPTS, rules: null }, true));
+    fs.writeFileSync(path.join(mods, "ast.json"), JSON.stringify({ engine: G.VERSION, runs: astRuns }, null, 1) + "\n");
+    /* and the burn's own: literals it folds, the repository's blend at the top
+       and nested, an operand the formula also writes, a burn deeper than the
+       cut, and a composition store of probes — a cycle, a chain past the
+       limit, a formula with no head, a formula whose head holds a literal —
+       and no store at all */
+    const BURN_STORE = { commands: {
+      AAA: { species: "composite", depth: 1, formula: "[bbb]" }, BBB: { species: "composite", depth: 1, formula: "[aaa]" },
+      HEADLESS: { species: "composite", depth: 1, formula: "'just text'" },
+      QUOTE: { species: "composite", depth: 1, formula: "[ctx'fixed']" }, CTX: { species: "atom", depth: 0 } } };
+    for (let i = 0; i < 26; i++) BURN_STORE.commands["C" + i] = { species: "composite", depth: 1, formula: "[c" + (i + 1) + "]" };
+    for (let i = 1; i <= 5; i++) BURN_STORE.commands["F" + i] = { species: "composite", depth: 1, formula: "[f" + (i % 5 + 1) + "]" };
+    [["[ctx`it's  a\ttest`]", SNAP_OPTS], ["[rev'x'][dist'y']", SNAP_OPTS], ["[ctx[rev'x'][dist'y']]", SNAP_OPTS],
+     ["[rmbr[get[ctx]]'X']", SNAP_OPTS], ["[crit".repeat(203), SNAP_OPTS], ["[aaa'x']", { ...SNAP_OPTS, expansions: BURN_STORE }],
+     ["[c0'x']", { ...SNAP_OPTS, expansions: BURN_STORE }], ["[headless[ctx]]", { ...SNAP_OPTS, expansions: BURN_STORE }],
+     ["[quote'mine']", { ...SNAP_OPTS, expansions: BURN_STORE }], ["[crit'x']", { ...SNAP_OPTS, expansions: null }], ["[f1'x']", { ...SNAP_OPTS, expansions: BURN_STORE }]
+    ].forEach(([src, o], k) => runHgml("burn-" + (k + 1), src, o, true));
+    fs.writeFileSync(path.join(mods, "hgml.json"), JSON.stringify({ engine: G.VERSION, runs: hgmlRuns }, null, 1) + "\n");
+    console.log("  ! module oracle written: util, vocabulary, stores, lexer, logic, trees, parse, xml, ast, hgml to " + mods);
   }
 
   if (process.argv.indexOf("--update-snapshot") !== -1) {
