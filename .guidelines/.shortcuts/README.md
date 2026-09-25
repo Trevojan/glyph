@@ -13,9 +13,9 @@
 | | |
 |---|---|
 | versão | **3.5.8.06** |
-| suíte | `npm run check` — verde, ~250 asserções em 25 baldes |
-| último marco | o núcleo em treze módulos, `scripts/core/`, zero ciclos, o maior com 594 linhas — cada um cabe num `Read`. Antes disso: `H-09` fechou pelo kit de cliente, `CRIT` soletra o §0.3, `REQ`/`MAND` com fronteira |
-| próximo | os stores como objeto de contexto ([`.orders/INTAKE-PARSER-SPLIT.md`](../.orders/INTAKE-PARSER-SPLIT.md) §5), agora que `core/stores.js` é o único lugar que os atribui; depois, `.plan/` |
+| suíte | `npm run check` — verde, 33 baldes, 114 fontes declaradas no snapshot; `npm run check:rust` compila e testa `rust/` |
+| último marco | as stores viajam como um objeto de contexto (`createContext`), e o workspace Rust existe em `rust/`: 20 crates presos às costuras do núcleo por `crate-graph.js`. Antes disso: o núcleo em treze módulos, `H-09` fechou pelo kit de cliente, `CRIT` soletra o §0.3, `REQ`/`MAND` com fronteira |
+| próximo | [`.orders/BRIEFING-2026-09-24.md`](../.orders/BRIEFING-2026-09-24.md), e a [`ORD-0012`](../.orders/ORD-0012.pgml) que ele acompanha: um app Rust pequeno que come o território do JS. Espera o Regente: o destino da `ORD-0011` e a autorização de commit |
 
 ## Os seis eixos
 
@@ -50,7 +50,8 @@
 | "isto é domínio ou síntese?" | [`PROMOTION_BOUNDARY.md`](../PROMOTION_BOUNDARY.md) §2 |
 | "o que o motor promete e não cumpre?" | [`.orders/INTAKE-VARIABLES.md`](../.orders/INTAKE-VARIABLES.md) |
 | "o que o estudo de setembro mediu e decidiu?" | [`.orders/INTAKE-FIELD-2026-09.md`](../.orders/INTAKE-FIELD-2026-09.md) §5 aponta os outros sete |
-| "Rust?" | [`.orders/INTAKE-RUST.md`](../.orders/INTAKE-RUST.md) — os dois lados, pesados; a decisão é do Regente |
+| "Rust?" | [`.orders/INTAKE-RUST.md`](../.orders/INTAKE-RUST.md) — os dois lados, pesados; o Regente decidiu migrar ([`.decisions/`](../.decisions/README.md), 2026-09-24) |
+| "a escada de migração perde alguma coisa?" | [`.orders/INTAKE-RUST-LADDER.md`](../.orders/INTAKE-RUST-LADDER.md) — a escada medida contra o motor, e o que o vendoring compra (§9); §8 é o que espera o Regente |
 | "duas fontes, uma intenção?" | [`HGML_CONVERGENCE.md`](../HGML_CONVERGENCE.md) |
 | "como escrever um exemplo de conformidade?" | [`conformance/README.md`](../../conformance/README.md) |
 | "como escrevo Glyph?" | a skill em [`.claude/skills/glyph-markup/`](../../.claude/skills/glyph-markup/) — gerada, e provada contra o motor |

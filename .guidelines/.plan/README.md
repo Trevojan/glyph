@@ -53,11 +53,17 @@ e o manifesto (`order, engine, emitted, files, source, diagnostics`). O botão
 `baixar` do app emite **só a aba visível**, um arquivo: o emissor de bundle
 existe e o app ainda não o chama.
 
+### 5. A escada Rust — M01, M02, M02b e M06 autorizados
+
+[`ladder.toml`](ladder.toml), 38 módulos, cada crate preso ao módulo JS que ele porta.
+`node scripts/ladder.js` mostra o estado; `--check` recusa ciclo, dependência
+solta e premissa usada antes de aterrada.
+
 ## Aberto, esperando o Regente
 
 | | |
 |---|---|
-| **estudo de setembro** | oito intakes em [`.orders/`](../.orders/): `INTAKE-VIRTUAL-PATH` (mini-repo, medido: o custo de round-trip é o tamanho de `glyph-parser.js`), `INTAKE-ORDER-COHERENCE` (`relates[]`, B antes de A), `INTAKE-BURN-INVARIANCE` (fechado), `INTAKE-FORMAL-ANALYSIS`, `INTAKE-PARSER-SPLIT` (o corte proposto, doze módulos, folhas primeiro — **próximo passo autorizado**), `INTAKE-RUST` (steelman e defeater; decisão do Regente), `INTAKE-FIELD-2026-09` (o kit de cliente; `H-09` fechou por ele). Pendentes do Regente: um esquema de ID e uma casa para as Ordens (`I_B1`); o `sameTarget` do blend que não confere o alvo; o `--check` do grafo de links |
+| **estudo de setembro** | oito intakes em [`.orders/`](../.orders/): `INTAKE-VIRTUAL-PATH` (mini-repo, medido: o custo de round-trip é o tamanho de `glyph-parser.js`), `INTAKE-ORDER-COHERENCE` (`relates[]`, B antes de A), `INTAKE-BURN-INVARIANCE` (fechado), `INTAKE-FORMAL-ANALYSIS`, `INTAKE-PARSER-SPLIT` (o corte, feito: treze módulos), `INTAKE-RUST` (steelman e defeater; o Regente decidiu migrar), `INTAKE-RUST-LADDER` (a escada auditada; §8 são as perguntas O1–O6), `INTAKE-FIELD-2026-09` (o kit de cliente; `H-09` fechou por ele). Pendentes do Regente: um esquema de ID e uma casa para as Ordens (`I_B1`); o `sameTarget` do blend que não confere o alvo; o `--check` do grafo de links |
 | **Q14** | o Regente autora o sexto exemplo de conformidade. Base verificada em [`conformance/README.md`](../../conformance/README.md) |
 | **Q4** | ratificar [`PROMOTION_BOUNDARY.md`](../PROMOTION_BOUNDARY.md) §5 |
 | sintaxe de referência | sem ela, `<needs var>` fora da cerca `[logic]` não tem no que disparar — uma referência não resolvida é indistinguível de prosa |
