@@ -113,6 +113,7 @@ version = "0.0.0"
 name = "glyph-stores"
 version = "0.0.0"
 dependencies = [
+ "glyph-util",
  "glyph-vocab",
 ]
 

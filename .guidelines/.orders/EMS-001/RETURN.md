@@ -114,7 +114,8 @@ not strings.
   sources. The expansions store also carries `schema` and a `note` that are
   `build-templates.js`'s own words; they are read from its output rather than
   typed a second time. Banked: `glyph_util::json`, the module answers of
-  `vocabulary.js` and `stores.js`, and `glyph-vocab`. Next: `glyph-stores`.
+  `vocabulary.js` and `stores.js`, `glyph-vocab`, and `glyph-stores`. Next:
+  the proof, and the close.
 
 ## Measured
 
@@ -207,6 +208,30 @@ not strings.
   survived until the export's `elName` domain took the case files' strings as
   glosses (no gloss of the tables ends in punctuation; 234 of those do) — and
   `ck` computed as an exact 32-bit FNV-1a.
+- **`glyph-stores`, held.** `build.rs` makes the three stores from the four
+  sources: `templates.json` and `rules.json` as read, and the composition
+  store compiled from `expansions.txt` and `GLOSSARY.md` — `read-expansions.js`,
+  the glossary reader, `element` through `glyph-vocab`, and the gates of
+  `build-templates.js` — which comes out byte for byte the `expansions.json`
+  that `build-templates.js` writes. `Context::new` is `createContext`, passed
+  by reference, with no global store; the six accessors equal the JS on 147
+  names, with the stores and with none. Mutated, the tests kill six of six —
+  `depsOf` blanking the return tokens survived until the export answered it
+  over the case files' strings (no formula carries one since H-09 closed; 7 of
+  those strings do).
+- **The envelope hashes the rules with the engine's cache — a JS defect, left
+  as the JS answers it.** `rules.js` hangs its compiled rules on the store
+  object (`store.__compiled`, enumerable), so every envelope's `stores.rules`
+  is the digest of 18 258 bytes, the store and the cache, not of the 9 921 of
+  `rules.json`: `9778b680…` where the store is `a0805b87…`. It is the intake's
+  X9, reaching the emitted document. The Rust store has the store's digest; a
+  test pins the envelope's, to be inverted when the JS moves its cache. The
+  export's `stores.json` records the stores as read from disk. For ORD-0009 it
+  is a question below.
+- **The store value repeats the shape of `glyph_util::json::Json`.**
+  `stores.js` imports only `vocabulary.js`, so `crate-graph.js` keeps
+  `glyph-stores` from `glyph-util`; the stores are a `Value` of their own, and
+  `glyph-util` reaches `build.rs` and the tests only. A question below.
 - **`ck` is not an exact FNV-1a, and the port says so.** The JS XORs on signed
   32-bit integers and multiplies in a double, and the product passes 2⁵³ —
   for `b`, every step — so low bits are rounded away before `>>> 0`. The
@@ -249,6 +274,20 @@ Closed questions, none answered.
      decision
    - b. no: the blind spot pinned by name, as a known loss
    - c. later, when ORD-0004 opens
+3. **The envelope's `stores.rules` hashes the engine's cache with the store.
+   What does the Rust envelope (ORD-0009) answer?**
+   - a. the JS keeps its compiled rules off the store object; the envelope then
+     hashes the store, and the `ast` hashes of the snapshot move by decision
+   - b. the Rust reproduces the cache's JSON, defect included, and the
+     envelopes stay as they are
+   - c. pinned as known until ORD-0009 opens
+4. **JSON sits in `glyph-util`, which `vocabulary.js` and `stores.js` do not
+   import. Where does it belong in the crate graph?**
+   - a. the platform, reachable from every crate: `crate-graph.js` learns one
+     exception
+   - b. a crate of its own under every other, with an oracle entry in
+     `crate-graph.js`
+   - c. as it is: `glyph-stores` keeps its own `Value`
 
 ## The session, measured
 
@@ -276,4 +315,5 @@ Closed questions, none answered.
 | 14 | `b05ba19` | ORD-0003 emitted and open | 02:02 | green |
 | 15 | `a6dce20` | ORD-0003 work 1/4 — `glyph_util::json`, the testkit reads with it | 02:06 | the round trip red against an empty writer, then green on 115 files |
 | 16 | `35487d4` | ORD-0003 work 2/4 — the export answers `vocabulary.js` and `stores.js` | 02:09 | green |
-| 17 | this commit | ORD-0003 work 3/4 — `glyph-vocab` from `vocabulary.js`; `ck` in the testkit | 2026-09-25 | green at once, so observed failing by mutation: 3 of 4 killed, then 4 of 4 once `elName` took the oracle's strings |
+| 17 | `2bbcc8b` | ORD-0003 work 3/4 — `glyph-vocab` from `vocabulary.js`; `ck` in the testkit | 02:16 | green at once, so observed failing by mutation: 3 of 4 killed, then 4 of 4 once `elName` took the oracle's strings |
+| 18 | this commit | ORD-0003 work 4/4 — `glyph-stores`: the stores compiled from the four sources, the context | 2026-09-25 | the rules digest red first — the oracle had recorded the store with the engine's cache; 6 of 6 mutations killed |
