@@ -12,7 +12,7 @@
 | environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed |
 | ground | read in the order the handoff names; `npm run check` (33 buckets, 41 s) and `npm run check:rust` (20 crates, 3 s) green on the clone at `ea8fc59`, before anything was touched |
 | layout | **closed** — its val holds (below), five banks |
-| queue | ORD-0001 to ORD-0006 closed; ORD-0007 open. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
+| queue | ORD-0001 to ORD-0007 closed; ORD-0008 opens next. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
 
 ## Waiting for the Regent
 
@@ -99,6 +99,7 @@ Closed questions, none answered.
 | [`ORD-0004`](ORD-0004/ORD-0004.xml) | `glyph-lex`: the 11 008 tokens of the 114 sources equal the oracle, spans in UTF-16; and 1 688 more sources, `classify` and `suggest` | `06989f7` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828`, the case files; `b70bb078c74ad025507d9eebbc86239068e1cc48ef678f47df4005206d6201b8`, `oracle-modules/lexer.json` |
 | [`ORD-0005`](ORD-0005/ORD-0005.xml) | `glyph-logic`: the 8 Logic nodes of the oracle equal; and `parseLogic`, `expandExpr` and `freeVars` on 1 610 blocks and 1 588 strings | `12cc408` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828`, the case files; `53ec4964aca68075372dd85f38e020fa571b9c8716cae8f1db26f490f895b546`, `oracle-modules/logic.json` |
 | [`ORD-0006`](ORD-0006/ORD-0006.xml) | `glyph-templates` and `glyph-rules`: the 14 diagnostics templates and rules raise in the 36 T-, C- and K-cases equal the oracle; and 163 runs over 215 levels of expansion, the JS's defects reproduced | `ca9c1a6` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828`, the case files; `cb065d27bb54551637ccfb07ce896557f5cc5f82797a238875af0a693c631ed3`, `oracle-modules/trees.json` |
+| [`ORD-0007`](ORD-0007/ORD-0007.xml) | `glyph-parse`: every field the envelope reads — each node, each segment, each diagnostic in pt-BR and en-EU — equals the JS on the 114 sources and 159 probes, the JS's defects reproduced | `1a79b2c` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828`, the case files; `3fd68d651077ca5332d8bedcf6c797509ab1f3ee30ff442f9e50ea3f59c4ef9b`, `oracle-modules/parse.json` |
 
 **ORD-0001, the proof**, run at `02c92ee` (the commit that emitted it; the
 closing commit changes no code):
@@ -239,20 +240,39 @@ c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828  -
 "Every T-, C- and K-case" is read as the diagnostics `templates.js` and
 `rules.js` raise in them (ORD-0006, how it was read; question 5).
 
+**ORD-0007, the proof**, run at `1a79b2c`:
+
+```
+$ rm -rf rust/target/oracle* && node scripts/test-corpus.js --export-oracle
+  ! oracle written: 114 cases to rust/target/oracle
+  ! module oracle written: util, vocabulary, stores, lexer, logic, trees, parse to rust/target/oracle-modules
+All green.
+$ cargo test --manifest-path rust/Cargo.toml -p glyph-parse -- --nocapture
+273 runs, 11371 nodes, 504 diagnostics in both languages, 18 throws
+test every_tree_and_diagnostic_equals_the_js ... ok
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.91s
+$ sha256sum rust/target/oracle-modules/parse.json
+3fd68d651077ca5332d8bedcf6c797509ab1f3ee30ff442f9e50ea3f59c4ef9b
+$ cd rust/target/oracle && LC_ALL=C sha256sum *.json | sha256sum
+c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828  -
+```
+
+"The AST envelope equals the oracle digest" is read as every field the
+envelope reads (ORD-0007, how it was read; question 7).
+
 ## Open, and why
 
-**ORD-0007, `glyph-parse`**, open since `b145777`; its work is banked, and
-the close runs the proof.
-Its val — "the AST envelope equals the oracle digest on all 114 sources" —
-names a projection that `emit-ast.js` makes, and `crate-graph.js` puts that
-module in `glyph-envelope`, ORD-0009's crate; ORD-0009 opens only after
-ORD-0008, and its own val names the same digest. So the val is read as the
-tree the envelope is made from: every field `emit-ast.js` reads — each node's,
-each segment's, and each diagnostic's in pt-BR and in en-EU, `at` included —
-equal to the JS's on all 114 sources. The reading is question 7.
+Nothing is open. ORD-0008, `glyph-xml` and the first binary, opens next.
 
 ## ORD-0007, how it was read
 
+- **The val, read.** "The AST envelope equals the oracle digest on all 114
+  sources" names a projection `emit-ast.js` makes, and `crate-graph.js` puts
+  that module in `glyph-envelope`, ORD-0009's crate, whose own val names the
+  same digest. So the val is read as the tree the envelope is made from: every
+  field `emit-ast.js` reads — each node's, each segment's, and each
+  diagnostic's in pt-BR and in en-EU, `at` included — equal to the JS's on
+  all 114 sources. The reading is question 7.
 - **Five JS defects the port reproduces**, measured, and left as the JS
   answers them:
   - **The vocabulary tables are plain objects too.** `constructor` and
@@ -631,7 +651,7 @@ and `npm run check` passes on the commit that carries this return.
 | ORD-0004 | `2c68949` 02:34 | `e08f1f9` 02:45 | 11 min, one work bank |
 | ORD-0005 | `2466cef` 02:49 | `17658ec` 03:00 | 11 min, one work bank |
 | ORD-0006 | `8f996df` 03:15 | `480268b` 03:50 | 35 min, one work bank |
-| ORD-0007 | `b145777` 03:54 | — | open |
+| ORD-0007 | `b145777` 03:54 | the commit after `1a79b2c` | ~20 min, one work bank |
 
 | # | commit | step | UTC | checks |
 |---|---|---|---|---|
@@ -665,4 +685,5 @@ and `npm run check` passes on the commit that carries this return.
 | 27 | `ca9c1a6` | ORD-0006 work — `glyph-templates`, `glyph-rules`, the tree in `glyph-util`, `trees.json` in the export | 03:47 | green at once; 28 of 32 mutations killed, then 30 once the export recorded every level and a lower-case forbidden name; the pair-key test was red on its own expectation — by UTF-16 unit U+10000 sorts before U+FF21 — and was fixed to what node answers |
 | 28 | `480268b` | ORD-0006 closes | 03:50 | green |
 | 29 | `b145777` | ORD-0007 emitted and open | 03:54 | green |
-| 30 | this commit | ORD-0007 work — `glyph-parse`, `parse.json` in the export, the tree's fields for the projections | 2026-09-25 | green at once on 273 runs; 33 of 40 mutations killed, then 36 of 40 with a probe at the auto-close limit and a store with no numeric depth, and one mutation of mine rewritten because it did not build |
+| 30 | `1a79b2c` | ORD-0007 work — `glyph-parse`, `parse.json` in the export, the tree's fields for the projections | 04:13 | green at once on 273 runs; 33 of 40 mutations killed, then 36 of 40 with a probe at the auto-close limit and a store with no numeric depth, and one mutation of mine rewritten because it did not build |
+| 31 | this commit | ORD-0007 closes | 2026-09-25 | green |
