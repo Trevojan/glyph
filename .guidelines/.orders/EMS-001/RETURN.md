@@ -173,6 +173,8 @@ b70bb078c74ad025507d9eebbc86239068e1cc48ef678f47df4005206d6201b8
     `EmptyLogicLine`, at `fix`.
   - **`a != b` reads as `a não = b`.** The negation rule rewrites the `!` of
     `!=`.
+- Banked: `logic.json` in the export and `glyph-logic`. Next: the proof, and
+  the close.
 
 ## ORD-0004, how it was read
 
@@ -365,6 +367,15 @@ and `npm run check` passes on the commit that carries this return.
   spans to UTF-16 units and not characters — and `classify`, with and without
   session words, and `suggest` over 542 names. Against it the seven die, and
   so do the two mutations that undo the reproduced defects: nine of nine.
+- **`glyph-logic`, held.** Each regex of `logic.js` is a matcher of its own,
+  searching as the JS searches — the when-rule's optional mark retried
+  without it, its leading space longest first, its condition shortest first —
+  which is what reproduces `? -> b`. `logic.json` joined the export before
+  the port: `parseLogic` over the 22 `[logic]` blocks the lexer finds and over
+  1 584 strings and probes, `expandExpr` and `freeVars` over the same. The
+  port answered all of it, and the 8 Logic nodes of the oracle, at once.
+  Mutated, eight of eight die — the negation rule excluding `!<>=` before the
+  `!` survived until four probes put one there.
 - **`ck` is not an exact FNV-1a, and the port says so.** The JS XORs on signed
   32-bit integers and multiplies in a double, and the product passes 2⁵³ —
   for `b`, every step — so low bits are rounded away before `>>> 0`. The
@@ -413,4 +424,5 @@ and `npm run check` passes on the commit that carries this return.
 | 20 | `2c68949` | ORD-0004 emitted and open | 02:34 | green |
 | 21 | `06989f7` | ORD-0004 work — `glyph-lex`, and `lexer.json` in the export | 02:42 | green at once on the 114 sources; 7 mutations survived them; 9 of 9 killed against `lexer.json` |
 | 22 | `e08f1f9` | ORD-0004 closes | 02:45 | green |
-| 23 | this commit | ORD-0005 emitted and open | 2026-09-25 | green |
+| 23 | `2466cef` | ORD-0005 emitted and open | 02:49 | green |
+| 24 | this commit | ORD-0005 work — `glyph-logic`, and `logic.json` in the export | 2026-09-25 | green at once; 7 of 8 mutations killed, then 8 of 8 with four negation probes |
