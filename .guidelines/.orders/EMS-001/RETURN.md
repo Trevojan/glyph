@@ -12,7 +12,7 @@
 | environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed |
 | ground | read in the order the handoff names; `npm run check` (33 buckets, 41 s) and `npm run check:rust` (20 crates, 3 s) green on the clone at `ea8fc59`, before anything was touched |
 | layout | **closed** — its val holds (below), five banks |
-| queue | ORD-0001, ORD-0002 and ORD-0003 closed; ORD-0004 opens next. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
+| queue | ORD-0001, ORD-0002 and ORD-0003 closed. **ORD-0004 open** — emitted into [`ORD-0004/`](ORD-0004/ORD-0004.xml), no diagnostics. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
 
 ## The layout, built
 
@@ -133,7 +133,17 @@ rules digest also hashes the engine's cache, pinned above.
 
 ## Open, and why
 
-Nothing is open. ORD-0004, `glyph-lex`, opens next.
+- **ORD-0004, `glyph-lex`.** Two JS defects the port reproduces, measured
+  before building, and left as the JS answers them:
+  - **Lookups fall through to `Object.prototype`.** `EMO[x]` and `SESSION[x]`
+    are plain objects, so `/constructor/` tokenizes as a mood — and the XML
+    carries `<mood dominant="function Object() { [native code] }"/>`, the
+    source text of the JS's own `Object`, into the deliverable — and
+    `classify("constructor")` and `classify("__proto__")` answer `session`.
+  - **`[off]` looks for `[ON]` in an upper-cased copy.** A character whose
+    upper case is longer (`ß` → `SS`) moves every index after it, so
+    `ß[off]x[on]y` gives a raw `x[`, an `ON` spanning 8–12 in a 12-unit
+    source, and loses the `y` in silence.
 
 ## ORD-0003, how it was read
 
@@ -328,7 +338,7 @@ Closed questions, none answered.
 |---|---|---|---|
 | ORD-0001 | `02c92ee` 01:28 | `030ed76` 01:31 | 3 min |
 | ORD-0002 | `3413eb5` 01:40 | `4c4743a` 01:54 | 14 min, three work banks |
-| ORD-0003 | `b05ba19` 02:02 | the commit after `d9ea4fe` | ~28 min, four work banks |
+| ORD-0003 | `b05ba19` 02:02 | `51e291b` 02:30 | 28 min, four work banks |
 
 | # | commit | step | UTC | checks |
 |---|---|---|---|---|
@@ -351,4 +361,5 @@ Closed questions, none answered.
 | 16 | `35487d4` | ORD-0003 work 2/4 — the export answers `vocabulary.js` and `stores.js` | 02:09 | green |
 | 17 | `2bbcc8b` | ORD-0003 work 3/4 — `glyph-vocab` from `vocabulary.js`; `ck` in the testkit | 02:16 | green at once, so observed failing by mutation: 3 of 4 killed, then 4 of 4 once `elName` took the oracle's strings |
 | 18 | `d9ea4fe` | ORD-0003 work 4/4 — `glyph-stores`: the stores compiled from the four sources, the context | 02:27 | the rules digest red first — the oracle had recorded the store with the engine's cache; 6 of 6 mutations killed |
-| 19 | this commit | ORD-0003 closes | 2026-09-25 | green |
+| 19 | `51e291b` | ORD-0003 closes | 02:30 | green |
+| 20 | this commit | ORD-0004 emitted and open | 2026-09-25 | green |
