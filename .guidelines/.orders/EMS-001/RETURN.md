@@ -12,7 +12,7 @@
 | environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed |
 | ground | read in the order the handoff names; `npm run check` (33 buckets, 41 s) and `npm run check:rust` (20 crates, 3 s) green on the clone at `ea8fc59`, before anything was touched |
 | layout | **closed** — its val holds (below), five banks |
-| queue | ORD-0001 to ORD-0007 closed; ORD-0008 opens next. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
+| queue | ORD-0001 to ORD-0007 closed; ORD-0008 open. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
 
 ## Waiting for the Regent
 
@@ -262,7 +262,16 @@ envelope reads (ORD-0007, how it was read; question 7).
 
 ## Open, and why
 
-Nothing is open. ORD-0008, `glyph-xml` and the first binary, opens next.
+**ORD-0008, `glyph-xml` and the first binary**, open since the commit that
+carries this line. `glyph-cli.js` takes its source as an argument or a
+`--file` and writes `console.log`'s line; the spec's binary reads stdin and
+writes "the XML, and nothing else". Read as the binary's I/O and not as an
+engine feature the JS lacks, since the XML of a source is what `toXML`
+answers either way: stdin is read as UTF-8, and stdout holds the XML's bytes
+with no line after them. Where the JS throws, the binary writes the JS's
+message to stderr and exits 1, as node does on an uncaught throw. The
+binary reads with the repository's three stores, as the suite reads the
+examples.
 
 ## ORD-0007, how it was read
 
@@ -651,7 +660,8 @@ and `npm run check` passes on the commit that carries this return.
 | ORD-0004 | `2c68949` 02:34 | `e08f1f9` 02:45 | 11 min, one work bank |
 | ORD-0005 | `2466cef` 02:49 | `17658ec` 03:00 | 11 min, one work bank |
 | ORD-0006 | `8f996df` 03:15 | `480268b` 03:50 | 35 min, one work bank |
-| ORD-0007 | `b145777` 03:54 | the commit after `1a79b2c` | ~20 min, one work bank |
+| ORD-0007 | `b145777` 03:54 | `6dcf854` 04:17 | 23 min, one work bank |
+| ORD-0008 | the commit after `6dcf854` | — | open |
 
 | # | commit | step | UTC | checks |
 |---|---|---|---|---|
@@ -686,4 +696,5 @@ and `npm run check` passes on the commit that carries this return.
 | 28 | `480268b` | ORD-0006 closes | 03:50 | green |
 | 29 | `b145777` | ORD-0007 emitted and open | 03:54 | green |
 | 30 | `1a79b2c` | ORD-0007 work — `glyph-parse`, `parse.json` in the export, the tree's fields for the projections | 04:13 | green at once on 273 runs; 33 of 40 mutations killed, then 36 of 40 with a probe at the auto-close limit and a store with no numeric depth, and one mutation of mine rewritten because it did not build |
-| 31 | this commit | ORD-0007 closes | 2026-09-25 | green |
+| 31 | `6dcf854` | ORD-0007 closes | 04:17 | green |
+| 32 | this commit | ORD-0008 emitted and open | 2026-09-25 | green |

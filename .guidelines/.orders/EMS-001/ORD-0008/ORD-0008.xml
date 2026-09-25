@@ -1,0 +1,23 @@
+<glyph-package engine="3.5.8.06">
+  <schema/>
+  <block once="true">
+    <block binds="ORD-0008-first-binary">
+      <user-input>ORD-0008-first-binary</user-input>
+      <context>
+        <user-input>the spec of EMS-001</user-input>
+        <user-input>.guidelines/.orders/EMS-001/EMS-001.pgml</user-input>
+      </context>
+      <only-if>
+        <user-input>ORD-0007 closed</user-input>
+      </only-if>
+      <target>
+        <user-input>glyph-xml and the first binary: glyph reads Glyph on stdin and writes the XML, and nothing else</user-input>
+      </target>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the first binary</user-input>
+        <user-input>the five sources of conformance/examples.json come out byte-exact against the XML they record, then all 114 against the oracle</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>
