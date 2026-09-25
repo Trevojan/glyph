@@ -1,0 +1,38 @@
+[block
+  'ORD-0008-first-binary'
+  [ctx
+    'the spec of EMS-001'
+    '.guidelines/.orders/EMS-001/EMS-001.pgml'
+  [/ctx]
+  [onlyif
+    'ORD-0007 closed'
+  [/onlyif]
+  [tgt
+    'glyph-xml and the first binary: glyph reads Glyph on stdin and writes the XML, and nothing else'
+  [/tgt]
+  [cmp
+    'the first binary'
+    'the five sources of conformance/examples.json come out byte-exact against the XML they record, then all 114 against the oracle'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+[/block]

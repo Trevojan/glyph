@@ -8,6 +8,8 @@ com o pacote que o `--bundle` escreve, e a contagem é desta série.
 
 ## A Ordem aberta
 
+- [`EMS-001/ORD-0008`](ORD-0008/ORD-0008.xml) — `glyph-xml` e o primeiro binário; aberta em 2026-09-25
+
 ## Ordens fechadas
 
 | ORD | o que entregou | commit | digest |
