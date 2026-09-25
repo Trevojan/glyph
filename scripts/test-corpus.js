@@ -2444,6 +2444,14 @@ function runBundleChecks() {
     ok("ZP-05", "o conteudo volta byte a byte, acentos incluidos",
        back === fsx.readFileSync(srcFile, "utf8") ? null
          : "voltou diferente: " + JSON.stringify(back.slice(0, 80)));
+
+    /* um ID e ORD-#### seguido de nada ou de um ponto: ORD-2026-08-30-01 e um
+       ID datado, e lido como o numero 2026 faria a proxima sair ORD-2027 */
+    fsx.writeFileSync(px.join(tmp, "ORD-2026-08-30-01.pgml"), "[nt'datada']", "utf8");
+    run(["--file", srcFile, "--bundle", "--out", tmp]);
+    ok("ZP-06", "um ID datado no destino nao vira numero",
+       fsx.existsSync(px.join(tmp, "ORD-0003.zip")) ? null
+         : "saiu " + fsx.readdirSync(tmp).filter(n => /\.zip$/.test(n)).join(", "));
   } finally {
     try { fsx.rmSync(tmp, { recursive: true, force: true }); } catch (e) { /* ja foi */ }
   }
@@ -2619,7 +2627,7 @@ console.log(" suggest      " + String(rSG).padStart(4) + "/4");
 console.log(" aspas        " + String(rQT).padStart(4) + "/3");
 console.log(" param template" + String(rTP).padStart(4) + "/4");
 console.log(" imperativo   " + String(rIM).padStart(4) + "/5");
-console.log(" bundle ORD   " + String(rZP).padStart(4) + "/5");
+console.log(" bundle ORD   " + String(rZP).padStart(4) + "/6");
 console.log(" global store " + rGS + "/3");
 console.log(" context      " + rCX + "/3");
 console.log(" coverage     " + String(rOC).padStart(4) + "/" + ORACLE_COVERAGE.length);
