@@ -80,8 +80,8 @@ commit are byte-identical, the 114 per-case digests equal
   node's children `body` where `walk` follows `children`. So the export writes
   the answers of `util.js` beside the case files, over what they hold, and the
   crates read them with a JSON reader of their own. Banked: the export,
-  `check:rust` writing the oracle before `cargo test`, and `glyph-util` with
-  the reader. Next: `glyph-version`.
+  `check:rust` writing the oracle before `cargo test`, `glyph-util` with the
+  reader, and `glyph-version`. Next: the proof, and the close.
 
 ## Measured
 
@@ -142,6 +142,9 @@ commit are byte-identical, the 114 per-case digests equal
   green: 1 609 strings through `esc` and `xesc`, 1 609 `lev` pairs both ways,
   116 trees walked. Mutated, the test kills three of four: `esc` without `"`,
   `walk` with the children reversed, `lev` with a substitution costing 2.
+- **`glyph-version` reads `VERSION` from `scripts/core/version.js`** in its
+  `build.rs`, so the number stays in one place. Its test was red against an
+  empty constant, green after, and a hard-coded `3.4.7.05` fails it.
 - **The survivor: `lev` counting `char`s instead of UTF-16 units.** No string
   in the oracle carries a character outside the BMP, so the two countings
   answer alike on all of it. 129 strings are non-ASCII, which holds bytes
@@ -195,4 +198,5 @@ Closed questions, none answered.
 | 8 | `3380a36` | ORD-0001's rows name `030ed76`, since the tag is not on the remote | 01:33 | green |
 | 9 | `3413eb5` | ORD-0002 emitted and open | 01:40 | green |
 | 10 | `85f5b6f` | ORD-0002 work 1/3 — the export answers `util.js`; `check:rust` writes the oracle | 01:43 | green; `check:rust` 49 s |
-| 11 | this commit | ORD-0002 work 2/3 — the oracle reader and `glyph-util` | 2026-09-25 | red against `todo!()` first, then green; 3 of 4 mutations killed |
+| 11 | `ecb85d5` | ORD-0002 work 2/3 — the oracle reader and `glyph-util` | 01:48 | red against `todo!()` first, then green; 3 of 4 mutations killed |
+| 12 | this commit | ORD-0002 work 3/3 — `glyph-version`, `VERSION` read from `version.js` | 2026-09-25 | red against an empty constant first, then green |
