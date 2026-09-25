@@ -12,7 +12,7 @@
 | environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed |
 | ground | read in the order the handoff names; `npm run check` (33 buckets, 41 s) and `npm run check:rust` (20 crates, 3 s) green on the clone at `ea8fc59`, before anything was touched |
 | layout | **closed** — its val holds (below), five banks |
-| queue | ORD-0001 to ORD-0007 closed; ORD-0008 open. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
+| queue | ORD-0001 to ORD-0008 closed; ORD-0009 opens next. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
 
 ## Waiting for the Regent
 
@@ -100,6 +100,7 @@ Closed questions, none answered.
 | [`ORD-0005`](ORD-0005/ORD-0005.xml) | `glyph-logic`: the 8 Logic nodes of the oracle equal; and `parseLogic`, `expandExpr` and `freeVars` on 1 610 blocks and 1 588 strings | `12cc408` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828`, the case files; `53ec4964aca68075372dd85f38e020fa571b9c8716cae8f1db26f490f895b546`, `oracle-modules/logic.json` |
 | [`ORD-0006`](ORD-0006/ORD-0006.xml) | `glyph-templates` and `glyph-rules`: the 14 diagnostics templates and rules raise in the 36 T-, C- and K-cases equal the oracle; and 163 runs over 215 levels of expansion, the JS's defects reproduced | `ca9c1a6` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828`, the case files; `cb065d27bb54551637ccfb07ce896557f5cc5f82797a238875af0a693c631ed3`, `oracle-modules/trees.json` |
 | [`ORD-0007`](ORD-0007/ORD-0007.xml) | `glyph-parse`: every field the envelope reads — each node, each segment, each diagnostic in pt-BR and en-EU — equals the JS on the 114 sources and 159 probes, the JS's defects reproduced | `1a79b2c` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828`, the case files; `3fd68d651077ca5332d8bedcf6c797509ab1f3ee30ff442f9e50ea3f59c4ef9b`, `oracle-modules/parse.json` |
+| [`ORD-0008`](ORD-0008/ORD-0008.xml) | `glyph-xml` and the first binary: `glyph` reads Glyph on stdin and writes the XML; the five examples byte-exact and the 114 sources as the oracle; `toXML` on 312 runs, plain and described | `97ea472` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828`, the case files; `cfab5a595c70e3458995474b1a01cdb08857e6a902bd5d331b6eaa99f3b02c63`, `oracle-modules/xml.json` |
 
 **ORD-0001, the proof**, run at `02c92ee` (the commit that emitted it; the
 closing commit changes no code):
@@ -260,21 +261,55 @@ c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828  -
 "The AST envelope equals the oracle digest" is read as every field the
 envelope reads (ORD-0007, how it was read; question 7).
 
+**ORD-0008, the proof**, run at `97ea472`:
+
+```
+$ rm -rf rust/target/oracle* && node scripts/test-corpus.js --export-oracle
+  ! oracle written: 114 cases to rust/target/oracle
+  ! module oracle written: util, vocabulary, stores, lexer, logic, trees, parse, xml to rust/target/oracle-modules
+All green.
+$ cargo test --manifest-path rust/Cargo.toml -p glyph-cli -p glyph-xml -- --nocapture
+test a_source_the_js_throws_on_writes_no_xml ... ok
+test the_five_examples_come_out_byte_exact ... ok
+114 sources
+test all_114_come_out_as_the_oracle ... ok
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.73s
+114 cases
+test the_xml_of_every_case_equals_the_oracle ... ok
+312 runs, 2203421 bytes of XML, 18 throws
+test every_xml_run_equals_the_js ... ok
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.23s
+$ printf "[crit'the parser']" | rust/target/debug/glyph
+<glyph-package engine="3.5.8.06">
+  <schema/>
+  <block once="true">
+    <criticise>
+      <invoke reads="[CMP[CTX]],[SPEC-CORE],[EVAL[ERROR]]" species="composite" depth="2"/>
+      <user-input>the parser</user-input>
+    </criticise>
+  </block>
+</glyph-package>
+$ sha256sum rust/target/oracle-modules/xml.json
+cfab5a595c70e3458995474b1a01cdb08857e6a902bd5d331b6eaa99f3b02c63
+$ cd rust/target/oracle && LC_ALL=C sha256sum *.json | sha256sum
+c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828  -
+```
+
 ## Open, and why
 
-**ORD-0008, `glyph-xml` and the first binary**, open since `aefc148`; its
-work is banked, and the close runs the proof. `glyph-cli.js` takes its source as an argument or a
-`--file` and writes `console.log`'s line; the spec's binary reads stdin and
-writes "the XML, and nothing else". Read as the binary's I/O and not as an
-engine feature the JS lacks, since the XML of a source is what `toXML`
-answers either way: stdin is read as UTF-8, and stdout holds the XML's bytes
-with no line after them. Where the JS throws, the binary writes the JS's
-message to stderr and exits 1, as node does on an uncaught throw. The
-binary reads with the repository's three stores, as the suite reads the
-examples.
+Nothing is open. ORD-0009, `glyph-envelope`, `glyph-burn` and `glyph-inverse`, opens next.
 
 ## ORD-0008, how it was read
 
+- **The binary, read.** `glyph-cli.js` takes its source as an argument or a
+  `--file` and writes `console.log`'s line; the spec's binary reads stdin and
+  writes "the XML, and nothing else". Read as the binary's I/O and not as an
+  engine feature the JS lacks, since the XML of a source is what `toXML`
+  answers either way: stdin is read as UTF-8, and stdout holds the XML's bytes
+  with no line after them. Where the JS throws, the binary writes the JS's
+  message to stderr and exits 1, as node does on an uncaught throw. The
+  binary reads with the repository's three stores, as the suite reads the
+  examples.
 - **Four JS defects in the deliverable the port reproduces**, measured, and
   left as the JS answers them:
   - **A `ref` to a binding nobody made.** The bindings are a plain object, so
@@ -702,7 +737,7 @@ and `npm run check` passes on the commit that carries this return.
 | ORD-0005 | `2466cef` 02:49 | `17658ec` 03:00 | 11 min, one work bank |
 | ORD-0006 | `8f996df` 03:15 | `480268b` 03:50 | 35 min, one work bank |
 | ORD-0007 | `b145777` 03:54 | `6dcf854` 04:17 | 23 min, one work bank |
-| ORD-0008 | `aefc148` 04:21 | — | open |
+| ORD-0008 | `aefc148` 04:21 | the commit after `97ea472` | ~20 min, one work bank |
 
 | # | commit | step | UTC | checks |
 |---|---|---|---|---|
@@ -739,4 +774,5 @@ and `npm run check` passes on the commit that carries this return.
 | 30 | `1a79b2c` | ORD-0007 work — `glyph-parse`, `parse.json` in the export, the tree's fields for the projections | 04:13 | green at once on 273 runs; 33 of 40 mutations killed, then 36 of 40 with a probe at the auto-close limit and a store with no numeric depth, and one mutation of mine rewritten because it did not build |
 | 31 | `6dcf854` | ORD-0007 closes | 04:17 | green |
 | 32 | `aefc148` | ORD-0008 emitted and open | 04:21 | green |
-| 33 | this commit | ORD-0008 work — `glyph-xml`, the binary `glyph`, `xml.json` in the export | 2026-09-25 | green at once; the XML tests took 126 s until the pass read each line once, 3 s after; 28 of 32 mutations killed, then 30 with a continuing segment and a deep conjunction |
+| 33 | `97ea472` | ORD-0008 work — `glyph-xml`, the binary `glyph`, `xml.json` in the export | 04:39 | green at once; the XML tests took 126 s until the pass read each line once, 3 s after; 28 of 32 mutations killed, then 30 with a continuing segment and a deep conjunction |
+| 34 | this commit | ORD-0008 closes | 2026-09-25 | green |
