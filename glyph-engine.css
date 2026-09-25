@@ -102,7 +102,7 @@
   }
   .ordno:focus { outline:none; border-color:var(--h-op); }
 
-  /* ---------- molde: onde estou ---------- */
+  /* ---------- mould: onde estou ---------- */
   .where { display:flex; gap:1px; background:var(--line-soft); border:1px solid var(--line);
            border-radius:var(--r); overflow:hidden; flex-wrap:wrap; }
   .where .ph {
@@ -303,7 +303,7 @@
     border-radius:0; padding:13px; font-family:var(--mono); font-size:12.5px; line-height:1.6;
   }
 
-  /* ---------- biblioteca de modelos e moldes ---------- */
+  /* ---------- biblioteca de templates e moulds ---------- */
   .lib { display:flex; flex-direction:column; gap:1px; margin-top:9px; }
   .libRow {
     display:flex; align-items:center; gap:8px; padding:6px 0;

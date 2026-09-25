@@ -1,7 +1,7 @@
 /* Glyph engine — interface layer.
    Parsing, [logic], the XML emitter and the vocabulary all live in
-   glyph-parser.js; the rule and template stores in glyph-data.js; the form
-   data in glyph-moldes.js. What is left here is only the app. */
+   glyph-parser.js; the rule and template stores in glyph-data.js; the mould
+   data in glyph-moulds.js. What is left here is only the app. */
 
 import { zipStore } from "./glyph-zip.js";
 
@@ -82,13 +82,13 @@ import { zipStore } from "./glyph-zip.js";
   }
 
   /* ======================================================
-     7. MOLDE → GLYPH
+     7. MOULD → GLYPH
      ====================================================== */
 
-  function moldeById(id) {
-    /* embutidos e guardados na mesma busca: assim buildGlyph, drawMolde e
-       countPhase passam a servir molde do usuário sem saber que existe. */
-    var all = mergedMoldes();
+  function mouldById(id) {
+    /* embutidos e guardados na mesma busca: assim buildGlyph, drawMould e
+       countPhase passam a servir mould do usuário sem saber que existe. */
+    var all = mergedMoulds();
     for (var i = 0; i < all.length; i++) if (all[i].id === id) return all[i];
     return null;
   }
@@ -106,15 +106,15 @@ import { zipStore } from "./glyph-zip.js";
   }
 
   /* A pergunta da casa vira <needs> no XML, então ela CHEGA ao entregável —
-     por isso segue a língua da tela, e não o pt-BR fixo de glyph-moldes.js.
-     Precisa do molde junto: a pergunta inglesa mora no overlay, não no slot. */
+     por isso segue a língua da tela, e não o pt-BR fixo de glyph-moulds.js.
+     Precisa do mould junto: a pergunta inglesa mora no overlay, não no slot. */
   function slotLine(m, slot, value) {
     if (value && value.trim()) return "  [" + slot.tag + "'" + litSafe(value) + "']";
     return "  [ph-" + slot.id + "'" + litSafe(slotQ(m, slot)) + "']";
   }
 
   function buildGlyph(state) {
-    var m = moldeById(state.molde);
+    var m = mouldById(state.mould);
     if (!m) return "";
     var L = [];
     var head = state.extras.save && state.saveName.trim()
@@ -178,7 +178,7 @@ import { zipStore } from "./glyph-zip.js";
   var OPTS = { session:true, valency:true, lang:"pt" };
 
   var state = {
-    molde: "fluxo",
+    mould: "fluxo",
     slots: {},
     steps: ["", ""],
     junctions: [],
@@ -192,24 +192,24 @@ import { zipStore } from "./glyph-zip.js";
 
 
 
-  /* ---- molde ---- */
-  function drawMoldePick() {
-    $("moldePick").innerHTML = MOLDES.map(function (m) {
+  /* ---- mould ---- */
+  function drawMouldPick() {
+    $("mouldPick").innerHTML = MOULDS.map(function (m) {
       return '<button class="chip" type="button" data-m="' + m.id + '" aria-pressed="' +
-        (m.id === state.molde && !state.detached) + '">' + esc(mLabel(m)) + "</button>";
+        (m.id === state.mould && !state.detached) + '">' + esc(mLabel(m)) + "</button>";
     }).join("") + '<button class="chip" type="button" id="detach">' +
       (state.detached ? t("attach") : t("detach")) + "</button>";
   }
 
-  function drawMolde() {
-    var m = moldeById(state.molde);
-    var body = $("moldeBody");
+  function drawMould() {
+    var m = mouldById(state.mould);
+    var body = $("mouldBody");
     if (state.detached) {
       body.innerHTML = '<div class="none">' + t("detachedMsg") + "</div>";
-      $("moldeName").textContent = t("detachedName");
+      $("mouldName").textContent = t("detachedName");
       return;
     }
-    $("moldeName").textContent = t("moldeWord") + " · " + mTitle(m).toLowerCase();
+    $("mouldName").textContent = t("mouldWord") + " · " + mTitle(m).toLowerCase();
 
     var H = [];
 
@@ -269,7 +269,7 @@ import { zipStore } from "./glyph-zip.js";
   function drawWhere() {
     var bar = $("whereBar");
     if (!bar) return;
-    var m = moldeById(state.molde);
+    var m = mouldById(state.mould);
     var firstIncomplete = null;
     var counts = m.phases.map(function (ph) {
       var c = countPhase(m, ph, state);
@@ -287,7 +287,7 @@ import { zipStore } from "./glyph-zip.js";
 
   // marca as casas preenchidas sem recriar os campos
   function drawDone() {
-    var m = moldeById(state.molde);
+    var m = mouldById(state.mould);
     m.phases.forEach(function (ph) {
       ph.slots.forEach(function (slot) {
         var el = $("slot_" + slot.id);
@@ -298,8 +298,8 @@ import { zipStore } from "./glyph-zip.js";
     if (sp) sp.className = "slot" + (state.steps.some(function (s) { return s && s.trim(); }) ? " done" : "");
   }
 
-  function bindMolde() {
-    var body = $("moldeBody");
+  function bindMould() {
+    var body = $("mouldBody");
     body.addEventListener("input", function (ev) {
       var t = ev.target;
       if (t.hasAttribute("data-slot")) { state.slots[t.getAttribute("data-slot")] = t.value; live(); }
@@ -327,13 +327,13 @@ import { zipStore } from "./glyph-zip.js";
         }
       }
     });
-    $("moldePick").addEventListener("click", function (ev) {
+    $("mouldPick").addEventListener("click", function (ev) {
       var b = ev.target.closest ? ev.target.closest(".chip") : null;
       if (!b) return;
       if (b.id === "detach") { state.detached = !state.detached; rebuild(); return; }
       var id = b.getAttribute("data-m");
       if (!id) return;
-      activateMolde(id);
+      activateMould(id);
     });
   }
 
@@ -439,12 +439,12 @@ import { zipStore } from "./glyph-zip.js";
     run();
   }
 
-  // mudança de estrutura: trocar molde, somar/remover passo, ligar extra.
+  // mudança de estrutura: trocar mould, somar/remover passo, ligar extra.
   function rebuild() {
     srcEl.readOnly = !state.detached;
     if (!state.detached) srcEl.value = buildGlyph(state);
-    drawMolde();
-    drawMoldePick();
+    drawMould();
+    drawMouldPick();
     run();
   }
 
@@ -500,29 +500,29 @@ import { zipStore } from "./glyph-zip.js";
     resetCopyButtons();
   }
 
-  /* ---- presets ---- */
+  /* ---- samples ---- */
   /* virou função porque a troca de língua precisa redesenhar: no lugar antigo
      rodava uma vez só e as fichas ficavam na língua do arranque. */
-  function drawPresets() {
-    $("presets").innerHTML = PRESETS.map(function (p, k) {
-      return '<button class="chip" type="button" data-p="' + k + '">' + esc(presetLabel(p, k)) + "</button>";
+  function drawSamples() {
+    $("samples").innerHTML = SAMPLES.map(function (p, k) {
+      return '<button class="chip" type="button" data-p="' + k + '">' + esc(sampleLabel(p, k)) + "</button>";
     }).join("");
   }
-  $("presets").addEventListener("click", function (ev) {
+  $("samples").addEventListener("click", function (ev) {
     var b = ev.target.closest ? ev.target.closest(".chip") : null;
     if (!b) return;
     state.detached = true;
     srcEl.readOnly = false;
     var pk = +b.getAttribute("data-p");
-    srcEl.value = presetSrc(PRESETS[pk], pk);
-    drawMolde(); drawMoldePick(); run();
+    srcEl.value = sampleSrc(SAMPLES[pk], pk);
+    drawMould(); drawMouldPick(); run();
   });
 
   /* ---- inserção da tabela ---- */
   $("cmdTbl").addEventListener("click", function (ev) {
     var b = ev.target.closest ? ev.target.closest("button[data-ins]") : null;
     if (!b) return;
-    if (!state.detached) { state.detached = true; srcEl.readOnly = false; drawMolde(); drawMoldePick(); }
+    if (!state.detached) { state.detached = true; srcEl.readOnly = false; drawMould(); drawMouldPick(); }
     var ins = b.getAttribute("data-ins");
     var a = srcEl.selectionStart, z = srcEl.selectionEnd, v = srcEl.value;
     srcEl.value = v.slice(0, a) + ins + v.slice(z);
@@ -870,8 +870,8 @@ import { zipStore } from "./glyph-zip.js";
      10. XML EDITÁVEL
 
      O painel de XML era só vitrine. Agora ele volta: fromXML() reconstrói a
-     fonte e o resto da tela se refaz a partir dela. Ao aplicar, o molde se
-     solta — é a mesma autoridade que "soltar do molde" já dava à caixa de
+     fonte e o resto da tela se refaz a partir dela. Ao aplicar, o mould se
+     solta — é a mesma autoridade que "soltar do mould" já dava à caixa de
      fonte, só que acionada do outro lado. Duas portas, um conceito.
      ====================================================== */
 
@@ -920,14 +920,14 @@ import { zipStore } from "./glyph-zip.js";
     srcEl.value = back.src;
     state.detached = true;
     srcEl.readOnly = false;
-    drawMolde(); drawMoldePick();
+    drawMould(); drawMouldPick();
     run();
   }
 
   /* ======================================================
-     11. GUARDADOS — modelos e moldes do usuário
+     11. GUARDADOS — templates e moulds do usuário
 
-     templates.json e glyph-moldes.js continuam sendo a fonte de
+     templates.json e glyph-moulds.js continuam sendo a fonte de
      verdade e não são tocados daqui: a página abre em file:// e não escreve
      no projeto. O que o usuário cria fica no localStorage e é sobreposto aos
      embutidos na carga — mesmo formato, origem diferente, e o nome do usuário
@@ -940,7 +940,7 @@ import { zipStore } from "./glyph-zip.js";
   var LS = {
     collapse:  "glyph.ui.collapse.v1",
     templates: "glyph.templates.user.v1",
-    moldes:    "glyph.moldes.user.v1",
+    moulds:    "glyph.moldes.user.v1",
     lang:      "glyph.ui.lang.v1",
     tab:       "glyph.ui.tab.v1",
     target:    "glyph.ui.target.v1"
@@ -957,8 +957,8 @@ import { zipStore } from "./glyph-zip.js";
   /* O parâmetro sai do corpo, não de uma lista escrita à mão ao lado dele.
      Quem escreve [ph-alvo já disse o nome; repetir isso num cabeçalho é a
      mesma informação em dois lugares, que é como as duas versões divergem.
-     `tag` é o comando que embrulha o buraco — é o que separa um molde (onde
-     a casa É [tgt[ph-x]]) de um modelo (onde o buraco basta). */
+     `tag` é o comando que embrulha o buraco — é o que separa um mould (onde
+     a casa É [tgt[ph-x]]) de um template (onde o buraco basta). */
   function extractPlaceholders(bodySrc) {
     var res = parse(String(bodySrc || ""), { session:false });
     var out = [], seen = {};
@@ -995,13 +995,13 @@ import { zipStore } from "./glyph-zip.js";
       .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
   }
 
-  /* ---- modelos ---- */
+  /* ---- templates ---- */
   function builtinTemplates() {
     return (typeof GlyphTemplates !== "undefined" && GlyphTemplates && GlyphTemplates.templates) || {};
   }
   function userTemplates() { return lsGet(LS.templates, {}); }
 
-  /* O motor precisa ser reavisado, não só a lista: sem isto um [--meu-modelo
+  /* O motor precisa ser reavisado, não só a lista: sem isto um [--meu-template
      não expande, ele só aparece bonito na tela. */
   function refreshTemplates() {
     var merged = {}, bi = builtinTemplates(), us = userTemplates();
@@ -1051,24 +1051,24 @@ import { zipStore } from "./glyph-zip.js";
     return "# " + name + "\n\n" + (def.gloss || "") + "\n\n```glyph\n" + (def.body || "") + "\n```\n";
   }
 
-  /* ---- moldes ---- */
-  function userMoldes() { return lsGet(LS.moldes, []); }
-  function mergedMoldes() { return MOLDES.concat(userMoldes()); }
-  function saveUserMolde(def) {
-    var all = userMoldes(), at = -1;
+  /* ---- moulds ---- */
+  function userMoulds() { return lsGet(LS.moulds, []); }
+  function mergedMoulds() { return MOULDS.concat(userMoulds()); }
+  function saveUserMould(def) {
+    var all = userMoulds(), at = -1;
     all.forEach(function (m, i) { if (m.id === def.id) at = i; });
     if (at >= 0) all[at] = def; else all.push(def);
-    if (!lsSet(LS.moldes, all)) return false;
+    if (!lsSet(LS.moulds, all)) return false;
     return true;
   }
-  function deleteUserMolde(id) {
-    lsSet(LS.moldes, userMoldes().filter(function (m) { return m.id !== id; }));
+  function deleteUserMould(id) {
+    lsSet(LS.moulds, userMoulds().filter(function (m) { return m.id !== id; }));
   }
 
   /* Uma fase é "## Rótulo" e o que vem abaixo dela. As cercas ``` são
      toleradas e ignoradas, para que o mesmo texto sirva no editor da tela e
      dentro do .md sem duas gramáticas. */
-  function parseMoldePhases(text) {
+  function parseMouldPhases(text) {
     var blocks = [], cur = null;
     String(text || "").replace(/\r\n?/g, "\n").split("\n").forEach(function (ln) {
       var h = /^##\s+(.+)$/.exec(ln);
@@ -1081,9 +1081,9 @@ import { zipStore } from "./glyph-zip.js";
     return blocks;
   }
 
-  function moldeFromText(title, hint, bodyText) {
+  function mouldFromText(title, hint, bodyText) {
     if (!String(title || "").trim()) return { error:t("mldNoTitle") };
-    var blocks = parseMoldePhases(bodyText);
+    var blocks = parseMouldPhases(bodyText);
     if (!blocks.length) return { error:t("mldNoPhase") };
     var warn = [], phases = [], total = 0, usedIds = {};
     blocks.forEach(function (b, k) {
@@ -1099,18 +1099,18 @@ import { zipStore } from "./glyph-zip.js";
       phases.push({ id:slug(b.label) || ("fase-" + (k + 1)), label:b.label, note:"", slots:slots });
     });
     if (!total) return { error:t("mldNoSlot") };
-    var id = slug(title) || "molde";
+    var id = slug(title) || "mould";
     var taken = {};
-    mergedMoldes().forEach(function (m) { taken[m.id] = 1; });
+    mergedMoulds().forEach(function (m) { taken[m.id] = 1; });
     while (taken[id]) id = id + "-2";
     return {
-      molde: { id:id, label:String(title).trim().toLowerCase().slice(0, 18), title:String(title).trim(),
+      mould: { id:id, label:String(title).trim().toLowerCase().slice(0, 18), title:String(title).trim(),
                hint:String(hint || "").trim(), steps:false, phases:phases, user:true },
       warn: warn
     };
   }
 
-  function moldeFromMarkdown(md) {
+  function mouldFromMarkdown(md) {
     var title = "", intro = [], rest = [], seen = false;
     String(md || "").replace(/\r\n?/g, "\n").split("\n").forEach(function (ln) {
       var h1 = /^#\s+(.+)$/.exec(ln);
@@ -1119,10 +1119,10 @@ import { zipStore } from "./glyph-zip.js";
       if (seen) rest.push(ln);
       else if (ln.trim() && !/^\s*```/.test(ln)) intro.push(ln.trim());
     });
-    return moldeFromText(title, intro.join(" "), rest.join("\n"));
+    return mouldFromText(title, intro.join(" "), rest.join("\n"));
   }
 
-  function moldeToMarkdown(m) {
+  function mouldToMarkdown(m) {
     var L = ["# " + (m.title || m.label), "", (m.hint || ""), ""];
     (m.phases || []).forEach(function (ph) {
       L.push("## " + ph.label, "", "```glyph");
@@ -1133,7 +1133,7 @@ import { zipStore } from "./glyph-zip.js";
     });
     return L.join("\n");
   }
-  function moldeToEditorText(m) {
+  function mouldToEditorText(m) {
     var L = [];
     (m.phases || []).forEach(function (ph) {
       L.push("## " + ph.label);
@@ -1165,7 +1165,7 @@ import { zipStore } from "./glyph-zip.js";
     }).join("");
   }
 
-  /* ---- a lista de modelos ---- */
+  /* ---- a lista de templates ---- */
   function drawTplList() {
     var bi = builtinTemplates(), us = userTemplates();
     var names = Object.keys(bi).concat(Object.keys(us).filter(function (k) { return !(k in bi); })).sort();
@@ -1226,10 +1226,10 @@ import { zipStore } from "./glyph-zip.js";
     run();
   }
 
-  /* ---- a lista de moldes ---- */
+  /* ---- a lista de moulds ---- */
   function drawMldList() {
-    var us = userMoldes();
-    var all = mergedMoldes();
+    var us = userMoulds();
+    var all = mergedMoulds();
     $("mldCount").textContent = t("counts", all.length, us.length);
     $("mldList").innerHTML = all.map(function (m) {
       var mine = !!m.user;
@@ -1242,22 +1242,22 @@ import { zipStore } from "./glyph-zip.js";
           '<button class="btn mini" type="button" data-act="edit">' + esc(t("open")) + "</button>" +
           (mine ? '<button class="btn mini" type="button" data-act="del">' + esc(t("del")) + "</button>" : "") +
         "</span></div>";
-    }).join("") || '<div class="none">' + t("noMoldes") + "</div>";
+    }).join("") || '<div class="none">' + t("noMoulds") + "</div>";
   }
 
   var mldEditing = null;
   function mldOpen(id) {
-    var m = id ? moldeById(id) : null;
+    var m = id ? mouldById(id) : null;
     mldEditing = (m && m.user) ? m.id : null;
     $("mldTitle").value = m ? (m.title || "") : "";
     $("mldHint").value = m ? (m.hint || "") : "";
-    $("mldBody").value = m ? moldeToEditorText(m) : "";
+    $("mldBody").value = m ? mouldToEditorText(m) : "";
     $("mldEditor").hidden = false;
     showDiag("mldDiag", m && !m.user ? [t("builtinCopy")] : [], "note");
     mldPreview();
   }
   function mldPreview() {
-    var blocks = parseMoldePhases($("mldBody").value);
+    var blocks = parseMouldPhases($("mldBody").value);
     var n = 0;
     blocks.forEach(function (b) { n += extractPlaceholders(b.lines.join("\n")).length; });
     $("mldParams").innerHTML = blocks.length
@@ -1265,23 +1265,23 @@ import { zipStore } from "./glyph-zip.js";
       : t("phasesNone");
   }
   function mldSave() {
-    var built = moldeFromText($("mldTitle").value, $("mldHint").value, $("mldBody").value);
+    var built = mouldFromText($("mldTitle").value, $("mldHint").value, $("mldBody").value);
     if (built.error) { showDiag("mldDiag", [built.error], "fix"); return; }
-    if (mldEditing) built.molde.id = mldEditing;      // editar não duplica
-    if (!saveUserMolde(built.molde)) {
+    if (mldEditing) built.mould.id = mldEditing;      // editar não duplica
+    if (!saveUserMould(built.mould)) {
       showDiag("mldDiag", [t("noWrite")], "fix");
       return;
     }
-    mldEditing = built.molde.id;
+    mldEditing = built.mould.id;
     drawMldList();
     showDiag("mldDiag", (built.warn || []).concat([t("saved")]), built.warn.length ? "ask" : "note");
   }
 
-  /* Trocar de molde é a mesma coisa vinda de dois lugares: as fichas de cima
+  /* Trocar de mould é a mesma coisa vinda de dois lugares: as fichas de cima
      (só os embutidos, para a fileira não crescer sem fim) e a lista de baixo. */
-  function activateMolde(id) {
-    if (!moldeById(id)) return;
-    state.molde = id; state.detached = false;
+  function activateMould(id) {
+    if (!mouldById(id)) return;
+    state.mould = id; state.detached = false;
     state.slots = {}; state.steps = ["", ""]; state.junctions = [];
     rebuild();
   }
@@ -1296,21 +1296,21 @@ import { zipStore } from "./glyph-zip.js";
      comandos passa a mostrar a glosa do próprio motor em vez da tradução
      pt-BR de CATS. A tradução que não precisa existir é a melhor.
 
-     Vale notar o efeito colateral bom: a pergunta de cada casa do molde vira
+     Vale notar o efeito colateral bom: a pergunta de cada casa do mould vira
      <needs> no XML, ou seja, chega ao entregável. Em EN ela finalmente sai em
      inglês, que é o que a fronteira de língua sempre pediu.
      ====================================================== */
 
   var I18N = {
     pt_BR: {
-      docTitle: "Glyph — molde e motor",
-      rule: "Molde pergunta, você responde o que souber. <strong>Casa vazia não bloqueia</strong>: vira <code>&lt;needs&gt;</code> no XML — mande incompleto, preencha com a resposta. Sem <kbd>shift</kbd>: humor <code>/frs/</code> · literal <code>'texto'</code> · teto e piso <code>pc[] pb[]</code> · retorno <code>r-</code>.",
+      docTitle: "Glyph — mould e motor",
+      rule: "Mould pergunta, você responde o que souber. <strong>Casa vazia não bloqueia</strong>: vira <code>&lt;needs&gt;</code> no XML — mande incompleto, preencha com a resposta. Sem <kbd>shift</kbd>: humor <code>/frs/</code> · literal <code>'texto'</code> · teto e piso <code>pc[] pb[]</code> · retorno <code>r-</code>.",
 
-      moldeWord: "molde",
-      detach: "soltar do molde",
-      attach: "voltar ao molde",
-      detachedName: "molde · solto",
-      detachedMsg: "Molde solto. Fonte editável à mão — <em>voltar ao molde</em> retoma as perguntas.",
+      mouldWord: "mould",
+      detach: "soltar do mould",
+      attach: "voltar ao mould",
+      detachedName: "mould · solto",
+      detachedMsg: "Mould solto. Fonte editável à mão — <em>voltar ao mould</em> retoma as perguntas.",
       youAreHere: "você está aqui",
       stepsLabel: "os passos mínimos, em ordem",
       addStep: "+ passo",
@@ -1327,9 +1327,9 @@ import { zipStore } from "./glyph-zip.js";
       srcTitle: "fonte glyph",
       srcPh: "[rw[cr'api/pedidos.py'",
 
-      tplTitle: "modelos",
-      tplHelp: "Modelos com buracos <code>[ph-nome</code>. Os parâmetros saem do próprio corpo — não se declara nada duas vezes.",
-      mldTitle: "meus moldes",
+      tplTitle: "templates",
+      tplHelp: "Templates com buracos <code>[ph-nome</code>. Os parâmetros saem do próprio corpo — não se declara nada duas vezes.",
+      mldTitle: "meus moulds",
       mldHelp: "Cada fase é um <code>## Rótulo</code> seguido das casas, uma por linha, na forma <code>[tag[ph-id`a pergunta`]]</code>.",
       newOne: "novo",
       importMd: "importar .md",
@@ -1347,24 +1347,24 @@ import { zipStore } from "./glyph-zip.js";
       fTitle: "título",
       fHint: "dica",
       fPhases: "fases e casas",
-      tplNamePh: "meu-modelo",
+      tplNamePh: "meu-template",
       mldTitlePh: "Revisão de contrato",
       paramsRead: "parâmetros lidos do corpo: {0}",
-      paramsNone: "nenhum <code>[ph-</code> no corpo — o modelo não tem buraco para preencher.",
+      paramsNone: "nenhum <code>[ph-</code> no corpo — o template não tem buraco para preencher.",
       phasesRead: "{0} fase(s), {1} casa(s) lidas do corpo.",
       phasesNone: "nenhuma fase — comece uma linha com <code>## </code>.",
-      noTemplates: "nenhum modelo.",
-      noMoldes: "nenhum molde.",
+      noTemplates: "nenhum template.",
+      noMoulds: "nenhum mould.",
       savedTpl: "gravado. <code>[--{0}</code> já expande.",
       saved: "gravado.",
       readFromFile: "lido do arquivo. Confira e salve.",
       builtinCopy: "este é embutido: salvar cria uma cópia sua.",
-      needName: "falta o nome do modelo.",
-      needBody: "falta o corpo do modelo.",
+      needName: "falta o nome do template.",
+      needBody: "falta o corpo do template.",
       noWrite: "o navegador não deixou gravar (cota ou aba anônima).",
       mdNoTitle: "falta o título: a primeira linha precisa ser <code># nome</code>.",
-      mdNoBody: "falta o corpo: um bloco cercado por <code>```</code> com o glyph do modelo.",
-      mldNoTitle: "falta o título do molde.",
+      mdNoBody: "falta o corpo: um bloco cercado por <code>```</code> com o glyph do template.",
+      mldNoTitle: "falta o título do mould.",
       mldNoPhase: "nenhuma fase: comece uma linha com <code>## </code> e o rótulo.",
       mldNoSlot: "nenhuma casa: cada linha é <code>[tag[ph-id`a pergunta`]]</code>.",
       mldLooseHole: "<code>[ph-{0}</code> sem comando em volta — virou <code>[ins</code>.",
@@ -1393,21 +1393,21 @@ import { zipStore } from "./glyph-zip.js";
 
       labFix: "erro", labAsk: "falta", labNote: "nota",
       complete: "<b>Completo.</b> Copie e mande.",
-      pickOne: "Escolha um molde ou escreva à esquerda.",
+      pickOne: "Escolha um mould ou escreva à esquerda.",
       toFix: "{0} a consertar · ", toSay: "{0} a dizer", notes: "{0} nota(s)",
       stat: "{0} bloco(s) · {1} comando(s) · {2} linhas de xml",
       footer: "o xml não faz nada sozinho — ele é o recado pra mim"
     },
 
     en: {
-      docTitle: "Glyph — form and engine",
-      rule: "The form asks, you answer what you know. <strong>An empty field does not block</strong>: it becomes <code>&lt;needs&gt;</code> in the XML — send it incomplete and let the answer fill it. No <kbd>shift</kbd> needed: mood <code>/frs/</code> · literal <code>'text'</code> · ceiling and floor <code>pc[] pb[]</code> · return <code>r-</code>.",
+      docTitle: "Glyph — mould and engine",
+      rule: "The mould asks, you answer what you know. <strong>An empty field does not block</strong>: it becomes <code>&lt;needs&gt;</code> in the XML — send it incomplete and let the answer fill it. No <kbd>shift</kbd> needed: mood <code>/frs/</code> · literal <code>'text'</code> · ceiling and floor <code>pc[] pb[]</code> · return <code>r-</code>.",
 
-      moldeWord: "form",
-      detach: "detach form",
-      attach: "re-attach form",
-      detachedName: "form · detached",
-      detachedMsg: "Form detached. The source is yours to edit — <em>re-attach form</em> brings the questions back.",
+      mouldWord: "mould",
+      detach: "detach mould",
+      attach: "re-attach mould",
+      detachedName: "mould · detached",
+      detachedMsg: "Mould detached. The source is yours to edit — <em>re-attach mould</em> brings the questions back.",
       youAreHere: "you are here",
       stepsLabel: "the smallest steps, in order",
       addStep: "+ step",
@@ -1426,7 +1426,7 @@ import { zipStore } from "./glyph-zip.js";
 
       tplTitle: "templates",
       tplHelp: "Templates with <code>[ph-name</code> holes. The parameters come from the body itself — nothing is declared twice.",
-      mldTitle: "my forms",
+      mldTitle: "my moulds",
       mldHelp: "Each phase is a <code>## Label</code> followed by its fields, one per line, written <code>[tag[ph-id`the question`]]</code>.",
       newOne: "new",
       importMd: "import .md",
@@ -1451,7 +1451,7 @@ import { zipStore } from "./glyph-zip.js";
       phasesRead: "{0} phase(s), {1} field(s) read from the body.",
       phasesNone: "no phase yet — start a line with <code>## </code>.",
       noTemplates: "no templates.",
-      noMoldes: "no forms.",
+      noMoulds: "no moulds.",
       savedTpl: "saved. <code>[--{0}</code> expands now.",
       saved: "saved.",
       readFromFile: "read from the file. Check it and save.",
@@ -1461,7 +1461,7 @@ import { zipStore } from "./glyph-zip.js";
       noWrite: "the browser refused to store it (quota, or a private window).",
       mdNoTitle: "no title: the first line must be <code># name</code>.",
       mdNoBody: "no body: a block fenced with <code>```</code> holding the glyph.",
-      mldNoTitle: "the form needs a title.",
+      mldNoTitle: "the mould needs a title.",
       mldNoPhase: "no phase: start a line with <code>## </code> and the label.",
       mldNoSlot: "no fields: each line is <code>[tag[ph-id`the question`]]</code>.",
       mldLooseHole: "<code>[ph-{0}</code> has no command around it — it became <code>[ins</code>.",
@@ -1490,7 +1490,7 @@ import { zipStore } from "./glyph-zip.js";
 
       labFix: "error", labAsk: "missing", labNote: "note",
       complete: "<b>Complete.</b> Copy it and send.",
-      pickOne: "Pick a form, or write on the left.",
+      pickOne: "Pick a mould, or write on the left.",
       toFix: "{0} to fix · ", toSay: "{0} to say", notes: "{0} note(s)",
       stat: "{0} block(s) · {1} command(s) · {2} lines of xml",
       footer: "the xml does nothing on its own — it is the message to me"
@@ -1534,39 +1534,39 @@ import { zipStore } from "./glyph-zip.js";
 
 
   /* ---- de qual língua sai cada dado ----
-     O overlay MOLDES_EN é consultado por id; faltando a chave, cai no pt-BR
-     daquele pedaço em vez de sumir. Molde do usuário nunca tem overlay — foi
+     O overlay MOULDS_EN é consultado por id; faltando a chave, cai no pt-BR
+     daquele pedaço em vez de sumir. Mould do usuário nunca tem overlay — foi
      ele quem escreveu, na língua que quis. */
   function enOn() { return state.lang === "en"; }
-  function moldeEn(m) {
-    return (enOn() && typeof MOLDES_EN !== "undefined" && MOLDES_EN && m) ? MOLDES_EN[m.id] : null;
+  function mouldEn(m) {
+    return (enOn() && typeof MOULDS_EN !== "undefined" && MOULDS_EN && m) ? MOULDS_EN[m.id] : null;
   }
-  function mLabel(m) { var e = moldeEn(m); return (e && e.label) || m.label; }
-  function mTitle(m) { var e = moldeEn(m); return (e && e.title) || m.title || m.label; }
-  function mHint(m)  { var e = moldeEn(m); return (e && e.hint)  || m.hint || ""; }
+  function mLabel(m) { var e = mouldEn(m); return (e && e.label) || m.label; }
+  function mTitle(m) { var e = mouldEn(m); return (e && e.title) || m.title || m.label; }
+  function mHint(m)  { var e = mouldEn(m); return (e && e.hint)  || m.hint || ""; }
   function phLabel(m, ph) {
-    var e = moldeEn(m);
+    var e = mouldEn(m);
     return (e && e.phases && e.phases[ph.id] && e.phases[ph.id].label) || ph.label;
   }
   function phNote(m, ph) {
-    var e = moldeEn(m);
+    var e = mouldEn(m);
     if (e && e.phases && e.phases[ph.id]) return e.phases[ph.id].note;
     return ph.note;
   }
   function slotQ(m, slot) {
-    var e = moldeEn(m);
+    var e = mouldEn(m);
     return (e && e.slots && e.slots[slot.id]) || slot.q;
   }
   function extraQ(x) {
     return (enOn() && typeof EXTRAS_EN !== "undefined" && EXTRAS_EN && EXTRAS_EN[x.id]) || x.q;
   }
-  function presetEn(k) {
-    return (enOn() && typeof PRESETS_EN !== "undefined" && PRESETS_EN) ? PRESETS_EN[k] : null;
+  function sampleEn(k) {
+    return (enOn() && typeof SAMPLES_EN !== "undefined" && SAMPLES_EN) ? SAMPLES_EN[k] : null;
   }
-  function presetLabel(p, k) { var e = presetEn(k); return (e && e.label) || p.label; }
+  function sampleLabel(p, k) { var e = sampleEn(k); return (e && e.label) || p.label; }
   /* a fonte do exemplo também: um exemplo em pt-BR numa tela em inglês ensina
      a sintaxe e atrapalha a leitura ao mesmo tempo. */
-  function presetSrc(p, k) { var e = presetEn(k); return (e && e.src) || p.src; }
+  function sampleSrc(p, k) { var e = sampleEn(k); return (e && e.src) || p.src; }
 
   /* CATS é dado de interface e pt-BR por desenho (o comentário no motor diz
      isso). Aqui está só a metade inglesa: rótulo e nota da categoria. As 104
@@ -1616,13 +1616,13 @@ import { zipStore } from "./glyph-zip.js";
     drawLangPick();
     /* tudo que é desenhado por JS precisa ser redesenhado: o dicionário só
        alcança o que passar por t() de novo. */
-    drawCatRow(); drawCmds(); drawPresets();
+    drawCatRow(); drawCmds(); drawSamples();
     drawTplList(); drawMldList(); drawTarget();
     /* o resumo dos parâmetros é texto traduzido dentro de um editor que pode
        estar aberto na hora da troca — sem isto ele fica na língua anterior. */
     if (!$("tplEditor").hidden) tplPreview();
     if (!$("mldEditor").hidden) mldPreview();
-    drawMoldePick(); drawMolde();
+    drawMouldPick(); drawMould();
     if (!state.detached) srcEl.value = buildGlyph(state);
     run();
   }
@@ -1638,9 +1638,9 @@ import { zipStore } from "./glyph-zip.js";
   state.target = lsGet(LS.target, { harness:"claude-code", model:"inherit", role:"dv" });
   state.tab = lsGet(LS.tab, "xml");
 
-  drawPresets();
-  drawMoldePick();
-  bindMolde();
+  drawSamples();
+  drawMouldPick();
+  bindMould();
   drawCatRow();
   drawCmds();
   bindTabs();
@@ -1665,7 +1665,7 @@ import { zipStore } from "./glyph-zip.js";
   /* ---- xml editável ---- */
   onBtn("xmlEdit", function () { state.xmlEditing ? xmlApply() : xmlEditOn(); });
 
-  /* ---- modelos ---- */
+  /* ---- templates ---- */
   onBtn("tplNew", function () { tplOpen(null); });
   onBtn("tplImport", function () { $("tplFile").click(); });
   $("tplFile").addEventListener("change", function () {
@@ -1684,7 +1684,7 @@ import { zipStore } from "./glyph-zip.js";
   onBtn("tplSave", tplSave);
   onBtn("tplCancel", function () { $("tplEditor").hidden = true; tplEditing = null; });
   onBtn("tplExport", function () {
-    var name = slug($("tplName").value) || "modelo";
+    var name = slug($("tplName").value) || "template";
     downloadText(name + ".md", "text/markdown",
       templateToMarkdown(name, { gloss:$("tplGloss").value, body:$("tplBody").value }));
   });
@@ -1696,7 +1696,7 @@ import { zipStore } from "./glyph-zip.js";
     if (!name) return;
     var act = b.getAttribute("data-act");
     if (act === "use") {
-      if (!state.detached) { state.detached = true; srcEl.readOnly = false; drawMolde(); drawMoldePick(); }
+      if (!state.detached) { state.detached = true; srcEl.readOnly = false; drawMould(); drawMouldPick(); }
       var ins = "[--" + name;
       var a = srcEl.selectionStart, z = srcEl.selectionEnd, v = srcEl.value;
       srcEl.value = v.slice(0, a) + ins + v.slice(z);
@@ -1707,17 +1707,17 @@ import { zipStore } from "./glyph-zip.js";
     else if (act === "del") { deleteUserTemplate(name); drawTplList(); run(); }
   });
 
-  /* ---- moldes ---- */
+  /* ---- moulds ---- */
   onBtn("mldNew", function () { mldOpen(null); });
   onBtn("mldImport", function () { $("mldFile").click(); });
   $("mldFile").addEventListener("change", function () {
     readMd($("mldFile"), function (md) {
-      var got = moldeFromMarkdown(md);
+      var got = mouldFromMarkdown(md);
       if (got.error) { $("mldEditor").hidden = false; showDiag("mldDiag", [got.error], "fix"); return; }
       mldEditing = null;
-      $("mldTitle").value = got.molde.title;
-      $("mldHint").value = got.molde.hint;
-      $("mldBody").value = moldeToEditorText(got.molde);
+      $("mldTitle").value = got.mould.title;
+      $("mldHint").value = got.mould.hint;
+      $("mldBody").value = mouldToEditorText(got.mould);
       $("mldEditor").hidden = false;
       mldPreview();
       showDiag("mldDiag", (got.warn || []).concat([t("readFromFile")]),
@@ -1727,9 +1727,9 @@ import { zipStore } from "./glyph-zip.js";
   onBtn("mldSave", mldSave);
   onBtn("mldCancel", function () { $("mldEditor").hidden = true; mldEditing = null; });
   onBtn("mldExport", function () {
-    var built = moldeFromText($("mldTitle").value, $("mldHint").value, $("mldBody").value);
+    var built = mouldFromText($("mldTitle").value, $("mldHint").value, $("mldBody").value);
     if (built.error) { showDiag("mldDiag", [built.error], "fix"); return; }
-    downloadText(built.molde.id + ".md", "text/markdown", moldeToMarkdown(built.molde));
+    downloadText(built.mould.id + ".md", "text/markdown", mouldToMarkdown(built.mould));
   });
   $("mldBody").addEventListener("input", mldPreview);
   $("mldList").addEventListener("click", function (ev) {
@@ -1738,11 +1738,11 @@ import { zipStore } from "./glyph-zip.js";
     var row = b.closest(".libRow"), id = row && row.getAttribute("data-mld");
     if (!id) return;
     var act = b.getAttribute("data-act");
-    if (act === "use") activateMolde(id);
+    if (act === "use") activateMould(id);
     else if (act === "edit") mldOpen(id);
     else if (act === "del") {
-      deleteUserMolde(id);
-      if (state.molde === id) { state.molde = MOLDES[0].id; state.slots = {}; }
+      deleteUserMould(id);
+      if (state.mould === id) { state.mould = MOULDS[0].id; state.slots = {}; }
       drawMldList(); rebuild();
     }
   });
@@ -1768,8 +1768,8 @@ import { zipStore } from "./glyph-zip.js";
     setTab:setTab, drawTarget:drawTarget, TABS:TABS,
     tokenize:tokenize, parse:parse, buildXml:buildXml, colorize:colorize, renderLit:renderLit,
     parseLogic:parseLogic, expandExpr:expandExpr, freeVars:freeVars, classify:classify, walk:walk,
-    buildGlyph:buildGlyph, countPhase:countPhase, moldeById:moldeById,
-    MOLDES:MOLDES, CATS:CATS, PRESETS:PRESETS, INSTR:INSTR, EMO:EMO, FRAMES:FRAMES,
+    buildGlyph:buildGlyph, countPhase:countPhase, mouldById:mouldById,
+    MOULDS:MOULDS, CATS:CATS, SAMPLES:SAMPLES, INSTR:INSTR, EMO:EMO, FRAMES:FRAMES,
     SESSION:SESSION, ALIAS:ALIAS, LOGIC_OPS:LOGIC_OPS, PTBR:PTBR, CAT_OF:CAT_OF
   };
 })();

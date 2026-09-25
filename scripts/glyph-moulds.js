@@ -1,15 +1,15 @@
-/* Glyph engine — form data (MOLDES) and ready-made examples (PRESETS).
+/* Glyph engine — form data (MOULDS) and ready-made examples (SAMPLES).
    Data only: no behaviour lives here. Loaded before glyph-ui.js. */
 (function (root) {
   "use strict";
 
   /* ======================================================
-     2. MOLDES — as perguntas que você não quer ter que lembrar
+     2. MOULDS — as perguntas que você não quer ter que lembrar
      Ordem das fases: começa pelo ALVO, porque é assim que
      você disse que pensa (explorar a saída pra achar o caminho).
      ====================================================== */
 
-  var MOLDES = [
+  var MOULDS = [
     {
       id:"fluxo", label:"fluxo",
       title:"Fluxo / Processo",
@@ -96,7 +96,7 @@
     { id:"save", type:"bool", tag:"",     q:"salvar como template" }
   ];
 
-  var PRESETS = [
+  var SAMPLES = [
     { label:"conta de dados", src:
       "[go[logic-dano-critico]\ntier = pc[attr/4] <5\nroll = 4d6kh3\nmarg = roll - dif\ncdmg = base + pb[marg/tier]\n!precision -> sem arredondar\n[/logic]" },
     { label:"encadeia blocos", src:"[rd'pedidos.csv';\n[=[org[cat'por cliente','por data';\n[=[sum;r-[skep-crit,scru" },
@@ -106,7 +106,7 @@
 
 
   /* ======================================================
-     MOLDES_EN — a camada inglesa, sobreposta e não misturada
+     MOULDS_EN — a camada inglesa, sobreposta e não misturada
 
      Um overlay em vez de campos `_en` espalhados pela estrutura: a tabela
      pt-BR acima fica exatamente como estava, e quem lê uma delas não precisa
@@ -115,10 +115,10 @@
 
      A pergunta de cada casa vira <needs> no XML, então em EN ela chega ao
      entregável em inglês — que é o que a fronteira de língua sempre pediu e
-     o molde ainda não cumpria.
+     o mould ainda não cumpria.
      ====================================================== */
 
-  var MOLDES_EN = {
+  var MOULDS_EN = {
     fluxo: {
       label:"flow", title:"Flow / Process",
       hint:"Start and precondition, expectation and technical validation",
@@ -177,14 +177,14 @@
     save: "save as a template"
   };
 
-  /* Os presets são exemplos: o rótulo é tela e a fonte é a lição. Traduzir a
+  /* Os samples são exemplos: o rótulo é tela e a fonte é a lição. Traduzir a
      fonte junto é o certo — um exemplo em pt-BR numa tela em inglês ensina a
      sintaxe e atrapalha a leitura ao mesmo tempo. O que NÃO muda é a forma:
      mesmos comandos, mesma ordem, mesmos diagnósticos. Só o que é palavra
      humana — nome do bloco, literal, variável de nome português — vira
      inglês, para que o exemplo continue demonstrando exatamente o que
      demonstrava. */
-  var PRESETS_EN = [
+  var SAMPLES_EN = [
     { label:"data maths", src:
       "[go[logic-critical-damage]\ntier = pc[attr/4] <5\nroll = 4d6kh3\nmargin = roll - difficulty\ncdmg = base + pb[margin/tier]\n!precision -> no rounding\n[/logic]" },
     { label:"chained blocks", src:"[rd'orders.csv';\n[=[org[cat'by client','by date';\n[=[sum;r-[skep-crit,scru" },
@@ -192,10 +192,10 @@
     { label:"no shift", src:"/frs/[crit'this parser beat me'][ask'what I got wrong'" }
   ];
 
-  root.MOLDES = MOLDES;
+  root.MOULDS = MOULDS;
   root.EXTRAS = EXTRAS;
-  root.PRESETS = PRESETS;
-  root.MOLDES_EN = MOLDES_EN;
+  root.SAMPLES = SAMPLES;
+  root.MOULDS_EN = MOULDS_EN;
   root.EXTRAS_EN = EXTRAS_EN;
-  root.PRESETS_EN = PRESETS_EN;
+  root.SAMPLES_EN = SAMPLES_EN;
 })(typeof self !== "undefined" ? self : this);

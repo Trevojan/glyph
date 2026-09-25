@@ -1,4 +1,4 @@
-<title>Glyph — molde e motor</title>
+<title>Glyph — mould e motor</title>
 
 <link rel="icon" type="image/x-icon" href=".scope/asset/favicon.ico">
 
@@ -14,24 +14,24 @@
         <button class="chip" type="button" data-lang="en">EN-EU</button>
       </div>
     </div>
-    <p class="rule" id="headerRule" data-i18n-html="rule">Molde pergunta, você responde o que souber. <strong>Casa vazia não bloqueia</strong>: vira <code>&lt;needs&gt;</code> no XML — mande incompleto, preencha com a resposta. Sem <kbd>shift</kbd>: humor <code>/frs/</code> · literal <code>'texto'</code> · teto e piso <code>pc[] pb[]</code> · retorno <code>r-</code>.</p>
+    <p class="rule" id="headerRule" data-i18n-html="rule">Mould pergunta, você responde o que souber. <strong>Casa vazia não bloqueia</strong>: vira <code>&lt;needs&gt;</code> no XML — mande incompleto, preencha com a resposta. Sem <kbd>shift</kbd>: humor <code>/frs/</code> · literal <code>'texto'</code> · teto e piso <code>pc[] pb[]</code> · retorno <code>r-</code>.</p>
   </header>
 
   <div class="grid">
 
     <div class="col">
-      <details class="card" data-lsid="molde" open>
+      <details class="card" data-lsid="mould" open>
         <summary class="hd">
-          <span id="moldeName">molde</span>
-          <div class="chips" id="moldePick"></div>
+          <span id="mouldName">mould</span>
+          <div class="chips" id="mouldPick"></div>
         </summary>
-        <div class="bd" id="moldeBody"></div>
+        <div class="bd" id="mouldBody"></div>
       </details>
 
       <details class="card" data-lsid="src" open>
         <summary class="hd">
           <span data-i18n="srcTitle">fonte glyph</span>
-          <div class="chips" id="presets"></div>
+          <div class="chips" id="samples"></div>
         </summary>
         <div class="bd">
           <label for="src" style="position:absolute;left:-9999px">Comandos Glyph</label>
@@ -42,19 +42,19 @@
 
       <details class="card" data-lsid="tpl-lib">
         <summary class="hd">
-          <span><span data-i18n="tplTitle">modelos</span> <span id="tplCount"></span></span>
+          <span><span data-i18n="tplTitle">templates</span> <span id="tplCount"></span></span>
           <div class="chips">
             <button class="btn mini" id="tplNew" type="button" data-i18n="newOne">novo</button>
             <button class="btn mini" id="tplImport" type="button" data-i18n="importMd">importar .md</button>
           </div>
         </summary>
         <div class="bd">
-          <p class="none" data-i18n-html="tplHelp">Modelos com buracos <code>[ph-nome</code>. Os parâmetros saem do próprio corpo — não se declara nada duas vezes.</p>
+          <p class="none" data-i18n-html="tplHelp">Templates com buracos <code>[ph-nome</code>. Os parâmetros saem do próprio corpo — não se declara nada duas vezes.</p>
           <input type="file" id="tplFile" accept=".md,.markdown,text/markdown" style="display:none">
           <div class="lib" id="tplList"></div>
           <div class="editor" id="tplEditor" hidden>
             <div class="gaps" id="tplDiag"></div>
-            <label class="fld"><span data-i18n="fName">nome</span><input type="text" id="tplName" spellcheck="false" data-i18n-ph="tplNamePh" placeholder="meu-modelo"></label>
+            <label class="fld"><span data-i18n="fName">nome</span><input type="text" id="tplName" spellcheck="false" data-i18n-ph="tplNamePh" placeholder="meu-template"></label>
             <label class="fld"><span data-i18n="fGloss">o que faz</span><textarea id="tplGloss" rows="2" spellcheck="false"></textarea></label>
             <label class="fld"><span data-i18n="fBody">corpo (glyph)</span><textarea id="tplBody" rows="6" spellcheck="false" placeholder="[ctx[ph-situacao`a situação`]][prop`uma saída`]"></textarea></label>
             <div class="none" id="tplParams"></div>
@@ -67,9 +67,9 @@
         </div>
       </details>
 
-      <details class="card" data-lsid="molde-lib">
+      <details class="card" data-lsid="mould-lib">
         <summary class="hd">
-          <span><span data-i18n="mldTitle">meus moldes</span> <span id="mldCount"></span></span>
+          <span><span data-i18n="mldTitle">meus moulds</span> <span id="mldCount"></span></span>
           <div class="chips">
             <button class="btn mini" id="mldNew" type="button" data-i18n="newOne">novo</button>
             <button class="btn mini" id="mldImport" type="button" data-i18n="importMd">importar .md</button>
@@ -173,6 +173,6 @@
      BEFORE the module core and find no GlyphCore at all. Modules execute in
      document order, so the two below stay ordered. -->
 <script src="scripts/glyph-data.js"></script>
-<script src="scripts/glyph-moldes.js"></script>
+<script src="scripts/glyph-moulds.js"></script>
 <script type="module" src="scripts/glyph-parser.js"></script>
 <script type="module" src="scripts/glyph-ui.js"></script>

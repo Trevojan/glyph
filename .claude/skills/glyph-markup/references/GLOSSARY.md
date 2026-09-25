@@ -13,7 +13,7 @@ entries below exist in the vocabulary, `expansions.txt` closes with 0 cycles and
 
 **Language:** everything that reaches the deliverable is English — definitions,
 slot questions, mood glosses. The interface stays pt-BR, and its strings live in
-`scripts/glyph-moldes.js`, `scripts/glyph-ui.js` and the `CATS` table.
+`scripts/glyph-moulds.js`, `scripts/glyph-ui.js` and the `CATS` table.
 
 Marks: **★** entry proposed during consolidation, not in the original draft.
 

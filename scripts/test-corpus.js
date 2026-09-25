@@ -276,10 +276,10 @@ const TEMPLATES = [
 ];
 
 /* Template constraints: the rules above are local (command vs command).
-   These check the SHAPE a preset promised, only inside its own expansion —
+   These check the SHAPE a template promised, only inside its own expansion —
    the gap that let a loop be handed commands dissolving the loop itself. */
 const CONSTRAINTS = [
-  { id:"K-01", name:"preset intacto não acusa nada",
+  { id:"K-01", name:"template intacto não acusa nada",
     src:"[--loop'a arquitetura','um nível mais fino','quando couber numa página']",
     opts:WITH_BOTH, codeAbsent:"TemplateConstraint:", noFix:true },
   { id:"K-02", name:"improvisar DENTRO da passagem é permitido",
@@ -294,9 +294,9 @@ const CONSTRAINTS = [
   { id:"K-05", name:"[ovr] isenta: a saída foi pedida em voz alta",
     src:"[--loop'x','y','z'[ovr[gen'o padrão']]]",
     opts:WITH_BOTH, codeAbsent:"TemplateConstraint:" },
-  { id:"K-06", name:"o mesmo comando fora do preset não acusa",
+  { id:"K-06", name:"o mesmo comando fora do template não acusa",
     src:"[gen'x']", opts:WITH_BOTH, codeAbsent:"TemplateConstraint:" },
-  { id:"K-07", name:"preset sem constraints declaradas segue livre",
+  { id:"K-07", name:"template sem constraints declaradas segue livre",
     src:"[--germinate'a','b'[gen'x']]", opts:WITH_BOTH, codeAbsent:"TemplateConstraint:" },
   { id:"K-08", name:"sem store de regras, a classe não resolve e nada é checado",
     src:"[--loop'x','y','z'[gen'x']]", opts:WITH_TPL, codeAbsent:"TemplateConstraint:" },
@@ -519,7 +519,7 @@ const rR = runGroup("v1.8 regressions closed in v1.0.9", REGRESSION, { noFix:fal
 const rL = runGroup("Long blocks — the engine must not break", LONG, { noFix:false });
 const rT = runGroup("Templates — invocation expands the definition", TEMPLATES, { noFix:false });
 const rC = runGroup("Semantic rules — pair, order, precondition", RULE_CASES, { noFix:false });
-const rK = runGroup("Template constraints — the shape a preset promises", CONSTRAINTS, { noFix:false });
+const rK = runGroup("Template constraints — the shape a template promises", CONSTRAINTS, { noFix:false });
 const rG = runGroup("Guard — rules must not break normal usage", POSITIVE_WITH_RULES, { noFix:true });
 
 /* ------------------------------------------------------------------ *
@@ -2259,7 +2259,7 @@ const rQT = runQuoteChecks();
 
 
 /* ------------------------------------------------------------------ *
- * parametro de molde -- so literal conta, e o resto tem de recusar
+ * parametro de template -- so literal conta, e o resto tem de recusar
  *
  * Ate 2026-09-05 um nao-literal na lista de argumentos escorregava para
  * `extra` em silencio, reaparecia como irmao orfao depois da expansao, e
@@ -2271,7 +2271,7 @@ const rQT = runQuoteChecks();
  * enquanto escondia a que aconteceu.
  * ------------------------------------------------------------------ */
 function runTemplateParamChecks() {
-  console.log("\n--- parametro de molde ---");
+  console.log("\n--- parametro de template ---");
   const D = [];
   const ok = (id, name, why) => {
     if (why) { console.log("  \u2717 " + id + ": " + name); console.log("      " + why); failures.push(id); }
@@ -2617,7 +2617,7 @@ console.log(" literal role " + String(rRO).padStart(4) + "/5");
 console.log(" bindings     " + String(rBD).padStart(4) + "/6");
 console.log(" suggest      " + String(rSG).padStart(4) + "/4");
 console.log(" aspas        " + String(rQT).padStart(4) + "/3");
-console.log(" param molde  " + String(rTP).padStart(4) + "/4");
+console.log(" param template" + String(rTP).padStart(4) + "/4");
 console.log(" imperativo   " + String(rIM).padStart(4) + "/5");
 console.log(" bundle ORD   " + String(rZP).padStart(4) + "/5");
 console.log(" global store " + rGS + "/3");

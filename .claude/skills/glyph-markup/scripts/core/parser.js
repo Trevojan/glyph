@@ -483,7 +483,7 @@ export function parse(input, opts) {
   // ---- semantic rules (pairs, order, preconditions) ----
   checkRules(segments, opts, G);
 
-  // ---- template constraints (the shape each preset promises) ----
+  // ---- template constraints (the shape each template promises) ----
   checkTemplateConstraints(segments, opts, G);
 
   /* ---- bindings ----

@@ -1,9 +1,9 @@
 /**
- * core/templates.js — a preset expanded into the tree, and the shape it promised.
+ * core/templates.js — a template expanded into the tree, and the shape it promised.
  *
  * expandInvocations replaces `[--name …]` with the template's body, holes
  * bound to what the author supplied; checkTemplateConstraints then asks whether
- * the result still has the shape the preset declared. The body is Glyph, so
+ * the result still has the shape the template declared. The body is Glyph, so
  * expanding it means parsing it — and parse() is the caller. Rather than the
  * two modules importing each other, parse hands itself in as `parseFn`, the
  * way it already hands in `G` for diagnostics; the graph stays a DAG.
@@ -199,12 +199,12 @@ export function expandInvocations(segments, opts, G, parseFn) {
 
 
 /* ======================================================
-   3d. TEMPLATE CONSTRAINTS — the shape a preset promises
+   3d. TEMPLATE CONSTRAINTS — the shape a template promises
 
    The rules in 3c are all LOCAL: they compare two commands to each other
    (siblings, or one an ancestor of the other) or check what preceded a
    target in the same segment. None of them sees the SHAPE of a whole
-   preset once it is expanded. So a template that set up an iteration
+   template once it is expanded. So a template that set up an iteration
    could be handed commands that dissolve the very loop it opened, and the
    engine stayed quiet — it only knew two commands coexisted, not that one
    of them walked out of the structure the other one promised.
@@ -216,12 +216,12 @@ export function expandInvocations(segments, opts, G, parseFn) {
 
    `forbid` names a class or command that must not appear inside. The
    exemption is deliberate and is the whole point: under an explicit
-   [ovr]/[byp] the departure was requested out loud. The preset
+   [ovr]/[byp] the departure was requested out loud. The template
    de-limits, it does not wall in — leaving the rails stays possible, it
    just stops happening by drift.
 
    Severity is data, but `ask` is the right default and what the shipped
-   presets use: walking out of a preset's shape is not broken syntax, the
+   templates use: walking out of a template's shape is not broken syntax, the
    XML stays trustworthy, so it must not be `fix` (that would also make
    any such template fail the Guard bucket).
    ====================================================== */
@@ -252,7 +252,7 @@ export function checkTemplateConstraints(segments, opts, G) {
 
   /* Same walk as checkRules' underExempt, but it stops at the template
      node: an [ovr] wrapping the whole invocation from outside says
-     nothing about what happens inside this preset. */
+     nothing about what happens inside this template. */
   function exemptWithin(nd, stopAt) {
     var p = nd.parent, hops = 0;
     while (p && p !== stopAt && hops++ < 64) { if (exempt[p.canonical]) return true; p = p.parent; }
