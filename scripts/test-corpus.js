@@ -1832,7 +1832,44 @@ function runSnapshotChecks() {
          table carries a return token since H-09 closed, and these do */
       depsOf: S.filter(x => x.length <= 256).map(x => [x, depsOf(x)])
     }, null, 1) + "\n");
-    console.log("  ! module oracle written: util.json, vocabulary.json, stores.json to " + mods);
+
+    /* lexer.js (from ORD-0004): the 114 sources exercise less than the lexer
+       reads — no text span past ASCII, no `[--name =`, no `[logic name]`, no
+       mood run, no character outside the BMP — so `tokenize` answers here
+       over every string of up to 4096 units the case files hold, and over
+       probes written one per branch of lexer.js; `classify` (with the stores,
+       with and without session words) and `suggest` over every name those
+       tokens carry, the vocabulary's, and a few strangers */
+    const PROBES = [
+      "ß[off]x[on]y", "[off]ßx[on]y", "[off] never closed", "[OFF]x[ On ]y", "😀[off]x[on]z",
+      "[nt/constructor/ x]", "[nt/eth/cnf/clm/ x]", "/eth/cur/ser/joy/awe/hop/lov/ x", "/" + "eth/".repeat(70) + " x",
+      "[nt/eth x]", "[nt /xyz/ x]", "/eth", "a/b", "[in-rwk/ctx]", "[in-rwk/ins/fmt]", "[a,/eth/ x]",
+      "[--name = x]", "[-- name=]", "[--a.b-c x]", "[--]", "[-- ]", "[--x", "[=", "[= x]",
+      "[logic name]x[/logic]", "[logic: a b ]x[ / LOGIC ]", "[logic-n]1+1", "[logicx]", "[LOGIC]",
+      "[logic\n name\n]x[/logic]", "[logic", "[logic ]", "[logic:]", "[logic x: y]", "[logic\t-\tz ]q",
+      "[raw]a[b]c[/raw]", "[ RAW ]x", "[raw]unclosed", "[raw][/ raw ]", "[on]", "[ on ]x", "[offx]",
+      "[/nt]", "[/", "[/nt", "[", "]", "[]", "[ctx", "[a.b_c9]",
+      "`a'b`", "`a]b", "`unclosed", "`a;b`", "'a`b'", "'a]b", "'a\nb'", "'unclosed", "'a;b'",
+      "\\eth\\ x", "a \\ b", "\\", "x\\y", "[nt\\cnf\\ x]",
+      "a;b;;c", ";;;", "[in-rwk,fmt ,  sum]", "[a, b]", "[a,b-c, d]", "[in- rwk]", "[a -b]", "[a-b-c]",
+      "r- x", " R: x", "r: x", "r-x", "R-", "[in r- ]", "  r  - x", "R :x", "a:b=c",
+      " [nt x]　", "\t[ctx]\r\n", "﻿[ctx]", "[nt'😀']x😀", "[nt`😀`] 😀;",
+      "ação [ctx'fichação'] ç", "[nt'a b'] x y"
+    ];
+    const lexSources = [...new Set([...PROBES, ...S.filter(x => x.length <= 4096)])];
+    const lexed = lexSources.map(x => [x, G.tokenize(x)]);
+    const lexNames = [...new Set([
+      ...lexed.flatMap(([, ts]) => ts.filter(t => /^(open|closeTag|bareTag|tpl)$/.test(t.k)).map(t => t.v)),
+      ...["MODE", "STRUCT", "META", "ALIAS", "INSTR", "SESSION", "EMO", "GLOSS_REVERSE", "ELEMENT_INPUT"]
+        .flatMap(t => Object.keys(VOCAB[t])),
+      ...(SNAP_OPTS.rules.rules || []).filter(r => r.kind === "blend").map(r => r.emit),
+      "", "constructor", "__proto__", "Constructor", "rule", "sec", "iter", "itr", "xyz", "notes", "insteadof"])];
+    fs.writeFileSync(path.join(mods, "lexer.json"), JSON.stringify({
+      engine: G.VERSION, tokenize: lexed,
+      classify: lexNames.map(x => [x, G.classify(x, SNAP_OPTS), G.classify(x, { ...SNAP_OPTS, session: false })]),
+      suggest: lexNames.map(x => [x, G.suggest(x)])
+    }, null, 1) + "\n");
+    console.log("  ! module oracle written: util.json, vocabulary.json, stores.json, lexer.json to " + mods);
   }
 
   if (process.argv.indexOf("--update-snapshot") !== -1) {
