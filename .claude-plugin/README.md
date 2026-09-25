@@ -17,7 +17,7 @@ O nome do comando é o caminho: `commands/a/b/c.md` → `/glyph-markup:a:b:c`.
 | `/glyph-markup:repo-config:guidelines:changelog:config [glyph]` | viaja até `.changelog/` do repositório atual e deixa o motor perguntar o que muda |
 | `/glyph-markup:engine-config:guidelines:changelog:config [glyph]` | o mesmo, sobre o `.guidelines/` deste repositório |
 | `/glyph-markup:repo-config:guidelines:orders:bundle <glyph>` | mede a fonte, mostra a Ordem aberta, e diz como emitir a próxima `ORD-####` — o motor escreve, depois do Regente |
-| `/glyph-markup:repo-config:guidelines:orders:diag` `:hgml` `:xml` `:ast <ORD-####>` | os modos sobre uma Ordem que já existe |
+| `/glyph-markup:repo-config:guidelines:orders:diag` `:hgml` `:xml` `:ast <ORD-#### \| EMS-###/ORD-####>` | os modos sobre uma Ordem que já existe, chapada ou numa série |
 
 `repo-config` procura `Docs/.guidelines/` e depois `.guidelines/` a partir da
 pasta do projeto; `engine-config` aponta para `${CLAUDE_PLUGIN_ROOT}/.guidelines/`,
@@ -31,8 +31,8 @@ Uma folha não chama `glyph-cli.js` direto: chama
 [`scripts/glyph-plugin.js`](../scripts/glyph-plugin.js), que resolve o que um
 comando de barra não consegue — a fonte chega por **stdin** num heredoc
 citado, para que aspas, `;` e quebras de linha cheguem intactas; `--from` acha
-`ORD-0011` na pasta certa; `--bundle` sem `--out` cai em `.orders/`. O motor
-segue intocado.
+`ORD-0011` na pasta certa, e `EMS-001/ORD-0003` na pasta da série; `--bundle`
+sem `--out` cai em `.orders/`. O motor segue intocado.
 
 ```
 !`node "${CLAUDE_PLUGIN_ROOT}/scripts/glyph-plugin.js" --diag <<'GLYPH'
@@ -56,4 +56,5 @@ argumento pode entrar no heredoc.
 
 O pipeline é app → CLI → skill → plugin: uma função que o motor não tem hoje
 não ganha folha aqui antes de existir na CLI. A versão do plugin é própria
-(`0.1.0`), não a `a.b.c.d` do motor, e `npm run check` não o cobre.
+(`0.1.0`), não a `a.b.c.d` do motor, e `npm run check` cobre dele só o
+`--from` de série (`ZP-11`, `ZP-12`, no balde do bundle).

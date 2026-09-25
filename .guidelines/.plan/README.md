@@ -78,8 +78,9 @@ contagem reinicia em cada série. A pasta [`.orders/EMS-001/`](../.orders/EMS-00
 existe e guarda a spec e o [retorno](../.orders/EMS-001/RETURN.md) da sessão.
 Com o `--out` numa pasta `EMS-###`, o `--bundle` escreve a ORD como a pasta
 `ORD-####/` com os cinco arquivos, numerada só pelas pastas ORD da série; fora
-de uma série, o zip. O plugin ainda acha a Ordem pelo número solto, e o comando
-de bundle ainda não lê a série.
+de uma série, o zip. O plugin acha a ORD de uma série por
+`--from EMS-###/ORD-####` ou pelo caminho da pasta dela; o comando de bundle
+ainda não lê a série.
 
 ## Aberto, esperando o Regente
 
