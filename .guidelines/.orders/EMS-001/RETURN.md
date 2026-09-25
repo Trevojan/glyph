@@ -12,7 +12,7 @@
 | environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed |
 | ground | read in the order the handoff names; `npm run check` (33 buckets, 41 s) and `npm run check:rust` (20 crates, 3 s) green on the clone at `ea8fc59`, before anything was touched |
 | layout | **closed** — its val holds (below), five banks |
-| queue | ORD-0001 to ORD-0008 closed; ORD-0009 opens next. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
+| queue | ORD-0001 to ORD-0008 closed; ORD-0009 open. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
 
 ## Waiting for the Regent
 
@@ -297,7 +297,15 @@ c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828  -
 
 ## Open, and why
 
-Nothing is open. ORD-0009, `glyph-envelope`, `glyph-burn` and `glyph-inverse`, opens next.
+**ORD-0009, `glyph-envelope`, `glyph-burn` and `glyph-inverse`**, open since
+the commit that carries this line. Its val is read as it is written: the `ast`
+and `hgml` digests of the 114 case files, and the round trips the JS suite
+runs. Measured before opening: the snapshot's pin says `toHGML` overflows
+V8's stack on L-01, and it no longer does — the burn stops at 200 levels and
+says so in its first line — so no stack limit is reproduced. The envelope's
+`stores.rules` hashes the rules with the engine's cache (question 3), and the
+digests the val names are those, so the port hashes the cache too, until the
+Regent answers.
 
 ## ORD-0008, how it was read
 
@@ -737,7 +745,8 @@ and `npm run check` passes on the commit that carries this return.
 | ORD-0005 | `2466cef` 02:49 | `17658ec` 03:00 | 11 min, one work bank |
 | ORD-0006 | `8f996df` 03:15 | `480268b` 03:50 | 35 min, one work bank |
 | ORD-0007 | `b145777` 03:54 | `6dcf854` 04:17 | 23 min, one work bank |
-| ORD-0008 | `aefc148` 04:21 | the commit after `97ea472` | ~20 min, one work bank |
+| ORD-0008 | `aefc148` 04:21 | `a262233` 04:43 | 22 min, one work bank |
+| ORD-0009 | the commit after `a262233` | — | open |
 
 | # | commit | step | UTC | checks |
 |---|---|---|---|---|
@@ -775,4 +784,5 @@ and `npm run check` passes on the commit that carries this return.
 | 31 | `6dcf854` | ORD-0007 closes | 04:17 | green |
 | 32 | `aefc148` | ORD-0008 emitted and open | 04:21 | green |
 | 33 | `97ea472` | ORD-0008 work — `glyph-xml`, the binary `glyph`, `xml.json` in the export | 04:39 | green at once; the XML tests took 126 s until the pass read each line once, 3 s after; 28 of 32 mutations killed, then 30 with a continuing segment and a deep conjunction |
-| 34 | this commit | ORD-0008 closes | 2026-09-25 | green |
+| 34 | `a262233` | ORD-0008 closes | 04:43 | green |
+| 35 | this commit | ORD-0009 emitted and open | 2026-09-25 | green |
