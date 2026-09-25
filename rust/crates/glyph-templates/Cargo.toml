@@ -8,3 +8,6 @@ publish = false
 [dependencies]
 glyph-util = { path = "../glyph-util" }
 glyph-stores = { path = "../glyph-stores" }
+
+[dev-dependencies]
+glyph-rules = { path = "../glyph-rules" }

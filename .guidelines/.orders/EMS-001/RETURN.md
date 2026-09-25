@@ -68,6 +68,16 @@ Closed questions, none answered.
    - b. the spec moves: ORD-0006's val names the two modules' diagnostics,
      and ORD-0007's names every case's
    - c. the spec moves the other way: templates and rules enter ORD-0007
+6. **A template's body is parsed with the registered stores, not the
+   context's** (ORD-0006, how it was read). **What does the Rust parser hand
+   a body?**
+   - a. the context's stores: the JS expander passes them on too, and a body
+     that breaks a rule reads the same in the oracle, the CLI and the app
+   - b. no rules and no composition table, as the oracle was recorded: the
+     Rust answers the oracle and differs from the CLI where a body breaks a
+     rule
+   - c. what the caller registered, as the JS does: the Rust keeps a registry
+     of its own beside the context
 
 ## ORDs closed
 
@@ -192,8 +202,8 @@ port from its `[logic]` token as `emit-ast.js` projects it, `at` included.
 
 ## Open, and why
 
-**ORD-0006, `glyph-templates` and `glyph-rules`**, open since the commit that
-carries this line. Its val — "the diagnostics of every T-, C- and K-case
+**ORD-0006, `glyph-templates` and `glyph-rules`**, open since `8f996df`; its
+work is banked, and the close runs the proof. Its val — "the diagnostics of every T-, C- and K-case
 equal the oracle" — is read as the diagnostics the two modules raise: 14 of
 the 23 those 36 cases hold. The other 9 are raised by `parser.js`, and every
 diagnostic of a case needs the tree the parser builds, which is ORD-0007's.
@@ -201,6 +211,48 @@ So the export records the trees the JS parser builds, and the port is held
 to them: the tree before expansion, each body the expander asks `parse` for,
 the tree after, and each diagnostic in the order raised. The reading is
 question 5 above.
+
+## ORD-0006, how it was read
+
+- **Four JS defects the port reproduces**, measured before porting, and left
+  as the JS answers them:
+  - **A param written as a string is a repeat param.** `templates.js` names a
+    param `p.name || p`, so a string is allowed, and asks `p && p.repeat`
+    for the repeat — on a string, `String.prototype.repeat`. The first string
+    param leaves the positional order: `[--strs'a''b']` over
+    `params: ["alpha", "beta"]` drops the `alpha` hole, binds `a` to `beta`
+    and loses `b` in silence. The repository writes every param as an
+    object, so none of its templates meets it.
+  - **`[constructor]` and `[__proto__]` make `parse` throw when a rules store
+    is loaded.** `checkRules` groups siblings by name in a plain object, finds
+    `Object.prototype`'s member there first and calls `push` on it:
+    `byName[c.canonical].push is not a function`. The app and the CLI load the
+    rules, so the word crashes the parse there. The port stops with the same
+    message, after raising what the JS raised before it.
+  - **A hole named `constructor` is filled with the text of the function
+    `Object`.** The named fills are a plain object too: an unfilled
+    `[ph-constructor…]` binds `function Object() { [native code] }` into the
+    deliverable, as the mood did in ORD-0004; a repeat param of that name
+    throws, `named[key].push is not a function` when the call fills it and
+    `vals.forEach is not a function` when it does not.
+  - **A template whose lower-case name `Object.prototype` holds never
+    expands.** The registry is read lower-cased first, and `constructor`
+    answers there before `Constructor`, as written, is tried. Without a rules
+    store the constraints read their forbidden names from a plain object as
+    well, so `[constructor` breaks every constraint of a template it sits in.
+- **Two behaviours ORD-0007 has to answer**, measured and not decided here:
+  - **A body's parse reads the registered stores, not the context's.** The
+    expander hands `parse` the registry and nothing else, so a body is parsed
+    with whatever `useRules` and `useExpansions` registered. The suite
+    registers nothing until its last bucket, so the oracle holds a body
+    parsed with no rules; the CLI and the app register the repository's.
+    `[--clash]`, whose body is `[mand'x'][opt'x']`, raises `Rule:mand-opt`
+    once in the oracle and twice in the CLI. Question 6.
+  - **A template named `templates` is lost inside a body.** `asTemplates`
+    reads a map holding that key as the file `templates.json`, so the
+    registry a body is parsed with collapses to that one template:
+    `[--templates]` expands at the top and stays a bare call inside another
+    template's body.
 
 ## ORD-0005, how it was read
 
@@ -426,6 +478,44 @@ and `npm run check` passes on the commit that carries this return.
   apart from units, but nothing holds units apart from characters. Closing it
   takes a declared source with such a character, and that moves the snapshot:
   a question below.
+- **The tree, on the floor.** `glyph_util::tree` is the parser's tree as an
+  arena, generic over what only the parser carries: `walk`, `graft` (a body's
+  parse moved into the tree), `reparent`, `Diag`, `Thrown` — what the JS
+  throws, by its message — and `strip_tags`; `glyph_util::inherited` names
+  the twelve keys a plain JS object answers through `Object.prototype`. A
+  node's gloss is text or the prototype itself, which JSON writes `{}`.
+- **`trees.json`.** The export writes the trees the JS parser builds, for the
+  114 sources and 49 probes: the tree when expansion starts (the source
+  parsed with no templates and no rules), each body parse the expander asks
+  for — a level of its own, with the chain it is parsed under, down to depth
+  2 — what each level raises and throws, the tree after, and what
+  `checkRules` and `checkTemplateConstraints` raise. 163 runs, 215 levels,
+  11 390 nodes before expansion, 10.7 MB. Each run is held to `parse` before
+  it is written: the tree after, and the three passes' diagnostics ranked as
+  `parse` ranks them, equal a whole parse's, and every level equals the
+  body's parse. So the reading of the parser's pipeline is checked, not
+  assumed; sabotaged — the tree before in place of the tree after, the
+  diagnostics reversed — the export fails on `T-01` and on `probe-3`. Beside
+  them, `compileRules` over the repository's store and a probe store. The 114
+  case files keep `c00119e0…d828`.
+- **`glyph-templates` and `glyph-rules`, held.** `expand_invocations` takes
+  `parse` as the JS takes `parseFn`, and the test answers it with the level
+  below, expanded by the port itself: every level runs with the chain the JS
+  had, and the tree it builds goes up as the body's parse. The val's test
+  runs the three passes over the 36 T-, C- and K-cases and matches the 14
+  diagnostics their case files hold from them. Mutated, 30 of 32 die. The two
+  that live cannot die: a named fill of `__proto__` kept — the lexer reads
+  `[ph-__proto__` as text, so no source makes it a slot name — and the
+  siblings' name table keeping repeats, which answers alike since the first
+  is taken. The cycle lived until the export recorded every level: a cycle is
+  only ever met one level down, and the first recording answered that level
+  with the JS's.
+- **Store shapes the JS never guards stay outside the port's contract.** A
+  null param; `params`, `constraints` or `exemptUnder` that is not a list; a
+  body that is not a string: the JS throws a TypeError in V8's words, or
+  parses the value as tokens. The port reads them as absent or as text. The
+  repository's stores hold none, and `build-templates.js` validates neither
+  templates nor rules.
 - **The version stays `3.5.8.06`.** No emitted document changes; the
   CHANGELOG entry waits for a release, as the work of 2026-09-24 does.
 
@@ -438,7 +528,7 @@ and `npm run check` passes on the commit that carries this return.
 | ORD-0003 | `b05ba19` 02:02 | `51e291b` 02:30 | 28 min, four work banks |
 | ORD-0004 | `2c68949` 02:34 | `e08f1f9` 02:45 | 11 min, one work bank |
 | ORD-0005 | `2466cef` 02:49 | `17658ec` 03:00 | 11 min, one work bank |
-| ORD-0006 | the commit after `17658ec` 03:14 | — | open |
+| ORD-0006 | `8f996df` 03:15 | — | open |
 
 | # | commit | step | UTC | checks |
 |---|---|---|---|---|
@@ -468,4 +558,5 @@ and `npm run check` passes on the commit that carries this return.
 | 23 | `2466cef` | ORD-0005 emitted and open | 02:49 | green |
 | 24 | `12cc408` | ORD-0005 work — `glyph-logic`, and `logic.json` in the export | 02:57 | green at once; 7 of 8 mutations killed, then 8 of 8 with four negation probes |
 | 25 | `17658ec` | ORD-0005 closes | 03:00 | green |
-| 26 | this commit | ORD-0006 emitted and open | 2026-09-25 | green |
+| 26 | `8f996df` | ORD-0006 emitted and open | 03:15 | green |
+| 27 | this commit | ORD-0006 work — `glyph-templates`, `glyph-rules`, the tree in `glyph-util`, `trees.json` in the export | 2026-09-25 | green at once; 28 of 32 mutations killed, then 30 once the export recorded every level and a lower-case forbidden name; the pair-key test was red on its own expectation — by UTF-16 unit U+10000 sorts before U+FF21 — and was fixed to what node answers |

@@ -6,8 +6,35 @@
 //! holds each to what the JS answers on everything the oracle holds. `json` is
 //! the platform's `JSON.parse` and `JSON.stringify`, which the Rust lacks
 //! (ORD-0003); `tests/json.rs` holds it to every file the oracle writes.
+//! `tree` is the parser's tree as an arena, with `stripTags` (ORD-0006);
+//! `inherited` names what a plain JS object answers for without being told.
 
 pub mod json;
+pub mod tree;
+
+/// The names every plain JS object answers through `Object.prototype`: the
+/// JS writes `obj[key]` and `key in obj` over objects that never set them.
+pub const OBJECT_PROTOTYPE: [&str; 12] = [
+    "constructor", "__defineGetter__", "__defineSetter__", "hasOwnProperty", "__lookupGetter__",
+    "__lookupSetter__", "isPrototypeOf", "propertyIsEnumerable", "toString", "valueOf", "__proto__",
+    "toLocaleString",
+];
+
+/// A key a plain JS object answers for without holding it.
+pub fn inherited(key: &str) -> bool {
+    OBJECT_PROTOTYPE.contains(&key)
+}
+
+/// `String(v)` of what the object answers for `key`: the function `Object`
+/// for `constructor`, the prototype itself for `__proto__`, and a method of
+/// the prototype for every other.
+pub fn inherited_text(key: &str) -> String {
+    match key {
+        "constructor" => "function Object() { [native code] }".into(),
+        "__proto__" => "[object Object]".into(),
+        k => format!("function {k}() {{ [native code] }}"),
+    }
+}
 
 /// `&`, `<`, `>` and `"` as entities. The JS takes any value and reads null as
 /// the empty string; here the caller hands over the string.
