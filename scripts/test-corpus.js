@@ -47,6 +47,46 @@ const WITH_RULES = { rules: RULESTORE };
    rules store, so those cases need both loaded. */
 const WITH_BOTH = { templates: TPL.templates, rules: RULESTORE };
 
+/* The round trips every bucket runs, recorded when the oracle is written
+   (EMS-001 ORD-0009): each fromXML and fromAST call with what it answered,
+   the source a toXML or toAST of the suite made its input from, and the JS's
+   XML of what came back; each toHGML call with what the burn's re-parse
+   raises at `fix`. Written after the last bucket, as `inverse.json`. */
+const EXPORT_ORACLE = process.argv.includes("--export-oracle");
+const TRIPS = [];
+if (EXPORT_ORACLE) {
+  const EXP = require("../.guidelines/expansions.json");
+  /* the stores the call ran with, as stores.js resolves them — a bucket
+     after the registry guard runs on what `useRules` and the rest registered */
+  const storeOf = (s, repo) => !s || (typeof s === "object" && !Object.keys(s).length) ? "none" : s === repo ? "repo" : "other";
+  const flags = o => ({ templates: storeOf(STORES.templatesOf(o), TPL.templates), rules: storeOf(STORES.rulesOf(o), RULESTORE),
+                        expansions: storeOf(STORES.expansionsOf(o), EXP), session: !(o && o.session === false),
+                        valency: !(o && o.valency === false), lang: (o && o.lang) || null,
+                        projection: (o && o.projection) || null });
+  const orig = { toXML: G.toXML, toAST: G.toAST, fromXML: G.fromXML, fromAST: G.fromAST, toHGML: G.toHGML, parse: G.parse };
+  const made = new Map();
+  const REPO = { templates: TPL.templates, rules: RULESTORE, expansions: EXP };
+  const reemit = src => { try { return orig.toXML(src, REPO); } catch (e) { return { thrown: e.message }; } };
+  const inverse = (fn, input) => (arg, o) => {
+    let r;
+    try { r = orig[fn](arg, o); }
+    catch (e) { TRIPS.push({ fn: fn, input: input(arg), from: made.get(arg) || null, thrown: e.message }); throw e; }
+    TRIPS.push({ fn: fn, input: input(arg), from: made.get(arg) || null, src: r.src, diag: r.diag, reemit: reemit(r.src) });
+    return r;
+  };
+  G.toXML = (src, o) => { const x = orig.toXML(src, o); if (!made.has(x)) made.set(x, { src: src, opts: flags(o) }); return x; };
+  G.toAST = (src, o) => { const a = orig.toAST(src, o); made.set(a, { src: src, opts: flags(o) }); return a; };
+  G.fromXML = inverse("fromXML", x => x);
+  G.fromAST = inverse("fromAST", env => env);
+  G.toHGML = (src, o) => {
+    const out = orig.toHGML(src, o);
+    let fix;
+    try { fix = orig.parse(out, o).gaps.filter(g => g.sev === "fix").map(g => g.code); } catch (e) { fix = { thrown: e.message }; }
+    TRIPS.push({ fn: "toHGML", src: src, opts: flags(o), out: out, reparseFix: fix });
+    return out;
+  };
+}
+
 /* ------------------------------------------------------------------ *
  * cases
  * ------------------------------------------------------------------ */
@@ -2240,6 +2280,44 @@ function runSnapshotChecks() {
      ["[quote'mine']", { ...SNAP_OPTS, expansions: BURN_STORE }], ["[crit'x']", { ...SNAP_OPTS, expansions: null }], ["[f1'x']", { ...SNAP_OPTS, expansions: BURN_STORE }]
     ].forEach(([src, o], k) => runHgml("burn-" + (k + 1), src, o, true));
     fs.writeFileSync(path.join(mods, "hgml.json"), JSON.stringify({ engine: G.VERSION, runs: hgmlRuns }, null, 1) + "\n");
+
+    /* inverse.js (from ORD-0009): the way back's own probes, made here so the
+       recorder takes them with the suite's round trips — an element the
+       prototype answers for, a mood it answers for, references past U+FFFF,
+       the malformed shapes, and envelopes the way back refuses */
+    const PKG = b => '<glyph-package engine="' + G.VERSION + '"><schema/><block once="true">' + b + "</block></glyph-package>";
+    [PKG("<constructor/>"), PKG("<toString><user-input>x</user-input></toString>"),
+     PKG('<mood dominant="constructor" also="focus,__proto__"/><context/>'),
+     PKG("<context><user-input>&#128512; &#x41;&#65; &amp;lt; &#xD83D;&#xDE00; &#x;</user-input></context>"),
+     PKG('<instruction><context chain="item"/><example chain="item"/></instruction>'),
+     PKG('<holds><context/><example join="item"/></holds><chain><context chain="item"/><example/></chain>'),
+     PKG("<context><example>"), PKG("<context></example></context>"), PKG("<context"), "<glyph><block once=\"true\"/></glyph>",
+     "nada aqui", PKG('<zzz><user-input>kept</user-input></zzz><needs slot="2">q</needs><needs slot="alvo">q</needs>'),
+     PKG('<template name="t" expanded="true"><context><user-input slot="alvo">A</user-input><user-input slot="9">n</user-input></context></template>'),
+     PKG('<unresolved tag="Zz" chain="extend"><context/></unresolved><off>a\nb</off><raw>x]y</raw>'),
+     PKG('<logic name="q"><rule kind="let"><source>a = 1</source></rule></logic>'),
+     '<glyph-package><block once="true" continues="previous"><context/></block><break/><block once="true"><sum/></block></glyph-package>',
+     PKG('<context name="a" name="b"><user-input>&apos;q&apos;</user-input></context>< context/><raw>   </raw>'),
+     PKG('<instruction chain="extend"/><user-input>x</user-input><context chain="item"/>'),
+     PKG('<context><instruction chain="extend"/><user-input>x</user-input><example chain="item"/></context>'),
+     PKG('<context chain="item"/>'),
+     PKG("<" + Object.keys(VOCAB.SESSION)[0] + "/>"), PKG('<user-expectative expects="context"><context/></user-expectative>')
+    ].forEach(x => { try { G.fromXML(x); } catch (e) { /* recorded where it throws */ } });
+    const ENV = segs => ({ type: "GlyphAST", schema: 2, projection: "full", segments: segs });
+    [ENV([{ mood: [{ name: "eth" }, {}], continues: true, isReturn: true, breaks: 1, body: [
+        { type: "Literal", value: "a`b", form: "tick" }, { type: "Literal", value: "c", form: "tick" },
+        { type: "Raw", value: "prose", form: "raw" }, { type: "Raw", value: "q", form: "quote" }, [],
+        { type: "Nope" }, { type: "Truncated", atDepth: 200, omittedNodes: 7 }, 5,
+        { type: "Command", raw: "CTX", canonical: "CTX", name: "n[1]", origin: "item", body: [{ type: "Text", value: "t" }] },
+        { type: "Command", canonical: "SUM", chainElement: true, origin: "extend" },
+        { type: "Command", canonical: "CTX", chainElement: true, origin: "item" },
+        { type: "Template", name: "germinate", expanded: true, body: [{ type: "Command", slotName: true, canonical: "X" },
+          { type: "Literal", value: "A", form: "quote", slot: "alvo" }, { type: "Literal", value: "B", slot: "2" }] },
+        { type: "Template", name: "d", isDefinition: true, body: [{ type: "Verbatim", value: "v]" }] },
+        { type: "Logic", name: "q", rules: [{ source: "a = 1" }, {}] }, { type: "ModeOff", body: [{ type: "Text", value: "p" }] }] },
+      { body: [] }, { breaks: 0, body: [{ type: "Command", raw: "nt" }] }]),
+     { ...ENV([]), projection: "panel" }, { type: "Other" }, [], "text", null
+    ].forEach(env => G.fromAST(env));
     console.log("  ! module oracle written: util, vocabulary, stores, lexer, logic, trees, parse, xml, ast, hgml to " + mods);
   }
 
@@ -3252,6 +3330,19 @@ console.log(" global store " + rGS + "/3");
 console.log(" context      " + rCX + "/3");
 console.log(" coverage     " + String(rOC).padStart(4) + "/" + ORACLE_COVERAGE.length);
 console.log("=================================================");
+
+if (EXPORT_ORACLE) {
+  /* one entry per distinct call, in the order first made */
+  const seen = new Set(), trips = TRIPS.filter(t => {
+    const k = JSON.stringify([t.fn, t.input === undefined ? t.src : t.input, t.opts || null]);
+    if (seen.has(k)) return false;
+    seen.add(k); return true;
+  });
+  const arg = process.argv[process.argv.indexOf("--export-oracle") + 1];
+  const mods = (arg && arg.slice(0, 2) !== "--" ? path.resolve(arg) : path.resolve(__dirname, "../rust/target/oracle")) + "-modules";
+  require("fs").writeFileSync(path.join(mods, "inverse.json"), JSON.stringify({ engine: G.VERSION, trips: trips }, null, 1) + "\n");
+  console.log("  ! round trips written: " + trips.length + " calls to " + path.join(mods, "inverse.json"));
+}
 
 if (failures.length) {
   console.error("\nFAILED: " + failures.join(", "));
