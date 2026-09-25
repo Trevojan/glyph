@@ -12,7 +12,7 @@
 | environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed |
 | ground | read in the order the handoff names; `npm run check` (33 buckets, 41 s) and `npm run check:rust` (20 crates, 3 s) green on the clone at `ea8fc59`, before anything was touched |
 | layout | **closed** — its val holds (below), five banks |
-| queue | ORD-0001 to ORD-0008 closed; ORD-0009 open. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
+| queue | ORD-0001 to ORD-0009 closed; ORD-0010, whose val needs the Regent, opens next. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
 
 ## Waiting for the Regent
 
@@ -101,6 +101,7 @@ Closed questions, none answered.
 | [`ORD-0006`](ORD-0006/ORD-0006.xml) | `glyph-templates` and `glyph-rules`: the 14 diagnostics templates and rules raise in the 36 T-, C- and K-cases equal the oracle; and 163 runs over 215 levels of expansion, the JS's defects reproduced | `ca9c1a6` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828`, the case files; `cb065d27bb54551637ccfb07ce896557f5cc5f82797a238875af0a693c631ed3`, `oracle-modules/trees.json` |
 | [`ORD-0007`](ORD-0007/ORD-0007.xml) | `glyph-parse`: every field the envelope reads — each node, each segment, each diagnostic in pt-BR and en-EU — equals the JS on the 114 sources and 159 probes, the JS's defects reproduced | `1a79b2c` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828`, the case files; `3fd68d651077ca5332d8bedcf6c797509ab1f3ee30ff442f9e50ea3f59c4ef9b`, `oracle-modules/parse.json` |
 | [`ORD-0008`](ORD-0008/ORD-0008.xml) | `glyph-xml` and the first binary: `glyph` reads Glyph on stdin and writes the XML; the five examples byte-exact and the 114 sources as the oracle; `toXML` on 312 runs, plain and described | `97ea472` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828`, the case files; `cfab5a595c70e3458995474b1a01cdb08857e6a902bd5d331b6eaa99f3b02c63`, `oracle-modules/xml.json` |
+| [`ORD-0009`](ORD-0009/ORD-0009.xml) | `glyph-envelope`, `glyph-burn` and `glyph-inverse`: the `ast` and `hgml` digests of the 114 sources equal `corpus-snapshot.json`, and every round trip the JS suite runs closes, step for step — 510 calls recorded as it runs | `9c943d3` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828`, the case files; `8f6519986e2c843458abb255874e49bd696bf0a42db9a82ac5ebc6a3397fb560`, `ast.json`; `05717e791bf4805b7cfb1f507d934efbbf0e735fbe567f4cd9ecfd26e1ba9af2`, `hgml.json`; `3ae341cc376024ffa224308c83c53b3f052b2e13c490c4cfed0aa1e140adc326`, `inverse.json` |
 
 **ORD-0001, the proof**, run at `02c92ee` (the commit that emitted it; the
 closing commit changes no code):
@@ -295,20 +296,52 @@ $ cd rust/target/oracle && LC_ALL=C sha256sum *.json | sha256sum
 c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828  -
 ```
 
+**ORD-0009, the proof**, run at `9c943d3`:
+
+```
+$ rm -rf rust/target/oracle* && node scripts/test-corpus.js --export-oracle
+  ! oracle written: 114 cases to rust/target/oracle
+  ! module oracle written: util, vocabulary, stores, lexer, logic, trees, parse, xml, ast, hgml to rust/target/oracle-modules
+  ! round trips written: 510 calls to rust/target/oracle-modules/inverse.json
+All green.
+$ cargo test --manifest-path rust/Cargo.toml -p glyph-envelope -p glyph-burn -p glyph-inverse -- --nocapture
+114 cases
+test the_hgml_digest_of_every_case_equals_the_snapshot ... ok
+284 runs, 454 burns, 22 throws
+test every_burn_equals_the_js ... ok
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.56s
+test sha256_is_fips_180_4 ... ok
+114 cases
+test the_ast_digest_of_every_case_equals_the_snapshot ... ok
+279 runs, 774 envelopes, 36 throws
+test every_envelope_equals_the_js ... ok
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 11.29s
+test the_way_back_stops_where_the_js_stack_did ... ok
+510 calls: 168 inputs made again, 199 ways back, 259 burns re-parsed, 50 over a store of the suite's own
+test every_round_trip_the_suite_runs_equals_the_js ... ok
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.20s
+$ sha256sum rust/target/oracle-modules/{ast,hgml,inverse}.json
+8f6519986e2c843458abb255874e49bd696bf0a42db9a82ac5ebc6a3397fb560  ast.json
+05717e791bf4805b7cfb1f507d934efbbf0e735fbe567f4cd9ecfd26e1ba9af2  hgml.json
+3ae341cc376024ffa224308c83c53b3f052b2e13c490c4cfed0aa1e140adc326  inverse.json
+$ cd rust/target/oracle && LC_ALL=C sha256sum *.json | sha256sum
+c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828  -
+```
+
 ## Open, and why
 
-**ORD-0009, `glyph-envelope`, `glyph-burn` and `glyph-inverse`**, open since
-`e4e6a59`; its work is banked, and the close runs the proof. Its val is read as it is written: the `ast`
-and `hgml` digests of the 114 case files, and the round trips the JS suite
-runs. Measured before opening: the snapshot's pin says `toHGML` overflows
-V8's stack on L-01, and it no longer does — the burn stops at 200 levels and
-says so in its first line — so no stack limit is reproduced. The envelope's
-`stores.rules` hashes the rules with the engine's cache (question 3), and the
-digests the val names are those, so the port hashes the cache too, until the
-Regent answers.
+Nothing is open. ORD-0010, the protocol, opens next: its val ends in an ADR the Regent signs.
 
 ## ORD-0009, how it was read
 
+- **The val, read.** As it is written: the `ast`
+  and `hgml` digests of the 114 case files, and the round trips the JS suite
+  runs. Measured before opening: the snapshot's pin says `toHGML` overflows
+  V8's stack on L-01, and it no longer does — the burn stops at 200 levels and
+  says so in its first line — so the burn reproduces no stack limit. The envelope's
+  `stores.rules` hashes the rules with the engine's cache (question 3), and the
+  digests the val names are those, so the port hashes the cache too, until the
+  Regent answers.
 - **The rules digest with the engine's cache, reproduced.** The val names the
   snapshot's `ast` digests, and they hash the rules store as `checkRules`
   leaves it, with `__compiled` on it (question 3). `emit-ast.js` imports no
@@ -839,7 +872,7 @@ and `npm run check` passes on the commit that carries this return.
 | ORD-0006 | `8f996df` 03:15 | `480268b` 03:50 | 35 min, one work bank |
 | ORD-0007 | `b145777` 03:54 | `6dcf854` 04:17 | 23 min, one work bank |
 | ORD-0008 | `aefc148` 04:21 | `a262233` 04:43 | 22 min, one work bank |
-| ORD-0009 | `e4e6a59` 04:47 | — | open |
+| ORD-0009 | `e4e6a59` 04:47 | the commit after `9c943d3` | ~1 h, two work banks |
 
 | # | commit | step | UTC | checks |
 |---|---|---|---|---|
@@ -880,4 +913,5 @@ and `npm run check` passes on the commit that carries this return.
 | 34 | `a262233` | ORD-0008 closes | 04:43 | green |
 | 35 | `e4e6a59` | ORD-0009 emitted and open | 04:47 | green |
 | 36 | `54308c3` | ORD-0009 work 1/2 — `glyph-envelope` and `glyph-burn`, `ast.json` and `hgml.json` in the export | 05:08 | green at once on the 114 digests; the burn test red on a composite with no formula until the port read `undefined` as the JS does; mutations 19 of 22 (envelope) and 7 of 22 (burn), then 22 and 20 with probes; `check:rust` red once, on `ast.json` written without the one-space indent every export file keeps, which `glyph-util`'s round trip holds |
-| 37 | this commit | ORD-0009 work 2/2 — `glyph-inverse`, the round trips recorded as the suite runs (`inverse.json`) | 2026-09-25 | the recorder red on a burn after the registry guard until it read the stores `stores.js` resolves; the depth test red on its own count until it counted the question and its text; 24 of 32 mutations killed, then 32 with the way back's probes |
+| 37 | `9c943d3` | ORD-0009 work 2/2 — `glyph-inverse`, the round trips recorded as the suite runs (`inverse.json`) | 05:41 | the recorder red on a burn after the registry guard until it read the stores `stores.js` resolves; the depth test red on its own count until it counted the question and its text; 24 of 32 mutations killed, then 32 with the way back's probes |
+| 38 | this commit | ORD-0009 closes | 2026-09-25 | green |
