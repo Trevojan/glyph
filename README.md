@@ -56,7 +56,7 @@ answered, confidently, about a filename.
 ### `--bundle` — a Ordem inteira, numerada como um ADR
 
 ```bash
-node scripts/glyph-cli.js --file fonte.pgml --bundle --out .guidelines/ORDERS
+node scripts/glyph-cli.js --file fonte.pgml --bundle --out .guidelines/.orders
 ```
 
 Escreve `ORD-0001.zip` com as quatro projeções mais um manifesto. A numeração é

@@ -14,10 +14,10 @@
 |---|---|
 | versão | **3.5.8.06** |
 | suíte | `npm run check` — verde, 33 baldes, 114 fontes declaradas no snapshot; `npm run check:rust` compila e testa `rust/` |
-| último marco | as stores viajam como um objeto de contexto (`createContext`), e o workspace Rust existe em `rust/`: 20 crates presos às costuras do núcleo por `crate-graph.js`. Antes disso: o núcleo em treze módulos, `H-09` fechou pelo kit de cliente, `CRIT` soletra o §0.3, `REQ`/`MAND` com fronteira |
-| próximo | [`.orders/BRIEFING-2026-09-24.md`](../.orders/BRIEFING-2026-09-24.md), e a [`ORD-0012`](../.orders/ORD-0012.pgml) que ele acompanha: um app Rust pequeno que come o território do JS. Espera o Regente: o destino da `ORD-0011` e a autorização de commit |
+| último marco | o trabalho de 2026-09-24 está commitado, `82befb4` a `4a907e3`: as stores viajam como um objeto de contexto (`createContext`), `--export-oracle` escreve o oráculo das 114 fontes, o workspace Rust existe em `rust/` com 20 crates presos às costuras do núcleo por `crate-graph.js`, os nomes ratificados (`mould`, `sample`, `Order Matrix`) e o motor como plugin de comandos de barra. Antes disso: o núcleo em treze módulos, `H-09` fechou pelo kit de cliente, `CRIT` soletra o §0.3, `REQ`/`MAND` com fronteira |
+| próximo | a série **EMS-001** ([`.plan/`](../.plan/README.md) §5): um app Rust pequeno que come o território do JS, em 14 ORDs numa fila. A spec está em [`.orders/ORD-0012.pgml`](../.orders/ORD-0012.pgml), as razões em [`BRIEFING-2026-09-24.md`](../.orders/BRIEFING-2026-09-24.md). Espera o Regente: o destino da `ORD-0011`, a assinatura do que a spec revoga, e o layout `.orders/EMS-###/ORD-####/` (§6) |
 
-## Os seis eixos
+## Os sete eixos
 
 | eixo | o que guarda |
 |---|---|
@@ -26,6 +26,7 @@
 | [`.decisions/`](../.decisions/) | decisões tomadas, quem decidiu, e a razão |
 | [`.constraints/`](../.constraints/) | o que o projeto **se proíbe** de fazer |
 | [`.changelog/`](../.changelog/) | o que mudou, e como o número de versão se move |
+| [`.orders/`](../.orders/) | as Ordens — o contrato do que foi entregue, exatamente uma aberta por vez — e os intakes que as alimentam |
 | `.shortcuts/` | este arquivo |
 
 ## O mapa do motor, em cinco linhas
@@ -52,6 +53,7 @@
 | "o que o estudo de setembro mediu e decidiu?" | [`.orders/INTAKE-FIELD-2026-09.md`](../.orders/INTAKE-FIELD-2026-09.md) §5 aponta os outros sete |
 | "Rust?" | [`.orders/INTAKE-RUST.md`](../.orders/INTAKE-RUST.md) — os dois lados, pesados; o Regente decidiu migrar ([`.decisions/`](../.decisions/README.md), 2026-09-24) |
 | "a escada de migração perde alguma coisa?" | [`.orders/INTAKE-RUST-LADDER.md`](../.orders/INTAKE-RUST-LADDER.md) — a escada medida contra o motor, e o que o vendoring compra (§9); §8 é o que espera o Regente |
+| "o que se constrói em Rust, e em que ordem?" | [`.plan/`](../.plan/README.md) §5, a série EMS-001 |
 | "duas fontes, uma intenção?" | [`HGML_CONVERGENCE.md`](../HGML_CONVERGENCE.md) |
 | "como escrever um exemplo de conformidade?" | [`conformance/README.md`](../../conformance/README.md) |
 | "como escrevo Glyph?" | a skill em [`.claude/skills/glyph-markup/`](../../.claude/skills/glyph-markup/) — gerada, e provada contra o motor |

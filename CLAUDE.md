@@ -17,6 +17,7 @@ propósito. Não reconstrua por inferência o que está a um atalho de distânci
 | [`.decisions/`](.guidelines/.decisions/) | o que já foi decidido, por quem, e a razão |
 | [`.constraints/`](.guidelines/.constraints/) | o que o projeto se proíbe — **leia antes de propor** |
 | [`.changelog/`](.guidelines/.changelog/) | como o número de versão se move |
+| [`.orders/`](.guidelines/.orders/) | as Ordens e os intakes; exatamente uma Ordem aberta por vez |
 | [`.sources/`](.guidelines/.sources/) | as referências externas que decidiram alguma coisa |
 
 ## Escrever Glyph
