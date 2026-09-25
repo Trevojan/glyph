@@ -15,7 +15,7 @@
 | versão | **3.5.8.06** |
 | suíte | `npm run check` — verde, 33 baldes, 114 fontes declaradas no snapshot; `npm run check:rust` compila e testa `rust/` |
 | último marco | o trabalho de 2026-09-24 está commitado, `82befb4` a `4a907e3`: as stores viajam como um objeto de contexto (`createContext`), `--export-oracle` escreve o oráculo das 114 fontes, o workspace Rust existe em `rust/` com 20 crates presos às costuras do núcleo por `crate-graph.js`, os nomes ratificados (`mould`, `sample`, `Order Matrix`) e o motor como plugin de comandos de barra. Antes disso: o núcleo em treze módulos, `H-09` fechou pelo kit de cliente, `CRIT` soletra o §0.3, `REQ`/`MAND` com fronteira |
-| próximo | a série **EMS-001** ([`.plan/`](../.plan/README.md) §5): um app Rust pequeno que come o território do JS, em 14 ORDs numa fila. A spec está em [`.orders/ORD-0012.pgml`](../.orders/ORD-0012.pgml), as razões em [`BRIEFING-2026-09-24.md`](../.orders/BRIEFING-2026-09-24.md). O portão é o layout `.orders/EMS-###/ORD-####/` (§6), e a primeira sessão na nuvem o constrói: [`HANDOFF-2026-09-24.pgml`](../.orders/HANDOFF-2026-09-24.pgml) |
+| próximo | a série **EMS-001** ([`.plan/`](../.plan/README.md) §5): um app Rust pequeno que come o território do JS, em 14 ORDs numa fila. A spec está em [`.orders/EMS-001/EMS-001.pgml`](../.orders/EMS-001/EMS-001.pgml), as razões em [`BRIEFING-2026-09-24.md`](../.orders/BRIEFING-2026-09-24.md). O portão é o layout `.orders/EMS-###/ORD-####/` (§6), e a primeira sessão na nuvem o constrói: [`HANDOFF-2026-09-24.pgml`](../.orders/HANDOFF-2026-09-24.pgml), com o retorno em [`EMS-001/RETURN.md`](../.orders/EMS-001/RETURN.md) |
 
 ## Os sete eixos
 

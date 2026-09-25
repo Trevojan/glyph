@@ -22,7 +22,7 @@
         </define-symbol>
         <define-symbol>
           <user-input>the spec</user-input>
-          <user-input>the spec of EMS-001: .guidelines/.orders/ORD-0012.pgml until the layout moves it to .guidelines/.orders/EMS-001/EMS-001.pgml</user-input>
+          <user-input>the spec of EMS-001: .guidelines/.orders/EMS-001/EMS-001.pgml</user-input>
         </define-symbol>
         <define-symbol>
           <user-input>bank</user-input>
