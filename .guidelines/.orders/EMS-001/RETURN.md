@@ -113,8 +113,8 @@ not strings.
   place they live, and `glyph-stores`' compiles the stores from the four
   sources. The expansions store also carries `schema` and a `note` that are
   `build-templates.js`'s own words; they are read from its output rather than
-  typed a second time. Banked: `glyph_util::json`, and the module answers of
-  `vocabulary.js` and `stores.js`. Next: `glyph-vocab`, then `glyph-stores`.
+  typed a second time. Banked: `glyph_util::json`, the module answers of
+  `vocabulary.js` and `stores.js`, and `glyph-vocab`. Next: `glyph-stores`.
 
 ## Measured
 
@@ -197,6 +197,21 @@ not strings.
   makes of each shape it accepts, and `speciesOf`, `depthOf`, `formulaOf`,
   `defOf`, `atomsOf` and `standsAlone` for 147 names, with the stores loaded
   and with none. `util.json` keeps `6fb833ec…`.
+- **`glyph-vocab`, held.** `build.rs` reads the 14 hand-written tables out of
+  `vocabulary.js` as literals, in the JS's property order, and stops the build
+  on a shape it does not know; `derived()` ports the code that builds the
+  other 8. All 22 equal the JS by `JSON.stringify` text and by digest, and a
+  table the JS adds fails the test by name. `el_name` equals the JS on 3 018
+  calls. Mutated, the test kills four of four: an empty `PTBR`, `GLOSS_REVERSE`
+  letting the last writer win, `el_name` keeping a trailing hyphen — which
+  survived until the export's `elName` domain took the case files' strings as
+  glosses (no gloss of the tables ends in punctuation; 234 of those do) — and
+  `ck` computed as an exact 32-bit FNV-1a.
+- **`ck` is not an exact FNV-1a, and the port says so.** The JS XORs on signed
+  32-bit integers and multiplies in a double, and the product passes 2⁵³ —
+  for `b`, every step — so low bits are rounded away before `>>> 0`. The
+  testkit's `ck` does the same arithmetic, and equals the `source.checksum` of
+  all 114 envelopes; the exact 32-bit version does not.
 - **The survivor: `lev` counting `char`s instead of UTF-16 units.** No string
   in the oracle carries a character outside the BMP, so the two countings
   answer alike on all of it. 129 strings are non-ASCII, which holds bytes
@@ -260,4 +275,5 @@ Closed questions, none answered.
 | 13 | `4c4743a` | ORD-0002 closes | 01:54 | green |
 | 14 | `b05ba19` | ORD-0003 emitted and open | 02:02 | green |
 | 15 | `a6dce20` | ORD-0003 work 1/4 — `glyph_util::json`, the testkit reads with it | 02:06 | the round trip red against an empty writer, then green on 115 files |
-| 16 | this commit | ORD-0003 work 2/4 — the export answers `vocabulary.js` and `stores.js` | 2026-09-25 | green |
+| 16 | `35487d4` | ORD-0003 work 2/4 — the export answers `vocabulary.js` and `stores.js` | 02:09 | green |
+| 17 | this commit | ORD-0003 work 3/4 — `glyph-vocab` from `vocabulary.js`; `ck` in the testkit | 2026-09-25 | green at once, so observed failing by mutation: 3 of 4 killed, then 4 of 4 once `elName` took the oracle's strings |

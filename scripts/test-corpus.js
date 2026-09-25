@@ -1775,7 +1775,9 @@ function runSnapshotChecks() {
     /* vocabulary.js (from ORD-0003): every table it exports, as the text
        JSON.stringify gives and the digest the envelope's `ck` gives, so a
        table added to the JS reaches the oracle, and the port, on its own;
-       and elName over every name of the tables it is read through */
+       and elName over every name of the tables it is read through, then over
+       every string of up to 64 units the case files hold, as a gloss and as
+       a blend, since no gloss of the tables ends in punctuation */
     const tables = {};
     Object.keys(VOCAB).sort().forEach(k => {
       if (typeof VOCAB[k] === "function") return;
@@ -1789,6 +1791,10 @@ function runSnapshotChecks() {
         named.push([k, tier, table[k], VOCAB.elName(k, tier, table[k])]);
         named.push([k, tier, null, VOCAB.elName(k, tier)]);
       }));
+    S.filter(x => x.length <= 64).forEach(x => {
+      named.push([x, "instr", x, VOCAB.elName(x, "instr", x)]);
+      named.push([x, "blend", null, VOCAB.elName(x, "blend")]);
+    });
     fs.writeFileSync(path.join(mods, "vocabulary.json"), JSON.stringify({
       engine: G.VERSION, tables: tables, elName: named
     }, null, 1) + "\n");
