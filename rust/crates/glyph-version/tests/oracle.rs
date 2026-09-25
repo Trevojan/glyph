@@ -3,6 +3,8 @@
 #[path = "../../../testkit/oracle.rs"]
 mod oracle;
 
+use oracle::Must;
+
 #[test]
 fn version_is_the_engine_the_oracle_names() {
     let cases = oracle::cases();

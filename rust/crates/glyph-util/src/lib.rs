@@ -3,7 +3,11 @@
 //!   the layer no banner ever named.
 //!
 //! EMS-001 ORD-0002 ports `esc`, `xesc`, `lev` and `walk`; `tests/oracle.rs`
-//! holds each to what the JS answers on everything the oracle holds.
+//! holds each to what the JS answers on everything the oracle holds. `json` is
+//! the platform's `JSON.parse` and `JSON.stringify`, which the Rust lacks
+//! (ORD-0003); `tests/json.rs` holds it to every file the oracle writes.
+
+pub mod json;
 
 /// `&`, `<`, `>` and `"` as entities. The JS takes any value and reads null as
 /// the empty string; here the caller hands over the string.

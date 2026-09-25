@@ -7,7 +7,7 @@
 mod oracle;
 
 use glyph_util::{esc, lev, walk, xesc, Children};
-use oracle::Json;
+use oracle::{Json, Must};
 use std::collections::{BTreeSet, HashMap};
 
 fn util() -> &'static Json {
