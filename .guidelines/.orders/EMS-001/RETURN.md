@@ -144,6 +144,9 @@ rules digest also hashes the engine's cache, pinned above.
     upper case is longer (`ß` → `SS`) moves every index after it, so
     `ß[off]x[on]y` gives a raw `x[`, an `ON` spanning 8–12 in a 12-unit
     source, and loses the `y` in silence.
+- Banked: `glyph-lex` — `tokenize` over UTF-16 units, each regex of
+  `lexer.js` ported by what it matches, the two defects reproduced; `classify`
+  and `suggest`. Next: the proof, and the close.
 
 ## ORD-0003, how it was read
 
@@ -275,6 +278,17 @@ rules digest also hashes the engine's cache, pinned above.
   `stores.js` imports only `vocabulary.js`, so `crate-graph.js` keeps
   `glyph-stores` from `glyph-util`; the stores are a `Value` of their own, and
   `glyph-util` reaches `build.rs` and the tests only. A question below.
+- **The 114 sources are a weak gate for the lexer.** `glyph-lex` answered
+  their 11 008 tokens at once, and seven mutations lived through them: text
+  spans in UTF-8 bytes, `r:` taken for `R:`, a mood run cut at two, `[--name =`
+  without the space, `[logic name]` without the space as separator, a quote
+  running past a newline, and the `constructor` mood. So the export writes
+  `lexer.json`: `tokenize` over every string of up to 4 096 units the case
+  files hold and over 90 probes written one per branch of `lexer.js` — 1 688
+  sources, characters outside the BMP among them, which holds the lexer's
+  spans to UTF-16 units and not characters — and `classify`, with and without
+  session words, and `suggest` over 542 names. Against it the seven die, and
+  so do the two mutations that undo the reproduced defects: nine of nine.
 - **`ck` is not an exact FNV-1a, and the port says so.** The JS XORs on signed
   32-bit integers and multiplies in a double, and the product passes 2⁵³ —
   for `b`, every step — so low bits are rounded away before `>>> 0`. The
@@ -311,8 +325,8 @@ Closed questions, none answered.
    - b. the folder, with the zip inside it beside the five files
    - c. the folder, and the zip only behind a flag
 2. **The oracle holds no character outside the BMP. Does the corpus gain a
-   source that does?** It is what would hold `lev`, and the UTF-16 spans of
-   ORD-0004, to UTF-16 units rather than characters.
+   source that does?** The lexer's probes now hold its spans to UTF-16 units;
+   `lev` and every later projection are still held only by the corpus.
    - a. yes: a declared source with an astral character, the snapshot moved by
      decision
    - b. no: the blind spot pinned by name, as a known loss
@@ -362,4 +376,5 @@ Closed questions, none answered.
 | 17 | `2bbcc8b` | ORD-0003 work 3/4 — `glyph-vocab` from `vocabulary.js`; `ck` in the testkit | 02:16 | green at once, so observed failing by mutation: 3 of 4 killed, then 4 of 4 once `elName` took the oracle's strings |
 | 18 | `d9ea4fe` | ORD-0003 work 4/4 — `glyph-stores`: the stores compiled from the four sources, the context | 02:27 | the rules digest red first — the oracle had recorded the store with the engine's cache; 6 of 6 mutations killed |
 | 19 | `51e291b` | ORD-0003 closes | 02:30 | green |
-| 20 | this commit | ORD-0004 emitted and open | 2026-09-25 | green |
+| 20 | `2c68949` | ORD-0004 emitted and open | 02:34 | green |
+| 21 | this commit | ORD-0004 work — `glyph-lex`, and `lexer.json` in the export | 2026-09-25 | green at once on the 114 sources; 7 mutations survived them; 9 of 9 killed against `lexer.json` |

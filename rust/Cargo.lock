@@ -63,6 +63,7 @@ name = "glyph-lex"
 version = "0.0.0"
 dependencies = [
  "glyph-stores",
+ "glyph-util",
  "glyph-vocab",
 ]
 
