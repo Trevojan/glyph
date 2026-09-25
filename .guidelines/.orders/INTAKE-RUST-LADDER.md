@@ -2,7 +2,8 @@
 
 > **The ladder audited here is not the plan.** On 2026-09-24 the Regent set a
 > new direction — a small Rust app that eats the JS engine's territory, not a
-> port in lockstep — commissioned by `ORD-0012` and summarised in
+> port in lockstep — commissioned by the spec of EMS-001,
+> [`EMS-001.pgml`](EMS-001/EMS-001.pgml), and summarised in
 > [`BRIEFING-2026-09-24.md`](BRIEFING-2026-09-24.md). The measurements below stand.
 >
 > **Not an order.** An audit of the migration plan Opus 5.5 structured for the
@@ -160,7 +161,7 @@ debug build on this machine.
 | `lexopt` | alternative | 1 | 1 | 2 423 | 1s |
 | `notify` | M17 watcher | 13 | 6 | 846 339 | 3s |
 | `tauri` | M22 (draft) | 236 | 16 | 7 424 631 | 75s |
-| `wry` + `tao` | the native window (ORD-0012) | 78 | 12 | 5 259 057 | 50s |
+| `wry` + `tao` | the native window (EMS-001, ORD-0014) | 78 | 12 | 5 259 057 | 50s |
 | `candle-core` + `candle-transformers` + `tokenizers` | M20 (draft) | 143 | 10 | 2 576 927 | 59s |
 | `llama-cpp-2` | M20 (draft) | 54 | 7 | 1 200 029 | **fails here**: needs libclang and cmake; bundles 730 000 lines of C/C++ |
 

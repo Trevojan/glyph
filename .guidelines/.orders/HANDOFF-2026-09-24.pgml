@@ -4,7 +4,7 @@
 
   [section'species'
     [dfn'the Regent','who decides; this session measures, proposes and refuses, and never ratifies a norm it wrote']
-    [dfn'the spec','the spec of EMS-001: .guidelines/.orders/ORD-0012.pgml until the layout moves it to .guidelines/.orders/EMS-001/EMS-001.pgml']
+    [dfn'the spec','the spec of EMS-001: .guidelines/.orders/EMS-001/EMS-001.pgml']
     [dfn'bank','a commit that passes npm run check and npm run check:rust, pushed to the session branch, with the return updated in the same commit']
     [dfn'the return','.guidelines/.orders/EMS-001/RETURN.md, the file the Regent reads first when the session ends, however it ends']
     [dfn'close an ORD','its val holds, its work is banked, and its row is written in the track of the spec, in EMS-001/README.md and in the where-am-I table of .shortcuts']

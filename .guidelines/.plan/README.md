@@ -57,8 +57,8 @@ existe e o app ainda não o chama.
 ### 5. O Glyph em Rust — a série EMS-001
 
 Um app Rust pequeno que come o território do JS, uma peça verificável por vez.
-A spec da série está em [`.orders/ORD-0012.pgml`](../.orders/ORD-0012.pgml) (o
-caminho de rascunho, até o layout do §6 existir), e as razões em
+A spec da série está em
+[`.orders/EMS-001/EMS-001.pgml`](../.orders/EMS-001/EMS-001.pgml), e as razões em
 [`BRIEFING-2026-09-24.md`](../.orders/BRIEFING-2026-09-24.md). São 14 ORDs numa
 fila, do oráculo congelado (`ORD-0001`) à janela própria (`ORD-0014`), cada uma
 presa ao oráculo byte a byte.
@@ -71,13 +71,14 @@ o registro da auditoria, e `node scripts/ladder.js --check` segue no
 
 ### 6. As Ordens em séries — `.orders/EMS-###/ORD-####/`
 
-Decidido pelo Regente ([`.decisions/`](../.decisions/README.md), 2026-09-24),
-ainda não construído; é o primeiro trabalho da sessão na nuvem. Uma EMS é uma pasta com a própria spec, que conversa com as
+Decidido pelo Regente ([`.decisions/`](../.decisions/README.md), 2026-09-24), e
+em construção pela sessão na nuvem. Uma EMS é uma pasta com a própria spec, que conversa com as
 Guidelines: restrições, contadores, exceções, as ADR e DC que ela modifica, e
 como seguir depois que fecha. Uma ORD é uma pasta dentro dela com o pacote; a
-contagem reinicia em cada série. Hoje o `--bundle` escreve um `ORD-####.zip`
-chapado na `.orders/`, e o plugin acha a Ordem pelo número solto: os dois
-precisam aprender a série.
+contagem reinicia em cada série. A pasta [`.orders/EMS-001/`](../.orders/EMS-001/)
+existe e guarda a spec e o [retorno](../.orders/EMS-001/RETURN.md) da sessão.
+O `--bundle` ainda escreve um `ORD-####.zip` chapado na `.orders/`, e o plugin
+acha a Ordem pelo número solto: os dois precisam aprender a série.
 
 ## Aberto, esperando o Regente
 
