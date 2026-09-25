@@ -12,7 +12,7 @@
 | environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed |
 | ground | read in the order the handoff names; `npm run check` (33 buckets, 41 s) and `npm run check:rust` (20 crates, 3 s) green on the clone at `ea8fc59`, before anything was touched |
 | layout | **closed** — its val holds (below), five banks |
-| queue | **ORD-0001 closed** on the commit tagged `conformance-v0`; ORD-0002 opens next |
+| queue | **ORD-0001 closed** at `030ed76`, tagged `conformance-v0` in the session's clone — the push of the tag was refused (below); ORD-0002 opens next |
 
 ## The layout, built
 
@@ -54,7 +54,7 @@ and `npm run check` passes on the commit that carries this return.
 
 | ORD | delivered | commit | digest it matched |
 |---|---|---|---|
-| [`ORD-0001`](ORD-0001/ORD-0001.xml) | the frozen oracle: `--export-oracle` writes 114 files | the tag `conformance-v0` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828` |
+| [`ORD-0001`](ORD-0001/ORD-0001.xml) | the frozen oracle: `--export-oracle` writes 114 files | `030ed76`, the tag `conformance-v0` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828` |
 
 **ORD-0001, the proof**, run at `02c92ee` (the commit that emitted it; the
 closing commit changes no code):
@@ -115,6 +115,19 @@ Nothing is open. ORD-0002, `glyph-util` and `glyph-version`, opens next.
 - **The version stays `3.5.8.06`.** No emitted document changes; the
   CHANGELOG entry waits for a release, as the work of 2026-09-24 does.
 
+## Waiting for the Regent
+
+1. **The tag `conformance-v0` is not on the remote.** The branch pushes; the
+   push of the tag came back `HTTP 403` from the session's git proxy, a policy
+   refusal, so it was not retried. The tag lives only in this session's clone,
+   on `030ed76`. From any clone:
+
+   ```bash
+   git fetch origin claude/laughing-archimedes-3pf0wa
+   git tag -a conformance-v0 030ed76 -m "ORD-0001 da EMS-001: o oráculo congelado — 114 arquivos, sha256 c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828"
+   git push origin conformance-v0
+   ```
+
 ## Questions for the Regent
 
 Closed questions, none answered.
@@ -135,4 +148,5 @@ Closed questions, none answered.
 | 4 | `b472fcf` | layout 4/5 — the plugin finds an ORD by its series | 01:15 | `ZP-11`, `ZP-12` red first (`não existe`, `EISDIR`), green after |
 | 5 | `70bffd7` | layout 5/5 — the bundle command reads the series; the layout closes | 01:23 | `ZP-13`, `ZP-14` red against the old leaf; one red of the check's own (`/fechada/` matched the heading `fechadas`), fixed to the row |
 | 6 | `02c92ee` | ORD-0001 emitted and open | 01:28 | green |
-| 7 | this commit, tagged `conformance-v0` | ORD-0001 closes | 2026-09-25 | green |
+| 7 | `030ed76`, tagged `conformance-v0` | ORD-0001 closes | 01:31 | green; the tag push: `HTTP 403` |
+| 8 | this commit | ORD-0001's rows name `030ed76`, since the tag is not on the remote | 2026-09-25 | green |

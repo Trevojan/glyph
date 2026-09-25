@@ -12,4 +12,4 @@ com o pacote que o `--bundle` escreve, e a contagem é desta série.
 
 | ORD | o que entregou | commit | digest |
 |---|---|---|---|
-| [`ORD-0001`](ORD-0001/ORD-0001.xml) | o oráculo congelado: `--export-oracle` escreve 114 arquivos | a tag `conformance-v0` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828` — `LC_ALL=C sha256sum *.json \| sha256sum` em `rust/target/oracle/` |
+| [`ORD-0001`](ORD-0001/ORD-0001.xml) | o oráculo congelado: `--export-oracle` escreve 114 arquivos | `030ed76`, a tag `conformance-v0` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828` — `LC_ALL=C sha256sum *.json \| sha256sum` em `rust/target/oracle/` |
