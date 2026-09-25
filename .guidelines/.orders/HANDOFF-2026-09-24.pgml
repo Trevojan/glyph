@@ -1,0 +1,94 @@
+[block'cloud-session-ems-001'
+  [ctx'the first Glyph session in the cloud: build the series layout, then run the EMS-001 queue from ORD-0001 for as long as the budget lasts','a clone of github.com/Trevojan/glyph on a Linux machine, at the commit that carries this handoff','engine 3.5.8.06, the work of 2026-09-24 committed, ORD-0011 parked, everything the EMS-001 spec revokes signed']
+  [skl'glyph-markup'[ins'hear this order, ground before building, bank every step before the next, and stop at the gates of the Regent']]
+
+  [section'species'
+    [dfn'the Regent','who decides; this session measures, proposes and refuses, and never ratifies a norm it wrote']
+    [dfn'the spec','the spec of EMS-001: .guidelines/.orders/ORD-0012.pgml until the layout moves it to .guidelines/.orders/EMS-001/EMS-001.pgml']
+    [dfn'bank','a commit that passes npm run check and npm run check:rust, pushed to the session branch, with the return updated in the same commit']
+    [dfn'the return','.guidelines/.orders/EMS-001/RETURN.md, the file the Regent reads first when the session ends, however it ends']
+    [dfn'close an ORD','its val holds, its work is banked, and its row is written in the track of the spec, in EMS-001/README.md and in the where-am-I table of .shortcuts']
+    [nt'the budget is finite and can end in the middle of a step; what is not banked is lost, so a small banked step is worth more than a large unbanked one']
+    [nt'this session is also a measurement of the cloud: what it closes, how long each step takes and where it stalls is part of what it delivers']
+  ]
+
+  [section'environment'
+    [req'node 18 or later, and cargo; run node --version and cargo --version before anything else']
+    [ins'if cargo is missing, install it with rustup; if it cannot be installed, do the layout, bank it, write the return and stop']
+    [nt'the Rust workspace holds no crate from outside the repository, so cargo builds offline']
+    [nt'.gitattributes forces LF everywhere, and the oracle is written at the commit under test, so it is never compared across machines']
+    [nt'the slash commands under commands/ need the plugin installed; here, call node scripts/glyph-plugin.js and node scripts/glyph-cli.js directly']
+    [nt'this machine is Linux: ORD-0013, the installer, and ORD-0014, the window, are for Windows and never run here']
+    [cnst'work on the branch this session was given, and push to it after every bank']
+  ]
+
+  [section'ground'
+    [get[whr'CLAUDE.md, then .guidelines/.shortcuts/README.md, then .constraints, .decisions and .plan, in that order']]
+    [get[whr'the spec, then .guidelines/.orders/BRIEFING-2026-09-24.md']]
+    [req'npm run check and npm run check:rust pass on the clone before anything is touched']
+    [fin'the session here if either fails on the clone, with the failure and its output in the return']
+    [nt'the references of the skill are long: open the section a question needs, not the whole file']
+  ]
+
+  [section'layout'
+    [tgt'the series layout: .guidelines/.orders/EMS-###/ holds the spec of its series and one folder ORD-####/ per order, and the count of ORD restarts in each series']
+    [ins'git mv the spec to .guidelines/.orders/EMS-001/EMS-001.pgml, and rewrite every pointer to it in the same commit: .plan, .shortcuts, .decisions, the briefing and this handoff']
+    [ins'teach --bundle in scripts/glyph-cli.js the series: when --out is a folder named EMS-###, the ORD is written as a folder ORD-####/ holding the five files the zip holds today, numbered by the ORD folders of that series alone']
+    [ins'the number reads an ID only when ORD-#### is followed by nothing, a dot or the end of a folder name, so ORD-2026-08-30-01 stops counting as 2026 in every destination']
+    [ins'teach scripts/glyph-plugin.js the series: --from takes EMS-001/ORD-0003 as well as a path or a bare ORD-####']
+    [ins'teach commands/repo-config/guidelines/orders/bundle.md the series: its probes list the series and read the open ORD from EMS-###/README.md']
+    [ins'write .guidelines/.orders/EMS-001/README.md with the two sections the bundle command reads, A Ordem aberta and Ordens fechadas']
+    [nt'the Regent delegates to this session the open and closed lines of EMS-001 alone']
+    [mand'every new behaviour gets a check in the bundle bucket of scripts/test-corpus.js, observed failing before the code that makes it pass']
+    [mand'run node scripts/build-templates.js and node scripts/build-skill.js after touching the engine, and let their --check decide']
+    [cnst'the emitir ORD button of the app stays as it is: the browser sees no folder, and its number stays in localStorage']
+    [nt'whether an ORD of a series also travels as a .zip is the Regent’s question; write the folder, and put the question in the return']
+    [val'the layout','the bundle emits EMS-001/ORD-0001/ on its first call and ORD-0002 on its second, a dated ID beside them changes nothing, and npm run check passes']
+  ]
+
+  [section'queue'
+    [onlyif'the layout banked']
+    [ins'run the ORDs of the spec in the order of their numbers, one open at a time, each one through the same five steps']
+    [ins'author: write the source of the ORD from its section of the spec alone, under a block whose ctx names the spec; add nothing the section does not say, and leave a gap as an empty slot so it travels as needs']
+    [ins'emit: node scripts/glyph-plugin.js --from the source --bundle --out .guidelines/.orders/EMS-001, then mark it open in EMS-001/README.md, and bank']
+    [ins'work: one step per commit, each one banked']
+    [ins'prove: run the val of the ORD as the spec writes it, and keep the output that proves it']
+    [ins'close: write its row in the track of the spec, in EMS-001/README.md and in .shortcuts, with the commit and the digest it matched, and bank']
+    [cnst'one ORD open at a time: the asynchronous pairs in the queue section of the spec are a proposal the Regent has not signed']
+    [mand'the oracle is the test: node scripts/test-corpus.js --export-oracle writes it to rust/target/oracle at the commit under test']
+    [mand'a Rust test that finds no oracle fails and names the command that writes it; it never passes empty']
+    [nev'fix a JS defect inside an ORD: the oracle is what the JS answers, defects included; the Rust answers the same bytes, and the defect goes to the return']
+    [nt'ORD-0001 closes with the tag conformance-v0 on its commit, pushed with it']
+    [nt'the spans of ORD-0004 are counted in UTF-16 code units, as the JS counts them']
+  ]
+
+  [section'gates'
+    [fin'the queue at the first ORD whose val needs the Regent: ORD-0010 ends in an ADR the Regent signs, so it is measured, the ADR is written as a proposal in the return, and it stays open']
+    [fin'the queue when a crate from outside the repository would enter: measure its tree by the filter of INTAKE-RUST-LADDER section 9, put the measurement in the return, and let it wait']
+    [fin'the queue when the Rust would need a feature the JS lacks, or the snapshot would need regenerating']
+    [fin'the queue when the budget is near its end: bank what is green, write the return, and push']
+  ]
+
+  [section'return'
+    [ins'keep the return current in every bank commit, so it is true whenever the session ends']
+    [ins'write in it: where the session is; each ORD closed, with its commit and the digest it matched; what is open and why; what was measured']
+    [ins'write the questions for the Regent as closed questions, each with its options, none answered']
+    [ins'write what the session measured of itself: the ORDs closed, the commits banked, the time from each ORD opening to its closing as the commits date it, the checks that failed and what fixed them']
+  ]
+
+  [section'limits'
+    [nev'the snapshot is regenerated to make the suite green']
+    [nev'push to main, force a push, or rewrite a banked commit']
+    [dont'open an ORD before the ORDs it depends on close']
+    [dont'let a feature land in Rust that the JS engine lacks; new vocabulary enters the stores and the JS first']
+    [dont'touch ORD-0011, the flat ORD files of .orders, or .scope, which is the workspace of the Regent']
+    [cnst'prose declares the state, never the correction']
+    [cnst'what travels is spelt en-EU, the interface stays pt-BR, and commit messages follow the pt-BR of the log']
+    [cnst'no worktrees']
+  ]
+
+  [section'conclude'
+    [vrfy'npm run check and npm run check:rust pass on the last commit, and it is pushed']
+    [rdy'the Regent opens the return and knows, without this conversation, what was built, what it matched, and what waits for the Regent']
+  ]
+];
