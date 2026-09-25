@@ -34,6 +34,8 @@ import * as VOCAB from "./core/vocabulary.js";
 import * as STORES from "./core/stores.js";
 import { ck } from "./core/emit-ast.js";
 import { depsOf } from "./read-expansions.js";
+import { expandInvocations, checkTemplateConstraints } from "./core/templates.js";
+import { checkRules, compileRules } from "./core/rules.js";
 
 /* Stores travel through opts in the cases that need them, so the suite
    doesn't depend on the module's global state or on test order. */
@@ -1894,7 +1896,182 @@ function runSnapshotChecks() {
       expandExpr: logicStrings.map(x => [x, G.expandExpr(x)]),
       freeVars: logicStrings.map(x => [x, G.freeVars(x)])
     }, null, 1) + "\n");
-    console.log("  ! module oracle written: util, vocabulary, stores, lexer, logic to " + mods);
+
+    /* templates.js and rules.js (from ORD-0006): they work on the parser's
+       tree, and the parser is ORD-0007. So the JS describes the tree: each
+       source parsed with no templates and no rules — the tree the parser has
+       built when expansion starts — then expandInvocations, checkRules and
+       checkTemplateConstraints run on it here, the body parses the expander
+       asks for recorded (parse is handed in, as parse.js hands itself in),
+       with the tree after expansion and every diagnostic the three raise.
+       Over the 114 sources with the repository's stores, and over probes with
+       a store of probe templates: a cycle, a mutual cycle, a broken body,
+       named, positional and non-literal arguments, a repeat, constraints, and
+       the JS defects the port reproduces (params written as strings, the
+       names Object.prototype answers for). What throws is recorded where it
+       throws, and nothing after it runs: parse would stop there. Each run is
+       then held to parse itself — the tree after, and the diagnostics the
+       three raise, equal what a whole parse gives — so the reading of the
+       parser's pipeline here is checked, not assumed */
+    /* flat, as an arena: a tree 8000 levels deep overflows a recursive dump
+       and JSON.stringify alike, and a list of nodes with child indices does not */
+    const fieldsOf = nd => {
+      const o = {};
+      ["id", "raw", "tier", "canonical", "gloss", "alias", "colon", "autoClosed", "editorial", "origin",
+       "chainElement", "slotName", "depth", "literal", "v", "form", "role", "text", "rawFence", "template",
+       "isDef", "mode", "isDefinition", "expanded", "boundSlot"].forEach(k => {
+        if (nd[k] !== undefined && typeof nd[k] !== "function") o[k] = nd[k];
+      });
+      if (nd.logic) o.logic = nd.logic.name || "";
+      if (nd.emotions && nd.emotions.length) o.emotions = nd.emotions;
+      if (nd.tok) o.tok = { k: nd.tok.k, s: nd.tok.s, e: nd.tok.e };
+      return o;
+    };
+    const dumpSegs = segs => {
+      const order = [], at = new Map();
+      segs.forEach(sg => {
+        const stack = sg.children.slice().reverse();
+        while (stack.length) {
+          const nd = stack.pop();
+          if (at.has(nd)) continue;
+          at.set(nd, order.length);
+          order.push(nd);
+          const kids = nd.children || [];
+          for (let i = kids.length - 1; i >= 0; i--) stack.push(kids[i]);
+        }
+      });
+      return {
+        nodes: order.map(nd => Object.assign(fieldsOf(nd), { children: (nd.children || []).map(c => at.get(c)),
+          parent: nd.parent == null ? null : at.has(nd.parent) ? at.get(nd.parent) : -1 })),
+        segments: segs.map(sg => sg.children.map(c => at.get(c)))
+      };
+    };
+    const PROBE_TEMPLATES = {
+      selfref: { gloss: "Calls itself.", params: [], body: "[nt'before'][--selfref][nt'after']" },
+      ping: { gloss: "Calls pong.", params: [], body: "[--pong]" },
+      pong: { gloss: "Calls ping.", params: [], body: "[ctx[--ping]]" },
+      broken: { gloss: "A body that does not parse clean.", params: [], body: "[xyz'a'][nt'b']]" },
+      pair: { gloss: "Two holes.", params: [{ name: "first", ask: "the first" }, { name: "second", ask: "the second" }],
+              body: "[crit[ph-first`the first`]][rev[ph-second`the second`]]" },
+      many: { gloss: "A repeat.", params: [{ name: "item", ask: "an item", repeat: true }, { name: "why", ask: "the reason" }],
+              body: "[cat[ph-item`an item`]][rtnl[ph-why`the reason`]]" },
+      fenced: { gloss: "Constrained.", params: [{ name: "x", ask: "x" }],
+                body: "[itr[ph-x`x`][elab]]", constraints: [{ id: "no-sum", forbid: ["SUM", "@thinking"], why: "stays open", suggest: "keep going" }] },
+      Upper: { gloss: "Mixed case name.", params: [], body: "[nt'upper']" },
+      strs: { gloss: "Params as strings.", params: ["alpha", "beta"], body: "[crit[ph-alpha`a`]][rev[ph-beta`b`]]" },
+      ctor: { gloss: "A hole named constructor.", params: [{ name: "constructor" }, { name: "b" }],
+              body: "[crit[ph-constructor`q`]][rev[ph-b`r`]]" },
+      rep: { gloss: "A repeat named constructor.", params: [{ name: "constructor", repeat: true }], body: "[cat[ph-constructor`q`]]" },
+      Constructor: { gloss: "Found by its own name only.", params: [], body: "[nt'ctor']" },
+      bare: { gloss: "Constrained with no rules store.", params: [], body: "[itr[elab]]", constraints: [{ id: "no-sum", forbid: "sum" }] },
+      wraprep: { gloss: "A body whose own expansion throws.", params: [], body: "[ctx'w'][--rep]" }
+    };
+    const probeTemplates = { ...TPL.templates, ...PROBE_TEMPLATES };
+    const TEMPLATE_PROBES = [
+      "[--selfref]", "[--ping]", "[--broken]", "[--pair'a''b']", "[--pair[ph-second'b']'a']",
+      "[--pair[ctx]'b']", "[--pair'a'[ctx]]", "[--pair'a'[ctx]'b']", "[--pair]", "[--pair'a''b''c']",
+      "[--many[ph-item'x'][ph-item'y']'because']", "[--many'because']", "[--many[ph-item''][ph-item'z']]",
+      "[--fenced'q'[sum'x']]", "[--fenced'q'[ovr[sum'x']]]", "[ovr[--fenced'q'[sum'x']]]", "[--fenced'q'[hyp'h']]",
+      "[--upper]", "[--UPPER]", "[--Upper]", "[--nosuch'x']", "[--pair='x']", "[--pair'a''b'][--pair'c''d']",
+      "[mand[opt'x']][mand[opt'y']]", "[alw[nev'x']]", "[ovr[alw[nev'x']]]", "[elab'a'][hyp'b']", "[brst'x']",
+      "[ctx'c'][brst'x']", "[pos[ngt]]", "[pos'a'][ngt'b']", "[--pair[ph-first[ctx]]'b']",
+      "[--strs'a''b']", "[--strs[ph-beta'B']'a']", "[--ctor'a''b']", "[--ctor[ph-constructor'C']'a']", "[--rep]",
+      "[--rep[ph-constructor'x']]", "[--Constructor]", "[--constructor]", "[constructor]", "[mand'x'][opt'x'];[ctx[__proto__]]",
+      "[pos[constructor]]", "[opt[opt[mand'x']]]", "[--wraprep]"
+    ];
+    /* without a rules store: checkRules stays out, and the constraints read their
+       own names — `[constructor` is one of them, through Object.prototype */
+    const BARE_PROBES = ["[--bare[constructor]]", "[--bare[sum'x']]", "[--bare[constructor[sum'x']]]", "[--fenced'q'[constructor]]"];
+    const treeRuns = [];
+    const MODULE_CODE = /^(TemplateCycle|TemplateParamNotLiteral|TemplateConstraint:|Rule:)/;
+    const RANK = { fix: 0, ask: 1, note: 2 };
+    const catcher = caught => (sev, lab, msg, code, enLab, enMsg) => caught.push({ sev: sev, lab: lab, msg: msg,
+      code: code || "Note", enLab: enLab || null, enMsg: enMsg || null });
+    /* one level of expansion into `out`: the tree before, each body parse the
+       expander asks for — a level of its own, down to where the chain stops —
+       what it raises, what it throws, and the tree after. `opts` is what the
+       expander reads its registry and `_expanding` from: the context at the
+       top, what the expander hands parse below it */
+    const expandLevel = (base, opts, out) => {
+      out.before = dumpSegs(base.segments);
+      out.parses = [];
+      const caught = [];
+      const rec = (body, o) => {
+        const sub = { body: body, expanding: o._expanding };
+        out.parses.push(sub);
+        expandLevel(G.parse(body, { ...o, templates: {} }), o, sub);
+        let whole;
+        try { whole = G.parse(body, o); } catch (e) {
+          if (!sub.thrown || sub.thrown.message !== e.message) throw new Error("trees.json: the parse of " + body + " is not what parse does");
+          throw e;
+        }
+        if (sub.thrown || JSON.stringify(dumpSegs(whole.segments)) !== JSON.stringify(sub.after))
+          throw new Error("trees.json: the parse of " + body + " is not what parse does");
+        sub.gaps = whole.gaps.map(g => ({ sev: g.sev, lab: g.lab, msg: g.msg, code: g.code }));
+        return whole;
+      };
+      try { expandInvocations(base.segments, opts, catcher(caught), rec); }
+      catch (e) { out.thrown = { stage: "expand", message: e.message }; }
+      out.expand = caught;
+      out.after = dumpSegs(base.segments);
+    };
+    const runTrees = (id, src, templates, rules) => {
+      const ctx = G.createContext({ templates: templates, rules: rules, expansions: SNAP_OPTS.expansions });
+      const run = { id: id, src: src, probe: templates !== TPL.templates, withRules: !!rules };
+      const base = G.parse(src, { ...SNAP_OPTS, templates: {}, rules: null });
+      expandLevel(base, ctx, run);
+      const caught = [], Gc = catcher(caught);
+      if (!run.thrown) for (const [stage, fn] of [["rules", () => checkRules(base.segments, ctx, Gc)],
+                                                  ["constraints", () => checkTemplateConstraints(base.segments, ctx, Gc)]]) {
+        try { fn(); } catch (e) { run.thrown = { stage: stage, message: e.message }; }
+        run[stage] = caught.splice(0);
+        if (run.thrown) break;
+      }
+      /* held to parse itself */
+      let whole, threw = null;
+      try { whole = G.parse(src, { ...SNAP_OPTS, templates: templates, rules: rules }); } catch (e) { threw = e.message; }
+      const mine = [].concat(run.expand || [], run.rules || [], run.constraints || [])
+        .map((g, k) => [g, k]).sort((a, b) => RANK[a[0].sev] - RANK[b[0].sev] || a[1] - b[1])
+        .map(([g]) => JSON.stringify([g.sev, g.lab, g.msg, g.code]));
+      const theirs = whole ? whole.gaps.filter(g => MODULE_CODE.test(g.code) || g.msg.indexOf("no corpo de <code>[--") === 0)
+        .map(g => JSON.stringify([g.sev, g.lab, g.msg, g.code])) : null;
+      if (threw !== (run.thrown ? run.thrown.message : null) ||
+          (whole && (JSON.stringify(dumpSegs(whole.segments)) !== JSON.stringify(run.after) ||
+                     JSON.stringify(theirs) !== JSON.stringify(mine))))
+        throw new Error("trees.json: the run of " + id + " is not what parse does");
+      treeRuns.push(run);
+    };
+    CORPUS.forEach(c => { if (c && c.id && typeof c.src === "string") runTrees(c.id, c.src, TPL.templates, RULESTORE); });
+    TEMPLATE_PROBES.forEach((src, k) => runTrees("probe-" + (k + 1), src, probeTemplates, RULESTORE));
+    BARE_PROBES.forEach((src, k) => runTrees("bare-" + (k + 1), src, probeTemplates, null));
+    /* compileRules, over the repository's store and a probe store: a key met
+       twice, a class in `then` holding `first`, overlapping classes, a class
+       the store lacks, and the three ways a blend is refused */
+    const PROBE_RULES = {
+      classes: { k: ["A", "B", "A"], j: ["B", "C"] },
+      rules: [
+        { id: "p1", kind: "pair", a: "B", b: "A" }, { id: "p2", kind: "pair", a: "A", b: "B" },
+        { id: "p3", kind: "pair", a: "C", b: "C" }, { id: "o1", kind: "order", first: "A", then: "@k" },
+        { id: "o2", kind: "order", first: "Q", then: "@missing" }, { id: "o3", kind: "order", first: "Q", then: "R" },
+        { id: "c1", kind: "precondition", target: "C", requiresBefore: ["@k", "@j", "Z"] },
+        { id: "c2", kind: "precondition", target: "D" },
+        { id: "b1", kind: "blend", when: ["@k", "C"], emit: "e", means: "m" },
+        { id: "b2", kind: "blend", when: ["A", "B"], emit: "e" }, { id: "b3", kind: "blend", when: ["A"], emit: "e", means: "m" },
+        { id: "b4", kind: "blend", when: ["A", "B"], means: "m" }, { id: "x1", kind: "other" }
+      ]
+    };
+    const compiled = store => {
+      const c = compileRules(store);
+      return { pairs: Object.keys(c.pairs).map(k => [k, c.pairs[k].id]),
+               order: c.order.map(o => [o.rule.id, o.first, o.then]),
+               pre: c.pre.map(q => [q.rule.id, q.target, Object.keys(q.accept)]),
+               blends: c.blends.map(b => [b.rule.id, b.when, b.emit, b.means]) };
+    };
+    fs.writeFileSync(path.join(mods, "trees.json"), JSON.stringify({
+      engine: G.VERSION, probeTemplates: PROBE_TEMPLATES, probeRules: PROBE_RULES,
+      compileRules: { repository: compiled(RULESTORE), probe: compiled(PROBE_RULES) }, runs: treeRuns
+    }, null, 1) + "\n");
+    console.log("  ! module oracle written: util, vocabulary, stores, lexer, logic, trees to " + mods);
   }
 
   if (process.argv.indexOf("--update-snapshot") !== -1) {

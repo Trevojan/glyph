@@ -149,3 +149,168 @@ pub fn ck(s: &str) -> String {
     }
     format!("{a:08x}{b:08x}")
 }
+
+/* ---- the parser's tree, as the export writes it (trees.json, ORD-0006) ----
+   A tree is `{ nodes, segments }`: every node reachable from the segments,
+   once, in the order a pre-order walk first meets it, each with its fields in
+   the order `fieldsOf` names them, then `children` and `parent` as indices. */
+
+use glyph_util::tree::{Diag, Emotion, Gloss, Id, Node, Segment, Span, Tree};
+
+const FIELDS: [&str; 25] = ["id", "raw", "tier", "canonical", "gloss", "alias", "colon", "autoClosed", "editorial",
+    "origin", "chainElement", "slotName", "depth", "literal", "v", "form", "role", "text", "rawFence", "template",
+    "isDef", "mode", "isDefinition", "expanded", "boundSlot"];
+
+fn index(v: &Json) -> usize {
+    v.num().filter(|n| *n >= 0.0).unwrap_or_else(|| panic!("not an index: {v:?}")) as usize
+}
+
+/// The tree a dump describes; node `i` is the dump's node `i`.
+pub fn tree_of(dump: &Json) -> Tree<()> {
+    let text = |v: &Json| v.str().unwrap_or_else(|| panic!("not a string: {v:?}")).to_string();
+    let flag = |v: &Json| match v {
+        Json::Bool(b) => *b,
+        v => panic!("not a boolean: {v:?}"),
+    };
+    let maybe = |v: &Json| if *v == Json::Null { None } else { Some(text(v)) };
+    let nodes = dump.a("nodes").iter().map(|n| {
+        let mut nd: Node<()> = Node::default();
+        for (k, v) in n.obj().expect("a node is an object") {
+            match k.as_str() {
+                "id" => nd.id = Some(index(v) as u64),
+                "raw" => nd.raw = Some(text(v)),
+                "tier" => nd.tier = Some(text(v)),
+                "canonical" => nd.canonical = Some(text(v)),
+                "gloss" => nd.gloss = Some(match v {
+                    Json::Obj(kv) if kv.is_empty() => Gloss::Prototype,
+                    v => Gloss::Text(text(v)),
+                }),
+                "alias" => nd.alias = Some(flag(v)),
+                "colon" => nd.colon = Some(maybe(v)),
+                "autoClosed" => nd.auto_closed = Some(flag(v)),
+                "editorial" => nd.editorial = Some(flag(v)),
+                "origin" => nd.origin = Some(maybe(v)),
+                "chainElement" => nd.chain_element = Some(flag(v)),
+                "slotName" => nd.slot_name = Some(flag(v)),
+                "depth" => nd.depth = Some(index(v)),
+                "literal" => nd.literal = Some(flag(v)),
+                "v" => nd.v = Some(text(v)),
+                "form" => nd.form = Some(text(v)),
+                "role" => nd.role = Some(text(v)),
+                "text" => nd.text = Some(flag(v)),
+                "rawFence" => nd.raw_fence = Some(flag(v)),
+                "template" => nd.template = Some(text(v)),
+                "isDef" => nd.is_def = Some(flag(v)),
+                "mode" => nd.mode = Some(text(v)),
+                "isDefinition" => nd.is_definition = Some(flag(v)),
+                "expanded" => nd.expanded = Some(flag(v)),
+                "boundSlot" => nd.bound_slot = Some(text(v)),
+                "logic" => nd.logic = Some(text(v)),
+                "emotions" => nd.emotions = v.arr().expect("emotions are a list").iter().map(|e| Emotion {
+                    name: text(e.get("name").expect("an emotion's name")),
+                    gloss: text(e.get("gloss").expect("an emotion's gloss")),
+                    order: index(e.get("order").expect("an emotion's order")),
+                }).collect(),
+                "tok" => nd.tok = Some(Span { k: text(v.get("k").expect("tok.k")), s: index(v.get("s").expect("tok.s")),
+                                              e: index(v.get("e").expect("tok.e")) }),
+                "children" => nd.children = v.arr().expect("children are a list").iter().map(index).collect(),
+                "parent" => nd.parent = if *v == Json::Null { None } else { Some(index(v)) },
+                k => panic!("a field the tree does not know: {k}"),
+            }
+        }
+        nd
+    }).collect();
+    let segments = dump.a("segments").iter()
+        .map(|s| Segment { children: s.arr().expect("a segment is a list").iter().map(index).collect(), ..Default::default() })
+        .collect();
+    Tree { nodes, segments }
+}
+
+/// The dump of a tree, as the export writes one.
+pub fn dump_of<X: Clone>(tree: &Tree<X>) -> Json {
+    let mut order: Vec<Id> = Vec::new();
+    let mut at: HashMap<Id, usize> = HashMap::new();
+    for sg in &tree.segments {
+        let mut stack: Vec<Id> = sg.children.iter().rev().copied().collect();
+        while let Some(id) = stack.pop() {
+            if at.contains_key(&id) {
+                continue;
+            }
+            at.insert(id, order.len());
+            order.push(id);
+            stack.extend(tree.nodes[id].children.iter().rev());
+        }
+    }
+    let s = |v: &str| Json::Str(v.to_string());
+    let num = |n: usize| Json::Num(n as f64);
+    let nodes = order.iter().map(|&id| {
+        let nd = &tree.nodes[id];
+        let mut kv: Vec<(String, Json)> = Vec::new();
+        for f in FIELDS {
+            let v = match f {
+                "id" => nd.id.map(|i| Json::Num(i as f64)),
+                "raw" => nd.raw.as_deref().map(s),
+                "tier" => nd.tier.as_deref().map(s),
+                "canonical" => nd.canonical.as_deref().map(s),
+                "gloss" => nd.gloss.as_ref().map(|g| match g {
+                    Gloss::Text(t) => s(t),
+                    Gloss::Prototype => Json::Obj(Vec::new()),
+                }),
+                "alias" => nd.alias.map(Json::Bool),
+                "colon" => nd.colon.as_ref().map(|c| c.as_deref().map_or(Json::Null, s)),
+                "autoClosed" => nd.auto_closed.map(Json::Bool),
+                "editorial" => nd.editorial.map(Json::Bool),
+                "origin" => nd.origin.as_ref().map(|o| o.as_deref().map_or(Json::Null, s)),
+                "chainElement" => nd.chain_element.map(Json::Bool),
+                "slotName" => nd.slot_name.map(Json::Bool),
+                "depth" => nd.depth.map(num),
+                "literal" => nd.literal.map(Json::Bool),
+                "v" => nd.v.as_deref().map(s),
+                "form" => nd.form.as_deref().map(s),
+                "role" => nd.role.as_deref().map(s),
+                "text" => nd.text.map(Json::Bool),
+                "rawFence" => nd.raw_fence.map(Json::Bool),
+                "template" => nd.template.as_deref().map(s),
+                "isDef" => nd.is_def.map(Json::Bool),
+                "mode" => nd.mode.as_deref().map(s),
+                "isDefinition" => nd.is_definition.map(Json::Bool),
+                "expanded" => nd.expanded.map(Json::Bool),
+                "boundSlot" => nd.bound_slot.as_deref().map(s),
+                _ => unreachable!(),
+            };
+            if let Some(v) = v {
+                kv.push((f.to_string(), v));
+            }
+        }
+        if let Some(l) = &nd.logic {
+            kv.push(("logic".into(), s(l)));
+        }
+        if !nd.emotions.is_empty() {
+            kv.push(("emotions".into(), Json::Arr(nd.emotions.iter().map(|e| Json::Obj(vec![
+                ("name".into(), s(&e.name)), ("gloss".into(), s(&e.gloss)), ("order".into(), num(e.order))])).collect())));
+        }
+        if let Some(t) = &nd.tok {
+            kv.push(("tok".into(), Json::Obj(vec![("k".into(), s(&t.k)), ("s".into(), num(t.s)), ("e".into(), num(t.e))])));
+        }
+        kv.push(("children".into(), Json::Arr(nd.children.iter().map(|c| num(at[c])).collect())));
+        kv.push(("parent".into(), nd.parent.map_or(Json::Null, |p| at.get(&p).map_or(Json::Num(-1.0), |&i| num(i)))));
+        Json::Obj(kv)
+    }).collect();
+    let segments = tree.segments.iter().map(|sg| Json::Arr(sg.children.iter().map(|c| num(at[c])).collect())).collect();
+    Json::Obj(vec![("nodes".into(), Json::Arr(nodes)), ("segments".into(), Json::Arr(segments))])
+}
+
+/// A diagnostic as the export records what a pass raised: the pt-BR pair,
+/// the code, and the English pair or null.
+pub fn diag_json(d: &Diag) -> Json {
+    let s = |v: &str| Json::Str(v.to_string());
+    let or_null = |v: &Option<String>| v.as_deref().map_or(Json::Null, s);
+    Json::Obj(vec![("sev".into(), s(&d.sev)), ("lab".into(), s(&d.lab)), ("msg".into(), s(&d.msg)),
+                   ("code".into(), s(&d.code)), ("enLab".into(), or_null(&d.en_lab)), ("enMsg".into(), or_null(&d.en_msg))])
+}
+
+/// A diagnostic of a body's parse, as the export records it: the JS hands the
+/// expander `{ sev, lab, msg, code }`.
+pub fn diag_of(v: &Json) -> Diag {
+    Diag::new(v.s("sev"), v.s("lab"), v.s("msg").to_string(), v.s("code"))
+}
