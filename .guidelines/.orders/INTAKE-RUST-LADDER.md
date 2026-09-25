@@ -94,7 +94,8 @@ it waits on is ADR-001's signature.
 
 `rust/Cargo.toml`, edition 2024, version `0.0.0` until the port produces the
 engine's bytes. `npm run check` runs `crate-graph.js` (Node only, no cargo);
-`npm run check:rust` adds `cargo test`. No external crate yet.
+`npm run check:rust` writes the oracle at the commit under test and adds
+`cargo test`. No external crate yet.
 
 | crate | oracle |
 |---|---|
