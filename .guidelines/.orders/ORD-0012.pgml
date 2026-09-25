@@ -1,5 +1,5 @@
 [block'glyph-rust-app'
-  [ctx'a small Rust app that eats the territory of the JS engine one verifiable piece at a time; this is the spec of EMS-001, the first series of orders Glyph emits, and it commissions the series and implements nothing','C:/Users/Usuario/Documents/GitHub/glyph','engine 3.5.8.06, the work of 2026-09-24 committed from 82befb4 to 4a907e3, ORD-0011 emitted and not closed']
+  [ctx'a small Rust app that eats the territory of the JS engine one verifiable piece at a time; this is the spec of EMS-001, the first series of orders Glyph emits, and it commissions the series and implements nothing','C:/Users/Usuario/Documents/GitHub/glyph','engine 3.5.8.06, the work of 2026-09-24 committed from 82befb4 to 4a907e3, ORD-0011 parked on 2026-09-24']
   [skl'glyph-markup'[ins'hear this spec, ground before building, and stop at the gate of the Regent']]
 
   [section'species'
@@ -33,6 +33,7 @@
     [depr'from ORD-0011, the rows that would place plan/ladder.toml, scripts/ladder.py and scripts/audit_corpus.py into the axes']
     [nt'kept from the ladder: one crate per JS module held by scripts/crate-graph.js, the oracle, the context object, the dependency filter with its measurements, and the decision practice of M04']
     [nt'neither revoked nor scheduled here: the language server, M03 and M12 to M15, and M16 to M24']
+    [nt'signed by the Regent on 2026-09-24, recorded in .decisions']
   ]
 
   [section'queue'
@@ -49,11 +50,8 @@
   ]
 
   [section'gate'
-    [conf'ORD-0011 is closed, versioned or parked, because two open orders are forbidden and its move would shift every path the series reads'[hmn]]
-    [conf'everything this spec revokes'[hmn]]
-    [conf'the layout .guidelines/.orders/EMS-###/ORD-####/ exists, and the bundle writes an ORD into its folder with the count of its series'[hmn]]
+    [val'the layout','the layout .guidelines/.orders/EMS-###/ORD-####/ exists, and the bundle writes an ORD into its folder with the count of its series, proved by the suite']
     [nt'measured on 2026-09-24: into the flat .orders/ the bundle names the next order ORD-2027, because ORD-2026-08-30-01 reads as the number 2026']
-    [fin'this spec here if the Regent refuses the direction, and record the refusal in .decisions']
   ]
 
   [section'ORD-0001-oracle'

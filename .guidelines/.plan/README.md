@@ -63,15 +63,16 @@ caminho de rascunho, até o layout do §6 existir), e as razões em
 fila, do oráculo congelado (`ORD-0001`) à janela própria (`ORD-0014`), cada uma
 presa ao oráculo byte a byte.
 
-O portão da série espera o Regente: o destino da `ORD-0011`, a assinatura do
-que a spec revoga, e o layout do §6. Entre o que ela propõe revogar está a
-escada como ordem de trabalho: [`ladder.toml`](ladder.toml) fica como o registro
-da auditoria, e `node scripts/ladder.js --check` segue no `npm run check`.
+O portão da série é o layout do §6. O que a spec revoga está assinado, e entre
+isso está a escada como ordem de trabalho: [`ladder.toml`](ladder.toml) fica como
+o registro da auditoria, e `node scripts/ladder.js --check` segue no
+`npm run check`. A primeira sessão na nuvem constrói o layout e corre a fila:
+[`.orders/HANDOFF-2026-09-24.pgml`](../.orders/HANDOFF-2026-09-24.pgml).
 
 ### 6. As Ordens em séries — `.orders/EMS-###/ORD-####/`
 
 Decidido pelo Regente ([`.decisions/`](../.decisions/README.md), 2026-09-24),
-ainda não construído. Uma EMS é uma pasta com a própria spec, que conversa com as
+ainda não construído; é o primeiro trabalho da sessão na nuvem. Uma EMS é uma pasta com a própria spec, que conversa com as
 Guidelines: restrições, contadores, exceções, as ADR e DC que ela modifica, e
 como seguir depois que fecha. Uma ORD é uma pasta dentro dela com o pacote; a
 contagem reinicia em cada série. Hoje o `--bundle` escreve um `ORD-####.zip`
@@ -83,8 +84,7 @@ precisam aprender a série.
 | | |
 |---|---|
 | **estudo de setembro** | oito intakes em [`.orders/`](../.orders/): `INTAKE-VIRTUAL-PATH` (mini-repo, medido: o custo de round-trip é o tamanho de `glyph-parser.js`), `INTAKE-ORDER-COHERENCE` (`relates[]`, B antes de A), `INTAKE-BURN-INVARIANCE` (fechado), `INTAKE-FORMAL-ANALYSIS`, `INTAKE-PARSER-SPLIT` (o corte, feito: treze módulos), `INTAKE-RUST` (steelman e defeater; o Regente decidiu migrar), `INTAKE-RUST-LADDER` (a escada auditada; §8 são as perguntas O1–O6), `INTAKE-FIELD-2026-09` (o kit de cliente; `H-09` fechou por ele). Pendentes do Regente: o `sameTarget` do blend que não confere o alvo; o `--check` do grafo de links |
-| **`ORD-0011`** | emitida e nunca fechada; fechar, versionar ou estacionar. Enquanto está aberta, nenhuma outra Ordem sai, e o [`.orders/`](../.orders/) não tem registro de qual está aberta |
-| **EMS-001** | assinar o que a spec revoga, e a execução assíncrona que a seção `queue` propõe: medida, economiza no máximo 4 de 14 turnos e esbarra em três restrições |
+| **EMS-001** | a execução assíncrona que a seção `queue` da spec propõe: medida, economiza no máximo 4 de 14 turnos e esbarra em três restrições |
 | **O4, O5, O7–O10** | [`BRIEFING-2026-09-24.md`](../.orders/BRIEFING-2026-09-24.md) §8, as que esperam sem pressa: os defeitos do §3 acima, o snapshot e o `opts` de cada caso, o limiar de profundidade, e as renomeações que movem o emitido |
 | **Q14** | o Regente autora o sexto exemplo de conformidade. Base verificada em [`conformance/README.md`](../../conformance/README.md) |
 | **Q4** | ratificar [`PROMOTION_BOUNDARY.md`](../PROMOTION_BOUNDARY.md) §5 |
@@ -98,5 +98,7 @@ precisam aprender a série.
 - **Efeitos** — [`.orders/INTAKE-EFFECTS.md`](../.orders/INTAKE-EFFECTS.md). A
   metade barata (`<effect>` declarativo) espera; a cara (objetos de contexto) é
   segunda ordem.
+- **`ORD-0011`**, estacionada em 2026-09-24. Reestrutura o repositório lendo
+  `_ORBITAL`, que só existe nesta máquina; reabre aqui quando o Regente chamar.
 - **Escopos aninhados** para variáveis. O escopo é o pacote inteiro, como o
   Regente especificou. Ninguém pediu mais.
