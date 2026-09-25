@@ -12,7 +12,7 @@
 | environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed |
 | ground | read in the order the handoff names; `npm run check` (33 buckets, 41 s) and `npm run check:rust` (20 crates, 3 s) green on the clone at `ea8fc59`, before anything was touched |
 | layout | **closed** — its val holds (below), five banks |
-| queue | ORD-0001 to ORD-0009 closed; ORD-0010, whose val needs the Regent, opens next. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
+| queue | ORD-0001 to ORD-0009 closed; ORD-0010 open, and the queue ends there: its val needs the Regent's ADR. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
 
 ## Waiting for the Regent
 
@@ -330,7 +330,14 @@ c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828  -
 
 ## Open, and why
 
-Nothing is open. ORD-0010, the protocol, opens next: its val ends in an ADR the Regent signs.
+**ORD-0010, the protocol**, open since the commit that carries this line, and
+it stays open: its val is an ADR the Regent signs, so the gate of the handoff
+ends the queue here. It is measured, and the ADR is written below as a
+proposal. The twelve calls `glyph-ui.js` makes are `parse`, `buildXml`,
+`serializeAST`, `toHGML`, `fromXML`, `tokenize`, `classify`, `suggest`,
+`parseLogic`, `expandExpr`, `freeVars` and `elName`; besides them it
+registers the three stores (`useTemplates`, `useRules`, `useExpansions`) and
+reads tables and `esc`.
 
 ## ORD-0009, how it was read
 
@@ -872,7 +879,8 @@ and `npm run check` passes on the commit that carries this return.
 | ORD-0006 | `8f996df` 03:15 | `480268b` 03:50 | 35 min, one work bank |
 | ORD-0007 | `b145777` 03:54 | `6dcf854` 04:17 | 23 min, one work bank |
 | ORD-0008 | `aefc148` 04:21 | `a262233` 04:43 | 22 min, one work bank |
-| ORD-0009 | `e4e6a59` 04:47 | the commit after `9c943d3` | ~1 h, two work banks |
+| ORD-0009 | `e4e6a59` 04:47 | `160d43d` 05:46 | 59 min, two work banks |
+| ORD-0010 | the commit after `160d43d` | — | open, at the gate |
 
 | # | commit | step | UTC | checks |
 |---|---|---|---|---|
@@ -914,4 +922,5 @@ and `npm run check` passes on the commit that carries this return.
 | 35 | `e4e6a59` | ORD-0009 emitted and open | 04:47 | green |
 | 36 | `54308c3` | ORD-0009 work 1/2 — `glyph-envelope` and `glyph-burn`, `ast.json` and `hgml.json` in the export | 05:08 | green at once on the 114 digests; the burn test red on a composite with no formula until the port read `undefined` as the JS does; mutations 19 of 22 (envelope) and 7 of 22 (burn), then 22 and 20 with probes; `check:rust` red once, on `ast.json` written without the one-space indent every export file keeps, which `glyph-util`'s round trip holds |
 | 37 | `9c943d3` | ORD-0009 work 2/2 — `glyph-inverse`, the round trips recorded as the suite runs (`inverse.json`) | 05:41 | the recorder red on a burn after the registry guard until it read the stores `stores.js` resolves; the depth test red on its own count until it counted the question and its text; 24 of 32 mutations killed, then 32 with the way back's probes |
-| 38 | this commit | ORD-0009 closes | 2026-09-25 | green |
+| 38 | `160d43d` | ORD-0009 closes | 05:46 | green |
+| 39 | this commit | ORD-0010 emitted and open | 2026-09-25 | green |
