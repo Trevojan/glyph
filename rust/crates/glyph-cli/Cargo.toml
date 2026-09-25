@@ -18,3 +18,6 @@ glyph-envelope = { path = "../glyph-envelope" }
 glyph-burn = { path = "../glyph-burn" }
 glyph-inverse = { path = "../glyph-inverse" }
 glyph-bundle = { path = "../glyph-bundle" }
+
+[dev-dependencies]
+glyph-util = { path = "../glyph-util" }

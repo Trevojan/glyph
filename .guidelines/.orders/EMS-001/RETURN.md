@@ -262,8 +262,8 @@ envelope reads (ORD-0007, how it was read; question 7).
 
 ## Open, and why
 
-**ORD-0008, `glyph-xml` and the first binary**, open since the commit that
-carries this line. `glyph-cli.js` takes its source as an argument or a
+**ORD-0008, `glyph-xml` and the first binary**, open since `aefc148`; its
+work is banked, and the close runs the proof. `glyph-cli.js` takes its source as an argument or a
 `--file` and writes `console.log`'s line; the spec's binary reads stdin and
 writes "the XML, and nothing else". Read as the binary's I/O and not as an
 engine feature the JS lacks, since the XML of a source is what `toXML`
@@ -272,6 +272,31 @@ with no line after them. Where the JS throws, the binary writes the JS's
 message to stderr and exits 1, as node does on an uncaught throw. The
 binary reads with the repository's three stores, as the suite reads the
 examples.
+
+## ORD-0008, how it was read
+
+- **Four JS defects in the deliverable the port reproduces**, measured, and
+  left as the JS answers them:
+  - **A `ref` to a binding nobody made.** The bindings are a plain object, so
+    a literal whose text the prototype holds — `toString`, `valueOf`,
+    `constructor` — is written `ref="toString"`.
+  - **The source of the function `Object` in a mood.** `/constructor/` writes
+    `dominant="function Object() { [native code] }"` into the document
+    (ORD-0004 measured the mood; this is where it lands).
+  - **A conjunction inside a conjunction's member is lost.** `<holds>` strips
+    `join="item"` from every line of a member, not from its head alone:
+    `[a],[b[c],[d]]` emits `[c]` and `[d]` as a sequence.
+  - **Below the indent's ceiling a conjunction can come out ill-formed.**
+    Past 12 levels every line shares one indent, and `packageSpan` takes the
+    first close of the same name for an element's own: at depth 13,
+    `[a[a[x]]],[b]` opens `<holds>` around a lone `</unresolved>`.
+- **The deliverable carries pt-BR in three places**: the empty document
+  (`<!-- escolha um molde ou escreva do lado esquerdo -->`), an unanswered
+  hole (`<needs>sem resposta</needs>`), and a variable no line defines
+  (`usado e nunca definido`).
+- **Two arms no source reaches, kept**: `means` on a template that is not
+  expanded — its gloss is only ever set together with `expanded` — and a
+  self-closing line that ends in whitespace, which the emitter never writes.
 
 ## ORD-0007, how it was read
 
@@ -641,6 +666,22 @@ and `npm run check` passes on the commit that carries this return.
   `defd`'s prototype, which the registry answers the same. Two died only once
   the export had a probe for them: exactly 8 commands closed by one `;`, and
   a store entry whose depth is not a number.
+- **`xml.json`.** The export writes `toXML` over the runs `parse.json` reads,
+  plain and with `describe`, and over 39 probes of the emitter's own: a
+  literal named after a member of the prototype, a mood the prototype
+  answers, return blocks, a chain against a conjunction, an imperative,
+  bindings and their references, a continuing segment, and conjunctions
+  below the indent's ceiling. 312 runs, 2.2 MB of XML in all.
+- **`glyph-xml` and the binary, held.** The emitter answered all of it at
+  once, and the binary the five examples and the 114 sources. The structural
+  pass reads each line's indent and text once: `packageSpan` is asked of every
+  line and scans to the element's close, and a deep document holds thousands
+  of lines at the ceiling — 312 runs in 3 s in a debug build, where reading
+  them again at every step took two minutes. JS whitespace and `trim` are the
+  platform, so they sit in `glyph-util` beside `inherited`. Mutated, 30 of 32
+  die. The two that live cannot die: the two arms no source reaches (ORD-0008,
+  how it was read). A continuing segment and a conjunction below the ceiling
+  killed theirs only once the export had a probe for each.
 - **Store shapes the JS never guards stay outside the port's contract.** A
   null param; `params`, `constraints` or `exemptUnder` that is not a list; a
   body that is not a string: the JS throws a TypeError in V8's words, or
@@ -661,7 +702,7 @@ and `npm run check` passes on the commit that carries this return.
 | ORD-0005 | `2466cef` 02:49 | `17658ec` 03:00 | 11 min, one work bank |
 | ORD-0006 | `8f996df` 03:15 | `480268b` 03:50 | 35 min, one work bank |
 | ORD-0007 | `b145777` 03:54 | `6dcf854` 04:17 | 23 min, one work bank |
-| ORD-0008 | the commit after `6dcf854` | — | open |
+| ORD-0008 | `aefc148` 04:21 | — | open |
 
 | # | commit | step | UTC | checks |
 |---|---|---|---|---|
@@ -697,4 +738,5 @@ and `npm run check` passes on the commit that carries this return.
 | 29 | `b145777` | ORD-0007 emitted and open | 03:54 | green |
 | 30 | `1a79b2c` | ORD-0007 work — `glyph-parse`, `parse.json` in the export, the tree's fields for the projections | 04:13 | green at once on 273 runs; 33 of 40 mutations killed, then 36 of 40 with a probe at the auto-close limit and a store with no numeric depth, and one mutation of mine rewritten because it did not build |
 | 31 | `6dcf854` | ORD-0007 closes | 04:17 | green |
-| 32 | this commit | ORD-0008 emitted and open | 2026-09-25 | green |
+| 32 | `aefc148` | ORD-0008 emitted and open | 04:21 | green |
+| 33 | this commit | ORD-0008 work — `glyph-xml`, the binary `glyph`, `xml.json` in the export | 2026-09-25 | green at once; the XML tests took 126 s until the pass read each line once, 3 s after; 28 of 32 mutations killed, then 30 with a continuing segment and a deep conjunction |

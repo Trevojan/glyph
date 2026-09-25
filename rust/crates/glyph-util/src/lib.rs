@@ -36,6 +36,17 @@ pub fn inherited_text(key: &str) -> String {
     }
 }
 
+/// JS `\s`: WhiteSpace and LineTerminator.
+pub fn js_space(c: char) -> bool {
+    matches!(c, '\t' | '\n' | '\u{b}' | '\u{c}' | '\r' | ' ' | '\u{a0}' | '\u{1680}' | '\u{2000}'..='\u{200a}'
+        | '\u{2028}' | '\u{2029}' | '\u{202f}' | '\u{205f}' | '\u{3000}' | '\u{feff}')
+}
+
+/// `String.prototype.trim`.
+pub fn js_trim(s: &str) -> String {
+    s.trim_matches(js_space).to_string()
+}
+
 /// `&`, `<`, `>` and `"` as entities. The JS takes any value and reads null as
 /// the empty string; here the caller hands over the string.
 pub fn esc(s: &str) -> String {

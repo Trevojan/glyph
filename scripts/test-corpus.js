@@ -2122,8 +2122,23 @@ function runSnapshotChecks() {
     ];
     const NO_SESSION = ["constructor", "[constructor]", "rd", "[ctx] prose ist"];
     const NO_VALENCY = ["[gt'a']", "[ctx]", "[cat'a']"];
-    const parseRuns = [];
+    const parseRuns = [], xmlRuns = [];
+    /* emit-xml.js (from ORD-0008): toXML over the same sources and options,
+       plain and with `describe` */
+    const runXml = (id, src, opts) => {
+      const run = { id: id, src: src };
+      if (opts.templates !== SNAP_OPTS.templates) run.probeTemplates = true;
+      if (opts.rules !== SNAP_OPTS.rules) run.withRules = false;
+      if (opts.expansions !== SNAP_OPTS.expansions) run.expansions = opts.expansions;
+      if (opts.session === false) run.session = false;
+      if (opts.valency === false) run.valency = false;
+      for (const [k, o] of [["xml", opts], ["describe", { ...opts, describe: true }]]) {
+        try { run[k] = G.toXML(src, o); } catch (e) { run[k] = { thrown: e.message }; }
+      }
+      xmlRuns.push(run);
+    };
     const runParse = (id, src, opts) => {
+      runXml(id, src, opts);
       const run = { id: id, src: src };
       if (opts.templates !== SNAP_OPTS.templates) run.probeTemplates = true;
       if (opts.rules !== SNAP_OPTS.rules) run.withRules = false;
@@ -2153,7 +2168,19 @@ function runSnapshotChecks() {
     ["[ctx[sum'x']]", "[ref'x'][nt'y']"].forEach((src, k) => runParse("store-" + (k + 1), src, { ...SNAP_OPTS, expansions: PROBE_EXPANSIONS }));
     BARE_PROBES.forEach((src, k) => runParse("tpl-bare-" + (k + 1), src, { ...SNAP_OPTS, templates: probeTemplates, rules: null }));
     fs.writeFileSync(path.join(mods, "parse.json"), JSON.stringify({ engine: G.VERSION, runs: parseRuns }, null, 1) + "\n");
-    console.log("  ! module oracle written: util, vocabulary, stores, lexer, logic, trees, parse to " + mods);
+    /* and the emitter's own branches: a literal named after a member of the
+       prototype, a mood the prototype answers, return blocks, a chain against
+       a conjunction, an imperative, bindings and their references */
+    const XML_PROBES = ["[ctx'toString']", "[ctx'__proto__'][sum'constructor']", "[ctx'x']/constructor/", "/eth/cnf/clm/[ctx]",
+      "r- [tgt'x'][zzz]", "R: [ctx[sum]]", "r-", "r- [ph-x`q`]", "[a-b,c]", "[a-b-c]", "[in-rwk,ctx]", "[simp'X'],[core]",
+      "[simp'X'][core]", "[simp'X'],[core],[ctx'y']", "[a],[b[c],[d]]", "[bold[ctx]]", "[bold'x']", "[sum`organized`[ctx]][ref'organized']",
+      "[sum`organized`[ctx]] organized", "[crit'x']", "[logic q]a -> b\n! c -> d = e\nz = y + 1[/logic]", "[ctx: a, b]",
+      "[ph-x`q`][ph-y]", "[--germinate]", "[--germinate[ph-alvo'A']]", "[dfn'a']", "[in-zzz]", "[a],[zzz]", "[ctx`x` 'y']",
+      "[ctx[raw] <b> & [/raw]]", "[off]a <b> \"c\"[on]", "[gt'a'[ctx]]", "[ctx-cat'a']", "[ctx;;[sum]", "[ctx]] [sum]",
+      "[ctx'a'];[=[sum'b']", ...["[a[x]],[b[y]]", "[a[a]],[b]", "[a[a[x]]],[b]"].map(t => "[ctx".repeat(13) + t)];
+    XML_PROBES.forEach((src, k) => runXml("xml-" + (k + 1), src, SNAP_OPTS));
+    fs.writeFileSync(path.join(mods, "xml.json"), JSON.stringify({ engine: G.VERSION, runs: xmlRuns }, null, 1) + "\n");
+    console.log("  ! module oracle written: util, vocabulary, stores, lexer, logic, trees, parse, xml to " + mods);
   }
 
   if (process.argv.indexOf("--update-snapshot") !== -1) {
