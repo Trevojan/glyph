@@ -12,7 +12,7 @@
 | environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed |
 | ground | read in the order the handoff names; `npm run check` (33 buckets, 41 s) and `npm run check:rust` (20 crates, 3 s) green on the clone at `ea8fc59`, before anything was touched |
 | layout | **closed** — its val holds (below), five banks |
-| queue | ORD-0001 and ORD-0002 closed; ORD-0003 opens next. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
+| queue | ORD-0001 and ORD-0002 closed. **ORD-0003 open** — emitted into [`ORD-0003/`](ORD-0003/ORD-0003.xml), no diagnostics. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
 
 ## The layout, built
 
@@ -102,7 +102,18 @@ not strings.
 
 ## Open, and why
 
-Nothing is open. ORD-0003, `glyph-vocab` and `glyph-stores`, opens next.
+- **ORD-0003, `glyph-vocab` and `glyph-stores`.** Measured before building:
+  the four sources `build-templates.js` reads — `GLOSSARY.md`,
+  `expansions.txt`, `rules.json`, `templates.json`, as `CLAUDE.md` names them —
+  make the three stores, not the vocabulary. Aliases, arity (`FRAMES`,
+  `SLOTS`), moods, categories and the element glosses live only in
+  `scripts/core/vocabulary.js`; `INSTR` does not even repeat the glossary's
+  labels (`DFN` is "Define Symbol" in the engine, "Define" in the glossary).
+  So `glyph-vocab`'s `build.rs` reads its tables from `vocabulary.js`, the one
+  place they live, and `glyph-stores`' compiles the stores from the four
+  sources. The expansions store also carries `schema` and a `note` that are
+  `build-templates.js`'s own words; they are read from its output rather than
+  typed a second time.
 
 ## Measured
 
@@ -209,7 +220,7 @@ Closed questions, none answered.
 | ORD | opened | closed | open for |
 |---|---|---|---|
 | ORD-0001 | `02c92ee` 01:28 | `030ed76` 01:31 | 3 min |
-| ORD-0002 | `3413eb5` 01:40 | the commit after `79aebbd` | ~13 min, three work banks |
+| ORD-0002 | `3413eb5` 01:40 | `4c4743a` 01:54 | 14 min, three work banks |
 
 | # | commit | step | UTC | checks |
 |---|---|---|---|---|
@@ -226,4 +237,5 @@ Closed questions, none answered.
 | 10 | `85f5b6f` | ORD-0002 work 1/3 — the export answers `util.js`; `check:rust` writes the oracle | 01:43 | green; `check:rust` 49 s |
 | 11 | `ecb85d5` | ORD-0002 work 2/3 — the oracle reader and `glyph-util` | 01:48 | red against `todo!()` first, then green; 3 of 4 mutations killed |
 | 12 | `79aebbd` | ORD-0002 work 3/3 — `glyph-version`, `VERSION` read from `version.js` | 01:51 | red against an empty constant first, then green |
-| 13 | this commit | ORD-0002 closes | 2026-09-25 | green |
+| 13 | `4c4743a` | ORD-0002 closes | 01:54 | green |
+| 14 | this commit | ORD-0003 emitted and open | 2026-09-25 | green |

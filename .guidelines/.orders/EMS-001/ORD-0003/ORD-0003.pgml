@@ -1,0 +1,6 @@
+[block'ORD-0003-vocabulary'
+  [ctx'the spec of EMS-001','.guidelines/.orders/EMS-001/EMS-001.pgml']
+  [onlyif'ORD-0002 closed']
+  [tgt'glyph-vocab and glyph-stores: build.rs turns the four sources build-templates.js reads into tables, and the context object is a struct passed by reference']
+  [val'the generated tables','the digest of every generated table equals the JS store']
+];
