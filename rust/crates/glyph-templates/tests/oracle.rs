@@ -90,7 +90,7 @@ fn level(p: &Json, ctx: &Context, expanding: &[String], id: &str, n: &mut Count)
     assert_eq!(result.clone().err(), thrown_at(p, "expand"), "{id} {expanding:?}: what expansion throws");
     assert_eq!(Json::Arr(raised.iter().map(diag_json).collect()), Json::Arr(p.a("expand").to_vec()),
                "{id} {expanding:?}: what expansion raises");
-    assert_eq!(dump_of(&tree), *p.get("after").expect("after"), "{id} {expanding:?}: the tree after expansion");
+    assert_eq!(dump_of(&tree, false), *p.get("after").expect("after"), "{id} {expanding:?}: the tree after expansion");
     n.levels += 1;
     n.expanded += tree.nodes.iter().filter(|nd| nd.expanded == Some(true)).count();
     n.raised += p.a("expand").len();
@@ -123,7 +123,7 @@ fn every_dump_reads_back_to_itself() {
     fn each(p: &Json, id: &str, n: &mut usize) {
         for k in ["before", "after"] {
             let d = p.get(k).unwrap_or_else(|| panic!("{id}: no {k}"));
-            assert_eq!(dump_of(&tree_of(d)), *d, "{id}: a dump the tree does not hold");
+            assert_eq!(dump_of(&tree_of(d), false), *d, "{id}: a dump the tree does not hold");
             *n += 1;
         }
         p.a("parses").iter().for_each(|q| each(q, id, n));

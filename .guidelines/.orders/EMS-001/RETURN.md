@@ -241,7 +241,8 @@ c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828  -
 
 ## Open, and why
 
-**ORD-0007, `glyph-parse`**, open since the commit that carries this line.
+**ORD-0007, `glyph-parse`**, open since `b145777`; its work is banked, and
+the close runs the proof.
 Its val — "the AST envelope equals the oracle digest on all 114 sources" —
 names a projection that `emit-ast.js` makes, and `crate-graph.js` puts that
 module in `glyph-envelope`, ORD-0009's crate; ORD-0009 opens only after
@@ -249,6 +250,40 @@ ORD-0008, and its own val names the same digest. So the val is read as the
 tree the envelope is made from: every field `emit-ast.js` reads — each node's,
 each segment's, and each diagnostic's in pt-BR and in en-EU, `at` included —
 equal to the JS's on all 114 sources. The reading is question 7.
+
+## ORD-0007, how it was read
+
+- **Five JS defects the port reproduces**, measured, and left as the JS
+  answers them:
+  - **The vocabulary tables are plain objects too.** `constructor` and
+    `__proto__`, the two session words `Object.prototype` gives the lexer
+    (ORD-0004), are editorial (`EDITORIAL_ONLY`), named structures that want a
+    literal name (`NAMED_STRUCT`), and slotted commands (`SLOTS`): the function
+    `Object` has one slot and names none, so `MissingOperand` reads *"Falta ."*.
+    With a rules store the parse throws first (ORD-0006); without one — inside
+    a template's body — these are the diagnostics the author reads.
+  - **`constructor` written as prose is "in the vocabulary".** `SESSION[lw]`
+    answers it, so the loose word draws `LooseCommandWord` and the advice to
+    write `[constructor`.
+  - **A binding named after a member of the prototype is bound twice from its
+    first use.** `binds` is a plain object: `[sum'toString'[ctx]]` raises
+    `DuplicateBinding` at `fix`, and so do `valueOf`, `constructor`,
+    `hasOwnProperty` and the rest.
+  - **`[/undefined]` closes an open template.** A closing tag is matched
+    against `String(canonical).toUpperCase()`, and a template node has no
+    canonical.
+  - **`BackslashMood` shows `emo`, not `\emo\`.** The JS writes
+    `"<code>\emo\</code>"`; `\e` and `\<` are escapes of nothing, so the
+    backslashes the message is about never reach it.
+- **What travels is not all en-EU.** `toAST` parses in en-EU, and three kinds
+  of diagnostic carry one language into it: a template constraint's
+  (*"dentro de"*), a body's syntax error raised again under its invocation
+  (*"no corpo de"*), and what `logic.js` raises — pt-BR for most (*"linha 3
+  sem expressão"*), English for `CapFloorNotice` and `UndefinedVariable`.
+- **Two arms of `parse()` no source reaches, kept.** `TruncatedLiteral` names
+  `;` when a literal is closed by one, and the lexer has not closed a literal
+  at `;` since 2026-09-05; and a bare tag's `extend` fallback never decides,
+  since a bare tag always follows the `-` or `,` that set its operator.
 
 ## ORD-0006, how it was read
 
@@ -554,6 +589,29 @@ and `npm run check` passes on the commit that carries this return.
   is taken. The cycle lived until the export recorded every level: a cycle is
   only ever met one level down, and the first recording answered that level
   with the JS's.
+- **`parse.json`.** The export writes the 114 sources parsed as the snapshot
+  parses them, once in pt-BR and once in en-EU: the tree with every field a
+  projection reads — the species pass, the binder marks, the suggestion, and
+  a function kept as `{ "function": "Object" }` where JSON would drop it —
+  each segment's own fields, and the diagnostics as `parse` returns them, `at`
+  and `plain` included. Beside them: 100 probes, one or more per branch of
+  `parse()`; 7 without the session words or without valency; the 50 template
+  probes parsed whole, the real parse handed to the expander at every level,
+  with and without a rules store; and 2 over a composition store whose
+  entries lack a species or a numeric depth. 273 runs, 11 371 nodes, 252
+  diagnostics in each language, 9 runs that throw. The export refuses a node
+  or a segment holding a key its dump does not know, and a tree that moves
+  with the language. `trees.json` writes the function `Object` the same way.
+- **`glyph-parse`, held.** The tree grows what the projections read — species
+  and composition depth, the binder mark, the suggestion, a mood's order, a
+  gloss that is the function `Object` — and the segment its pending `[off]`
+  node. The port answered all 273 runs at once, in both languages. Mutated,
+  36 of 40 die. The four that live cannot die: the two arms no source
+  reaches (ORD-0007, how it was read); `SingletonList` at `got <= 1`, the same
+  as `got == 1` once `got == 0` has its branch; and the templates pass without
+  `defd`'s prototype, which the registry answers the same. Two died only once
+  the export had a probe for them: exactly 8 commands closed by one `;`, and
+  a store entry whose depth is not a number.
 - **Store shapes the JS never guards stay outside the port's contract.** A
   null param; `params`, `constraints` or `exemptUnder` that is not a list; a
   body that is not a string: the JS throws a TypeError in V8's words, or
@@ -573,7 +631,7 @@ and `npm run check` passes on the commit that carries this return.
 | ORD-0004 | `2c68949` 02:34 | `e08f1f9` 02:45 | 11 min, one work bank |
 | ORD-0005 | `2466cef` 02:49 | `17658ec` 03:00 | 11 min, one work bank |
 | ORD-0006 | `8f996df` 03:15 | `480268b` 03:50 | 35 min, one work bank |
-| ORD-0007 | the commit after `480268b` | — | open |
+| ORD-0007 | `b145777` 03:54 | — | open |
 
 | # | commit | step | UTC | checks |
 |---|---|---|---|---|
@@ -606,4 +664,5 @@ and `npm run check` passes on the commit that carries this return.
 | 26 | `8f996df` | ORD-0006 emitted and open | 03:15 | green |
 | 27 | `ca9c1a6` | ORD-0006 work — `glyph-templates`, `glyph-rules`, the tree in `glyph-util`, `trees.json` in the export | 03:47 | green at once; 28 of 32 mutations killed, then 30 once the export recorded every level and a lower-case forbidden name; the pair-key test was red on its own expectation — by UTF-16 unit U+10000 sorts before U+FF21 — and was fixed to what node answers |
 | 28 | `480268b` | ORD-0006 closes | 03:50 | green |
-| 29 | this commit | ORD-0007 emitted and open | 2026-09-25 | green |
+| 29 | `b145777` | ORD-0007 emitted and open | 03:54 | green |
+| 30 | this commit | ORD-0007 work — `glyph-parse`, `parse.json` in the export, the tree's fields for the projections | 2026-09-25 | green at once on 273 runs; 33 of 40 mutations killed, then 36 of 40 with a probe at the auto-close limit and a store with no numeric depth, and one mutation of mine rewritten because it did not build |
