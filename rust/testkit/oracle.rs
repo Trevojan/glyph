@@ -150,16 +150,46 @@ pub fn ck(s: &str) -> String {
     format!("{a:08x}{b:08x}")
 }
 
-/* ---- the parser's tree, as the export writes it (trees.json, ORD-0006) ----
+/* ---- the parser's tree, as the export writes it (trees.json from ORD-0006,
+   parse.json from ORD-0007) ----
    A tree is `{ nodes, segments }`: every node reachable from the segments,
    once, in the order a pre-order walk first meets it, each with its fields in
-   the order `fieldsOf` names them, then `children` and `parent` as indices. */
+   the order `fieldsOf` names them, then `children` and `parent` as indices.
+   A segment is its children, or — in a full dump — an object with its own
+   fields too. A function where a value should be is `{ "function": name }`. */
 
-use glyph_util::tree::{Diag, Emotion, Gloss, Id, Node, Segment, Span, Tree};
+use glyph_util::tree::{Diag, Emotion, Gloss, Id, Node, Segment, Span, Suggestion, Tree};
 
-const FIELDS: [&str; 25] = ["id", "raw", "tier", "canonical", "gloss", "alias", "colon", "autoClosed", "editorial",
+fn gloss_of(v: &Json) -> Gloss {
+    match v {
+        Json::Obj(kv) if kv.is_empty() => Gloss::Prototype,
+        Json::Obj(kv) if kv.len() == 1 && kv[0].0 == "function" && kv[0].1 == Json::Str("Object".into()) => Gloss::Object,
+        Json::Str(t) => Gloss::Text(t.clone()),
+        v => panic!("not a gloss: {v:?}"),
+    }
+}
+fn gloss_json(g: &Gloss) -> Json {
+    match g {
+        Gloss::Text(t) => Json::Str(t.clone()),
+        Gloss::Prototype => Json::Obj(Vec::new()),
+        Gloss::Object => Json::Obj(vec![("function".into(), Json::Str("Object".into()))]),
+    }
+}
+fn mood_of(e: &Json) -> Emotion {
+    Emotion { name: e.s("name").to_string(), gloss: gloss_of(e.get("gloss").expect("a mood's gloss")),
+              order: e.get("order").map(index) }
+}
+fn mood_json(e: &Emotion) -> Json {
+    let mut kv = vec![("name".to_string(), Json::Str(e.name.clone())), ("gloss".to_string(), gloss_json(&e.gloss))];
+    if let Some(o) = e.order {
+        kv.push(("order".into(), Json::Num(o as f64)));
+    }
+    Json::Obj(kv)
+}
+
+const FIELDS: [&str; 29] = ["id", "raw", "tier", "canonical", "gloss", "alias", "colon", "autoClosed", "editorial",
     "origin", "chainElement", "slotName", "depth", "literal", "v", "form", "role", "text", "rawFence", "template",
-    "isDef", "mode", "isDefinition", "expanded", "boundSlot"];
+    "isDef", "mode", "isDefinition", "expanded", "boundSlot", "species", "compositionDepth", "isBinder", "suggestion"];
 
 fn index(v: &Json) -> usize {
     v.num().filter(|n| *n >= 0.0).unwrap_or_else(|| panic!("not an index: {v:?}")) as usize
@@ -181,10 +211,7 @@ pub fn tree_of(dump: &Json) -> Tree<()> {
                 "raw" => nd.raw = Some(text(v)),
                 "tier" => nd.tier = Some(text(v)),
                 "canonical" => nd.canonical = Some(text(v)),
-                "gloss" => nd.gloss = Some(match v {
-                    Json::Obj(kv) if kv.is_empty() => Gloss::Prototype,
-                    v => Gloss::Text(text(v)),
-                }),
+                "gloss" => nd.gloss = Some(gloss_of(v)),
                 "alias" => nd.alias = Some(flag(v)),
                 "colon" => nd.colon = Some(maybe(v)),
                 "autoClosed" => nd.auto_closed = Some(flag(v)),
@@ -205,12 +232,15 @@ pub fn tree_of(dump: &Json) -> Tree<()> {
                 "isDefinition" => nd.is_definition = Some(flag(v)),
                 "expanded" => nd.expanded = Some(flag(v)),
                 "boundSlot" => nd.bound_slot = Some(text(v)),
+                "species" => nd.species = Some(text(v)),
+                "compositionDepth" => nd.composition_depth = Some(v.num()),
+                "isBinder" => nd.is_binder = Some(flag(v)),
+                "suggestion" => nd.suggestion = Some(match v {
+                    Json::Null => None,
+                    v => Some(Suggestion { name: v.s("name").to_string(), how: v.s("how").to_string() }),
+                }),
                 "logic" => nd.logic = Some(text(v)),
-                "emotions" => nd.emotions = v.arr().expect("emotions are a list").iter().map(|e| Emotion {
-                    name: text(e.get("name").expect("an emotion's name")),
-                    gloss: text(e.get("gloss").expect("an emotion's gloss")),
-                    order: index(e.get("order").expect("an emotion's order")),
-                }).collect(),
+                "emotions" => nd.emotions = v.arr().expect("emotions are a list").iter().map(mood_of).collect(),
                 "tok" => nd.tok = Some(Span { k: text(v.get("k").expect("tok.k")), s: index(v.get("s").expect("tok.s")),
                                               e: index(v.get("e").expect("tok.e")) }),
                 "children" => nd.children = v.arr().expect("children are a list").iter().map(index).collect(),
@@ -220,14 +250,25 @@ pub fn tree_of(dump: &Json) -> Tree<()> {
         }
         nd
     }).collect();
-    let segments = dump.a("segments").iter()
-        .map(|s| Segment { children: s.arr().expect("a segment is a list").iter().map(index).collect(), ..Default::default() })
-        .collect();
+    let segments = dump.a("segments").iter().map(|s| match s {
+        Json::Arr(kids) => Segment { children: kids.iter().map(index).collect(), ..Default::default() },
+        s => Segment {
+            children: s.a("children").iter().map(index).collect(),
+            mood: s.a("mood").iter().map(mood_of).collect(),
+            auto_closed: index(s.get("autoClosed").expect("autoClosed")),
+            breaks: index(s.get("breaks").expect("breaks")),
+            cause: s.get("cause").and_then(Json::str).map(str::to_string),
+            continues: s.get("continues") == Some(&Json::Bool(true)),
+            is_return: s.get("isReturn") == Some(&Json::Bool(true)),
+            pending_mode: s.get("pendingMode").map(|p| if *p == Json::Null { None } else { Some(index(p)) }),
+        },
+    }).collect();
     Tree { nodes, segments }
 }
 
-/// The dump of a tree, as the export writes one.
-pub fn dump_of<X: Clone>(tree: &Tree<X>) -> Json {
+/// The dump of a tree, as the export writes one: `full` writes each segment
+/// with its own fields, as parse.json does.
+pub fn dump_of<X: Clone>(tree: &Tree<X>, full: bool) -> Json {
     let mut order: Vec<Id> = Vec::new();
     let mut at: HashMap<Id, usize> = HashMap::new();
     for sg in &tree.segments {
@@ -252,10 +293,7 @@ pub fn dump_of<X: Clone>(tree: &Tree<X>) -> Json {
                 "raw" => nd.raw.as_deref().map(s),
                 "tier" => nd.tier.as_deref().map(s),
                 "canonical" => nd.canonical.as_deref().map(s),
-                "gloss" => nd.gloss.as_ref().map(|g| match g {
-                    Gloss::Text(t) => s(t),
-                    Gloss::Prototype => Json::Obj(Vec::new()),
-                }),
+                "gloss" => nd.gloss.as_ref().map(gloss_json),
                 "alias" => nd.alias.map(Json::Bool),
                 "colon" => nd.colon.as_ref().map(|c| c.as_deref().map_or(Json::Null, s)),
                 "autoClosed" => nd.auto_closed.map(Json::Bool),
@@ -276,6 +314,11 @@ pub fn dump_of<X: Clone>(tree: &Tree<X>) -> Json {
                 "isDefinition" => nd.is_definition.map(Json::Bool),
                 "expanded" => nd.expanded.map(Json::Bool),
                 "boundSlot" => nd.bound_slot.as_deref().map(s),
+                "species" => nd.species.as_deref().map(s),
+                "compositionDepth" => nd.composition_depth.map(|d| d.map_or(Json::Null, Json::Num)),
+                "isBinder" => nd.is_binder.map(Json::Bool),
+                "suggestion" => nd.suggestion.as_ref().map(|g| g.as_ref().map_or(Json::Null, |g| Json::Obj(vec![
+                    ("name".into(), s(&g.name)), ("how".into(), s(&g.how))]))),
                 _ => unreachable!(),
             };
             if let Some(v) = v {
@@ -286,8 +329,7 @@ pub fn dump_of<X: Clone>(tree: &Tree<X>) -> Json {
             kv.push(("logic".into(), s(l)));
         }
         if !nd.emotions.is_empty() {
-            kv.push(("emotions".into(), Json::Arr(nd.emotions.iter().map(|e| Json::Obj(vec![
-                ("name".into(), s(&e.name)), ("gloss".into(), s(&e.gloss)), ("order".into(), num(e.order))])).collect())));
+            kv.push(("emotions".into(), Json::Arr(nd.emotions.iter().map(mood_json).collect())));
         }
         if let Some(t) = &nd.tok {
             kv.push(("tok".into(), Json::Obj(vec![("k".into(), s(&t.k)), ("s".into(), num(t.s)), ("e".into(), num(t.e))])));
@@ -296,7 +338,25 @@ pub fn dump_of<X: Clone>(tree: &Tree<X>) -> Json {
         kv.push(("parent".into(), nd.parent.map_or(Json::Null, |p| at.get(&p).map_or(Json::Num(-1.0), |&i| num(i)))));
         Json::Obj(kv)
     }).collect();
-    let segments = tree.segments.iter().map(|sg| Json::Arr(sg.children.iter().map(|c| num(at[c])).collect())).collect();
+    let segments = tree.segments.iter().map(|sg| {
+        let kids = Json::Arr(sg.children.iter().map(|c| num(at[c])).collect());
+        if !full {
+            return kids;
+        }
+        let mut kv = vec![("children".to_string(), kids), ("mood".into(), Json::Arr(sg.mood.iter().map(mood_json).collect())),
+                          ("autoClosed".into(), num(sg.auto_closed)), ("breaks".into(), num(sg.breaks)),
+                          ("cause".into(), sg.cause.as_deref().map_or(Json::Null, s))];
+        if sg.continues {
+            kv.push(("continues".into(), Json::Bool(true)));
+        }
+        if sg.is_return {
+            kv.push(("isReturn".into(), Json::Bool(true)));
+        }
+        if let Some(p) = sg.pending_mode {
+            kv.push(("pendingMode".into(), p.map_or(Json::Null, |p| at.get(&p).map_or(Json::Num(-1.0), |&i| num(i)))));
+        }
+        Json::Obj(kv)
+    }).collect();
     Json::Obj(vec![("nodes".into(), Json::Arr(nodes)), ("segments".into(), Json::Arr(segments))])
 }
 

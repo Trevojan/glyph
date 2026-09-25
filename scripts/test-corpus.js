@@ -1915,19 +1915,34 @@ function runSnapshotChecks() {
        parser's pipeline here is checked, not assumed */
     /* flat, as an arena: a tree 8000 levels deep overflows a recursive dump
        and JSON.stringify alike, and a list of nodes with child indices does not */
-    const fieldsOf = nd => {
-      const o = {};
-      ["id", "raw", "tier", "canonical", "gloss", "alias", "colon", "autoClosed", "editorial", "origin",
+    /* a function the JS holds where a value should be — `Object`, which the
+       prototype answers for `constructor` — is written as what it is, since
+       JSON would drop it */
+    const valueOf = v => typeof v === "function" ? { function: v.name } : v;
+    const FIELDS = ["id", "raw", "tier", "canonical", "gloss", "alias", "colon", "autoClosed", "editorial", "origin",
        "chainElement", "slotName", "depth", "literal", "v", "form", "role", "text", "rawFence", "template",
-       "isDef", "mode", "isDefinition", "expanded", "boundSlot"].forEach(k => {
-        if (nd[k] !== undefined && typeof nd[k] !== "function") o[k] = nd[k];
+       "isDef", "mode", "isDefinition", "expanded", "boundSlot"];
+    /* `full` adds what only the whole parse sets — the species pass, the
+       bindings, the suggestion — and the segments' own fields; every key a
+       node or a segment holds must be one the dump knows */
+    const FULL = ["species", "compositionDepth", "isBinder", "suggestion"];
+    const KNOWN = new Set([...FIELDS, ...FULL, "logic", "emotions", "tok", "children", "parent"]);
+    const KNOWN_SEG = new Set(["children", "mood", "autoClosed", "breaks", "cause", "continues", "isReturn", "pendingMode"]);
+    const moodOf = e => { const o = { name: e.name, gloss: valueOf(e.gloss) }; if (e.order !== undefined) o.order = e.order; return o; };
+    const fieldsOf = (nd, full) => {
+      const o = {};
+      (full ? [...FIELDS, ...FULL] : FIELDS).forEach(k => {
+        if (nd[k] === undefined) return;
+        if (k === "suggestion") o[k] = nd[k] && { name: nd[k].name, how: nd[k].how };
+        else o[k] = valueOf(nd[k]);
       });
       if (nd.logic) o.logic = nd.logic.name || "";
-      if (nd.emotions && nd.emotions.length) o.emotions = nd.emotions;
+      if (nd.emotions && nd.emotions.length) o.emotions = nd.emotions.map(moodOf);
       if (nd.tok) o.tok = { k: nd.tok.k, s: nd.tok.s, e: nd.tok.e };
+      if (full) Object.keys(nd).forEach(k => { if (!KNOWN.has(k)) throw new Error("parse.json: a node holds " + k); });
       return o;
     };
-    const dumpSegs = segs => {
+    const dumpSegs = (segs, full) => {
       const order = [], at = new Map();
       segs.forEach(sg => {
         const stack = sg.children.slice().reverse();
@@ -1941,9 +1956,18 @@ function runSnapshotChecks() {
         }
       });
       return {
-        nodes: order.map(nd => Object.assign(fieldsOf(nd), { children: (nd.children || []).map(c => at.get(c)),
+        nodes: order.map(nd => Object.assign(fieldsOf(nd, full), { children: (nd.children || []).map(c => at.get(c)),
           parent: nd.parent == null ? null : at.has(nd.parent) ? at.get(nd.parent) : -1 })),
-        segments: segs.map(sg => sg.children.map(c => at.get(c)))
+        segments: segs.map(sg => {
+          const kids = sg.children.map(c => at.get(c));
+          if (!full) return kids;
+          Object.keys(sg).forEach(k => { if (!KNOWN_SEG.has(k)) throw new Error("parse.json: a segment holds " + k); });
+          const o = { children: kids, mood: sg.mood.map(moodOf), autoClosed: sg.autoClosed, breaks: sg.breaks, cause: sg.cause };
+          if (sg.continues !== undefined) o.continues = sg.continues;
+          if (sg.isReturn !== undefined) o.isReturn = sg.isReturn;
+          if (sg.pendingMode !== undefined) o.pendingMode = sg.pendingMode === null ? null : at.get(sg.pendingMode);
+          return o;
+        })
       };
     };
     const PROBE_TEMPLATES = {
@@ -1964,7 +1988,8 @@ function runSnapshotChecks() {
       rep: { gloss: "A repeat named constructor.", params: [{ name: "constructor", repeat: true }], body: "[cat[ph-constructor`q`]]" },
       Constructor: { gloss: "Found by its own name only.", params: [], body: "[nt'ctor']" },
       bare: { gloss: "Constrained with no rules store.", params: [], body: "[itr[elab]]", constraints: [{ id: "no-sum", forbid: "sum" }] },
-      wraprep: { gloss: "A body whose own expansion throws.", params: [], body: "[ctx'w'][--rep]" }
+      wraprep: { gloss: "A body whose own expansion throws.", params: [], body: "[ctx'w'][--rep]" },
+      clash: { gloss: "A body that breaks a rule.", params: [], body: "[mand'x'][opt'x']" }
     };
     const probeTemplates = { ...TPL.templates, ...PROBE_TEMPLATES };
     const TEMPLATE_PROBES = [
@@ -1977,7 +2002,7 @@ function runSnapshotChecks() {
       "[ctx'c'][brst'x']", "[pos[ngt]]", "[pos'a'][ngt'b']", "[--pair[ph-first[ctx]]'b']",
       "[--strs'a''b']", "[--strs[ph-beta'B']'a']", "[--ctor'a''b']", "[--ctor[ph-constructor'C']'a']", "[--rep]",
       "[--rep[ph-constructor'x']]", "[--Constructor]", "[--constructor]", "[constructor]", "[mand'x'][opt'x'];[ctx[__proto__]]",
-      "[pos[constructor]]", "[opt[opt[mand'x']]]", "[--wraprep]"
+      "[pos[constructor]]", "[opt[opt[mand'x']]]", "[--wraprep]", "[--clash]"
     ];
     /* without a rules store: checkRules stays out, and the constraints read their
        own names — `[constructor` is one of them, through Object.prototype */
@@ -2071,7 +2096,64 @@ function runSnapshotChecks() {
       engine: G.VERSION, probeTemplates: PROBE_TEMPLATES, probeRules: PROBE_RULES,
       compileRules: { repository: compiled(RULESTORE), probe: compiled(PROBE_RULES) }, runs: treeRuns
     }, null, 1) + "\n");
-    console.log("  ! module oracle written: util, vocabulary, stores, lexer, logic, trees to " + mods);
+
+    /* parser.js (from ORD-0007): every source parsed as the snapshot parses it,
+       once in pt-BR and once in en-EU — the tree with every field a
+       projection reads, the segments, and the diagnostics as parse returns
+       them — and probes, one or more per branch of parse(), some of them
+       without the session words or without valency */
+    const PARSE_PROBES = [
+      "", "[", "[ ]", "[ctx", "]", "[/ctx]", "[ctx[sum'x'][/ctx]'y'", "[--t[/undefined]x", "[--t: a]", "[ctx: a, b]",
+      "[block: a, b]", "[ctx: a = b - c]", "[ctx: 'q' `r`]", "[ctx:]", "[ctx`x]", "[ctx`x;", "[ctx`x", "[ctx'x",
+      "[ctx/eth/'x']", "/eth/xyz/", "[ctx/constructor/]", "/cnf/[sum/eth/]", "[rw-", "[rw-]", "[rw-cr'x']",
+      "[in-rwk/ctx]", "\\eth\\", "[ctx'a','b']", "[dfn'a'='b']", "a;b;;c", ";;", "[ctx;;", "[off]x[on]y", "[off]x",
+      "[ctx[off]raw text", "[off]a[on][off]b", "[raw]x[/raw]", "[raw]x", "[ctx[raw]y[/raw]", "[logic]a = b[/logic]",
+      "[logic q]a -> b[/logic]", "[logic]a", "[ctx[logic]x = 1[/logic]]", "r- x", "R: y", "if x", "rd", "...", "constructor",
+      "Constructor", "[ctx] prose ist", "[ph-x`q`]", "[ph-x]", "[ph[ctx]]", "[block]", "[block'n']", "[block[ctx]'n']",
+      "[section[logic]x[/logic]]", "[ctx[sum[ctx[sum[ctx[sum[ctx[sum[ctx[sum[ctx",
+      "[ctx[sum[ctx[sum[ctx[sum[ctx[sum[ctx[sum;", "[ctx[sum[ctx[sum[ctx;", "[ctx[sum[ctx[sum[ctx[sum[ctx[sum;",
+      "[ctx[sum[ctx[sum[ctx[sum[ctx[sum[ctx;", "[gt'a']", "[gt: a]", "[gt'a''b'''c']",
+      "[cat'a']", "[cat'a','b']", "[ctx]", "[ctx'x']", "[--x=]", "[--x=[ctx]]", "[--nosuch]", "[--constructor]",
+      "[--toString]", "[--Germinate]", "[sum`organized`[ctx]][ref'organized']", "[sum'a'[ctx]][sum'a'[ctx]]",
+      "[sum'toString'[ctx]]", "[sum'__proto__'[ctx]]", "[sum'two words'[ctx]]", "[sum[ctx]'late']", "[sum'x'-ctx]",
+      "[xyzzy]", "[summ]", "[constructor]", "[__proto__'x']", "[pos[constructor]]", "[rw-cr-ctx]", "[a-b,c]",
+      "[ctx[--germinate'x']]", "[mand'x'][opt'x']", "[ctx'x'][ctx'y'];[ctx]", "[CTX'Upper']", "[cx'alias']",
+      "[heavyreview]", "[ctx`x`'y'[sum]'z']", "[ctx]]", "[--t'a'", "[ctx[--t]]]"
+    ];
+    const NO_SESSION = ["constructor", "[constructor]", "rd", "[ctx] prose ist"];
+    const NO_VALENCY = ["[gt'a']", "[ctx]", "[cat'a']"];
+    const parseRuns = [];
+    const runParse = (id, src, opts) => {
+      const run = { id: id, src: src };
+      if (opts.templates !== SNAP_OPTS.templates) run.probeTemplates = true;
+      if (opts.rules !== SNAP_OPTS.rules) run.withRules = false;
+      if (opts.expansions !== SNAP_OPTS.expansions) run.expansions = opts.expansions;
+      if (opts.session === false) run.session = false;
+      if (opts.valency === false) run.valency = false;
+      for (const lang of ["pt", "en"]) {
+        let r;
+        try { r = G.parse(src, lang === "en" ? { ...opts, lang: "en" } : opts); }
+        catch (e) { run[lang] = { thrown: e.message }; continue; }
+        const tree = dumpSegs(r.segments, true);
+        if (lang === "pt") run.tree = tree;
+        else if (JSON.stringify(tree) !== JSON.stringify(run.tree)) throw new Error("parse.json: the tree of " + id + " moves with the language");
+        run[lang] = r.gaps.map(g => ({ sev: g.sev, lab: g.lab, msg: g.msg, code: g.code, at: g.at || null, plain: g.plain }));
+      }
+      parseRuns.push(run);
+    };
+    CORPUS.forEach(c => { if (c && c.id && typeof c.src === "string") runParse(c.id, c.src, SNAP_OPTS); });
+    PARSE_PROBES.forEach((src, k) => runParse("probe-" + (k + 1), src, SNAP_OPTS));
+    NO_SESSION.forEach((src, k) => runParse("nosession-" + (k + 1), src, { ...SNAP_OPTS, session: false }));
+    NO_VALENCY.forEach((src, k) => runParse("novalency-" + (k + 1), src, { ...SNAP_OPTS, valency: false }));
+    /* the template probes parsed whole: the expander handed the real parse,
+       every level down, with the probe templates, and without the rules */
+    TEMPLATE_PROBES.forEach((src, k) => runParse("tpl-" + (k + 1), src, { ...SNAP_OPTS, templates: probeTemplates }));
+    /* a composition store with an entry of no species and one whose depth is not a number */
+    const PROBE_EXPANSIONS = { commands: { CTX: { species: "atom" }, SUM: { species: "composite", depth: "2" }, REF: { depth: 1 } } };
+    ["[ctx[sum'x']]", "[ref'x'][nt'y']"].forEach((src, k) => runParse("store-" + (k + 1), src, { ...SNAP_OPTS, expansions: PROBE_EXPANSIONS }));
+    BARE_PROBES.forEach((src, k) => runParse("tpl-bare-" + (k + 1), src, { ...SNAP_OPTS, templates: probeTemplates, rules: null }));
+    fs.writeFileSync(path.join(mods, "parse.json"), JSON.stringify({ engine: G.VERSION, runs: parseRuns }, null, 1) + "\n");
+    console.log("  ! module oracle written: util, vocabulary, stores, lexer, logic, trees, parse to " + mods);
   }
 
   if (process.argv.indexOf("--update-snapshot") !== -1) {

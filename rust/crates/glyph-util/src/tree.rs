@@ -12,8 +12,7 @@
 //! `canonical`, a command has no `v`. `Some(None)` is a field the JS holds as
 //! `null` (a command's `colon` before a colon arrives, a slot name's `origin`).
 //!
-//! `walk` and `stripTags` are util.js's; `valueChildren` arrives with the
-//! parser that reads it (ORD-0007).
+//! `walk`, `valueChildren` and `stripTags` are util.js's.
 
 pub type Id = usize;
 
@@ -21,17 +20,26 @@ pub type Id = usize;
 #[derive(Debug, Clone, PartialEq)]
 pub struct Emotion {
     pub name: String,
-    pub gloss: String,
-    pub order: usize,
+    pub gloss: Gloss,
+    pub order: Option<usize>,
 }
 
-/// A node's gloss. The JS looks a session word up in a plain object, so
-/// `__proto__` finds `Object.prototype` there and keeps it as its gloss —
-/// JSON writes it `{}` (EMS-001/RETURN.md, ORD-0004).
+/// What the parser suggests for a name outside the vocabulary.
+#[derive(Debug, Clone, PartialEq)]
+pub struct Suggestion {
+    pub name: String,
+    pub how: String,
+}
+
+/// A gloss. The JS looks session words and moods up in plain objects, so
+/// `__proto__` finds `Object.prototype` there, and `constructor` the function
+/// `Object` — which JSON drops, and `String()` writes as its source
+/// (EMS-001/RETURN.md, ORD-0004).
 #[derive(Debug, Clone, PartialEq)]
 pub enum Gloss {
     Text(String),
     Prototype,
+    Object,
 }
 
 /// A token's kind and span, as the node keeps it.
@@ -69,6 +77,14 @@ pub struct Node<X> {
     pub is_definition: Option<bool>,
     pub expanded: Option<bool>,
     pub bound_slot: Option<String>,
+    /// Set by the species pass, from the composition store: the species, and
+    /// the depth when the store holds a number (`null` otherwise).
+    pub species: Option<String>,
+    pub composition_depth: Option<Option<f64>>,
+    /// The literal that names its command's result.
+    pub is_binder: Option<bool>,
+    /// A name outside the vocabulary: the neighbour meant, or `null`.
+    pub suggestion: Option<Option<Suggestion>>,
     /// A `[logic]` node: the block's name (the parser keeps what it read in
     /// the payload).
     pub logic: Option<String>,
@@ -95,7 +111,9 @@ impl<X> Node<X> {
     }
 }
 
-/// A segment: what `;` or `;;` closes.
+/// A segment: what `;` or `;;` closes. `continues` and `is_return` are only
+/// ever set true; `pending_mode` is the `[off]` node the segment's raw text
+/// goes into, `null` once `[on]` arrives.
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct Segment {
     pub children: Vec<Id>,
@@ -105,7 +123,17 @@ pub struct Segment {
     pub cause: Option<String>,
     pub continues: bool,
     pub is_return: bool,
+    pub pending_mode: Option<Option<Id>>,
 }
+
+/// `LIMITS`: where a long block stops growing, warns, or is cut.
+pub struct Limits {
+    pub indent: usize,
+    pub nesting: usize,
+    pub auto_close: usize,
+    pub ast_depth: usize,
+}
+pub const LIMITS: Limits = Limits { indent: 12, nesting: 10, auto_close: 8, ast_depth: 200 };
 
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct Tree<X> {
@@ -141,6 +169,15 @@ impl<X: Clone> Tree<X> {
             self.nodes.push(nd);
         }
         other.segments.iter().flat_map(|s| s.children.iter().map(|c| c + base)).collect()
+    }
+
+    /// `valueChildren`: the children that count as a filled slot.
+    pub fn value_children(&self, id: Id) -> Vec<Id> {
+        self.nodes[id].children.iter().copied().filter(|&c| {
+            let n = &self.nodes[c];
+            n.is_canonical() || n.is_literal() || n.logic.is_some() || n.is_template()
+                || (n.text == Some(true) && Node::<X>::has(&n.v)) || Node::<X>::has(&n.mode)
+        }).collect()
     }
 
     /// `reparent`: every node under `list`, at any depth, points to its container.
