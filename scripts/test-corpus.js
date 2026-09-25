@@ -33,6 +33,7 @@ import * as CHECK_MOD from "./glyph-check.js";
 import * as VOCAB from "./core/vocabulary.js";
 import * as STORES from "./core/stores.js";
 import { ck } from "./core/emit-ast.js";
+import { depsOf } from "./read-expansions.js";
 
 /* Stores travel through opts in the cases that need them, so the suite
    doesn't depend on the module's global state or on test order. */
@@ -1802,8 +1803,11 @@ function runSnapshotChecks() {
     /* stores.js (from ORD-0003): the three stores as the repository loads
        them, their digests, and what is read off them — for every name the
        composition table and the vocabulary know, and three it does not —
-       with the stores loaded and with none */
+       with the stores loaded and with none. The digests are of the stores as
+       read from disk: by now the suite's parses have hung `__compiled` on the
+       rules object (rules.js), and the envelope's `stores.rules` hashes it */
     const EXP = SNAP_OPTS.expansions;
+    const fresh = f => JSON.parse(fs.readFileSync(path.resolve(__dirname, "../.guidelines/" + f), "utf8"));
     const names = [...new Set([...Object.keys(EXP.commands),
       ...["MODE", "STRUCT", "META", "INSTR", "ALIAS", "SESSION"].flatMap(t => Object.keys(VOCAB[t])),
       "crit", "", "XYZ"])];
@@ -1812,8 +1816,8 @@ function runSnapshotChecks() {
     const digestOf = v => ck(JSON.stringify(v));
     fs.writeFileSync(path.join(mods, "stores.json"), JSON.stringify({
       engine: G.VERSION,
-      digests: { templates: digestOf(SNAP_OPTS.templates), rules: digestOf(SNAP_OPTS.rules),
-                 expansions: digestOf(EXP), commands: digestOf(EXP.commands) },
+      digests: { templates: digestOf(fresh("templates.json").templates), rules: digestOf(fresh("rules.json")),
+                 expansions: digestOf(fresh("expansions.json")), commands: digestOf(fresh("expansions.json").commands) },
       context: {
         templatesFromWhole: digestOf(STORES.createContext({ templates: TPL }).templates),
         templatesFromMap: digestOf(STORES.createContext({ templates: TPL.templates }).templates),
@@ -1822,7 +1826,11 @@ function runSnapshotChecks() {
                 STORES.createContext({}).expansions]
       },
       loaded: readOff(G.createContext(SNAP_OPTS)),
-      bare: readOff(G.createContext({}))
+      bare: readOff(G.createContext({})),
+      /* read-expansions.js' depsOf, the compiler's reading of a formula, over
+         every string of up to 256 units the case files hold: no formula of the
+         table carries a return token since H-09 closed, and these do */
+      depsOf: S.filter(x => x.length <= 256).map(x => [x, depsOf(x)])
     }, null, 1) + "\n");
     console.log("  ! module oracle written: util.json, vocabulary.json, stores.json to " + mods);
   }

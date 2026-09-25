@@ -7,3 +7,10 @@ publish = false
 
 [dependencies]
 glyph-vocab = { path = "../glyph-vocab" }
+
+[build-dependencies]
+glyph-util = { path = "../glyph-util" }
+glyph-vocab = { path = "../glyph-vocab" }
+
+[dev-dependencies]
+glyph-util = { path = "../glyph-util" }
