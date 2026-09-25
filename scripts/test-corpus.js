@@ -2469,7 +2469,7 @@ console.log(" Rules        " + rC + "/" + RULE_CASES.length);
 console.log(" Constraints  " + rK + "/" + CONSTRAINTS.length);
 console.log(" Guard        " + rG + "/" + POSITIVE_WITH_RULES.length);
 console.log(" Composition  " + rX + "/17");
-console.log(" .hgml burn   " + rH + "/14");
+console.log(" .hgml burn   " + rH + "/15");
 console.log(" fromXML      " + rF + "/23");
 console.log(" reference    " + rD + "/11");
 console.log(" round trip   " + rRT + "/7");
