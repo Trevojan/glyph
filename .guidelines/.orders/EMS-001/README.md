@@ -8,6 +8,8 @@ com o pacote que o `--bundle` escreve, e a contagem é desta série.
 
 ## A Ordem aberta
 
+- [`EMS-001/ORD-0003`](ORD-0003/ORD-0003.xml) — `glyph-vocab` e `glyph-stores`; aberta em 2026-09-25
+
 ## Ordens fechadas
 
 | ORD | o que entregou | commit | digest |
