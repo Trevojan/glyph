@@ -11,8 +11,44 @@
 |---|---|
 | environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed |
 | ground | read in the order the handoff names; `npm run check` (33 buckets, 41 s) and `npm run check:rust` (20 crates, 3 s) green on the clone at `ea8fc59`, before anything was touched |
-| layout | **in progress, 4 of 5 banked** — the spec lives at [`EMS-001.pgml`](EMS-001.pgml); `--bundle` reads an ID only as `ORD-####` followed by nothing or a dot, in every destination, and with `--out` a folder `EMS-###` it writes the folder `ORD-####/` numbered by the ORD folders of that series alone; the plugin finds an ORD by `--from EMS-###/ORD-####` or by its folder's path. The bundle command does not read the series yet |
-| queue | waits for the layout to bank |
+| layout | **closed** — its val holds (below), five banks |
+| queue | ORD-0001 opens next |
+
+## The layout, built
+
+| piece | state |
+|---|---|
+| the spec | [`EMS-001.pgml`](EMS-001.pgml), moved with `git mv`; every pointer names it |
+| `--bundle` | with `--out` a folder `EMS-###`, writes the ORD as the folder `ORD-####/` holding the five files the zip holds, numbered by the ORD folders of that series alone; elsewhere, the zip. An ID is `ORD-####` followed by nothing or a dot, in every destination |
+| the plugin | `--from EMS-001/ORD-0003` and the path of an ORD folder resolve the `.pgml` inside it; `ORD-####` and a bare number still find the flat file |
+| the bundle command | its probes list each series and read the open ORD from `EMS-###/README.md` |
+| the series README | [`README.md`](README.md), with `A Ordem aberta` and `Ordens fechadas` |
+| the suite | the bundle bucket grows from 5 to 14 checks, `ZP-06` to `ZP-14`, each observed red before its code |
+| the app | the `emitir ORD` button is untouched: its number stays in `localStorage` |
+
+**The val**, run on a replica of the series beside the real one, with the dated
+ID `ORD-2026-08-30-01` as a file and as a folder beside the ORDs:
+
+```
+$ ls EMS-001/   # before
+EMS-001.pgml
+ORD-2026-08-30-01
+ORD-2026-08-30-01.pgml
+README.md
+$ glyph-plugin.js --from src.pgml --bundle --out .guidelines/.orders/EMS-001   # call 1
+val/.guidelines/.orders/EMS-001/ORD-0001/  (2037 bytes, 5 arquivos)
+$ glyph-plugin.js --from src.pgml --bundle --out .guidelines/.orders/EMS-001   # call 2
+val/.guidelines/.orders/EMS-001/ORD-0002/  (2037 bytes, 5 arquivos)
+$ ls EMS-001/   # after
+EMS-001.pgml
+ORD-0001/
+ORD-0002/
+ORD-2026-08-30-01/
+ORD-2026-08-30-01.pgml
+README.md
+```
+
+and `npm run check` passes on the commit that carries this return.
 
 ## ORDs closed
 
@@ -20,8 +56,7 @@ None.
 
 ## Open, and why
 
-- **The layout**, the gate of the series: the bundle command and the series
-  README are the last step.
+Nothing is open. ORD-0001 opens next.
 
 ## Measured
 
@@ -38,17 +73,23 @@ None.
 - **A series counts folders, not files.** Beside the spec, a draft
   `ORD-0007.pgml` and a folder `ORD-2026-08-30-01/`, the old bundle wrote
   `ORD-0008.zip`; it writes `ORD-0001/`, then `ORD-0002/`, and a second series
-  starts again at `ORD-0001/`. The folder holds the five files the zip holds,
-  and the three projections are byte-equal to the zip's for the same source.
+  starts again at `ORD-0001/`. The three projections in the folder are
+  byte-equal to the zip's for the same source.
 - **An ORD folder is written beside itself and renamed** (`.ORD-####.<pid>`,
   which no count reads), so a write that fails midway leaves no half ORD to be
   counted as emitted; the failure says which folder and exits 2.
-- **The plugin, before the fix:** `--from EMS-001/ORD-0002` looked for
-  `.orders/EMS-001/ORD-0002.pgml` and died on `não existe`; the folder's path
-  reached the CLI as a directory and failed on `EISDIR`. Both resolve to the
-  `.pgml` inside the folder, `\` accepted beside `/`; `ORD-####` and a bare
-  number still find the flat file. The four order leaves and the plugin README
-  name the series form.
+- **The plugin, before its fix:** `--from EMS-001/ORD-0002` looked for
+  `.orders/EMS-001/ORD-0002.pgml` and died on `não existe`, and the folder's
+  path reached the CLI as a directory and failed on `EISDIR`. `\` is accepted
+  beside `/`, for the Regent's Windows. The four order leaves and the plugin
+  README name the series form.
+- **The bundle command's probes run without a shell in the suite.** The suite
+  depends on nothing but node, and bash is not certain on Windows, so
+  `ZP-13`/`ZP-14` evaluate what the probes name — the `ls` globs and the `sed`
+  range — over a temporary series. Against the old leaf they saw
+  `EMS-001, EMS-002` and no open line.
+- **The version stays `3.5.8.06`.** No emitted document changes; the
+  CHANGELOG entry waits for a release, as the work of 2026-09-24 does.
 
 ## Questions for the Regent
 
@@ -67,4 +108,5 @@ Closed questions, none answered.
 | 1 | `0588ada` | layout 1/5 — the spec moves into its series, the pointers follow | 01:03 | green |
 | 2 | `bf0d687` | layout 2/5 — an ID is `ORD-####` followed by nothing or a dot | 01:08 | `ZP-06` red first (`ORD-2027.zip`), green after the regex |
 | 3 | `1e70ad7` | layout 3/5 — `--bundle` writes the series folder | 01:11 | `ZP-07`–`ZP-10` red first (`ORD-0008.zip` in the series), green after |
-| 4 | this commit | layout 4/5 — the plugin finds an ORD by its series | 2026-09-25 | `ZP-11`, `ZP-12` red first (`não existe`, `EISDIR`), green after |
+| 4 | `b472fcf` | layout 4/5 — the plugin finds an ORD by its series | 01:15 | `ZP-11`, `ZP-12` red first (`não existe`, `EISDIR`), green after |
+| 5 | this commit | layout 5/5 — the bundle command reads the series; the layout closes | 2026-09-25 | `ZP-13`, `ZP-14` red against the old leaf; one red of the check's own (`/fechada/` matched the heading `fechadas`), fixed to the row |

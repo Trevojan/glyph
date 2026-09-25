@@ -62,25 +62,14 @@ A spec da série está em
 fila, do oráculo congelado (`ORD-0001`) à janela própria (`ORD-0014`), cada uma
 presa ao oráculo byte a byte.
 
-O portão da série é o layout do §6. O que a spec revoga está assinado, e entre
-isso está a escada como ordem de trabalho: [`ladder.toml`](ladder.toml) fica como
-o registro da auditoria, e `node scripts/ladder.js --check` segue no
-`npm run check`. A primeira sessão na nuvem constrói o layout e corre a fila:
-[`.orders/HANDOFF-2026-09-24.pgml`](../.orders/HANDOFF-2026-09-24.pgml).
-
-### 6. As Ordens em séries — `.orders/EMS-###/ORD-####/`
-
-Decidido pelo Regente ([`.decisions/`](../.decisions/README.md), 2026-09-24), e
-em construção pela sessão na nuvem. Uma EMS é uma pasta com a própria spec, que conversa com as
-Guidelines: restrições, contadores, exceções, as ADR e DC que ela modifica, e
-como seguir depois que fecha. Uma ORD é uma pasta dentro dela com o pacote; a
-contagem reinicia em cada série. A pasta [`.orders/EMS-001/`](../.orders/EMS-001/)
-existe e guarda a spec e o [retorno](../.orders/EMS-001/RETURN.md) da sessão.
-Com o `--out` numa pasta `EMS-###`, o `--bundle` escreve a ORD como a pasta
-`ORD-####/` com os cinco arquivos, numerada só pelas pastas ORD da série; fora
-de uma série, o zip. O plugin acha a ORD de uma série por
-`--from EMS-###/ORD-####` ou pelo caminho da pasta dela; o comando de bundle
-ainda não lê a série.
+O portão da série, o layout `.orders/EMS-###/ORD-####/`, está construído: numa
+série, o `--bundle` escreve a ORD como a pasta `ORD-####/` numerada pela série, e
+o plugin a acha por `EMS-###/ORD-####`. O que a spec revoga está assinado, e
+entre isso está a escada como ordem de trabalho: [`ladder.toml`](ladder.toml)
+fica como o registro da auditoria, e `node scripts/ladder.js --check` segue no
+`npm run check`. A primeira sessão na nuvem corre a fila,
+[`.orders/HANDOFF-2026-09-24.pgml`](../.orders/HANDOFF-2026-09-24.pgml), e o
+[retorno](../.orders/EMS-001/RETURN.md) dela diz onde a fila está.
 
 ## Aberto, esperando o Regente
 

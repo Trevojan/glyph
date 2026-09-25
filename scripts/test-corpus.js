@@ -2518,6 +2518,50 @@ function runBundleChecks() {
        sameAs(plugin(["--root", tmp, "--from", "EMS-001/ORD-0002", "--xml"])));
     ok("ZP-12", "e pelo caminho da pasta dela",
        sameAs(plugin(["--root", tmp, "--from", px.join(ems, "ORD-0002"), "--xml"])));
+
+    /* o comando de bundle le a serie. As sondas de ls e sed do bundle.md sao
+       avaliadas aqui pelo que nomeiam -- os globs e o intervalo --, sem shell,
+       porque a suite nao depende de bash; o README da serie declara uma Ordem
+       aberta e uma fechada, e so a aberta pode sair */
+    fsx.writeFileSync(px.join(ems, "README.md"), "# EMS-001\n\n## A Ordem aberta\n\n" +
+      "- `EMS-001/ORD-0002` aberta\n\n## Ordens fechadas\n\n- `EMS-001/ORD-0001` fechada\n", "utf8");
+    const leaf = fsx.readFileSync(px.join(ROOT, "commands", "repo-config", "guidelines",
+                                          "orders", "bundle.md"), "utf8");
+    const probes = [];
+    leaf.replace(/^!`((?:ls|sed) .*) 2>\/dev\/null \|\| true`$/gm, (m, c) => probes.push(c));
+    const glob = g => {
+      const re = new RegExp("^" + g.split("*").map(s => s.replace(/[.+?^${}()|[\]\\]/g, "\\$&"))
+                                     .join("[^/.][^/]*") + "$");
+      const found = [];
+      const walk = (rel, depth) => {
+        if (re.test(rel)) found.push(rel);
+        const abs = px.join(tmp, rel);
+        if (depth < 5 && fsx.statSync(abs).isDirectory())
+          fsx.readdirSync(abs).sort().forEach(n => walk(rel ? rel + "/" + n : n, depth + 1));
+      };
+      walk("", 0);
+      return found;
+    };
+    const said = probes.map(c => {
+      const words = c.match(/'[^']*'|\S+/g), args = words.slice(1).filter(w => w[0] !== "-");
+      if (words[0] === "ls") {
+        const dirOnly = words.slice(1).some(w => /^-\w*d/.test(w));
+        return args.map(glob).flat().map(p => dirOnly || !fsx.statSync(px.join(tmp, p)).isDirectory()
+          ? p : fsx.readdirSync(px.join(tmp, p)).join("\n")).join("\n");
+      }
+      const range = /^'\/(.*)\/,\/(.*)\/p'$/.exec(args[0]);
+      if (!range) return "";
+      const [from, to] = [new RegExp(range[1]), new RegExp(range[2])];
+      let inside = false;
+      return args.slice(1).map(glob).flat().map(f => fsx.readFileSync(px.join(tmp, f), "utf8"))
+        .join("").split("\n").filter(line => inside ? (inside = !to.test(line), true)
+                                                     : (inside = from.test(line))).join("\n");
+    }).join("\n");
+    ok("ZP-13", "as sondas do bundle listam as pastas ORD de cada serie",
+       /EMS-001\/ORD-0002/.test(said) ? null : "nao viram EMS-001/ORD-0002: " + JSON.stringify(said));
+    ok("ZP-14", "e leem a Ordem aberta do README da serie, e so ela",
+       !/ORD-0002` aberta/.test(said) ? "a Ordem aberta nao foi lida"
+         : /ORD-0001` fechada/.test(said) ? "leram alem da secao aberta" : null);
   } finally {
     try { fsx.rmSync(tmp, { recursive: true, force: true }); } catch (e) { /* ja foi */ }
   }
@@ -2693,7 +2737,7 @@ console.log(" suggest      " + String(rSG).padStart(4) + "/4");
 console.log(" aspas        " + String(rQT).padStart(4) + "/3");
 console.log(" param template" + String(rTP).padStart(4) + "/4");
 console.log(" imperativo   " + String(rIM).padStart(4) + "/5");
-console.log(" bundle ORD   " + String(rZP).padStart(4) + "/12");
+console.log(" bundle ORD   " + String(rZP).padStart(4) + "/14");
 console.log(" global store " + rGS + "/3");
 console.log(" context      " + rCX + "/3");
 console.log(" coverage     " + String(rOC).padStart(4) + "/" + ORACLE_COVERAGE.length);
