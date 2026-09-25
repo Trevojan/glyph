@@ -1,0 +1,6 @@
+[block'ORD-0004-lexer'
+  [ctx'the spec of EMS-001','.guidelines/.orders/EMS-001/EMS-001.pgml']
+  [onlyif'ORD-0003 closed']
+  [tgt'glyph-lex: tokenize, classify, suggest']
+  [val'glyph-lex','the tokens equal the oracle on all 114 sources, spans counted in UTF-16 as the JS counts them']
+];
