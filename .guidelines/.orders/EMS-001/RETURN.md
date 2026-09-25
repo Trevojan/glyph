@@ -79,9 +79,9 @@ commit are byte-identical, the 114 per-case digests equal
   of `esc`, `lev` and `walk`, not their answers, and the envelope names a
   node's children `body` where `walk` follows `children`. So the export writes
   the answers of `util.js` beside the case files, over what they hold, and the
-  crates read them with a JSON reader of their own. Banked: the export, and
-  `check:rust` writing the oracle before `cargo test`. Next: `glyph-util`,
-  then `glyph-version`.
+  crates read them with a JSON reader of their own. Banked: the export,
+  `check:rust` writing the oracle before `cargo test`, and `glyph-util` with
+  the reader. Next: `glyph-version`.
 
 ## Measured
 
@@ -130,6 +130,24 @@ commit are byte-identical, the 114 per-case digests equal
 - **`npm run check:rust` writes the oracle at the commit under test** before
   `cargo test`, so a stale oracle never answers for a commit; it now takes the
   JS suite's time (~45 s) too.
+- **The oracle reader, `rust/testkit/oracle.rs`**, shared by `#[path]` and not
+  a crate, so `crate-graph.js` has no arrow to hold: a JSON reader of its own
+  (no crate from outside), the case files held to `corpus-snapshot.json` — as
+  many as it counts, each with its digest, so an oracle written at another
+  commit fails instead of answering — and the module answers. Without an
+  oracle, and with an empty one, the test fails naming
+  `node scripts/test-corpus.js --export-oracle`; observed both ways.
+- **`glyph-util`, held.** The four tests were observed red against `todo!()`
+  bodies (three red; the fourth checks the oracle itself and passed), then
+  green: 1 609 strings through `esc` and `xesc`, 1 609 `lev` pairs both ways,
+  116 trees walked. Mutated, the test kills three of four: `esc` without `"`,
+  `walk` with the children reversed, `lev` with a substitution costing 2.
+- **The survivor: `lev` counting `char`s instead of UTF-16 units.** No string
+  in the oracle carries a character outside the BMP, so the two countings
+  answer alike on all of it. 129 strings are non-ASCII, which holds bytes
+  apart from units, but nothing holds units apart from characters. Closing it
+  takes a declared source with such a character, and that moves the snapshot:
+  a question below.
 - **The version stays `3.5.8.06`.** No emitted document changes; the
   CHANGELOG entry waits for a release, as the work of 2026-09-24 does.
 
@@ -154,6 +172,13 @@ Closed questions, none answered.
    - a. the folder alone
    - b. the folder, with the zip inside it beside the five files
    - c. the folder, and the zip only behind a flag
+2. **The oracle holds no character outside the BMP. Does the corpus gain a
+   source that does?** It is what would hold `lev`, and the UTF-16 spans of
+   ORD-0004, to UTF-16 units rather than characters.
+   - a. yes: a declared source with an astral character, the snapshot moved by
+     decision
+   - b. no: the blind spot pinned by name, as a known loss
+   - c. later, when ORD-0004 opens
 
 ## The session, measured
 
@@ -169,4 +194,5 @@ Closed questions, none answered.
 | 7 | `030ed76`, tagged `conformance-v0` | ORD-0001 closes | 01:31 | green; the tag push: `HTTP 403` |
 | 8 | `3380a36` | ORD-0001's rows name `030ed76`, since the tag is not on the remote | 01:33 | green |
 | 9 | `3413eb5` | ORD-0002 emitted and open | 01:40 | green |
-| 10 | this commit | ORD-0002 work 1/3 — the export answers `util.js`; `check:rust` writes the oracle | 2026-09-25 | green |
+| 10 | `85f5b6f` | ORD-0002 work 1/3 — the export answers `util.js`; `check:rust` writes the oracle | 01:43 | green; `check:rust` 49 s |
+| 11 | this commit | ORD-0002 work 2/3 — the oracle reader and `glyph-util` | 2026-09-25 | red against `todo!()` first, then green; 3 of 4 mutations killed |
