@@ -1,0 +1,6 @@
+{
+  "name": "glyph-markup",
+  "description": "O motor Glyph como comandos de barra: /glyph-markup:<modo> compila Glyph inline; /glyph-markup:repo-config:guidelines:<eixo>:… viaja até um eixo de .guidelines/ e deixa o motor perguntar; /glyph-markup:engine-config:… faz o mesmo neste repositório.",
+  "version": "0.1.0",
+  "author": { "name": "Eros" }
+}
