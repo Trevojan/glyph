@@ -118,8 +118,23 @@
         "value",
         "form",
         "slot",
+        "role",
         "at"
-      ]
+      ],
+      "role": [
+        "operand",
+        "result",
+        null
+      ],
+      "note": "A raw literal is a Literal whose `form` is `raw`, emitted by the same branch, so it carries `role` for the same reason: a fact the document carries is not one the envelope makes a reader re-derive."
+    },
+    "Verbatim": {
+      "required": [
+        "type",
+        "value",
+        "at"
+      ],
+      "note": "The body of a `[raw]…[/raw]` fence (or of an unclosed one, which the parser refuses with UnclosedRaw), kept verbatim: Glyph quoted inside Glyph, never parsed."
     },
     "Text": {
       "required": [

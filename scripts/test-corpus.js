@@ -307,6 +307,32 @@ const CONSTRAINTS = [
 
 /* Semantic rules: pairs, order and precondition. The criterion that was
    missing for "commands don't contradict each other". */
+/* ------------------------------------------------------------------ *
+ * Oracle coverage (M01, INTAKE-RUST-LADDER.md)
+ *
+ * One declared source per diagnostic code the arrays above never reached.
+ * Eight of these had no test anywhere in this file; the others were tested
+ * with inline sources, which have no id and so never reached the snapshot or
+ * the oracle a port is held to. Declared, they travel in both. Projected with
+ * the repository's stores, like every snapshot source — TemplateCycle needs a
+ * cyclic store and stays in T-06/T-07 until the snapshot honours a case's own
+ * opts.
+ * ------------------------------------------------------------------ */
+const ORACLE_COVERAGE = [
+  { id:"OC-01", src:"[crit: a,b,c]", code:"AmbiguousSlotOrder" },
+  { id:"OC-02", src:"[logic]\nx = 1\ny = x < 5\n[/logic]", code:"CapFloorNotice" },
+  { id:"OC-03", src:"[logic]\na = 1\na = 2\n[/logic]", code:"DuplicateBinding" },
+  { id:"OC-04", src:"[logic]\na = 1\n!\n[/logic]", code:"EmptyLogicLine" },
+  { id:"OC-05", src:"[crit'x'] . [ask'y']", code:"LooseDots" },
+  { id:"OC-06", src:"[crit'x'] if [ask'y']", code:"LooseKeyword" },
+  { id:"OC-07", src:"[logic]\na = 1\n? a\n[/logic]", code:"MissingConsequent" },
+  { id:"OC-08", src:"[crit'x'][off] the rest is prose", code:"UnclosedOffMode" },
+  { id:"OC-09", src:"[logic]\ny = z + 1\n[/logic]", code:"UndefinedVariable" },
+  { id:"OC-10", src:"[--reinforce[ctx],`interprete`]", code:"TemplateParamNotLiteral" },
+  { id:"OC-11", src:"[nt`a ] b`]", code:"TruncatedLiteral" },
+  { id:"OC-12", src:"[raw] never closed", code:"UnclosedRaw" }
+];
+
 const RULE_CASES = [
   { id:"C-01", name:"pair: mand + opt siblings", src:"[mand'x'][opt'x']", opts:WITH_RULES,
     code:"Rule:mand-opt", requireFix:true },
@@ -1369,7 +1395,7 @@ function runSchemaChecks() {
   const opts = { templates: TPL.templates, rules: RULESTORE,
                  expansions: require("../.guidelines/expansions.json") };
   const CORPUS = [].concat(POSITIVE, INCOMPLETE, INVALID, REGRESSION, LONG,
-                           TEMPLATES, CONSTRAINTS, RULE_CASES);
+                           TEMPLATES, CONSTRAINTS, RULE_CASES, ORACLE_COVERAGE);
 
   const bad = [], truncated = [], acceptedAnyway = [];
   CORPUS.forEach(c => {
@@ -1623,7 +1649,7 @@ function runSnapshotChecks() {
   /* the eight declared arrays; the inline sources of the X/H/F/D checks are
      covered by their own buckets and have no stable id to key on here */
   const CORPUS = [].concat(POSITIVE, INCOMPLETE, INVALID, REGRESSION, LONG,
-                           TEMPLATES, CONSTRAINTS, RULE_CASES);
+                           TEMPLATES, CONSTRAINTS, RULE_CASES, ORACLE_COVERAGE);
 
   const now = {};
   const threw = [];
@@ -1675,6 +1701,37 @@ function runSnapshotChecks() {
        : null);
 
   const ids = Object.keys(now);
+
+  /* The oracle a port is held to (M01, INTAKE-RUST-LADDER.md §4 R3): the same
+     sources the snapshot hashes, written out whole and language-neutral, one
+     file per case. Implementation-derived, so NOT conformance — conformance/
+     derives from the specification (lock T5); this is only what the JS engine
+     answers at this commit, and the port must answer the same bytes. Written
+     on demand and never committed: any commit regenerates its own. */
+  const exAt = process.argv.indexOf("--export-oracle");
+  if (exAt !== -1) {
+    const arg = process.argv[exAt + 1];
+    const dir = arg && arg.slice(0, 2) !== "--" ? path.resolve(arg)
+      : path.resolve(__dirname, "../rust/target/oracle");
+    fs.mkdirSync(dir, { recursive: true });
+    const guard = f => { try { return f(); } catch (e) { return { threw: e.message }; } };
+    let written = 0;
+    CORPUS.forEach(c => {
+      if (!c || !c.id || typeof c.src !== "string") return;
+      const ast = guard(() => { const a = G.toAST(c.src, SNAP_OPTS); delete a.version; return a; });
+      fs.writeFileSync(path.join(dir, c.id + ".json"), JSON.stringify({
+        id: c.id, engine: G.VERSION, src: c.src, digest: now[c.id],
+        tokens: guard(() => G.tokenize(c.src, SNAP_OPTS)),
+        diagnostics: guard(() => (G.parse(c.src, SNAP_OPTS).gaps || [])
+          .map(g => ({ sev: g.sev, code: g.code, plain: g.plain }))),
+        xml: guard(() => G.toXML(c.src, SNAP_OPTS)),
+        ast: ast,
+        hgml: guard(() => G.toHGML(c.src, SNAP_OPTS))
+      }, null, 1) + "\n");
+      written++;
+    });
+    console.log("  ! oracle written: " + written + " cases to " + dir);
+  }
 
   if (process.argv.indexOf("--update-snapshot") !== -1) {
     let prev = null;
@@ -2477,7 +2534,7 @@ function runContextGuard() {
   const loose = { templates: TPL.templates, rules: RULESTORE, expansions: require("../.guidelines/expansions.json") };
   const ctx = G.createContext(loose);
   const CORPUS = [].concat(POSITIVE, INCOMPLETE, INVALID, REGRESSION, LONG,
-                           TEMPLATES, CONSTRAINTS, RULE_CASES);
+                           TEMPLATES, CONSTRAINTS, RULE_CASES, ORACLE_COVERAGE);
   const three = (src, o) => {
     const a = G.toAST(src, o); delete a.version;
     return G.toXML(src, o) + "\n" + JSON.stringify(a) + "\n" + G.toHGML(src, o);
@@ -2513,6 +2570,22 @@ function runContextGuard() {
 }
 const rCX = runContextGuard();
 
+function runOracleCoverage() {
+  console.log("\n--- oracle coverage — every declared code fires ---");
+  const D = [];
+  const opts = { templates: TPL.templates, rules: RULESTORE,
+                 expansions: require("../.guidelines/expansions.json") };
+  ORACLE_COVERAGE.forEach(c => {
+    const codes = (G.parse(c.src, opts).gaps || []).map(g => g.code);
+    if (codes.indexOf(c.code) === -1) {
+      console.log("  ✗ " + c.id + ": " + c.code);
+      console.log("      fired " + (codes.join(",") || "nothing") + " for " + JSON.stringify(c.src));
+      failures.push(c.id);
+    } else { console.log("  ✓ " + c.id + ": " + c.code); D.push(c.id); }
+  });
+  return D.length;
+}
+const rOC = runOracleCoverage();
 
 
 
@@ -2549,6 +2622,7 @@ console.log(" imperativo   " + String(rIM).padStart(4) + "/5");
 console.log(" bundle ORD   " + String(rZP).padStart(4) + "/5");
 console.log(" global store " + rGS + "/3");
 console.log(" context      " + rCX + "/3");
+console.log(" coverage     " + String(rOC).padStart(4) + "/" + ORACLE_COVERAGE.length);
 console.log("=================================================");
 
 if (failures.length) {
