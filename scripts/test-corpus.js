@@ -2501,6 +2501,23 @@ function runBundleChecks() {
     fsx.mkdirSync(ems2);
     run(["--file", srcFile, "--bundle", "--out", ems2]);
     ok("ZP-10", "a contagem reinicia em cada serie", folder(ems2, "ORD-0001"));
+
+    /* o plugin acha a ORD de uma serie: --from EMS-001/ORD-0002 e o caminho da
+       pasta dela respondem o mesmo que o .pgml de dentro */
+    const plugin = args => {
+      try {
+        return cp.execFileSync(process.execPath,
+          [px.join(ROOT, "scripts", "glyph-plugin.js")].concat(args),
+          { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
+      } catch (e) { return { failed: String(e.stderr || e.message).trim() }; }
+    };
+    const direct = run(["--file", px.join(ems, "ORD-0002", "ORD-0002.pgml"), "--xml"]);
+    const sameAs = got => typeof got !== "string" ? got.failed
+      : got === direct ? null : "respondeu outro XML";
+    ok("ZP-11", "o plugin acha a ORD pela serie: --from EMS-001/ORD-0002",
+       sameAs(plugin(["--root", tmp, "--from", "EMS-001/ORD-0002", "--xml"])));
+    ok("ZP-12", "e pelo caminho da pasta dela",
+       sameAs(plugin(["--root", tmp, "--from", px.join(ems, "ORD-0002"), "--xml"])));
   } finally {
     try { fsx.rmSync(tmp, { recursive: true, force: true }); } catch (e) { /* ja foi */ }
   }
@@ -2676,7 +2693,7 @@ console.log(" suggest      " + String(rSG).padStart(4) + "/4");
 console.log(" aspas        " + String(rQT).padStart(4) + "/3");
 console.log(" param template" + String(rTP).padStart(4) + "/4");
 console.log(" imperativo   " + String(rIM).padStart(4) + "/5");
-console.log(" bundle ORD   " + String(rZP).padStart(4) + "/10");
+console.log(" bundle ORD   " + String(rZP).padStart(4) + "/12");
 console.log(" global store " + rGS + "/3");
 console.log(" context      " + rCX + "/3");
 console.log(" coverage     " + String(rOC).padStart(4) + "/" + ORACLE_COVERAGE.length);

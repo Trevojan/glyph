@@ -2,7 +2,7 @@
 /**
  * glyph-plugin — the plugin's way in to glyph-cli.
  *
- *   node glyph-plugin.js [--from <ORD-####|name|path>] [--root <dir>]
+ *   node glyph-plugin.js [--from <ORD-####|EMS-###/ORD-####|name|path>] [--root <dir>]
  *                        [--fallback "<glyph>"] [--keep] <engine flags…>  < source
  *
  * A slash command cannot do three things the CLI needs: hand over a source that
@@ -14,8 +14,10 @@
  *
  *   source     stdin, always (a quoted heredoc from the leaf). Blank stdin
  *              compiles `--fallback` instead, when one is given.
- *   --from     an order by number (`ORD-0011`, `0011`), by name
- *              (`ORD-0009.v2`) or by path; replaces stdin.
+ *   --from     an order by number (`ORD-0011`, `0011`), by series
+ *              (`EMS-001/ORD-0003`, the .pgml inside that ORD's folder), by
+ *              name (`ORD-0009.v2`) or by path, an ORD folder's included;
+ *              replaces stdin.
  *   --root     the repository whose `.guidelines/` is meant. Default: cwd.
  *              `Docs/.guidelines/` and `.guidelines/` are both tried.
  *   --keep     keep the temp file the stdin source was written to, and print
@@ -61,18 +63,25 @@ function guidelines() {
 
 function die(msg) { console.error(msg); process.exit(2); }
 
+/* the ORD of a series is a folder, and its source is the .pgml of its own name */
+const inFolder = dir => path.join(dir, path.basename(dir) + ".pgml");
+
 let file = null;
 if (from != null) {
-  if (!from) die("--from sem valor: ORD-####, um nome, ou um caminho.");
-  if (fs.existsSync(from)) file = from;
+  if (!from) die("--from sem valor: ORD-####, EMS-###/ORD-####, um nome, ou um caminho.");
+  if (fs.existsSync(from)) file = fs.statSync(from).isDirectory() ? inFolder(from) : from;
   else {
     const g = guidelines();
     if (!g) die("nenhum Docs/.guidelines/ nem .guidelines/ em " + root);
-    let name = /^\d{4}$/.test(from) ? "ORD-" + from : from;
-    if (!/\.pgml$/i.test(name)) name += ".pgml";
-    file = path.join(g, ".orders", name);
-    if (!fs.existsSync(file)) die("não existe: " + file);
+    const ser = /^(EMS-\d{3})[\/\\](ORD-\d{4})[\/\\]?$/.exec(from);
+    if (ser) file = inFolder(path.join(g, ".orders", ser[1], ser[2]));
+    else {
+      let name = /^\d{4}$/.test(from) ? "ORD-" + from : from;
+      if (!/\.pgml$/i.test(name)) name += ".pgml";
+      file = path.join(g, ".orders", name);
+    }
   }
+  if (!fs.existsSync(file)) die("não existe: " + file);
 } else {
   let src = "";
   try { src = fs.readFileSync(0, "utf8"); } catch (e) { /* no stdin: stays blank */ }

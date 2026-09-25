@@ -11,7 +11,7 @@
 |---|---|
 | environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed |
 | ground | read in the order the handoff names; `npm run check` (33 buckets, 41 s) and `npm run check:rust` (20 crates, 3 s) green on the clone at `ea8fc59`, before anything was touched |
-| layout | **in progress, 3 of 5 banked** — the spec lives at [`EMS-001.pgml`](EMS-001.pgml); `--bundle` reads an ID only as `ORD-####` followed by nothing or a dot, in every destination, and with `--out` a folder `EMS-###` it writes the folder `ORD-####/` numbered by the ORD folders of that series alone. The plugin and the bundle command do not read the series yet |
+| layout | **in progress, 4 of 5 banked** — the spec lives at [`EMS-001.pgml`](EMS-001.pgml); `--bundle` reads an ID only as `ORD-####` followed by nothing or a dot, in every destination, and with `--out` a folder `EMS-###` it writes the folder `ORD-####/` numbered by the ORD folders of that series alone; the plugin finds an ORD by `--from EMS-###/ORD-####` or by its folder's path. The bundle command does not read the series yet |
 | queue | waits for the layout to bank |
 
 ## ORDs closed
@@ -20,8 +20,8 @@ None.
 
 ## Open, and why
 
-- **The layout**, the gate of the series: the plugin learns the series, then
-  the bundle command and the series README, one bank each.
+- **The layout**, the gate of the series: the bundle command and the series
+  README are the last step.
 
 ## Measured
 
@@ -43,6 +43,12 @@ None.
 - **An ORD folder is written beside itself and renamed** (`.ORD-####.<pid>`,
   which no count reads), so a write that fails midway leaves no half ORD to be
   counted as emitted; the failure says which folder and exits 2.
+- **The plugin, before the fix:** `--from EMS-001/ORD-0002` looked for
+  `.orders/EMS-001/ORD-0002.pgml` and died on `não existe`; the folder's path
+  reached the CLI as a directory and failed on `EISDIR`. Both resolve to the
+  `.pgml` inside the folder, `\` accepted beside `/`; `ORD-####` and a bare
+  number still find the flat file. The four order leaves and the plugin README
+  name the series form.
 
 ## Questions for the Regent
 
@@ -60,4 +66,5 @@ Closed questions, none answered.
 | 0 | `ea8fc59` | the clone | 2026-09-25 00:57 | `check` 41 s and `check:rust` 3 s, green |
 | 1 | `0588ada` | layout 1/5 — the spec moves into its series, the pointers follow | 01:03 | green |
 | 2 | `bf0d687` | layout 2/5 — an ID is `ORD-####` followed by nothing or a dot | 01:08 | `ZP-06` red first (`ORD-2027.zip`), green after the regex |
-| 3 | this commit | layout 3/5 — `--bundle` writes the series folder | 2026-09-25 | `ZP-07`–`ZP-10` red first (`ORD-0008.zip` in the series), green after |
+| 3 | `1e70ad7` | layout 3/5 — `--bundle` writes the series folder | 01:11 | `ZP-07`–`ZP-10` red first (`ORD-0008.zip` in the series), green after |
+| 4 | this commit | layout 4/5 — the plugin finds an ORD by its series | 2026-09-25 | `ZP-11`, `ZP-12` red first (`não existe`, `EISDIR`), green after |
