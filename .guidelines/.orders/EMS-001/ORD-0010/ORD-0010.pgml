@@ -1,0 +1,8 @@
+[block'ORD-0010-protocol'
+  [ctx'the spec of EMS-001','.guidelines/.orders/EMS-001/EMS-001.pgml']
+  [onlyif'ORD-0008 closed']
+  [tgt'the engine as a process, and the protocol chosen by measurement']
+  [nt'a page cannot open stdio: the browser reaches the engine by HTTP, either served by the engine itself or relayed to its stdio by scripts/serve-dev.js']
+  [ins'measure both over the 114 sources: time per call, lines written, crates added']
+  [val'the protocol','the chosen protocol answers the twelve calls glyph-ui.js makes, and the choice is an ADR the Regent signs']
+];
