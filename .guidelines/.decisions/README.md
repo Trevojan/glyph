@@ -13,6 +13,13 @@
 
 ---
 
+## 2026-09-25
+
+| decisão | razão |
+|---|---|
+| **O protocolo da EMS-001 é B**: o motor responde em stdio, uma requisição JSON por linha e uma resposta por linha; o `serve-dev.js`, que serve a página, o lança e repassa `POST /engine` a ele | respondido no questionário de 2026-09-25: *"B"*, contra a proposta A da sessão. As duas opções foram medidas sobre as 114 fontes, do node e de uma página: as duas respondem os bytes do JS e não trazem crate; B tem 16 linhas a menos e o salto do relay custa de 0,1 a 0,3 ms por chamada. O app instalado (`ORD-0013`) leva node ou um segundo protocolo. Medição e ADR: [retorno da EMS-001](../.orders/EMS-001/RETURN.md) |
+| **"Degraus" são as ORDs da EMS-001** | respondido no mesmo questionário: *"As ORDs da EMS-001"*. A fila segue da `ORD-0010` em diante, uma aberta por vez; a escada continua revogada |
+
 ## 2026-09-24
 
 Respostas do Regente à auditoria da escada Rust

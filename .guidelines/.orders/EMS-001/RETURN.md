@@ -12,7 +12,7 @@
 | environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed |
 | ground | read in the order the handoff names; `npm run check` (33 buckets, 41 s) and `npm run check:rust` (20 crates, 3 s) green on the clone at `ea8fc59`, before anything was touched |
 | layout | **closed** — its val holds (below), five banks |
-| queue | ORD-0001 to ORD-0009 closed; ORD-0010 open and measured, its ADR proposed below, and the queue ends there: its val needs the Regent's signature. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
+| queue | ORD-0001 to ORD-0009 closed; ORD-0010 open, measured, its ADR signed B by the Regent; it closes once B answers the twelve calls, and the queue goes on. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
 
 ## Waiting for the Regent
 
@@ -27,11 +27,6 @@
    git push origin conformance-v0
    ```
 
-2. **ORD-0010's ADR.** Proposed under *Open, and why*: the engine serves
-   HTTP on localhost itself, and the page reaches it by `fetch`.
-   ORD-0010 closes when the ADR is signed, amended or refused, and ORD-0011,
-   the app on the Rust engine, opens only after it; questions 8 to 14 are the
-   ones the measurement raised.
 
 ## Questions for the Regent
 
@@ -94,12 +89,8 @@ Closed questions, none answered.
      the digest
    - c. `glyph-envelope` enters ORD-0007, and ORD-0009 keeps the burn and the
      inverse
-8. **Which protocol does ORD-0010's ADR sign?**
-   - a. A, as proposed: the engine serves HTTP on localhost, and the page
-     too once the installer puts them on a machine without node
-   - b. B: the engine on stdio, relayed by `serve-dev.js`, and the installed
-     app carries node or a second protocol
-   - c. both: B while `serve-dev.js` serves the page, A from the installer on
+8. **Which protocol does ORD-0010's ADR sign?** Answered by the Regent on
+   2026-09-25: **b**, the engine on stdio, relayed by `serve-dev.js`.
 9. **`run()` is synchronous, and a page's HTTP is not. How do they meet?**
    - a. a synchronous `XMLHttpRequest` inside the transport: `glyph-ui.js`
      changes only at its transport, as ORD-0011's target says, and the page
@@ -393,16 +384,20 @@ c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828  -
 
 ## Open, and why
 
-**ORD-0010, the protocol**, open since `df25609`, and it stays open: its val
-is an ADR the Regent signs, so the gate of the handoff ends the queue here.
-Both protocols are measured and the ADR is proposed below; the session does
-not sign it.
+**ORD-0010, the protocol**, open since `df25609`. Both protocols are
+measured and the Regent signed B on 2026-09-25, so half of the val holds; the
+other half — *"the chosen protocol answers the twelve calls glyph-ui.js
+makes"* — is the work that remains. The prototype answers three. The JS
+answers first, as a tool of its own that is the oracle, and the Rust engine
+on stdio answers the same bytes; then ORD-0010 closes, and the queue goes on
+to ORD-0011 and ORD-0012, one open at a time, since the Regent named the
+EMS-001 ORDs as the steps to take.
 
-### ORD-0010's ADR, proposed
+### ORD-0010's ADR, signed: B
 
 | date | decision | who | reason |
 |---|---|---|---|
-| 2026-09-25, proposed | **The engine serves HTTP on localhost itself, and the page reaches it by `fetch`** (option A): one JSON request a `POST` and one JSON answer. While `serve-dev.js` serves the page, the page calls the engine across origins with simple requests; once the installer puts the binary and the page on a machine without node, the engine serves the page too | proposed by the session; unsigned | measured below: both options answer every call with the JS's bytes and add no crate; A is 0.1–0.3 ms a call faster from a page and 16 lines longer, and it is the shape ORD-0013 and ORD-0014 stand on |
+| 2026-09-25 | **The engine answers on stdio, one JSON request a line and one JSON answer a line; `serve-dev.js`, which serves the page, spawns it and relays `POST /engine` to it** (option B) | the Regent, in the questionnaire of 2026-09-25: *"B"*; the session had proposed A | measured below: both options answer every call with the JS's bytes and add no crate; B is 16 lines shorter and keeps the page on its own origin, and its relay costs 0.1–0.3 ms a call from a page. The installed app (ORD-0013) carries node, or a second protocol |
 
 **The two options.** A page cannot open stdio, so the browser reaches the
 engine by HTTP: **A**, the engine serves HTTP itself; **B**, the engine
@@ -487,7 +482,7 @@ every answer is JSON.stringify's own bytes
   INTAKE-RUST-LADDER §9.
 - **Spawn to first answer:** A 16.3 ms, B 18.9 ms, once a launch.
 
-**Why A.** The spec's later ORDs stand on it. ORD-0013 puts *"the binary
+**The session's proposal, A.** The spec's later ORDs stand on it. ORD-0013 puts *"the binary
 and the page on a clean machine"*, where no node runs `serve-dev.js` to
 relay anything, and ORD-0014's path with no crate is *"the engine opens
 msedge --app on its localhost page"*: a page the engine serves. Under A, the
@@ -495,7 +490,7 @@ transport ORD-0011 builds is the one the installer ships; under B, the
 installed app carries node or a second protocol. A is also the faster from a
 page, by the relay's hop.
 
-**What B has.** It is 16 lines shorter, the page calls its own origin from
+**What B has, and why it is signed.** It is 16 lines shorter, the page calls its own origin from
 the start, and the engine stays a filter from stdin to stdout, as the
 `glyph` binary is. A reaches one origin only once the engine serves the
 page; until then the page's requests stay simple — a `text/plain` body,
@@ -1146,4 +1141,5 @@ crates' tests arrived.
 | 39 | `df25609` | ORD-0010 emitted and open | 05:49 | green |
 | 40 | `faa6a93` | ORD-0010 measured — both protocols over the 114 sources, the ADR proposed | 06:13 | green, `check` 42 s and `check:rust` 95 s; nothing red — the measurement's first run showed the Rust's `toAST` at 10 ms whatever the source, which the probes and callgrind traced to the store digests and the rules copy (question 12) |
 | 41 | `1e4f2f5` | ORD-0010 measured from a page — Chrome drives both protocols; the ADR proposes A, the engine's own HTTP | 06:22 | green, `check` 42 s and `check:rust` 95 s; nothing red — the proposal of `faa6a93`, B, had been read against ORD-0010 alone, and ORD-0013 and ORD-0014 stand on the engine's own HTTP |
-| 42 | this commit | the return's totals, and the queue stops at the gate | 06:26 | green, `check` 42 s and `check:rust` 95 s |
+| 42 | `2434e6e` | the return's totals, and the queue stops at the gate | 06:26 | green, `check` 42 s and `check:rust` 95 s |
+| 43 | this commit | the Regent signs B; ORD-0010 stays open until B answers the twelve calls | 23:50 | green, `check` 42 s and `check:rust` 95 s |
