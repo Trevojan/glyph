@@ -12,7 +12,7 @@
 | environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed |
 | ground | read in the order the handoff names; `npm run check` (33 buckets, 41 s) and `npm run check:rust` (20 crates, 3 s) green on the clone at `ea8fc59`, before anything was touched |
 | layout | **closed** — its val holds (below), five banks |
-| queue | ORD-0001 to ORD-0004 closed. **ORD-0005 open** — emitted into [`ORD-0005/`](ORD-0005/ORD-0005.xml), no diagnostics. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
+| queue | ORD-0001 to ORD-0005 closed; ORD-0006 opens next. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
 
 ## Waiting for the Regent
 
@@ -65,6 +65,7 @@ Closed questions, none answered.
 | [`ORD-0002`](ORD-0002/ORD-0002.xml) | `glyph-util` and `glyph-version`: `esc`, `xesc`, `lev`, `walk` and `VERSION` equal the JS on everything the oracle holds | `79aebbd` | `6fb833ec47e105cdc72fd515633597896e1e65d83730dcd157f67876cc927b5c`, `oracle-modules/util.json` |
 | [`ORD-0003`](ORD-0003/ORD-0003.xml) | `glyph-vocab` and `glyph-stores`: the 22 tables of the vocabulary and the three stores equal the JS by digest; the composition store compiled byte for byte | `d9ea4fe` | `55ba73dad05f0811ccecf782e701e86966fe6b0ce818055cf0d99cdb2010bf25`, `oracle-modules/vocabulary.json`; `4f03181d22088569691864c88925d48bc1bbc5691df080d97d4551511541d4b1`, `oracle-modules/stores.json` |
 | [`ORD-0004`](ORD-0004/ORD-0004.xml) | `glyph-lex`: the 11 008 tokens of the 114 sources equal the oracle, spans in UTF-16; and 1 688 more sources, `classify` and `suggest` | `06989f7` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828`, the case files; `b70bb078c74ad025507d9eebbc86239068e1cc48ef678f47df4005206d6201b8`, `oracle-modules/lexer.json` |
+| [`ORD-0005`](ORD-0005/ORD-0005.xml) | `glyph-logic`: the 8 Logic nodes of the oracle equal; and `parseLogic`, `expandExpr` and `freeVars` on 1 610 blocks and 1 588 strings | `12cc408` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828`, the case files; `53ec4964aca68075372dd85f38e020fa571b9c8716cae8f1db26f490f895b546`, `oracle-modules/logic.json` |
 
 **ORD-0001, the proof**, run at `02c92ee` (the commit that emitted it; the
 closing commit changes no code):
@@ -158,12 +159,32 @@ $ sha256sum rust/target/oracle-modules/lexer.json
 b70bb078c74ad025507d9eebbc86239068e1cc48ef678f47df4005206d6201b8
 ```
 
+**ORD-0005, the proof**, run at `12cc408`:
+
+```
+$ rm -rf rust/target/oracle* && node scripts/test-corpus.js --export-oracle
+  ! oracle written: 114 cases to rust/target/oracle
+  ! module oracle written: util, vocabulary, stores, lexer, logic to rust/target/oracle-modules
+All green.
+$ cargo test --manifest-path rust/Cargo.toml -p glyph-logic -- --nocapture
+8 Logic nodes
+test every_logic_node_equals_the_oracle ... ok
+test parse_logic_expand_expr_and_free_vars_equal_the_js ... ok
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.26s
+$ sha256sum rust/target/oracle-modules/logic.json
+53ec4964aca68075372dd85f38e020fa571b9c8716cae8f1db26f490f895b546
+```
+
+"Every Logic node" is read as each node of the envelopes, projected by the
+port from its `[logic]` token as `emit-ast.js` projects it, `at` included.
+
 ## Open, and why
 
-- **ORD-0005, `glyph-logic`.** The oracle holds 8 Logic nodes, in 8 cases —
-  the lexer showed what so few sources leave unread, so `logic.json` joins the
-  export before the port. Three more JS defects the port reproduces, measured
-  first:
+Nothing is open. ORD-0006, `glyph-templates` and `glyph-rules`, opens next.
+
+## ORD-0005, how it was read
+
+- **Three JS defects the port reproduces**, measured before porting:
   - **`defined`, `used` and `seen` are plain objects.** A variable named
     `constructor` or `__proto__` reads as already defined — `DuplicateBinding`
     on its first definition — and as already seen, so it never reaches
@@ -173,8 +194,6 @@ b70bb078c74ad025507d9eebbc86239068e1cc48ef678f47df4005206d6201b8
     `EmptyLogicLine`, at `fix`.
   - **`a != b` reads as `a não = b`.** The negation rule rewrites the `!` of
     `!=`.
-- Banked: `logic.json` in the export and `glyph-logic`. Next: the proof, and
-  the close.
 
 ## ORD-0004, how it was read
 
@@ -398,6 +417,7 @@ and `npm run check` passes on the commit that carries this return.
 | ORD-0002 | `3413eb5` 01:40 | `4c4743a` 01:54 | 14 min, three work banks |
 | ORD-0003 | `b05ba19` 02:02 | `51e291b` 02:30 | 28 min, four work banks |
 | ORD-0004 | `2c68949` 02:34 | `e08f1f9` 02:45 | 11 min, one work bank |
+| ORD-0005 | `2466cef` 02:49 | the commit after `12cc408` | ~10 min, one work bank |
 
 | # | commit | step | UTC | checks |
 |---|---|---|---|---|
@@ -425,4 +445,5 @@ and `npm run check` passes on the commit that carries this return.
 | 21 | `06989f7` | ORD-0004 work — `glyph-lex`, and `lexer.json` in the export | 02:42 | green at once on the 114 sources; 7 mutations survived them; 9 of 9 killed against `lexer.json` |
 | 22 | `e08f1f9` | ORD-0004 closes | 02:45 | green |
 | 23 | `2466cef` | ORD-0005 emitted and open | 02:49 | green |
-| 24 | this commit | ORD-0005 work — `glyph-logic`, and `logic.json` in the export | 2026-09-25 | green at once; 7 of 8 mutations killed, then 8 of 8 with four negation probes |
+| 24 | `12cc408` | ORD-0005 work — `glyph-logic`, and `logic.json` in the export | 02:57 | green at once; 7 of 8 mutations killed, then 8 of 8 with four negation probes |
+| 25 | this commit | ORD-0005 closes | 2026-09-25 | green |
