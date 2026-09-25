@@ -12,7 +12,7 @@
 | environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed |
 | ground | read in the order the handoff names; `npm run check` (33 buckets, 41 s) and `npm run check:rust` (20 crates, 3 s) green on the clone at `ea8fc59`, before anything was touched |
 | layout | **closed** — its val holds (below), five banks |
-| queue | ORD-0001 and ORD-0002 closed. **ORD-0003 open** — emitted into [`ORD-0003/`](ORD-0003/ORD-0003.xml), no diagnostics. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
+| queue | ORD-0001, ORD-0002 and ORD-0003 closed; ORD-0004 opens next. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
 
 ## The layout, built
 
@@ -56,6 +56,7 @@ and `npm run check` passes on the commit that carries this return.
 |---|---|---|---|
 | [`ORD-0001`](ORD-0001/ORD-0001.xml) | the frozen oracle: `--export-oracle` writes 114 files | `030ed76`, the tag `conformance-v0` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828` |
 | [`ORD-0002`](ORD-0002/ORD-0002.xml) | `glyph-util` and `glyph-version`: `esc`, `xesc`, `lev`, `walk` and `VERSION` equal the JS on everything the oracle holds | `79aebbd` | `6fb833ec47e105cdc72fd515633597896e1e65d83730dcd157f67876cc927b5c`, `oracle-modules/util.json` |
+| [`ORD-0003`](ORD-0003/ORD-0003.xml) | `glyph-vocab` and `glyph-stores`: the 22 tables of the vocabulary and the three stores equal the JS by digest; the composition store compiled byte for byte | `d9ea4fe` | `55ba73dad05f0811ccecf782e701e86966fe6b0ce818055cf0d99cdb2010bf25`, `oracle-modules/vocabulary.json`; `4f03181d22088569691864c88925d48bc1bbc5691df080d97d4551511541d4b1`, `oracle-modules/stores.json` |
 
 **ORD-0001, the proof**, run at `02c92ee` (the commit that emitted it; the
 closing commit changes no code):
@@ -100,7 +101,41 @@ c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828  -
 pairs it; `walk` over every tree the oracle holds, since it takes trees and
 not strings.
 
+**ORD-0003, the proof**, run at `d9ea4fe`:
+
+```
+$ rm -rf rust/target/oracle* && node scripts/test-corpus.js --export-oracle
+  ! oracle written: 114 cases to rust/target/oracle
+  ! module oracle written: util.json, vocabulary.json, stores.json to rust/target/oracle-modules
+All green.
+$ cargo test --manifest-path rust/Cargo.toml -p glyph-vocab -p glyph-stores
+test deps_of_equals_the_js ... ok
+test the_composition_store_is_the_one_build_templates_writes ... ok
+test what_is_read_off_the_stores_equals_the_js ... ok
+test a_context_reads_each_shape_as_create_context_does ... ok
+test the_envelope_hashes_the_rules_with_the_engines_cache ... ok
+test the_digest_of_every_generated_table_equals_the_js_store ... ok
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+test el_name_equals_the_js ... ok
+test every_table_equals_the_js_table ... ok
+test the_testkit_ck_is_the_envelopes ... ok
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+$ sha256sum rust/target/oracle-modules/{vocabulary,stores}.json
+55ba73dad05f0811ccecf782e701e86966fe6b0ce818055cf0d99cdb2010bf25  vocabulary.json
+4f03181d22088569691864c88925d48bc1bbc5691df080d97d4551511541d4b1  stores.json
+$ the store digests
+{"templates":"d127beace2f86000","rules":"a0805b87fcbb2c00","expansions":"2549caa003b0a400","commands":"081a4b4813895800"}
+```
+
+"Every generated table" is read as the 22 tables `vocabulary.js` exports and
+the three stores; "the JS store" as the store read from disk — the envelope's
+rules digest also hashes the engine's cache, pinned above.
+
 ## Open, and why
+
+Nothing is open. ORD-0004, `glyph-lex`, opens next.
+
+## ORD-0003, how it was read
 
 - **ORD-0003, `glyph-vocab` and `glyph-stores`.** Measured before building:
   the four sources `build-templates.js` reads — `GLOSSARY.md`,
@@ -113,9 +148,7 @@ not strings.
   place they live, and `glyph-stores`' compiles the stores from the four
   sources. The expansions store also carries `schema` and a `note` that are
   `build-templates.js`'s own words; they are read from its output rather than
-  typed a second time. Banked: `glyph_util::json`, the module answers of
-  `vocabulary.js` and `stores.js`, `glyph-vocab`, and `glyph-stores`. Next:
-  the proof, and the close.
+  typed a second time.
 
 ## Measured
 
@@ -295,6 +328,7 @@ Closed questions, none answered.
 |---|---|---|---|
 | ORD-0001 | `02c92ee` 01:28 | `030ed76` 01:31 | 3 min |
 | ORD-0002 | `3413eb5` 01:40 | `4c4743a` 01:54 | 14 min, three work banks |
+| ORD-0003 | `b05ba19` 02:02 | the commit after `d9ea4fe` | ~28 min, four work banks |
 
 | # | commit | step | UTC | checks |
 |---|---|---|---|---|
@@ -316,4 +350,5 @@ Closed questions, none answered.
 | 15 | `a6dce20` | ORD-0003 work 1/4 — `glyph_util::json`, the testkit reads with it | 02:06 | the round trip red against an empty writer, then green on 115 files |
 | 16 | `35487d4` | ORD-0003 work 2/4 — the export answers `vocabulary.js` and `stores.js` | 02:09 | green |
 | 17 | `2bbcc8b` | ORD-0003 work 3/4 — `glyph-vocab` from `vocabulary.js`; `ck` in the testkit | 02:16 | green at once, so observed failing by mutation: 3 of 4 killed, then 4 of 4 once `elName` took the oracle's strings |
-| 18 | this commit | ORD-0003 work 4/4 — `glyph-stores`: the stores compiled from the four sources, the context | 2026-09-25 | the rules digest red first — the oracle had recorded the store with the engine's cache; 6 of 6 mutations killed |
+| 18 | `d9ea4fe` | ORD-0003 work 4/4 — `glyph-stores`: the stores compiled from the four sources, the context | 02:27 | the rules digest red first — the oracle had recorded the store with the engine's cache; 6 of 6 mutations killed |
+| 19 | this commit | ORD-0003 closes | 2026-09-25 | green |
