@@ -12,7 +12,7 @@
 | environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed |
 | ground | read in the order the handoff names; `npm run check` (33 buckets, 41 s) and `npm run check:rust` (20 crates, 3 s) green on the clone at `ea8fc59`, before anything was touched |
 | layout | **closed** — its val holds (below), five banks |
-| queue | **ORD-0001 closed** at `030ed76`, tagged `conformance-v0` in the session's clone — the push of the tag was refused (below); ORD-0002 opens next |
+| queue | ORD-0001 closed at `030ed76`, tagged `conformance-v0` in the session's clone — the push of the tag was refused (below). **ORD-0002 open** — emitted into [`ORD-0002/`](ORD-0002/ORD-0002.xml), no diagnostics |
 
 ## The layout, built
 
@@ -75,7 +75,11 @@ commit are byte-identical, the 114 per-case digests equal
 
 ## Open, and why
 
-Nothing is open. ORD-0002, `glyph-util` and `glyph-version`, opens next.
+- **ORD-0002, `glyph-util` and `glyph-version`.** The oracle holds the inputs
+  of `esc`, `lev` and `walk`, not their answers, and the envelope names a
+  node's children `body` where `walk` follows `children`. So the export writes
+  the answers of `util.js` beside the case files, over what they hold, and the
+  crates read them with a JSON reader of their own; next, one bank each.
 
 ## Measured
 
@@ -149,4 +153,5 @@ Closed questions, none answered.
 | 5 | `70bffd7` | layout 5/5 — the bundle command reads the series; the layout closes | 01:23 | `ZP-13`, `ZP-14` red against the old leaf; one red of the check's own (`/fechada/` matched the heading `fechadas`), fixed to the row |
 | 6 | `02c92ee` | ORD-0001 emitted and open | 01:28 | green |
 | 7 | `030ed76`, tagged `conformance-v0` | ORD-0001 closes | 01:31 | green; the tag push: `HTTP 403` |
-| 8 | this commit | ORD-0001's rows name `030ed76`, since the tag is not on the remote | 2026-09-25 | green |
+| 8 | `3380a36` | ORD-0001's rows name `030ed76`, since the tag is not on the remote | 01:33 | green |
+| 9 | this commit | ORD-0002 emitted and open | 2026-09-25 | green |

@@ -1,0 +1,6 @@
+[block'ORD-0002-util'
+  [ctx'the spec of EMS-001','.guidelines/.orders/EMS-001/EMS-001.pgml']
+  [onlyif'ORD-0001 closed']
+  [tgt'glyph-util and glyph-version: esc, xesc, lev, walk and VERSION']
+  [val'glyph-util and glyph-version','each function equals its JS on every string the oracle holds']
+];
