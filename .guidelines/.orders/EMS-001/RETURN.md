@@ -12,7 +12,7 @@
 | environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed |
 | ground | read in the order the handoff names; `npm run check` (33 buckets, 41 s) and `npm run check:rust` (20 crates, 3 s) green on the clone at `ea8fc59`, before anything was touched |
 | layout | **closed** — its val holds (below), five banks |
-| queue | ORD-0001 to ORD-0004 closed; ORD-0005 opens next. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
+| queue | ORD-0001 to ORD-0004 closed. **ORD-0005 open** — emitted into [`ORD-0005/`](ORD-0005/ORD-0005.xml), no diagnostics. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
 
 ## Waiting for the Regent
 
@@ -160,7 +160,19 @@ b70bb078c74ad025507d9eebbc86239068e1cc48ef678f47df4005206d6201b8
 
 ## Open, and why
 
-Nothing is open. ORD-0005, `glyph-logic`, opens next.
+- **ORD-0005, `glyph-logic`.** The oracle holds 8 Logic nodes, in 8 cases —
+  the lexer showed what so few sources leave unread, so `logic.json` joins the
+  export before the port. Three more JS defects the port reproduces, measured
+  first:
+  - **`defined`, `used` and `seen` are plain objects.** A variable named
+    `constructor` or `__proto__` reads as already defined — `DuplicateBinding`
+    on its first definition — and as already seen, so it never reaches
+    `uses` or `missing`.
+  - **`? -> b` is an empty line.** The when-rule's regex backtracks until the
+    condition is the one space before `->`; trimmed, it is empty:
+    `EmptyLogicLine`, at `fix`.
+  - **`a != b` reads as `a não = b`.** The negation rule rewrites the `!` of
+    `!=`.
 
 ## ORD-0004, how it was read
 
@@ -374,7 +386,7 @@ and `npm run check` passes on the commit that carries this return.
 | ORD-0001 | `02c92ee` 01:28 | `030ed76` 01:31 | 3 min |
 | ORD-0002 | `3413eb5` 01:40 | `4c4743a` 01:54 | 14 min, three work banks |
 | ORD-0003 | `b05ba19` 02:02 | `51e291b` 02:30 | 28 min, four work banks |
-| ORD-0004 | `2c68949` 02:34 | the commit after `06989f7` | ~10 min, one work bank |
+| ORD-0004 | `2c68949` 02:34 | `e08f1f9` 02:45 | 11 min, one work bank |
 
 | # | commit | step | UTC | checks |
 |---|---|---|---|---|
@@ -400,4 +412,5 @@ and `npm run check` passes on the commit that carries this return.
 | 19 | `51e291b` | ORD-0003 closes | 02:30 | green |
 | 20 | `2c68949` | ORD-0004 emitted and open | 02:34 | green |
 | 21 | `06989f7` | ORD-0004 work — `glyph-lex`, and `lexer.json` in the export | 02:42 | green at once on the 114 sources; 7 mutations survived them; 9 of 9 killed against `lexer.json` |
-| 22 | this commit | ORD-0004 closes | 2026-09-25 | green |
+| 22 | `e08f1f9` | ORD-0004 closes | 02:45 | green |
+| 23 | this commit | ORD-0005 emitted and open | 2026-09-25 | green |
