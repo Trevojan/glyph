@@ -26,6 +26,7 @@ dependencies = [
  "glyph-inverse",
  "glyph-parse",
  "glyph-stores",
+ "glyph-util",
  "glyph-version",
  "glyph-xml",
 ]
