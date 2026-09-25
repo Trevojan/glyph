@@ -27,8 +27,8 @@
    git push origin conformance-v0
    ```
 
-2. **ORD-0010's ADR.** Proposed under *Open, and why*: the page reaches the
-   Rust engine through `serve-dev.js`, and the engine answers on stdio.
+2. **ORD-0010's ADR.** Proposed under *Open, and why*: the engine serves
+   HTTP on localhost itself, and the page reaches it by `fetch`.
    ORD-0010 closes when the ADR is signed, amended or refused, and ORD-0011,
    the app on the Rust engine, opens only after it; questions 8 to 14 are the
    ones the measurement raised.
@@ -95,10 +95,11 @@ Closed questions, none answered.
    - c. `glyph-envelope` enters ORD-0007, and ORD-0009 keeps the burn and the
      inverse
 8. **Which protocol does ORD-0010's ADR sign?**
-   - a. B, as proposed: the engine on stdio, relayed by `serve-dev.js`
-   - b. A: the engine serves HTTP itself, and something launches it beside
-     the dev server
-   - c. neither yet: the same measurement from a browser first
+   - a. A, as proposed: the engine serves HTTP on localhost, and the page
+     too once the installer puts them on a machine without node
+   - b. B: the engine on stdio, relayed by `serve-dev.js`, and the installed
+     app carries node or a second protocol
+   - c. both: B while `serve-dev.js` serves the page, A from the installer on
 9. **`run()` is synchronous, and a page's HTTP is not. How do they meet?**
    - a. a synchronous `XMLHttpRequest` inside the transport: `glyph-ui.js`
      changes only at its transport, as ORD-0011's target says, and the page
@@ -401,7 +402,7 @@ not sign it.
 
 | date | decision | who | reason |
 |---|---|---|---|
-| 2026-09-25, proposed | **The page reaches the Rust engine through `scripts/serve-dev.js`**: the engine answers on stdio, one JSON request a line and one answer a line, and the dev server that serves the page spawns it and relays `POST /engine` to it (option B) | proposed by the session; unsigned | measured below: both options answer every call with the JS's bytes and add no crate; B is 16 lines shorter, keeps the page on its own origin and the app on one launcher, and costs about 0.1 ms more a call |
+| 2026-09-25, proposed | **The engine serves HTTP on localhost itself, and the page reaches it by `fetch`** (option A): one JSON request a `POST` and one JSON answer. While `serve-dev.js` serves the page, the page calls the engine across origins with simple requests; once the installer puts the binary and the page on a machine without node, the engine serves the page too | proposed by the session; unsigned | measured below: both options answer every call with the JS's bytes and add no crate; A is 0.1–0.3 ms a call faster from a page and 16 lines longer, and it is the shape ORD-0013 and ORD-0014 stand on |
 
 **The two options.** A page cannot open stdio, so the browser reaches the
 engine by HTTP: **A**, the engine serves HTTP itself; **B**, the engine
@@ -409,82 +410,100 @@ answers on stdio and `serve-dev.js`, which already serves the page, relays
 the page's HTTP to it. Each is a std-only prototype among `glyph-cli`'s cargo
 examples — instruments for this measurement, not part of the `glyph` binary
 — and carries the three calls that are one call in both engines, `toXML`,
-`toAST` and `toHGML`, over the repository's stores. The engine with its JSON
-and no transport is the floor both share, and B's pipe without the relay
-tells the relay's hop from the pipe's.
+`toAST` and `toHGML`, over the repository's stores. Each is called twice:
+from node's `http` on one kept-alive socket, and from a page, by `fetch`, in
+a Chrome the DevTools protocol drives, the page served beside B's relay as
+`serve-dev.js` would serve it. The engine with its JSON and no transport is
+the floor all of them share, and B's pipe without the relay tells the
+relay's hop from the pipe's.
 
 ```text
 $ cargo build --release --manifest-path rust/Cargo.toml -p glyph-cli --examples
-$ node rust/crates/glyph-cli/examples/protocol_measure.mjs
+$ CHROME=<a Chrome or Chromium> node rust/crates/glyph-cli/examples/protocol_measure.mjs
 ```
 
-measured 2026-09-25T06:05:35.385Z · 114 sources × 3 calls × 5 rounds after one warm-up · median per source · node v22.22.2 · Intel(R) Xeon(R) Processor @ 2.80GHz × 4
+measured 2026-09-25T06:16:41.398Z · 114 sources × 3 calls × 5 rounds after one warm-up · median per source · node v22.22.2 · Chrome/141.0.7390.37, timer 5 µs, isolated across origins · Intel(R) Xeon(R) Processor @ 2.80GHz × 4
 
 | option | call | total for the 114 (ms) | p50 (µs) | p95 (µs) | max (µs) | over the engine alone, p50 (µs) | answers unequal to the JS |
 |---|---|---|---|---|---|---|---|
-| JS in process (today) | toXML | 6577.9 | 62.6 | 271.1 | 6150167.5 | — | oracle |
-| JS in process (today) | toAST | 156.2 | 528.1 | 685.3 | 73077.3 | — | oracle |
-| JS in process (today) | toHGML | 109.6 | 74.5 | 394.7 | 75641.9 | — | oracle |
-| Rust engine alone, no transport | toXML | 178.9 | 143.1 | 421.9 | 127839.9 | — | — |
-| Rust engine alone, no transport | toAST | 1236.1 | 9593.2 | 13064.8 | 101816.3 | — | — |
-| Rust engine alone, no transport | toHGML | 138.6 | 207.6 | 1276.2 | 77558.7 | — | — |
-| A · the engine serves HTTP | toXML | 254.7 | 574.6 | 817.5 | 155145.5 | 415.1 | 0 |
-| A · the engine serves HTTP | toAST | 1270.5 | 10134.8 | 10476.1 | 97241.6 | 550.9 | 0 |
-| A · the engine serves HTTP | toHGML | 196.2 | 675.4 | 2171.7 | 78754.8 | 468.6 | 0 |
-| B · stdio, relayed by the dev server | toXML | 271.7 | 689.8 | 890.5 | 159740.9 | 524.5 | 0 |
-| B · stdio, relayed by the dev server | toAST | 1294.8 | 10301.1 | 10996.1 | 98411.0 | 716.2 | 0 |
-| B · stdio, relayed by the dev server | toHGML | 207.9 | 788.5 | 1894.8 | 78010.0 | 572.5 | 0 |
-| B's pipe alone, no relay | toXML | 224.4 | 338.0 | 578.2 | 152833.1 | 179.4 | 0 |
-| B's pipe alone, no relay | toAST | 1228.4 | 9808.3 | 10086.1 | 92520.5 | 220.0 | 0 |
-| B's pipe alone, no relay | toHGML | 155.7 | 442.8 | 1524.6 | 72133.0 | 203.5 | 0 |
+| JS in process (today) | toXML | 6497.1 | 60.3 | 277.6 | 6059265.8 | — | oracle |
+| JS in process (today) | toAST | 149.4 | 508.1 | 667.1 | 68871.6 | — | oracle |
+| JS in process (today) | toHGML | 100.0 | 67.3 | 340.6 | 68509.3 | — | oracle |
+| Rust engine alone, no transport | toXML | 172.1 | 139.9 | 325.7 | 124402.7 | — | — |
+| Rust engine alone, no transport | toAST | 1208.7 | 9526.2 | 12432.2 | 93215.0 | — | — |
+| Rust engine alone, no transport | toHGML | 140.1 | 224.4 | 1321.9 | 74711.1 | — | — |
+| A · the engine serves HTTP | toXML | 266.0 | 620.0 | 872.4 | 160664.8 | 459.7 | 0 |
+| A · the engine serves HTTP | toAST | 1315.1 | 10244.6 | 13878.8 | 103102.3 | 718.7 | 0 |
+| A · the engine serves HTTP | toHGML | 203.0 | 743.1 | 1983.9 | 79495.7 | 500.0 | 0 |
+| B · stdio, relayed by the dev server | toXML | 265.9 | 638.5 | 820.1 | 159586.4 | 484.3 | 0 |
+| B · stdio, relayed by the dev server | toAST | 1272.7 | 10136.6 | 10959.0 | 97025.8 | 591.1 | 0 |
+| B · stdio, relayed by the dev server | toHGML | 191.5 | 709.2 | 1809.3 | 75378.9 | 461.3 | 0 |
+| B's pipe alone, no relay | toXML | 226.4 | 358.6 | 588.9 | 152486.5 | 206.0 | 0 |
+| B's pipe alone, no relay | toAST | 1241.0 | 9891.2 | 10380.5 | 92529.5 | 358.2 | 0 |
+| B's pipe alone, no relay | toHGML | 160.7 | 432.7 | 1518.3 | 73463.6 | 196.4 | 0 |
+| A · from a page | toXML | 498.4 | 2500.0 | 3155.0 | 174690.0 | 2344.0 | 0 |
+| A · from a page | toAST | 1568.6 | 12580.0 | 14805.0 | 106015.0 | 2993.5 | 0 |
+| A · from a page | toHGML | 445.9 | 2820.0 | 4585.0 | 90460.0 | 2535.6 | 0 |
+| B · from a page | toXML | 524.8 | 2840.0 | 3410.0 | 167335.0 | 2634.2 | 0 |
+| B · from a page | toAST | 1567.8 | 12635.0 | 14070.0 | 98165.0 | 3093.1 | 0 |
+| B · from a page | toHGML | 460.2 | 3090.0 | 4150.0 | 81025.0 | 2803.5 | 0 |
 
-slowest source per call — JS: toXML L-01 6150.2 ms, toAST L-01 73.1 ms, toHGML L-01 75.6 ms · Rust alone: toXML L-01 127.8 ms, toAST L-01 101.8 ms, toHGML L-01 77.6 ms
+slowest source per call — JS: toXML L-01 6059.3 ms, toAST L-01 68.9 ms, toHGML L-01 68.5 ms · Rust alone: toXML L-01 124.4 ms, toAST L-01 93.2 ms, toHGML L-01 74.7 ms
 calls one keystroke makes, as run() makes them (five, and one classify a command token) — p50 6, p95 12, max 8005
 
 | option | spawn to first answer (ms) | files | lines | code lines | crates added |
 |---|---|---|---|---|---|
-| A | 15.7 | protocol_http.rs 56, common/mod.rs 31 | 87 | 72 | 0 |
-| B | 20.9 | protocol_stdio.rs 18, common/mod.rs 31, protocol_relay.mjs 22 | 71 | 54 | 0 |
+| A | 16.3 | protocol_http.rs 56, common/mod.rs 31 | 87 | 72 | 0 |
+| B | 18.9 | protocol_stdio.rs 18, common/mod.rs 31, protocol_relay.mjs 22 | 71 | 54 | 0 |
 
 every answer is JSON.stringify's own bytes
 
 **What the numbers say.**
 
-- **Both are correct.** All 342 answers of A, of B and of the pipe equal
-  what the JS answers in the same process, each in `JSON.stringify`'s own
-  bytes.
-- **The transport costs half a millisecond a call either way.** Over the
-  engine alone, at p50: A 0.42–0.55 ms, B 0.52–0.72 ms. The relay's hop is
-  B's extra 0.1 ms, since the pipe alone costs 0.18–0.22 ms. The client is
-  node's `http` on one kept-alive socket, as a page's `fetch` holds one; a
-  browser was not measured.
-- **The count of requests weighs more than the transport.** A keystroke
-  makes 6 calls at p50, 12 at p95 and 8 005 for L-01: `run()` makes five,
-  and `renderLit` one `classify` a command token. At half a millisecond a
-  request, that is 3 ms at p50 and four seconds for L-01 (question 10).
-- **The engine weighs more than either.** `toAST` costs 9.6 ms in the Rust
+- **Both are correct.** All 342 answers of each transport — A and B from
+  node and from a page, and B's pipe — equal what the JS answers in the same
+  process, each in `JSON.stringify`'s own bytes.
+- **From a page, the transport costs 2.3 to 3.1 ms a call.** Over the
+  engine alone, at p50: A 2.34–2.99 ms, B 2.63–3.09 ms, so the relay's hop
+  costs B 0.1–0.3 ms. From node's client the transport costs half a
+  millisecond and the two options are within the runs' spread of each
+  other: over three runs the sign of A − B changed.
+- **The count of requests weighs more than the option.** A keystroke makes
+  6 calls at p50, 12 at p95 and 8 005 for L-01: `run()` makes five, and
+  `renderLit` one `classify` a command token. From a page, at 2.5 ms a
+  request, that is 15 ms a keystroke at p50 — a frame — and twenty seconds
+  for L-01 (question 10).
+- **The engine weighs more than either.** `toAST` costs 9.5 ms in the Rust
   engine alone, 9.3 of them digesting the three stores (question 12), and
-  the page's JS spends 6.2 s on L-01's XML, which the Rust writes in 0.13 s
+  the page's JS spends 6.1 s on L-01's XML, which the Rust writes in 0.12 s
   (question 13).
-- **Lines: B 71, A 87** (54 and 72 of code). A's count is a floor: the page
-  sits on the dev server's origin and calls A across origins, so its
-  requests must stay simple — a `text/plain` body, which the prototype reads
-  — or A must answer a preflight; and something must still launch A beside
-  the dev server, which is what B's relay does.
+- **Lines: A 87, B 71** (72 and 54 of code). Neither count is whole: A's
+  leaves out serving the page, which is `serve-dev.js`'s work ported and
+  which the installer needs; B's leaves out the line with which
+  `serve-dev.js` routes `/engine` to the relay.
 - **Crates: none either way.** `Cargo.lock` holds no entry with a `source`,
-  and the prototypes use `std` and the `glyph` crates alone, so no crate
-  came before the filter of INTAKE-RUST-LADDER §9.
-- **Spawn to first answer:** A 15.7 ms, B 20.9 ms, once a launch.
+  the prototypes use `std` and the `glyph` crates alone, and the page is
+  driven over node's own `WebSocket`, so no crate came before the filter of
+  INTAKE-RUST-LADDER §9.
+- **Spawn to first answer:** A 16.3 ms, B 18.9 ms, once a launch.
 
-**Why B.** At 0.1 ms a call the difference in time is below what a
-keystroke shows, and the rest leans one way: B is shorter; the page calls
-its own origin; `serve-dev.js` is already the app's launcher, the one click
-the decision of 2026-09-05 allows, and under B it stays the only thing to
-launch; and the engine stays what the `glyph` binary already is, a filter
-from stdin to stdout.
+**Why A.** The spec's later ORDs stand on it. ORD-0013 puts *"the binary
+and the page on a clean machine"*, where no node runs `serve-dev.js` to
+relay anything, and ORD-0014's path with no crate is *"the engine opens
+msedge --app on its localhost page"*: a page the engine serves. Under A, the
+transport ORD-0011 builds is the one the installer ships; under B, the
+installed app carries node or a second protocol. A is also the faster from a
+page, by the relay's hop.
 
-**The twelve calls, over B.** Each already has its Rust, ported by ORD-0003
-to ORD-0009; what the protocol adds is the request that names it.
+**What B has.** It is 16 lines shorter, the page calls its own origin from
+the start, and the engine stays a filter from stdin to stdout, as the
+`glyph` binary is. A reaches one origin only once the engine serves the
+page; until then the page's requests stay simple — a `text/plain` body,
+which the prototype reads — or A answers a preflight.
+
+**The twelve calls, over the protocol.** Each already has its Rust, ported
+by ORD-0003 to ORD-0009; what the protocol adds is the request that names
+it.
 
 | call | where `glyph-ui.js` makes it | over the protocol | the Rust that answers |
 |---|---|---|---|
@@ -1032,12 +1051,14 @@ and `npm run check` passes on the commit that carries this return.
 - **The protocol, measured.** Two std-only prototypes, the relay, the
   engine's baseline and the measurement are `glyph-cli`'s cargo examples
   (`protocol_*`), which the crate graph does not check, as it does not check
-  dev-dependencies; the `glyph` binary does not change. The numbers are in
-  the ADR, under *Open, and why*.
+  dev-dependencies; the `glyph` binary does not change. The page is driven
+  over the DevTools protocol with node's own `WebSocket` and isolated across
+  origins, so its timer resolves 5 µs. The numbers are in the ADR, under
+  *Open, and why*.
 - **The Rust engine is slower than the page's JS at the median of every
-  call, and faster only where the JS is quadratic.** At p50, `toXML` 143 µs
-  against 63, `toHGML` 208 against 75, `toAST` 9 593 against 528; for L-01
-  the Rust writes the XML in 0.13 s and the JS in 6.2 s.
+  call, and faster only where the JS is quadratic.** At p50, `toXML` 140 µs
+  against 60, `toHGML` 224 against 67, `toAST` 9 526 against 508; for L-01
+  the Rust writes the XML in 0.12 s and the JS in 6.1 s.
 - **An empty parse costs the Rust 95 µs and the JS 4.5.** Under callgrind,
   `with_cache` — the rules store copied with its compiled cache on every
   parse, so the envelope can digest it — is 54% of the instructions; the JS
@@ -1114,4 +1135,5 @@ and `npm run check` passes on the commit that carries this return.
 | 37 | `9c943d3` | ORD-0009 work 2/2 — `glyph-inverse`, the round trips recorded as the suite runs (`inverse.json`) | 05:41 | the recorder red on a burn after the registry guard until it read the stores `stores.js` resolves; the depth test red on its own count until it counted the question and its text; 24 of 32 mutations killed, then 32 with the way back's probes |
 | 38 | `160d43d` | ORD-0009 closes | 05:46 | green |
 | 39 | `df25609` | ORD-0010 emitted and open | 05:49 | green |
-| 40 | this commit | ORD-0010 measured — both protocols over the 114 sources, the ADR proposed | 06:13 | green, `check` 42 s and `check:rust` 95 s; nothing red — the measurement's first run showed the Rust's `toAST` at 10 ms whatever the source, which the probes and callgrind traced to the store digests and the rules copy (question 12) |
+| 40 | `faa6a93` | ORD-0010 measured — both protocols over the 114 sources, the ADR proposed | 06:13 | green, `check` 42 s and `check:rust` 95 s; nothing red — the measurement's first run showed the Rust's `toAST` at 10 ms whatever the source, which the probes and callgrind traced to the store digests and the rules copy (question 12) |
+| 41 | this commit | ORD-0010 measured from a page — Chrome drives both protocols; the ADR proposes A, the engine's own HTTP | 06:22 | green, `check` 42 s and `check:rust` 95 s; nothing red — the proposal of `faa6a93`, B, had been read against ORD-0010 alone, and ORD-0013 and ORD-0014 stand on the engine's own HTTP |

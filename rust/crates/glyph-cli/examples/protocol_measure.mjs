@@ -2,7 +2,7 @@
 // lines written, crates added — each answer held against what the JS answers
 // in this same process.
 //   cargo build --release --manifest-path rust/Cargo.toml -p glyph-cli --examples
-//   node rust/crates/glyph-cli/examples/protocol_measure.mjs [rounds]
+//   [CHROME=/path/to/chrome] node rust/crates/glyph-cli/examples/protocol_measure.mjs [rounds]
 import http from "node:http";
 import fs from "node:fs";
 import os from "node:os";
@@ -12,6 +12,7 @@ import { spawn } from "node:child_process";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import G from "../../../../scripts/glyph-parser.js";
+import { ck } from "../../../../scripts/core/emit-ast.js";
 import { relay } from "./protocol_relay.mjs";
 
 const require = createRequire(import.meta.url);
@@ -91,10 +92,10 @@ for (const call of CALLS) {
 engineProc.kill();
 
 /* a client on one kept-alive socket, as a page's fetch is */
-const poster = port => {
+const poster = (port, route) => {
   const agent = new http.Agent({ keepAlive: true, maxSockets: 1 });
   const post = body => new Promise((resolve, reject) => {
-    const req = http.request({ host: "127.0.0.1", port, method: "POST", path: "/", agent,
+    const req = http.request({ host: "127.0.0.1", port, method: "POST", path: route, agent,
       headers: { "Content-Type": "application/json", "Content-Length": Buffer.byteLength(body) } }, res => {
       let text = "";
       res.setEncoding("utf8");
@@ -113,24 +114,97 @@ const probe = request("toXML", sources[0]);
 let t0 = now();
 const serverA = spawn(path.join(BIN, "protocol_http"), ["8732"], { stdio: ["ignore", "pipe", "inherit"] });
 await firstLine(serverA.stdout);
-const clientA = poster(8732);
+const clientA = poster(8732, "/");
 await clientA.post(probe);
 const coldA = Number(now() - t0) / 1e6;
 const A = await measure("A · the engine serves HTTP", clientA.post);
 clientA.agent.destroy();
-serverA.kill();
 
-/* B: the engine on stdio, its HTTP relayed by the dev server */
+/* B: the engine on stdio, its HTTP relayed by the dev server, which serves
+   the page beside it — isolated across origins here only so the page's timer
+   resolves 5 µs */
+const PAGE = "<!doctype html><title>protocol</title><script>" + ck + "</script>";
 t0 = now();
 const r = relay(path.join(BIN, "protocol_stdio"));
-const relayServer = http.createServer(r.handle);
-await new Promise(ok => relayServer.listen(8733, "127.0.0.1", ok));
-const clientB = poster(8733);
+const serverB = http.createServer((req, res) => {
+  if (req.method === "POST" && req.url === "/engine") return r.handle(req, res);
+  res.writeHead(200, { "Content-Type": "text/html; charset=utf-8",
+                       "Cross-Origin-Opener-Policy": "same-origin", "Cross-Origin-Embedder-Policy": "require-corp" });
+  res.end(PAGE);
+});
+await new Promise(ok => serverB.listen(8733, "127.0.0.1", ok));
+const clientB = poster(8733, "/engine");
 await clientB.post(probe);
 const coldB = Number(now() - t0) / 1e6;
 const B = await measure("B · stdio, relayed by the dev server", clientB.post);
 clientB.agent.destroy();
-relayServer.close();
+
+/* from a page, when CHROME names a browser: the client the spec's note
+   names, driven over the DevTools protocol; A across origins, B on the
+   page's own */
+const fromPage = [];
+let browser = "no browser: CHROME unset";
+if (process.env.CHROME) {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "glyph-protocol-"));
+  const chrome = spawn(process.env.CHROME, ["--headless=new", "--no-sandbox", "--disable-gpu", "--no-first-run",
+    "--remote-debugging-port=0", "--user-data-dir=" + dir, "about:blank"], { stdio: ["ignore", "ignore", "pipe"] });
+  const wsUrl = await new Promise(resolve => readline.createInterface({ input: chrome.stderr })
+    .on("line", l => { const m = l.match(/DevTools listening on (ws:\S+)/); if (m) resolve(m[1]); }));
+  const ws = new WebSocket(wsUrl);
+  await new Promise(ok => ws.addEventListener("open", ok, { once: true }));
+  let seq = 0;
+  const pending = new Map();
+  ws.addEventListener("message", e => {
+    const m = JSON.parse(e.data);
+    if (pending.has(m.id)) { pending.get(m.id)(m); pending.delete(m.id); }
+  });
+  const cdp = (method, params, sessionId) => new Promise(resolve => {
+    const id = ++seq;
+    pending.set(id, resolve);
+    ws.send(JSON.stringify({ id, method, params: params || {}, sessionId }));
+  });
+  const product = (await cdp("Browser.getVersion")).result.product;
+  const { result: { targetId } } = await cdp("Target.createTarget", { url: "http://127.0.0.1:8733/" });
+  const { result: { sessionId } } = await cdp("Target.attachToTarget", { targetId, flatten: true });
+  const evaluate = async expression => {
+    const m = (await cdp("Runtime.evaluate", { expression, awaitPromise: true, returnByValue: true }, sessionId)).result;
+    if (m.exceptionDetails) { console.error(JSON.stringify(m.exceptionDetails)); process.exit(1); }
+    return m.result.value;
+  };
+  while (await evaluate("typeof ck") !== "function") await new Promise(ok => setTimeout(ok, 50));
+  const inPage = async (srcs, calls, rounds, want, urlA) => {
+    const run = async url => {
+      const per = calls.map(() => srcs.map(() => []));
+      const wrong = [];
+      for (let round = 0; round <= rounds; round++)
+        for (let i = 0; i < srcs.length; i++)
+          for (let c = 0; c < calls.length; c++) {
+            const body = JSON.stringify({ call: calls[c], src: srcs[i] });
+            const t0 = performance.now();
+            const text = await (await fetch(url, { method: "POST", body })).text();
+            const answer = JSON.parse(text);
+            const t1 = performance.now();
+            if (round > 0) per[c][i].push(t1 - t0);
+            else if (ck(JSON.stringify(answer)) !== want[i * calls.length + c]) wrong.push(i * calls.length + c);
+          }
+      return { per, wrong };
+    };
+    return { isolated: crossOriginIsolated, A: await run(urlA), B: await run("/engine") };
+  };
+  const want = sources.flatMap(s => CALLS.map(c => ck(expected.get(s.id + " " + c))));
+  const got = await evaluate("(" + inPage + ")(" + [JSON.stringify(sources.map(s => s.src)), JSON.stringify(CALLS), ROUNDS,
+                                                    JSON.stringify(want), JSON.stringify("http://127.0.0.1:8732/")].join(",") + ")");
+  browser = product + ", timer " + (got.isolated ? "5 µs, isolated across origins" : "100 µs, not isolated");
+  for (const [name, o] of [["A · from a page", got.A], ["B · from a page", got.B]])
+    fromPage.push({ name, us: new Map(CALLS.map((c, k) => [c, o.per[k].map(xs => median(xs) * 1000)])), respelt: [],
+                    wrong: o.wrong.map(n => sources[Math.floor(n / CALLS.length)].id + " " + CALLS[n % CALLS.length]) });
+  ws.close();
+  chrome.kill();
+  await new Promise(ok => chrome.once("exit", ok));
+  fs.rmSync(dir, { recursive: true, force: true });
+}
+serverA.kill();
+serverB.close();
 r.child.kill();
 
 /* B's pipe without the relay, to tell the relay's hop from the pipe's */
@@ -163,11 +237,11 @@ const stats = xs => {
 };
 const out = [];
 out.push("measured " + new Date().toISOString() + " · " + sources.length + " sources × " + CALLS.length + " calls × " + ROUNDS +
-         " rounds after one warm-up · median per source · node " + process.version + " · " + os.cpus()[0].model + " × " + os.cpus().length);
+         " rounds after one warm-up · median per source · node " + process.version + " · " + browser + " · " + os.cpus()[0].model + " × " + os.cpus().length);
 out.push("");
 out.push("| option | call | total for the " + sources.length + " (ms) | p50 (µs) | p95 (µs) | max (µs) | over the engine alone, p50 (µs) | answers unequal to the JS |");
 out.push("|---|---|---|---|---|---|---|---|");
-for (const o of [js, engine, A, B, Bpipe])
+for (const o of [js, engine, A, B, Bpipe, ...fromPage])
   for (const call of CALLS) {
     const st = stats(o.us.get(call));
     const over = o === js || o === engine ? "—" : f1(stats(o.us.get(call).map((x, i) => x - engine.us.get(call)[i])).p50);
@@ -192,7 +266,7 @@ out.push("| A | " + f1(coldA) + " | " + filesA.map(f => f.rel + " " + f.lines).j
          sum(filesA, "code") + " | " + (external + foreign.length) + " |");
 out.push("| B | " + f1(coldB) + " | " + filesB.map(f => f.rel + " " + f.lines).join(", ") + " | " + sum(filesB, "lines") + " | " +
          sum(filesB, "code") + " | " + (external + foreign.length) + " |");
-const unequal = [...A.wrong, ...B.wrong, ...Bpipe.wrong];
+const unequal = [A, B, Bpipe, ...fromPage].flatMap(o => o.wrong.map(w => o.name + ": " + w));
 if (unequal.length) out.push("", "unequal: " + unequal.join(", "));
 const respelt = [...A.respelt, ...B.respelt, ...Bpipe.respelt];
 out.push("", respelt.length ? "equal in value, spelt otherwise than JSON.stringify: " + respelt.join(", ")
