@@ -156,6 +156,7 @@
       [ph-item'each ORD of the series, the commit that closed it and the digest it matched']
       [ph-scope'EMS-001']
     ]
+    [--track[ph-item'ORD-0001, the frozen oracle: 114 files at the commit tagged conformance-v0, sha256 c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828 over LC_ALL=C sha256sum *.json'][ph-scope'EMS-001']]
     [ins'when ORD-0014 closes, EMS-001 stays as the record of what it delivered, and the next series opens as EMS-002 under a spec of its own']
     [rdy'the Rust app replaces the browser Glyph for the Regent, and the JS engine stays as long as anything reads it']
   ]

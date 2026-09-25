@@ -12,7 +12,7 @@
 | environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed |
 | ground | read in the order the handoff names; `npm run check` (33 buckets, 41 s) and `npm run check:rust` (20 crates, 3 s) green on the clone at `ea8fc59`, before anything was touched |
 | layout | **closed** — its val holds (below), five banks |
-| queue | **ORD-0001 open** — emitted into [`ORD-0001/`](ORD-0001/ORD-0001.xml), no diagnostics |
+| queue | **ORD-0001 closed** on the commit tagged `conformance-v0`; ORD-0002 opens next |
 
 ## The layout, built
 
@@ -52,13 +52,30 @@ and `npm run check` passes on the commit that carries this return.
 
 ## ORDs closed
 
-None.
+| ORD | delivered | commit | digest it matched |
+|---|---|---|---|
+| [`ORD-0001`](ORD-0001/ORD-0001.xml) | the frozen oracle: `--export-oracle` writes 114 files | the tag `conformance-v0` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828` |
+
+**ORD-0001, the proof**, run at `02c92ee` (the commit that emitted it; the
+closing commit changes no code):
+
+```
+$ rm -rf rust/target/oracle && node scripts/test-corpus.js --export-oracle
+  ! oracle written: 114 cases to rust/target/oracle
+All green.
+$ ls rust/target/oracle | wc -l
+114
+$ cd rust/target/oracle && LC_ALL=C sha256sum *.json | sha256sum
+c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828  -
+```
+
+It needed no code: the export exists since `b127ec2`. Two exports at the same
+commit are byte-identical, the 114 per-case digests equal
+`corpus-snapshot.json`, and no projection throws.
 
 ## Open, and why
 
-- **ORD-0001, the frozen oracle.** Its source is its section of the spec under a
-  block whose ctx names the spec, and nothing else; it closes with the tag
-  `conformance-v0` on its closing commit.
+Nothing is open. ORD-0002, `glyph-util` and `glyph-version`, opens next.
 
 ## Measured
 
@@ -117,4 +134,5 @@ Closed questions, none answered.
 | 3 | `1e70ad7` | layout 3/5 — `--bundle` writes the series folder | 01:11 | `ZP-07`–`ZP-10` red first (`ORD-0008.zip` in the series), green after |
 | 4 | `b472fcf` | layout 4/5 — the plugin finds an ORD by its series | 01:15 | `ZP-11`, `ZP-12` red first (`não existe`, `EISDIR`), green after |
 | 5 | `70bffd7` | layout 5/5 — the bundle command reads the series; the layout closes | 01:23 | `ZP-13`, `ZP-14` red against the old leaf; one red of the check's own (`/fechada/` matched the heading `fechadas`), fixed to the row |
-| 6 | this commit | ORD-0001 emitted and open | 2026-09-25 | green |
+| 6 | `02c92ee` | ORD-0001 emitted and open | 01:28 | green |
+| 7 | this commit, tagged `conformance-v0` | ORD-0001 closes | 2026-09-25 | green |
