@@ -12,7 +12,7 @@
 | environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed |
 | ground | read in the order the handoff names; `npm run check` (33 buckets, 41 s) and `npm run check:rust` (20 crates, 3 s) green on the clone at `ea8fc59`, before anything was touched |
 | layout | **closed** — its val holds (below), five banks |
-| queue | ORD-0001 to ORD-0006 closed; ORD-0007 opens next. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
+| queue | ORD-0001 to ORD-0006 closed; ORD-0007 open. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
 
 ## Waiting for the Regent
 
@@ -78,6 +78,16 @@ Closed questions, none answered.
      rule
    - c. what the caller registered, as the JS does: the Rust keeps a registry
      of its own beside the context
+7. **ORD-0007's val names the envelope's digest, and the envelope is
+   `emit-ast.js` — `glyph-envelope`, ORD-0009's, which opens only after
+   ORD-0008.** Which reading holds?
+   - a. as read here: every field the envelope reads — each node's, each
+     segment's, each diagnostic's in both languages — equal on all 114
+     sources; the digest itself is ORD-0009's val, which names it
+   - b. the spec moves: ORD-0007's val names the tree, and ORD-0009's keeps
+     the digest
+   - c. `glyph-envelope` enters ORD-0007, and ORD-0009 keeps the burn and the
+     inverse
 
 ## ORDs closed
 
@@ -231,7 +241,14 @@ c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828  -
 
 ## Open, and why
 
-Nothing is open. ORD-0007, `glyph-parse`, opens next.
+**ORD-0007, `glyph-parse`**, open since the commit that carries this line.
+Its val — "the AST envelope equals the oracle digest on all 114 sources" —
+names a projection that `emit-ast.js` makes, and `crate-graph.js` puts that
+module in `glyph-envelope`, ORD-0009's crate; ORD-0009 opens only after
+ORD-0008, and its own val names the same digest. So the val is read as the
+tree the envelope is made from: every field `emit-ast.js` reads — each node's,
+each segment's, and each diagnostic's in pt-BR and in en-EU, `at` included —
+equal to the JS's on all 114 sources. The reading is question 7.
 
 ## ORD-0006, how it was read
 
@@ -555,7 +572,8 @@ and `npm run check` passes on the commit that carries this return.
 | ORD-0003 | `b05ba19` 02:02 | `51e291b` 02:30 | 28 min, four work banks |
 | ORD-0004 | `2c68949` 02:34 | `e08f1f9` 02:45 | 11 min, one work bank |
 | ORD-0005 | `2466cef` 02:49 | `17658ec` 03:00 | 11 min, one work bank |
-| ORD-0006 | `8f996df` 03:15 | the commit after `ca9c1a6` | ~35 min, one work bank |
+| ORD-0006 | `8f996df` 03:15 | `480268b` 03:50 | 35 min, one work bank |
+| ORD-0007 | the commit after `480268b` | — | open |
 
 | # | commit | step | UTC | checks |
 |---|---|---|---|---|
@@ -587,4 +605,5 @@ and `npm run check` passes on the commit that carries this return.
 | 25 | `17658ec` | ORD-0005 closes | 03:00 | green |
 | 26 | `8f996df` | ORD-0006 emitted and open | 03:15 | green |
 | 27 | `ca9c1a6` | ORD-0006 work — `glyph-templates`, `glyph-rules`, the tree in `glyph-util`, `trees.json` in the export | 03:47 | green at once; 28 of 32 mutations killed, then 30 once the export recorded every level and a lower-case forbidden name; the pair-key test was red on its own expectation — by UTF-16 unit U+10000 sorts before U+FF21 — and was fixed to what node answers |
-| 28 | this commit | ORD-0006 closes | 2026-09-25 | green |
+| 28 | `480268b` | ORD-0006 closes | 03:50 | green |
+| 29 | this commit | ORD-0007 emitted and open | 2026-09-25 | green |

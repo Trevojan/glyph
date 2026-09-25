@@ -1,0 +1,40 @@
+[block
+  'ORD-0007-parser'
+  [ctx
+    'the spec of EMS-001'
+    '.guidelines/.orders/EMS-001/EMS-001.pgml'
+  [/ctx]
+  [onlyif
+    'ORD-0004 closed'
+    'ORD-0005 closed'
+    'ORD-0006 closed'
+  [/onlyif]
+  [tgt
+    'glyph-parse: the tree the projections read'
+  [/tgt]
+  [cmp
+    'glyph-parse'
+    'the AST envelope equals the oracle digest on all 114 sources'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+[/block]
