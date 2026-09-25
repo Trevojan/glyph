@@ -15,7 +15,7 @@
  */
 
 import { LIMITS, pad, hgmlLit } from "./util.js";
-import { EXPANSIONS, RULES, expansionRegistry, entryOf } from "./stores.js";
+import { rulesOf, expansionsOf, formulaContextOf, expansionRegistry, entryOf } from "./stores.js";
 import { parse } from "./parser.js";
 import { compileRules } from "./rules.js";
 
@@ -93,7 +93,7 @@ export var burnBlends = [];        /* what fired, so the output can declare itse
 /* Co-occurrence among siblings in the burnt form. The burn is a canonical
    form, so this asks a question about MEANING and not about spelling. */
 export function applyBlends(list, opts) {
-  var store = (opts && opts.rules) || RULES;
+  var store = rulesOf(opts);
   if (!store) return list;
   var comp = store.__compiled || (store.__compiled = compileRules(store));
   if (!comp || !comp.blends.length || !list.length) return list;
@@ -172,7 +172,8 @@ export function burnList(list, opts, chain, depth) {
     var sub = parse(e.formula, {
       session: opts && opts.session,
       valency: false,          // a formula is a definition, not a request
-      expansions: (opts && opts.expansions) || EXPANSIONS
+      context: formulaContextOf(opts) || undefined,
+      expansions: expansionsOf(opts)
     });
     var body = [];
     sub.segments.forEach(function (s) { body = body.concat(s.children); });

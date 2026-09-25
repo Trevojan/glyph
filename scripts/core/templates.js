@@ -10,7 +10,7 @@
  */
 
 import { esc, walk } from "./util.js";
-import { templateRegistry, RULES } from "./stores.js";
+import { templateRegistry, rulesOf } from "./stores.js";
 
 /* ======================================================
    3b. TEMPLATE EXPANSION
@@ -244,7 +244,7 @@ export function constraintNames(rulesStore, spec) {
 export function checkTemplateConstraints(segments, opts, G) {
   var registry = templateRegistry(opts);
   if (!registry) return;
-  var rulesStore = (opts && opts.rules) || RULES;
+  var rulesStore = rulesOf(opts);
 
   var exempt = {};
   (((rulesStore || {}).scope || {}).exemptUnder || ["OVR", "BYP"])

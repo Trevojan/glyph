@@ -13,7 +13,7 @@
 
 import { LIMITS, walk } from "./util.js";
 import { elName } from "./vocabulary.js";
-import { TEMPLATES, EXPANSIONS, RULES } from "./stores.js";
+import { templatesOf, rulesOf, expansionsOf } from "./stores.js";
 import { parse } from "./parser.js";
 import { VERSION } from "./version.js";
 
@@ -267,9 +267,9 @@ export function serializeAST(segments, gaps, opts) {
        adds the text, for the examples and teaching models T12 allows. */
     source: srcDescriptor(opts),
     stores: {
-      templates: storeCk(opts && opts.templates ? opts.templates : TEMPLATES),
-      rules: storeCk(opts && opts.rules ? opts.rules : RULES),
-      expansions: storeCk(opts && opts.expansions ? opts.expansions : EXPANSIONS)
+      templates: storeCk(templatesOf(opts)),
+      rules: storeCk(rulesOf(opts)),
+      expansions: storeCk(expansionsOf(opts))
     },
     /* A reader must never have to infer which projection it was handed by
        noticing which fields happen to be absent — that inference is exactly

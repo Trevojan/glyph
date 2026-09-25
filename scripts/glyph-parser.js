@@ -39,7 +39,8 @@ import { CATS, INSTR, PTBR, CAT_OF, EDITORIAL_ONLY, ALIAS, ALIAS_OF, STRUCT, MET
   from "./core/vocabulary.js";
 import { VERSION } from "./core/version.js";
 import { useTemplates, templateRegistry, useExpansions, expansionRegistry,
-         speciesOf, depthOf, formulaOf, defOf, atomsOf, standsAlone, useRules } from "./core/stores.js";
+         speciesOf, depthOf, formulaOf, defOf, atomsOf, standsAlone, useRules,
+         createContext } from "./core/stores.js";
 import { tokenize, classify, suggest } from "./core/lexer.js";
 import { expandExpr, freeVars, parseLogic } from "./core/logic.js";
 import { parse } from "./core/parser.js";
@@ -59,6 +60,7 @@ const GlyphCore = {
   parse: parse, walk: walk,
   useTemplates: useTemplates, templateRegistry: templateRegistry,
   useRules: useRules,
+  createContext: createContext,
   useExpansions: useExpansions, expansionRegistry: expansionRegistry,
   speciesOf: speciesOf, depthOf: depthOf, formulaOf: formulaOf, atomsOf: atomsOf,
   standsAlone: standsAlone,

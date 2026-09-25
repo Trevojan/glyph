@@ -2456,6 +2456,64 @@ function runRegistryGuard() {
 }
 const rGS = runRegistryGuard();
 
+/* ------------------------------------------------------------------ *
+ * The context — the three stores as one object, with no global fallback
+ *
+ * Loose `opts.templates/rules/expansions` fall back to the globals store by
+ * store, so a call that brings its own templates still gets whatever rules
+ * the process loaded: two packages in one process leak into each other. A
+ * context (G.createContext) answers for all three or for none. This runs
+ * after runRegistryGuard on purpose — the globals are loaded, so a context
+ * that leaked would show it here.
+ * ------------------------------------------------------------------ */
+function runContextGuard() {
+  console.log("\n--- context — one object, no fallback ---");
+  const D = [];
+  const ok = (id, name, why) => {
+    if (why) { console.log("  ✗ " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  ✓ " + id + ": " + name); D.push(id); }
+  };
+
+  const loose = { templates: TPL.templates, rules: RULESTORE, expansions: require("../.guidelines/expansions.json") };
+  const ctx = G.createContext(loose);
+  const CORPUS = [].concat(POSITIVE, INCOMPLETE, INVALID, REGRESSION, LONG,
+                           TEMPLATES, CONSTRAINTS, RULE_CASES);
+  const three = (src, o) => {
+    const a = G.toAST(src, o); delete a.version;
+    return G.toXML(src, o) + "\n" + JSON.stringify(a) + "\n" + G.toHGML(src, o);
+  };
+  const differ = CORPUS.filter(c => c && typeof c.src === "string" &&
+    (three(c.src, ctx) !== three(c.src, loose) ||
+     three(c.src, { context: ctx }) !== three(c.src, loose))).map(c => c.id);
+  ok("CX-01", "a context projects the corpus exactly as the loose stores do",
+     differ.length ? "differs on " + differ.slice(0, 8).join(", ") : null);
+
+  const ruleCodes = o => (G.parse("[mand'x'][opt'x']", o).gaps || []).map(g => g.code);
+  /* the baseline is a loose store that is present and empty — it cannot fall
+     back, in this engine or in one without contexts, so it measures the rules
+     alone and not the mechanism under test. `__compiled` is cleared because
+     compileRules caches onto the store object itself, and a copy would carry
+     the original's compiled rules along with it */
+  const noRules = ruleCodes(Object.assign({}, loose,
+    { rules: Object.assign({}, RULESTORE, { rules: [], __compiled: undefined }) }));
+  const fromRules = ruleCodes(loose).filter(c => noRules.indexOf(c) === -1);
+  const leaked = ruleCodes(G.createContext({ templates: TPL.templates }))
+    .filter(c => fromRules.indexOf(c) !== -1);
+  ok("CX-02", "a context without rules gets none from the globals",
+     !fromRules.length ? "the probe fired no rule even with the store — it proves nothing"
+       : leaked.length ? "global rules reached it: " + leaked.join(",") : null);
+
+  const expands = o => /expanded/.test(G.toXML("[--germinate]", o));
+  ok("CX-03", "templates.json whole and the map inside it read the same, in both doors",
+     [G.createContext({ templates: TPL }), { templates: TPL }].every(expands) &&
+     !expands(G.createContext({}))
+       ? null : "the file's own shape lost the templates in one of the two doors");
+
+  return D.length;
+}
+const rCX = runContextGuard();
+
+
 
 
 console.log("\n=================================================");
@@ -2490,6 +2548,7 @@ console.log(" param molde  " + String(rTP).padStart(4) + "/4");
 console.log(" imperativo   " + String(rIM).padStart(4) + "/5");
 console.log(" bundle ORD   " + String(rZP).padStart(4) + "/5");
 console.log(" global store " + rGS + "/3");
+console.log(" context      " + rCX + "/3");
 console.log("=================================================");
 
 if (failures.length) {

@@ -9,8 +9,17 @@
  * live binding an ESM export gives. speciesOf, depthOf, formulaOf, defOf and
  * atomsOf are the composition table read one entry at a time; standsAlone is
  * derived from it and from the valency tables, never transcribed from prose
- * (`domínio evita síntese`). Turning the three into one context object
- * passed down is the step after the split (INTAKE-PARSER-SPLIT.md §5).
+ * (`domínio evita síntese`).
+ *
+ * The three also travel as one CONTEXT (createContext): a frozen object that
+ * is passed as `opts` or as `opts.context`, and that answers for all three
+ * stores with no fallback to the globals. A call that passes loose
+ * `opts.templates/rules/expansions` still falls back store by store, so a
+ * caller who brings only its templates gets the global rules — which is how
+ * two packages in one process contaminate each other, and why the context
+ * exists (INTAKE-PARSER-SPLIT.md §5). templatesOf / rulesOf / expansionsOf
+ * are the one place either resolution happens; no other module reads the
+ * globals.
  */
 
 import { FRAMES, SLOTS, NAMED_STRUCT } from "./vocabulary.js";
@@ -45,12 +54,14 @@ export function standsAlone(canonical, opts) {
    the browser, from the generated glyph-data.js (file:// blocks fetch). */
 export var TEMPLATES = {};
 export function useTemplates(store) {
-  TEMPLATES = (store && store.templates) || store || {};
+  TEMPLATES = asTemplates(store);
   return TEMPLATES;
 }
 export function templateRegistry(opts) {
-  return (opts && opts.templates) || TEMPLATES;
+  return templatesOf(opts);
 }
+/* templates.json itself or the map inside it — one reading for both doors */
+function asTemplates(s) { return (s && s.templates) || s || {}; }
 
 /* ---- composition registry (v1.1.0.0) --------------------------------
    What GLOSSARY.md knows and the engine did not: which commands are
@@ -67,13 +78,15 @@ export function templateRegistry(opts) {
    travels in the AST. */
 export var EXPANSIONS = null;
 export function useExpansions(store) {
-  EXPANSIONS = (store && store.commands) ? store : (store ? { commands: store } : null);
+  EXPANSIONS = asExpansions(store);
   return EXPANSIONS;
 }
 export function expansionRegistry(opts) {
-  var s = (opts && opts.expansions) || EXPANSIONS;
+  var s = expansionsOf(opts);
   return (s && s.commands) ? s : null;
 }
+/* expansions.json itself or its bare `commands` map */
+function asExpansions(s) { return (s && s.commands) ? s : (s ? { commands: s } : null); }
 export function entryOf(name, opts) {
   var reg = expansionRegistry(opts);
   if (!reg) return null;
@@ -129,3 +142,51 @@ export function atomsOf(name, opts) {
 
 export var RULES = null;
 export function useRules(store) { RULES = store || null; return RULES; }
+
+
+/* ---- the context -----------------------------------------------------
+   Made here and only here, so `contextOf` can tell a context from an opts
+   object that merely has the same three keys: the loose keys fall back to
+   the globals, a context never does. */
+var CONTEXTS = new WeakSet();
+export function createContext(stores) {
+  var c = Object.freeze({
+    templates: asTemplates(stores && stores.templates),
+    rules: (stores && stores.rules) || null,
+    expansions: asExpansions(stores && stores.expansions)
+  });
+  CONTEXTS.add(c);
+  return c;
+}
+export function contextOf(opts) {
+  if (!opts || typeof opts !== "object") return null;
+  if (CONTEXTS.has(opts)) return opts;
+  var c = opts.context;
+  return (c && typeof c === "object" && CONTEXTS.has(c)) ? c : null;
+}
+/* A formula is a definition, not a request: its parse reads the composition
+   table and nothing the Order loaded. From a context that is one more
+   context, made once per context rather than once per formula. */
+var FORMULA_CONTEXTS = new WeakMap();
+export function formulaContextOf(opts) {
+  var c = contextOf(opts);
+  if (!c) return null;
+  var f = FORMULA_CONTEXTS.get(c);
+  if (!f) { f = createContext({ expansions: c.expansions }); FORMULA_CONTEXTS.set(c, f); }
+  return f;
+}
+export function templatesOf(opts) {
+  var c = contextOf(opts);
+  if (c) return c.templates;
+  return (opts && opts.templates) ? asTemplates(opts.templates) : TEMPLATES;
+}
+export function rulesOf(opts) {
+  var c = contextOf(opts);
+  if (c) return c.rules;
+  return (opts && opts.rules) || RULES;
+}
+export function expansionsOf(opts) {
+  var c = contextOf(opts);
+  if (c) return c.expansions;
+  return (opts && opts.expansions) ? asExpansions(opts.expansions) : EXPANSIONS;
+}

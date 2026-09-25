@@ -11,7 +11,7 @@
  */
 
 import { INSTR, ALIAS, STRUCT, META, MODE, EMO, SESSION, GLOSS_REVERSE, ELEMENT_INPUT } from "./vocabulary.js";
-import { RULES } from "./stores.js";
+import { rulesOf } from "./stores.js";
 
 /* ======================================================
    2. LEXER
@@ -305,7 +305,7 @@ export function classify(name, opts) {
    species at burn time. Re-reading a burn must know it, or every pattern that
    fired reports as a stranger. The rules store is the only place it lives. */
 export function blendOf(U, opts) {
-  var store = (opts && opts.rules) || RULES;
+  var store = rulesOf(opts);
   var rs = store && store.rules;
   if (!rs) return null;
   for (var i = 0; i < rs.length; i++)

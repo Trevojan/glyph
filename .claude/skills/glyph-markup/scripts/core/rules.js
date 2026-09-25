@@ -11,7 +11,7 @@
  */
 
 import { esc, walk } from "./util.js";
-import { RULES } from "./stores.js";
+import { rulesOf } from "./stores.js";
 
 
 /* ======================================================
@@ -73,7 +73,7 @@ export function compileRules(store) {
 }
 
 export function checkRules(segments, opts, G) {
-  var store = (opts && opts.rules) || RULES;
+  var store = rulesOf(opts);
   if (!store) return;
   var C = store.__compiled || (store.__compiled = compileRules(store));
   var exempt = {};
