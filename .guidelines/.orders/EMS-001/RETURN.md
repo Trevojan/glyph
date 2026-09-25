@@ -12,7 +12,7 @@
 | environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed |
 | ground | read in the order the handoff names; `npm run check` (33 buckets, 41 s) and `npm run check:rust` (20 crates, 3 s) green on the clone at `ea8fc59`, before anything was touched |
 | layout | **closed** — its val holds (below), five banks |
-| queue | ORD-0001 closed at `030ed76`, tagged `conformance-v0` in the session's clone — the push of the tag was refused (below). **ORD-0002 open** — emitted into [`ORD-0002/`](ORD-0002/ORD-0002.xml), no diagnostics |
+| queue | ORD-0001 and ORD-0002 closed; ORD-0003 opens next. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
 
 ## The layout, built
 
@@ -55,6 +55,7 @@ and `npm run check` passes on the commit that carries this return.
 | ORD | delivered | commit | digest it matched |
 |---|---|---|---|
 | [`ORD-0001`](ORD-0001/ORD-0001.xml) | the frozen oracle: `--export-oracle` writes 114 files | `030ed76`, the tag `conformance-v0` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828` |
+| [`ORD-0002`](ORD-0002/ORD-0002.xml) | `glyph-util` and `glyph-version`: `esc`, `xesc`, `lev`, `walk` and `VERSION` equal the JS on everything the oracle holds | `79aebbd` | `6fb833ec47e105cdc72fd515633597896e1e65d83730dcd157f67876cc927b5c`, `oracle-modules/util.json` |
 
 **ORD-0001, the proof**, run at `02c92ee` (the commit that emitted it; the
 closing commit changes no code):
@@ -73,15 +74,35 @@ It needed no code: the export exists since `b127ec2`. Two exports at the same
 commit are byte-identical, the 114 per-case digests equal
 `corpus-snapshot.json`, and no projection throws.
 
+**ORD-0002, the proof**, run at `79aebbd`:
+
+```
+$ rm -rf rust/target/oracle* && node scripts/test-corpus.js --export-oracle
+  ! oracle written: 114 cases to rust/target/oracle
+  ! module oracle written: util.json to rust/target/oracle-modules
+All green.
+$ cargo test --manifest-path rust/Cargo.toml -p glyph-util -p glyph-version --test oracle
+test walk_visits_as_the_js ... ok
+test esc_and_xesc_equal_the_js ... ok
+test the_answers_cover_every_string_the_case_files_hold ... ok
+test lev_equals_the_js ... ok
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.76s
+test version_is_the_engine_the_oracle_names ... ok
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+$ sha256sum rust/target/oracle-modules/util.json
+6fb833ec47e105cdc72fd515633597896e1e65d83730dcd157f67876cc927b5c
+$ cd rust/target/oracle && LC_ALL=C sha256sum *.json | sha256sum
+c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828  -
+```
+
+"Every string the oracle holds" is read as: `esc` and `xesc` over each of the
+1 609 distinct strings; `lev` over each one whole, paired as the export
+pairs it; `walk` over every tree the oracle holds, since it takes trees and
+not strings.
+
 ## Open, and why
 
-- **ORD-0002, `glyph-util` and `glyph-version`.** The oracle holds the inputs
-  of `esc`, `lev` and `walk`, not their answers, and the envelope names a
-  node's children `body` where `walk` follows `children`. So the export writes
-  the answers of `util.js` beside the case files, over what they hold, and the
-  crates read them with a JSON reader of their own. Banked: the export,
-  `check:rust` writing the oracle before `cargo test`, `glyph-util` with the
-  reader, and `glyph-version`. Next: the proof, and the close.
+Nothing is open. ORD-0003, `glyph-vocab` and `glyph-stores`, opens next.
 
 ## Measured
 
@@ -185,6 +206,11 @@ Closed questions, none answered.
 
 ## The session, measured
 
+| ORD | opened | closed | open for |
+|---|---|---|---|
+| ORD-0001 | `02c92ee` 01:28 | `030ed76` 01:31 | 3 min |
+| ORD-0002 | `3413eb5` 01:40 | the commit after `79aebbd` | ~13 min, three work banks |
+
 | # | commit | step | UTC | checks |
 |---|---|---|---|---|
 | 0 | `ea8fc59` | the clone | 2026-09-25 00:57 | `check` 41 s and `check:rust` 3 s, green |
@@ -199,4 +225,5 @@ Closed questions, none answered.
 | 9 | `3413eb5` | ORD-0002 emitted and open | 01:40 | green |
 | 10 | `85f5b6f` | ORD-0002 work 1/3 — the export answers `util.js`; `check:rust` writes the oracle | 01:43 | green; `check:rust` 49 s |
 | 11 | `ecb85d5` | ORD-0002 work 2/3 — the oracle reader and `glyph-util` | 01:48 | red against `todo!()` first, then green; 3 of 4 mutations killed |
-| 12 | this commit | ORD-0002 work 3/3 — `glyph-version`, `VERSION` read from `version.js` | 2026-09-25 | red against an empty constant first, then green |
+| 12 | `79aebbd` | ORD-0002 work 3/3 — `glyph-version`, `VERSION` read from `version.js` | 01:51 | red against an empty constant first, then green |
+| 13 | this commit | ORD-0002 closes | 2026-09-25 | green |
