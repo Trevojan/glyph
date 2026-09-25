@@ -1080,6 +1080,15 @@ and `npm run check` passes on the commit that carries this return.
 
 ## The session, measured
 
+From the clone at 00:57 to the last row of the log: 42 commits, each banked
+green on both checks and pushed; nine ORDs closed, and ORD-0010 open at the
+gate. Eleven rows record a red before their bank, each with what turned it
+green: seven are tests observed failing before the code they hold, and four
+are misses the checks caught (rows 18, 27, 36 and 37). One push was
+refused, the tag's (row 7). `npm run check` held at 41–42 s; `npm run
+check:rust` grew from 3 s to 95 s as the oracle export and the ported
+crates' tests arrived.
+
 | ORD | opened | closed | open for |
 |---|---|---|---|
 | ORD-0001 | `02c92ee` 01:28 | `030ed76` 01:31 | 3 min |
@@ -1091,7 +1100,7 @@ and `npm run check` passes on the commit that carries this return.
 | ORD-0007 | `b145777` 03:54 | `6dcf854` 04:17 | 23 min, one work bank |
 | ORD-0008 | `aefc148` 04:21 | `a262233` 04:43 | 22 min, one work bank |
 | ORD-0009 | `e4e6a59` 04:47 | `160d43d` 05:46 | 59 min, two work banks |
-| ORD-0010 | `df25609` 05:49 | — | open at the gate: measured, the ADR proposed |
+| ORD-0010 | `df25609` 05:49 | — | open at the gate: two measurement banks, the ADR proposed |
 
 | # | commit | step | UTC | checks |
 |---|---|---|---|---|
@@ -1136,4 +1145,5 @@ and `npm run check` passes on the commit that carries this return.
 | 38 | `160d43d` | ORD-0009 closes | 05:46 | green |
 | 39 | `df25609` | ORD-0010 emitted and open | 05:49 | green |
 | 40 | `faa6a93` | ORD-0010 measured — both protocols over the 114 sources, the ADR proposed | 06:13 | green, `check` 42 s and `check:rust` 95 s; nothing red — the measurement's first run showed the Rust's `toAST` at 10 ms whatever the source, which the probes and callgrind traced to the store digests and the rules copy (question 12) |
-| 41 | this commit | ORD-0010 measured from a page — Chrome drives both protocols; the ADR proposes A, the engine's own HTTP | 06:22 | green, `check` 42 s and `check:rust` 95 s; nothing red — the proposal of `faa6a93`, B, had been read against ORD-0010 alone, and ORD-0013 and ORD-0014 stand on the engine's own HTTP |
+| 41 | `1e4f2f5` | ORD-0010 measured from a page — Chrome drives both protocols; the ADR proposes A, the engine's own HTTP | 06:22 | green, `check` 42 s and `check:rust` 95 s; nothing red — the proposal of `faa6a93`, B, had been read against ORD-0010 alone, and ORD-0013 and ORD-0014 stand on the engine's own HTTP |
+| 42 | this commit | the return's totals, and the queue stops at the gate | 06:26 | green, `check` 42 s and `check:rust` 95 s |
