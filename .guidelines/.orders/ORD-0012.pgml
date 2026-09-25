@@ -1,0 +1,164 @@
+[block'glyph-rust-app'
+  [ctx'a small Rust app that eats the territory of the JS engine one verifiable piece at a time; this is the spec of EMS-001, the first series of orders Glyph emits, and it commissions the series and implements nothing','C:/Users/Usuario/Documents/GitHub/glyph','engine 3.5.8.06, the work of 2026-09-24 committed from 82befb4 to 4a907e3, ORD-0011 emitted and not closed']
+  [skl'glyph-markup'[ins'hear this spec, ground before building, and stop at the gate of the Regent']]
+
+  [section'species'
+    [dfn'engine','the Rust binary that reads Glyph and answers its projections; a process of its own, never linked into the page']
+    [dfn'visual','the browser app that exists today, glyph-engine-alias.html with scripts/glyph-ui.js; it stays, and it is the MVP']
+    [dfn'oracle','what the JS engine answers at the same commit, written by node scripts/test-corpus.js --export-oracle, one file per declared source, never committed']
+    [dfn'byte-exact','the Rust answer equals the oracle as bytes, not as meaning']
+    [dfn'EMS','a series of orders kept in one folder, .guidelines/.orders/EMS-###/, with a spec of its own that talks to the Guidelines: its constraints, counters, exceptions, the ADR and DC it modifies, and how to proceed after it closes']
+    [dfn'ORD','one order of a series, kept in .guidelines/.orders/EMS-###/ORD-####/; the XML is the order, and the .pgml, .json, .hgml and manifest beside it let it validate itself']
+    [nt'the ORD count resets in each series: EMS-001 counts ORD-0001 to ORD-0014']
+    [nt'the briefing that carries the reasons is .guidelines/.orders/BRIEFING-2026-09-24.md']
+  ]
+
+  [section'direction'
+    [intn'a small, contained, limited app; while it does not replace the browser Glyph, it is fed features one by one until it surpasses the JS engine']
+    [nev'a big-bang migration: the JS engine and the Rust engine live side by side for as long as it takes, and neither waits for the other']
+    [cnst'the browser app stays and is the MVP, and the skill keeps the JS engine it ships']
+    [cnst'the engine runs as its own process, over stdio or HTTP on localhost, and the visual is the browser app pointed at it']
+    [cnst'a native window is a consequence and comes last, never a prerequisite']
+    [cnst'every crate passes the measured filter of INTAKE-RUST-LADDER section 9 and enters vendored']
+  ]
+
+  [section'revoked'
+    [depr'the 38-step ladder as the order of work: .guidelines/.plan/ladder.toml stays as the record of the audit']
+    [depr'M11d, JS and Rust in permanent lockstep, with every change to the language landing twice']
+    [depr'M11b and the glyph-wasm crate: the browser keeps the JS core, so the Rust needs no WASM, and wasm-bindgen leaves with it']
+    [depr'M22 and Tauri as the shell']
+    [depr'the retirement of the JS engine']
+    [depr'from ORD-0011, the ladder as the plan, and scripts/ladder.py with it']
+    [depr'from ORD-0011, the limit zero dependencies: since 2026-09-24 dependency is measured by transitive depth, and the base enters vendored']
+    [depr'from ORD-0011, the rows that would place plan/ladder.toml, scripts/ladder.py and scripts/audit_corpus.py into the axes']
+    [nt'kept from the ladder: one crate per JS module held by scripts/crate-graph.js, the oracle, the context object, the dependency filter with its measurements, and the decision practice of M04']
+    [nt'neither revoked nor scheduled here: the language server, M03 and M12 to M15, and M16 to M24']
+  ]
+
+  [section'queue'
+    [cnst'the series runs as a queue: an ORD opens when the ORDs it depends on close, and its number is its place in the queue']
+    [nt'measured on 2026-09-24: 14 ORDs over 10 levels of the graph; four levels hold two ORDs that could run together, 0003 with 0005, 0004 with 0006, 0009 with 0010, 0011 with 0012; only ORD-0005 has slack, one level']
+    [nt'the most asynchronous execution saves is 4 of 14 turns, and only if the ORDs weigh alike']
+    [nt'asynchronous execution meets three constraints: two concurrent orders are forbidden; no worktrees, so two ORDs in flight share one working tree; one step per commit, green on each, so two in flight share one npm run check']
+    [nt'the writes two ORDs in flight share: the where-am-I table of .shortcuts, the track of this series, rust/Cargo.lock when a crate enters']
+    [prop'two ORDs open at once, only on the pairs the graph allows, as an ADR the Regent signs and a DC this series modifies'[hmn]]
+  ]
+
+  [section'exceptions'
+    [exc]
+  ]
+
+  [section'gate'
+    [conf'ORD-0011 is closed, versioned or parked, because two open orders are forbidden and its move would shift every path the series reads'[hmn]]
+    [conf'everything this spec revokes'[hmn]]
+    [conf'the layout .guidelines/.orders/EMS-###/ORD-####/ exists, and the bundle writes an ORD into its folder with the count of its series'[hmn]]
+    [nt'measured on 2026-09-24: into the flat .orders/ the bundle names the next order ORD-2027, because ORD-2026-08-30-01 reads as the number 2026']
+    [fin'this spec here if the Regent refuses the direction, and record the refusal in .decisions']
+  ]
+
+  [section'ORD-0001-oracle'
+    [tgt'the oracle every ORD is held to, frozen at one commit']
+    [val'the frozen oracle','node scripts/test-corpus.js --export-oracle writes 114 files, and the commit carries the tag conformance-v0']
+  ]
+
+  [section'ORD-0002-util'
+    [onlyif'ORD-0001 closed']
+    [tgt'glyph-util and glyph-version: esc, xesc, lev, walk and VERSION']
+    [val'glyph-util and glyph-version','each function equals its JS on every string the oracle holds']
+  ]
+
+  [section'ORD-0003-vocabulary'
+    [onlyif'ORD-0002 closed']
+    [tgt'glyph-vocab and glyph-stores: build.rs turns the four sources build-templates.js reads into tables, and the context object is a struct passed by reference']
+    [val'the generated tables','the digest of every generated table equals the JS store']
+  ]
+
+  [section'ORD-0004-lexer'
+    [onlyif'ORD-0003 closed']
+    [tgt'glyph-lex: tokenize, classify, suggest']
+    [val'glyph-lex','the tokens equal the oracle on all 114 sources, spans counted in UTF-16 as the JS counts them']
+  ]
+
+  [section'ORD-0005-logic'
+    [onlyif'ORD-0002 closed']
+    [tgt'glyph-logic: the logic block']
+    [val'glyph-logic','every Logic node equals the oracle']
+  ]
+
+  [section'ORD-0006-templates-rules'
+    [onlyif'ORD-0003 closed']
+    [tgt'glyph-templates and glyph-rules, with parse passed to the expander as the JS passes it']
+    [val'glyph-templates and glyph-rules','the diagnostics of every T-, C- and K-case equal the oracle']
+  ]
+
+  [section'ORD-0007-parser'
+    [onlyif'ORD-0004 closed','ORD-0005 closed','ORD-0006 closed']
+    [tgt'glyph-parse: the tree the projections read']
+    [val'glyph-parse','the AST envelope equals the oracle digest on all 114 sources']
+  ]
+
+  [section'ORD-0008-first-binary'
+    [onlyif'ORD-0007 closed']
+    [tgt'glyph-xml and the first binary: glyph reads Glyph on stdin and writes the XML, and nothing else']
+    [val'the first binary','the five sources of conformance/examples.json come out byte-exact against the XML they record, then all 114 against the oracle']
+  ]
+
+  [section'ORD-0009-projections'
+    [onlyif'ORD-0008 closed']
+    [tgt'glyph-envelope, glyph-burn and glyph-inverse: the AST envelope, the burn, fromXML and fromAST']
+    [val'the three projections and the inverse','the ast and hgml digests equal the oracle, and every round trip the JS suite runs closes']
+  ]
+
+  [section'ORD-0010-protocol'
+    [onlyif'ORD-0008 closed']
+    [tgt'the engine as a process, and the protocol chosen by measurement']
+    [nt'a page cannot open stdio: the browser reaches the engine by HTTP, either served by the engine itself or relayed to its stdio by scripts/serve-dev.js']
+    [ins'measure both over the 114 sources: time per call, lines written, crates added']
+    [val'the protocol','the chosen protocol answers the twelve calls glyph-ui.js makes, and the choice is an ADR the Regent signs']
+  ]
+
+  [section'ORD-0011-app-on-rust'
+    [onlyif'ORD-0009 closed','ORD-0010 closed']
+    [tgt'the browser app talks to the Rust engine behind one switch, and glyph-ui.js changes only at its transport']
+    [val'the app on the Rust engine','the app drives the 114 sources through Rust with the same bytes as through JS, and the JS path still works']
+  ]
+
+  [section'ORD-0012-cli'
+    [onlyif'ORD-0009 closed']
+    [tgt'glyph-bundle and flag parity with scripts/glyph-cli.js']
+    [val'the Rust CLI','each flag answers the same bytes: --ast --xml --diag --expand --hgml --from-xml --file --bundle --out']
+  ]
+
+  [section'ORD-0013-installer'
+    [onlyif'ORD-0011 closed','ORD-0012 closed']
+    [tgt'an installer for Windows that puts the binary and the page on a clean machine']
+    [ins'measure every installer path against the filter before choosing one']
+    [val'the installer','a clean machine installs, opens the app and emits an Order']
+  ]
+
+  [section'ORD-0014-window'
+    [onlyif'ORD-0013 closed','the Regent accepts the measured tree']
+    [tgt'the app in a window of its own']
+    [nt'wry with tao, measured on 2026-09-24: 78 crates, depth 12, 5 259 057 vendored lines, 50 s clean build; by the filter a continent, the weight in the Windows bindings and the depth in URL handling']
+    [nt'the path with no crate: the engine opens msedge --app on its localhost page; Edge ships with Windows']
+    [val'the window','the app opens in its own window and the Order it emits equals the one the browser emits']
+  ]
+
+  [section'limits'
+    [nev'the snapshot is regenerated to make the suite green']
+    [dont'open an ORD before the ORDs it depends on close']
+    [dont'let a feature land in Rust that the JS engine lacks while the oracle is the test; new vocabulary enters the stores and the JS first']
+    [cnst'prose declares the state, never the correction']
+    [cnst'no worktrees']
+  ]
+
+  [section'conclude'
+    [ins'update the where-am-I table of .shortcuts at each ORD that closes']
+    [--track
+      [ph-item'each ORD of the series, the commit that closed it and the digest it matched']
+      [ph-scope'EMS-001']
+    ]
+    [ins'when ORD-0014 closes, EMS-001 stays as the record of what it delivered, and the next series opens as EMS-002 under a spec of its own']
+    [rdy'the Rust app replaces the browser Glyph for the Regent, and the JS engine stays as long as anything reads it']
+  ]
+];
