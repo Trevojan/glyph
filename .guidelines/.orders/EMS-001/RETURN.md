@@ -12,7 +12,7 @@
 | environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed |
 | ground | read in the order the handoff names; `npm run check` (33 buckets, 41 s) and `npm run check:rust` (20 crates, 3 s) green on the clone at `ea8fc59`, before anything was touched |
 | layout | **closed** — its val holds (below), five banks |
-| queue | ORD-0001 opens next |
+| queue | **ORD-0001 open** — emitted into [`ORD-0001/`](ORD-0001/ORD-0001.xml), no diagnostics |
 
 ## The layout, built
 
@@ -56,7 +56,9 @@ None.
 
 ## Open, and why
 
-Nothing is open. ORD-0001 opens next.
+- **ORD-0001, the frozen oracle.** Its source is its section of the spec under a
+  block whose ctx names the spec, and nothing else; it closes with the tag
+  `conformance-v0` on its closing commit.
 
 ## Measured
 
@@ -88,6 +90,11 @@ Nothing is open. ORD-0001 opens next.
   `ZP-13`/`ZP-14` evaluate what the probes name — the `ls` globs and the `sed`
   range — over a temporary series. Against the old leaf they saw
   `EMS-001, EMS-002` and no open line.
+- **A second named fill of a template param that is not `repeat` overwrites
+  the first, with no diagnostic.** `[--track [ph-item'a'][ph-item'b'] …]`
+  emits `b` alone, and `a` is gone in silence. Found while choosing how a row
+  enters the track of the spec; a JS defect, left as the JS answers it. The
+  track takes one `--track` invocation per row, which carries every row.
 - **The version stays `3.5.8.06`.** No emitted document changes; the
   CHANGELOG entry waits for a release, as the work of 2026-09-24 does.
 
@@ -109,4 +116,5 @@ Closed questions, none answered.
 | 2 | `bf0d687` | layout 2/5 — an ID is `ORD-####` followed by nothing or a dot | 01:08 | `ZP-06` red first (`ORD-2027.zip`), green after the regex |
 | 3 | `1e70ad7` | layout 3/5 — `--bundle` writes the series folder | 01:11 | `ZP-07`–`ZP-10` red first (`ORD-0008.zip` in the series), green after |
 | 4 | `b472fcf` | layout 4/5 — the plugin finds an ORD by its series | 01:15 | `ZP-11`, `ZP-12` red first (`não existe`, `EISDIR`), green after |
-| 5 | this commit | layout 5/5 — the bundle command reads the series; the layout closes | 2026-09-25 | `ZP-13`, `ZP-14` red against the old leaf; one red of the check's own (`/fechada/` matched the heading `fechadas`), fixed to the row |
+| 5 | `70bffd7` | layout 5/5 — the bundle command reads the series; the layout closes | 01:23 | `ZP-13`, `ZP-14` red against the old leaf; one red of the check's own (`/fechada/` matched the heading `fechadas`), fixed to the row |
+| 6 | this commit | ORD-0001 emitted and open | 2026-09-25 | green |
