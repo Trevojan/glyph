@@ -128,6 +128,34 @@ pub fn compile_rules(store: &Value) -> Compiled<'_> {
     c
 }
 
+/// The store as the JS object stands once `checkRules` has run on it: its own
+/// keys, then the `__compiled` it hangs there — a store that brings its own
+/// keeps it. The envelope hashes the store in this state (EMS-001/RETURN.md,
+/// question 3).
+pub fn with_cache(store: &Value) -> Value {
+    let Value::Obj(kv) = store else { return store.clone() };
+    if store.get("__compiled").is_some_and(Value::truthy) {
+        return store.clone();
+    }
+    let c = compile_rules(store);
+    let s = |x: &str| Value::Str(x.to_string());
+    let strs = |v: &[String]| Value::Arr(v.iter().map(|x| s(x)).collect());
+    let compiled = Value::Obj(vec![
+        ("pairs".into(), Value::Obj(c.pairs.iter().map(|(k, r)| (k.clone(), (*r).clone())).collect())),
+        ("order".into(), Value::Arr(c.order.iter().map(|o| Value::Obj(vec![
+            ("rule".into(), o.rule.clone()), ("first".into(), s(&o.first)), ("then".into(), strs(&o.then))])).collect())),
+        ("pre".into(), Value::Arr(c.pre.iter().map(|p| Value::Obj(vec![
+            ("rule".into(), p.rule.clone()), ("target".into(), s(&p.target)),
+            ("accept".into(), Value::Obj(p.accept.iter().map(|a| (a.clone(), Value::Num(1.0))).collect()))])).collect())),
+        ("blends".into(), Value::Arr(c.blends.iter().map(|b| Value::Obj(vec![
+            ("rule".into(), b.rule.clone()), ("when".into(), strs(&b.when)), ("emit".into(), s(&b.emit)),
+            ("means".into(), s(&b.means))])).collect())),
+    ]);
+    let mut kv: Vec<(String, Value)> = kv.iter().filter(|(k, _)| k != "__compiled").cloned().collect();
+    kv.push(("__compiled".into(), compiled));
+    Value::Obj(kv)
+}
+
 /// `checkRules(segments, opts, G)`.
 pub fn check_rules<X: Clone>(tree: &Tree<X>, ctx: &Context, g: &mut dyn FnMut(Diag)) -> Result<(), Thrown> {
     let Some(store) = ctx.rules.as_ref() else { return Ok(()) };

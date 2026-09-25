@@ -298,7 +298,7 @@ c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828  -
 ## Open, and why
 
 **ORD-0009, `glyph-envelope`, `glyph-burn` and `glyph-inverse`**, open since
-the commit that carries this line. Its val is read as it is written: the `ast`
+`e4e6a59`; the envelope and the burn are banked, the inverse is next. Its val is read as it is written: the `ast`
 and `hgml` digests of the 114 case files, and the round trips the JS suite
 runs. Measured before opening: the snapshot's pin says `toHGML` overflows
 V8's stack on L-01, and it no longer does — the burn stops at 200 levels and
@@ -306,6 +306,29 @@ says so in its first line — so no stack limit is reproduced. The envelope's
 `stores.rules` hashes the rules with the engine's cache (question 3), and the
 digests the val names are those, so the port hashes the cache too, until the
 Regent answers.
+
+## ORD-0009, how it was read
+
+- **The rules digest with the engine's cache, reproduced.** The val names the
+  snapshot's `ast` digests, and they hash the rules store as `checkRules`
+  leaves it, with `__compiled` on it (question 3). `emit-ast.js` imports no
+  `rules.js`, so the cache reaches the envelope as a side effect; the port
+  makes it an output: `glyph_rules::with_cache` is the store as the JS object
+  stands after `checkRules`, and `parse` returns the rules store as it leaves
+  it, which is what the envelope hashes.
+- **Two JS defects of the burn the port reproduces**, measured, and left as
+  the JS answers them:
+  - **The `.hgml` never says a burn was not fully reduced.** A cycle in the
+    composition table, or a chain past the 24-link limit, ends in a node the
+    burn marks `unburned` with the chain that stopped it; `hgmlLines` writes
+    neither, so `[f1'x']` over a five-cycle comes out as the plain `[f5 'x']`
+    of a reduced burn.
+  - **A composite with no formula makes `toHGML` throw**, `Cannot read
+    properties of undefined (reading 'length')`: `parse` reads what is not a
+    string as a token list, and `undefined` has no length.
+- **The envelope carries pt-BR where it travels in en-EU**: `DepthExceeded`,
+  the diagnostic the envelope adds when it cuts a tree, is written in pt-BR
+  only.
 
 ## ORD-0008, how it was read
 
@@ -725,6 +748,27 @@ and `npm run check` passes on the commit that carries this return.
   die. The two that live cannot die: the two arms no source reaches (ORD-0008,
   how it was read). A continuing segment and a conjunction below the ceiling
   killed theirs only once the export had a probe for each.
+- **`ast.json` and `hgml.json`.** The export writes `toAST` and `toHGML` over
+  the runs `parse.json` reads; for the probes, the envelope in the panel
+  projection, in pt-BR and with its source and uri, and the burn with the
+  prose kept; beside them 6 envelope probes — line endings, a tree cut in the
+  panel, the prototype's gloss where no rules store stops the parse — and 11
+  burn probes: a literal the burn folds, the repository's blend at the top and
+  nested, an operand the formula also writes, a burn past the cut, a
+  composition store with a two-cycle, a five-cycle, a chain past the limit, a
+  headless formula and a literal in a formula's head, and no store at all.
+  279 envelope runs, 284 burn runs.
+- **`glyph-envelope` and `glyph-burn`, held.** Both answered the 114 case
+  files at once, digest for digest against `corpus-snapshot.json` — the
+  testkit computes SHA-256 itself, since no crate enters from outside — and
+  all of their module answers. The burn's two globals, `burnTruncated` and
+  `burnBlends`, are a `Burning` the calls pass along. Mutated, the envelope
+  kills 22 of 22 — three only once the export had a probe for them — and the
+  burn 20 of 22: the corpus and the parse probes held it to 7 until the burn
+  probes arrived, and the five-cycle killed the last reachable one, since a
+  two-cycle run to the limit ends on the name it began with. The two that
+  live write the same `.hgml`: an atom and an unburned node upper-cased,
+  which `hgmlLines` lower-cases again.
 - **Store shapes the JS never guards stay outside the port's contract.** A
   null param; `params`, `constraints` or `exemptUnder` that is not a list; a
   body that is not a string: the JS throws a TypeError in V8's words, or
@@ -746,7 +790,7 @@ and `npm run check` passes on the commit that carries this return.
 | ORD-0006 | `8f996df` 03:15 | `480268b` 03:50 | 35 min, one work bank |
 | ORD-0007 | `b145777` 03:54 | `6dcf854` 04:17 | 23 min, one work bank |
 | ORD-0008 | `aefc148` 04:21 | `a262233` 04:43 | 22 min, one work bank |
-| ORD-0009 | the commit after `a262233` | — | open |
+| ORD-0009 | `e4e6a59` 04:47 | — | open |
 
 | # | commit | step | UTC | checks |
 |---|---|---|---|---|
@@ -785,4 +829,5 @@ and `npm run check` passes on the commit that carries this return.
 | 32 | `aefc148` | ORD-0008 emitted and open | 04:21 | green |
 | 33 | `97ea472` | ORD-0008 work — `glyph-xml`, the binary `glyph`, `xml.json` in the export | 04:39 | green at once; the XML tests took 126 s until the pass read each line once, 3 s after; 28 of 32 mutations killed, then 30 with a continuing segment and a deep conjunction |
 | 34 | `a262233` | ORD-0008 closes | 04:43 | green |
-| 35 | this commit | ORD-0009 emitted and open | 2026-09-25 | green |
+| 35 | `e4e6a59` | ORD-0009 emitted and open | 04:47 | green |
+| 36 | this commit | ORD-0009 work 1/2 — `glyph-envelope` and `glyph-burn`, `ast.json` and `hgml.json` in the export | 2026-09-25 | green at once on the 114 digests; the burn test red on a composite with no formula until the port read `undefined` as the JS does; mutations 19 of 22 (envelope) and 7 of 22 (burn), then 22 and 20 with probes; `check:rust` red once, on `ast.json` written without the one-space indent every export file keeps, which `glyph-util`'s round trip holds |

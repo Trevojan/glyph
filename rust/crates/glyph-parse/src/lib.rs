@@ -19,7 +19,7 @@
 
 use glyph_lex::{classify, js_trim, suggest, tokenize, Token};
 use glyph_logic::{parse_logic, Logic};
-use glyph_rules::check_rules;
+use glyph_rules::{check_rules, with_cache};
 use glyph_stores::{entry_of, expansion_registry, Context, Value};
 use glyph_templates::{check_template_constraints, expand_invocations, Parsed, SubParse};
 use glyph_util::tree::{strip_tags, Diag, Emotion, Gloss, Id, Node, Segment, Span, Suggestion, Thrown, Tree, LIMITS};
@@ -65,6 +65,9 @@ pub struct Parse {
     pub tree: Tree<Extra>,
     pub gaps: Vec<Gap>,
     pub tokens: Vec<Token>,
+    /// The rules store as the parse leaves it: the JS's `checkRules` hangs its
+    /// compiled rules on the store object, and the envelope hashes that.
+    pub rules: Option<Value>,
 }
 
 /// A table the JS reads as `TABLE[key]`: a key of its own, or one
@@ -746,5 +749,5 @@ pub fn parse(src: &str, o: &Opts) -> Result<Parse, Thrown> {
         };
         Gap { plain: strip_tags(&msg), sev: d.sev, lab, msg, code: if d.code.is_empty() { "Note".into() } else { d.code }, at: d.at }
     }).collect();
-    Ok(Parse { tree, gaps, tokens })
+    Ok(Parse { tree, gaps, tokens, rules: ctx.rules.as_ref().map(with_cache) })
 }
