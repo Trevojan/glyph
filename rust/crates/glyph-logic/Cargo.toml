@@ -7,3 +7,6 @@ publish = false
 
 [dependencies]
 glyph-util = { path = "../glyph-util" }
+
+[dev-dependencies]
+glyph-lex = { path = "../glyph-lex" }

@@ -1869,7 +1869,32 @@ function runSnapshotChecks() {
       classify: lexNames.map(x => [x, G.classify(x, SNAP_OPTS), G.classify(x, { ...SNAP_OPTS, session: false })]),
       suggest: lexNames.map(x => [x, G.suggest(x)])
     }, null, 1) + "\n");
-    console.log("  ! module oracle written: util.json, vocabulary.json, stores.json, lexer.json to " + mods);
+
+    /* logic.js (from ORD-0005): the oracle holds 8 Logic nodes, so parseLogic
+       answers over every [logic] block the lexer finds in the sources above,
+       over every string of up to 256 units the case files hold, and over
+       probes written one per rule of expandExpr, freeVars and parseLogic;
+       expandExpr and freeVars over the same strings and probes */
+    const LOGIC_PROBES = [
+      "hp = 3d6kh2", "x = 4d6", "2d8kl", "3 D 6 KH 1", "d6", "10d10kh", "x = pb[y/2]", "pc z", "ar [q]",
+      "PB  w.v", "Pc[n]", "^[a+b]", "_ q", "~[r]", "^x", "_x", "~ y.z", "a_b", "__x", "a < 5", "b > 3",
+      "c <= 4", "roll.dbl", "roll.dblx", "!x -> y", "? a -> b = 2", "? -> b", "!-> b", "a -> b -> c",
+      "# comment", "// c", "a = 1\na = 2", "!", "?", "! x", "? y", "1.5 + y_z", "`quoted` 'q' _",
+      "not a and b or c", "x = y if z else w", "min(a, max(b, 3))", "1.5x", "x1 2x",
+      "constructor = 1\n__proto__ = 2\ny = constructor + __proto__ + z", "Constructor = 1\nq = CONSTRUCTOR",
+      "a != b", "!!x", "a !b", "a=b", "a == b", "a =", "=b", "a\r\nb = c", "  \n\t\n", "x = 'a' + `b`",
+      "x = a.b.c", "é = 1", "ação = x", "n = 10 < 3", "k = rolls > 2 < 5", "x -> y = 1", "a b = 1",
+      "z = 😀 + w", "t = 2d6 + 1d4kl1 + 3d", "a =!b", "x<!y", "!!!", "p>!q -> r"
+    ];
+    const logicBlocks = lexed.flatMap(([, ts]) => ts.filter(t => t.k === "logic").map(t => [t.v, t.body]));
+    const logicStrings = [...new Set([...LOGIC_PROBES, ...S.filter(x => x.length <= 256)])];
+    fs.writeFileSync(path.join(mods, "logic.json"), JSON.stringify({
+      engine: G.VERSION,
+      parseLogic: [...logicBlocks, ...logicStrings.map(x => ["", x])].map(([n, b]) => [n, b, G.parseLogic(n, b)]),
+      expandExpr: logicStrings.map(x => [x, G.expandExpr(x)]),
+      freeVars: logicStrings.map(x => [x, G.freeVars(x)])
+    }, null, 1) + "\n");
+    console.log("  ! module oracle written: util, vocabulary, stores, lexer, logic to " + mods);
   }
 
   if (process.argv.indexOf("--update-snapshot") !== -1) {

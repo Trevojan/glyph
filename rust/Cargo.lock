@@ -71,6 +71,7 @@ dependencies = [
 name = "glyph-logic"
 version = "0.0.0"
 dependencies = [
+ "glyph-lex",
  "glyph-util",
 ]
 
