@@ -45,7 +45,6 @@ semântico** — categoria, espécie, tabela de composição — não de limiar 
 | `;;` **migra** | `[nt'a'];;[nt'b']` volta como `[nt'a'][nt'b'];;` — a quebra sai de entre os blocos e vai para o fim. E some inteira na queima. |
 | `;` é **assimétrico entre aspas** | encerra um literal de crase, não encerra um de apóstrofo. As duas formas deveriam ser intercambiáveis. |
 | param de template nu vira prosa | `[--germinate a,b]` → `PlaceholderPending` ×2 e os valores caem como `<off>`. Param de template é **sempre literal** — as duas aspas servem, a palavra nua não. |
-| `--bundle` lê o ID datado como número | o próximo número é o maior `^ORD-(d{4})` do destino, mais um, e `ORD-2026-08-30-01` casa como 2026: emitida na `.orders/` de hoje, a próxima Ordem sai `ORD-2027`. Um rascunho `ORD-####.pgml` deixado no destino também conta. A série (§6) dá a cada ORD uma pasta que começa vazia |
 
 ### 4. `ORD-xxxxx` como pacote de quatro formatos — só na CLI
 

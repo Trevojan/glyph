@@ -11,7 +11,7 @@
 |---|---|
 | environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed |
 | ground | read in the order the handoff names; `npm run check` (33 buckets, 41 s) and `npm run check:rust` (20 crates, 3 s) green on the clone at `ea8fc59`, before anything was touched |
-| layout | **in progress** — the spec lives at [`EMS-001.pgml`](EMS-001.pgml) and every pointer names that path; `--bundle`, the plugin and the bundle command do not read the series yet |
+| layout | **in progress, 2 of 5 banked** — the spec lives at [`EMS-001.pgml`](EMS-001.pgml); `--bundle` reads an ID only as `ORD-####` followed by nothing or a dot, in every destination. It does not write the series folder yet, and the plugin and the bundle command do not read the series |
 | queue | waits for the layout to bank |
 
 ## ORDs closed
@@ -20,8 +20,8 @@ None.
 
 ## Open, and why
 
-- **The layout**, the gate of the series: the spec is in its folder; the bundle,
-  the plugin and the bundle command learn the series next, one bank each.
+- **The layout**, the gate of the series: `--bundle` learns the series folder,
+  then the plugin, then the bundle command and the series README, one bank each.
 
 ## Measured
 
@@ -31,6 +31,10 @@ None.
   the window as its ORD-0014.
 - **`HANDOFF-2026-09-24.xml` was the exact projection of its source**, so it is
   re-emitted in the commit that rewrites the source.
+- **The dated ID, reproduced before the fix:** `ZP-06` put
+  `ORD-2026-08-30-01.pgml` beside `ORD-0001.zip` and `ORD-0002.zip` and the
+  bundle wrote `ORD-2027.zip`. It writes `ORD-0003.zip`. The row leaves
+  [`.plan`](../../.plan/README.md) §3, which holds its three older defects.
 
 ## Questions for the Regent
 
@@ -46,4 +50,5 @@ Closed questions, none answered.
 | # | commit | step | UTC | checks |
 |---|---|---|---|---|
 | 0 | `ea8fc59` | the clone | 2026-09-25 00:57 | `check` 41 s and `check:rust` 3 s, green |
-| 1 | this commit | layout 1/5 — the spec moves into its series, the pointers follow | 2026-09-25 | — |
+| 1 | `0588ada` | layout 1/5 — the spec moves into its series, the pointers follow | 01:03 | green |
+| 2 | this commit | layout 2/5 — an ID is `ORD-####` followed by nothing or a dot | 2026-09-25 | `ZP-06` red first (`ORD-2027.zip`), green after the regex |

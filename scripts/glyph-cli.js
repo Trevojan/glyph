@@ -95,7 +95,8 @@ export function main() {
    * Numeracao chapada e sequencial -- ORD-0001, ORD-0002 -- e AQUI ela e de
    * verdade, porque a linha de comando enxerga a pasta: o proximo numero e o
    * maior ORD-#### que ja existe no destino, mais um. E a mesma coisa que se
-   * faz com um ADR, e pela mesma razao.
+   * faz com um ADR, e pela mesma razao. Um ID e ORD-#### seguido de nada ou de
+   * um ponto; ORD-2026-08-30-01 e um ID datado, nao o numero 2026.
    *
    * O app nao consegue fazer isso -- o navegador nao enxerga pasta -- entao la
    * o numero vem do localStorage e o campo fica editavel. A diferenca e
@@ -106,7 +107,7 @@ export function main() {
     var next = 1;
     try {
       fs.readdirSync(dir).forEach(function (name) {
-        var m = /^ORD-(\d{4})/.exec(name);
+        var m = /^ORD-(\d{4})(?:\.|$)/.exec(name);
         if (m) next = Math.max(next, parseInt(m[1], 10) + 1);
       });
     } catch (e) {
