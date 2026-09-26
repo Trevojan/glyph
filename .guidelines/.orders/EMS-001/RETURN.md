@@ -9,10 +9,10 @@
 
 | section | state |
 |---|---|
-| environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed |
+| environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed; the local session of 2026-09-26: Windows 11, node v22.17.1, cargo 1.88.0, and Edge as the Chromium the drivers ask for |
 | ground | read in the order the handoff names; `npm run check` (33 buckets, 41 s) and `npm run check:rust` (20 crates, 3 s) green on the clone at `ea8fc59`, before anything was touched |
 | layout | **closed** — its val holds (below), five banks |
-| queue | ORD-0001 to ORD-0010 closed; ORD-0011 open. First on the plan: the virtual paths, by the Regent's word. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
+| queue | ORD-0001 to ORD-0010 closed; ORD-0011 open: 106 of the 114 sources proven in the cloud, and the eight L-cases driven locally, five equal in every panel and three unequal on the status line alone (question 15). First on the plan: the virtual paths, by the Regent's word. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
 
 ## Waiting for the Regent
 
@@ -142,6 +142,23 @@ Closed questions, none answered.
     - b. they leave, and the numbers stay in this return
     - c. the signed option's prototype becomes ORD-0011's starting point, and
       the rest leave
+15. **Through the relay, the status line counts 200 commands on L-01, L-02
+    and L-03, where the JS counts 8 000, 2 000 and 400.** Every panel holds
+    the same bytes; the status line counts the commands of the tree, and the
+    relay rebuilds its tree from the full envelope, which stops at
+    `LIMITS.astDepth`, 200 levels, and marks the rest with one `Truncated`
+    node. Its `omittedNodes` counts every node it cut, literals and text
+    among them: on these three the cut holds commands alone, so 200 and
+    `omittedNodes` give the JS's count, and no rule holds it there.
+    ORD-0011's val, the same bytes as through JS, waits on this. Which way?
+    - a. the transport adds the `omittedNodes` of each `Truncated` to the
+      count: exact on the 114 sources, an overcount when a cut subtree holds
+      a literal; the protocol and the envelope stay as they are
+    - b. `parse` over the protocol answers the live tree's count of commands
+      beside the envelope, in `glyph-protocol.js` first and then in the Rust;
+      `protocol.json` is written again by decision
+    - c. the status line under the relay is pinned as a known loss, by name,
+      and ORD-0011's val names the exception
 
 ## ORDs closed
 
@@ -515,6 +532,15 @@ and `walk` stay in the page, data it loads and helpers with no engine
 state. What the ADR leaves open is asked above: how the synchronous `run()`
 meets an HTTP answer (question 9), and how many requests a keystroke costs
 (question 10).
+
+**The eight L-cases, driven locally on 2026-09-26.** `app_on_rust.mjs`,
+with `ONLY=^L-` and Edge as the Chromium, types the eight sources into the
+page twice in 19.9 s, the JS path in 3.8 s. L-04 to L-08 give the same bytes
+in every panel; L-01, L-02 and L-03 give the same XML, AST, burn and gaps,
+and a different status line: the relay counts 200 commands where the JS
+counts 8 000, 2 000 and 400 (question 15). The JS path equals the core in
+node on all eight. The driver found `glyph-engine` without the `.exe` a
+Windows build writes, and reads the platform's name as `serve-dev.js` does.
 
 ## ORD-0009, how it was read
 
@@ -1146,4 +1172,5 @@ crates' tests arrived.
 | 45 | `7eab706` | ORD-0010 work 2/2 — `glyph-protocol`, drafted by a Haiku agent and finished here, and the binary `glyph-engine`: the 6 328 requests of `protocol.json` answer the JS's bytes | 00:08 | red first: 15 of 6 328 — gaps of `logic.js` write `code` before `msg`, and the port wrote one order; `code_first` carries the JS's order from `Diag` to `Gap`, then green on a clean clone of the commit |
 | 46 | `4935593` | ORD-0010 closes; ORD-0011 emitted and open; the virtual paths first on the plan | 00:29 | green, both checks; the independent verifier of `glyph-protocol` was stopped before its report, to keep the budget — the 6 328 requests are the only proof |
 | 47 | `25cc924` | ORD-0011 work 1 — `glyph-transport.js` behind `engine=relay`; `session:false` in the protocol; `app_on_rust.mjs` drives the page in Chrome: 106 of 114 sources the same bytes in every panel through Rust, the JS path equal to the core; the eight L-cases not yet driven, so ORD-0011 stays open | 01:10 | green, both checks; the AST panel first differed on `source`, which `serializeAST` writes null |
-| 48 | this commit | the handoff for the local machine, `HANDOFF-2026-09-26.pgml`: prove the eight L-cases, close ORD-0011, then ORD-0012 | 11:49 | green, `npm run check` |
+| 48 | `86db5c1` | the handoff for the local machine, `HANDOFF-2026-09-26.pgml`: prove the eight L-cases, close ORD-0011, then ORD-0012 | 11:49 | green, `npm run check` |
+| 49 | this commit | ORD-0011 work 2 — the eight L-cases driven locally, through Edge on Windows: five equal in every panel, three unequal on the status line alone (question 15); `app_on_rust.mjs` finds `glyph-engine.exe` | 12:04 | green, `check` and `check:rust`; the driver stopped on a missing `glyph-engine` until it read the platform's `.exe` |
