@@ -1,0 +1,7 @@
+[block'ORD-0012-cli'
+  [ctx'the spec of EMS-001','.guidelines/.orders/EMS-001/EMS-001.pgml']
+  [onlyif'ORD-0009 closed']
+  [tgt'glyph-bundle and flag parity with scripts/glyph-cli.js']
+  [cnst'SOURCE_DATE_EPOCH, when set, is the moment the manifest names as emitted and the zip carries, and the time of the zip is UTC in both engines; the JS first, as question 16 of the return answers it']
+  [val'the Rust CLI','each flag answers the same bytes: --ast --xml --diag --expand --hgml --from-xml --file --bundle --out']
+];

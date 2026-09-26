@@ -12,7 +12,7 @@
 | environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed; the local session of 2026-09-26: Windows 11, node v22.17.1, cargo 1.88.0, and Edge as the Chromium the drivers ask for |
 | ground | read in the order the handoff names; `npm run check` (33 buckets, 41 s) and `npm run check:rust` (20 crates, 3 s) green on the clone at `ea8fc59`, before anything was touched |
 | layout | **closed** — its val holds (below), five banks |
-| queue | ORD-0001 to ORD-0011 closed; ORD-0011 at `cf3bb31`, driven locally on 2026-09-26. ORD-0012 opens next. First on the plan: the virtual paths, by the Regent's word. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
+| queue | ORD-0001 to ORD-0011 closed, ORD-0011 at `cf3bb31`, driven locally on 2026-09-26; ORD-0012 open, with the clock read as question 16 answers it. First on the plan: the virtual paths, by the Regent's word. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
 
 ## Waiting for the Regent
 
@@ -161,6 +161,19 @@ Closed questions, none answered.
     Answered by the Regent on 2026-09-26: **b**, and the status line of
     `glyph-ui.js` reads the count the parse result carries, walking the tree
     when it carries none.
+16. **ORD-0012's val asks `--bundle` for the same bytes in both engines, and
+    two clocks write into them:** the manifest's `emitted`, and the zip's
+    MS-DOS time and date, which `glyph-zip.js` takes in local time — a zone
+    Rust's `std` cannot read without a crate from outside. How do they meet?
+    - a. both engines read `SOURCE_DATE_EPOCH`, the reproducible-builds
+      convention: set, it is the moment `emitted` and the zip carry; the
+      zip's time is UTC in both, always; the JS first, and no crate enters
+    - b. the test masks `emitted` and the zip's time fields, and the Rust's
+      zip time stays UTC against the JS's local time
+    - c. the Rust `--bundle` writes the series folder alone, and the flat zip
+      stays the JS's
+
+    Answered by the Regent on 2026-09-26: **a**.
 
 ## ORDs closed
 
@@ -1179,4 +1192,5 @@ crates' tests arrived.
 | 48 | `86db5c1` | the handoff for the local machine, `HANDOFF-2026-09-26.pgml`: prove the eight L-cases, close ORD-0011, then ORD-0012 | 11:49 | green, `npm run check` |
 | 49 | `83326af` | ORD-0011 work 2 — the eight L-cases driven locally, through Edge on Windows: five equal in every panel, three unequal on the status line alone (question 15); `app_on_rust.mjs` finds `glyph-engine.exe` | 12:04 | green, `check` and `check:rust`; the driver stopped on a missing `glyph-engine` until it read the platform's `.exe` |
 | 50 | `cf3bb31` | ORD-0011 work 3 — `parse` answers the tree's count of commands, in `glyph-protocol.js` and then in the Rust; the transport carries it and the status line reads it (question 15, b); the 114 sources the same bytes in every panel | 12:23 | red first: RL-15 answered `undefined` for 260 commands, then the Rust against `protocol.json`, then the L-cases on a stale release binary; green, `check` and `check:rust` |
-| 51 | this commit | ORD-0011 closes | 12:26 | green, `check` and `check:rust`; the case digest first read `64b34d0f…` through Git Bash's `sha256sum`, whose `*` marks every line binary, and `c00119e0…` with `-t` |
+| 51 | `7be1812` | ORD-0011 closes | 12:26 | green, `check` and `check:rust`; the case digest first read `64b34d0f…` through Git Bash's `sha256sum`, whose `*` marks every line binary, and `c00119e0…` with `-t` |
+| 52 | this commit | ORD-0012 emitted and open; question 16 answered, `SOURCE_DATE_EPOCH` and the zip in UTC | 13:36 | green, `npm run check` |
