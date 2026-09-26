@@ -1,0 +1,35 @@
+[block'local-session-ems-001'
+  [ctx'the Regent resumes the EMS-001 queue on the local machine, from ORD-0011 open','a clone of github.com/Trevojan/glyph, branch claude/laughing-archimedes-3pf0wa, at the commit that carries this handoff','ORD-0001 to ORD-0010 closed, ADR B signed, the virtual paths first on the plan']
+  [skl'glyph-markup'[ins'hear this order, ground before building, bank every step before the next, and stop at the gates of the Regent']]
+
+  [section'species'
+    [dfn'bank','a commit that passes npm run check and npm run check:rust, pushed, with the return updated in the same commit']
+    [dfn'the return','.guidelines/.orders/EMS-001/RETURN.md; its log at the foot names every commit and its checks']
+    [ref'the rules of HANDOFF-2026-09-24.pgml hold: its sections limits, queue and gates, word for word']
+  ]
+
+  [section'environment'
+    [ins'node 18 or later, cargo, and a Chrome or Chromium; on Windows the release binary is rust/target/release/glyph-engine.exe']
+    [ins'git fetch origin claude/laughing-archimedes-3pf0wa and check it out; no worktrees']
+  ]
+
+  [section'ground'
+    [ins'npm run check, then npm run check:rust, which writes the oracle to rust/target/oracle and oracle-modules; both green before anything is touched']
+    [ins'cargo build --release --manifest-path rust/Cargo.toml -p glyph-cli, which writes glyph and glyph-engine']
+    [ins'read .guidelines/.shortcuts/README.md, then the log and the section Open, and why of the return']
+  ]
+
+  [section'queue'
+    [ins'ORD-0011, the app on the Rust engine: its transport is scripts/glyph-transport.js, behind engine=relay; 106 of the 114 sources give the same bytes through Rust in every panel at 25cc924']
+    [ins'prove the eight L-cases: set CHROME to the browser and run node rust/crates/glyph-cli/examples/app_on_rust.mjs with ONLY set to ^L- and a long timeout; L-01 makes about 8 000 synchronous classify requests']
+    [ins'when all 114 give the same bytes and the JS path holds, close ORD-0011: rows in the track of the spec, EMS-001/README.md and .shortcuts, with commit and digest; bank']
+    [nt'if an L-case differs, the difference goes to the return first; a JS defect is never fixed inside an ORD']
+    [ins'then ORD-0012, the Rust CLI: flag parity with scripts/glyph-cli.js, from its section of the spec, one ORD open at a time']
+  ]
+
+  [section'gates'
+    [fin'the queue at ORD-0013: the installer needs a clean Windows machine and the Regent, and under ADR B it carries node or a second protocol']
+    [fin'the queue at any closed question of the return the next ORD depends on, questions 9 to 14 among them']
+    [nt'the virtual paths, .plan section 0, open as an ORD only when the Regent calls them; the three measurements over the git history come before any code']
+  ]
+];
