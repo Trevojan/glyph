@@ -8,6 +8,8 @@ com o pacote que o `--bundle` escreve, e a contagem é desta série.
 
 ## A Ordem aberta
 
+- [`EMS-001/ORD-0012`](ORD-0012/ORD-0012.xml) — a CLI Rust, com as flags do `glyph-cli.js` e o `glyph-bundle`; aberta em 2026-09-26, com a leitura do relógio (pergunta 16) na própria Ordem
+
 ## Ordens fechadas
 
 | ORD | o que entregou | commit | digest |
