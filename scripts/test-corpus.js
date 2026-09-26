@@ -3421,6 +3421,8 @@ if (EXPORT_ORACLE) {
     const src = JSON.parse(fsx.readFileSync(path.join(dir, f), "utf8")).src;
     ask({ call: "tokenize", src: src });
     [undefined, "pt", "en"].forEach(lang => ask({ call: "parse", src: src, lang: lang }));
+    ask({ call: "parse", src: src, session: false });
+    ask({ call: "toAST", src: src, session: false, projection: "panel" });
     ask({ call: "toXML", src: src });
     ask({ call: "toXML", src: src, describe: true });
     ask({ call: "toAST", src: src });
@@ -3432,6 +3434,7 @@ if (EXPORT_ORACLE) {
     G.tokenize(src).forEach(t => {
       if (t.k === "open" || t.k === "bareTag") {
         ask({ call: "suggest", name: t.v });
+        ask({ call: "classify", name: t.v, session: false });
         ["pt", "en"].forEach(lang => {
           const c = ask({ call: "classify", name: t.v, lang: lang });
           if (c && c.ok) ask({ call: "elName", canonical: c.ok.canonical, tier: c.ok.tier, gloss: c.ok.gloss });

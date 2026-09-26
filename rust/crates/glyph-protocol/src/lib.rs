@@ -186,6 +186,8 @@ fn run(req: &Json) -> Result<Json, String> {
     if req.get("lang").and_then(Json::str) == Some("en") {
         opts.en = true;
     }
+    let session = req.get("session") != Some(&Json::Bool(false));
+    opts.session = session;
 
     let call = str_field(req, "call");
     match call.as_str() {
@@ -197,8 +199,7 @@ fn run(req: &Json) -> Result<Json, String> {
         }
         "classify" => {
             let name = str_field(req, "name");
-            // Session defaults to true as per the JS behavior
-            Ok(class_json(&classify(&name, &ctx, true)))
+            Ok(class_json(&classify(&name, &ctx, session)))
         }
         "suggest" => {
             let name = str_field(req, "name");
@@ -232,13 +233,7 @@ fn run(req: &Json) -> Result<Json, String> {
         "parse" => {
             let src = str_field(req, "src");
             // For toAST, default lang to "en" when not specified (per JS behavior)
-            let ast_opts = if req.get("lang").and_then(Json::str) == Some("pt") {
-                Opts::new(&ctx)
-            } else {
-                let mut o = Opts::new(&ctx);
-                o.en = true;
-                o
-            };
+            let ast_opts = Opts { en: req.get("lang").and_then(Json::str) != Some("pt"), session, ..Opts::new(&ctx) };
             let ast = to_ast(&src, &ast_opts, &AstOpts::default())
                 .map_err(|Thrown(e)| e)?;
             let parse_result = parse(&src, &opts).map_err(|Thrown(e)| e)?;
@@ -268,13 +263,7 @@ fn run(req: &Json) -> Result<Json, String> {
                 AstOpts::default()
             };
             // Default to en for toAST when lang not specified
-            let ast_opts_lang = if req.get("lang").and_then(Json::str) == Some("pt") {
-                Opts::new(&ctx)
-            } else {
-                let mut o = Opts::new(&ctx);
-                o.en = true;
-                o
-            };
+            let ast_opts_lang = Opts { en: req.get("lang").and_then(Json::str) != Some("pt"), session, ..Opts::new(&ctx) };
             to_ast(&src, &ast_opts_lang, &ast_opts).map_err(|Thrown(e)| e)
         }
         "toHGML" => {
