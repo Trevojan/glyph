@@ -23,6 +23,7 @@ glyph-burn = { path = "../glyph-burn" }
 glyph-inverse = { path = "../glyph-inverse" }
 glyph-bundle = { path = "../glyph-bundle" }
 glyph-protocol = { path = "../glyph-protocol" }
+glyph-util = { path = "../glyph-util" }
 
 [dev-dependencies]
 glyph-util = { path = "../glyph-util" }
