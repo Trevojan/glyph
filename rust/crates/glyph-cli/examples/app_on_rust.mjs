@@ -18,7 +18,7 @@ import G from "../../../../scripts/glyph-parser.js";
 const require = createRequire(import.meta.url);
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "../../../..");
 const ORACLE = path.join(ROOT, "rust/target/oracle");
-const ENGINE = path.join(ROOT, "rust/target/release/glyph-engine");
+const ENGINE = path.join(ROOT, "rust/target/release/glyph-engine" + (process.platform === "win32" ? ".exe" : ""));
 for (const [p, cmd] of [[ORACLE, "npm run check:rust"], [ENGINE, "cargo build --release --manifest-path rust/Cargo.toml -p glyph-cli"]])
   if (!fs.existsSync(p)) { console.error("missing " + path.relative(ROOT, p) + " — written by: " + cmd); process.exit(1); }
 if (!process.env.CHROME) { console.error("CHROME names no browser"); process.exit(1); }
