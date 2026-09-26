@@ -23,7 +23,7 @@ O nome do comando é o caminho: `commands/a/b/c.md` → `/glyph-markup:a:b:c`.
 pasta do projeto; `engine-config` aponta para `${CLAUDE_PLUGIN_ROOT}/.guidelines/`,
 que é este repositório. Os dois eixos além de `changelog`, e o que vai em
 `engine-config:<args>`, ainda não existem: a folha `changelog/config.md` é o
-molde para quando existirem — copiar, trocar o nome do eixo e a sonda.
+exemplo a copiar quando existirem — trocar o nome do eixo e a sonda.
 
 ## Como uma folha fala com o motor
 
@@ -47,8 +47,8 @@ argumento pode entrar no heredoc.
 ## Dois limites
 
 - **Crase no argumento quebra a folha.** O Claude Code fecha o `` !`…` `` na
-  primeira crase, e os moldes usam crase nos buracos (`` [ph-x`pergunta`] ``).
-  Glyph com molde entra por arquivo: `--from <caminho>`.
+  primeira crase, e os templates usam crase nos buracos (`` [ph-x`pergunta`] ``).
+  Glyph com template entra por arquivo: `--from <caminho>`.
 - **`!` depois de espaço vira `\!`** no argumento, por escape do Claude Code.
   `glyph-plugin.js` desfaz; Glyph nunca escreve `\!`.
 
@@ -56,5 +56,6 @@ argumento pode entrar no heredoc.
 
 O pipeline é app → CLI → skill → plugin: uma função que o motor não tem hoje
 não ganha folha aqui antes de existir na CLI. A versão do plugin é própria
-(`0.1.0`), não a `a.b.c.d` do motor, e `npm run check` cobre dele só o
-`--from` de série (`ZP-11`, `ZP-12`, no balde do bundle).
+(`0.1.0`), não a `a.b.c.d` do motor, e `npm run check` cobre dele o `--from`
+de série (`ZP-11`, `ZP-12`) e as sondas do `bundle.md` (`ZP-13`, `ZP-14`), no
+balde do bundle.

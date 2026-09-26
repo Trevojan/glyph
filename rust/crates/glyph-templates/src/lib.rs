@@ -1,6 +1,6 @@
 //! glyph-templates — Port of `scripts/core/templates.js` — the oracle. The JS module's own summary:
 //!
-//!   a preset expanded into the tree, and the shape it promised.
+//!   a template expanded into the tree, and the shape it promised.
 //!
 //! EMS-001 ORD-0006. `expand_invocations` replaces each `[--name …]` with the
 //! template's body, holes bound to what the author supplied, and

@@ -1,9 +1,10 @@
-# EMS-001 — the return of the first cloud session
+# EMS-001 — the return of the sessions that run the queue
 
-> What the session that heard [`HANDOFF-2026-09-24.pgml`](../HANDOFF-2026-09-24.pgml)
-> built, what it matched, and what waits for the Regent. Branch
-> `claude/laughing-archimedes-3pf0wa`. Every bank commit carries this file
-> current; the commit that carries it is the last row of the log at the foot.
+> What the sessions that heard [`HANDOFF-2026-09-24.pgml`](../HANDOFF-2026-09-24.pgml),
+> in the cloud, and [`HANDOFF-2026-09-26.pgml`](../HANDOFF-2026-09-26.pgml), on the
+> local machine, built, what they matched, and what waits for the Regent. The
+> queue ran on the branch `claude/laughing-archimedes-3pf0wa`, merged into `main`
+> on 2026-09-26. Every bank commit carries this file current; the commit that carries it is the last row of the log at the foot.
 
 ## Where the session is
 

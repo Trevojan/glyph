@@ -1,5 +1,5 @@
 [block'glyph-rust-app'
-  [ctx'a small Rust app that eats the territory of the JS engine one verifiable piece at a time; this is the spec of EMS-001, the first series of orders Glyph emits, and it commissions the series and implements nothing','C:/Users/Usuario/Documents/GitHub/glyph','engine 3.5.8.06, the work of 2026-09-24 committed from 82befb4 to 4a907e3, ORD-0011 parked on 2026-09-24']
+  [ctx'a small Rust app that eats the territory of the JS engine one verifiable piece at a time; this is the spec of EMS-001, the first series of orders Glyph emits, and it commissions the series and implements nothing','C:/Users/Usuario/Documents/GitHub/glyph','engine 3.5.8.06, the work of 2026-09-24 committed from 82befb4 to 4a907e3, the flat ORD-0011, restructure-glyph-repo, parked on 2026-09-24']
   [skl'glyph-markup'[ins'hear this spec, ground before building, and stop at the gate of the Regent']]
 
   [section'species'
