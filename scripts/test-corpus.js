@@ -3150,6 +3150,29 @@ function runBundleChecks() {
     ok("ZP-14", "e leem a Ordem aberta do README da serie, e so ela",
        !/ORD-0002` aberta/.test(said) ? "a Ordem aberta nao foi lida"
          : /ORD-0001` fechada/.test(said) ? "leram alem da secao aberta" : null);
+
+    /* o relogio (pergunta 16 da EMS-001): com SOURCE_DATE_EPOCH, o momento e
+       dele -- o emitted do manifesto e o horario do zip --, e o horario do zip
+       e UTC. O TZ do filho fica em Sao Paulo, para que um relogio local e um
+       UTC nao coincidam nem numa maquina em UTC */
+    const EPOCH = Date.UTC(2026, 8, 26, 1, 30, 0) / 1000;
+    const stamped = dir => {
+      fsx.mkdirSync(dir, { recursive: true });
+      cp.execFileSync(process.execPath, [px.join(ROOT, "scripts", "glyph-cli.js"), "--file", srcFile, "--bundle", "--out", dir],
+        { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"],
+          env: Object.assign({}, process.env, { SOURCE_DATE_EPOCH: String(EPOCH), TZ: "America/Sao_Paulo" }) });
+      return fsx.readFileSync(px.join(dir, "ORD-0001.zip"));
+    };
+    const za = stamped(px.join(tmp, "epoch-a")), zb = stamped(px.join(tmp, "epoch-b"));
+    const manifest = readZip(za).find(e => e.name === "ORD-0001.manifest.json");
+    const emitted = manifest ? JSON.parse(Buffer.from(manifest.data).toString("utf8")).emitted : null;
+    ok("ZP-15", "com SOURCE_DATE_EPOCH, dois zips da mesma fonte sao os mesmos bytes, e o manifesto diz o momento",
+       !za.equals(zb) ? "os dois zips diferem"
+         : emitted !== new Date(EPOCH * 1000).toISOString() ? "emitted: " + emitted : null);
+    const dosTime = za[10] | (za[11] << 8), dosDate = za[12] | (za[13] << 8);
+    ok("ZP-16", "o horario do zip e UTC",
+       dosTime === ((1 << 11) | (30 << 5)) && dosDate === (((2026 - 1980) << 9) | (9 << 5) | 26) ? null
+         : "gravou " + (dosTime >> 11) + ":" + ((dosTime >> 5) & 63) + " de " + (dosDate & 31) + "/" + ((dosDate >> 5) & 15));
   } finally {
     try { fsx.rmSync(tmp, { recursive: true, force: true }); } catch (e) { /* ja foi */ }
   }
@@ -3393,7 +3416,7 @@ console.log(" suggest      " + String(rSG).padStart(4) + "/4");
 console.log(" aspas        " + String(rQT).padStart(4) + "/3");
 console.log(" param template" + String(rTP).padStart(4) + "/4");
 console.log(" imperativo   " + String(rIM).padStart(4) + "/5");
-console.log(" bundle ORD   " + String(rZP).padStart(4) + "/14");
+console.log(" bundle ORD   " + String(rZP).padStart(4) + "/16");
 console.log(" global store " + rGS + "/3");
 console.log(" context      " + rCX + "/3");
 console.log(" coverage     " + String(rOC).padStart(4) + "/" + ORACLE_COVERAGE.length);
