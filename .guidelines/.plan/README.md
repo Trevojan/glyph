@@ -79,13 +79,6 @@ semântico** — categoria, espécie, tabela de composição — não de limiar 
 | `;` é **assimétrico entre aspas** | encerra um literal de crase, não encerra um de apóstrofo. As duas formas deveriam ser intercambiáveis. |
 | param de template nu vira prosa | `[--germinate a,b]` → `PlaceholderPending` ×2 e os valores caem como `<off>`. Param de template é **sempre literal** — as duas aspas servem, a palavra nua não. |
 
-### 4. `ORD-xxxxx` como pacote de quatro formatos — só na CLI
-
-`node scripts/glyph-cli.js --file ordem.pgml --bundle` emite os quatro formatos
-e o manifesto (`order, engine, emitted, files, source, diagnostics`). O botão
-`baixar` do app emite **só a aba visível**, um arquivo: o emissor de bundle
-existe e o app ainda não o chama.
-
 ### 5. O Glyph em Rust — a série EMS-001
 
 Um app Rust pequeno que come o território do JS, uma peça verificável por vez.
@@ -95,21 +88,23 @@ A spec da série está em
 fila, do oráculo congelado (`ORD-0001`) à janela própria (`ORD-0014`), cada uma
 presa ao oráculo byte a byte.
 
-O portão da série, o layout `.orders/EMS-###/ORD-####/`, está construído: numa
-série, o `--bundle` escreve a ORD como a pasta `ORD-####/` numerada pela série, e
-o plugin a acha por `EMS-###/ORD-####`. O que a spec revoga está assinado, e
-entre isso está a escada como ordem de trabalho: [`ladder.toml`](ladder.toml)
-fica como o registro da auditoria, e `node scripts/ladder.js --check` segue no
-`npm run check`. A primeira sessão na nuvem corre a fila,
-[`.orders/HANDOFF-2026-09-24.pgml`](../.orders/HANDOFF-2026-09-24.pgml), e o
-[retorno](../.orders/EMS-001/RETURN.md) dela diz onde a fila está.
+Da `ORD-0001` à `ORD-0012`, fechadas: a nuvem correu da `ORD-0001` à `ORD-0010`,
+e esta máquina a `ORD-0011` e a `ORD-0012`; o [registro da
+série](../.orders/EMS-001/README.md) guarda o commit e o digest de cada uma. O
+app roda no motor Rust atrás de `?engine=relay`, e o binário `glyph` responde as
+flags do `glyph-cli.js`. A fila para na `ORD-0013`, o instalador: pede uma
+máquina Windows limpa e o Regente, e sob a ADR B leva node ou um segundo
+protocolo. O que a spec revoga está assinado, e entre isso está a escada como
+ordem de trabalho: [`ladder.toml`](ladder.toml) fica como o registro da
+auditoria, e `node scripts/ladder.js --check` segue no `npm run check`.
 
 ## Aberto, esperando o Regente
 
 | | |
 |---|---|
 | **estudo de setembro** | oito intakes em [`.orders/`](../.orders/): `INTAKE-VIRTUAL-PATH` (mini-repo, medido: o custo de round-trip é o tamanho de `glyph-parser.js`), `INTAKE-ORDER-COHERENCE` (`relates[]`, B antes de A), `INTAKE-BURN-INVARIANCE` (fechado), `INTAKE-FORMAL-ANALYSIS`, `INTAKE-PARSER-SPLIT` (o corte, feito: treze módulos), `INTAKE-RUST` (steelman e defeater; o Regente decidiu migrar), `INTAKE-RUST-LADDER` (a escada auditada; §8 são as perguntas O1–O6), `INTAKE-FIELD-2026-09` (o kit de cliente; `H-09` fechou por ele). Pendentes do Regente: o `sameTarget` do blend que não confere o alvo; o `--check` do grafo de links |
-| **EMS-001** | a execução assíncrona que a seção `queue` da spec propõe: medida, economiza no máximo 4 de 14 turnos e esbarra em três restrições |
+| **EMS-001** | a execução assíncrona que a seção `queue` da spec propõe: medida, economiza no máximo 4 de 14 turnos e esbarra em três restrições; e as perguntas fechadas do [retorno](../.orders/EMS-001/RETURN.md) que ainda não têm resposta, 1 a 7 e 9 a 14 |
+| **a versão** | o motor segue em `3.5.8.06`, e desde 2026-09-24 o app passou a ler a contagem de comandos que a ponte responde, o `--bundle` escreve séries e lê `SOURCE_DATE_EPOCH`, e o zip grava em UTC — o que a regra do [`.changelog/`](../.changelog/README.md) conta. O número viaja no `engine=` de todo XML emitido, então movê-lo move todo hash do snapshot e o oráculo das 114 fontes |
 | **O4, O5, O7–O10** | [`BRIEFING-2026-09-24.md`](../.orders/BRIEFING-2026-09-24.md) §8, as que esperam sem pressa: os defeitos do §3 acima, o snapshot e o `opts` de cada caso, o limiar de profundidade, e as renomeações que movem o emitido |
 | **Q14** | o Regente autora o sexto exemplo de conformidade. Base verificada em [`conformance/README.md`](../../conformance/README.md) |
 | **Q4** | ratificar [`PROMOTION_BOUNDARY.md`](../PROMOTION_BOUNDARY.md) §5 |
@@ -123,7 +118,9 @@ fica como o registro da auditoria, e `node scripts/ladder.js --check` segue no
 - **Efeitos** — [`.orders/INTAKE-EFFECTS.md`](../.orders/INTAKE-EFFECTS.md). A
   metade barata (`<effect>` declarativo) espera; a cara (objetos de contexto) é
   segunda ordem.
-- **`ORD-0011`**, estacionada em 2026-09-24. Reestrutura o repositório lendo
-  `_ORBITAL`, que só existe nesta máquina; reabre aqui quando o Regente chamar.
+- **A `ORD-0011` chapada, `restructure-glyph-repo`**, estacionada em 2026-09-24 e
+  guardada fora do repositório; não é a `EMS-001/ORD-0011`. Reestrutura o
+  repositório lendo `_ORBITAL`, que só existe nesta máquina, e reabre aqui quando
+  o Regente chamar.
 - **Escopos aninhados** para variáveis. O escopo é o pacote inteiro, como o
   Regente especificou. Ninguém pediu mais.

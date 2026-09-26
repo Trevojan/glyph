@@ -31,10 +31,13 @@ conta pode estar atrasada; a desta pasta é a que vale.
 
 ```bash
 npm run check
+npm run check:rust
 ```
 
-Roda os dois `--check` de geração, `check-globals`, o DAG e a suíte. **Um passo
-por commit, verde em cada um.**
+O primeiro roda os dois `--check` de geração, `check-globals`, o DAG, os grafos
+de costura e de crates, a escada e a suíte; o segundo escreve o oráculo no
+commit sob teste e roda `cargo test` em `rust/`. **Um passo por commit, verde em
+cada um.**
 
 Editou `.guidelines/rules.json`, `templates.json`, `expansions.txt` ou
 `GLOSSARY.md`? Rode `node scripts/build-templates.js` antes de verificar: essas

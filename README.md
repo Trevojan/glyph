@@ -56,12 +56,19 @@ answered, confidently, about a filename.
 ### `--bundle` — a Ordem inteira, numerada como um ADR
 
 ```bash
-node scripts/glyph-cli.js --file fonte.pgml --bundle --out .guidelines/.orders
+node scripts/glyph-cli.js --file fonte.pgml --bundle --out .guidelines/.orders/EMS-001
 ```
 
-Escreve `ORD-0001.zip` com as quatro projeções mais um manifesto. A numeração é
-chapada e sequencial: o próximo é o maior `ORD-####` que já existe no destino,
-mais um — a mesma regra de um ADR, e pela mesma razão.
+Numa série — o `--out` é uma pasta `EMS-###` — a Ordem sai como a pasta
+`ORD-####/` com as quatro projeções e o manifesto, e o número é a maior pasta
+`ORD-####` daquela série, mais um: a contagem reinicia em cada série. Fora de uma
+série, sai `ORD-####.zip` com os mesmos cinco arquivos, numerado pelo maior
+`ORD-####` do destino seguido de nada ou de um ponto, e um ID datado como
+`ORD-2026-08-30-01` não conta como 2026. É a regra de um ADR, e pela mesma razão.
+
+O momento que o manifesto chama de `emitted`, e que o zip leva, é o de
+`SOURCE_DATE_EPOCH` quando a variável existe, e o horário do zip é UTC: a mesma
+fonte no mesmo momento dá os mesmos bytes.
 
 No app o botão **emitir ORD** faz o mesmo, com uma diferença declarada: o
 **navegador não enxerga pasta**, então lá o número vem do `localStorage` — o
@@ -157,7 +164,23 @@ node scripts/serve-dev.js --no-open  # serves only
 ```
 
 Serves at `http://localhost:8731`, and reaches another device on the same
-network.
+network. It also relays the engine: `POST /engine` takes one JSON request and
+answers one JSON line, from `scripts/glyph-protocol.js` in the same node, or
+from the Rust `glyph-engine` with `--engine rust`. The app goes through it when
+its address carries `?engine=relay`; without it, the app runs on the JS core.
+
+### The Rust engine — needs cargo
+
+```bash
+cargo build --release --manifest-path rust/Cargo.toml -p glyph-cli
+node scripts/serve-dev.js --engine rust   # then open the app with ?engine=relay
+```
+
+`rust/target/release/glyph` answers the flags of `glyph-cli.js` with the same
+bytes, and with no argument reads Glyph on stdin and writes the XML.
+`glyph-engine` answers the protocol on stdio. Both are held to the oracle the
+JS writes at the same commit (`npm run check:rust`); the series that built them,
+and where it stops, is [`EMS-001`](.guidelines/.orders/EMS-001/README.md).
 
 ---
 
@@ -185,8 +208,8 @@ opaque command is how drift gets in.
 ## Verify
 
 ```bash
-node scripts/test-corpus.js     # suite — 173 cases
-node scripts/dag.js             # composition table — 0 cycles, 0 undefined
+npm run check        # the generation checks, globals, the DAG, the seam and crate graphs, the ladder, and the suite
+npm run check:rust   # the crate arrows, the oracle at the commit under test, and cargo test
 ```
 
 Both exit non-zero on failure, so they work in CI.
@@ -211,7 +234,11 @@ built.
 | `scripts/glyph-parser.js` | the core's public face — assembles `GlyphCore` from `scripts/core/` |
 | `scripts/core/` | the engine, thirteen modules: `util vocabulary version stores lexer logic templates rules parser emit-xml emit-ast burn inverse`; `node scripts/seam-graph.js` prints who imports whom |
 | `scripts/glyph-ui.js` · `glyph-moulds.js` | interface and moulds (pt-BR) |
-| `scripts/serve-dev.js` | static server, for driving the app in a real browser |
+| `scripts/serve-dev.js` | static server, for driving the app in a real browser, and the relay of `POST /engine` |
+| `scripts/glyph-cli.js` · `glyph-zip.js` | the command line, and the zip its `--bundle` writes |
+| `scripts/glyph-protocol.js` · `glyph-transport.js` | the engine as a process, one JSON request a line, and the app's switch to it (`?engine=relay`) |
+| `scripts/glyph-plugin.js` · `commands/` · `.claude-plugin/` | the engine as slash commands |
+| `rust/` | the Rust engine, one crate per core module; `node scripts/crate-graph.js` prints the arrows |
 | `.guidelines/rules.json` · `templates.json` | data stores, hand-editable |
 | `.guidelines/expansions.txt` | composition table: atoms and formulas |
 | `.guidelines/.history/` | superseded records, kept for provenance |

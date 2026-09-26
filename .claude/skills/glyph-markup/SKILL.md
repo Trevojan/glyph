@@ -22,7 +22,7 @@ from it, and the suite fails (`X-01`, `X-14`) if the two drift apart.
 **Language boundary:** everything reaching the deliverable is English — the
 vocabulary, definitions, slot questions, mood glosses. The interface is pt-BR:
 the `CATS` labels, the diagnostic messages and every string in `glyph-ui.js`
-and `glyph-moldes.js`.
+and `glyph-moulds.js`.
 
 ## Normative rules
 
