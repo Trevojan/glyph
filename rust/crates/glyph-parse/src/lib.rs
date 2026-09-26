@@ -59,6 +59,9 @@ pub struct Gap {
     pub code: String,
     pub at: Option<(usize, usize)>,
     pub plain: String,
+    /// The key order of the JS object: `code` before `msg` for a gap of
+    /// `logic.js`.
+    pub code_first: bool,
 }
 
 pub struct Parse {
@@ -405,7 +408,7 @@ impl State<'_, '_> {
             "logic" => {
                 let lg = parse_logic(tk.v.as_deref().unwrap_or(""), tk.body.as_deref().unwrap_or(""));
                 let origin = self.pending.unwrap_or("nest").to_string();
-                let gaps: Vec<Diag> = lg.gaps.iter().map(|g| Diag::new(g.sev, g.lab, g.msg.clone(), g.code)).collect();
+                let gaps: Vec<Diag> = lg.gaps.iter().map(|g| Diag { code_first: true, ..Diag::new(g.sev, g.lab, g.msg.clone(), g.code) }).collect();
                 let id = self.add(Node { logic: Some(lg.name.clone()), tok: Self::span(tk), origin: Some(Some(origin)),
                                          extra: Some(lg), ..Default::default() });
                 self.attach(id);
@@ -575,7 +578,7 @@ pub fn parse(src: &str, o: &Opts) -> Result<Parse, Thrown> {
            composition table fall to what is registered, which here is none */
         let sub_ctx = Context::new(Some(sub.templates.clone()), None, None);
         let r = parse(body, &Opts { ctx: &sub_ctx, session: sub.session, valency: sub.valency, en: false, expanding: sub.expanding })?;
-        Ok(Parsed { tree: r.tree, gaps: r.gaps.into_iter().map(|p| Diag { at: p.at, ..Diag::new(&p.sev, &p.lab, p.msg, &p.code) }).collect() })
+        Ok(Parsed { tree: r.tree, gaps: r.gaps.into_iter().map(|p| Diag { at: p.at, code_first: p.code_first, ..Diag::new(&p.sev, &p.lab, p.msg, &p.code) }).collect() })
     })?;
 
     let n = |t: &Tree<Extra>, id: Id| t.nodes[id].clone();
@@ -747,7 +750,8 @@ pub fn parse(src: &str, o: &Opts) -> Result<Parse, Thrown> {
             (true, None, Some(m)) => (d.lab, if m.is_empty() { d.msg } else { m }),
             _ => (d.lab, d.msg),
         };
-        Gap { plain: strip_tags(&msg), sev: d.sev, lab, msg, code: if d.code.is_empty() { "Note".into() } else { d.code }, at: d.at }
+        Gap { plain: strip_tags(&msg), sev: d.sev, lab, msg, code: if d.code.is_empty() { "Note".into() } else { d.code }, at: d.at,
+              code_first: d.code_first }
     }).collect();
     Ok(Parse { tree, gaps, tokens, rules: ctx.rules.as_ref().map(with_cache) })
 }

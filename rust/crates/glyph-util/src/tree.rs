@@ -201,11 +201,14 @@ pub struct Diag {
     pub en_lab: Option<String>,
     pub en_msg: Option<String>,
     pub at: Option<(usize, usize)>,
+    /// The JS object writes `code` before `msg`: a gap `logic.js` built,
+    /// which the parser passes on as it is.
+    pub code_first: bool,
 }
 
 impl Diag {
     pub fn new(sev: &str, lab: &str, msg: String, code: &str) -> Diag {
-        Diag { sev: sev.into(), lab: lab.into(), msg, code: code.into(), en_lab: None, en_msg: None, at: None }
+        Diag { sev: sev.into(), lab: lab.into(), msg, code: code.into(), en_lab: None, en_msg: None, at: None, code_first: false }
     }
     pub fn en(mut self, lab: &str, msg: String) -> Diag {
         self.en_lab = Some(lab.into());

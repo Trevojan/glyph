@@ -1,28 +1,18 @@
 [package]
-name = "glyph-cli"
+name = "glyph-protocol"
 version.workspace = true
 edition.workspace = true
 license-file.workspace = true
 publish = false
 
-[[bin]]
-name = "glyph"
-path = "src/main.rs"
-
-[[bin]]
-name = "glyph-engine"
-path = "src/engine.rs"
-
 [dependencies]
-glyph-version = { path = "../glyph-version" }
+glyph-util = { path = "../glyph-util" }
 glyph-stores = { path = "../glyph-stores" }
+glyph-lex = { path = "../glyph-lex" }
+glyph-logic = { path = "../glyph-logic" }
+glyph-vocab = { path = "../glyph-vocab" }
 glyph-parse = { path = "../glyph-parse" }
 glyph-xml = { path = "../glyph-xml" }
 glyph-envelope = { path = "../glyph-envelope" }
 glyph-burn = { path = "../glyph-burn" }
 glyph-inverse = { path = "../glyph-inverse" }
-glyph-bundle = { path = "../glyph-bundle" }
-glyph-protocol = { path = "../glyph-protocol" }
-
-[dev-dependencies]
-glyph-util = { path = "../glyph-util" }
