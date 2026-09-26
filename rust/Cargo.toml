@@ -24,7 +24,6 @@ members = [
     "crates/glyph-bundle",
     "crates/glyph-protocol",
     "crates/glyph-cli",
-    "crates/glyph-wasm",
     "crates/glyph-lsp",
 ]
 
