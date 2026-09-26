@@ -64,8 +64,6 @@ const TOOLS = {
   "glyph-protocol": { oracle: "scripts/glyph-protocol.js", tools: [] },
   "glyph-cli":    { oracle: "scripts/glyph-cli.js",
                     tools: ["glyph-schema", "glyph-diff", "glyph-trace", "glyph-bundle", "glyph-protocol"] },
-  "glyph-wasm":   { oracle: "glyph-engine-alias.html + glyph-ui.js, on the corpus",
-                    tools: ["glyph-trace", "glyph-bundle"] },
   "glyph-lsp":    { oracle: "— (new capability; M12–M15)", tools: ["glyph-trace"] }
 };
 
