@@ -12,7 +12,7 @@
 | environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed |
 | ground | read in the order the handoff names; `npm run check` (33 buckets, 41 s) and `npm run check:rust` (20 crates, 3 s) green on the clone at `ea8fc59`, before anything was touched |
 | layout | **closed** — its val holds (below), five banks |
-| queue | ORD-0001 to ORD-0009 closed; ORD-0010 open, measured, its ADR signed B by the Regent; it closes once B answers the twelve calls, and the queue goes on. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
+| queue | ORD-0001 to ORD-0010 closed; ORD-0011 open. First on the plan: the virtual paths, by the Regent's word. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
 
 ## Waiting for the Regent
 
@@ -156,6 +156,7 @@ Closed questions, none answered.
 | [`ORD-0007`](ORD-0007/ORD-0007.xml) | `glyph-parse`: every field the envelope reads — each node, each segment, each diagnostic in pt-BR and en-EU — equals the JS on the 114 sources and 159 probes, the JS's defects reproduced | `1a79b2c` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828`, the case files; `3fd68d651077ca5332d8bedcf6c797509ab1f3ee30ff442f9e50ea3f59c4ef9b`, `oracle-modules/parse.json` |
 | [`ORD-0008`](ORD-0008/ORD-0008.xml) | `glyph-xml` and the first binary: `glyph` reads Glyph on stdin and writes the XML; the five examples byte-exact and the 114 sources as the oracle; `toXML` on 312 runs, plain and described | `97ea472` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828`, the case files; `cfab5a595c70e3458995474b1a01cdb08857e6a902bd5d331b6eaa99f3b02c63`, `oracle-modules/xml.json` |
 | [`ORD-0009`](ORD-0009/ORD-0009.xml) | `glyph-envelope`, `glyph-burn` and `glyph-inverse`: the `ast` and `hgml` digests of the 114 sources equal `corpus-snapshot.json`, and every round trip the JS suite runs closes, step for step — 510 calls recorded as it runs | `9c943d3` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828`, the case files; `8f6519986e2c843458abb255874e49bd696bf0a42db9a82ac5ebc6a3397fb560`, `ast.json`; `05717e791bf4805b7cfb1f507d934efbbf0e735fbe567f4cd9ecfd26e1ba9af2`, `hgml.json`; `3ae341cc376024ffa224308c83c53b3f052b2e13c490c4cfed0aa1e140adc326`, `inverse.json` |
+| [`ORD-0010`](ORD-0010/ORD-0010.xml) | the protocol: ADR B, signed by the Regent; `glyph-protocol.js` and the binary `glyph-engine` answer the twelve calls `glyph-ui.js` makes, 6 328 requests byte for byte, and `serve-dev.js` relays `POST /engine` | `7eab706` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828`, the case files; `6cbc1de1aed107a7017b12587355ead8cf41869a3e95260c5141ed7bbf7f9042`, `protocol.json` |
 
 **ORD-0001, the proof**, run at `02c92ee` (the commit that emitted it; the
 closing commit changes no code):
@@ -384,14 +385,11 @@ c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828  -
 
 ## Open, and why
 
-**ORD-0010, the protocol**, open since `df25609`. Both protocols are
-measured and the Regent signed B on 2026-09-25, so half of the val holds; the
-other half — *"the chosen protocol answers the twelve calls glyph-ui.js
-makes"* — is the work that remains. The prototype answers three. The JS
-answers first, as a tool of its own that is the oracle, and the Rust engine
-on stdio answers the same bytes; then ORD-0010 closes, and the queue goes on
-to ORD-0011 and ORD-0012, one open at a time, since the Regent named the
-EMS-001 ORDs as the steps to take.
+**ORD-0011, the app on the Rust engine**, open since the commit that carries
+this line. Its source carries the readings it is built on: ADR B's relay, a
+transport of the same shape as `GlyphCore`, a synchronous request (question
+9), the tree rebuilt from the full envelope, the repository's stores
+(question 11), and the switch as one query parameter, `engine=relay`.
 
 ### ORD-0010's ADR, signed: B
 
@@ -1095,7 +1093,8 @@ crates' tests arrived.
 | ORD-0007 | `b145777` 03:54 | `6dcf854` 04:17 | 23 min, one work bank |
 | ORD-0008 | `aefc148` 04:21 | `a262233` 04:43 | 22 min, one work bank |
 | ORD-0009 | `e4e6a59` 04:47 | `160d43d` 05:46 | 59 min, two work banks |
-| ORD-0010 | `df25609` 05:49 | — | open at the gate: two measurement banks, the ADR proposed |
+| ORD-0010 | `df25609` 05:49 | `7eab706` 2026-09-26 | across the Regent's signature: two measurement banks and two work banks |
+| ORD-0011 | the commit after `7eab706` | — | open |
 
 | # | commit | step | UTC | checks |
 |---|---|---|---|---|
@@ -1144,4 +1143,5 @@ crates' tests arrived.
 | 42 | `2434e6e` | the return's totals, and the queue stops at the gate | 06:26 | green, `check` 42 s and `check:rust` 95 s |
 | 43 | `3c55917` | the Regent signs B; ORD-0010 stays open until B answers the twelve calls | 23:50 | green, `check` 42 s and `check:rust` 95 s |
 | 44 | `c7b8110` | ORD-0010 work 1/2 — `glyph-protocol.js` answers the twelve calls on stdio, `serve-dev.js` relays `POST /engine`, `protocol.json` in the export | 00:03 | green on a clean clone of the commit, `check` and `check:rust`; the relay bucket red, 1 of 14, with its answer altered by one byte |
-| 45 | this commit | ORD-0010 work 2/2 — `glyph-protocol`, drafted by a Haiku agent and finished here, and the binary `glyph-engine`: the 6 328 requests of `protocol.json` answer the JS's bytes | 00:08 | red first: 15 of 6 328 — gaps of `logic.js` write `code` before `msg`, and the port wrote one order; `code_first` carries the JS's order from `Diag` to `Gap`, then green on a clean clone of the commit |
+| 45 | `7eab706` | ORD-0010 work 2/2 — `glyph-protocol`, drafted by a Haiku agent and finished here, and the binary `glyph-engine`: the 6 328 requests of `protocol.json` answer the JS's bytes | 00:08 | red first: 15 of 6 328 — gaps of `logic.js` write `code` before `msg`, and the port wrote one order; `code_first` carries the JS's order from `Diag` to `Gap`, then green on a clean clone of the commit |
+| 46 | this commit | ORD-0010 closes; ORD-0011 emitted and open; the virtual paths first on the plan | 00:29 | green, both checks; the independent verifier of `glyph-protocol` was stopped before its report, to keep the budget — the 6 328 requests are the only proof |

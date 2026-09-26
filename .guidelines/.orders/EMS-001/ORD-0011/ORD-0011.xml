@@ -1,0 +1,42 @@
+<glyph-package engine="3.5.8.06">
+  <schema/>
+  <block once="true">
+    <block binds="ORD-0011-app-on-rust">
+      <user-input>ORD-0011-app-on-rust</user-input>
+      <context>
+        <user-input>the spec of EMS-001</user-input>
+        <user-input>.guidelines/.orders/EMS-001/EMS-001.pgml</user-input>
+      </context>
+      <only-if>
+        <user-input>ORD-0009 closed</user-input>
+        <user-input>ORD-0010 closed</user-input>
+      </only-if>
+      <target>
+        <user-input>the browser app talks to the Rust engine behind one switch, and glyph-ui.js changes only at its transport</user-input>
+      </target>
+      <constraint>
+        <user-input>the protocol is ADR B: the page posts one request line to /engine on its own origin, and serve-dev.js relays it to glyph-engine with --engine rust, or to glyph-protocol.js</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the transport is a Core of the same shape as GlyphCore: the twelve calls go through /engine, and the tables, esc, xesc and walk stay the JS core</user-input>
+      </constraint>
+      <note>
+        <user-input>run is synchronous: the transport asks with a synchronous request, the one reading that leaves glyph-ui.js untouched; question 9 of the return stays open for the Regent</user-input>
+      </note>
+      <note>
+        <user-input>parse cannot send the live tree: the transport rebuilds segments from the full envelope, and buildXml and serializeAST ask toXML and toAST of the source the segments came from</user-input>
+      </note>
+      <note>
+        <user-input>the engine answers with the repository stores; the templates a page merges stay on the JS path, as question 11 of the return reads it</user-input>
+      </note>
+      <instruction>
+        <user-input>the switch is one query parameter of the page, engine=relay; without it the page runs on the JS core as it does today</user-input>
+      </instruction>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the app on the Rust engine</user-input>
+        <user-input>the app drives the 114 sources through Rust with the same bytes as through JS, and the JS path still works</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>
