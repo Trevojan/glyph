@@ -3293,6 +3293,64 @@ function runOracleCoverage() {
 }
 const rOC = runOracleCoverage();
 
+/* ------------------------------------------------------------------
+ * EMS-001 ORD-0010, ADR B: the engine on stdio, relayed by serve-dev.js.
+ * The twelve calls go through `POST /engine` to the engine process and come
+ * back as the bytes glyph-protocol.js answers in this process; a GET still
+ * serves the page's files, and a request the engine refuses is answered.
+ * ------------------------------------------------------------------ */
+async function runRelay() {
+  console.log("\n--- engine relay — POST /engine to glyph-protocol.js ---");
+  const D = [];
+  const ok = (id, name, why) => {
+    if (why) { console.log("  ✗ " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  ✓ " + id + ": " + name); D.push(id); }
+  };
+  const PROTOCOL = await import("./glyph-protocol.js");
+  const cp = await import("node:child_process");
+  const http = await import("node:http");
+  const server = cp.spawn(process.execPath, [path.join(__dirname, "serve-dev.js"), "0", "--no-open"],
+                          { stdio: ["ignore", "pipe", "inherit"] });
+  const port = await new Promise((resolve, reject) => {
+    let out = "";
+    server.stdout.on("data", c => { out += c; const m = out.match(/localhost:(\d+)\//); if (m) resolve(Number(m[1])); });
+    server.on("exit", () => reject(new Error("serve-dev.js exited")));
+  });
+  const send = (method, url, body) => new Promise((resolve, reject) => {
+    const req = http.request({ host: "127.0.0.1", port: port, method: method, path: url }, res => {
+      let text = "";
+      res.setEncoding("utf8");
+      res.on("data", c => { text += c; });
+      res.on("end", () => resolve({ status: res.statusCode, text: text }));
+    });
+    req.on("error", reject);
+    req.end(body);
+  });
+  const SRC = "[crit'the parser'][logic-risk[x = 2][/logic]";
+  const calls = [
+    { call: "tokenize", src: SRC }, { call: "classify", name: "crit" }, { call: "suggest", name: "crti" },
+    { call: "elName", canonical: "CRIT", tier: "instr", gloss: "Criticise" }, { call: "parseLogic", name: "risk", body: "x = 2\ny > x" },
+    { call: "expandExpr", raw: "a && !b" }, { call: "freeVars", raw: "y > x" }, { call: "parse", src: SRC, lang: "pt" },
+    { call: "toXML", src: SRC }, { call: "toAST", src: SRC, projection: "panel" }, { call: "toHGML", src: SRC },
+    { call: "fromXML", xml: G.toXML(SRC, { templates: TPL.templates, rules: RULESTORE }) }
+  ];
+  try {
+    for (const [k, q] of calls.entries()) {
+      const line = JSON.stringify(q), r = await send("POST", "/engine", line);
+      ok("RL-" + String(k + 1).padStart(2, "0"), q.call + " through the relay",
+         r.status !== 200 ? "status " + r.status : r.text !== PROTOCOL.answer(line) ? "the relay answered other bytes than the engine: " + r.text.slice(0, 120) : null);
+    }
+    const bad = await send("POST", "/engine", "nope");
+    ok("RL-13", "a line that is not a request is answered", bad.text !== "{\"thrown\":\"bad request\"}" ? bad.text : null);
+    const page = await send("GET", "/scripts/glyph-protocol.js");
+    ok("RL-14", "a GET still serves the files", page.status !== 200 || page.text.indexOf("ADR B") === -1 ? "status " + page.status : null);
+  } finally {
+    server.kill();
+  }
+  return D.length;
+}
+const rRL = await runRelay();
+
 
 
 console.log("\n=================================================");
@@ -3329,6 +3387,7 @@ console.log(" bundle ORD   " + String(rZP).padStart(4) + "/14");
 console.log(" global store " + rGS + "/3");
 console.log(" context      " + rCX + "/3");
 console.log(" coverage     " + String(rOC).padStart(4) + "/" + ORACLE_COVERAGE.length);
+console.log(" engine relay " + String(rRL).padStart(4) + "/14");
 console.log("=================================================");
 
 if (EXPORT_ORACLE) {
@@ -3342,6 +3401,68 @@ if (EXPORT_ORACLE) {
   const mods = (arg && arg.slice(0, 2) !== "--" ? path.resolve(arg) : path.resolve(__dirname, "../rust/target/oracle")) + "-modules";
   require("fs").writeFileSync(path.join(mods, "inverse.json"), JSON.stringify({ engine: G.VERSION, trips: trips }, null, 1) + "\n");
   console.log("  ! round trips written: " + trips.length + " calls to " + path.join(mods, "inverse.json"));
+
+  /* glyph-protocol.js (EMS-001 ORD-0010): the twelve calls over the case
+     files, one request line and the line the JS answers; the names the
+     tokens carry feed classify, suggest and elName, the logic blocks feed
+     parseLogic, and each rule's expression expandExpr and freeVars */
+  const PROTOCOL = await import("./glyph-protocol.js");
+  const fsx = require("fs"), dir = mods.slice(0, -"-modules".length);
+  const lines = [], had = new Set();
+  const ask = q => {
+    const line = typeof q === "string" ? q : JSON.stringify(q);
+    if (had.has(line)) return null;
+    had.add(line);
+    const a = PROTOCOL.answer(line);
+    lines.push({ q: line, a: a });
+    return JSON.parse(a);
+  };
+  fsx.readdirSync(dir).filter(f => f.endsWith(".json")).sort().forEach(f => {
+    const src = JSON.parse(fsx.readFileSync(path.join(dir, f), "utf8")).src;
+    ask({ call: "tokenize", src: src });
+    [undefined, "pt", "en"].forEach(lang => ask({ call: "parse", src: src, lang: lang }));
+    ask({ call: "toXML", src: src });
+    ask({ call: "toXML", src: src, describe: true });
+    ask({ call: "toAST", src: src });
+    ask({ call: "toAST", src: src, projection: "panel" });
+    ask({ call: "toAST", src: src, lang: "pt" });
+    ask({ call: "toHGML", src: src });
+    const xml = JSON.parse(PROTOCOL.answer(JSON.stringify({ call: "toXML", src: src }))).ok;
+    if (typeof xml === "string") ask({ call: "fromXML", xml: xml });
+    G.tokenize(src).forEach(t => {
+      if (t.k === "open" || t.k === "bareTag") {
+        ask({ call: "suggest", name: t.v });
+        ["pt", "en"].forEach(lang => {
+          const c = ask({ call: "classify", name: t.v, lang: lang });
+          if (c && c.ok) ask({ call: "elName", canonical: c.ok.canonical, tier: c.ok.tier, gloss: c.ok.gloss });
+        });
+      }
+      if (t.k === "logic") {
+        const lg = ask({ call: "parseLogic", name: t.v, body: t.body });
+        ((lg && lg.ok && lg.ok.rules) || []).forEach(r => {
+          [r.expr, r.source].forEach(raw => {
+            if (typeof raw !== "string") return;
+            ask({ call: "expandExpr", raw: raw });
+            ask({ call: "freeVars", raw: raw });
+          });
+        });
+      }
+    });
+  });
+  /* the logic blocks and expressions logic.json records, for the Logic
+     encoder the corpus alone reaches in nine blocks */
+  const LOGIC = JSON.parse(fsx.readFileSync(path.join(mods, "logic.json"), "utf8"));
+  LOGIC.parseLogic.forEach(([name, body]) => ask({ call: "parseLogic", name: name, body: body }));
+  LOGIC.expandExpr.forEach(([raw]) => ask({ call: "expandExpr", raw: raw }));
+  LOGIC.freeVars.forEach(([raw]) => ask({ call: "freeVars", raw: raw }));
+  /* the lines that are not a call, and the fields that are not strings */
+  ["", "nope", "null", "[]", "7", "{}", "{\"call\":\"zz\"}", "{\"call\":\"tokenize\"}", "{\"call\":\"toXML\",\"src\":7}",
+   "{\"call\":\"classify\",\"name\":\"CX\",\"lang\":\"xx\"}", "{\"call\":\"elName\",\"canonical\":\"CRIT\"}",
+   "{\"call\":\"parseLogic\",\"name\":\"a\",\"body\":\"x = 1\\ny > x\"}", "{\"call\":\"expandExpr\",\"raw\":\"a && !b || c >= 2\"}",
+   "{\"call\":\"fromXML\",\"xml\":\"<glyph>\"}", "{\"call\":\"suggest\",\"name\":\"crti\"}", "{\"call\":\"suggest\",\"name\":\"constructor\"}",
+   "{\"call\":\"classify\",\"name\":\"toString\"}"].forEach(ask);
+  fsx.writeFileSync(path.join(mods, "protocol.json"), JSON.stringify({ engine: G.VERSION, lines: lines }, null, 1) + "\n");
+  console.log("  ! protocol written: " + lines.length + " requests to " + path.join(mods, "protocol.json"));
 }
 
 if (failures.length) {

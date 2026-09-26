@@ -18,15 +18,23 @@ const __dirname = path.dirname(__filename);
  * The decision was to keep ESM and make serving the way in, not to walk the
  * module system back. So this file is no longer development-only: it IS the app
  * launcher, and `glyph.cmd` at the repository root is the single click.
- *   node serve-dev.js [port]
+ *   node serve-dev.js [port] [--engine rust] [--no-open]
+ *
+ * It also relays the engine (EMS-001 ORD-0010, ADR B): `POST /engine` writes
+ * the page's request, one JSON line, to an engine process's stdin and answers
+ * with the line the engine writes back. The engine is `glyph-protocol.js` on
+ * this same node, or the Rust `glyph-engine` with `--engine rust`; it starts
+ * at the first request, and again after it dies.
  */
 
 "use strict";
 
 const http = require("http");
 const fs = require("fs");
+const cp = require("child_process");
+const readline = require("readline");
 
-const PORT = Number(process.argv[2]) || 8731;
+const PORT = /^\d+$/.test(process.argv[2] || "") ? Number(process.argv[2]) : 8731;
 const ROOT = path.join(__dirname, "..");   // serve o repo inteiro, nao so scripts/
 
 const TYPES = {
@@ -38,7 +46,50 @@ const TYPES = {
   ".md":   "text/plain; charset=utf-8"
 };
 
-http.createServer((req, res) => {
+const RUST = process.argv.includes("--engine") && process.argv[process.argv.indexOf("--engine") + 1] === "rust";
+const ENGINE = RUST
+  ? [path.join(ROOT, "rust", "target", "release", "glyph-engine" + (process.platform === "win32" ? ".exe" : "")), []]
+  : [process.execPath, [path.join(__dirname, "glyph-protocol.js")]];
+
+/* the engine answers in order, so the answers wait in the order asked */
+let engine = null;
+function engineOf() {
+  if (engine) return engine;
+  const child = cp.spawn(ENGINE[0], ENGINE[1], { stdio: ["pipe", "pipe", "inherit"] });
+  const waiting = [];
+  const die = e => {
+    if (engine && engine.child === child) engine = null;
+    waiting.splice(0).forEach(w => w.fail(e));
+  };
+  readline.createInterface({ input: child.stdout }).on("line", line => { const w = waiting.shift(); if (w) w.ok(line); });
+  child.on("error", die);
+  child.stdin.on("error", die);
+  child.on("exit", () => die(new Error("the engine exited")));
+  engine = {
+    child: child,
+    ask: body => new Promise((ok, fail) => {
+      waiting.push({ ok: ok, fail: fail });
+      child.stdin.write(body.replace(/[\r\n]+/g, " ") + "\n");
+    })
+  };
+  return engine;
+}
+
+function relay(req, res) {
+  let body = "";
+  req.setEncoding("utf8");
+  req.on("data", c => { body += c; });
+  req.on("end", () => engineOf().ask(body).then(line => {
+    res.writeHead(200, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" });
+    res.end(line);
+  }, e => {
+    res.writeHead(502, { "Content-Type": "application/json; charset=utf-8" });
+    res.end(JSON.stringify({ thrown: "engine: " + e.message }));
+  }));
+}
+
+const server = http.createServer((req, res) => {
+  if (req.method === "POST" && req.url.split("?")[0] === "/engine") return relay(req, res);
   const rel = decodeURIComponent(req.url.split("?")[0]).replace(/^\/+/, "") || "glyph-engine-alias.html";
   const full = path.join(ROOT, rel);
 
@@ -53,15 +104,15 @@ http.createServer((req, res) => {
     });
     res.end(data);
   });
-}).listen(PORT, () => {
-  const url = "http://localhost:" + PORT + "/glyph-engine-alias.html";
+});
+server.listen(PORT, () => {
+  const url = "http://localhost:" + server.address().port + "/glyph-engine-alias.html";
   console.log("glyph: " + url);
   /* one click means the browser opens itself. Zero dependencies, so this is
      the platform's own opener rather than a package. */
   if (process.argv.indexOf("--no-open") === -1) {
     const cmd = process.platform === "win32" ? 'start ""'
               : process.platform === "darwin" ? "open" : "xdg-open";
-    import("node:child_process").then(cp =>
-      cp.exec(cmd + ' "' + url + '"', () => {}));
+    cp.exec(cmd + ' "' + url + '"', () => {});
   }
 });
