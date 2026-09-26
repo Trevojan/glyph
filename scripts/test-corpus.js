@@ -3529,7 +3529,10 @@ if (EXPORT_ORACLE) {
       process.argv = keep.argv; process.exit = keep.exit;
       if (had === undefined) delete process.env.SOURCE_DATE_EPOCH; else process.env.SOURCE_DATE_EPOCH = had;
     }
-    return { args: args, env: env || {}, stdout: out.join(""), stderr: err.join(""), exit: exit, thrown: thrown };
+    /* the folder is made fresh each export; where a message names it, it
+       reads <root>, so the file digests the same at the same commit */
+    const unroot = t => t.split(root).join("<root>");
+    return { args: args, env: env || {}, stdout: unroot(out.join("")), stderr: unroot(err.join("")), exit: exit, thrown: thrown };
   };
   const tree = (dir, rel) => fsx.readdirSync(dir, { withFileTypes: true }).sort((a, b) => a.name < b.name ? -1 : 1)
     .flatMap(e => e.isDirectory() ? [{ path: rel + e.name + "/", dir: true }].concat(tree(path.join(dir, e.name), rel + e.name + "/"))
