@@ -6,6 +6,39 @@
 
 ## Autorizado pelo Regente, ainda não construído
 
+### 0. Caminhos virtuais — `.guidelines/.shortcuts/.virtual/` — **decidido, primeiro da fila**
+
+> *"quero que seja feito um sistema que implemente `.guidelines/.shortcuts/.virtual/`
+> e defina os caminhos virtuais com offsets e tudo o mais […] a síntese deve
+> diminuir."* — e, em 2026-09-26: *"ponha no topo da lista. é uma mão na roda bem
+> otimizada para o Harness."*
+
+Um caminho virtual é `[arquivo][delimitador][seletor]` e resolve para uma fatia
+exata, com offsets. As fontes: [`VIRTUAL_PATHS.md`](../.sources/VIRTUAL_PATHS.md)
+e a conversa que o desenhou, [`VIRTUAL_PATHS_CONVERSATION.md`](../.sources/VIRTUAL_PATHS_CONVERSATION.md).
+O que o motor passa a fazer:
+
+- **despacho pela extensão**, e o resto é seletor: `.md#slug`, `.json` por JSON
+  Pointer (RFC 6901, um nó só), `.xml` por caminho de elementos, e código por
+  `@block:nome` … `@endblock:nome`, sem aninhamento, com qualquer prefixo de
+  comentário;
+- **cardinalidade 1**: um seletor que resolve para zero ou para vários nós é erro,
+  nunca fatia vazia;
+- **o documento declara as próprias fontes** (`sources:` no frontmatter), e o índice
+  código→documento sai por inversão mecânica; a Ordem carrega só a projeção do
+  que toca;
+- **o índice é JSON**, estado durável que o motor escreve e um resolvedor sem
+  julgamento lê: cada entrada com offsets de início e fim e o hash da fatia —
+  a fatia mudou e o documento não, o documento está defasado;
+- **cobertura fechada**: todo arquivo de `.guidelines/` aparece no índice, e toda
+  entrada resolve para conteúdo não vazio; a busca livre fica como recurso
+  auditado que registra um *index miss*.
+
+Antes do código, medido sobre o histórico do git, com os limiares declarados
+antes de rodar: a taxa de defasagem, a localidade das edições em `.md` e a
+co-mudança código↔documento, que também semeia o `sources:`. A primeira ORD
+nasce na série seguinte à EMS-001, ou avulsa, quando o Regente chamar.
+
 ### 1. `<section>` de cabeçalho, irmã do `<schema/>` — **decidido, faltando fazer**
 
 Toda ligação de variável detectada no corpo deve ser **içada** para um bloco de
