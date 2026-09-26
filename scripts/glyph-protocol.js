@@ -18,8 +18,11 @@
  *   {"call":"parseLogic","name":N,"body":B}
  *   {"call":"expandExpr","raw":R}          {"call":"freeVars","raw":R}
  *   {"call":"parse","src":S}               the tree cannot travel, so it
- *                                          answers {ast, gaps}: the full
- *                                          envelope and the parse's gaps
+ *                                          answers {ast, gaps, commands}:
+ *                                          the full envelope, the parse's
+ *                                          gaps, and the tree's commands —
+ *                                          the envelope stops at
+ *                                          LIMITS.astDepth, the count does not
  *   {"call":"toXML","src":S,"describe":true?}   for buildXml
  *   {"call":"toAST","src":S,"projection":"panel"?}   for serializeAST
  *   {"call":"toHGML","src":S}
@@ -62,7 +65,12 @@ function run(q) {
     case "parseLogic": return G.parseLogic(str("name"), str("body"));
     case "expandExpr": return G.expandExpr(str("raw"));
     case "freeVars":   return G.freeVars(str("raw"));
-    case "parse":      return { ast: G.toAST(str("src"), o), gaps: G.parse(str("src"), o).gaps };
+    case "parse": {
+      const p = G.parse(str("src"), o);
+      let commands = 0;
+      p.segments.forEach(sg => G.walk(sg.children, nd => { if (nd.canonical) commands++; }));
+      return { ast: G.toAST(str("src"), o), gaps: p.gaps, commands: commands };
+    }
     case "toXML":      return G.toXML(str("src"), q.describe === true ? { ...o, describe: true } : o);
     case "toAST":      return G.toAST(str("src"), q.projection === "panel" ? { ...o, projection: "panel" } : o);
     case "toHGML":     return G.toHGML(str("src"), o);

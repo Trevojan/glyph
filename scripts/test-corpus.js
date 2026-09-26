@@ -3344,6 +3344,16 @@ async function runRelay() {
     ok("RL-13", "a line that is not a request is answered", bad.text !== "{\"thrown\":\"bad request\"}" ? bad.text : null);
     const page = await send("GET", "/scripts/glyph-protocol.js");
     ok("RL-14", "a GET still serves the files", page.status !== 200 || page.text.indexOf("ADR B") === -1 ? "status " + page.status : null);
+    /* the envelope stops the tree at LIMITS.astDepth, so a page that rebuilds
+       its tree from it cannot count what was cut; parse answers the count */
+    const DEEP = "[crit".repeat(260) + "'x'" + "]".repeat(260);
+    let live = 0;
+    G.parse(DEEP, { templates: TPL.templates, rules: RULESTORE }).segments
+      .forEach(sg => G.walk(sg.children, nd => { if (nd.canonical) live++; }));
+    const deep = JSON.parse(PROTOCOL.answer(JSON.stringify({ call: "parse", src: DEEP }))).ok;
+    ok("RL-15", "parse counts every command, past the envelope's depth",
+       live !== 260 ? "the probe is not deep enough: " + live + " commands"
+         : deep.commands !== live ? "answered " + deep.commands + " for " + live : null);
   } finally {
     server.kill();
   }
@@ -3387,7 +3397,7 @@ console.log(" bundle ORD   " + String(rZP).padStart(4) + "/14");
 console.log(" global store " + rGS + "/3");
 console.log(" context      " + rCX + "/3");
 console.log(" coverage     " + String(rOC).padStart(4) + "/" + ORACLE_COVERAGE.length);
-console.log(" engine relay " + String(rRL).padStart(4) + "/14");
+console.log(" engine relay " + String(rRL).padStart(4) + "/15");
 console.log("=================================================");
 
 if (EXPORT_ORACLE) {

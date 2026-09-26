@@ -491,8 +491,10 @@ import { zipStore } from "./glyph-zip.js";
         t("notes", res.gaps.length)
       : "";
 
-    var cmds = 0;
-    res.segments.forEach(function (sg) { walk(sg.children, function (nd) { if (nd.canonical) cmds++; }); });
+    /* through the transport the tree is rebuilt from an envelope cut at
+       LIMITS.astDepth, and the count of its commands travels beside it */
+    var cmds = res.commands != null ? res.commands : 0;
+    if (res.commands == null) res.segments.forEach(function (sg) { walk(sg.children, function (nd) { if (nd.canonical) cmds++; }); });
     $("stat").textContent = src.trim()
       ? t("stat", res.segments.length, cmds, lastXml.split("\n").length)
       : "";

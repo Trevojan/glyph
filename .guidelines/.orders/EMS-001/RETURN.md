@@ -12,18 +12,16 @@
 | environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed; the local session of 2026-09-26: Windows 11, node v22.17.1, cargo 1.88.0, and Edge as the Chromium the drivers ask for |
 | ground | read in the order the handoff names; `npm run check` (33 buckets, 41 s) and `npm run check:rust` (20 crates, 3 s) green on the clone at `ea8fc59`, before anything was touched |
 | layout | **closed** — its val holds (below), five banks |
-| queue | ORD-0001 to ORD-0010 closed; ORD-0011 open: 106 of the 114 sources proven in the cloud, and the eight L-cases driven locally, five equal in every panel and three unequal on the status line alone (question 15). First on the plan: the virtual paths, by the Regent's word. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
+| queue | ORD-0001 to ORD-0010 closed; ORD-0011 open: the 114 sources give the same bytes through Rust in every panel, driven locally on 2026-09-26. First on the plan: the virtual paths, by the Regent's word. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
 
 ## Waiting for the Regent
 
-1. **The tag `conformance-v0` is not on the remote.** The branch pushes; the
-   push of the tag came back `HTTP 403` from the session's git proxy, a policy
-   refusal, so it was not retried. The tag lives only in this session's clone,
-   on `030ed76`. From any clone:
+1. **The tag `conformance-v0` is on `030ed76` in the local clone, and not
+   on the remote.** The cloud session's push of the tag came back `HTTP 403`
+   from its git proxy; on 2026-09-26 the Regent had it created locally, and
+   keeps the push:
 
    ```bash
-   git fetch origin claude/laughing-archimedes-3pf0wa
-   git tag -a conformance-v0 030ed76 -m "ORD-0001 da EMS-001: o oráculo congelado — 114 arquivos, sha256 c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828"
    git push origin conformance-v0
    ```
 
@@ -159,6 +157,10 @@ Closed questions, none answered.
       `protocol.json` is written again by decision
     - c. the status line under the relay is pinned as a known loss, by name,
       and ORD-0011's val names the exception
+
+    Answered by the Regent on 2026-09-26: **b**, and the status line of
+    `glyph-ui.js` reads the count the parse result carries, walking the tree
+    when it carries none.
 
 ## ORDs closed
 
@@ -533,14 +535,15 @@ state. What the ADR leaves open is asked above: how the synchronous `run()`
 meets an HTTP answer (question 9), and how many requests a keystroke costs
 (question 10).
 
-**The eight L-cases, driven locally on 2026-09-26.** `app_on_rust.mjs`,
-with `ONLY=^L-` and Edge as the Chromium, types the eight sources into the
-page twice in 19.9 s, the JS path in 3.8 s. L-04 to L-08 give the same bytes
-in every panel; L-01, L-02 and L-03 give the same XML, AST, burn and gaps,
-and a different status line: the relay counts 200 commands where the JS
-counts 8 000, 2 000 and 400 (question 15). The JS path equals the core in
-node on all eight. The driver found `glyph-engine` without the `.exe` a
-Windows build writes, and reads the platform's name as `serve-dev.js` does.
+**The 114 sources, driven locally on 2026-09-26.** `app_on_rust.mjs`, with
+Edge as the Chromium, types the 114 sources into the page twice in 21.3 s,
+the JS path in 3.7 s: every panel holds the same bytes through Rust as
+through JS, and the JS path equals the core in node. The status line is
+among them because `parse` answers the tree's count of commands beside the
+envelope (question 15): the envelope stops at `LIMITS.astDepth`, and a tree
+rebuilt from it counted 200 commands on L-01, L-02 and L-03, where the JS
+counts 8 000, 2 000 and 400. The driver reads the platform's `.exe`, as
+`serve-dev.js` does.
 
 ## ORD-0009, how it was read
 
@@ -1173,4 +1176,5 @@ crates' tests arrived.
 | 46 | `4935593` | ORD-0010 closes; ORD-0011 emitted and open; the virtual paths first on the plan | 00:29 | green, both checks; the independent verifier of `glyph-protocol` was stopped before its report, to keep the budget — the 6 328 requests are the only proof |
 | 47 | `25cc924` | ORD-0011 work 1 — `glyph-transport.js` behind `engine=relay`; `session:false` in the protocol; `app_on_rust.mjs` drives the page in Chrome: 106 of 114 sources the same bytes in every panel through Rust, the JS path equal to the core; the eight L-cases not yet driven, so ORD-0011 stays open | 01:10 | green, both checks; the AST panel first differed on `source`, which `serializeAST` writes null |
 | 48 | `86db5c1` | the handoff for the local machine, `HANDOFF-2026-09-26.pgml`: prove the eight L-cases, close ORD-0011, then ORD-0012 | 11:49 | green, `npm run check` |
-| 49 | this commit | ORD-0011 work 2 — the eight L-cases driven locally, through Edge on Windows: five equal in every panel, three unequal on the status line alone (question 15); `app_on_rust.mjs` finds `glyph-engine.exe` | 12:04 | green, `check` and `check:rust`; the driver stopped on a missing `glyph-engine` until it read the platform's `.exe` |
+| 49 | `83326af` | ORD-0011 work 2 — the eight L-cases driven locally, through Edge on Windows: five equal in every panel, three unequal on the status line alone (question 15); `app_on_rust.mjs` finds `glyph-engine.exe` | 12:04 | green, `check` and `check:rust`; the driver stopped on a missing `glyph-engine` until it read the platform's `.exe` |
+| 50 | this commit | ORD-0011 work 3 — `parse` answers the tree's count of commands, in `glyph-protocol.js` and then in the Rust; the transport carries it and the status line reads it (question 15, b); the 114 sources the same bytes in every panel | 12:23 | red first: RL-15 answered `undefined` for 260 commands, then the Rust against `protocol.json`, then the L-cases on a stale release binary; green, `check` and `check:rust` |

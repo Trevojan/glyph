@@ -13,6 +13,14 @@
 
 ---
 
+## 2026-09-26
+
+| decisão | razão |
+|---|---|
+| **Pela ponte, `parse` responde a contagem de comandos da árvore** ao lado do envelope — no `glyph-protocol.js` primeiro, depois no Rust | respondido no questionário de 2026-09-26: *"b. protocol answers count"* (pergunta 15 do [retorno](../.orders/EMS-001/RETURN.md)). O envelope para em `LIMITS.astDepth`, e a árvore que a ponte reconstrói dele para junto: a linha de status contava 200 comandos onde o JS conta 8 000, 2 000 e 400. `protocol.json` é escrito de novo por esta decisão |
+| **A linha de status do `glyph-ui.js` lê a contagem que o resultado do `parse` traz**, e percorre a árvore quando ele não traz nenhuma | respondido no mesmo questionário: *"One line in glyph-ui.js"*. É a leitura assinada do alvo da `ORD-0011`, *"glyph-ui.js changes only at its transport"*: o caminho JS não traz contagem e continua byte a byte igual. A outra via, nós de enchimento na árvore reconstruída, poria nela o que a fonte nunca teve |
+| **A tag `conformance-v0` é criada no clone local**, e o push fica com o Regente | respondido no mesmo questionário: *"Create it, don't push"*. O proxy da sessão na nuvem recusou o push da tag |
+
 ## 2026-09-25
 
 | decisão | razão |
