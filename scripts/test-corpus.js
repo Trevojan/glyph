@@ -3499,6 +3499,82 @@ if (EXPORT_ORACLE) {
    "{\"call\":\"classify\",\"name\":\"toString\"}"].forEach(ask);
   fsx.writeFileSync(path.join(mods, "protocol.json"), JSON.stringify({ engine: G.VERSION, lines: lines }, null, 1) + "\n");
   console.log("  ! protocol written: " + lines.length + " requests to " + path.join(mods, "protocol.json"));
+
+  /* glyph-cli.js (EMS-001 ORD-0012): what the command line answers, run in
+     this process over a folder of its own — argv, the working directory and
+     SOURCE_DATE_EPOCH set, console and exit caught. A case is a folder and
+     the runs made in it, in order; each run keeps stdout, stderr and the exit
+     code, and the case keeps every file the folder holds at its end. Where
+     stderr carries a message the filesystem wrote, `loose` says so: the port
+     answers the same exit and stdout, in its own words there. */
+  const CLI = await import("./glyph-cli.js");
+  const util = require("util"), os = require("os");
+  const root = fsx.mkdtempSync(path.join(os.tmpdir(), "glyph-cli-oracle-"));
+  const here = process.cwd(), keep = { argv: process.argv, exit: process.exit, log: console.log, error: console.error };
+  const EXIT = {};
+  const run1 = (args, env) => {
+    const out = [], err = [];
+    let exit = 0, thrown = null;
+    process.argv = [keep.argv[0], "glyph-cli.js"].concat(args);
+    console.log = (...a) => out.push(util.format(...a) + "\n");
+    console.error = (...a) => err.push(util.format(...a) + "\n");
+    process.exit = code => { exit = code; throw EXIT; };
+    const had = process.env.SOURCE_DATE_EPOCH;
+    if (env && env.SOURCE_DATE_EPOCH) process.env.SOURCE_DATE_EPOCH = env.SOURCE_DATE_EPOCH;
+    else delete process.env.SOURCE_DATE_EPOCH;
+    try { CLI.main(); }
+    catch (e) { if (e !== EXIT) { exit = 1; thrown = String(e && e.message); } }
+    finally {
+      Object.assign(console, { log: keep.log, error: keep.error });
+      process.argv = keep.argv; process.exit = keep.exit;
+      if (had === undefined) delete process.env.SOURCE_DATE_EPOCH; else process.env.SOURCE_DATE_EPOCH = had;
+    }
+    return { args: args, env: env || {}, stdout: out.join(""), stderr: err.join(""), exit: exit, thrown: thrown };
+  };
+  const tree = (dir, rel) => fsx.readdirSync(dir, { withFileTypes: true }).sort((a, b) => a.name < b.name ? -1 : 1)
+    .flatMap(e => e.isDirectory() ? [{ path: rel + e.name + "/", dir: true }].concat(tree(path.join(dir, e.name), rel + e.name + "/"))
+      : [{ path: rel + e.name, b64: fsx.readFileSync(path.join(dir, e.name)).toString("base64") }]);
+  const cases = [];
+  const kase = (fixture, runs, loose) => {
+    const dir = path.join(root, String(cases.length));
+    fsx.mkdirSync(dir);
+    (fixture.dirs || []).forEach(d => fsx.mkdirSync(path.join(dir, d), { recursive: true }));
+    Object.keys(fixture.files || {}).forEach(f => fsx.writeFileSync(path.join(dir, f), fixture.files[f]));
+    process.chdir(dir);
+    try { cases.push({ fixture: fixture, loose: !!loose, runs: runs.map(r => run1(r.args || r, r.env)), after: tree(dir, "") }); }
+    finally { process.chdir(here); }
+  };
+  /* every declared source, through --file, in every mode that reads one */
+  fsx.readdirSync(dir).filter(f => f.endsWith(".json")).sort().forEach(f => {
+    const src = JSON.parse(fsx.readFileSync(path.join(dir, f), "utf8")).src;
+    kase({ files: { "src.pgml": src, "src.xml": G.toXML(src) } }, [["--file", "src.pgml"], ["--file", "src.pgml", "--ast"],
+      ["--file", "src.pgml", "--diag"], ["--file", "src.pgml", "--hgml"], ["--file", "src.xml", "--from-xml"]]);
+  });
+  /* every name of the composition table, and names it does not hold */
+  const EXP = require("../.guidelines/expansions.json");
+  kase({}, Object.keys(EXP.commands || EXP).concat(["zzz", "crit", "[crit']", " ctx "]).map(n => [n, "--expand"]));
+  /* the source on argv, the forms of --file, the refusals */
+  kase({ files: { "x.pgml": "[nt'on disk']", "bom.pgml": "﻿[crit'x']", "src.pgml": "[crit'the parser']" } }, [
+    ["[crit'x']"], ["[crit'x']", "--ast"], ["[nt'a']", "[nt'b']", "--xml"], ["--diag", "[mand'x'][opt'x']"],
+    ["--hgml", "[crit[ctx]]"], ["[crit'x']", "--foo"], ["--from-xml", G.toXML("[crit'x']")],
+    [], ["--file"], ["--file="], ["--file", "src.pgml", "[crit]"], ["x.pgml"], ["y.pgml"], ["dir/z.md"],
+    ["--file", "bom.pgml"], ["-f", "src.pgml", "--diag"], ["--file=src.pgml", "--hgml"], ["--xml", "--ast", "[crit'x']"]]);
+  kase({}, [["--file", "missing.pgml"]], true);
+  /* --bundle, with the moment fixed; flat, then a series */
+  const E = { SOURCE_DATE_EPOCH: String(Date.UTC(2026, 8, 26, 1, 30, 0) / 1000) };
+  const b = (args, env) => ({ args: args, env: env === undefined ? E : env });
+  kase({ files: { "src.pgml": "[in[tgt`acentuação e c-cedilha: fichação`]]", "ORD-2026-08-30-01.pgml": "[nt'datada']" } },
+    [b(["--file", "src.pgml", "--bundle"]), b(["--file", "src.pgml", "--bundle", "--out", "."]),
+     b(["[mand'x'][opt'x']", "--bundle"]), b(["--bundle", "--out", "./", "--file", "src.pgml"])]);
+  kase({ dirs: ["out", "EMS-001/ORD-2026-08-30-01", "EMS-002"],
+         files: { "src.pgml": "[crit'the parser'][logic-risk[x = 2][/logic]", "EMS-001/EMS-001.pgml": "[nt'a spec']", "EMS-001/ORD-0007.pgml": "[nt'draft']" } },
+    [b(["--file", "src.pgml", "--bundle", "--out", "EMS-001"]), b(["--file", "src.pgml", "--bundle", "--out", "EMS-001/"]),
+     b(["--file", "src.pgml", "--bundle", "--out", "EMS-002"]), b(["[crit'x']", "--bundle", "--out", "out"]),
+     b(["--file", "src.pgml", "--bundle", "--out", "out/../EMS-001"])]);
+  kase({ files: { "src.pgml": "[crit'x']" } }, [b(["--file", "src.pgml", "--bundle", "--out", "nowhere"])], true);
+  fsx.rmSync(root, { recursive: true, force: true });
+  fsx.writeFileSync(path.join(mods, "cli.json"), JSON.stringify({ engine: G.VERSION, cases: cases }, null, 1) + "\n");
+  console.log("  ! command line written: " + cases.reduce((n, c) => n + c.runs.length, 0) + " runs in " + cases.length + " folders to " + path.join(mods, "cli.json"));
 }
 
 if (failures.length) {
