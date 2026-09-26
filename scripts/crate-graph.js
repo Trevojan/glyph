@@ -61,8 +61,9 @@ const TOOLS = {
   "glyph-diff":   { oracle: "scripts/glyph-diff.js",  tools: [] },
   "glyph-trace":  { oracle: "scripts/glyph-trace.js", tools: [] },
   "glyph-bundle": { oracle: "scripts/glyph-zip.js + glyph-cli.js --bundle", tools: [] },
+  "glyph-protocol": { oracle: "scripts/glyph-protocol.js", tools: [] },
   "glyph-cli":    { oracle: "scripts/glyph-cli.js",
-                    tools: ["glyph-schema", "glyph-diff", "glyph-trace", "glyph-bundle"] },
+                    tools: ["glyph-schema", "glyph-diff", "glyph-trace", "glyph-bundle", "glyph-protocol"] },
   "glyph-wasm":   { oracle: "glyph-engine-alias.html + glyph-ui.js, on the corpus",
                     tools: ["glyph-trace", "glyph-bundle"] },
   "glyph-lsp":    { oracle: "— (new capability; M12–M15)", tools: ["glyph-trace"] }

@@ -25,6 +25,7 @@ dependencies = [
  "glyph-envelope",
  "glyph-inverse",
  "glyph-parse",
+ "glyph-protocol",
  "glyph-stores",
  "glyph-util",
  "glyph-version",
@@ -103,6 +104,22 @@ dependencies = [
  "glyph-templates",
  "glyph-util",
  "glyph-vocab",
+]
+
+[[package]]
+name = "glyph-protocol"
+version = "0.0.0"
+dependencies = [
+ "glyph-burn",
+ "glyph-envelope",
+ "glyph-inverse",
+ "glyph-lex",
+ "glyph-logic",
+ "glyph-parse",
+ "glyph-stores",
+ "glyph-util",
+ "glyph-vocab",
+ "glyph-xml",
 ]
 
 [[package]]
