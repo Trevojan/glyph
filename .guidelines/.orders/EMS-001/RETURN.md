@@ -12,7 +12,7 @@
 | environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed; the local session of 2026-09-26: Windows 11, node v22.17.1, cargo 1.88.0, and Edge as the Chromium the drivers ask for |
 | ground | read in the order the handoff names; `npm run check` (33 buckets, 41 s) and `npm run check:rust` (20 crates, 3 s) green on the clone at `ea8fc59`, before anything was touched |
 | layout | **closed** — its val holds (below), five banks |
-| queue | ORD-0001 to ORD-0010 closed; ORD-0011 open: the 114 sources give the same bytes through Rust in every panel, driven locally on 2026-09-26. First on the plan: the virtual paths, by the Regent's word. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
+| queue | ORD-0001 to ORD-0011 closed; ORD-0011 at `cf3bb31`, driven locally on 2026-09-26. ORD-0012 opens next. First on the plan: the virtual paths, by the Regent's word. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
 
 ## Waiting for the Regent
 
@@ -176,6 +176,7 @@ Closed questions, none answered.
 | [`ORD-0008`](ORD-0008/ORD-0008.xml) | `glyph-xml` and the first binary: `glyph` reads Glyph on stdin and writes the XML; the five examples byte-exact and the 114 sources as the oracle; `toXML` on 312 runs, plain and described | `97ea472` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828`, the case files; `cfab5a595c70e3458995474b1a01cdb08857e6a902bd5d331b6eaa99f3b02c63`, `oracle-modules/xml.json` |
 | [`ORD-0009`](ORD-0009/ORD-0009.xml) | `glyph-envelope`, `glyph-burn` and `glyph-inverse`: the `ast` and `hgml` digests of the 114 sources equal `corpus-snapshot.json`, and every round trip the JS suite runs closes, step for step — 510 calls recorded as it runs | `9c943d3` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828`, the case files; `8f6519986e2c843458abb255874e49bd696bf0a42db9a82ac5ebc6a3397fb560`, `ast.json`; `05717e791bf4805b7cfb1f507d934efbbf0e735fbe567f4cd9ecfd26e1ba9af2`, `hgml.json`; `3ae341cc376024ffa224308c83c53b3f052b2e13c490c4cfed0aa1e140adc326`, `inverse.json` |
 | [`ORD-0010`](ORD-0010/ORD-0010.xml) | the protocol: ADR B, signed by the Regent; `glyph-protocol.js` and the binary `glyph-engine` answer the twelve calls `glyph-ui.js` makes, 6 328 requests byte for byte, and `serve-dev.js` relays `POST /engine` | `7eab706` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828`, the case files; `6cbc1de1aed107a7017b12587355ead8cf41869a3e95260c5141ed7bbf7f9042`, `protocol.json` |
+| [`ORD-0011`](ORD-0011/ORD-0011.xml) | the app on the Rust engine: behind `engine=relay`, `glyph-transport.js` swaps the twelve calls, and the 114 sources give the same bytes in every panel through Rust and through JS; `parse` answers the count of commands beside the envelope (question 15) | `cf3bb31` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828` (the cases) and `e95a54e563f6424c6dc93d51be781fb2c744e32f28de5e38b3dab586624b1e78`, `oracle-modules/protocol.json`, 6 634 requests — on Windows, `sha256sum -t`, since Git Bash's binary marker changes the listing |
 
 **ORD-0001, the proof**, run at `02c92ee` (the commit that emitted it; the
 closing commit changes no code):
@@ -404,7 +405,7 @@ c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828  -
 
 ## Open, and why
 
-**ORD-0011, the app on the Rust engine**, open since the commit that carries
+**ORD-0011, the app on the Rust engine**, closed at `cf3bb31`; opened by the commit that carries
 this line. Its source carries the readings it is built on: ADR B's relay, a
 transport of the same shape as `GlyphCore`, a synchronous request (question
 9), the tree rebuilt from the full envelope, the repository's stores
@@ -1177,4 +1178,5 @@ crates' tests arrived.
 | 47 | `25cc924` | ORD-0011 work 1 — `glyph-transport.js` behind `engine=relay`; `session:false` in the protocol; `app_on_rust.mjs` drives the page in Chrome: 106 of 114 sources the same bytes in every panel through Rust, the JS path equal to the core; the eight L-cases not yet driven, so ORD-0011 stays open | 01:10 | green, both checks; the AST panel first differed on `source`, which `serializeAST` writes null |
 | 48 | `86db5c1` | the handoff for the local machine, `HANDOFF-2026-09-26.pgml`: prove the eight L-cases, close ORD-0011, then ORD-0012 | 11:49 | green, `npm run check` |
 | 49 | `83326af` | ORD-0011 work 2 — the eight L-cases driven locally, through Edge on Windows: five equal in every panel, three unequal on the status line alone (question 15); `app_on_rust.mjs` finds `glyph-engine.exe` | 12:04 | green, `check` and `check:rust`; the driver stopped on a missing `glyph-engine` until it read the platform's `.exe` |
-| 50 | this commit | ORD-0011 work 3 — `parse` answers the tree's count of commands, in `glyph-protocol.js` and then in the Rust; the transport carries it and the status line reads it (question 15, b); the 114 sources the same bytes in every panel | 12:23 | red first: RL-15 answered `undefined` for 260 commands, then the Rust against `protocol.json`, then the L-cases on a stale release binary; green, `check` and `check:rust` |
+| 50 | `cf3bb31` | ORD-0011 work 3 — `parse` answers the tree's count of commands, in `glyph-protocol.js` and then in the Rust; the transport carries it and the status line reads it (question 15, b); the 114 sources the same bytes in every panel | 12:23 | red first: RL-15 answered `undefined` for 260 commands, then the Rust against `protocol.json`, then the L-cases on a stale release binary; green, `check` and `check:rust` |
+| 51 | this commit | ORD-0011 closes | 12:26 | green, `check` and `check:rust`; the case digest first read `64b34d0f…` through Git Bash's `sha256sum`, whose `*` marks every line binary, and `c00119e0…` with `-t` |

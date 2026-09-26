@@ -8,8 +8,6 @@ com o pacote que o `--bundle` escreve, e a contagem é desta série.
 
 ## A Ordem aberta
 
-- [`EMS-001/ORD-0011`](ORD-0011/ORD-0011.xml) — o app no motor Rust, atrás de uma chave; aberta em 2026-09-26, com as diretrizes da leitura na própria Ordem
-
 ## Ordens fechadas
 
 | ORD | o que entregou | commit | digest |
@@ -24,3 +22,4 @@ com o pacote que o `--bundle` escreve, e a contagem é desta série.
 | [`ORD-0008`](ORD-0008/ORD-0008.xml) | `glyph-xml` e o primeiro binário: `glyph` lê Glyph no stdin e escreve o XML; os cinco exemplos de `conformance/examples.json` byte a byte, e as 114 fontes iguais ao oráculo | `97ea472` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828` (os casos) e `cfab5a595c70e3458995474b1a01cdb08857e6a902bd5d331b6eaa99f3b02c63` (`xml.json`) |
 | [`ORD-0009`](ORD-0009/ORD-0009.xml) | `glyph-envelope`, `glyph-burn` e `glyph-inverse`: os digests de ast e hgml das 114 fontes iguais ao `corpus-snapshot.json`, e toda volta que a suíte JS faz, passo a passo — 510 chamadas gravadas enquanto ela roda | `9c943d3` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828` (os casos), `8f6519986e2c843458abb255874e49bd696bf0a42db9a82ac5ebc6a3397fb560` (`ast.json`), `05717e791bf4805b7cfb1f507d934efbbf0e735fbe567f4cd9ecfd26e1ba9af2` (`hgml.json`) e `3ae341cc376024ffa224308c83c53b3f052b2e13c490c4cfed0aa1e140adc326` (`inverse.json`) |
 | [`ORD-0010`](ORD-0010/ORD-0010.xml) | o protocolo: o ADR B assinado pelo Regente; `glyph-protocol.js` e o binário `glyph-engine` respondem as doze chamadas do `glyph-ui.js`, e o `serve-dev.js` repassa `POST /engine` | `7eab706` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828` (os casos) e `6cbc1de1aed107a7017b12587355ead8cf41869a3e95260c5141ed7bbf7f9042` (`protocol.json`, 6 328 requisições) |
+| [`ORD-0011`](ORD-0011/ORD-0011.xml) | o app no motor Rust, atrás de `engine=relay`: `glyph-transport.js` troca as doze chamadas, e as 114 fontes dão os mesmos bytes em todo painel pelo Rust e pelo JS; `parse` responde a contagem de comandos ao lado do envelope | `cf3bb31` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828` (os casos) e `e95a54e563f6424c6dc93d51be781fb2c744e32f28de5e38b3dab586624b1e78` (`protocol.json`, 6 634 requisições) |
