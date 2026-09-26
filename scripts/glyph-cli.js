@@ -129,13 +129,18 @@ export function main() {
     }
     var gaps = G.parse(input).gaps || [];
     var refused = gaps.filter(function (g) { return g.sev === "fix"; });
+    /* o momento da emissao: o de SOURCE_DATE_EPOCH, a convencao dos builds
+       reprodutiveis, quando ha um; senao, agora. O manifesto e o zip levam o
+       mesmo, e o mesmo momento da os mesmos bytes (pergunta 16 da EMS-001) */
+    var epoch = process.env.SOURCE_DATE_EPOCH;
+    var when = /^\d+$/.test(epoch || "") ? new Date(Number(epoch) * 1000) : new Date();
     var five = [
       { name: id + ".pgml", text: input },
       { name: id + ".xml",  text: xml },
       { name: id + ".json", text: ast },
       { name: id + ".hgml", text: hgml },
       { name: id + ".manifest.json", text: JSON.stringify({
-          order: id, engine: G.VERSION, emitted: new Date().toISOString(),
+          order: id, engine: G.VERSION, emitted: when.toISOString(),
           files: [id + ".pgml", id + ".xml", id + ".json", id + ".hgml"],
           source: file || null,
           diagnostics: { fix: refused.length, total: gaps.length }
@@ -160,7 +165,7 @@ export function main() {
       }
       console.log(dest + path.sep + "  (" + bytes + " bytes, 5 arquivos)");
     } else {
-      var zip = zipStore(five);
+      var zip = zipStore(five, when);
       var dest = path.join(dir, id + ".zip");
       fs.writeFileSync(dest, zip);
       console.log(dest + "  (" + zip.length + " bytes, 5 arquivos)");

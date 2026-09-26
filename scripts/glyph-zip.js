@@ -42,13 +42,14 @@ function utf8(str) {
   return new Uint8Array(Buffer.from(String(str), "utf8"));
 }
 
-/* Data e hora no formato do MS-DOS, que é o que o ZIP guarda. Segundos têm
-   resolução de dois, por isso o >>> 1. */
+/* Data e hora no formato do MS-DOS, que é o que o ZIP guarda, em UTC: o mesmo
+   momento dá os mesmos bytes em qualquer fuso, e em qualquer motor (pergunta
+   16 da EMS-001). Segundos têm resolução de dois, por isso o / 2. */
 function dosTime(d) {
-  return ((d.getHours() & 31) << 11) | ((d.getMinutes() & 63) << 5) | ((d.getSeconds() / 2) & 31);
+  return ((d.getUTCHours() & 31) << 11) | ((d.getUTCMinutes() & 63) << 5) | ((d.getUTCSeconds() / 2) & 31);
 }
 function dosDate(d) {
-  return (((d.getFullYear() - 1980) & 127) << 9) | (((d.getMonth() + 1) & 15) << 5) | (d.getDate() & 31);
+  return (((d.getUTCFullYear() - 1980) & 127) << 9) | (((d.getUTCMonth() + 1) & 15) << 5) | (d.getUTCDate() & 31);
 }
 
 function w16(a, o, v) { a[o] = v & 0xFF; a[o + 1] = (v >>> 8) & 0xFF; }
