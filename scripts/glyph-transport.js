@@ -10,7 +10,9 @@
  *
  * `run()` is synchronous, so each call is a synchronous request. `parse`
  * cannot receive the live tree: it answers the full envelope, and the
- * segments are rebuilt from it with the fields the page reads; the source
+ * segments are rebuilt from it with the fields the page reads, and the count
+ * of commands travels beside them, since the envelope stops at
+ * LIMITS.astDepth and the tree it rebuilds stops there too; the source
  * they came from is remembered, so `buildXml` and `serializeAST` ask `toXML`
  * and `toAST` of that source. The engine answers with the repository's
  * stores, so templates a page merges stay on the JS path.
@@ -66,7 +68,7 @@ export function relayCore() {
         return { ...s, children: (sg.body || []).map(node) };
       });
       from.set(segments, { src: src, o: { lang: lang(o), ...session(o) } });
-      return { segments: segments, gaps: r.gaps, tokens: Array.isArray(input) ? input : [] };
+      return { segments: segments, gaps: r.gaps, tokens: Array.isArray(input) ? input : [], commands: r.commands };
     },
     buildXml: (segments, o) => ask({ call: "toXML", src: (from.get(segments) || { src: "" }).src,
                                      describe: !!(o && o.describe === true) }),

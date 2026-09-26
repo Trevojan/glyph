@@ -237,12 +237,26 @@ fn run(req: &Json) -> Result<Json, String> {
             let ast = to_ast(&src, &ast_opts, &AstOpts::default())
                 .map_err(|Thrown(e)| e)?;
             let parse_result = parse(&src, &opts).map_err(|Thrown(e)| e)?;
+            // the envelope stops at LIMITS.ast_depth; the count of the tree's
+            // commands does not, as the page's status line counts them
+            let tree = &parse_result.tree;
+            let commands: usize = tree
+                .segments
+                .iter()
+                .map(|sg| {
+                    tree.walk(&sg.children)
+                        .into_iter()
+                        .filter(|&id| tree.nodes[id].canonical.as_deref().map_or(false, |c| !c.is_empty()))
+                        .count()
+                })
+                .sum();
             Ok(Json::Obj(vec![
                 ("ast".into(), ast),
                 (
                     "gaps".into(),
                     Json::Arr(parse_result.gaps.iter().map(gap_json).collect()),
                 ),
+                ("commands".into(), Json::Num(commands as f64)),
             ]))
         }
         "toXML" => {
