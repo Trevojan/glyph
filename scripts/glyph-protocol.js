@@ -25,7 +25,8 @@
  *   {"call":"toHGML","src":S}
  *   {"call":"fromXML","xml":X}
  *
- * Any request may carry "lang": "pt" or "en". A field that is not a string
+ * Any request may carry "lang": "pt" or "en", and "session": false, which the
+ * page's template bodies parse with. A field that is not a string
  * reads as "". The answer is {"ok": value}, or {"thrown": message} where the
  * engine throws; a line that is not a JSON object answers
  * {"thrown":"bad request"}, and an unknown call {"thrown":"no such call"}.
@@ -51,6 +52,7 @@ const BAD = JSON.stringify({ thrown: "bad request" });
 function run(q) {
   const o = { templates: STORES.templates, rules: STORES.rules, expansions: STORES.expansions };
   if (q.lang === "pt" || q.lang === "en") o.lang = q.lang;
+  if (q.session === false) o.session = false;
   const str = k => (typeof q[k] === "string" ? q[k] : "");
   switch (q.call) {
     case "tokenize":   return G.tokenize(str("src"));
