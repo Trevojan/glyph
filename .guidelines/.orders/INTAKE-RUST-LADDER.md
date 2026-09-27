@@ -111,13 +111,12 @@ Recorded with his words in [`.decisions/`](../.decisions/README.md) under
 2026-09-24; the ADR norm is also a row of [`.constraints/`](../.constraints/README.md)
 and is task M04.T04 verbatim.
 
+Settled by the Regent, in [`.decisions/`](../.decisions/README.md): O1 and O2 on 2026-09-27 — Glyph ends 100% in Rust, the app and the skill included, the JS retiring piece by piece, and no lockstep; O3 on 2026-09-27 — the Harness reads what is doable from the EMS configuration inside each ORD's `<glyph-package>` ([`INTAKE-PIN-TRAFFIC.md`](INTAKE-PIN-TRAFFIC.md) §4); O6 on 2026-09-24.
+
 Open, for the Regent:
 
 | id | question | why it is his |
 |---|---|---|
-| O1 | **"the skill keeps the JS" and the draft's JS retirement cannot both hold.** The revision keeps the JS as reference, skill payload and app core, and runs both engines in lockstep (M11d): every change to the language lands twice, checked by the differential test. The alternative — a skill that ships `.wasm` under Node — would redefine the skill | scope |
-| O2 | the browser app: stays on JS with WASM beside it (M11b's switch), or moves to WASM once M11b passes | the MVP |
-| O3 | M18 bridges to `call-team`, a skill of the Orbital team system — a second product's contract inside Glyph's ladder | scope; *"se algum for de outro produto, levante"* |
 | O4 | the three measured defects of `.plan` §3 — fix in JS before the port, or pin as behaviour the port reproduces | the deliverable |
 | O5 | the snapshot honouring a case's own `opts` (X10) | moves hashes |
 | O7 | the depth threshold of §9.2 — the numbers `crate-graph.js` would enforce | the dependency norm |
