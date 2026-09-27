@@ -168,6 +168,12 @@ Regente chamar, o JS primeiro onde o oráculo muda:
   da cerca `[logic]`, dispara `<needs var>`;
 - **o alarme de inferência profunda**: composto de profundidade 5 ou mais sem
   operando pergunta (`ask`);
+- **dois diagnósticos para um comando sem efeito**: *não trabalha* (`note`), um
+  comando conhecido sem efeito na posição em que está; *não sabe* (`fix`), fora
+  do vocabulário;
+- **as duas propostas do rascunho do XML**: `[pt'1.1'` → `<part n="1.1">` e
+  `[if'cond'` → `<if cond="…">`, pelo `PACKAGE_TARGET.md`, com o `fromXML` no
+  mesmo passo;
 - **o blend `REV` + `DIST` só no mesmo alvo**: o `sameTarget` passa a conferir o
   alvo, e alvos diferentes queimam como dois comandos;
 - **os três defeitos antigos do §3, só no Rust** (O4): o Rust responde certo, e o
@@ -190,8 +196,6 @@ As perguntas escritas com opções medidas estão em
 | **estudo de setembro** | oito intakes em [`.orders/`](../.orders/): [`INTAKE-VIRTUAL-PATH`](../.orders/INTAKE-VIRTUAL-PATH.md) (mini-repo, medido: o custo de round-trip é o tamanho de `glyph-parser.js`), [`INTAKE-ORDER-COHERENCE`](../.orders/INTAKE-ORDER-COHERENCE.md) (`relates[]`, B antes de A), [`INTAKE-BURN-INVARIANCE`](../.orders/INTAKE-BURN-INVARIANCE.md) (fechado), [`INTAKE-FORMAL-ANALYSIS`](../.orders/INTAKE-FORMAL-ANALYSIS.md), [`INTAKE-PARSER-SPLIT`](../.orders/INTAKE-PARSER-SPLIT.md) (o corte, feito: treze módulos), [`INTAKE-RUST`](../.orders/INTAKE-RUST.md) (steelman e defeater; o Regente decidiu migrar), [`INTAKE-RUST-LADDER`](../.orders/INTAKE-RUST-LADDER.md) (a escada auditada; §8 guarda o que espera, O4, O5 e O7 a O10), [`INTAKE-FIELD-2026-09`](../.orders/INTAKE-FIELD-2026-09.md) (o kit de cliente; `H-09` fechou por ele). |
 | **EMS-001** | a execução assíncrona que a seção `queue` da spec propõe: medida, economiza no máximo 4 de 14 turnos e esbarra em três restrições; a série fecha como está escrita, e com o tráfego da [`EMS.json`](../.orders/INTAKE-PIN-TRAFFIC.md) a pergunta passa à EMS-002. As perguntas do [retorno](../.orders/EMS-001/RETURN.md) têm todas resposta |
 | **Q14** | o Regente autora o sexto exemplo de conformidade. Base verificada em [`conformance/README.md`](../../conformance/README.md) |
-| filtro / `blend` | `blend` em `rules.json` é o precedente implementado; falta decidir *não-trabalha* contra *não-sabe* |
-| duas propostas do rascunho do XML | `[pt'1.1'` → `<part n="1.1">` e `[if'cond'` → `<if cond="…">`, em vez de pôr o valor em `<user-input>`. As duas são **melhores** que o que o motor faz; as duas mudam o entregável e exigem `fromXML()` no mesmo passo. Registro em [`.history/XML_REFERENCE_DRAFT.md`](../.history/XML_REFERENCE_DRAFT.md) |
 
 ## Adiado por decisão, não por esquecimento
 

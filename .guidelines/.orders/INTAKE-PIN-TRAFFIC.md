@@ -9,14 +9,20 @@
 
 A PIN marks a line to **inject a snippet into the output**. It gives the user a
 *try-catch* or a *switch-case* in the editor itself, without calling up a
-template: a structural command under a user-oriented condition, written as
-`[pin-if`reason`(...)]`.
+template: a structural command under a user-oriented condition. Three forms:
+
+- `[pin-if`reason` …]` — the first parameter is the **alias of the validation**,
+  and the validation itself runs inside the `pin-if`; the commands that follow
+  are its body;
+- `[pin-else …]` — after a `pin-if`, what holds when it does not;
+- `[pin-case`value` …]` — in a list, one per case, as a switch.
 
 - **Fallback.** When a block fails in its definition, the Harness follows to
   the next block, as the last PIN writes it.
 - **Selection by property.** A PIN calls the property of a parameter declared
-  inside another command, the way a CSS selector applies to every matching
-  element rather than to one class or id; the editor shows the match in a
+  inside another command by the command's **type**, the way a CSS selector
+  applies to every matching element; an element may carry an **optional id**
+  for when the type is not enough; the editor shows the match in a
   tooltip on hover.
 - **Shared through the EMS.** Pins travel with the series, so a loose ORD lacks
   the exception treatment an EMS gives for free, and is incomplete by nature.
@@ -29,13 +35,16 @@ mode) that never reached an Order's body: the PIN of today reaches the output.
 The reason the EMS exists: the conventions, rules and exceptions come out of
 the ORDs and into one file, the **EMS configuration**, so each ORD stays
 separate and the final user does not do the classifying. It is a file of its
-own, `EMS.json`, in JSON, beside the series' ORDs.
+own, `EMS.json`, in JSON, beside the series' ORDs. The spec `EMS-###.pgml`
+keeps the ORDs — the direction and one section per ORD, its `tgt` and `val`;
+`EMS.json` keeps the rules — conventions, exceptions, pins and traffic — and
+it is `EMS.json` that enters every ORD's `<glyph-package>`.
 
 - The user **starts an EMS or an ORD**. An EMS configured to create an ORD
   starts a blank ORD that inherits its destination; a **loose ORD** has a
   numbering of its own in **NEM** (*Not Emitted*), `.orders/NEM/`, one
   unnumbered folder beside the EMS folders, and can later be emitted into an EMS being drawn.
-- A **generic EMS** holds the common ground: its default `EMS.json` carries
+- A **generic EMS**, `EMS-000`, titled *Generic*, holds the common ground: its default `EMS.json` carries
   the commands and pins every Order may want, so an ORD emitted there gets the
   exception treatment a loose one lacks. The Order Matrices of
   `.scope/generics/` seed it.
@@ -58,7 +67,8 @@ structural error does, as `fix` has always meant.
 
 **Repair.** When data is corrupted or paths change, the files under an EMS are
 repaired from what `EMS.json` declares — the very paths each ORD reads and
-writes. It shows the diff and asks before it writes anything.
+writes. It may rewrite **everything traffic declares**, the source included, and
+it shows the diff and asks before it writes anything.
 
 ## 4. The EMS configuration, inside every ORD's package
 
@@ -72,12 +82,14 @@ Glyph's output — held inside Glyph's own format. It changes the deliverable, s
 it passes through [`PACKAGE_TARGET.md`](../PACKAGE_TARGET.md) and is measured
 against `conformance/`.
 
-## 5. Open, for the Regent
+## 5. Settled when built
+
+Each item opens as a measured proposal in the ORD that builds it, and that ORD
+stops at the Regent's gate until he signs it (2026-09-27).
 
 | | question |
 |---|---|
-| syntax | `[pin-if`reason`(...)]` — what the parentheses hold, and whether `pin-else` or a `case` form follows; `PIN` enters `expansions.txt` and `GLOSSARY.md` first, then the JS, then the Rust |
-| selection | the selector grammar a PIN matches parameters with, and whether elements need ids of their own |
-| `EMS.json` | its format, what stays in the spec `EMS-###.pgml`, and which of its fields enter the `<glyph-package>` |
-| the generic EMS | its name and first contents, from the Order Matrices of `.scope/generics/` |
-| repair | which files a repair may rewrite |
+| vocabulary | `PIN` and its three forms enter `expansions.txt` and `GLOSSARY.md` first, then the JS, then the Rust — the canonical names and the valency of each |
+| selection | the exact grammar of the type selector, and the spelling of the optional id |
+| `EMS.json` | its schema: the fields and their shapes |
+| the generic EMS | its first contents, from the Order Matrices of `.scope/generics/` |
