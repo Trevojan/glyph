@@ -1,0 +1,178 @@
+<glyph-package engine="3.5.8.06">
+  <schema/>
+  <block once="true">
+    <block binds="restructure-glyph-repo">
+      <user-input>restructure-glyph-repo</user-input>
+      <context>
+        <user-input>the Glyph repository, restructured to take the folder structure of _ORBITAL while keeping the organisation and depth of its .guidelines</user-input>
+        <user-input>C:/Users/Usuario/Documents/GitHub/glyph</user-input>
+        <user-input>engine 3.5.8.06, before the Rust port opens</user-input>
+      </context>
+      <skill imperative="true" binds="glyph-markup">
+        <user-input>glyph-markup</user-input>
+        <instruction>
+          <user-input>hear this order, ground before mapping, map before moving, and stop at the gate of the Regent</user-input>
+        </instruction>
+      </skill>
+      <section binds="species">
+        <user-input>species</user-input>
+        <define-symbol>
+          <user-input>axis</user-input>
+          <user-input>a .guidelines folder that answers one question of whoever resumes the work: sources, plan, decisions, constraints, changelog, shortcuts, orders</user-input>
+        </define-symbol>
+        <define-symbol>
+          <user-input>entry point</user-input>
+          <user-input>a file a reader opens first; it points and never copies</user-input>
+        </define-symbol>
+        <define-symbol>
+          <user-input ref="map">map</user-input>
+          <user-input>a table of current path, target path, reason, and every pointer the move breaks</user-input>
+        </define-symbol>
+        <define-symbol>
+          <user-input>intake</user-input>
+          <user-input>material that arrives while an order is open; it waits in .orders as INTAKE-*.md and never becomes a second order</user-input>
+        </define-symbol>
+        <define-symbol>
+          <user-input>ladder</user-input>
+          <user-input>.scope/corpus-ledger/plan/ladder.toml: modules, tasks and premises for Glyph, validated by scripts/ladder.py</user-input>
+        </define-symbol>
+        <note>
+          <user-input>the target is the folder structure of _ORBITAL, read from C:/Users/Usuario/Documents/GitHub/_ORBITAL/Docs/.guidelines, and not its .NET projects</user-input>
+        </note>
+        <do-not>
+          <user-input>invent a structure that neither repository already shows</user-input>
+        </do-not>
+      </section>
+      <section binds="ground">
+        <user-input>ground</user-input>
+        <get>
+          <where>
+            <user-input>.guidelines/.shortcuts/README.md, then .constraints, .decisions and .plan, in that order</user-input>
+          </where>
+        </get>
+        <requirement>
+          <user-input>npm run check exits zero before anything is touched</user-input>
+        </requirement>
+        <find>
+          <user-input>every file in the working tree that git does not track, starting with .claude-plugin, commands, scripts/glyph-plugin.js and .scope/oriented/ORD-0010</user-input>
+        </find>
+        <never force="editorial">
+          <user-input>a file git does not track is moved, renamed or deleted without the Regent naming it</user-input>
+        </never>
+        <find>
+          <user-input>what the ladder asks for that the repository already holds: conformance, glyph-grammar.ebnf, the measurements in .orders/INTAKE-RUST.md, .sources/COMPILER_LESSONS.md, the thirteen modules of scripts/core</user-input>
+        </find>
+        <note>
+          <user-input>a ladder task the repository already closed is marked closed with its evidence, and is not redone</user-input>
+        </note>
+        <distinguish>
+          <user-input>the organisation of the Glyph .guidelines</user-input>
+          <user-input>the folder structure of _ORBITAL Docs/.guidelines</user-input>
+        </distinguish>
+      </section>
+      <section binds="map">
+        <user-input>map</user-input>
+        <intention>
+          <invoke reads="[DFN[TGT[RSN]]]" species="composite" depth="1"/>
+          <user-input>the Regent ratifies one table, and nothing is decided by moving a file</user-input>
+        </intention>
+        <instruction>
+          <user-input>write .guidelines/.orders/INTAKE-RESTRUCTURE.md: the map, one row per path that would move</user-input>
+        </instruction>
+        <requirement>
+          <user-input>every row names the pointers the move breaks: CLAUDE.md, README.md, .shortcuts, package.json scripts, scripts/build-skill.js, scripts/build-templates.js, the generated skill and every relative link inside .guidelines</user-input>
+        </requirement>
+        <instruction>
+          <user-input>place the files of .scope/corpus-ledger into the axes they belong to, as rows of the same map: LEDGER, DECISIONS, INPUT-PROTOCOL, GLYPH-DIRECTION, HANDOFF-CLAUDE-CODE, plan/ladder.toml, scripts/ladder.py, scripts/audit_corpus.py, glyph-ems</user-input>
+        </instruction>
+        <find>
+          <user-input>every fact that would then live in two places, and name which copy stays</user-input>
+        </find>
+        <instruction>
+          <user-input>list the collisions as closed questions, each with its options and none answered</user-input>
+        </instruction>
+        <note>
+          <user-input>known collisions: dot-prefixed axes against the uppercase folders of _ORBITAL; ORD as the four-format bundle of glyph-cli against ORD as the per-agent order of the corpus-ledger DECISIONS; the order ID scheme and home still open as I_B1; the corpus-ledger DC against the .decisions axis</user-input>
+        </note>
+      </section>
+      <section binds="gate">
+        <user-input>gate</user-input>
+        <do-not>
+          <user-input>answer a collision by choosing the option that makes the map shorter</user-input>
+        </do-not>
+        <confirmation imperative="true">
+          <user-input>the map and the answer to every collision, before any file moves</user-input>
+          <human/>
+        </confirmation>
+        <finally>
+          <user-input>this order here if the Regent refuses the map, and record the refusal in .decisions</user-input>
+        </finally>
+      </section>
+      <section binds="move">
+        <user-input>move</user-input>
+        <only-if>
+          <user-input>the map is ratified in .decisions, with the date and the answers</user-input>
+        </only-if>
+        <mandatory>
+          <user-input>one row group per commit, npm run check green on each</user-input>
+        </mandatory>
+        <mandatory>
+          <user-input>git mv for every move, so history follows the file</user-input>
+        </mandatory>
+        <instruction>
+          <user-input>rewrite each broken pointer in the same commit as the move that broke it</user-input>
+        </instruction>
+        <instruction>
+          <user-input>run node scripts/build-templates.js and node scripts/build-skill.js after any move that touches .guidelines</user-input>
+        </instruction>
+        <template name="track" expanded="true" means="Explain where a detail came from across a long context: where it entered, what changed it, where it stands now. For the small things a human lets slip.">
+          <context>
+            <user-input slot="scope">this order</user-input>
+          </context>
+          <derive-from>
+            <invoke reads="[RTNL-RWK[MAND-NEQ],[CTX[GO-SWITCH]]]" species="composite" depth="2"/>
+            <user-input slot="item">each path moved, each pointer rewritten, and the commit that did it</user-input>
+          </derive-from>
+          <elaborate>
+            <user-input>the chain: where it entered, what changed it, where it stands now</user-input>
+          </elaborate>
+        </template>
+      </section>
+      <section binds="limits">
+        <user-input>limits</user-input>
+        <never force="editorial">
+          <user-input>the snapshot is regenerated to make the suite green</user-input>
+        </never>
+        <constraint>
+          <user-input>prose declares the state, never the correction</user-input>
+        </constraint>
+        <constraint>
+          <user-input>no worktrees; zero dependencies</user-input>
+        </constraint>
+        <do-not>
+          <user-input>write Rust in this order; the Rust port is the next order, opened after this one closes</user-input>
+        </do-not>
+      </section>
+      <section binds="conclude">
+        <user-input>conclude</user-input>
+        <instruction>
+          <user-input>update the where-am-I table of .shortcuts: version, last milestone, next step</user-input>
+        </instruction>
+        <instruction>
+          <user-input>close the moved items out of .plan and write one changelog entry; the content digit moves because where things live changed</user-input>
+        </instruction>
+        <verify>
+          <invoke reads="[CMP-TRUE[[CORE],[TGT]]]" species="composite" depth="1"/>
+          <user-input>every relative link in the repository resolves, and every fact lives in one place</user-input>
+        </verify>
+        <confirmation imperative="true">
+          <user-input>the repository against the ratified map</user-input>
+          <human/>
+        </confirmation>
+        <ready>
+          <user-input>the next order, the Rust port, opens on a repository whose paths no longer move</user-input>
+        </ready>
+      </section>
+    </block>
+  </block>
+</glyph-package>

@@ -1,0 +1,2125 @@
+{
+  "type": "GlyphAST",
+  "schema": 2,
+  "version": "3.5.8.06",
+  "source": {
+    "length": 4906,
+    "checksum": "c5897b88bcecc800",
+    "encoding": "utf-8",
+    "newline": "lf",
+    "uri": null
+  },
+  "stores": {
+    "templates": "d127beace2f86000",
+    "rules": "9778b68073854800",
+    "expansions": "2549caa003b0a400"
+  },
+  "projection": "full",
+  "segments": [
+    {
+      "type": "Segment",
+      "mood": [],
+      "isReturn": false,
+      "continues": false,
+      "breaks": 0,
+      "autoClosedCount": 0,
+      "body": [
+        {
+          "type": "Command",
+          "raw": "block",
+          "canonical": "BLOCK",
+          "tier": "struct",
+          "gloss": "Block",
+          "element": "block",
+          "isAlias": false,
+          "chainElement": false,
+          "origin": "root",
+          "slotName": false,
+          "editorial": false,
+          "name": null,
+          "depth": 0,
+          "autoClosed": false,
+          "suggestion": null,
+          "emotions": [],
+          "species": "atom",
+          "compositionDepth": 0,
+          "at": {
+            "s": 0,
+            "e": 6
+          },
+          "body": [
+            {
+              "type": "Literal",
+              "value": "restructure-glyph-repo",
+              "form": "quote",
+              "slot": null,
+              "role": "operand",
+              "at": {
+                "s": 6,
+                "e": 30
+              }
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 33,
+                "e": 37
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the Glyph repository, restructured to take the folder structure of _ORBITAL while keeping the organisation and depth of its .guidelines",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 37,
+                    "e": 174
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": "C:/Users/Usuario/Documents/GitHub/glyph",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 175,
+                    "e": 216
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": "engine 3.5.8.06, before the Rust port opens",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 217,
+                    "e": 262
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "skl",
+              "canonical": "SKL",
+              "tier": "struct",
+              "gloss": "Skill",
+              "element": "skill",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 266,
+                "e": 270
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "glyph-markup",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 270,
+                    "e": 284
+                  }
+                },
+                {
+                  "type": "Command",
+                  "raw": "ins",
+                  "canonical": "INS",
+                  "tier": "instr",
+                  "gloss": "Instruction",
+                  "element": "instruction",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 284,
+                    "e": 288
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "hear this order, ground before mapping, map before moving, and stop at the gate of the Regent",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 288,
+                        "e": 383
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "section",
+              "canonical": "SECTION",
+              "tier": "struct",
+              "gloss": "Section",
+              "element": "section",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 389,
+                "e": 397
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "species",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 397,
+                    "e": 406
+                  }
+                },
+                {
+                  "type": "Command",
+                  "raw": "dfn",
+                  "canonical": "DFN",
+                  "tier": "instr",
+                  "gloss": "Define Symbol",
+                  "element": "define-symbol",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 411,
+                    "e": 415
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "axis",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 415,
+                        "e": 421
+                      }
+                    },
+                    {
+                      "type": "Literal",
+                      "value": "a .guidelines folder that answers one question of whoever resumes the work: sources, plan, decisions, constraints, changelog, shortcuts, orders",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 422,
+                        "e": 567
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "dfn",
+                  "canonical": "DFN",
+                  "tier": "instr",
+                  "gloss": "Define Symbol",
+                  "element": "define-symbol",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 573,
+                    "e": 577
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "entry point",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 577,
+                        "e": 590
+                      }
+                    },
+                    {
+                      "type": "Literal",
+                      "value": "a file a reader opens first; it points and never copies",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 591,
+                        "e": 648
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "dfn",
+                  "canonical": "DFN",
+                  "tier": "instr",
+                  "gloss": "Define Symbol",
+                  "element": "define-symbol",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 654,
+                    "e": 658
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "map",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 658,
+                        "e": 663
+                      }
+                    },
+                    {
+                      "type": "Literal",
+                      "value": "a table of current path, target path, reason, and every pointer the move breaks",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 664,
+                        "e": 745
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "dfn",
+                  "canonical": "DFN",
+                  "tier": "instr",
+                  "gloss": "Define Symbol",
+                  "element": "define-symbol",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 751,
+                    "e": 755
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "intake",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 755,
+                        "e": 763
+                      }
+                    },
+                    {
+                      "type": "Literal",
+                      "value": "material that arrives while an order is open; it waits in .orders as INTAKE-*.md and never becomes a second order",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 764,
+                        "e": 879
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "dfn",
+                  "canonical": "DFN",
+                  "tier": "instr",
+                  "gloss": "Define Symbol",
+                  "element": "define-symbol",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 885,
+                    "e": 889
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "ladder",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 889,
+                        "e": 897
+                      }
+                    },
+                    {
+                      "type": "Literal",
+                      "value": ".scope/corpus-ledger/plan/ladder.toml: modules, tasks and premises for Glyph, validated by scripts/ladder.py",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 898,
+                        "e": 1008
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "nt",
+                  "canonical": "NT",
+                  "tier": "instr",
+                  "gloss": "Note",
+                  "element": "note",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 1014,
+                    "e": 1017
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "the target is the folder structure of _ORBITAL, read from C:/Users/Usuario/Documents/GitHub/_ORBITAL/Docs/.guidelines, and not its .NET projects",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 1017,
+                        "e": 1163
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "dont",
+                  "canonical": "DONT",
+                  "tier": "instr",
+                  "gloss": "Do Not",
+                  "element": "do-not",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 1169,
+                    "e": 1174
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "invent a structure that neither repository already shows",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 1174,
+                        "e": 1232
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "section",
+              "canonical": "SECTION",
+              "tier": "struct",
+              "gloss": "Section",
+              "element": "section",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 1241,
+                "e": 1249
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "ground",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1249,
+                    "e": 1257
+                  }
+                },
+                {
+                  "type": "Command",
+                  "raw": "get",
+                  "canonical": "GET",
+                  "tier": "instr",
+                  "gloss": "Get",
+                  "element": "get",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 1262,
+                    "e": 1266
+                  },
+                  "body": [
+                    {
+                      "type": "Command",
+                      "raw": "whr",
+                      "canonical": "WHR",
+                      "tier": "instr",
+                      "gloss": "Where",
+                      "element": "where",
+                      "isAlias": false,
+                      "chainElement": false,
+                      "origin": "nest",
+                      "slotName": false,
+                      "editorial": false,
+                      "name": null,
+                      "depth": 3,
+                      "autoClosed": false,
+                      "suggestion": null,
+                      "emotions": [],
+                      "species": "atom",
+                      "compositionDepth": 0,
+                      "at": {
+                        "s": 1266,
+                        "e": 1270
+                      },
+                      "body": [
+                        {
+                          "type": "Literal",
+                          "value": ".guidelines/.shortcuts/README.md, then .constraints, .decisions and .plan, in that order",
+                          "form": "quote",
+                          "slot": null,
+                          "role": "operand",
+                          "at": {
+                            "s": 1270,
+                            "e": 1360
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "req",
+                  "canonical": "REQ",
+                  "tier": "instr",
+                  "gloss": "Requirement",
+                  "element": "requirement",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 1367,
+                    "e": 1371
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "npm run check exits zero before anything is touched",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 1371,
+                        "e": 1424
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "find",
+                  "canonical": "FIND",
+                  "tier": "instr",
+                  "gloss": "Find",
+                  "element": "find",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 1430,
+                    "e": 1435
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "every file in the working tree that git does not track, starting with .claude-plugin, commands, scripts/glyph-plugin.js and .scope/oriented/ORD-0010",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 1435,
+                        "e": 1585
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "nev",
+                  "canonical": "NEV",
+                  "tier": "instr",
+                  "gloss": "Never",
+                  "element": "never",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": true,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 1591,
+                    "e": 1595
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "a file git does not track is moved, renamed or deleted without the Regent naming it",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 1595,
+                        "e": 1680
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "find",
+                  "canonical": "FIND",
+                  "tier": "instr",
+                  "gloss": "Find",
+                  "element": "find",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 1686,
+                    "e": 1691
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "what the ladder asks for that the repository already holds: conformance, glyph-grammar.ebnf, the measurements in .orders/INTAKE-RUST.md, .sources/COMPILER_LESSONS.md, the thirteen modules of scripts/core",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 1691,
+                        "e": 1896
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "nt",
+                  "canonical": "NT",
+                  "tier": "instr",
+                  "gloss": "Note",
+                  "element": "note",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 1902,
+                    "e": 1905
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "a ladder task the repository already closed is marked closed with its evidence, and is not redone",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 1905,
+                        "e": 2004
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "dist",
+                  "canonical": "DIST",
+                  "tier": "instr",
+                  "gloss": "Distinguish",
+                  "element": "distinguish",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 2010,
+                    "e": 2015
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "the organisation of the Glyph .guidelines",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 2015,
+                        "e": 2058
+                      }
+                    },
+                    {
+                      "type": "Literal",
+                      "value": "the folder structure of _ORBITAL Docs/.guidelines",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 2059,
+                        "e": 2110
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "section",
+              "canonical": "SECTION",
+              "tier": "struct",
+              "gloss": "Section",
+              "element": "section",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 2119,
+                "e": 2127
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "map",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 2127,
+                    "e": 2132
+                  }
+                },
+                {
+                  "type": "Command",
+                  "raw": "intn",
+                  "canonical": "INTN",
+                  "tier": "instr",
+                  "gloss": "Intention",
+                  "element": "intention",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "composite",
+                  "compositionDepth": 1,
+                  "at": {
+                    "s": 2137,
+                    "e": 2142
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "the Regent ratifies one table, and nothing is decided by moving a file",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 2142,
+                        "e": 2214
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "ins",
+                  "canonical": "INS",
+                  "tier": "instr",
+                  "gloss": "Instruction",
+                  "element": "instruction",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 2220,
+                    "e": 2224
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "write .guidelines/.orders/INTAKE-RESTRUCTURE.md: the map, one row per path that would move",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 2224,
+                        "e": 2316
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "req",
+                  "canonical": "REQ",
+                  "tier": "instr",
+                  "gloss": "Requirement",
+                  "element": "requirement",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 2322,
+                    "e": 2326
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "every row names the pointers the move breaks: CLAUDE.md, README.md, .shortcuts, package.json scripts, scripts/build-skill.js, scripts/build-templates.js, the generated skill and every relative link inside .guidelines",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 2326,
+                        "e": 2544
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "ins",
+                  "canonical": "INS",
+                  "tier": "instr",
+                  "gloss": "Instruction",
+                  "element": "instruction",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 2550,
+                    "e": 2554
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "place the files of .scope/corpus-ledger into the axes they belong to, as rows of the same map: LEDGER, DECISIONS, INPUT-PROTOCOL, GLYPH-DIRECTION, HANDOFF-CLAUDE-CODE, plan/ladder.toml, scripts/ladder.py, scripts/audit_corpus.py, glyph-ems",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 2554,
+                        "e": 2795
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "find",
+                  "canonical": "FIND",
+                  "tier": "instr",
+                  "gloss": "Find",
+                  "element": "find",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 2801,
+                    "e": 2806
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "every fact that would then live in two places, and name which copy stays",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 2806,
+                        "e": 2880
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "ins",
+                  "canonical": "INS",
+                  "tier": "instr",
+                  "gloss": "Instruction",
+                  "element": "instruction",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 2886,
+                    "e": 2890
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "list the collisions as closed questions, each with its options and none answered",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 2890,
+                        "e": 2972
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "nt",
+                  "canonical": "NT",
+                  "tier": "instr",
+                  "gloss": "Note",
+                  "element": "note",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 2978,
+                    "e": 2981
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "known collisions: dot-prefixed axes against the uppercase folders of _ORBITAL; ORD as the four-format bundle of glyph-cli against ORD as the per-agent order of the corpus-ledger DECISIONS; the order ID scheme and home still open as I_B1; the corpus-ledger DC against the .decisions axis",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 2981,
+                        "e": 3269
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "section",
+              "canonical": "SECTION",
+              "tier": "struct",
+              "gloss": "Section",
+              "element": "section",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 3278,
+                "e": 3286
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "gate",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 3286,
+                    "e": 3292
+                  }
+                },
+                {
+                  "type": "Command",
+                  "raw": "dont",
+                  "canonical": "DONT",
+                  "tier": "instr",
+                  "gloss": "Do Not",
+                  "element": "do-not",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 3297,
+                    "e": 3302
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "answer a collision by choosing the option that makes the map shorter",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 3302,
+                        "e": 3372
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "conf",
+                  "canonical": "CONF",
+                  "tier": "instr",
+                  "gloss": "Confirmation",
+                  "element": "confirmation",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 3378,
+                    "e": 3383
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "the map and the answer to every collision, before any file moves",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 3383,
+                        "e": 3449
+                      }
+                    },
+                    {
+                      "type": "Command",
+                      "raw": "hmn",
+                      "canonical": "HMN",
+                      "tier": "meta",
+                      "gloss": "Human",
+                      "element": "human",
+                      "isAlias": false,
+                      "chainElement": false,
+                      "origin": "nest",
+                      "slotName": false,
+                      "editorial": false,
+                      "name": null,
+                      "depth": 3,
+                      "autoClosed": false,
+                      "suggestion": null,
+                      "emotions": [],
+                      "species": "atom",
+                      "compositionDepth": 0,
+                      "at": {
+                        "s": 3449,
+                        "e": 3453
+                      },
+                      "body": []
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "fin",
+                  "canonical": "FIN",
+                  "tier": "instr",
+                  "gloss": "Finally",
+                  "element": "finally",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 3460,
+                    "e": 3464
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "this order here if the Regent refuses the map, and record the refusal in .decisions",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 3464,
+                        "e": 3549
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "section",
+              "canonical": "SECTION",
+              "tier": "struct",
+              "gloss": "Section",
+              "element": "section",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 3558,
+                "e": 3566
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "move",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 3566,
+                    "e": 3572
+                  }
+                },
+                {
+                  "type": "Command",
+                  "raw": "onlyif",
+                  "canonical": "ONLYIF",
+                  "tier": "instr",
+                  "gloss": "Only If",
+                  "element": "only-if",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 3577,
+                    "e": 3584
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "the map is ratified in .decisions, with the date and the answers",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 3584,
+                        "e": 3650
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "mand",
+                  "canonical": "MAND",
+                  "tier": "instr",
+                  "gloss": "Mandatory",
+                  "element": "mandatory",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 3656,
+                    "e": 3661
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "one row group per commit, npm run check green on each",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 3661,
+                        "e": 3716
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "mand",
+                  "canonical": "MAND",
+                  "tier": "instr",
+                  "gloss": "Mandatory",
+                  "element": "mandatory",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 3722,
+                    "e": 3727
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "git mv for every move, so history follows the file",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 3727,
+                        "e": 3779
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "ins",
+                  "canonical": "INS",
+                  "tier": "instr",
+                  "gloss": "Instruction",
+                  "element": "instruction",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 3785,
+                    "e": 3789
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "rewrite each broken pointer in the same commit as the move that broke it",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 3789,
+                        "e": 3863
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "ins",
+                  "canonical": "INS",
+                  "tier": "instr",
+                  "gloss": "Instruction",
+                  "element": "instruction",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 3869,
+                    "e": 3873
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "run node scripts/build-templates.js and node scripts/build-skill.js after any move that touches .guidelines",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 3873,
+                        "e": 3982
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Template",
+                  "name": "track",
+                  "isDefinition": false,
+                  "expanded": true,
+                  "at": {
+                    "s": 3988,
+                    "e": 4003
+                  },
+                  "body": [
+                    {
+                      "type": "Command",
+                      "raw": "ctx",
+                      "canonical": "CTX",
+                      "tier": "instr",
+                      "gloss": "Context",
+                      "element": "context",
+                      "isAlias": false,
+                      "chainElement": false,
+                      "origin": "root",
+                      "slotName": false,
+                      "editorial": false,
+                      "name": null,
+                      "depth": 0,
+                      "autoClosed": false,
+                      "suggestion": null,
+                      "emotions": [],
+                      "species": "atom",
+                      "compositionDepth": 0,
+                      "at": {
+                        "s": 0,
+                        "e": 4
+                      },
+                      "body": [
+                        {
+                          "type": "Literal",
+                          "value": "this order",
+                          "form": "quote",
+                          "slot": "scope",
+                          "role": null,
+                          "at": null
+                        }
+                      ]
+                    },
+                    {
+                      "type": "Command",
+                      "raw": "drvf",
+                      "canonical": "DRVF",
+                      "tier": "instr",
+                      "gloss": "Derive From",
+                      "element": "derive-from",
+                      "isAlias": false,
+                      "chainElement": false,
+                      "origin": "root",
+                      "slotName": false,
+                      "editorial": false,
+                      "name": null,
+                      "depth": 0,
+                      "autoClosed": false,
+                      "suggestion": null,
+                      "emotions": [],
+                      "species": "composite",
+                      "compositionDepth": 2,
+                      "at": {
+                        "s": 61,
+                        "e": 66
+                      },
+                      "body": [
+                        {
+                          "type": "Literal",
+                          "value": "each path moved, each pointer rewritten, and the commit that did it",
+                          "form": "quote",
+                          "slot": "item",
+                          "role": null,
+                          "at": null
+                        }
+                      ]
+                    },
+                    {
+                      "type": "Command",
+                      "raw": "elab",
+                      "canonical": "ELAB",
+                      "tier": "instr",
+                      "gloss": "Elaborate",
+                      "element": "elaborate",
+                      "isAlias": false,
+                      "chainElement": false,
+                      "origin": "root",
+                      "slotName": false,
+                      "editorial": false,
+                      "name": null,
+                      "depth": 0,
+                      "autoClosed": false,
+                      "suggestion": null,
+                      "emotions": [],
+                      "species": "atom",
+                      "compositionDepth": 0,
+                      "at": {
+                        "s": 112,
+                        "e": 117
+                      },
+                      "body": [
+                        {
+                          "type": "Literal",
+                          "value": "the chain: where it entered, what changed it, where it stands now",
+                          "form": "tick",
+                          "slot": null,
+                          "role": "operand",
+                          "at": {
+                            "s": 117,
+                            "e": 184
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "section",
+              "canonical": "SECTION",
+              "tier": "struct",
+              "gloss": "Section",
+              "element": "section",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 4124,
+                "e": 4132
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "limits",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 4132,
+                    "e": 4140
+                  }
+                },
+                {
+                  "type": "Command",
+                  "raw": "nev",
+                  "canonical": "NEV",
+                  "tier": "instr",
+                  "gloss": "Never",
+                  "element": "never",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": true,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 4145,
+                    "e": 4149
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "the snapshot is regenerated to make the suite green",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 4149,
+                        "e": 4202
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "cnst",
+                  "canonical": "CNST",
+                  "tier": "instr",
+                  "gloss": "Constraint",
+                  "element": "constraint",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 4208,
+                    "e": 4213
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "prose declares the state, never the correction",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 4213,
+                        "e": 4261
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "cnst",
+                  "canonical": "CNST",
+                  "tier": "instr",
+                  "gloss": "Constraint",
+                  "element": "constraint",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 4267,
+                    "e": 4272
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "no worktrees; zero dependencies",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 4272,
+                        "e": 4305
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "dont",
+                  "canonical": "DONT",
+                  "tier": "instr",
+                  "gloss": "Do Not",
+                  "element": "do-not",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 4311,
+                    "e": 4316
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "write Rust in this order; the Rust port is the next order, opened after this one closes",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 4316,
+                        "e": 4405
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "section",
+              "canonical": "SECTION",
+              "tier": "struct",
+              "gloss": "Section",
+              "element": "section",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 4414,
+                "e": 4422
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "conclude",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 4422,
+                    "e": 4432
+                  }
+                },
+                {
+                  "type": "Command",
+                  "raw": "ins",
+                  "canonical": "INS",
+                  "tier": "instr",
+                  "gloss": "Instruction",
+                  "element": "instruction",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 4437,
+                    "e": 4441
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "update the where-am-I table of .shortcuts: version, last milestone, next step",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 4441,
+                        "e": 4520
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "ins",
+                  "canonical": "INS",
+                  "tier": "instr",
+                  "gloss": "Instruction",
+                  "element": "instruction",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 4526,
+                    "e": 4530
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "close the moved items out of .plan and write one changelog entry; the content digit moves because where things live changed",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 4530,
+                        "e": 4655
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "vrfy",
+                  "canonical": "VRFY",
+                  "tier": "instr",
+                  "gloss": "Verify",
+                  "element": "verify",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "composite",
+                  "compositionDepth": 1,
+                  "at": {
+                    "s": 4661,
+                    "e": 4666
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "every relative link in the repository resolves, and every fact lives in one place",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 4666,
+                        "e": 4749
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "conf",
+                  "canonical": "CONF",
+                  "tier": "instr",
+                  "gloss": "Confirmation",
+                  "element": "confirmation",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 4755,
+                    "e": 4760
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "the repository against the ratified map",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 4760,
+                        "e": 4801
+                      }
+                    },
+                    {
+                      "type": "Command",
+                      "raw": "hmn",
+                      "canonical": "HMN",
+                      "tier": "meta",
+                      "gloss": "Human",
+                      "element": "human",
+                      "isAlias": false,
+                      "chainElement": false,
+                      "origin": "nest",
+                      "slotName": false,
+                      "editorial": false,
+                      "name": null,
+                      "depth": 3,
+                      "autoClosed": false,
+                      "suggestion": null,
+                      "emotions": [],
+                      "species": "atom",
+                      "compositionDepth": 0,
+                      "at": {
+                        "s": 4801,
+                        "e": 4805
+                      },
+                      "body": []
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "rdy",
+                  "canonical": "RDY",
+                  "tier": "instr",
+                  "gloss": "Ready",
+                  "element": "ready",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 4812,
+                    "e": 4816
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "the next order, the Rust port, opens on a repository whose paths no longer move",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 4816,
+                        "e": 4897
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "diagnostics": []
+}

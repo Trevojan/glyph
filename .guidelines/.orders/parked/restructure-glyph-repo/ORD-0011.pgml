@@ -1,0 +1,67 @@
+[block'restructure-glyph-repo'
+  [ctx'the Glyph repository, restructured to take the folder structure of _ORBITAL while keeping the organisation and depth of its .guidelines','C:/Users/Usuario/Documents/GitHub/glyph','engine 3.5.8.06, before the Rust port opens']
+  [skl'glyph-markup'[ins'hear this order, ground before mapping, map before moving, and stop at the gate of the Regent']]
+
+  [section'species'
+    [dfn'axis','a .guidelines folder that answers one question of whoever resumes the work: sources, plan, decisions, constraints, changelog, shortcuts, orders']
+    [dfn'entry point','a file a reader opens first; it points and never copies']
+    [dfn'map','a table of current path, target path, reason, and every pointer the move breaks']
+    [dfn'intake','material that arrives while an order is open; it waits in .orders as INTAKE-*.md and never becomes a second order']
+    [dfn'ladder','.scope/corpus-ledger/plan/ladder.toml: modules, tasks and premises for Glyph, validated by scripts/ladder.py']
+    [nt'the target is the folder structure of _ORBITAL, read from C:/Users/Usuario/Documents/GitHub/_ORBITAL/Docs/.guidelines, and not its .NET projects']
+    [dont'invent a structure that neither repository already shows']
+  ]
+
+  [section'ground'
+    [get[whr'.guidelines/.shortcuts/README.md, then .constraints, .decisions and .plan, in that order']]
+    [req'npm run check exits zero before anything is touched']
+    [find'every file in the working tree that git does not track, starting with .claude-plugin, commands, scripts/glyph-plugin.js and .scope/oriented/ORD-0010']
+    [nev'a file git does not track is moved, renamed or deleted without the Regent naming it']
+    [find'what the ladder asks for that the repository already holds: conformance, glyph-grammar.ebnf, the measurements in .orders/INTAKE-RUST.md, .sources/COMPILER_LESSONS.md, the thirteen modules of scripts/core']
+    [nt'a ladder task the repository already closed is marked closed with its evidence, and is not redone']
+    [dist'the organisation of the Glyph .guidelines','the folder structure of _ORBITAL Docs/.guidelines']
+  ]
+
+  [section'map'
+    [intn'the Regent ratifies one table, and nothing is decided by moving a file']
+    [ins'write .guidelines/.orders/INTAKE-RESTRUCTURE.md: the map, one row per path that would move']
+    [req'every row names the pointers the move breaks: CLAUDE.md, README.md, .shortcuts, package.json scripts, scripts/build-skill.js, scripts/build-templates.js, the generated skill and every relative link inside .guidelines']
+    [ins'place the files of .scope/corpus-ledger into the axes they belong to, as rows of the same map: LEDGER, DECISIONS, INPUT-PROTOCOL, GLYPH-DIRECTION, HANDOFF-CLAUDE-CODE, plan/ladder.toml, scripts/ladder.py, scripts/audit_corpus.py, glyph-ems']
+    [find'every fact that would then live in two places, and name which copy stays']
+    [ins'list the collisions as closed questions, each with its options and none answered']
+    [nt'known collisions: dot-prefixed axes against the uppercase folders of _ORBITAL; ORD as the four-format bundle of glyph-cli against ORD as the per-agent order of the corpus-ledger DECISIONS; the order ID scheme and home still open as I_B1; the corpus-ledger DC against the .decisions axis']
+  ]
+
+  [section'gate'
+    [dont'answer a collision by choosing the option that makes the map shorter']
+    [conf'the map and the answer to every collision, before any file moves'[hmn]]
+    [fin'this order here if the Regent refuses the map, and record the refusal in .decisions']
+  ]
+
+  [section'move'
+    [onlyif'the map is ratified in .decisions, with the date and the answers']
+    [mand'one row group per commit, npm run check green on each']
+    [mand'git mv for every move, so history follows the file']
+    [ins'rewrite each broken pointer in the same commit as the move that broke it']
+    [ins'run node scripts/build-templates.js and node scripts/build-skill.js after any move that touches .guidelines']
+    [--track
+      [ph-item'each path moved, each pointer rewritten, and the commit that did it']
+      [ph-scope'this order']
+    ]
+  ]
+
+  [section'limits'
+    [nev'the snapshot is regenerated to make the suite green']
+    [cnst'prose declares the state, never the correction']
+    [cnst'no worktrees; zero dependencies']
+    [dont'write Rust in this order; the Rust port is the next order, opened after this one closes']
+  ]
+
+  [section'conclude'
+    [ins'update the where-am-I table of .shortcuts: version, last milestone, next step']
+    [ins'close the moved items out of .plan and write one changelog entry; the content digit moves because where things live changed']
+    [vrfy'every relative link in the repository resolves, and every fact lives in one place']
+    [conf'the repository against the ratified map'[hmn]]
+    [rdy'the next order, the Rust port, opens on a repository whose paths no longer move']
+  ]
+];
