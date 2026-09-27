@@ -59,6 +59,20 @@
 | "como escrever um exemplo de conformidade?" | [`conformance/README.md`](../../conformance/README.md) |
 | "como escrevo Glyph?" | a skill em [`.claude/skills/glyph-markup/`](../../.claude/skills/glyph-markup/) — gerada, e provada contra o motor |
 
+## Os outros documentos
+
+| documento | o que guarda |
+|---|---|
+| [`BUNDLE_TARGET.md`](../BUNDLE_TARGET.md) | o que é saída de nível de produção aqui |
+| [`OPERATOR_TARGET.md`](../OPERATOR_TARGET.md) | `-` e `,` da árvore até o XML e de volta |
+| [`SIGNATURES.md`](../SIGNATURES.md) | assinaturas e aridades, tabela normativa |
+| [`HGML_PLAN.md`](../HGML_PLAN.md) | o `.hgml`: plano e estado |
+| [`FORMULA_REVIEW.md`](../FORMULA_REVIEW.md) | o que mudou entre as duas passadas das fórmulas |
+| [`PROMOTION_MEASUREMENT.md`](../PROMOTION_MEASUREMENT.md) | a medição de onde o `PROMOTION_BOUNDARY.md` saiu |
+| [`DMHP_IMPORTS.md`](../DMHP_IMPORTS.md) | o que vale trazer do DMHP, e o que não |
+| [`FUSIONS_WORKSHEET.md`](../FUSIONS_WORKSHEET.md) | as fusões da v1.7, documento histórico |
+| [`E0b-ARCHITECT-RETURN.md`](../.orders/E0b-ARCHITECT-RETURN.md), [`E2-PLAN.md`](../.orders/E2-PLAN.md) | o retorno do arquiteto e o plano de rederivação da ordem de agosto, `ORD-2026-08-30-01` |
+
 ## Vocabulário do projeto
 
 Em [`GLOSSARY.md`](../GLOSSARY.md) §8: quem decide (Regente, Autor da Ordem,
