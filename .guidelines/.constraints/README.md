@@ -9,7 +9,7 @@
 | | |
 |---|---|
 | **Zero dependências no lado JS** | o motor JS, a skill e o app de navegador são propriedade do repositório, não acidente. Não há `dependencies` em `package.json` e não haverá |
-| **No Rust, dependência se mede pela profundidade, e a base se vendoriza** | o que se recusa é *"emprestar excessivamente funções de terceiros e até quarteiros e quinteiros"* — a árvore que desce e cobra em build e em dias de depuração em código alheio; o que se aceita é *"a base que não precisamos reinventar"*. Antes de adotar, mede-se a árvore da crate (crates, profundidade, linhas, build limpo); a que entra vem vendorizada |
+| **No Rust, dependência se mede pela profundidade, e a base se vendoriza** | o que se recusa é *"emprestar excessivamente funções de terceiros e até quarteiros e quinteiros"* — a árvore que desce e cobra em build e em dias de depuração em código alheio; o que se aceita é *"a base que não precisamos reinventar"*. Antes de adotar, mede-se a árvore da crate (crates, profundidade, linhas, build limpo), e ela se julga em três graus: *note*, profundidade até 4 e até 12 crates, entra; *ask*, profundidade 5–6 ou 13–40 crates, só com ADR assinada pelo Regente; *fix*, profundidade 7 ou mais ou mais de 40 crates, recusada. A que entra vem vendorizada |
 | **Glyph descreve; nada executa** | o documento diz **o que está sob o quê** e nunca computa o resultado. É o que carrega a invariante de ida e volta, o `<invoke reads>` e o validador |
 | **Raiz única** | `glyph-package` sem forma condicional. Um consumidor não pode ramificar na forma do documento antes de conseguir lê-lo |
 | **O AST é a fonte de verdade** | as três projeções derivam dele. O `.hgml` **não pode** vir antes — ele descarta de propósito e não expressa o que o AST distingue |

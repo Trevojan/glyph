@@ -179,6 +179,22 @@ bears on the **action** ("do not do X"), `DENY` on the **route** ("I refuse the
 path that leads to Y"). Consequence in `rules.json`: the `req-deny` rule
 was written when `DENY` meant refusing a proposal, and under the refined reading
 `REQ` (demanding something exist) and `DENY` (rejecting a route to a result) no
+`CTX` — Context. Declared scope.
+`TGT` — Target. Aim, destination or objective.
+`SPEC` — Specification. Detailed technical description of a requirement.
+`EX` — Example. The example itself — the datum, the concrete case.
+`RWK` — Rework. Rebuilds the structure while keeping the original intent.
+`IMPR` — Improve. Raises quality without changing the structure (incremental polish).
+`REV` — Review. A reading sweep looking for error or inconsistency, with no formal comparison.
+`SKEP` — Sceptic. Takes a sceptical stance towards a proposition.
+`DIST` — Distinguish. Marks the difference between two elements.
+`REF` — Reference. Points at an external source.
+`SEEAL` — See also. Suggests a relation to another element.
+`NT` — Note. Annotation; marks a relevant point.
+`EXC` — Exception. Explicit departure from the general rule.
+`LIM` — Limitation. Observation that a limit exists (not an imposition).
+`REQ` — Requirement. Positive demand — what has to exist **before** the work: an input, a precondition, a thing the reader may refuse to proceed without. What the *output* must contain is `MAND`.
+`RSN` ★ — Reason. The motive underlying a decision. *(promoted from composite — §5)*
 longer collide by construction — see `.guidelines/.history/GLOSSARY_CLOSED.md` §6.6.
 
 ## 2. Hieroglyph primitives
@@ -197,9 +213,6 @@ Atoms that stand on their own, with no operand.
 `DEF` — Default. Default value, base behaviour.
 `TPL` ★ — Template. Named, reusable body with `[ph-]` holes, defined with `[--name=` and invoked with `[--name`.
 `CORE` ★ — Core. Structural foundation of a context object. *(was `BASE` — §0.2)*
-`CTX` — Context. Declared scope.
-`TGT` — Target. Aim, destination or objective.
-`SPEC` — Specification. Detailed technical description of a requirement.
 `LOGIC` — Logic. Block of mathematical or boolean operations.
 `WHR` — Where. Place marker; spatial context of reference.
 `HGH` — High. High intensity; raised priority.
@@ -207,21 +220,8 @@ Atoms that stand on their own, with no operand.
 `BOLD` — Bold. Strong emphasis; prominence in the output.
 `LIGHT` — Light. Soft emphasis; reduced tone in the output.
 `ATC` — Attach. Attaches auxiliary context or reference to a command.
-`EX` — Example. The example itself — the datum, the concrete case.
-`RWK` — Rework. Rebuilds the structure while keeping the original intent.
-`IMPR` — Improve. Raises quality without changing the structure (incremental polish).
-`REV` — Review. A reading sweep looking for error or inconsistency, with no formal comparison.
-`SKEP` — Sceptic. Takes a sceptical stance towards a proposition.
-`DIST` — Distinguish. Marks the difference between two elements.
 `REAL` — Realistic. The practical quality standard `EVAL` measures against.
-`REF` — Reference. Points at an external source.
-`SEEAL` — See also. Suggests a relation to another element.
-`NT` — Note. Annotation; marks a relevant point.
-`EXC` — Exception. Explicit departure from the general rule.
-`LIM` — Limitation. Observation that a limit exists (not an imposition).
-`REQ` — Requirement. Positive demand — what has to exist **before** the work: an input, a precondition, a thing the reader may refuse to proceed without. What the *output* must contain is `MAND`.
 `EXT` — External. Marks an element outside the document's scope.
-`RSN` ★ — Reason. The motive underlying a decision. *(promoted from composite — §5)*
 `FIN` ★ — Finally. Closing or termination marker. *(promoted from composite — §5)*
 
 ## 3. Composite glyphs
@@ -438,9 +438,9 @@ Portuguese interface, spelt en-EU (lock T13) — see
 |---|---|---|---|
 | **EMS** | a series of Orders kept in one folder, `.orders/EMS-###/`, whose conventions, rules and exceptions live in one file, the **EMS configuration**, so each ORD stays separate and the user does not classify; with a spec that talks to the guidelines: constraints, counters, exceptions, the ADR and DC it modifies, its pins, and how to proceed after it closes; it grows as a queue, and the user loads, edits and emits it, the Explorer showing it by its title | a version | [`.decisions/`](.decisions/README.md), 2026-09-25 and 2026-09-27; [`EMS-001.pgml`](.orders/EMS-001/EMS-001.pgml) |
 | **ORD** (Order, *Ordem*) | one Order: the XML is the Order, and the `.pgml`, `.json`, `.hgml` and manifest beside it let it validate itself; in a series, `.orders/EMS-###/ORD-####/`, carrying the EMS's rules and configuration inside its `<glyph-package>`; a loose ORD numbers itself in **NEM**, and lacks what an EMS gives for free; exactly one open at a time | the parked flat `ORD-0011`, `restructure-glyph-repo`, kept in `.orders/parked/` — not `EMS-001/ORD-0011` | [`.decisions/`](.decisions/README.md), 2026-09-25 and 2026-09-27 |
-| **EMS.config** | the EMS configuration: one file per series holding its conventions, rules, exceptions, pins and traffic, so each ORD stays separate; its rules travel inside every ORD's `<glyph-package>` | the spec | [`.decisions/`](.decisions/README.md), 2026-09-27; format open |
-| **NEM** (*Not Emitted*) | the one folder of loose ORDs, unnumbered, with an ORD numbering of its own | a series; a group | as **EMS.config** |
-| **generic EMS** | the series of common ground: its default `EMS.config` carries the commands and pins every Order may want; the Order Matrices of `.scope/generics/` seed it | a loose folder | as **EMS.config** |
+| **EMS.json** | the EMS configuration, in JSON: one file per series holding its conventions, rules, exceptions, pins and traffic, so each ORD stays separate; its rules travel inside every ORD's `<glyph-package>` | the spec | [`.decisions/`](.decisions/README.md), 2026-09-27; format open |
+| **NEM** (*Not Emitted*) | the one folder of loose ORDs, `.orders/NEM/` beside the EMS folders, unnumbered, its ORDs numbered `ORD-####` on their own | a series; a group | as **EMS.json** |
+| **generic EMS** | the series of common ground: its default `EMS.json` carries the commands and pins every Order may want; the Order Matrices of `.scope/generics/` seed it | a loose folder | as **EMS.json** |
 | **spec** | a series' own `EMS-###.pgml` | an Order | [`EMS-001.pgml`](.orders/EMS-001/EMS-001.pgml) |
 | **Degraus** | the ORDs of EMS-001 | the revoked 2026-09-24 ladder | [`.decisions/`](.decisions/README.md), 2026-09-25 |
 | **val** | the proof of done an ORD names: what is validated, and the external criterion | a test written after the fact | every ORD source |
@@ -451,7 +451,7 @@ Portuguese interface, spelt en-EU (lock T13) — see
 | **intake** | material that arrives while an Order is open; it waits in `.orders/` as `INTAKE-*.md` and never becomes a second Order | an Order | [`.constraints/`](.constraints/README.md) |
 | **Order Matrix** | an Order that assembles a formulary filled by an input pattern, and chains into a "DRAWING" | a generic template | [`.decisions/`](.decisions/README.md), 2026-09-24; `.scope/generics/` |
 | **PIN** | a mark on a line that injects a snippet into the output: a structural command under a user-oriented condition, `[pin-if`reason`(...)]`, giving a *try-catch* or *switch-case* in the editor without a template; when a block fails, the Harness follows to the next, as the last PIN writes it; shared through the EMS | a routing mark on a section — the reading of 2026-09-23; a template | [`.decisions/`](.decisions/README.md), 2026-09-27; [`INTAKE-PIN-TRAFFIC.md`](.orders/INTAKE-PIN-TRAFFIC.md); not built |
-| **traffic** | the paths an ORD reads and writes, declared in `EMS.config` — files now, virtual paths later; a path that stops resolving warns the user and never blocks the emission, and **repair** rewrites the files under an EMS from these paths when data is corrupted or paths change | `<invoke reads>` in the XML, which names what a command reads | as **PIN** |
+| **traffic** | the paths an ORD reads and writes, declared in `EMS.json` — files now, virtual paths later; a path that stops resolving warns the user and never blocks the emission, and **repair** rewrites the files under an EMS from these paths when data is corrupted or paths change, showing the diff and asking first | `<invoke reads>` in the XML, which names what a command reads | as **PIN** |
 | **layout** | the render layout of an ORD (`packets.md`) | the repository's folder layout | [`.decisions/`](.decisions/README.md), 2026-09-24 |
 
 ### The Rust app

@@ -28,17 +28,11 @@ import { FRAMES, SLOTS, NAMED_STRUCT } from "./vocabulary.js";
  * standsAlone -- o eixo primitivo/operador, DERIVADO
  *
  * GLOSSARY §0 declara dois eixos independentes: hieroglifo/glifo (decompoe?)
- * e primitivo/operador (precisa de operando?). O segundo nunca virou tabela:
- * vive na prosa da §2 e num comentario dentro de FRAMES nomeando cinco
- * comandos.
+ * e primitivo/operador (precisa de operando?). O segundo nao e tabela: o
+ * GLOSSARY o arquiva nas secoes §1 (operadores) e §2 (primitivos), que
+ * concordam com esta funcao desde 2026-09-27.
  *
- * E a prosa da §2 nao serve como fonte. Medido: dos 38 comandos que ela
- * lista como "atoms that stand on their own, with no operand", QUINZE estao
- * so ali e mesmo assim exigem operando pelo FRAMES -- CTX, NT, REV, RSN, REQ
- * entre eles -- e REQ aparece nas duas secoes ao mesmo tempo. A §2 contradiz
- * a §0 no proprio corpo do documento.
- *
- * Entao a tabela e DERIVADA do que o motor ja segura: e primitivo o atomo
+ * A tabela e DERIVADA do que o motor ja segura: e primitivo o atomo
  * de que nenhuma tabela de valencia cobra operando. Nada de transcrever
  * prosa -- dominio evita sintese, e derivar de FRAMES/SLOTS significa que a
  * classificacao nao pode divergir do que o motor de fato faz.
