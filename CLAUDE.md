@@ -58,7 +58,5 @@ você faz na primeira hora:
 
 ## Vocabulário
 
-- **Regente** — quem decide. Um agente mede, propõe e recusa; não ratifica.
-- **Autor da Ordem** — quem escreve a fonte `.pgml`. O motor existe para trocar
-  a inferência dele por re-ferência.
-- **queima** — o `.hgml`, a redução a hieróglifos puros.
+Em [`.guidelines/GLOSSARY.md`](.guidelines/GLOSSARY.md) §8 — quem decide, como o
+trabalho se ordena, o app Rust e os nomes que o Regente ratificou.

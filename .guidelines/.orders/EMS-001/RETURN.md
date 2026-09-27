@@ -17,8 +17,13 @@
 
 ## Waiting for the Regent
 
-1. **The questions below that carry no answer:** 1, 10, 12, 13 and 14.
-2. **The answers of 2026-09-27 that ask for work:** questions 2, 3, 4 and 6,
+1. **Every question below carries an answer.**
+2. **The spec's direction is superseded, and the spec is not versioned.** On
+   2026-09-27 the Regent set the goal as Glyph 100% in Rust, skill and app
+   included, against this spec's *"the skill keeps the JS engine it ships"*;
+   the series closes as written at ORD-0014, and EMS-002 carries the new
+   direction.
+3. **The answers of 2026-09-27 that ask for work:** questions 1, 2, 3, 4, 6, 10 and 12,
    in [`.plan`](../../.plan/README.md) §5, and question 11, the user's own
    stores on the user's machine, with the installer (ORD-0013).
 
@@ -30,6 +35,9 @@ Closed questions; an answered one carries the Regent's answer below its options.
    - a. the folder alone
    - b. the folder, with the zip inside it beside the five files
    - c. the folder, and the zip only behind a flag
+
+   Answered by the Regent on 2026-09-27: **c** — the folder, and the zip only behind a
+   flag. Not built yet: [`.plan`](../../.plan/README.md) §5.
 2. **The oracle holds no character outside the BMP. Does the corpus gain a
    source that does?** The lexer's probes now hold its spans to UTF-16 units;
    `lev` and every later projection are still held only by the corpus.
@@ -127,6 +135,9 @@ Closed questions; an answered one carries the Regent's answer below its options.
       paints, and answers the calls from that answer
     - c. one a call, and `classify` answered from the tables the page
       already loads
+
+    Answered by the Regent on 2026-09-27: **c** — one request a call, and `classify`
+    answered from the tables the page already loads. Not built yet.
 11. **The page merges the user's templates into the store (`useTemplates`,
     `glyph-ui.js` line 1010). Where do they live once the engine is a
     process?**
@@ -157,6 +168,11 @@ Closed questions; an answered one carries the Regent's answer below its options.
     - b. only the Rust changes: the rules compiled once a context, and `ck` in
       integer arithmetic; the JS keeps digesting on every call
     - c. as it is, until the app reaches the Rust
+
+    Answered by the Regent on 2026-09-27: *"go gradually switching JS for Rust.
+    each distinction you find is a step closer to 100% Rust-coded <- this is
+    the goal."* Read as **b**: only the Rust changes, and the JS is not tuned
+    further. Not built yet.
 13. **The JS `toXML` grows with the square of the lines.** L-03, L-02 and L-01
     take 23 ms, 0.44 s and 6.2 s, and 84% of L-02's is the structural pass
     (`packageSpan`, `packageIndent` and its `^ +`), which the port reads once
@@ -166,6 +182,9 @@ Closed questions; an answered one carries the Regent's answer below its options.
       does, and no emitted byte moves
     - b. pinned as known, by name, in [`.plan`](../../.plan/README.md) §3
     - c. left: the app on the Rust engine answers the long sources
+
+    Answered by the Regent on 2026-09-27: **b** — pinned as known, by name, in
+    [`.plan`](../../.plan/README.md) §3.
 14. **The instruments in `rust/crates/glyph-cli/examples/` — the two
     prototypes, the relay, the baseline and the measurement — once the ADR is
     signed:**
@@ -173,6 +192,9 @@ Closed questions; an answered one carries the Regent's answer below its options.
     - b. they leave, and the numbers stay in this return
     - c. the signed option's prototype becomes ORD-0011's starting point, and
       the rest leave
+
+    Answered by the Regent on 2026-09-27: **a** — they stay, so the numbers can be
+    measured again.
 15. **Through the relay, the status line counts 200 commands on L-01, L-02
     and L-03, where the JS counts 8 000, 2 000 and 400.** Every panel holds
     the same bytes; the status line counts the commands of the tree, and the
@@ -1234,4 +1256,5 @@ crates' tests arrived.
 | 56 | `33b9adc` | ORD-0012 closes; the queue stops at the gate of ORD-0013 | 13:57 | green, `check` and `check:rust` |
 | 57 | `dd31183` | alignment: the guidelines, the README and the comments declare EMS-001 up to ORD-0012 | 18:30 | not recorded by the commit; both green at `6226196` on 2026-09-27 |
 | 58 | `6226196` | `glyph-wasm` leaves: the empty crate of M11b, revoked by the spec of EMS-001 | 18:33 | green on 2026-09-27, `check` and `check:rust` (48 tests); pushed with the tag `conformance-v0` |
-| 59 | this commit | the handoff audited against the cloud session: questions 2 to 7, 9 and 11 answered; the virtual paths take the seven layers of `do-gepeto.md`; the project vocabulary in `GLOSSARY.md` §8, and `TPL` no longer a mould there, the snapshot's 114 `ast` hashes moved by decision; the sources indexed | — | green, `check` and `check:rust` |
+| 59 | `b5635ee` | the handoff audited against the cloud session: questions 2 to 7, 9 and 11 answered; the virtual paths take the seven layers of `do-gepeto.md`; the project vocabulary in `GLOSSARY.md` §8, and `TPL` no longer a mould there, the snapshot's 114 `ast` hashes moved by decision; the sources indexed | — | green, `check` and `check:rust` |
+| 60 | this commit | questions 1, 10 and 12 to 14 answered, so every question carries an answer; the goal set as Glyph 100% in Rust, carried by EMS-002 while this spec closes as written; PIN, traffic, `EMS.config`, repair, NEM and the generic EMS designed by the Regent, in `INTAKE-PIN-TRAFFIC.md` and `GLOSSARY.md` §8; `CLAUDE.md` points to §8 | — | green, `check` and `check:rust` |
