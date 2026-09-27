@@ -111,18 +111,16 @@ Recorded with his words in [`.decisions/`](../.decisions/README.md) under
 2026-09-24; the ADR norm is also a row of [`.constraints/`](../.constraints/README.md)
 and is task M04.T04 verbatim.
 
-Settled by the Regent, in [`.decisions/`](../.decisions/README.md): O1 and O2 on 2026-09-27 — Glyph ends 100% in Rust, the app and the skill included, the JS retiring piece by piece, and no lockstep; O3 on 2026-09-27 — the Harness reads what is doable from the EMS configuration inside each ORD's `<glyph-package>` ([`INTAKE-PIN-TRAFFIC.md`](INTAKE-PIN-TRAFFIC.md) §4); O6 on 2026-09-24.
+Settled by the Regent, in [`.decisions/`](../.decisions/README.md): O1 and O2 on 2026-09-27 — Glyph ends 100% in Rust, the app and the skill included, the JS retiring piece by piece, and no lockstep; O3 on 2026-09-27 — the Harness reads what is doable from the EMS configuration inside each ORD's `<glyph-package>` ([`INTAKE-PIN-TRAFFIC.md`](INTAKE-PIN-TRAFFIC.md) §4); O6 on 2026-09-24; O5 and O10 on 2026-09-27, queued as ORDs — the snapshot honouring each case's stores, and `<sceptic>`.
 
 Open, for the Regent:
 
 | id | question | why it is his |
 |---|---|---|
 | O4 | the three measured defects of `.plan` §3 — fix in JS before the port, or pin as behaviour the port reproduces | the deliverable |
-| O5 | the snapshot honouring a case's own `opts` (X10) | moves hashes |
 | O7 | the depth threshold of §9.2 — the numbers `crate-graph.js` would enforce | the dependency norm |
 | O8 | the renames of §11.3 — the glossary fix moves every AST envelope; the others move a diagnostic, a store checksum, the empty-source XML, or a key on disk | emitted documents |
 | O9 | two more uses to name: the vocabulary category `molde`, and *modelo* as data or design model outside the app (§11.1) | vocabulary |
-| O10 | the spelling residue of §12: `<skeptic>` in the emitted XML, and the API names `tokenize`, `serializeAST` | emitted documents; the public face |
 
 ## 9. Dependencies — measured before adopted
 

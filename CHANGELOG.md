@@ -37,6 +37,53 @@ All notable changes to Glyph are documented here, most recent first.
 
 ---
 
+## [3.6.9.07] — the engine answers in Rust too, and the words the project runs on have one home
+
+`frontend` moves because the app can run on the Rust engine: behind `?engine=relay`
+`scripts/glyph-transport.js` sends the page's twelve engine calls to `POST /engine`,
+which `serve-dev.js` relays to the Rust `glyph-engine`; the status line reads the
+command count the parse answers; and the interface says *template*, *mould* and
+*sample* in both languages (`scripts/glyph-moulds.js`, `MOULDS`, `SAMPLES`), with the
+page's icons renamed. `rules` moves because the vocabulary changed: `TPL` is a
+named, reusable body with `[ph-]` holes, no longer a *mould*, and that definition
+travels in the checksum of the composition store every envelope carries. `minor`
+carries the rest. No digit resets any other.
+
+### What moved in the emitted documents
+
+- **`engine=`** reads `3.6.9.07`: every XML the engine emits moves by that
+  attribute alone — the snapshot's 114 `xml` hashes, the five conformance
+  examples and the five goldens.
+- **The envelope's store checksum** moved with `TPL`'s definition: the snapshot's
+  114 `ast` hashes, by decision; no `xml` or `hgml` byte moved with it.
+- **`ast-schema.json`** declares what the engine already emitted and the schema did
+  not: `role` on a `Raw` literal, and the `Verbatim` node of a `[raw]` fence.
+
+### What the engine gained
+
+- **The stores travel as one context** (`createContext`): a call that brings its own
+  stores no longer meets the rules the process loaded.
+- **The oracle**: `node scripts/test-corpus.js --export-oracle` writes what the JS
+  answers, one file per declared source; twelve sources (`ORACLE_COVERAGE`) reach
+  the diagnostic codes no declared source reached, eight of them untested before;
+  the snapshot counts 114 sources. The tag `conformance-v0` freezes it.
+- **The Rust engine, EMS-001 up to ORD-0012**: one crate per JS core module, held to
+  the measured seams by `scripts/crate-graph.js`, each byte-exact against the
+  oracle; `glyph` answers the flags of `glyph-cli.js`, and `glyph-engine` answers the
+  protocol `glyph-protocol.js` defines, one JSON line in and one out.
+- **`--bundle`** writes a series, `.orders/EMS-###/ORD-####/`, reads the moment of
+  `SOURCE_DATE_EPOCH`, and writes the zip's time in UTC.
+
+### What the records decided
+
+The Regent's decisions of 2026-09-24 to 2026-09-27 are in `.guidelines/.decisions/`:
+the Rust app that eats the JS engine's territory, the series layout, ADR B, the
+names (`template`, `mould`, `sample`, `Order Matrix`, `snippet`, `layout`) spelt
+en-EU, the goal of Glyph 100% in Rust, and the design of PIN, traffic and
+`EMS.config`. The project vocabulary lives in `GLOSSARY.md` §8.
+
+---
+
 ## [3.5.8.06] — a queima foi lida de volta em campo, e três fórmulas não voltaram
 
 `frontend` moves because the page gained an icon (`.scope/asset/`). `rules` moves
