@@ -61,9 +61,7 @@
 
 ## Vocabulário do projeto
 
-- **Regente** — quem decide.
-- **Autor da Ordem** — quem escreve a fonte `.pgml`. O motor existe para trocar
-  a **inferência** dele por **re-ferência**.
-- **queima** — o `.hgml`, redução a hieróglifos puros.
-- **domínio evita síntese** — o que couber em código, esquema ou tabela nunca
-  deve ser re-inferido.
+Em [`GLOSSARY.md`](../GLOSSARY.md) §8: quem decide (Regente, Autor da Ordem,
+ADR, DC), como o trabalho se ordena (EMS, ORD, val, bank, o retorno, handoff,
+intake), o app Rust (motor, visual, Glyph Explorer, oráculo) e os nomes que o
+Regente ratificou (template, mould, sample, Order Matrix, snippet, layout).

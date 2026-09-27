@@ -13,23 +13,18 @@
 | environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed; the local session of 2026-09-26: Windows 11, node v22.17.1, cargo 1.88.0, and Edge as the Chromium the drivers ask for |
 | ground | read in the order the handoff names; `npm run check` (33 buckets, 41 s) and `npm run check:rust` (20 crates, 3 s) green on the clone at `ea8fc59`, before anything was touched |
 | layout | **closed** — its val holds (below), five banks |
-| queue | ORD-0001 to ORD-0012 closed, ORD-0011 at `cf3bb31` and ORD-0012 at `73da9f9`, both on the local machine on 2026-09-26. The queue stops at the gate of ORD-0013, the installer: a clean Windows machine and the Regent, and under ADR B it carries node or a second protocol. First on the plan: the virtual paths, by the Regent's word. The tag `conformance-v0` is on `030ed76` in the session's clone only — its push was refused (below) |
+| queue | ORD-0001 to ORD-0012 closed, ORD-0011 at `cf3bb31` and ORD-0012 at `73da9f9`, both on the local machine on 2026-09-26. The queue stops at the gate of ORD-0013, the installer: a clean Windows machine and the Regent, and under ADR B it carries node or a second protocol. First on the plan: the virtual paths, by the Regent's word. The tag `conformance-v0` is on `030ed76`, on the remote since 2026-09-27 |
 
 ## Waiting for the Regent
 
-1. **The tag `conformance-v0` is on `030ed76` in the local clone, and not
-   on the remote.** The cloud session's push of the tag came back `HTTP 403`
-   from its git proxy; on 2026-09-26 the Regent had it created locally, and
-   keeps the push:
-
-   ```bash
-   git push origin conformance-v0
-   ```
-
+1. **The questions below that carry no answer:** 1, 10, 12, 13 and 14.
+2. **The answers of 2026-09-27 that ask for work:** questions 2, 3, 4 and 6,
+   in [`.plan`](../../.plan/README.md) §5, and question 11, the user's own
+   stores on the user's machine, with the installer (ORD-0013).
 
 ## Questions for the Regent
 
-Closed questions, none answered.
+Closed questions; an answered one carries the Regent's answer below its options.
 
 1. **Does an ORD of a series also travel as a `.zip`?**
    - a. the folder alone
@@ -42,6 +37,9 @@ Closed questions, none answered.
      decision
    - b. no: the blind spot pinned by name, as a known loss
    - c. later, when ORD-0004 opens
+
+   Answered by the Regent on 2026-09-27: **a** — a declared source with a character
+   outside the BMP, the snapshot moved by decision. Not built yet: [`.plan`](../../.plan/README.md) §5.
 3. **The envelope's `stores.rules` hashes the engine's cache with the store.
    What does the Rust envelope (ORD-0009) answer?**
    - a. the JS keeps its compiled rules off the store object; the envelope then
@@ -49,6 +47,10 @@ Closed questions, none answered.
    - b. the Rust reproduces the cache's JSON, defect included, and the
      envelopes stay as they are
    - c. pinned as known until ORD-0009 opens
+
+   Answered by the Regent on 2026-09-27: **a** — the JS keeps its compiled rules
+   off the store object first, the envelope hashes the store alone, and the
+   `ast` hashes move by decision; the Rust follows. Not built yet.
 4. **JSON sits in `glyph-util`, which `vocabulary.js` and `stores.js` do not
    import. Where does it belong in the crate graph?**
    - a. the platform, reachable from every crate: `crate-graph.js` learns one
@@ -56,6 +58,9 @@ Closed questions, none answered.
    - b. a crate of its own under every other, with an oracle entry in
      `crate-graph.js`
    - c. as it is: `glyph-stores` keeps its own `Value`
+
+   Answered by the Regent on 2026-09-27: **b** — JSON becomes a crate of its own
+   under every other, with an oracle entry in `crate-graph.js`. Not built yet.
 5. **ORD-0006's val names diagnostics that `parser.js` raises.** Of the 23
    diagnostics of the T-, C- and K-cases, `templates.js` and `rules.js` raise
    14; `parser.js` raises the other 9 (`PlaceholderPending` six times,
@@ -68,6 +73,11 @@ Closed questions, none answered.
    - b. the spec moves: ORD-0006's val names the two modules' diagnostics,
      and ORD-0007's names every case's
    - c. the spec moves the other way: templates and rules enter ORD-0007
+
+   Answered by the Regent on 2026-09-27: **c**. ORD-0006 and ORD-0007 are
+   closed and stay as delivered; the answer is how the record reads — the
+   diagnostics of the T-, C- and K-cases are held by the two together — and
+   how a later series cuts a module whose val needs another's tree.
 6. **A template's body is parsed with the registered stores, not the
    context's** (ORD-0006, how it was read). **What does the Rust parser hand
    a body?**
@@ -78,6 +88,11 @@ Closed questions, none answered.
      rule
    - c. what the caller registered, as the JS does: the Rust keeps a registry
      of its own beside the context
+
+   Answered by the Regent on 2026-09-27: **c** — the Rust keeps a registry of its own
+   beside the context, so a body reads what the caller registered, in the
+   CLI and the app as in the JS. Not built yet: the Rust hands a body no
+   rules and no composition table today.
 7. **ORD-0007's val names the envelope's digest, and the envelope is
    `emit-ast.js` — `glyph-envelope`, ORD-0009's, which opens only after
    ORD-0008.** Which reading holds?
@@ -88,6 +103,10 @@ Closed questions, none answered.
      the digest
    - c. `glyph-envelope` enters ORD-0007, and ORD-0009 keeps the burn and the
      inverse
+
+   Answered by the Regent on 2026-09-27: **b** — ORD-0007's val names the tree,
+   and ORD-0009's keeps the digest; the closed ORDs stay as delivered, and
+   this is how their record reads.
 8. **Which protocol does ORD-0010's ADR sign?** Answered by the Regent on
    2026-09-25: **b**, the engine on stdio, relayed by `serve-dev.js`.
 9. **`run()` is synchronous, and a page's HTTP is not. How do they meet?**
@@ -98,6 +117,9 @@ Closed questions, none answered.
      and ORD-0011's target moves
    - c. the page paints from the JS engine, and the Rust answer replaces it
      when it arrives
+
+   Answered by the Regent on 2026-09-27: **a**, ratifying the reading ORD-0011
+   closed on — the synchronous request inside the transport.
 10. **A keystroke makes 6 calls at p50 and 8 005 for L-01, one `classify` a
     command token. How many requests does it cost?**
     - a. one a call, as the twelve are named
@@ -114,6 +136,16 @@ Closed questions, none answered.
       one page to an engine
     - c. the engine keeps the repository's stores, and a request carries only
       the templates that differ, named by their digest
+
+    Answered by the Regent on 2026-09-27, beside the options: what a user saves
+    lives on that user's machine, never in the public repository — *"the Glyph
+    Explorer would be located in the final user's machine and everything
+    personal would be stored there. as the repository's public, i don't want
+    to let very customized material in there"*; *"the only templates that
+    should appear after installing are the basic ones for user examples."*
+    The engine answers with the stores of the user's machine, and the
+    installer (ORD-0013) is where they live; behind `?engine=relay` today it
+    answers with the repository's alone.
 12. **The Rust redoes on every call what the JS does once, or cheaper.** Every
     parse copies the rules store with its compiled cache (`with_cache`, 54% of
     an empty parse's instructions: 95 µs against the JS's 4.5 µs, which
@@ -1199,4 +1231,7 @@ crates' tests arrived.
 | 53 | `3ba94f3` | ORD-0012 work 1 — the JS first: `glyph-cli.js` takes the moment of `SOURCE_DATE_EPOCH` for the manifest and the zip, and `glyph-zip.js` writes its time in UTC (ZP-15, ZP-16) | 13:41 | red first: the two zips differed and the time read local; then the regex lost its backslash on the way in and matched no epoch; green, `check` and `check:rust` |
 | 54 | `73da9f9` | ORD-0012 work 2 — the Rust: `glyph-bundle` ports `glyph-zip.js` and the moment (CRC, dates as a JS `Date` reads them, the zip in UTC); `glyph` answers the flags of `glyph-cli.js`; `cli.json` records 723 runs in 120 folders — the 114 sources in five modes, every name of the composition table, the forms of argv and `--file`, and `--bundle` flat and in series — and `tests/cli.rs` replays them | 13:52 | red first: 723 of 723 against the binary that refused every flag; then green on the first build of the port, so three mutations were planted — the zip an hour late, the series counting files, a dated ID read as a number — and each was caught, 2, 4 and 9 runs; green, `check` and `check:rust` |
 | 55 | `ccc5521` | ORD-0012 work 3 — `cli.json` digests the same at the same commit: the folder the recorder makes fresh reads `<root>` where a message names it | 13:57 | two exports, one digest, `92986fa1…1464`; green, `check` and `check:rust` |
-| 56 | this commit | ORD-0012 closes; the queue stops at the gate of ORD-0013 | 13:57 | green, `check` and `check:rust` |
+| 56 | `33b9adc` | ORD-0012 closes; the queue stops at the gate of ORD-0013 | 13:57 | green, `check` and `check:rust` |
+| 57 | `dd31183` | alignment: the guidelines, the README and the comments declare EMS-001 up to ORD-0012 | 18:30 | not recorded by the commit; both green at `6226196` on 2026-09-27 |
+| 58 | `6226196` | `glyph-wasm` leaves: the empty crate of M11b, revoked by the spec of EMS-001 | 18:33 | green on 2026-09-27, `check` and `check:rust` (48 tests); pushed with the tag `conformance-v0` |
+| 59 | this commit | the handoff audited against the cloud session: questions 2 to 7, 9 and 11 answered; the virtual paths take the seven layers of `do-gepeto.md`; the project vocabulary in `GLOSSARY.md` §8, and `TPL` no longer a mould there, the snapshot's 114 `ast` hashes moved by decision; the sources indexed | — | green, `check` and `check:rust` |

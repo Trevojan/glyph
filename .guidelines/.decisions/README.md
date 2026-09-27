@@ -13,6 +13,16 @@
 
 ---
 
+## 2026-09-27
+
+| decisão | razão |
+|---|---|
+| **Standalone é o app servindo cada usuário por si: o que é pessoal mora na máquina dele, nunca no repositório público** | respondido no questionário de 2026-09-27, sobre a pergunta 11 do [retorno](../.orders/EMS-001/RETURN.md): *"the idea of an installer came to solve exactly this problem, as the Glyph Explorer would be located in the final user's machine and everything personal would be stored there. as the repository's public, i don't want to let very customized material in there. the main goal here is to maintain the application as a whole thing that serves its own purpose for each user individually: that's what i meant for \"standalone\" from the beginning. the only templates that should appear after installing are the basic ones for user examples."* O motor Rust responde com as stores da máquina do usuário; o repositório entrega só os templates básicos de exemplo ([`.plan`](../.plan/README.md) §5) |
+| **Os caminhos virtuais incorporam a identidade, a ordem e a recuperação** de [`.scope/do-gepeto.md`](../../.scope/do-gepeto.md): `NodeID` estável, manutenção de ordem e índice de recuperação, além do endereçamento, dos offsets, das impressões digitais e do grafo de dependência | respondido no mesmo questionário: *"Incorporate it into §0"*. O desenho em sete camadas está em [`.plan`](../.plan/README.md) §0 |
+| **O vocabulário do projeto vive em [`GLOSSARY.md`](../GLOSSARY.md)** — os termos que ficavam só dentro de Ordens e handoffs, os nomes ratificados e os conceitos ainda não construídos | respondido no mesmo questionário: *"GLOSSARY.md"*. Uma tabela, em §8, fora das entradas de comando que o `build-templates.js` lê |
+| **`TPL` é um corpo nomeado e reutilizável com buracos `[ph-]`, não um *mould***; **snapshot regenerado**: 114 hashes de `ast`, nenhum de `xml` ou `hgml` | a correção de 2026-09-24 (*"o glossário troca template por mold, fonte está errada"*), aplicada por *"Apply it, snapshot moves by decision"*. A definição viaja no checksum da store de composição, que todo envelope carrega; por isso só o `ast` se move |
+| **As perguntas 2 a 7 e 9 do retorno** | respondidas uma a uma no mesmo questionário, cada resposta sob a sua pergunta no [retorno](../.orders/EMS-001/RETURN.md): **2a**, uma fonte declarada com caractere fora do BMP; **3a**, o JS tira o cache compilado das regras de cima da store, e o envelope passa a hashear só a store; **4b**, JSON num crate próprio; **5c** e **7b**, a leitura das ORDs 0006, 0007 e 0009 fechadas, que ficam como entregues; **6c**, o Rust guarda um registro ao lado do contexto, como o JS; **9a**, a requisição síncrona com que a `ORD-0011` fechou. O trabalho que 2, 3, 4 e 6 pedem está em [`.plan`](../.plan/README.md) §5 |
+
 ## 2026-09-26
 
 | decisão | razão |
