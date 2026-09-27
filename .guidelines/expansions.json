@@ -302,7 +302,7 @@
     "TPL": {
       "species": "atom",
       "depth": 0,
-      "def": "Named mould, defined with [--name= and invoked with [--name.",
+      "def": "Named, reusable body with [ph-] holes, defined with [--name= and invoked with [--name.",
       "element": "template"
     },
     "CORE": {

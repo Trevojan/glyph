@@ -14,25 +14,48 @@
 > otimizada para o Harness."*
 
 Um caminho virtual é `[arquivo][delimitador][seletor]` e resolve para uma fatia
-exata, com offsets. As fontes: [`VIRTUAL_PATHS.md`](../.sources/VIRTUAL_PATHS.md)
-e a conversa que o desenhou, [`VIRTUAL_PATHS_CONVERSATION.md`](../.sources/VIRTUAL_PATHS_CONVERSATION.md).
-O que o motor passa a fazer:
+exata, com offsets. **O índice guarda posições semânticas em estruturas
+ordenadas, não textos**: a identidade de um trecho é estrutural, e sobrevive
+quando o trecho muda de lugar. As fontes: [`VIRTUAL_PATHS.md`](../.sources/VIRTUAL_PATHS.md),
+a conversa que desenhou o endereçamento e o índice,
+[`VIRTUAL_PATHS_CONVERSATION.md`](../.sources/VIRTUAL_PATHS_CONVERSATION.md), e a
+que desenhou a identidade, a ordem e a recuperação,
+[`.scope/do-gepeto.md`](../../.scope/do-gepeto.md) (§4, §5, §8, §14 e §15).
 
-- **despacho pela extensão**, e o resto é seletor: `.md#slug`, `.json` por JSON
-  Pointer (RFC 6901, um nó só), `.xml` por caminho de elementos, e código por
-  `@block:nome` … `@endblock:nome`, sem aninhamento, com qualquer prefixo de
-  comentário;
+O que o motor passa a fazer, em sete camadas:
+
+1. **árvore por formato**, com despacho pela extensão, e o resto é seletor:
+   `.md#slug`, `.json` por JSON Pointer (RFC 6901, um nó só), `.xml` por caminho
+   de elementos, e código por `@block:nome` … `@endblock:nome`, sem aninhamento,
+   com qualquer prefixo de comentário;
+2. **identidade estável**: cada nó estrutural recebe um `NodeID` persistente, com
+   `parent`, `prev`, `next`, `depth` e o intervalo `[início, fim)` — metadado de
+   identidade, nunca o conteúdo; um trecho movido de lugar é o mesmo nó;
+3. **manutenção de ordem**: `before(a, b)` responde sob inserção, movimento e
+   remoção (Dietz–Sleator), e "o que vem acima de X" vira consulta de ordem e de
+   intervalo, não busca textual;
+4. **mapa de offsets**: `NodeID → [início, fim)`, e a extração devolve offsets,
+   porque a âncora também é coordenada de escrita;
+5. **impressões digitais**: o hash de cada fatia — a fatia mudou e o documento
+   não, o documento está defasado;
+6. **grafo de dependência**: **o documento declara as próprias fontes**
+   (`sources:` no frontmatter), o índice código→documento sai por inversão
+   mecânica, e a invalidação se propaga por ele; a Ordem carrega só a projeção
+   do que toca;
+7. **índice de recuperação**, só quando a identidade estrutural falhar: busca por
+   q-grama ou FM-index, e cada uso fica registrado como *index miss*.
+
+O que vale em todas as camadas:
+
 - **cardinalidade 1**: um seletor que resolve para zero ou para vários nós é erro,
   nunca fatia vazia;
-- **o documento declara as próprias fontes** (`sources:` no frontmatter), e o índice
-  código→documento sai por inversão mecânica; a Ordem carrega só a projeção do
-  que toca;
 - **o índice é JSON**, estado durável que o motor escreve e um resolvedor sem
-  julgamento lê: cada entrada com offsets de início e fim e o hash da fatia —
-  a fatia mudou e o documento não, o documento está defasado;
+  julgamento lê;
 - **cobertura fechada**: todo arquivo de `.guidelines/` aparece no índice, e toda
-  entrada resolve para conteúdo não vazio; a busca livre fica como recurso
-  auditado que registra um *index miss*.
+  entrada resolve para conteúdo não vazio;
+- **a complexidade-alvo**: `NodeID → nó` e `before(a, b)` em O(1), predecessor em
+  O(log n), extração em O(log n + L) para L bytes devolvidos, e atualização em
+  O(k log n) para k nós afetados pela edição, nunca pelo tamanho do repositório.
 
 Antes do código, medido sobre o histórico do git, com os limiares declarados
 antes de rodar: a taxa de defasagem, a localidade das edições em `.md` e a
@@ -94,7 +117,30 @@ série](../.orders/EMS-001/README.md) guarda o commit e o digest de cada uma. O
 app roda no motor Rust atrás de `?engine=relay`, e o binário `glyph` responde as
 flags do `glyph-cli.js`. A fila para na `ORD-0013`, o instalador: pede uma
 máquina Windows limpa e o Regente, e sob a ADR B leva node ou um segundo
-protocolo. O que a spec revoga está assinado, e entre isso está a escada como
+protocolo. O instalador é também o que torna o app **standalone** no sentido do
+Regente: o Glyph Explorer mora na máquina de cada usuário, e tudo o que é
+pessoal — os templates e os moulds que ele guarda — fica lá, nunca no
+repositório público, que entrega só os templates básicos de exemplo. O motor
+Rust responde com as stores da máquina do usuário; hoje, atrás de
+`?engine=relay`, ele responde só com as do repositório, e os templates que a
+página guarda ficam no caminho JS (pergunta 11 do retorno).
+
+Decidido em 2026-09-27, ainda não construído — cada item uma ORD quando o
+Regente chamar, o JS primeiro onde o oráculo muda:
+
+- **uma fonte declarada com caractere fora do BMP** (pergunta 2): o snapshot se
+  move por decisão, e `lev` e as projeções seguintes passam a ser provados nela;
+- **o cache das regras sai de cima da store** (pergunta 3): o JS guarda as regras
+  compiladas fora do objeto, o envelope hashea só a store, os hashes de `ast` se
+  movem por decisão, e o `glyph_rules::with_cache` do Rust sai;
+- **JSON num crate próprio** (pergunta 4), abaixo de todos, com entrada de oráculo
+  no `crate-graph.js`, no lugar do `glyph_util::json` e do `Value` do
+  `glyph-stores`;
+- **o corpo de um template lê o que o chamador registrou** (pergunta 6): o Rust
+  guarda um registro ao lado do contexto, e um corpo que quebra uma regra lê igual
+  na CLI e no app pelos dois motores.
+
+O que a spec revoga está assinado, e entre isso está a escada como
 ordem de trabalho: [`ladder.toml`](ladder.toml) fica como o registro da
 auditoria, e `node scripts/ladder.js --check` segue no `npm run check`.
 

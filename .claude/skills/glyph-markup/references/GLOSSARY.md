@@ -195,7 +195,7 @@ Atoms that stand on their own, with no operand.
 `PARAM` — Parameter. Configurable input to a command.
 `PH` — Placeholder. A reserved position in an object, awaiting a value.
 `DEF` — Default. Default value, base behaviour.
-`TPL` ★ — Template. Named mould, defined with `[--name=` and invoked with `[--name`.
+`TPL` ★ — Template. Named, reusable body with `[ph-]` holes, defined with `[--name=` and invoked with `[--name`.
 `CORE` ★ — Core. Structural foundation of a context object. *(was `BASE` — §0.2)*
 `CTX` — Context. Declared scope.
 `TGT` — Target. Aim, destination or objective.
@@ -410,3 +410,65 @@ store, and the burn is what makes it tractable — patterns written over the 88
 atoms are invariant to which surface synonym the human typed. Every element such
 a pattern invents must carry its own `means`, or the interpretation problem just
 moves one step along.
+
+## 8. Project vocabulary — the terms outside the language
+
+Sections 0 to 7 define what the engine reads. This section defines the words
+the project itself is run with: who decides, how work is ordered, what the Rust
+app is made of, and the names the Regent ratified. None of them is a command,
+and none reaches the deliverable. Each row points to where it was decided.
+
+**Norm:** technical and theoretical terms settle in English, also in the
+Portuguese interface, spelt en-EU (lock T13) — see
+[`.constraints/`](.constraints/README.md).
+
+### Who decides
+
+| term | is | is not | decided in |
+|---|---|---|---|
+| **Regente** | who decides; an agent measures, proposes and refuses, and never ratifies a norm it wrote | an agent | [`.decisions/`](.decisions/README.md) |
+| **Autor da Ordem** | who writes the `.pgml` source; the engine exists to trade that author's inference for re-ference | the Regent, necessarily | [`.decisions/`](.decisions/README.md), 2026-09-05 |
+| **ADR** | a decision record: a `.decisions/` row with its reversibility and what it supersedes; it binds once the Regent signs, and changing a signed one costs one questionnaire session | a rule for a case | [`.constraints/`](.constraints/README.md) |
+| **DC** | case handling, "when this occurs, do this": a `.constraints/` row naming the gate that checks it and the ADR it enforces | a decision's reason | stated in the EMS definition; none written yet |
+| **domínio evita síntese** | what fits in code, schema or table is never re-inferred | a style preference | [`.constraints/`](.constraints/README.md) |
+
+### How work is ordered
+
+| term | is | is not | decided in |
+|---|---|---|---|
+| **EMS** | a series of Orders kept in one folder, `.orders/EMS-###/`, with a spec of its own that talks to the guidelines: its constraints, counters, exceptions, the ADR and DC it modifies, and how to proceed after it closes; it grows as a queue, not as a version | one authored source split into Orders by pins — the reading of 2026-09-23, see **PIN** | [`.decisions/`](.decisions/README.md), 2026-09-25; [`EMS-001.pgml`](.orders/EMS-001/EMS-001.pgml) |
+| **ORD** (Order, *Ordem*) | one Order of a series, `.orders/EMS-###/ORD-####/`: the XML is the Order, and the `.pgml`, `.json`, `.hgml` and manifest beside it let it validate itself; exactly one open at a time, and the count resets in each series | the parked flat `ORD-0011`, `restructure-glyph-repo`, kept outside the repository — not `EMS-001/ORD-0011` | [`.decisions/`](.decisions/README.md), 2026-09-25; [`.plan`](.plan/README.md) |
+| **spec** | a series' own `EMS-###.pgml` | an Order | [`EMS-001.pgml`](.orders/EMS-001/EMS-001.pgml) |
+| **Degraus** | the ORDs of EMS-001 | the revoked 2026-09-24 ladder | [`.decisions/`](.decisions/README.md), 2026-09-25 |
+| **val** | the proof of done an ORD names: what is validated, and the external criterion | a test written after the fact | every ORD source |
+| **close an ORD** | its val holds, its work is banked, and its row is written in the spec's track, the series register and `.shortcuts` | merging a branch | [`HANDOFF-2026-09-24.pgml`](.orders/HANDOFF-2026-09-24.pgml) |
+| **bank** | a commit that passes `npm run check` and `npm run check:rust`, pushed, with the return updated in the same commit | a commit alone | [`HANDOFF-2026-09-26.pgml`](.orders/HANDOFF-2026-09-26.pgml) |
+| **the return** | `EMS-###/RETURN.md`: what the sessions built and matched, and what waits for the Regent; its log names every commit and its checks | a changelog | [`HANDOFF-2026-09-26.pgml`](.orders/HANDOFF-2026-09-26.pgml) |
+| **handoff** | `HANDOFF-yyyy-mm-dd.pgml`: the Order a new session hears to resume where another stopped | the return | `.orders/` |
+| **intake** | material that arrives while an Order is open; it waits in `.orders/` as `INTAKE-*.md` and never becomes a second Order | an Order | [`.constraints/`](.constraints/README.md) |
+| **Order Matrix** | an Order that assembles a formulary filled by an input pattern, and chains into a "DRAWING" | a generic template | [`.decisions/`](.decisions/README.md), 2026-09-24; `.scope/generics/` |
+| **PIN** | a routing mark on a section, `[pin'<target>','<mode>']`: target an agent, `model:<id>` or `harness:<rule>`; mode `owns` or `reads`; no pin reaches an Order's body | content | decided 2026-09-23 in the corpus-ledger, outside this repository; not in the vocabulary and not built; how it meets the EMS as a series is open |
+| **traffic** | each agent's declared `reads` and `writes`: writes disjoint, every read resolving, no cycles; the order of the Orders derived from it | `<invoke reads>` in the XML, which names what a command reads | as **PIN** |
+| **layout** | the render layout of an ORD (`packets.md`) | the repository's folder layout | [`.decisions/`](.decisions/README.md), 2026-09-24 |
+
+### The Rust app
+
+| term | is | is not | decided in |
+|---|---|---|---|
+| **engine** | the Rust binary `glyph-engine`: it reads Glyph and answers the projections, a process of its own, on stdio (ADR B), relayed by `serve-dev.js` | linked into the page | [`.decisions/`](.decisions/README.md), 2026-09-25 |
+| **visual** | the browser app, `glyph-engine-alias.html` with `scripts/glyph-ui.js`: the MVP; behind `?engine=relay` it talks to the engine | a rewrite | [`EMS-001.pgml`](.orders/EMS-001/EMS-001.pgml) |
+| **Glyph Explorer** | the app installed on each user's machine, where everything personal lives | anything stored in the public repository | [`.decisions/`](.decisions/README.md), 2026-09-27 |
+| **standalone** | the app serving each user individually, as a whole thing of its own | an app without a server process | [`.decisions/`](.decisions/README.md), 2026-09-27 |
+| **oracle** | what the JS engine answers at the same commit, written by `node scripts/test-corpus.js --export-oracle`, never committed; frozen by the tag `conformance-v0` | `conformance/`, which derives from the specification | [`EMS-001.pgml`](.orders/EMS-001/EMS-001.pgml) |
+| **byte-exact** | the Rust answer equals the oracle as bytes, not as meaning | equivalent | [`EMS-001.pgml`](.orders/EMS-001/EMS-001.pgml) |
+| **queima** | the `.hgml`, the reduction to pure hieroglyphs | the source of truth | §0 |
+
+### The names the Regent ratified
+
+| term | is | is not | decided in |
+|---|---|---|---|
+| **template** | the language's macro: `[--name=` defines, `[--name` invokes, `[ph-x]` are its holes (`TPL`) | a mould | [`.decisions/`](.decisions/README.md), 2026-09-24 |
+| **mould** | the app's forms: phases Alvo · Partida · Percurso, slots `{id, tag, q}` (`scripts/glyph-moulds.js`) | a template | as **template** |
+| **sample** | a ready-made example source in the app (`SAMPLES`) | a preset — the word is retired; a conformance example | as **template** |
+| **snippet** | an editor completion of a whole shape | a template | as **template** |
+| **virtual path** | `[file][delimiter][selector]`, resolving to one exact slice with offsets, over a structural identity that survives a move | a text search | [`.plan`](.plan/README.md) §0 |

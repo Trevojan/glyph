@@ -11,6 +11,9 @@
 | arquivo | assunto | decidiu |
 |---|---|---|
 | [`COMPILER_LESSONS.md`](COMPILER_LESSONS.md) | falhas comuns em compiladores, e o que fazer com mensagem de erro | o gatilho **aponta**, não explica; `suggest()` precisa de filtro semântico, não de limiar melhor; ~85% dos erros reais são delimitação, não lógica |
+| [`VIRTUAL_PATHS.md`](VIRTUAL_PATHS.md) | o formato `[arquivo][delimitador][seletor]` e a resolução por tipo de alvo | o caminho virtual como endereço de uma fatia, com o seletor por formato |
+| [`VIRTUAL_PATHS_CONVERSATION.md`](VIRTUAL_PATHS_CONVERSATION.md) | a conversa que desenhou o endereçamento e o índice | despacho pela extensão, cardinalidade 1, `sources:` no frontmatter do documento, o índice JSON com offsets e hash, e as três medições no histórico do git antes do código |
+| [`../../.scope/do-gepeto.md`](../../.scope/do-gepeto.md) | a matemática do `.virtual/`: identidade, ordem e recuperação | identidade estrutural em vez de conteúdo (`NodeID`), manutenção de ordem, índice de recuperação só quando a identidade falha, e a complexidade-alvo — as sete camadas de [`.plan`](../.plan/README.md) §0 |
 
 ## Referências externas, por assunto
 
