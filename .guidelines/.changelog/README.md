@@ -25,6 +25,7 @@ descartava o número que o motor tinha conquistado.
 
 | versão | o que moveu o dígito maior |
 |---|---|
+| **3.6.9.07** | o app roda no motor Rust atrás de `?engine=relay`, e a interface diz *template*, *mould* e *sample*; o `TPL` deixou de ser *mould* no vocabulário. `minor`: o objeto de contexto, o oráculo e as 114 fontes, o motor Rust da EMS-001 até a `ORD-0012`, e o `--bundle` em séries |
 | **3.5.8.06** | um kit de cliente releu as próprias queimas: o blend emitia um nome com hífen, e `SCRU`/`QST` soletravam o que a gramática não lê — `H-09` fechou. `CRIT` passou a soletrar o que o §0.3 escreve, e o `--check` compara glossário e tabela. `REQ`/`MAND` com fronteira. Ícone na página |
 | **3.4.7.05** | o documento reescrevia conjunção como sequência em silêncio. `<holds>`, `binds`, `ref`, `role`, cerca `[raw]`. `GLOSSARY` §0.1 perdeu *"sem ordem entre eles"*. 98 grafias de elemento entraram |
 | **2.4.6.04** | `expansions.json` ganhou `element` **depois** que o dígito que o cobre já tinha sido gasto |

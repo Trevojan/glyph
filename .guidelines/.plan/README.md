@@ -153,6 +153,10 @@ Regente chamar, o JS primeiro onde o oráculo muda:
 - **o `classify` pelas tabelas da página** (pergunta 10): atrás de
   `?engine=relay`, uma requisição por chamada, menos o `classify`, que a página
   responde com as tabelas que já carrega — o L-01 deixa de fazer 8 000 idas;
+- **o snapshot respeita os stores de cada caso** (O5): os hashes dos casos T se
+  movem por decisão, e o `TemplateCycle` entra no oráculo;
+- **`<sceptic>`, não `<skeptic>`** (O10): o `SKEP` do `vocabulary.js` passa a
+  *Sceptic*, como o glossário já diz; `<skeptic>` e `[skeptic` continuam lidos;
 - **o Rust para de refazer a cada chamada o que o JS faz uma vez** (pergunta 12):
   as regras compiladas uma vez por contexto e o `ck` em aritmética inteira, só no
   Rust; o JS não é afinado.
@@ -167,7 +171,6 @@ auditoria, e `node scripts/ladder.js --check` segue no `npm run check`.
 |---|---|
 | **estudo de setembro** | oito intakes em [`.orders/`](../.orders/): `INTAKE-VIRTUAL-PATH` (mini-repo, medido: o custo de round-trip é o tamanho de `glyph-parser.js`), `INTAKE-ORDER-COHERENCE` (`relates[]`, B antes de A), `INTAKE-BURN-INVARIANCE` (fechado), `INTAKE-FORMAL-ANALYSIS`, `INTAKE-PARSER-SPLIT` (o corte, feito: treze módulos), `INTAKE-RUST` (steelman e defeater; o Regente decidiu migrar), `INTAKE-RUST-LADDER` (a escada auditada; §8 guarda o que espera, O4, O5 e O7 a O10), `INTAKE-FIELD-2026-09` (o kit de cliente; `H-09` fechou por ele). Pendentes do Regente: o `sameTarget` do blend que não confere o alvo; o `--check` do grafo de links |
 | **EMS-001** | a execução assíncrona que a seção `queue` da spec propõe: medida, economiza no máximo 4 de 14 turnos e esbarra em três restrições; a série fecha como está escrita, e com o tráfego da [`EMS.config`](../.orders/INTAKE-PIN-TRAFFIC.md) a pergunta passa à EMS-002. As perguntas do [retorno](../.orders/EMS-001/RETURN.md) têm todas resposta |
-| **a versão** | o motor segue em `3.5.8.06`, e desde 2026-09-24 o app passou a ler a contagem de comandos que a ponte responde, o `--bundle` escreve séries e lê `SOURCE_DATE_EPOCH`, e o zip grava em UTC — o que a regra do [`.changelog/`](../.changelog/README.md) conta. O número viaja no `engine=` de todo XML emitido, então movê-lo move todo hash do snapshot e o oráculo das 114 fontes |
 | **O4, O5, O7–O10** | [`BRIEFING-2026-09-24.md`](../.orders/BRIEFING-2026-09-24.md) §8, as que esperam sem pressa: os defeitos do §3 acima, o snapshot e o `opts` de cada caso, o limiar de profundidade, e as renomeações que movem o emitido |
 | **Q14** | o Regente autora o sexto exemplo de conformidade. Base verificada em [`conformance/README.md`](../../conformance/README.md) |
 | **Q4** | ratificar [`PROMOTION_BOUNDARY.md`](../PROMOTION_BOUNDARY.md) §5 |

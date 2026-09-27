@@ -6,4 +6,4 @@
  * incoming document's `engine=` against it. release.frontend.rules.minor —
  * no digit resets another.
  */
-export var VERSION = "3.5.8.06";
+export var VERSION = "3.6.9.07";
