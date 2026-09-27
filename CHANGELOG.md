@@ -80,7 +80,7 @@ The Regent's decisions of 2026-09-24 to 2026-09-27 are in `.guidelines/.decision
 the Rust app that eats the JS engine's territory, the series layout, ADR B, the
 names (`template`, `mould`, `sample`, `Order Matrix`, `snippet`, `layout`) spelt
 en-EU, the goal of Glyph 100% in Rust, and the design of PIN, traffic and
-`EMS.config`. The project vocabulary lives in `GLOSSARY.md` §8.
+`EMS.json`. The project vocabulary lives in `GLOSSARY.md` §8.
 
 ---
 

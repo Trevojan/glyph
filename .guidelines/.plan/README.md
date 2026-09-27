@@ -87,14 +87,14 @@ Decidíveis hoje, sem mecanismo novo:
 | detecção | com o que já existe |
 |---|---|
 | nome ligado e nunca referenciado | subtração entre `binds` e `ref` |
-| composto profundo sem operando | `depthOf`; limiar 5 dispara em 4% do corpus |
+| composto profundo sem operando | `depthOf`; limiar 5 dispara em 4% do corpus — decidido: `ask`, vira `<needs>` |
 | conjunção onde sequência era mais provável | `<holds>` distingue as duas desde `3.4.7.05` |
 
 **Antes disso:** `suggest()` acerta **1 de 11** nas palavras que o Autor da Ordem
 realmente escreveu (§0 do `COMPILER_LESSONS.md`). Precisa de **filtro
 semântico** — categoria, espécie, tabela de composição — não de limiar melhor.
 
-### 3. Quatro defeitos, medidos e não consertados
+### 3. Quatro defeitos, medidos e não consertados no JS
 
 | | medido |
 |---|---|
@@ -155,8 +155,23 @@ Regente chamar, o JS primeiro onde o oráculo muda:
   responde com as tabelas que já carrega — o L-01 deixa de fazer 8 000 idas;
 - **o snapshot respeita os stores de cada caso** (O5): os hashes dos casos T se
   movem por decisão, e o `TemplateCycle` entra no oráculo;
-- **`<sceptic>`, não `<skeptic>`** (O10): o `SKEP` do `vocabulary.js` passa a
-  *Sceptic*, como o glossário já diz; `<skeptic>` e `[skeptic` continuam lidos;
+- **uma ORD de renomeações** (O8, O9, O10): o `SKEP` do `vocabulary.js` passa a
+  *Sceptic*, como o glossário já diz, e `<skeptic>` e `[skeptic` continuam lidos;
+  o diagnóstico *"Parâmetro de molde"* diz template; o *preset* sai do
+  `templates.json` e do `rules.json`; o comentário do XML de fonte vazia diz
+  mould; a chave `glyph.moldes.user.v1` migra uma vez, sem perder mould
+  nenhum; e a categoria `molde` do vocabulário vira `frame`;
+- **a régua das crates no portão** (O7): o `check:rust` mede a árvore de cada crate
+  externa e aplica *note*, *ask* e *fix*; `wry` + `tao` é *fix*, e a janela da
+  `ORD-0014` vai pelo `msedge --app`;
+- **a sintaxe de referência `[ref'nome']`**: um nome ligado que não resolve, fora
+  da cerca `[logic]`, dispara `<needs var>`;
+- **o alarme de inferência profunda**: composto de profundidade 5 ou mais sem
+  operando pergunta (`ask`);
+- **o blend `REV` + `DIST` só no mesmo alvo**: o `sameTarget` passa a conferir o
+  alvo, e alvos diferentes queimam como dois comandos;
+- **os três defeitos antigos do §3, só no Rust** (O4): o Rust responde certo, e o
+  teste diferencial nomeia cada um como diferença conhecida;
 - **o Rust para de refazer a cada chamada o que o JS faz uma vez** (pergunta 12):
   as regras compiladas uma vez por contexto e o `ck` em aritmética inteira, só no
   Rust; o JS não é afinado.
@@ -167,16 +182,15 @@ auditoria, e `node scripts/ladder.js --check` segue no `npm run check`.
 
 ## Aberto, esperando o Regente
 
+As perguntas escritas com opções medidas estão em
+[`PERGUNTAS-ABERTAS.md`](PERGUNTAS-ABERTAS.md), todas respondidas.
+
 | | |
 |---|---|
-| **estudo de setembro** | oito intakes em [`.orders/`](../.orders/): `INTAKE-VIRTUAL-PATH` (mini-repo, medido: o custo de round-trip é o tamanho de `glyph-parser.js`), `INTAKE-ORDER-COHERENCE` (`relates[]`, B antes de A), `INTAKE-BURN-INVARIANCE` (fechado), `INTAKE-FORMAL-ANALYSIS`, `INTAKE-PARSER-SPLIT` (o corte, feito: treze módulos), `INTAKE-RUST` (steelman e defeater; o Regente decidiu migrar), `INTAKE-RUST-LADDER` (a escada auditada; §8 guarda o que espera, O4, O5 e O7 a O10), `INTAKE-FIELD-2026-09` (o kit de cliente; `H-09` fechou por ele). Pendentes do Regente: o `sameTarget` do blend que não confere o alvo; o `--check` do grafo de links |
-| **EMS-001** | a execução assíncrona que a seção `queue` da spec propõe: medida, economiza no máximo 4 de 14 turnos e esbarra em três restrições; a série fecha como está escrita, e com o tráfego da [`EMS.config`](../.orders/INTAKE-PIN-TRAFFIC.md) a pergunta passa à EMS-002. As perguntas do [retorno](../.orders/EMS-001/RETURN.md) têm todas resposta |
-| **O4, O5, O7–O10** | [`BRIEFING-2026-09-24.md`](../.orders/BRIEFING-2026-09-24.md) §8, as que esperam sem pressa: os defeitos do §3 acima, o snapshot e o `opts` de cada caso, o limiar de profundidade, e as renomeações que movem o emitido |
+| **estudo de setembro** | oito intakes em [`.orders/`](../.orders/): [`INTAKE-VIRTUAL-PATH`](../.orders/INTAKE-VIRTUAL-PATH.md) (mini-repo, medido: o custo de round-trip é o tamanho de `glyph-parser.js`), [`INTAKE-ORDER-COHERENCE`](../.orders/INTAKE-ORDER-COHERENCE.md) (`relates[]`, B antes de A), [`INTAKE-BURN-INVARIANCE`](../.orders/INTAKE-BURN-INVARIANCE.md) (fechado), [`INTAKE-FORMAL-ANALYSIS`](../.orders/INTAKE-FORMAL-ANALYSIS.md), [`INTAKE-PARSER-SPLIT`](../.orders/INTAKE-PARSER-SPLIT.md) (o corte, feito: treze módulos), [`INTAKE-RUST`](../.orders/INTAKE-RUST.md) (steelman e defeater; o Regente decidiu migrar), [`INTAKE-RUST-LADDER`](../.orders/INTAKE-RUST-LADDER.md) (a escada auditada; §8 guarda o que espera, O4, O5 e O7 a O10), [`INTAKE-FIELD-2026-09`](../.orders/INTAKE-FIELD-2026-09.md) (o kit de cliente; `H-09` fechou por ele). |
+| **EMS-001** | a execução assíncrona que a seção `queue` da spec propõe: medida, economiza no máximo 4 de 14 turnos e esbarra em três restrições; a série fecha como está escrita, e com o tráfego da [`EMS.json`](../.orders/INTAKE-PIN-TRAFFIC.md) a pergunta passa à EMS-002. As perguntas do [retorno](../.orders/EMS-001/RETURN.md) têm todas resposta |
 | **Q14** | o Regente autora o sexto exemplo de conformidade. Base verificada em [`conformance/README.md`](../../conformance/README.md) |
-| **Q4** | ratificar [`PROMOTION_BOUNDARY.md`](../PROMOTION_BOUNDARY.md) §5 |
-| sintaxe de referência | sem ela, `<needs var>` fora da cerca `[logic]` não tem no que disparar — uma referência não resolvida é indistinguível de prosa |
 | filtro / `blend` | `blend` em `rules.json` é o precedente implementado; falta decidir *não-trabalha* contra *não-sabe* |
-| alarme de inferência profunda | medido; falta decidir severidade, onde aparece, e se profundidade é o sinal certo |
 | duas propostas do rascunho do XML | `[pt'1.1'` → `<part n="1.1">` e `[if'cond'` → `<if cond="…">`, em vez de pôr o valor em `<user-input>`. As duas são **melhores** que o que o motor faz; as duas mudam o entregável e exigem `fromXML()` no mesmo passo. Registro em [`.history/XML_REFERENCE_DRAFT.md`](../.history/XML_REFERENCE_DRAFT.md) |
 
 ## Adiado por decisão, não por esquecimento

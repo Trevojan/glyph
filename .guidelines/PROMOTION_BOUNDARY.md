@@ -1,10 +1,9 @@
-<!-- DRAFT. Written by an agent from PROMOTION_MEASUREMENT.md, and NOT in force.
-     An agent may not ratify a norm it wrote; §5 is the Regent's to sign. -->
+<!-- Written by an agent from PROMOTION_MEASUREMENT.md; in force since the Regent
+     signed §5 on 2026-09-27. An agent may not ratify a norm it wrote. -->
 
 # Promotion boundary — where domain ends and synthesis begins
 
-> **Status: DRAFT, awaiting ratification as an F0 norm.** Nothing here binds
-> until §5 is signed.
+> **Status: in force as an F0 norm**, ratified by the Regent on 2026-09-27 (§5).
 >
 > Q4 asked the Regent to ratify this document. It did not exist: it was listed in
 > `PROMOTION_MEASUREMENT.md` §"What this changes" as item 2 — a deliverable to be
@@ -117,15 +116,14 @@ re-ratified rather than quietly widened.
 
 ## 5. Ratification — the Regent's
 
-An agent may not ratify a norm it wrote. This section is empty until the Regent
-fills it.
+An agent may not ratify a norm it wrote.
 
 ```
-ratified-by:
-date:
+ratified-by: the Regent, in the questionnaire of 2026-09-27 — "Ratify §2 as written"
+date: 2026-09-27
 force: F0
-notes:
+notes: §2 as written, the three tiers; recorded in .decisions
 ```
 
-Until then, §2 is a **recommendation drawn from a measurement**, not a norm, and
-nothing may cite it as binding.
+§2 binds: a divergence is described mechanically (D), promoted only where the
+composition table decides (P), and otherwise refused (S).

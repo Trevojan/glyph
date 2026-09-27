@@ -307,4 +307,6 @@ de mexer.
 > mudou de função de propósito. Se a resposta for (a), eu movo os quinze e
 > escrevo a razão junto, com a data.
 
-**RESPOSTA:**
+**RESPOSTA:** (c), e perguntado quais: *"Não lembro: mova todos (a)"* — em
+2026-09-27. Os quinze e o `REQ` foram para o §1; nenhuma entrada do §2 exige
+operando pelo motor.

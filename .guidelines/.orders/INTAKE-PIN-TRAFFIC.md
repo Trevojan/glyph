@@ -29,13 +29,13 @@ mode) that never reached an Order's body: the PIN of today reaches the output.
 The reason the EMS exists: the conventions, rules and exceptions come out of
 the ORDs and into one file, the **EMS configuration**, so each ORD stays
 separate and the final user does not do the classifying. It is a file of its
-own, `EMS.config`, beside the series' ORDs.
+own, `EMS.json`, in JSON, beside the series' ORDs.
 
 - The user **starts an EMS or an ORD**. An EMS configured to create an ORD
   starts a blank ORD that inherits its destination; a **loose ORD** has a
-  numbering of its own in **NEM** (*Not Emitted*), one unnumbered folder that
-  belongs to no EMS, and can later be emitted into an EMS being drawn.
-- A **generic EMS** holds the common ground: its default `EMS.config` carries
+  numbering of its own in **NEM** (*Not Emitted*), `.orders/NEM/`, one
+  unnumbered folder beside the EMS folders, and can later be emitted into an EMS being drawn.
+- A **generic EMS** holds the common ground: its default `EMS.json` carries
   the commands and pins every Order may want, so an ORD emitted there gets the
   exception treatment a loose one lacks. The Order Matrices of
   `.scope/generics/` seed it.
@@ -47,7 +47,7 @@ own, `EMS.config`, beside the series' ORDs.
 
 ## 3. Traffic and the paths
 
-The paths each ORD reads and writes are declared **in `EMS.config`**, for
+The paths each ORD reads and writes are declared **in `EMS.json`**, for
 maintenance: file paths now, virtual paths
 (`X.md#section`, [`.plan`](../.plan/README.md) §0) once they exist, so two ORDs
 touching different sections of one document stop colliding.
@@ -57,8 +57,8 @@ new path or to read the exact diagnosis — and never blocks the emission: only 
 structural error does, as `fix` has always meant.
 
 **Repair.** When data is corrupted or paths change, the files under an EMS are
-repaired from what `EMS.config` declares — the very paths each ORD reads and
-writes.
+repaired from what `EMS.json` declares — the very paths each ORD reads and
+writes. It shows the diff and asks before it writes anything.
 
 ## 4. The EMS configuration, inside every ORD's package
 
@@ -78,6 +78,6 @@ against `conformance/`.
 |---|---|
 | syntax | `[pin-if`reason`(...)]` — what the parentheses hold, and whether `pin-else` or a `case` form follows; `PIN` enters `expansions.txt` and `GLOSSARY.md` first, then the JS, then the Rust |
 | selection | the selector grammar a PIN matches parameters with, and whether elements need ids of their own |
-| `EMS.config` | its format, what stays in the spec `EMS-###.pgml`, and which of its fields enter the `<glyph-package>` |
-| NEM and the generic EMS | where NEM sits, how its ORDs number, and the generic EMS's name and first contents |
-| repair | what a repair may rewrite, and whether it asks before writing |
+| `EMS.json` | its format, what stays in the spec `EMS-###.pgml`, and which of its fields enter the `<glyph-package>` |
+| the generic EMS | its name and first contents, from the Order Matrices of `.scope/generics/` |
+| repair | which files a repair may rewrite |
