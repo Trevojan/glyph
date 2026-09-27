@@ -94,13 +94,14 @@ Decidíveis hoje, sem mecanismo novo:
 realmente escreveu (§0 do `COMPILER_LESSONS.md`). Precisa de **filtro
 semântico** — categoria, espécie, tabela de composição — não de limiar melhor.
 
-### 3. Três defeitos antigos, medidos e não consertados
+### 3. Quatro defeitos, medidos e não consertados
 
 | | medido |
 |---|---|
 | `;;` **migra** | `[nt'a'];;[nt'b']` volta como `[nt'a'][nt'b'];;` — a quebra sai de entre os blocos e vai para o fim. E some inteira na queima. |
 | `;` é **assimétrico entre aspas** | encerra um literal de crase, não encerra um de apóstrofo. As duas formas deveriam ser intercambiáveis. |
 | param de template nu vira prosa | `[--germinate a,b]` → `PlaceholderPending` ×2 e os valores caem como `<off>`. Param de template é **sempre literal** — as duas aspas servem, a palavra nua não. |
+| o `toXML` do JS **cresce com o quadrado das linhas** | L-03, L-02 e L-01 levam 23 ms, 0,44 s e 6,2 s; 84% do L-02 é a passada estrutural (`packageSpan`, `packageIndent` e o seu `^ +`). O port em Rust lê cada linha uma vez e faz o L-01 em 0,13 s. Fixado por decisão (pergunta 13 do [retorno](../.orders/EMS-001/RETURN.md)): o JS não é consertado, e as fontes longas vão pelo Rust |
 
 ### 5. O Glyph em Rust — a série EMS-001
 
@@ -125,6 +126,14 @@ Rust responde com as stores da máquina do usuário; hoje, atrás de
 `?engine=relay`, ele responde só com as do repositório, e os templates que a
 página guarda ficam no caminho JS (pergunta 11 do retorno).
 
+**O alvo é o Glyph 100% em Rust** — o motor, o núcleo do app e a skill —, com o
+JS saindo peça por peça, cada uma quando o Rust passa o oráculo nela. Até lá o
+JS é a referência, e só muda onde o oráculo precisa mudar. A EMS-001 fecha como
+está escrita; essa direção abre a EMS-002. O desenho do PIN, do tráfego e da
+EMS que o usuário conduz está em
+[`INTAKE-PIN-TRAFFIC.md`](../.orders/INTAKE-PIN-TRAFFIC.md), com o que ainda
+espera o Regente no §5 dele.
+
 Decidido em 2026-09-27, ainda não construído — cada item uma ORD quando o
 Regente chamar, o JS primeiro onde o oráculo muda:
 
@@ -138,7 +147,15 @@ Regente chamar, o JS primeiro onde o oráculo muda:
   `glyph-stores`;
 - **o corpo de um template lê o que o chamador registrou** (pergunta 6): o Rust
   guarda um registro ao lado do contexto, e um corpo que quebra uma regra lê igual
-  na CLI e no app pelos dois motores.
+  na CLI e no app pelos dois motores;
+- **o zip de uma ORD de série só atrás de uma flag** (pergunta 1): o `--bundle`
+  escreve a pasta, e o zip quando pedido;
+- **o `classify` pelas tabelas da página** (pergunta 10): atrás de
+  `?engine=relay`, uma requisição por chamada, menos o `classify`, que a página
+  responde com as tabelas que já carrega — o L-01 deixa de fazer 8 000 idas;
+- **o Rust para de refazer a cada chamada o que o JS faz uma vez** (pergunta 12):
+  as regras compiladas uma vez por contexto e o `ck` em aritmética inteira, só no
+  Rust; o JS não é afinado.
 
 O que a spec revoga está assinado, e entre isso está a escada como
 ordem de trabalho: [`ladder.toml`](ladder.toml) fica como o registro da
@@ -165,7 +182,8 @@ auditoria, e `node scripts/ladder.js --check` segue no `npm run check`.
   metade barata (`<effect>` declarativo) espera; a cara (objetos de contexto) é
   segunda ordem.
 - **A `ORD-0011` chapada, `restructure-glyph-repo`**, estacionada em 2026-09-24 e
-  guardada fora do repositório; não é a `EMS-001/ORD-0011`. Reestrutura o
+  guardada em [`.orders/parked/restructure-glyph-repo/`](../.orders/parked/restructure-glyph-repo/);
+  não é a `EMS-001/ORD-0011`. Reestrutura o
   repositório lendo `_ORBITAL`, que só existe nesta máquina, e reabre aqui quando
   o Regente chamar.
 - **Escopos aninhados** para variáveis. O escopo é o pacote inteiro, como o
