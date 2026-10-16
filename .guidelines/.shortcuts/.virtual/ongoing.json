@@ -4,6 +4,17 @@
   "updated": "2026-10-16",
   "items": [
     {
+      "id": "REGENCY-NORM",
+      "title": "normalizar nas convenções da Regency",
+      "state": "review",
+      "where": [
+        "99c844e",
+        "f2124a8"
+      ],
+      "next": "o Regente vê o plano: o registro está feito; o manifesto e os nomes banidos esperam",
+      "source": ".plan/README.md, Aberto: propostas de 2026-10-16"
+    },
+    {
       "id": "ORD-0013",
       "title": "o instalador, com o segundo protocolo em vez de node",
       "state": "backlog",
@@ -17,10 +28,11 @@
       "source": ".orders/EMS-001/EMS-001.pgml"
     },
     {
-      "id": "VP-1-4",
-      "title": "caminhos virtuais, camadas 1 a 4",
-      "state": "backlog",
-      "source": ".plan/README.md §0"
+      "id": "VP-0",
+      "title": "caminhos virtuais, o primeiro da fila pela palavra do Regente",
+      "state": "blocked",
+      "source": ".plan/README.md §0; Aberto: propostas de 2026-10-16",
+      "blocked_by": "o Regente: quais camadas primeiro (a sessão propõe 1 a 4), e onde o código mora"
     },
     {
       "id": "PLAN-1",
