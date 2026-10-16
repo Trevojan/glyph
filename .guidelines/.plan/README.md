@@ -233,6 +233,17 @@ As duas respostas comissionam trabalho diferente —
 [`PACKAGE_TARGET.md`](../PACKAGE_TARGET.md) §10. A norma que veio com ela já
 vale: nenhuma dependência bloqueante pode existir ao executar uma Ordem.
 
+### Propostas da sessão de 2026-10-16, para o Regente ver
+
+Saem das palavras dele de 2026-10-16 ([`.decisions/`](../.decisions/README.md)).
+São propostas e não ratificações.
+
+| proposta | o que já está no disco |
+|---|---|
+| a branch se chama **`rust`** e parte do `main` depois da normalização de base; o `main` segue como a linha JS, com `rust/` como está | a branch existe, local, no `f2124a8`; renomear é um `git branch -m` |
+| a normalização é **base**, no `main`, para as duas branches a herdarem. **Feito:** o registro de trabalho, [`.shortcuts/.virtual/ongoing.json`](../.shortcuts/.virtual/ongoing.json), mais o journal e as impressões que os hooks escrevem ao lado. **Proposto e não feito:** o manifesto de linhagem (`manifest.json`, norma → código, verificado por `vp.py check`), que é a camada 1 do §0 vista pela Regency; e a troca dos nomes que a convenção bane — `scripts/core/util.js` e a cópia dele na skill, o crate `glyph-util`, `rust/crates/glyph-cli/examples/common` —, que move o oráculo e o `crate-graph.js` | o registro, em `99c844e` e `f2124a8`; reverter são dois `git revert` |
+| dos caminhos virtuais, **as camadas 1 a 4 primeiro** — endereçamento, identidade, ordem e offsets —, com as 5 e 6 adiadas pela regra declarada até nova medição | a medição, em [`INTAKE-VIRTUAL-PATH.md`](../.orders/INTAKE-VIRTUAL-PATH.md) §18 |
+
 ### Duas perguntas que as respostas de 2026-10-15 criaram
 
 | pergunta | por que é dele |
