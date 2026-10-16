@@ -273,7 +273,7 @@ substitution with the build gate.
 
 | step | touches | kind | closes |
 |---|---|---|---|
-| a `--check` that the README's documented CLI modes match `glyph-cli.js` | `check-globals.js` or a sibling | ~20 lines, engine | the one ungated coupling M3 found |
+| ~~a `--check` that the README's documented CLI modes match `glyph-cli.js`~~ **built** on 2026-10-16: `CL-04` and `CL-05` in the suite, one per direction, each seen failing on a planted flag | `scripts/test-corpus.js` | 20 lines | the one ungated coupling M3 found, again in §18 |
 | ~~a baseline of round-trips~~ **captured** — 11 sessions, median re-read 38 %, §8.2 | — | done | the confounder in §8 is now excluded by protocol |
 | — then, if the baseline says reading is the bottleneck — the mini-repo, path **A** (heading-tree wrap, fingerprinted, one more `SOURCES` entry under the existing `--check`) | the build | ~40 lines | the round-trip goal, measurably |
 
