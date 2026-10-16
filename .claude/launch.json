@@ -6,6 +6,13 @@
       "runtimeExecutable": "node",
       "runtimeArgs": ["scripts/serve-dev.js", "--no-open"],
       "port": 8731
+    },
+    {
+      "name": "glyph-app",
+      "runtimeExecutable": "rust/target/debug/glyph.exe",
+      "runtimeArgs": ["--serve", "--port", "8740", "--no-open"],
+      "port": 8740,
+      "url": "http://127.0.0.1:8740"
     }
   ]
 }
