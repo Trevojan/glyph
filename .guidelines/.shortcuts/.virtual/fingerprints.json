@@ -1,16 +1,22 @@
 {
  "files": {
-  ".guidelines/.decisions/README.md": {
-   "at": "2026-10-16T07:53:13-03:00",
-   "bytes": 48775,
+  ".guidelines/.constraints/README.md": {
+   "at": "2026-10-16T11:14:00-03:00",
+   "bytes": 5152,
    "session": "8d995cad",
-   "sha256": "e484d62f08dcfecd01ae8af8284d542648100fa74e3a5ebd2956210624921cc5"
+   "sha256": "0ceb2b3884259c292eb0928ebe90a7b8e389783c6e96d5e855feab0120ba7d31"
+  },
+  ".guidelines/.decisions/README.md": {
+   "at": "2026-10-16T11:14:26-03:00",
+   "bytes": 50733,
+   "session": "8d995cad",
+   "sha256": "291cdfad18bc20e895e904008ad2f7d6f410d3250ef982b1e44de03b4c2a8572"
   },
   ".guidelines/.plan/README.md": {
-   "at": "2026-10-16T07:53:52-03:00",
-   "bytes": 21975,
+   "at": "2026-10-16T11:14:48-03:00",
+   "bytes": 22173,
    "session": "8d995cad",
-   "sha256": "06399119e28f3a1960c9a780b10e3ffb1689e011bbca99d205b71550c99e95bb"
+   "sha256": "4e9f3f410422f15eb434091e912560733ba18d9ac6f5b8a5f2df38bf602dbdb2"
   },
   ".guidelines/.shortcuts/README.md": {
    "at": "2026-10-16T07:48:19-03:00",
