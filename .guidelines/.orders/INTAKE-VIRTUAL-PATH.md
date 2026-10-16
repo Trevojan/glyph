@@ -549,3 +549,51 @@ The plan stated the `ORD-xxxxx` bundle **does not exist**. *Measured:* it does �
 had closed, and the plan dropped it: the bundle is in
 [`.changelog/`](../.changelog/README.md) now, under 3.6.9.07, *"o `--bundle` em
 séries"*.
+
+## 18. Re-measured, 2026-10-16 — the history since §7 says stop
+
+The plan's §0 asks for the three measures again before any code, with the
+thresholds declared before running. The instrument is
+[`scripts/measure-coupling.js`](../../scripts/measure-coupling.js), committed at
+`90044a5` **before** it ran on this repository: the §6 thresholds unchanged,
+and the universe declared in its header. Three things are new and were declared
+up front, not after the number: `*.rs` counts as code (the `js` arm keeps `*.js`
+alone, as §6); the generated files — `glyph-data.js`, `.claude/skills/**`,
+`EXAMPLES.md` — are out of every measure; and a commit over 15 files is out of
+M3. The confounds §7 removed post hoc are now part of the declaration.
+
+| | all 213 commits | the 112 after `49c392a` | the first 101, by subtraction |
+|---|---|---|---|
+| **M1**, k = 3 | 15.7 % — M2 decides; co 75, lagged 14, unpaired 42 | **4.8 % — stop**; co 40, lagged 2, unpaired 17 | ≈ 25.5 %; co 35, lagged 12, unpaired 25 |
+| M1, k = 1 · 2 · 5 · 8 | 6.3 · 11.8 · 24.2 · 27.9 % | 2.4 · 4.8 · 9.1 · 13.0 % | — |
+| **M2**, median | 8.4 %, 363 samples, q3 21 %, over half 15 % | **6.7 %**, 222 samples, q3 14 %, over half 2 % | — |
+| **M3**, pairs over the bar | 9 by basename, 17 by path | **0** by basename, **0** by path | — |
+
+The `js` arm moves none of the verdicts: 5.7 % since `49c392a`, 17.1 % over the
+whole.
+
+The first 101 under today's declaration land near §7's 23.4 %. The subtraction
+is approximate, because the k window crosses the boundary, and the gap is the
+generated files leaving before the number. **The fall is real, and it is in the
+recent history.** Since `49c392a`, 40 of the 42 pairable code commits carry
+their document in the same commit. That is the practice of one green step per
+commit with the guidelines updated per task. The practice is doing the job the
+fingerprint layer was sized for.
+
+Over the whole history, M3 is dominated by two artefacts and not by norms. One
+is `RETURN.md`, the run log of EMS-001: it co-changes with every Rust crate, as
+a changelog does, by design. The other is the old `skills/` copies of the
+parser, built before `.claude/skills/` existed. What is left is
+`glyph-parser.js ↔ XML_REFERENCE.md` (support 10, lift 2.76) and
+`glyph-cli.js ↔ README.md` (support 5, lift 2.75), the ungated pair §7 already
+named.
+
+**What this decides, by the declared rule, and what it does not.** On the
+recent history the staleness event happens twice in 42 code commits, under the
+10 % bar. Layers 5 and 6 of the plan's §0, the fingerprints and the dependency
+graph that propagates invalidation, detect an event this repository has
+stopped producing. The rule says stop for those layers. It says nothing about
+layers 1 to 4: addressing, stable identity, order and offsets. Their case is
+the round-trip goal of §8, and git cannot answer that. The §0 item is the
+Regent's decision, and the measurement does not revoke it. Whether it changes
+what §0 builds first is his call.
