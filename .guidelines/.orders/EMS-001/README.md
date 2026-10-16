@@ -8,6 +8,17 @@ com o pacote que o `--bundle` escreve, e a contagem é desta série.
 
 ## A Ordem aberta
 
+Nenhuma emitida. A vaga é da **`ORD-0013`, o instalador**, autorizada pelo
+Regente em 2026-10-15 — *"we'll follow through A"* —, com o **segundo protocolo
+em vez de node**, coerente com o Glyph 100% em Rust, e a máquina Windows limpa do
+Regente. A medição que o `[ins]` da spec pede corre dentro da Ordem. A sessão de
+código a emite.
+
+A `ORD-0014` tem o seu `[onlyif]` satisfeito pela metade que era do Regente: a
+árvore medida está **aceita**, e a janela vai pelo `msedge --app`
+([`.decisions/`](../../.decisions/README.md), 2026-10-15). Falta a `ORD-0013`
+fechar.
+
 ## Ordens fechadas
 
 | ORD | o que entregou | commit | digest |
