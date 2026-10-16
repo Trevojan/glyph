@@ -233,6 +233,13 @@ As duas respostas comissionam trabalho diferente —
 [`PACKAGE_TARGET.md`](../PACKAGE_TARGET.md) §10. A norma que veio com ela já
 vale: nenhuma dependência bloqueante pode existir ao executar uma Ordem.
 
+### Duas perguntas que as respostas de 2026-10-15 criaram
+
+| pergunta | por que é dele |
+|---|---|
+| o `repair` move **por item** — cada `fix` uma pergunta e um movimento — ou **por lote**, a fila lida inteira e um diff só? | [`INTAKE-PIN-TRAFFIC.md`](../.orders/INTAKE-PIN-TRAFFIC.md) §3 dá ao `repair` uma fila e um movimento que ele não tem. A unidade do movimento decide quantas vezes o Regente é perguntado |
+| entre o XSD da `EMS.json` e o conteúdo do `<schema>`, **qual peça gera qual**? | [`PACKAGE_TARGET.md`](../PACKAGE_TARGET.md) §5 e o §3 do mesmo intake dizem que são a mesma peça vista dos dois lados. Os dois documentos não dizem qual é a fonte e qual é a projeção, e o esquema da `EMS.json` se constrói *"together"* |
+
 ### A E-06, adiada com a direção dada
 
 O caminho é a base verificada de
