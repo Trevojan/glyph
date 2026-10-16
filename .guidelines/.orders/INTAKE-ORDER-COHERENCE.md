@@ -154,7 +154,14 @@ not carry. His words are in
 |---|---|
 | **two reference values** — `[ref'nem']` for a loose chained Order, `[ref'EMS']` to declare belonging to a series | replaces `[ref'ORD-0000']` and the explicit empty, both of which existed only to spell "I am the first". `ORD-0000` stays unreserved, and the `--check` keeps no special case for emptiness |
 | **the check is delegated to the EMS configuration**, which each series carries and which is already ratified | the destination of the `--check` for a series Order is its `EMS.json`, not the folder listing. §4 step 3 reads from it |
-| **`repair` becomes a queue** — every `fix` found here is enqueued to it, and it asks to move the misplaced ORD to its correct EMS or to `.orders/NEM/` | `repair` exists in the traffic design as *show the diff and ask before writing* ([`INTAKE-PIN-TRAFFIC.md`](INTAKE-PIN-TRAFFIC.md) §3); **it has no queue and no move**, so this is new work, not a reuse |
+| **`repair` becomes a queue** — every `fix` found here is enqueued to it, and it asks to move **each** misplaced ORD to its correct EMS or to `.orders/NEM/` | `repair` exists in the traffic design as *show the diff and ask before writing* ([`INTAKE-PIN-TRAFFIC.md`](INTAKE-PIN-TRAFFIC.md) §3); **it has no queue and no move**, so this is new work, not a reuse |
+
+**The granularity is settled, and it is per Order.** *"…will ask to move **each**
+misplaced ORD"* — one question per finding, not one question for the batch, which
+is the same contract `repair` already has for writing: it shows the difference
+and asks before it acts (2026-09-27). A batch confirmation would make one answer
+move files the Regent never saw named, and that is what the existing contract
+exists to prevent.
 
 It changes the manifest and what `--bundle` refuses, so it enters as an ORD. The
 gate of `FIELD-3b` — all `[ctx]` versions in a series equal the series'

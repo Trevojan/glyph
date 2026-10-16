@@ -3,7 +3,7 @@
 > **Delivered at 2.4.5.01.** The design record for how `-` and `,` reach the XML
 > and come back, and for the two removals that landed with them (§5) — both
 > decided at v1.7 and, until this document, never propagated past the grammar.
-> One decision marked **[Regent]** is still open (§9). Every reproduction below
+> The one decision marked **[Regent]** is answered (§9). Every reproduction below
 > is an output of the engine at `v1.4.4.01`, which is where the defects were
 > measured.
 

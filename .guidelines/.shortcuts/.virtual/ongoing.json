@@ -24,8 +24,7 @@
       "since": "2026-10-16",
       "where": [
         "branch:rust-port",
-        "order:ORD-0013",
-        "rust/crates/glyph-cli/src/app.rs"
+        "order:ORD-0013"
       ],
       "blocked_by": "o Regente: o val na máquina Windows limpa dele, com o binário de release; e o mecanismo da pergunta 11 (a, b ou c) para os templates salvos na página chegarem ao motor"
     },
@@ -75,31 +74,24 @@
     },
     {
       "id": "EFF-8",
-      "title": "a definição de item",
-      "state": "blocked",
-      "blocked_by": "o Regente: o que item é na estrutura, e o modelo de valor, objeto e escopo",
-      "source": ".plan/README.md, Aberto: \"Item\" não tem definição"
+      "title": "os objetos de contexto, segunda ordem dos efeitos",
+      "state": "backlog",
+      "next": "a fronteira de item está dada pelo Regente (o XSD gerado aplicado ao conteúdo do XML); falta a medição que a segunda ordem exige antes do desenho, e nenhum instrumento está escrito",
+      "source": ".orders/INTAKE-EFFECTS.md §8.1 e §9"
     },
     {
-      "id": "INVOKE-END",
-      "title": "o <invoke> continua a Ordem ou termina o XML",
-      "state": "blocked",
-      "blocked_by": "o Regente",
-      "source": ".plan/README.md, Aberto: o <invoke>"
+      "id": "EFF-8-PART",
+      "title": "restaurar o [part], que estava nos planos e sumiu sem registro",
+      "state": "backlog",
+      "next": "desenho e exemplo dados pelo Regente; a ORD entra o nome e a valência no vocabulário e diz onde o construto se perdeu",
+      "source": ".orders/INTAKE-EFFECTS.md §8.2"
     },
     {
-      "id": "REPAIR-UNIT",
-      "title": "o repair move por item ou por lote",
-      "state": "blocked",
-      "blocked_by": "o Regente",
-      "source": ".plan/README.md, Aberto: duas perguntas de 2026-10-15"
-    },
-    {
-      "id": "XSD-SCHEMA",
-      "title": "qual peça gera qual entre o XSD da EMS.json e o <schema>",
-      "state": "blocked",
-      "blocked_by": "o Regente",
-      "source": ".plan/README.md, Aberto: duas perguntas de 2026-10-15"
+      "id": "XSD-GATE",
+      "title": "o portão do XSD: gerado pelo motor, e conferido contra o XML",
+      "state": "review",
+      "next": "proposta de agente dentro da confirmação que o Regente pediu; sem assinatura dele não é norma",
+      "source": ".orders/INTAKE-EFFECTS.md §8.1"
     },
     {
       "id": "E-06",
@@ -107,6 +99,13 @@
       "state": "blocked",
       "blocked_by": "o Regente: a inspeção mais de perto que ele pediu",
       "source": ".plan/README.md, Aberto: a E-06"
+    },
+    {
+      "id": "VP-16-MEASURES",
+      "title": "as duas medições que o cross-package devia",
+      "state": "backlog",
+      "next": "o braço de comparação do §8 e o terceiro braço do transporte MCP; a decisão por B foi tomada sem elas e elas seguem devidas",
+      "source": ".orders/INTAKE-VIRTUAL-PATH.md §16.1"
     }
   ]
 }
