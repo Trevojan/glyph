@@ -182,6 +182,23 @@ bytes, and with no argument reads Glyph on stdin and writes the XML.
 JS writes at the same commit (`npm run check:rust`); the series that built them,
 and where it stops, is [`EMS-001`](.guidelines/.orders/EMS-001/README.md).
 
+### The app with no node — one file
+
+```bash
+rust/target/release/glyph --serve        # serves the app at http://127.0.0.1:8732 and opens it
+rust/target/release/glyph --install      # installs itself for this Windows user
+rust/target/release/glyph --uninstall    # takes the install back; the stores stay
+```
+
+`glyph --serve` answers the page out of the binary and `POST /engine` with
+the engine, on one localhost origin, so no node runs. The engine answers with
+the stores in `%APPDATA%\Glyph\stores\` when that folder holds them. `--install`
+copies the binary to `%LOCALAPPDATA%\Programs\Glyph\`, seeds the stores with
+this repository's basic templates without overwriting the ones a user keeps,
+writes a Start-menu shortcut, and writes an uninstall entry for *Apps*.
+Double-clicking `glyph.exe` does the install and then serves. `--port N` and
+`--no-open` adjust `--serve`, and `--no-register` leaves the registry alone.
+
 ---
 
 ## After editing

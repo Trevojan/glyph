@@ -1,5 +1,11 @@
 {
  "files": {
+  ".claude/launch.json": {
+   "at": "2026-10-16T11:45:12-03:00",
+   "bytes": 421,
+   "session": "8d995cad",
+   "sha256": "62edf225ee8ef720564b864c8177dcc8d2eb32cc31cc27d30671c491f9282a98"
+  },
   ".guidelines/.constraints/README.md": {
    "at": "2026-10-16T11:14:00-03:00",
    "bytes": 5152,
@@ -13,10 +19,10 @@
    "sha256": "291cdfad18bc20e895e904008ad2f7d6f410d3250ef982b1e44de03b4c2a8572"
   },
   ".guidelines/.orders/EMS-001/RETURN.md": {
-   "at": "2026-10-16T08:09:19-03:00",
-   "bytes": 96632,
+   "at": "2026-10-16T11:50:53-03:00",
+   "bytes": 99479,
    "session": "8d995cad",
-   "sha256": "306b83d3e789f606317d761d46202a9c3cdddcf405be6bf1958bfef5b2828635"
+   "sha256": "f807b89e1bf86797c74e65857b1c9ac490e8cbeffbc12a7eebea34cc993570d4"
   },
   ".guidelines/.plan/README.md": {
    "at": "2026-10-16T11:32:24-03:00",
@@ -35,6 +41,30 @@
    "bytes": 2985,
    "session": "8d995cad",
    "sha256": "b37b03b09ccb8481532a1ce0b031854914098613b193bce49c6aa53775aa5888"
+  },
+  "README.md": {
+   "at": "2026-10-16T11:50:14-03:00",
+   "bytes": 12566,
+   "session": "8d995cad",
+   "sha256": "d01baf5ee4c389e1234941a76700d5652f65d13079ab680cefdf6a7fe3faac70"
+  },
+  "rust/crates/glyph-cli/src/app.rs": {
+   "at": "2026-10-16T11:43:40-03:00",
+   "bytes": 16731,
+   "session": "8d995cad",
+   "sha256": "e21230aceca6cdd253b372baef70548735c16728428369c69b592f32820a1e5e"
+  },
+  "rust/crates/glyph-cli/src/main.rs": {
+   "at": "2026-10-16T11:43:43-03:00",
+   "bytes": 16439,
+   "session": "8d995cad",
+   "sha256": "b07b933bce1a0dd52eee079097cc91934ac5d9214cbcc7a4ea32efbba94ebd0d"
+  },
+  "rust/crates/glyph-cli/tests/app.rs": {
+   "at": "2026-10-16T11:44:36-03:00",
+   "bytes": 7775,
+   "session": "8d995cad",
+   "sha256": "ec04bc6a5ab2fe580f445b173c28f7b6ef749bfaeae40ca4d4666e2ea63d58a2"
   },
   "scripts/test-corpus.js": {
    "at": "2026-10-16T11:27:49-03:00",
