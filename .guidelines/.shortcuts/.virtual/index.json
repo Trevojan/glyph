@@ -2030,8 +2030,8 @@
       {"id":"n1f9","sel":"5-what-is-proved-what-is-measured-what-is-still-assumed","kind":"heading","parent":"n1em","prev":"n1f8","next":null,"depth":2,"start":20387,"end":21754,"label":1638400,"key":"2f014d47fa75"}
     ] },
     ".guidelines/.orders/INTAKE-ORDER-COHERENCE.md": { "format": "md", "nodes": [
-      {"id":"n1fa","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":9519,"label":65536,"key":"6cbfce4ce0bd"},
-      {"id":"n1fb","sel":"preliminary-intake--coherence-between-emitted-orders","kind":"heading","parent":"n1fa","prev":null,"next":null,"depth":1,"start":0,"end":9519,"label":131072,"key":"6cbfce4ce0bd"},
+      {"id":"n1fa","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":9946,"label":65536,"key":"098296b29990"},
+      {"id":"n1fb","sel":"preliminary-intake--coherence-between-emitted-orders","kind":"heading","parent":"n1fa","prev":null,"next":null,"depth":1,"start":0,"end":9946,"label":131072,"key":"098296b29990"},
       {"id":"n1fc","sel":"1-between-orders--nothing-not-even-informal","kind":"heading","parent":"n1fb","prev":null,"next":"n1fd","depth":2,"start":584,"end":1108,"label":196608,"key":"42ffb7040087"},
       {"id":"n1fd","sel":"2-inside-one-order--exists-disciplined-and-is-the-mould","kind":"heading","parent":"n1fb","prev":"n1fc","next":"n1fe","depth":2,"start":1108,"end":1867,"label":262144,"key":"715a14405bc9"},
       {"id":"n1fe","sel":"3-the-finding-nobody-asked-for--orders-do-not-share-an-identity","kind":"heading","parent":"n1fb","prev":"n1fd","next":"n1ff","depth":2,"start":1867,"end":2436,"label":327680,"key":"525339e1f640"},
@@ -2040,7 +2040,7 @@
       {"id":"n1fh","sel":"6-the-honest-limit","kind":"heading","parent":"n1fb","prev":"n1fg","next":"n1fi","depth":2,"start":5825,"end":6380,"label":524288,"key":"94812bcfa6ed"},
       {"id":"n1fi","sel":"7-where-the-relation-is-read-from-and-what-that-decides","kind":"heading","parent":"n1fb","prev":"n1fh","next":"n1fj","depth":2,"start":6380,"end":7060,"label":589824,"key":"2ab58b2846cf"},
       {"id":"n1fj","sel":"8-where-this-sits-among-the-other-intakes","kind":"heading","parent":"n1fb","prev":"n1fi","next":"n1fk","depth":2,"start":7060,"end":8028,"label":655360,"key":"294a00abb8a6"},
-      {"id":"n1fk","sel":"9-ratified-and-what-the-regent-added-to-it","kind":"heading","parent":"n1fb","prev":"n1fj","next":null,"depth":2,"start":8028,"end":9519,"label":720896,"key":"f3db91257578"}
+      {"id":"n1fk","sel":"9-ratified-and-what-the-regent-added-to-it","kind":"heading","parent":"n1fb","prev":"n1fj","next":null,"depth":2,"start":8028,"end":9946,"label":720896,"key":"8e3c4243ec0a"}
     ] },
     ".guidelines/.orders/INTAKE-PARSER-SPLIT.md": { "format": "md", "nodes": [
       {"id":"n1fl","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":10361,"label":65536,"key":"9ea6bebaf9dd"},
@@ -2053,13 +2053,13 @@
       {"id":"n1fs","sel":"6-what-the-cut-measured--the-state-after","kind":"heading","parent":"n1fm","prev":"n1fr","next":null,"depth":2,"start":7223,"end":10361,"label":524288,"key":"21c9c72b210f"}
     ] },
     ".guidelines/.orders/INTAKE-PIN-TRAFFIC.md": { "format": "md", "nodes": [
-      {"id":"n1ft","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":7678,"label":65536,"key":"8cc8b96117f9"},
-      {"id":"n1fu","sel":"preliminary-intake--pin-traffic-and-the-ems-the-user-drives","kind":"heading","parent":"n1ft","prev":null,"next":null,"depth":1,"start":0,"end":7678,"label":131072,"key":"8cc8b96117f9"},
+      {"id":"n1ft","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":8450,"label":65536,"key":"de151f6a9aab"},
+      {"id":"n1fu","sel":"preliminary-intake--pin-traffic-and-the-ems-the-user-drives","kind":"heading","parent":"n1ft","prev":null,"next":null,"depth":1,"start":0,"end":8450,"label":131072,"key":"de151f6a9aab"},
       {"id":"n1fv","sel":"1-pin--a-conditional-the-user-writes-in-the-editor","kind":"heading","parent":"n1fu","prev":null,"next":"n1fw","depth":2,"start":332,"end":1683,"label":196608,"key":"c241871b74ac"},
       {"id":"n1fw","sel":"2-the-ems-and-the-ord-as-the-user-drives-them","kind":"heading","parent":"n1fu","prev":"n1fv","next":"n1fx","depth":2,"start":1683,"end":3162,"label":262144,"key":"183dbb4faff0"},
-      {"id":"n1fx","sel":"3-traffic-and-the-paths","kind":"heading","parent":"n1fu","prev":"n1fw","next":"n1fy","depth":2,"start":3162,"end":4455,"label":327680,"key":"9702771716de"},
-      {"id":"n1fy","sel":"4-the-ems-configuration-inside-every-ords-package","kind":"heading","parent":"n1fu","prev":"n1fx","next":"n1fz","depth":2,"start":4455,"end":5116,"label":393216,"key":"ec9358810992"},
-      {"id":"n1fz","sel":"5-settled-when-built","kind":"heading","parent":"n1fu","prev":"n1fy","next":null,"depth":2,"start":5116,"end":7678,"label":458752,"key":"499344e58981"}
+      {"id":"n1fx","sel":"3-traffic-and-the-paths","kind":"heading","parent":"n1fu","prev":"n1fw","next":"n1fy","depth":2,"start":3162,"end":4548,"label":327680,"key":"5907df2d6a09"},
+      {"id":"n1fy","sel":"4-the-ems-configuration-inside-every-ords-package","kind":"heading","parent":"n1fu","prev":"n1fx","next":"n1fz","depth":2,"start":4548,"end":5209,"label":393216,"key":"ec9358810992"},
+      {"id":"n1fz","sel":"5-settled-when-built","kind":"heading","parent":"n1fu","prev":"n1fy","next":null,"depth":2,"start":5209,"end":8450,"label":458752,"key":"06559b430757"}
     ] },
     ".guidelines/.orders/INTAKE-RUST-LADDER.md": { "format": "md", "nodes": [
       {"id":"n1g0","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":26525,"label":65536,"key":"f7ab38b6da21"},
