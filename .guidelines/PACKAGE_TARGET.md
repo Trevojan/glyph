@@ -318,16 +318,30 @@ carries `engine`.
 
 **What fills it is decided, and is not this release.** On 2026-10-15 the Regent
 ruled that *"the declaration of sections, blocks, templates, parts and variables
-must all reflect inside the `<schema>` definition"*, and that it expands from
-there to value, subject, object and attributes. The consumer §9 demands is named:
-the Harness reading the Order, which the `EMS.json` XSD serves from the other
-side — *"the goal is to make the user's XML input very rich so that you may save
-effort trying to figure it out from nothing"*
+must all reflect inside the `<schema>` definition"*, that this *"serves as a
+sketch of how to build the script to better comprehend the situation"*, and that
+it expands from there *"to fit value, subject, object and its attributes and use
+other properties yet to be coded"*. The purpose is stated: today the workflow
+obliges the reader to infer from zero, and *"it's always better to start from
+sketch than start from nowhere"*
 ([`.decisions/`](.decisions/README.md);
-[`PERGUNTAS-ABERTAS.md`](.plan/PERGUNTAS-ABERTAS.md) §8). It moves the emitted
-document, so it enters as an ORD and is measured against `conformance/`, and it
-waits on the definition of *item* and *part*
-([`INTAKE-EFFECTS.md`](.orders/INTAKE-EFFECTS.md) §8).
+[`PERGUNTAS-ABERTAS.md`](.plan/PERGUNTAS-ABERTAS.md) §8).
+
+So *"empty in this line of releases"* is **not** the state: the element stays
+empty until the ORD that fills it, and the contents are no longer an open
+question. The consumer §9 demands is named — the Harness reading the Order,
+which the `EMS.json` XSD serves from the other side
+([`INTAKE-PIN-TRAFFIC.md`](.orders/INTAKE-PIN-TRAFFIC.md) §5).
+
+What it commissions:
+
+| | |
+|---|---|
+| five declarations reach the element | `[section]`, `[block]`, template, `[part]` and variable — four exist in the engine; `[part]` is a restoration and enters the vocabulary in its own ORD ([`INTAKE-EFFECTS.md`](.orders/INTAKE-EFFECTS.md) §8.2) |
+| the emitted document moves | every source gains a non-empty `<schema>`, so the `xml` hashes and the five `conformance/` examples move **by decision**, with the reason written |
+| the `fromXML` reads it back | or the round-trip invariant `I_A` breaks on the new content |
+| the expansion is named, not open-ended | value, subject, object and attributes are the declared next step, and *"other properties yet to be coded"* is a direction, not a slot a consumer may invent into |
+| one gate, in its ORD | the `<schema>` is derived from the tree and never hand-written, and it is checked against the content it describes — the same reservation recorded for the XSD ([`INTAKE-EFFECTS.md`](.orders/INTAKE-EFFECTS.md) §8.1) |
 
 ---
 
@@ -451,12 +465,19 @@ faster. The norm, which governs every Order and not only this element:
 the Harness may guess or even take blind decisions, leading only to rework."*
 ([`.decisions/`](.decisions/README.md))
 
-**Open, and new — the Regent's own question.** *"Will it go on through the Order
-or is the `<invoke>` the end of the XML?"* The two answers commission different
-work: if the Order continues, the EMS configuration must hold validated skill
-paths for what comes after; if `<invoke>` is the final output, a call that cannot
-execute as scripted must return an error rather than fall through. Nobody had
-asked this, and nothing here answers it.
+**Both branches of the output are answered, in the same breath.** The Regent
+raised the question — *"the most important here is the output: will it go on
+through the Order or is the `<invoke>` the end of the XML?"* — and settled each
+case rather than leaving the choice open:
+
+| branch | what holds |
+|---|---|
+| the Order **goes on** after the call | *"if goes on, the EMS is very important to have the skill's/pre-defined action's paths validated"* — so the EMS configuration must carry validated paths for everything downstream, or the dependency is blocking and the norm above refuses it |
+| the `<invoke>` **is** the final output | *"if it's the final output and the `<invoke>` can't execute as scripted, it must return an error before follow the Order specification"* — the failure surfaces before the specification is followed, never after |
+
+It is a conditional answer, complete on both sides: the engine does not have to
+know which case it is in before emitting, because each case has its own rule.
+What the ORD builds is the two rules, not a choice between them.
 
 **Q12 is closed.** The order's `K8` says ten mutations and nine catches (§6);
 twelve clauses exist, and the count is arithmetic, not policy. `K8` becomes
