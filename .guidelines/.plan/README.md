@@ -72,6 +72,19 @@ delas. A `ORD-0013` está aberta, e duas ordens concorrentes são proibidas
 como trabalho do plano no `main`, do mesmo jeito que o portão `CL-04`/`CL-05`, e
 não como uma segunda ORD.
 
+**As camadas 1 a 4 estão construídas** em
+[`scripts/virtual-path.js`](../../scripts/virtual-path.js), e o índice é
+[`.shortcuts/.virtual/index.json`](../.shortcuts/.virtual/index.json): 135
+arquivos, 3 532 nós e 678 KB. `node scripts/virtual-path.js --check` está no
+`npm run check`, e o balde `virtual path` da suíte tem 14 casos, cada regra
+vista falhando numa mutação plantada. Quem edita `.guidelines/` passa a rodar
+`node scripts/virtual-path.js` antes do `check`, como já roda o
+`build-templates.js` quando edita as fontes do motor. Esperam o Regente: o
+`.history/study.md`, vazio desde o commit inicial, está fixado como perda
+conhecida no `KNOWN_EMPTY` do módulo, porque cortar o sótão é dele; e não existe
+seletor para `.pgml`, então um `.pgml` se endereça pelo arquivo inteiro ou por
+`@block`.
+
 ### 1. `<section>` de cabeçalho, irmã do `<schema/>` — **decidido, faltando fazer**
 
 Toda ligação de variável detectada no corpo deve ser **içada** para um bloco de
