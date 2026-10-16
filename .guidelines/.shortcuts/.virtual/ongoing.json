@@ -36,15 +36,16 @@
     {
       "id": "VP-1-4",
       "title": "caminhos virtuais, camadas 1 a 4, em JS na base",
-      "state": "ongoing",
+      "state": "review",
       "source": ".plan/README.md §0",
       "who": "DV",
       "since": "2026-10-16",
       "where": [
         "branch:main",
-        ".guidelines/.plan/README.md"
+        "scripts/virtual-path.js",
+        ".guidelines/.shortcuts/.virtual/index.json"
       ],
-      "next": "a camada 1: árvore por formato e seletor de cardinalidade 1"
+      "next": "o Regente vê as camadas 1 a 4; o .history/study.md vazio e o seletor de .pgml esperam por ele"
     },
     {
       "id": "PLAN-1",
