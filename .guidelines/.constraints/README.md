@@ -24,6 +24,7 @@
 | **Perda conhecida é fixada com a razão** | e um pino que deixa de valer é **invertido**, não deletado — uma suíte que descarta pino aposentado perde a memória do que ele guardava |
 | **O golden deriva da especificação** | nunca de uma implementação (lock T5) |
 | **Um agente não ratifica norma que escreveu** | |
+| **O desnecessário de custo médio se pula, como requisito não funcional** | *"if unnecessary and mid cost, skip it like a nonfunctional requirement."* — o Regente, 2026-10-16. Desnecessário se mede: o item é desnecessário quando nada medido ou ratificado o pede. Um item necessário fica, seja qual for o custo. Cada item pulado leva uma linha de razão onde ele estava na fila |
 | **Uma ordem aberta é imutável salvo por versão** | e duas ordens concorrentes são proibidas — por isso o material novo vira *intake* |
 
 ## Da escrita
