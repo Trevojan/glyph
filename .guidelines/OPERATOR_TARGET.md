@@ -639,16 +639,23 @@ emitter is touched.
 
 ---
 
-## 9. Open — **[Regent]**
+## 9. Answered — **[Regent]**
 
-1. **Does the AST JSON expose diagnostic positions?** §6.3. The parser can carry
-   `at` either way; whether `serializeAST` (`:1904`) projects it is a
-   consumer-contract question, not a structural one.
+1. **The AST JSON exposes diagnostic positions.** §6.3: `at` enters the gap
+   record and `serializeAST` (`:1904`) projects it, so the AST panel says where.
+   The Regent, 2026-10-15: *"we must consider a future reality where the AST
+   should be read and used as generative context … if we may prevent the
+   situation, we solve a newborn problem. if not, we gain another point to an
+   already solid structure. double gain."* It gives `serializeAST` one more key,
+   so the **114 `ast` hashes move by decision**, the way `TPL` moved them on
+   2026-09-27 — the snapshot is regenerated because a decision was taken, and the
+   decision is written ([`.decisions/`](.decisions/README.md)). The work enters as
+   an ORD.
 
-Two items that were open in the first draft are now closed and are not
-re-litigated here: the divide operator is **deleted** (`C-01`, ratified again by
-the Regent), and `\eth\` is an **abandoned** spelling removed in the same release
-(`I-19`).
+Three items that were open in the first draft are closed and are not re-litigated
+here: the divide operator is **deleted** (`C-01`, ratified again by the Regent),
+`\eth\` is an **abandoned** spelling removed in the same release (`I-19`), and
+the position question above.
 
 ---
 
