@@ -1,0 +1,85 @@
+{
+  "_about": "Registro do trabalho dos agentes: o primeiro relance ao voltar a este repositório. Aponta, nunca copia. O modelo é o do toolkit Regency, library/virtualpath.md §3; o detalhe de cada item mora no source.",
+  "schema": 1,
+  "updated": "2026-10-16",
+  "items": [
+    {
+      "id": "ORD-0013",
+      "title": "o instalador, com o segundo protocolo em vez de node",
+      "state": "backlog",
+      "source": ".orders/EMS-001/README.md, A Ordem aberta",
+      "next": "emitir na branch rust; o primeiro passo dentro da Ordem é medir todo caminho de instalador contra o filtro"
+    },
+    {
+      "id": "ORD-0014",
+      "title": "a janela própria, pelo msedge --app",
+      "state": "backlog",
+      "source": ".orders/EMS-001/EMS-001.pgml"
+    },
+    {
+      "id": "VP-1-4",
+      "title": "caminhos virtuais, camadas 1 a 4",
+      "state": "backlog",
+      "source": ".plan/README.md §0"
+    },
+    {
+      "id": "PLAN-1",
+      "title": "a <section> de cabeçalho, irmã do <schema/>",
+      "state": "backlog",
+      "source": ".plan/README.md §1"
+    },
+    {
+      "id": "PLAN-2",
+      "title": "gatilhos de re-ferência",
+      "state": "backlog",
+      "source": ".plan/README.md §2"
+    },
+    {
+      "id": "PLAN-5",
+      "title": "os itens decididos em 2026-09-27, cada um uma ORD na EMS-002",
+      "state": "backlog",
+      "source": ".plan/README.md §5"
+    },
+    {
+      "id": "ORD-0011-parked",
+      "title": "mapear o repositório, sem mover nada, quando a EMS-001 fechar",
+      "state": "backlog",
+      "source": ".plan/README.md, Adiado por decisão"
+    },
+    {
+      "id": "EFF-8",
+      "title": "a definição de item",
+      "state": "blocked",
+      "blocked_by": "o Regente: o que item é na estrutura, e o modelo de valor, objeto e escopo",
+      "source": ".plan/README.md, Aberto: \"Item\" não tem definição"
+    },
+    {
+      "id": "INVOKE-END",
+      "title": "o <invoke> continua a Ordem ou termina o XML",
+      "state": "blocked",
+      "blocked_by": "o Regente",
+      "source": ".plan/README.md, Aberto: o <invoke>"
+    },
+    {
+      "id": "REPAIR-UNIT",
+      "title": "o repair move por item ou por lote",
+      "state": "blocked",
+      "blocked_by": "o Regente",
+      "source": ".plan/README.md, Aberto: duas perguntas de 2026-10-15"
+    },
+    {
+      "id": "XSD-SCHEMA",
+      "title": "qual peça gera qual entre o XSD da EMS.json e o <schema>",
+      "state": "blocked",
+      "blocked_by": "o Regente",
+      "source": ".plan/README.md, Aberto: duas perguntas de 2026-10-15"
+    },
+    {
+      "id": "E-06",
+      "title": "a base verificada da E-06",
+      "state": "blocked",
+      "blocked_by": "o Regente: a inspeção mais de perto que ele pediu",
+      "source": ".plan/README.md, Aberto: a E-06"
+    }
+  ]
+}
