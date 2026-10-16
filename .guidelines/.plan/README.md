@@ -116,9 +116,12 @@ Da `ORD-0001` à `ORD-0012`, fechadas: a nuvem correu da `ORD-0001` à `ORD-0010
 e esta máquina a `ORD-0011` e a `ORD-0012`; o [registro da
 série](../.orders/EMS-001/README.md) guarda o commit e o digest de cada uma. O
 app roda no motor Rust atrás de `?engine=relay`, e o binário `glyph` responde as
-flags do `glyph-cli.js`. A fila para na `ORD-0013`, o instalador: pede uma
-máquina Windows limpa e o Regente, e sob a ADR B leva node ou um segundo
-protocolo. O instalador é também o que torna o app **standalone** no sentido do
+flags do `glyph-cli.js`. A vaga da Ordem aberta é da **`ORD-0013`, o
+instalador**, autorizada pelo Regente em 2026-10-15 com o **segundo protocolo em
+vez de node** — coerente com o Glyph 100% em Rust — e a máquina Windows limpa é
+dele; a medição que o `[ins]` pede corre dentro da Ordem. A `ORD-0014` já tem a
+metade do portão que era do Regente: a árvore medida **aceita**, e a janela pelo
+`msedge --app`. O instalador é também o que torna o app **standalone** no sentido do
 Regente: o Glyph Explorer mora na máquina de cada usuário, e tudo o que é
 pessoal — os templates e os moulds que ele guarda — fica lá, nunca no
 repositório público, que entrega só os templates básicos de exemplo. O motor
@@ -189,23 +192,99 @@ auditoria, e `node scripts/ladder.js --check` segue no `npm run check`.
 ## Aberto, esperando o Regente
 
 As perguntas escritas com opções medidas estão em
-[`PERGUNTAS-ABERTAS.md`](PERGUNTAS-ABERTAS.md), todas respondidas.
+[`PERGUNTAS-ABERTAS.md`](PERGUNTAS-ABERTAS.md) — as sete da primeira rodada e as
+vinte e três do inventário de 2026-10-15, cada uma com a resposta dele. O que
+**ainda não tem resposta** está aqui, em ordem de quanto cada coisa bloqueia.
+
+### "Item" não tem definição — a primeira da fila
+
+[`INTAKE-EFFECTS.md`](../.orders/INTAKE-EFFECTS.md) §8. Glyph tem comandos,
+literais e casas — não tem valor nem objeto. O Regente desenhou a **fronteira**
+em 2026-10-15 (a inferência se apoia no XSD gerado sobre o conteúdo do XML) e
+**não** a definição: o que "item" é na estrutura, e o modelo de valor, objeto e
+escopo, seguem em branco.
+
+O que ela bloqueia hoje — e é mais do que bloqueava antes do inventário:
+
+| bloqueia | desde quando |
+|---|---|
+| a metade cara dos efeitos: objetos de contexto, efeito condicional por `[SECTION]` | antes |
+| o **D** de [`INTAKE-VARIABLES.md`](../.orders/INTAKE-VARIABLES.md) §4 — ligações fora da cerca | antes, e **cresceu**: com a referência saindo do pacote, o D carrega o enunciado maior |
+| a valência e o rótulo de **`[part]`**, cujo desenho existe e cuja peça é fatia de `[block]` | 2026-10-15 — o desenho chegou e se apoia em "item" |
+| a gramática do seletor do **PIN** (`PIN-selection`) | 2026-10-15 — *"this will come along the \"item\" and \"part\" definition"* |
+| o conteúdo do **`<schema>`**, que reflete seções, blocos, templates, parts e variáveis | 2026-10-15 — o conteúdo foi decidido e nomeia *parts* |
+| o esquema da **`EMS.json`**, que é o XSD pelo outro lado | 2026-10-15 — pela mesma peça |
+
+Era a chave da segunda ordem; agora é também a chave do PIN, do `<schema>` e da
+`EMS.json`. Pede medição antes de desenho, e a medição ainda não tem instrumento
+escrito.
+
+### O `<invoke>` continua ou termina o XML?
+
+Pergunta do próprio Regente em 2026-10-15, que ninguém havia feito:
+*"will it go on through the Order or is the `<invoke>` the end of the XML?"*
+As duas respostas comissionam trabalho diferente —
+[`PACKAGE_TARGET.md`](../PACKAGE_TARGET.md) §10. A norma que veio com ela já
+vale: nenhuma dependência bloqueante pode existir ao executar uma Ordem.
+
+### A E-06, adiada com a direção dada
+
+O caminho é a base verificada de
+[`conformance/README.md`](../../conformance/README.md) §E-06 — o Regente
+respondeu *"D"* — mas ele **não ratifica como feita**: *"this needs a closer
+inspection"*. Até a inspeção dele, `K1` não alcança a regra de posição do
+`PACKAGE_TARGET.md` §3.2 e as garantias **G2 e G3** seguem sem cobertura.
+
+### Pendências de registro, sem casa hoje
+
+Achados do inventário de 2026-10-15 que não são consequência de resposta nenhuma
+e que pedem uma decisão de norma — como um identificador se aposenta — que
+nenhum agente pode ratificar:
+
+| pendência | estado |
+|---|---|
+| a série `Q` tem seis buracos: `Q1`, `Q2`, `Q3`, `Q5`, `Q6`, `Q13` não são enunciados em lugar nenhum | nada vivo; quem contar `Q1..Q14` procura seis perguntas que não existem |
+| `Q9` nomeia duas perguntas diferentes sobre o mesmo assunto — [`E0b-ARCHITECT-RETURN.md`](../.orders/E0b-ARCHITECT-RETURN.md) e [`PACKAGE_TARGET.md`](../PACKAGE_TARGET.md) §10 | as duas fechadas; a colisão está registrada nos dois |
+| `O1`, `O2`, `O3` e `O6` são referenciados como resolvidos e nunca enunciados; `O2` e `O6` não têm nem descrição recuperável | todas as dez resolvidas; `O2` e `O6` são identificadores sem conteúdo |
+| em [`PERGUNTAS-ABERTAS.md`](PERGUNTAS-ABERTAS.md), *"O que eu faço sem você"* fecha o documento antes da pergunta 7 | ordem de leitura, não perda |
+| o `note` do `package.json` diz que o D1 do [`HGML_PLAN.md`](../HGML_PLAN.md) está *"open since v1.1"* | o D1 está **feito** — treze módulos; a linha do `package.json` é o mesmo fato defasado em segundo lugar, e não foi tocada nesta rodada |
+| as linhas de [`GLOSSARY.md`](../GLOSSARY.md) §8 que `[ref'nem']`, `[ref'EMS']` e a fila do `repair` pedem | o `GLOSSARY.md` é fonte de uma cópia gerada que a skill carrega, então entram **na ORD que as constrói**, com `node scripts/build-skill.js` no mesmo passo — a ordem que o §5 do [`INTAKE-PIN-TRAFFIC.md`](../.orders/INTAKE-PIN-TRAFFIC.md) já declara: vocabulário primeiro, depois o JS, depois o Rust |
+
+### O resto
 
 | | |
 |---|---|
-| **estudo de setembro** | oito intakes em [`.orders/`](../.orders/): [`INTAKE-VIRTUAL-PATH`](../.orders/INTAKE-VIRTUAL-PATH.md) (mini-repo, medido: o custo de round-trip é o tamanho de `glyph-parser.js`), [`INTAKE-ORDER-COHERENCE`](../.orders/INTAKE-ORDER-COHERENCE.md) (`relates[]`, B antes de A), [`INTAKE-BURN-INVARIANCE`](../.orders/INTAKE-BURN-INVARIANCE.md) (fechado), [`INTAKE-FORMAL-ANALYSIS`](../.orders/INTAKE-FORMAL-ANALYSIS.md), [`INTAKE-PARSER-SPLIT`](../.orders/INTAKE-PARSER-SPLIT.md) (o corte, feito: treze módulos), [`INTAKE-RUST`](../.orders/INTAKE-RUST.md) (steelman e defeater; o Regente decidiu migrar), [`INTAKE-RUST-LADDER`](../.orders/INTAKE-RUST-LADDER.md) (a escada auditada; §8 guarda o que espera, O4, O5 e O7 a O10), [`INTAKE-FIELD-2026-09`](../.orders/INTAKE-FIELD-2026-09.md) (o kit de cliente; `H-09` fechou por ele). |
-| **EMS-001** | a execução assíncrona que a seção `queue` da spec propõe: medida, economiza no máximo 4 de 14 turnos e esbarra em três restrições; a série fecha como está escrita, e com o tráfego da [`EMS.json`](../.orders/INTAKE-PIN-TRAFFIC.md) a pergunta passa à EMS-002. As perguntas do [retorno](../.orders/EMS-001/RETURN.md) têm todas resposta |
-| **Q14** | o Regente autora o sexto exemplo de conformidade. Base verificada em [`conformance/README.md`](../../conformance/README.md) |
+| **estudo de setembro** | oito intakes em [`.orders/`](../.orders/): [`INTAKE-VIRTUAL-PATH`](../.orders/INTAKE-VIRTUAL-PATH.md) (mini-repo, medido: o custo de round-trip é o tamanho de `glyph-parser.js`), [`INTAKE-ORDER-COHERENCE`](../.orders/INTAKE-ORDER-COHERENCE.md) (a aresta declarada, ratificada em 2026-10-15 com `[ref'nem']`, `[ref'EMS']` e a fila do `repair`; não construída), [`INTAKE-BURN-INVARIANCE`](../.orders/INTAKE-BURN-INVARIANCE.md) (fechado), [`INTAKE-FORMAL-ANALYSIS`](../.orders/INTAKE-FORMAL-ANALYSIS.md), [`INTAKE-PARSER-SPLIT`](../.orders/INTAKE-PARSER-SPLIT.md) (o corte, feito: treze módulos), [`INTAKE-RUST`](../.orders/INTAKE-RUST.md) (steelman e defeater; o Regente decidiu migrar), [`INTAKE-RUST-LADDER`](../.orders/INTAKE-RUST-LADDER.md) (a escada auditada; nada nela espera o Regente — as dez perguntas `O` fecharam em 2026-09-24 e 2026-09-27, e o §8 registra quando cada uma fechou), [`INTAKE-FIELD-2026-09`](../.orders/INTAKE-FIELD-2026-09.md) (o kit de cliente; `H-09` fechou por ele, e os dois achados estruturais fecharam em 2026-10-15). |
+| **EMS-001** | as perguntas do [retorno](../.orders/EMS-001/RETURN.md) têm todas resposta, e os dois portões das duas últimas ORDs também. A execução assíncrona da seção `queue` **passou à EMS-002** em 2026-10-15 e saiu desta lista |
+| **EMS-002** | nasce quando a `ORD-0014` fechar, e a ordem das ORDs sai de uma proposta medida, para o Regente cortar — os catorze itens do §5 esperam nela |
 
 ## Adiado por decisão, não por esquecimento
 
 - **Efeitos** — [`.orders/INTAKE-EFFECTS.md`](../.orders/INTAKE-EFFECTS.md). A
-  metade barata (`<effect>` declarativo) espera; a cara (objetos de contexto) é
-  segunda ordem.
+  metade barata (`<effect>` declarativo) tem o que lhe faltava: o `origin`
+  serializa nos dois níveis, `root-x` na raiz e `x-item-##` em cada item (§9.1
+  do intake), e isso move os hashes de `xml`. A cara (objetos de contexto) é
+  segunda ordem e espera a definição de "item".
 - **A `ORD-0011` chapada, `restructure-glyph-repo`**, estacionada em 2026-09-24 e
   guardada em [`.orders/parked/restructure-glyph-repo/`](../.orders/parked/restructure-glyph-repo/);
   não é a `EMS-001/ORD-0011`. Reestrutura o
-  repositório lendo `_ORBITAL`, que só existe nesta máquina, e reabre aqui quando
-  o Regente chamar.
-- **Escopos aninhados** para variáveis. O escopo é o pacote inteiro, como o
-  Regente especificou. Ninguém pediu mais.
+  repositório lendo `_ORBITAL`, que só existe nesta máquina. Segue estacionada
+  por decisão de 2026-10-15, e **quando a EMS-001 fechar** reabre só a parte de
+  **mapear** — o `[find]` e o `[nt]`, sem mover arquivo nenhum —, devolvendo uma
+  tabela de colisões para o Regente ler. Mapear não gasta a vaga da Ordem
+  aberta.
+- **Os caminhos B e C do mini-repo** saem como não justificados por medição
+  (2026-10-15): se o mini-repo vier, vem pelo caminho A. Qualquer um dos dois
+  reabre com medição na mão.
+- **A tabela de prefixos de kit** não entra no motor (2026-10-15): nomear
+  prefixo de kit é do autor do kit.
+
+## Reaberto por decisão
+
+- **Escopos aninhados** para variáveis. O escopo era o pacote inteiro, como o
+  Regente especificou, e ninguém havia pedido mais. Em 2026-10-15 ele tomou a
+  referência cruzando pacote — `<needs ref="glyph://…">`, tardia, resolvida por
+  quem tem o outro pacote —, e essa é exatamente a condição que **reabre** a
+  decisão. Por expectativa de demanda, não por medição: as duas medições que
+  [`INTAKE-VIRTUAL-PATH.md`](../.orders/INTAKE-VIRTUAL-PATH.md) §16 exigia em
+  ordem não foram feitas, e seguem devidas.
