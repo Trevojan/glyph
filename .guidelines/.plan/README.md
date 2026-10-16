@@ -62,11 +62,15 @@ antes de rodar, está em
 [`INTAKE-VIRTUAL-PATH.md`](../.orders/INTAKE-VIRTUAL-PATH.md) §18 (2026-10-16,
 `scripts/measure-coupling.js`). Desde setembro, a taxa de defasagem é **4,8 %**,
 abaixo da barra de parar. As edições em `.md` seguem locais, com mediana de
-6,7 %, e a co-mudança código↔documento não tem nenhum par acima da barra. Pela
-regra declarada, as camadas 5 e 6 detectam um evento que o repositório deixou de
-produzir. As camadas 1 a 4 respondem ao round-trip, que o git não mede. Se isso
-muda o que se constrói primeiro é do Regente. A primeira ORD nasce na série
-seguinte à EMS-001, ou avulsa, quando o Regente chamar.
+6,7 %, e a co-mudança código↔documento não tem nenhum par acima da barra.
+
+**Decidido em 2026-10-16** ([`.decisions/`](../.decisions/README.md)): as
+**camadas 1 a 4 vêm primeiro**, e o código mora **na base, em JS**, servindo as
+duas branches. As camadas 5 e 6 ficam adiadas pela medição, e a 7 vem depois
+delas. A `ORD-0013` está aberta, e duas ordens concorrentes são proibidas
+([`.constraints/`](../.constraints/README.md)). Por isso as camadas 1 a 4 correm
+como trabalho do plano no `main`, do mesmo jeito que o portão `CL-04`/`CL-05`, e
+não como uma segunda ORD.
 
 ### 1. `<section>` de cabeçalho, irmã do `<schema/>` — **decidido, faltando fazer**
 
@@ -233,17 +237,6 @@ As duas respostas comissionam trabalho diferente —
 [`PACKAGE_TARGET.md`](../PACKAGE_TARGET.md) §10. A norma que veio com ela já
 vale: nenhuma dependência bloqueante pode existir ao executar uma Ordem.
 
-### Propostas da sessão de 2026-10-16, para o Regente ver
-
-Saem das palavras dele de 2026-10-16 ([`.decisions/`](../.decisions/README.md)).
-São propostas e não ratificações.
-
-| proposta | o que já está no disco |
-|---|---|
-| a branch se chama **`rust`** e parte do `main` depois da normalização de base; o `main` segue como a linha JS, com `rust/` como está | a branch existe, local, no `f2124a8`; renomear é um `git branch -m` |
-| a normalização é **base**, no `main`, para as duas branches a herdarem. **Feito:** o registro de trabalho, [`.shortcuts/.virtual/ongoing.json`](../.shortcuts/.virtual/ongoing.json), mais o journal e as impressões que os hooks escrevem ao lado. **Proposto e não feito:** o manifesto de linhagem (`manifest.json`, norma → código, verificado por `vp.py check`), que é a camada 1 do §0 vista pela Regency; e a troca dos nomes que a convenção bane — `scripts/core/util.js` e a cópia dele na skill, o crate `glyph-util`, `rust/crates/glyph-cli/examples/common` —, que move o oráculo e o `crate-graph.js` | o registro, em `99c844e` e `f2124a8`; reverter são dois `git revert` |
-| dos caminhos virtuais, **as camadas 1 a 4 primeiro** — endereçamento, identidade, ordem e offsets —, com as 5 e 6 adiadas pela regra declarada até nova medição | a medição, em [`INTAKE-VIRTUAL-PATH.md`](../.orders/INTAKE-VIRTUAL-PATH.md) §18 |
-
 ### Duas perguntas que as respostas de 2026-10-15 criaram
 
 | pergunta | por que é dele |
@@ -300,6 +293,27 @@ nenhum agente pode ratificar:
 - **Os caminhos B e C do mini-repo** saem como não justificados por medição
   (2026-10-15): se o mini-repo vier, vem pelo caminho A. Qualquer um dos dois
   reabre com medição na mão.
+- **As camadas 5 e 6 dos caminhos virtuais**, as impressões digitais e o grafo
+  de invalidação, adiadas em 2026-10-16. A medição do §0 mostra que elas detectam
+  um evento que o repositório deixou de produzir. Reabrem com uma medição nova,
+  pelo mesmo `scripts/measure-coupling.js`.
+- **O resto da normalização na Regency**, pulado pela norma de 2026-10-16
+  (*"if unnecessary and mid cost, skip it like a nonfunctional requirement"*,
+  [`.constraints/`](../.constraints/README.md)). O registro de trabalho entrou;
+  dos dois itens restantes, nenhum é necessário hoje:
+  - **a troca dos nomes que a convenção bane** (`scripts/core/util.js` e a cópia
+    dele na skill, o crate `glyph-util`, `rust/crates/glyph-cli/examples/common`):
+    nada medido ou ratificado a pede, e o ganho é de nomenclatura. O custo é
+    médio: move o oráculo (`oracle-modules/util.json`) e o `crate-graph.js`, e
+    as ORDs fechadas da EMS-001, que são atos, seguem com o nome antigo;
+  - **o manifesto de linhagem**, `.virtual/manifest.json`: ele é funcional, e não
+    cosmético, porque alimenta o `vp.py code`/`slice`/`stale` e as linhas
+    `STALE` dos hooks. Mesmo assim não é necessário. A função de detectar
+    defasagem é a das camadas 5 e 6, que a medição adiou. A função de endereçar
+    norma e código é a das camadas 1 a 4, que se constroem na base com cobertura
+    fechada, e um manifesto escrito à mão ao lado delas seria um segundo índice.
+    O custo é médio: uma fatia por norma, mantida à mão. Reabre quando o índice
+    das camadas 1 a 4 puder emiti-lo por inversão mecânica.
 - **A tabela de prefixos de kit** não entra no motor (2026-10-15): nomear
   prefixo de kit é do autor do kit.
 
