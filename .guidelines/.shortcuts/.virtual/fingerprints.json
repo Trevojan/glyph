@@ -13,16 +13,34 @@
    "sha256": "291cdfad18bc20e895e904008ad2f7d6f410d3250ef982b1e44de03b4c2a8572"
   },
   ".guidelines/.plan/README.md": {
-   "at": "2026-10-16T11:14:48-03:00",
-   "bytes": 22173,
+   "at": "2026-10-16T11:32:24-03:00",
+   "bytes": 23228,
    "session": "8d995cad",
-   "sha256": "4e9f3f410422f15eb434091e912560733ba18d9ac6f5b8a5f2df38bf602dbdb2"
+   "sha256": "68c72e2e5a77a1f2680ebd7797ee95222dfc8eb89ddae8ac8b83436a02ab2d1b"
   },
   ".guidelines/.shortcuts/README.md": {
-   "at": "2026-10-16T07:48:19-03:00",
-   "bytes": 6776,
+   "at": "2026-10-16T11:32:31-03:00",
+   "bytes": 7021,
    "session": "8d995cad",
-   "sha256": "273d6687cd7c0d0ba13ebd99e7cd875bbaa44608a180cdda6ffd51fa8e644de9"
+   "sha256": "81cbe2607b3230f85fa5901bd27ad8f746194355e53602d23ed78ce1fc227bb7"
+  },
+  "CLAUDE.md": {
+   "at": "2026-10-16T11:32:04-03:00",
+   "bytes": 2985,
+   "session": "8d995cad",
+   "sha256": "b37b03b09ccb8481532a1ce0b031854914098613b193bce49c6aa53775aa5888"
+  },
+  "scripts/test-corpus.js": {
+   "at": "2026-10-16T11:27:49-03:00",
+   "bytes": 211957,
+   "session": "8d995cad",
+   "sha256": "bea19b81b42e0714504e5a6b9aee0211faa6506d19f5933e1fba5013ae126414"
+  },
+  "scripts/virtual-path.js": {
+   "at": "2026-10-16T11:22:24-03:00",
+   "bytes": 23378,
+   "session": "8d995cad",
+   "sha256": "87f855002bc4543ea45c691b5773b015e694555779d65e772f8f6fb10fddcf28"
   }
  },
  "schema": 1
