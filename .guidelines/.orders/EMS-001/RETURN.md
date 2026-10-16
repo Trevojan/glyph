@@ -22,10 +22,26 @@
    2026-09-27 the Regent set the goal as Glyph 100% in Rust, skill and app
    included, against this spec's *"the skill keeps the JS engine it ships"*;
    the series closes as written at ORD-0014, and EMS-002 carries the new
-   direction.
+   direction. On 2026-10-15 he fixed when EMS-002 is born: **when ORD-0014
+   closes**, with the order of its ORDs coming out of a measured proposal for him
+   to cut.
 3. **The answers of 2026-09-27 that ask for work:** questions 1, 2, 3, 4, 6, 10 and 12,
    in [`.plan`](../../.plan/README.md) §5, and question 11, the user's own
    stores on the user's machine, with the installer (ORD-0013).
+4. **Both gates of the last two ORDs are answered** (2026-10-15,
+   [`.decisions/`](../../.decisions/README.md)):
+   - **ORD-0013 opens, and the installer carries a second protocol, not node** —
+     *"we'll follow through A. at this point, the functional Rust desktop app
+     already is the main goal."* The clean Windows machine is the Regent's. The
+     measurement the spec's `[ins]` asks for runs inside the Order.
+   - **The measured tree is accepted, and the window goes by `msedge --app`** —
+     *"for instance the target is Windows … we'll follow with A."* This satisfies
+     `[onlyif'ORD-0013 closed','the Regent accepts the measured tree']`:
+     `wry` + `tao` (78 crates, depth 12) is *fix* by the three-grade filter, and
+     the filter is applied rather than changed.
+5. **The asynchronous execution of the spec's `queue` section is closed here** —
+   *"A"*: it passes to EMS-002 and leaves the open list. Measured, it saves at
+   most 4 of 14 turns and runs into three constraints.
 
 ## Questions for the Regent
 
