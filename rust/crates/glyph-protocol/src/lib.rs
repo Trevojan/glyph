@@ -178,9 +178,8 @@ fn str_field(req: &Json, name: &str) -> String {
 }
 
 /// Process a single request and return the response.
-fn run(req: &Json) -> Result<Json, String> {
-    let ctx = Context::repository();
-    let mut opts = Opts::new(&ctx);
+fn run(ctx: &Context, req: &Json) -> Result<Json, String> {
+    let mut opts = Opts::new(ctx);
 
     // Set language if specified in request
     if req.get("lang").and_then(Json::str) == Some("en") {
@@ -297,6 +296,12 @@ fn run(req: &Json) -> Result<Json, String> {
 
 /// Answer a single JSON request line, returning the exact bytes the JS returns.
 pub fn answer(line: &str) -> String {
+    answer_in(Context::repository(), line)
+}
+
+/// The same answer, from the stores of a given context: ORD-0013, the engine
+/// installed on a user's machine answers with the stores that live there.
+pub fn answer_in(ctx: &Context, line: &str) -> String {
     let req = match parse_json(line) {
         Ok(r) => r,
         Err(_) => return stringify(&Json::Obj(vec![("thrown".into(), Json::Str("bad request".into()))])),
@@ -307,7 +312,7 @@ pub fn answer(line: &str) -> String {
         return stringify(&Json::Obj(vec![("thrown".into(), Json::Str("bad request".into()))]));
     }
 
-    match run(&req) {
+    match run(ctx, &req) {
         Ok(result) => stringify(&Json::Obj(vec![("ok".into(), result)])),
         Err(msg) => stringify(&Json::Obj(vec![("thrown".into(), Json::Str(msg))])),
     }
