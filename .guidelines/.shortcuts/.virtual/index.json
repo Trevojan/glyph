@@ -3274,8 +3274,8 @@
       {"id":"n2c1","sel":"10-status","kind":"heading","parent":"n2ay","prev":"n2c0","next":null,"depth":2,"start":33595,"end":34287,"label":2686976,"key":"25f7a01245fa"}
     ] },
     ".guidelines/PACKAGE_TARGET.md": { "format": "md", "nodes": [
-      {"id":"n2c2","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":23266,"label":65536,"key":"d34b1673ef4e"},
-      {"id":"n2c3","sel":"package-target--the-glyph-package-document","kind":"heading","parent":"n2c2","prev":null,"next":null,"depth":1,"start":0,"end":23266,"label":131072,"key":"d34b1673ef4e"},
+      {"id":"n2c2","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":25114,"label":65536,"key":"441f66d3568c"},
+      {"id":"n2c3","sel":"package-target--the-glyph-package-document","kind":"heading","parent":"n2c2","prev":null,"next":null,"depth":1,"start":0,"end":25114,"label":131072,"key":"441f66d3568c"},
       {"id":"n2c4","sel":"0-what-this-is-and-what-it-is-not","kind":"heading","parent":"n2c3","prev":null,"next":"n2c5","depth":2,"start":330,"end":1022,"label":196608,"key":"368acb0f70c5"},
       {"id":"n2c5","sel":"1-why-this-is-a-delta-and-not-a-grammar","kind":"heading","parent":"n2c3","prev":"n2c4","next":"n2c6","depth":2,"start":1022,"end":2098,"label":262144,"key":"6d28f928dff9"},
       {"id":"n2c6","sel":"2-the-root","kind":"heading","parent":"n2c3","prev":"n2c5","next":"n2c7","depth":2,"start":2098,"end":3181,"label":327680,"key":"0fff8431beba"},
@@ -3296,15 +3296,15 @@
       {"id":"n2cl","sel":"43-emitted-for-composites-only","kind":"heading","parent":"n2ci","prev":"n2ck","next":"n2cm","depth":3,"start":10459,"end":10928,"label":1310720,"key":"3b36d41ae9fd"},
       {"id":"n2cm","sel":"44-template-is-unchanged","kind":"heading","parent":"n2ci","prev":"n2cl","next":"n2cn","depth":3,"start":10928,"end":11362,"label":1376256,"key":"5f06ef430db4"},
       {"id":"n2cn","sel":"45-divergence-from-operator_targetmd","kind":"heading","parent":"n2ci","prev":"n2cm","next":null,"depth":3,"start":11362,"end":12019,"label":1441792,"key":"8731cf4dcdbf"},
-      {"id":"n2co","sel":"5-schema","kind":"heading","parent":"n2c3","prev":"n2ci","next":"n2cp","depth":2,"start":12019,"end":13285,"label":1507328,"key":"e92b10920eba"},
-      {"id":"n2cp","sel":"6-refusals","kind":"heading","parent":"n2c3","prev":"n2co","next":"n2cq","depth":2,"start":13285,"end":16253,"label":1572864,"key":"c7dd142354c6"},
-      {"id":"n2cq","sel":"7-the-four-guarantees","kind":"heading","parent":"n2c3","prev":"n2cp","next":"n2cr","depth":2,"start":16253,"end":17313,"label":1638400,"key":"52c1d505ccae"},
-      {"id":"n2cr","sel":"8-round-trip","kind":"heading","parent":"n2c3","prev":"n2cq","next":"n2cs","depth":2,"start":17313,"end":18141,"label":1703936,"key":"1898e1d62cac"},
-      {"id":"n2cs","sel":"9-deliberately-not-specified-here","kind":"heading","parent":"n2c3","prev":"n2cr","next":"n2ct","depth":2,"start":18141,"end":18696,"label":1769472,"key":"db90d8ff1c6a"},
-      {"id":"n2ct","sel":"10-open","kind":"heading","parent":"n2c3","prev":"n2cs","next":"n2cu","depth":2,"start":18696,"end":20627,"label":1835008,"key":"a5f861289ff5"},
-      {"id":"n2cu","sel":"11-diagnostics-are-not-carried-in-the-document","kind":"heading","parent":"n2c3","prev":"n2ct","next":"n2cw","depth":2,"start":20627,"end":22976,"label":1900544,"key":"a1a2aa15f84f"},
-      {"id":"n2cv","sel":"111-two-findings-this-section-is-built-on","kind":"heading","parent":"n2cu","prev":null,"next":null,"depth":3,"start":21773,"end":22976,"label":1966080,"key":"f87d80775baa"},
-      {"id":"n2cw","sel":"12-status","kind":"heading","parent":"n2c3","prev":"n2cu","next":null,"depth":2,"start":22976,"end":23266,"label":2031616,"key":"6b0f8597fae3"}
+      {"id":"n2co","sel":"5-schema","kind":"heading","parent":"n2c3","prev":"n2ci","next":"n2cp","depth":2,"start":12019,"end":14500,"label":1507328,"key":"df3884e1a0b6"},
+      {"id":"n2cp","sel":"6-refusals","kind":"heading","parent":"n2c3","prev":"n2co","next":"n2cq","depth":2,"start":14500,"end":17468,"label":1572864,"key":"c7dd142354c6"},
+      {"id":"n2cq","sel":"7-the-four-guarantees","kind":"heading","parent":"n2c3","prev":"n2cp","next":"n2cr","depth":2,"start":17468,"end":18528,"label":1638400,"key":"52c1d505ccae"},
+      {"id":"n2cr","sel":"8-round-trip","kind":"heading","parent":"n2c3","prev":"n2cq","next":"n2cs","depth":2,"start":18528,"end":19356,"label":1703936,"key":"1898e1d62cac"},
+      {"id":"n2cs","sel":"9-deliberately-not-specified-here","kind":"heading","parent":"n2c3","prev":"n2cr","next":"n2ct","depth":2,"start":19356,"end":19911,"label":1769472,"key":"db90d8ff1c6a"},
+      {"id":"n2ct","sel":"10-open","kind":"heading","parent":"n2c3","prev":"n2cs","next":"n2cu","depth":2,"start":19911,"end":22475,"label":1835008,"key":"dc8b4cff3b48"},
+      {"id":"n2cu","sel":"11-diagnostics-are-not-carried-in-the-document","kind":"heading","parent":"n2c3","prev":"n2ct","next":"n2cw","depth":2,"start":22475,"end":24824,"label":1900544,"key":"a1a2aa15f84f"},
+      {"id":"n2cv","sel":"111-two-findings-this-section-is-built-on","kind":"heading","parent":"n2cu","prev":null,"next":null,"depth":3,"start":23621,"end":24824,"label":1966080,"key":"f87d80775baa"},
+      {"id":"n2cw","sel":"12-status","kind":"heading","parent":"n2c3","prev":"n2cu","next":null,"depth":2,"start":24824,"end":25114,"label":2031616,"key":"6b0f8597fae3"}
     ] },
     ".guidelines/PROMOTION_BOUNDARY.md": { "format": "md", "nodes": [
       {"id":"n2cx","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":5113,"label":65536,"key":"e52a4d107614"},
