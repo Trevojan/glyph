@@ -17,9 +17,15 @@
     {
       "id": "ORD-0013",
       "title": "o instalador, com o segundo protocolo em vez de node",
-      "state": "backlog",
+      "state": "ongoing",
       "source": ".orders/EMS-001/README.md, A Ordem aberta",
-      "next": "emitir na branch rust; o primeiro passo dentro da Ordem é medir todo caminho de instalador contra o filtro"
+      "next": "medir todo caminho de instalador contra a régua de três graus, e escrever a medição antes da escolha",
+      "who": "DV",
+      "since": "2026-10-16",
+      "where": [
+        "branch:rust",
+        ".orders/EMS-001/ORD-0013/"
+      ]
     },
     {
       "id": "ORD-0014",

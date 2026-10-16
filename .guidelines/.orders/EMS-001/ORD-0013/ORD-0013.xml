@@ -1,0 +1,39 @@
+<glyph-package engine="3.6.9.07">
+  <schema/>
+  <block once="true">
+    <block binds="ORD-0013-installer">
+      <user-input>ORD-0013-installer</user-input>
+      <context>
+        <user-input>the spec of EMS-001</user-input>
+        <user-input>.guidelines/.orders/EMS-001/EMS-001.pgml</user-input>
+      </context>
+      <only-if>
+        <user-input>ORD-0011 closed</user-input>
+        <user-input>ORD-0012 closed</user-input>
+      </only-if>
+      <target>
+        <user-input>an installer for Windows that puts the binary and the page on a clean machine</user-input>
+      </target>
+      <constraint>
+        <user-input>the installed app carries a second protocol and no node: the engine serves the page and answers /engine on its own localhost origin, as proposal A of the return measured it; ADR B stays the protocol of serve-dev.js</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the engine answers with the stores on the machine of the user, and the templates and moulds the user keeps live there and never in the repository, which ships only the basic sample templates; question 11 of the return</user-input>
+      </constraint>
+      <constraint>
+        <user-input>every crate passes the measured filter of INTAKE-RUST-LADDER section 9 and enters vendored</user-input>
+      </constraint>
+      <instruction>
+        <user-input>measure every installer path against the filter before choosing one, and write the measurement before the choice</user-input>
+      </instruction>
+      <note>
+        <user-input>the clean Windows machine belongs to the Regent, and the Regent runs the val</user-input>
+      </note>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the installer</user-input>
+        <user-input>a clean machine installs, opens the app and emits an Order</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>
