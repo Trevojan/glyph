@@ -60,16 +60,22 @@ layer:
 1. **The Order declares its relations in Glyph, in its own source** —
    `[ovr[ref'ORD-0003']]`, `[drvf[ref'ORD-0002']]`, `[seeal[ref'ORD-0007']]`.
    Existing vocabulary; goes through the parser; appears in the XML. The Order
-   carries its own lineage in its own language.
+   carries its own lineage in its own language. **A reference also names its own
+   category**: `[ref'nem']` on a loose chained Order, `[ref'EMS']` on the first
+   Order of a series, which is how an Order declares it belongs to a queue and
+   hands the check to that series' configuration (the Regent, 2026-10-15; §9).
 2. **The CLI extracts them into the manifest** as
    `relates: [{ order, kind, reason }]` — the shape `supersedes` already has,
    plus `order`. Derived from the source, never typed by hand: *domain avoids
    synthesis.*
 3. **A `--check`**: every `relates[].order` names an Order that exists in the
    destination; the `supersedes`/`overrides` subgraph is acyclic. `dag.js` over
-   a graph of ten nodes.
-4. **One home and one scheme** — the Regent's decision, and the precondition
-   of the other three.
+   a graph of ten nodes. Where the category is `EMS`, the destination is the
+   series' `EMS.json`, and what the check compares is metadata, not presence.
+4. **One home and one scheme** — decided on 2026-09-24:
+   `.orders/EMS-###/ORD-####/`, the ORD count restarting in each series
+   ([`.decisions/`](../.decisions/README.md), *"Responde ao `I_B1`"*). Steps 1
+   to 3 are ratified on 2026-10-15.
 
 ## 5. `required`, not nullable — the distinction that changes step 1
 
@@ -80,13 +86,22 @@ declared lineage is not an Order awaiting an answer, it is an Order that has
 not said where it stands — and if the field is prose, the engine cannot read it
 and the question returns to undecidable.
 
-So the relation is **`required`**: absence **prevents emission**. `--bundle`
-refuses an Order that declares no `relates` — where "none: this is the first"
-is itself a declaration, `[ref'ORD-0000']` or an explicit empty. The field is
-typed, in Glyph, and its absence is a `fix`, not an `ask`. This is the one
-place in the engine where an empty slot *does* block, and the reason is
-stated: the slot is not information the human lacks, it is a claim the Order
-must make about itself.
+So the relation is **`required`**: every Order says where it stands. The field
+is typed, in Glyph, and the claim is not optional — the slot is not information
+the human lacks, it is a claim the Order must make about itself.
+
+What the claim may be is wider than "name another Order". A loose chained Order
+references its neighbour in the same directory, and `[ref'nem']` names that
+category; the first Order of a series writes `[ref'EMS']` and the series'
+configuration answers for it. So **"none: this is the first" is not a case**:
+there is always a category to declare, and `ORD-0000` stays unreserved.
+
+And the trigger is **mismatch, not absence**. `--bundle` does not refuse for a
+missing reference; it refuses when the metadata does not match what the EMS
+configuration declares — a `[ref'EMS']` in a folder whose configuration does not
+hold that Order, a chain that points outside its own directory. That `fix` is
+not a dead end: it is **enqueued to `repair`**, which asks to move the misplaced
+ORD to its correct EMS, or to `.orders/NEM/` (§9).
 
 ## 6. The honest limit
 
@@ -127,3 +142,21 @@ no slice extraction, a graph of ten nodes — and it proves *manifest as
 dependency record* on the easiest case before the Virtual Path tries it on
 thirty-four documents. And it stands on its own: coherence between Orders is a
 problem whether or not a mini-repo is ever built.
+
+## 9. Ratified, and what the Regent added to it
+
+Steps 1 to 3 are **ratified** (the Regent, 2026-10-15,
+[`.decisions/`](../.decisions/README.md)), with three additions this intake did
+not carry. His words are in
+[`PERGUNTAS-ABERTAS.md`](../.plan/PERGUNTAS-ABERTAS.md) §8.
+
+| addition | what it changes here |
+|---|---|
+| **two reference values** — `[ref'nem']` for a loose chained Order, `[ref'EMS']` to declare belonging to a series | replaces `[ref'ORD-0000']` and the explicit empty, both of which existed only to spell "I am the first". `ORD-0000` stays unreserved, and the `--check` keeps no special case for emptiness |
+| **the check is delegated to the EMS configuration**, which each series carries and which is already ratified | the destination of the `--check` for a series Order is its `EMS.json`, not the folder listing. §4 step 3 reads from it |
+| **`repair` becomes a queue** — every `fix` found here is enqueued to it, and it asks to move the misplaced ORD to its correct EMS or to `.orders/NEM/` | `repair` exists in the traffic design as *show the diff and ask before writing* ([`INTAKE-PIN-TRAFFIC.md`](INTAKE-PIN-TRAFFIC.md) §3); **it has no queue and no move**, so this is new work, not a reuse |
+
+It changes the manifest and what `--bundle` refuses, so it enters as an ORD. The
+gate of `FIELD-3b` — all `[ctx]` versions in a series equal the series'
+declared one — lands on the same destination and follows it
+([`INTAKE-FIELD-2026-09.md`](INTAKE-FIELD-2026-09.md) §3).

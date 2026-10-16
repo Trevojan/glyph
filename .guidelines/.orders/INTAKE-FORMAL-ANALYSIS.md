@@ -202,7 +202,8 @@ sound premise.
 | extract `E_B(o)` from one Order | AST walk | `O(n)` | not built; same shape as `binds`/`ref` extraction |
 | resolve: `(o, r, o') ∈ E_B ⇒ o' ∈ O` | hash set of Order IDs | `O(1)` per edge, `O(|E_B|)` total | not built |
 | cycle check on `E_B^↓` | DFS | `O(|O| + |E_B^↓|)` | not built; **`dag.js`'s algorithm on a second graph** |
-| required-field gate at `--bundle` | `|E_B(o)| ≥ 1 ∨ root(o)` | `O(1)` after extraction | not built |
+| declaration gate at `--bundle` — the category is named, and the metadata matches the EMS configuration | compare against the series' `EMS.json` | `O(1)` after extraction | not built |
+| enqueue a mismatch to `repair`, which asks to move the ORD | append to the repair queue | `O(1)` per finding | not built; `repair` has neither queue nor move today |
 | `active(O)` | in-degree zero in `E_B^↓` | `O(|O| + |E_B^↓|)` | not built |
 | `--check`: manifest `relates[]` equals extraction | rebuild in memory, compare | `O(Σ n_o)` | not built; the `build-*.js --check` pattern |
 
@@ -210,13 +211,17 @@ sound premise.
 
 | | invariant | holds? | gate |
 |---|---|---|---|
-| `I_B1` | one ID scheme, one home: `id : O → ORD-####` injective, all under one destination | **✗** *measured* — two schemes, two homes | the Regent's decision (§3 of B) |
-| `I_B2` | every edge resolves: `(o, r, o') ∈ E_B ⇒ o' ∈ O` | vacuous today | `--bundle` refuses |
-| `I_B3` | `E_B^↓` is acyclic — no Order replaces an Order that replaces it | vacuous today | DFS, `--bundle` refuses |
-| `I_B4` | `relates` is **required**: `|E_B(o)| ≥ 1 ∨ root(o)` — absence is `fix`, the one slot where empty blocks | vacuous today | `--bundle` refuses |
-| `I_B5` | `relates[]` in the manifest is a function of the AST, never hand-written | vacuous today | `--check` |
+| `I_B1` | one ID scheme, one home: `id : O → ORD-####` injective, all under one destination | **answered** 2026-09-24 — `.orders/EMS-###/ORD-####/`, the count restarting per series, built since 2026-09-25 | the Regent's decision ([`.decisions/`](../.decisions/README.md), *"Responde ao `I_B1`"*) |
+| `I_B2` | every edge resolves: `(o, r, o') ∈ E_B ⇒ o' ∈ O` | ratified in design 2026-10-15, not built | `--bundle` refuses |
+| `I_B3` | `E_B^↓` is acyclic — no Order replaces an Order that replaces it | ratified in design 2026-10-15, not built | DFS, `--bundle` refuses |
+| `I_B4` | `relates` is **required**: every Order declares where it stands, and the declaration may name a category — `[ref'nem']` loose and chained, `[ref'EMS']` belonging to a series. The trigger is **mismatch against the EMS configuration, not absence**, and that `fix` is enqueued to `repair` | ratified in design 2026-10-15, not built | `--bundle` refuses; `repair` moves |
+| `I_B5` | `relates[]` in the manifest is a function of the AST, never hand-written | ratified in design 2026-10-15, not built | `--check` |
 
-`I_B1` is the precondition of the other four and is not an engine property.
+`I_B1` was the precondition of the other four and is not an engine property; it
+is settled, so `I_B2` to `I_B5` have a destination to stand on. Their design is
+ratified ([`INTAKE-ORDER-COHERENCE.md`](INTAKE-ORDER-COHERENCE.md) §4, §5 and
+§9), and what moved in `I_B4` is where the gate fires: an Order with no named
+neighbour is not a failure, an Order whose metadata contradicts its series is.
 
 ### 2.5 Defeasible logic — the vocabulary, and its honest reach
 
