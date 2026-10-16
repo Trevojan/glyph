@@ -310,3 +310,351 @@ de mexer.
 **RESPOSTA:** (c), e perguntado quais: *"Não lembro: mova todos (a)"* — em
 2026-09-27. Os quinze e o `REQ` foram para o §1; nenhuma entrada do §2 exige
 operando pelo motor.
+
+---
+
+## 8. O inventário de 2026-10-15 — vinte e três perguntas, as palavras do Regente
+
+> **Esta seção é a casa das palavras literais.** O inventário foi levantado
+> sobre o repositório em `main`, `afed370`, e cada pergunta tem o seu enunciado
+> no documento onde vive — este registro **aponta** para lá e não o copia. A
+> decisão e a razão de cada uma estão em
+> [`.decisions/`](../.decisions/README.md) sob 2026-10-15.
+>
+> O Regente declarou a rodada **incompleta**: *"i did not finished yet, but i
+> think this is enough material to go on. i understand that if i created new
+> questions or contradictions, this is actually good news and an advance of
+> Glyph's project anyway."*
+
+### `COH-relates` — a aresta entre Ordens
+
+Enunciado: [`INTAKE-ORDER-COHERENCE.md`](../.orders/INTAKE-ORDER-COHERENCE.md)
+§4 e §5. Candidatas A a D; a A era a recomendação.
+
+**RESPOSTA:** the concept of A is solid. i'll take it as base. when starting a
+loose ORD, from what i'm seeing, no EMS field should appear as `fix` for no
+references. instead, chained orders may simply reference each another in the same
+directory, and the `fix` appears when the metadata don't match. this solves loose
+chained ORDs (going back from later edition to say that a solution was already
+decided and named: *No-Emission/Not-Emitted* Orders -> NEM). the reason for this
+answer: there is already planned that each EMS will carry it's own configuration
+file. this is already ratified, and the `[CMD]` must follow it. i ratify it as
+`[ref'nem']`, for common chained loose Orders and `[ref'EMS']` for referencing
+the file's actual directory EMS configuration. this solves it - any `fix` found
+here will be enqueued to the `repair` function, which will ask to move each
+misplaced ORD to it's correct EMS (or to the NEM folder, if required). in resume:
+it is necessary for an Order to refer another, but if it's a loose one, it will
+note its category in their reference: `[ref'nem']`. the same goes to EMS -> the
+very first Order must `[ref'EMS']` to declare it's part of a queue, passing the
+responsibility to the EMS configuration, which is a real improvement in
+organisation and enables future `repair`s.
+
+> **Supera a candidata A como escrita.** O que a resposta cria, e que nenhuma
+> candidata oferecia: **dois valores de referência** (`[ref'nem']` e
+> `[ref'EMS']`), a **delegação da verificação à configuração da EMS**, e a
+> **função `repair` como fila** — que não existe hoje: o `repair` do tráfego
+> mostra a diferença e pergunta, e não enfileira nada. E inverte o gatilho: a
+> ausência de referência deixa de ser `fix`, e o `fix` passa a ser metadado que
+> não casa.
+
+### `PT-Q11` — `<invoke>` e a precondição
+
+Enunciado: [`PACKAGE_TARGET.md`](../PACKAGE_TARGET.md) §10. Candidatas A e B.
+
+**RESPOSTA:** when `<invoke>` is used, there must be a basis for the model to
+rely on. for example: if the EMS has a configuration that set paths to a SKILL.md
+or a file that comprehend a skill, it must be called. if ending unresolved by
+EMS's configurations, the Explorer must return a `fix`. the point also is that
+the Explorer should carry global generic skills of its own to save time and
+resolve faster the invocation dependency. the element itself is powerful because
+it calls pre-defined actions and send parameters, but the most important here is
+the output: will it go on through the Order or is the `<invoke>` the end of the
+XML? if goes on, the EMS is very important to have the skill's/pre-defined
+action's paths validated. if it's the final output and the `<invoke>` can't
+execute as scripted, it must return an error before follow the Order
+specification. no blocking dependency may be present when executing an Order -
+otherwise the Harness may guess or even take blind decisions, leading only to
+rework.
+
+> **A norma vale além do `<invoke>`:** nenhuma dependência bloqueante pode
+> existir ao executar uma Ordem. E a pergunta do próprio Regente — *"will it go
+> on through the Order or is the `<invoke>` the end of the XML?"* — é nova:
+> ninguém a tinha feito, e fica **aberta**.
+
+### `OT-9.1` — posição de diagnóstico no AST JSON
+
+Enunciado: [`OPERATOR_TARGET.md`](../OPERATOR_TARGET.md) §9. Candidatas A a C.
+
+**RESPOSTA:** A, undoubtly. we must consider a future reality where the AST
+should be read and used as generative context - if considering it
+source-of-truth isn't enough today. if we may prevent the situation, we solve a
+newborn problem. if not, we gain another point to an already solid structure.
+double gain.
+
+### `VP-16` — referências podem sair do pacote
+
+Enunciado: [`INTAKE-VIRTUAL-PATH.md`](../.orders/INTAKE-VIRTUAL-PATH.md) §16.
+Candidatas A a C; a C era a recomendação.
+
+**RESPOSTA:** we must reach B, though C is indeed a good idea. cross-packaging is
+a feature we know from UX and Software Development experience will be at high
+demand sooner or later -> sooner, certainly, if the user seek to solve multiple
+ORDs from different sources at a time. anyway, my answer about the Explorer
+resolving paths already covers part of it, but it's also more fruitful to verify
+if an MCP may join the ORD without worry about integration constraints.
+
+> **B, não a recomendação C — por expectativa de demanda, não por medição.** As
+> duas medições que o §16 exigia em ordem não foram feitas: o braço de
+> comparação do §8 e o terceiro braço do transporte MCP. A escolha **reabre a
+> decisão de escopos aninhados**, que estava adiada por palavra do Regente.
+
+### `ORD-0013` — o instalador
+
+Enunciado: [`EMS-001.pgml`](../.orders/EMS-001/EMS-001.pgml), seção
+`ORD-0013-installer`. Candidatas A a D; a recomendação era D e então A.
+
+**RESPOSTA:** we'll follow through A. at this point, the functional Rust desktop
+app already is the main goal.
+
+### `EFF-10` — o `->`
+
+Enunciado: [`INTAKE-EFFECTS.md`](../.orders/INTAKE-EFFECTS.md) §10. Candidatas A
+a D; a A era a recomendação.
+
+**RESPOSTA:** forget about it. when i wrote this, i was simply showing you an
+example -> compared to another. just that. the symbol `->` never existed and will
+never do, as `>` needs to press `SHIFT+.` to be typed.
+
+> Fecha sem reconhecedor: não houve construto a aposentar.
+
+### `PT-Q12` — o `K8` conta errado
+
+Enunciado: [`PACKAGE_TARGET.md`](../PACKAGE_TARGET.md) §10. Candidatas A e B.
+
+**RESPOSTA:** A -> straight to the point. *Mastery spares synthesis.*
+
+### `EFF-9` — `origin` em `item` vs `root`
+
+Enunciado: [`INTAKE-EFFECTS.md`](../.orders/INTAKE-EFFECTS.md) §9. Candidatas A
+a C, sem recomendação.
+
+**RESPOSTA:** the answer is both A and B. a root of a series of items must be
+clear in it's declaration to avoid confusion as the longer the official XML
+output, the harder it gets to distinguish subjects from a block to another of a
+section. so, there must be something like `root-x` and each item also carry its
+own `x-item-##` <- the first part being the related root, then declaring it is an
+item and finally it's position in the logic structure's queue. the generic
+`root-` of a section is primarily its name.
+
+> **Desenho, não escolha de letra:** um esquema de nomeação que os dois níveis
+> carregam. **Move os hashes de `xml`**, então passa pelo
+> [`PACKAGE_TARGET.md`](../PACKAGE_TARGET.md) e pelo `conformance/`.
+
+### `FIELD-3b` — o portão da versão nos 51 `[ctx]`
+
+Enunciado: [`INTAKE-FIELD-2026-09.md`](../.orders/INTAKE-FIELD-2026-09.md) §3.
+Candidatas A a D; a recomendação era D e então A.
+
+**RESPOSTA:** D, then A. a solution with finesse, must admit, well done!
+
+### `ORD-0014` — aceitar a árvore medida
+
+Enunciado: [`EMS-001.pgml`](../.orders/EMS-001/EMS-001.pgml), seção
+`ORD-0014-window`. Candidatas A a C; a A era a recomendação.
+
+**RESPOSTA:** for instance the target is Windows. so, as this is an integration
+question plus minor constraint for us today, we'll follow with A.
+
+### `VP-12` — os caminhos B e C do mini-repo
+
+Enunciado: [`INTAKE-VIRTUAL-PATH.md`](../.orders/INTAKE-VIRTUAL-PATH.md) §12.
+Candidatas A a D; a A era a recomendação.
+
+**RESPOSTA:** A.
+
+### `FIELD-3c` — tabela de prefixos no `--check`
+
+Enunciado: [`INTAKE-FIELD-2026-09.md`](../.orders/INTAKE-FIELD-2026-09.md) §3.
+Candidatas A e B; a B era a recomendação.
+
+**RESPOSTA:** B.
+
+### `PARKED` — a `ORD-0011` chapada
+
+Enunciado: [`README.md`](README.md), *Adiado por decisão*, e
+[`.orders/parked/restructure-glyph-repo/`](../.orders/parked/restructure-glyph-repo/).
+Candidatas A a C; a recomendação era B agora e C quando a EMS-001 fechar.
+
+**RESPOSTA:** i'll follow the recommendation: B now, C when EMS-001 closes.
+
+### `Q14-quando` — a E-06
+
+Enunciado: [`conformance/README.md`](../../conformance/README.md) §E-06.
+Candidatas A a D, só para o *quando*.
+
+**RESPOSTA:** D. this was actually responded in earlier questions, isn't it?
+anyway, i won't ratify this as done, as this needs a closer inspection. for now,
+i think you have enough material to go on.
+
+> **Adiada com a direção dada, não fechada.** A base verificada é o caminho; o
+> Regente inspecciona antes de assinar. Até então `K1` não alcança G2 e G3.
+
+### `PT-Q9` — o bundle de seis camadas
+
+Enunciado: [`PACKAGE_TARGET.md`](../PACKAGE_TARGET.md) §10. Candidatas A a C; a
+A era a recomendação.
+
+**RESPOSTA:** B.
+
+### `PIN-vocabulary` — os nomes canónicos e a valência do PIN
+
+Enunciado: [`INTAKE-PIN-TRAFFIC.md`](../.orders/INTAKE-PIN-TRAFFIC.md) §5. Sem
+candidata possível: vocabulário do Regente.
+
+**RESPOSTA:** a pinned attribute on a `[CMD]` is a way to declare it explicitly
+so it may be handled in many different forms without aching about inference
+effort. for example, if i have a `[rev'filepath.txt']`, and i `[pin-rev]`, it
+takes the last input and define it as part of each PIN call of the same type.
+
+> **Semântica, não só nome:** o PIN declara explicitamente um atributo de um
+> `[CMD]` para não depender de inferência, e `[pin-rev]` toma a **última
+> entrada** do tipo e a fixa para cada chamada PIN do mesmo tipo.
+
+### `PIN-selection` — a gramática do seletor de tipo
+
+Enunciado: [`INTAKE-PIN-TRAFFIC.md`](../.orders/INTAKE-PIN-TRAFFIC.md) §5. Sem
+candidata possível: fórmula.
+
+**RESPOSTA:** this will come along the "item" and "part" definition. for now, i
+can say: what is PINned is an attribute of a declared *object*, or a
+characteristic of a declared *subject*, or ultimately the formula of an specified
+*value*. all of this may be written down in the XML for you to digest, but still
+needs inference to find the whole meaning.
+
+> **Amarra-se ao `EFF-8`:** a gramática vem junto da definição de "item" e
+> "part", então `PIN-selection` espera o que o `EFF-8` ainda não tem.
+
+### `PIN-EMS.json` — o esquema da `EMS.json`
+
+Enunciado: [`INTAKE-PIN-TRAFFIC.md`](../.orders/INTAKE-PIN-TRAFFIC.md) §5. Sem
+candidata possível: desenho de esquema que entra no `<glyph-package>`.
+
+**RESPOSTA:** let's build it together. we'll brainstorm and relate to what we
+already own and is clearly ratified and immutable to the current version. the
+first thing to mention is that the EMS will have the basic XSD structure for the
+ORDs to follow. this is useful for when an specific declaration inside an Order
+is given, the Emission handles its spec instead of the very XML of input or your
+pure inference. also this helps when trying to figure how to untangle the user
+input meaning, as the EMS configuration will serve as a map and will hold very
+low cost to be used: just call where it matches the EMS' XSD pattern pointing to
+the current ORD being read and proceed the reasoning.
+
+### `PIN-EMS-000` — o conteúdo inicial da EMS genérica
+
+Enunciado: [`INTAKE-PIN-TRAFFIC.md`](../.orders/INTAKE-PIN-TRAFFIC.md) §5. A
+pergunta de um bit: medir `.scope/generics/` por frequência, ou escrever do zero.
+
+**RESPOSTA:** A, and i rewrite to make it fit. this will be quite an artisan
+handswork.
+
+### `EFF-8` — `PART`
+
+Enunciado: [`INTAKE-EFFECTS.md`](../.orders/INTAKE-EFFECTS.md) §8. Candidatas A
+a C para o recorte barato; a C era a recomendação.
+
+**RESPOSTA:** C, and "`[part]`" was already in the plans. i did not saw when it
+gone missing. time to solve it. "`[part'ph-label_height_0','ph-label_height_1,label_height_2']`"
+is a `[cmd]` that slices down `[block]`s, just like `[block]`s are slices of
+`[section]`s. this is useful when a `[section]` have a goal that may be achieved
+in multiple ways and ends being more fruitful in the same Order. through `[part]`
+is possible to take care of specific situations down to user input per boolean or
+word-by-word, something that `[block]` may do, but also isn't prepared for. in
+this case, a `[block]` hold a `[part]` when it's easier to apply the same logic,
+but manage different outputs, for example:
+
+```PGML
+[section'dish'
+[block'ingredients'
+[nt'salt'][nt'butter']
+[part'sa or bu'[ask'needs salt or butter?'
+]]
+[block'prepare'
+[nt'boil'][nt'oven']
+[part'bo or ov'[ask'send to boil or to oven?']
+]]];
+r-[nt'recipe: "le Fishe au Chocolat". sa or bu, bo or ov'];
+```
+
+when trying to resolve the subject `'dish'`, the recipe specified at `r-` must be
+put under the declared situation. each `[block]` has its object and values
+definition. the `[part]`s uses the declared ones. useful for complex logic
+operations within a determined scope of context. maybe driven by a subagent when
+the Harness encounter this specific situation. anyway, instead of letting you
+decide it all alone, it's possible to define pointers like
+`[part'dish-ingredients-core']` or even `[part'dish-cutlery']`. in this case,
+there are two notes for each `[block]`: `salt` and `butter`. each one of these
+"items" can be declared separately: `[item-salt]` and `[item-butter]`. even
+beyond, they may also be declared inside a root: `(inside section 'dish')
+[nt'pantry']` -> `[part'pantry-item-salt']`, `[part'pantry-item-butter']`. also
+an example using all labels: `[part'house-kitchen-pantry-item-salt']`,
+`[part'house-kitchen-pantry-item-salt']`.
+
+### `EFF-8` — "item" e os objetos de contexto
+
+Enunciado: [`INTAKE-EFFECTS.md`](../.orders/INTAKE-EFFECTS.md) §8, primeira
+linha. Sem candidata possível: modelo semântico novo.
+
+**RESPOSTA:** we have to be honest here. there is no way to save inference effort
+enough to make worthy use of this `[CMD]`. this is obvious, since no context is
+enough to simply run a script that will certainly help out with determinism if
+the user input may be *anything*. so, to ease the effort as far as we should, i
+press on to build scripts that help absorbing the information in a very concise
+and clearing way. most of this is based in the inference engines, but the use of
+suba-scribe would be a heavy response to a simple Order's XML input. a subagent
+for this specific situation, however, would be a killer - but still a strong
+answer to an almost mechanical situation. my verdict, and i want you to confirm
+if it makes sense, it that you must at least have some material to base your
+inference effort over the XML's content itself. that phrase i always repeat in
+personal conversations: "some-thing is better than no-thing". in resume: trust
+the engine's generated XSD and apply its rules to the pure XML content when you
+first come to follow an ORD. the XSD is mechanical and offers some structure,
+that in this case, will try to assemble a logic around a *subject* -> like
+preparing a dish, or finding out if it needs butter or salt. as it will be
+handmade, it may contain errors or contradictions. but hey, "we are all humans
+after all". the frontier of *item definition* is this. you will always need to
+rely on what the ORD has to offer as input.
+
+> **A fronteira está declarada; a definição, não.** O que a resposta dá é a
+> régua — a inferência se apoia no XSD gerado sobre o conteúdo do XML. O que ela
+> não dá é o que "item" **é** na estrutura, nem o modelo de valor, objeto e
+> escopo. `EFF-8` segue **aberta**, e agora governa também o `PIN-selection`.
+
+### `PKG-5` — o conteúdo de `<schema>`
+
+Enunciado: [`PACKAGE_TARGET.md`](../PACKAGE_TARGET.md) §5. Sem candidata
+possível para o conteúdo; o barato era confirmar que segue vazio.
+
+**RESPOSTA:** ironic, i just answered something citing it! Glyph's back on
+trails! the declaration of sections, blocks, templates, parts and variables must
+all reflect inside the `<schema>` definition. this serves as a sketch of how to
+build the script to better comprehend the situation. through this we may expand
+it so to fit value, subject, object and its attributes and use other properties
+yet to be coded. at this time, the current workflow obliges you to infer from
+zero, but at least you return a somewhat structured XML. the goal is to make the
+user's XML input very rich so that you may save effort trying to figure it out
+from nothing -> and, of course, it won't exactly save you, but it's always better
+to start from sketch than start from nowhere.
+
+### `EMS-002` — a série que ainda não foi escrita
+
+Levantada pelo inventário, não escrita como pergunta no repositório. Candidatas A
+a C; a A era a recomendação.
+
+**RESPOSTA:** A.
+
+### `EMS-001-queue` — a execução assíncrona
+
+Enunciado: [`README.md`](README.md), *Aberto, esperando o Regente*. Candidatas A
+e B; a A era a recomendação.
+
+**RESPOSTA:** A.
