@@ -44,6 +44,10 @@ Editou `.guidelines/rules.json`, `templates.json`, `expansions.txt` ou
 são as fontes, e `scripts/glyph-data.js` e `.guidelines/expansions.json` são as
 cópias que o motor carrega.
 
+Editou qualquer arquivo de `.guidelines/`? Rode `node scripts/virtual-path.js`
+antes de verificar. Ele reescreve `.shortcuts/.virtual/index.json`, o índice dos
+caminhos virtuais, e mantém o `NodeID` de cada fatia que continua lá.
+
 ## Duas restrições que pegam todo agente novo
 
 O conjunto inteiro está em
