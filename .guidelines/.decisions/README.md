@@ -15,9 +15,9 @@
 
 ## 2026-10-16
 
-Palavras do Regente trazidas à sessão em 2026-10-16 por quem a abriu. O que a
-sessão propôs a partir delas, e ele ainda não viu, está nas abertas do
-[`.plan`](../.plan/README.md).
+Palavras do Regente trazidas à sessão em 2026-10-16 por quem a abriu, em duas
+rodadas: os pedidos, e depois as respostas às cinco perguntas que a sessão fez
+a partir deles.
 
 | decisão | razão |
 |---|---|
@@ -25,6 +25,11 @@ sessão propôs a partir delas, e ele ainda não viu, está nas abertas do
 | **Os ícones novos entram antes da branch, para que ela os herde** | *"the icons are mine, take along and use the new ones (favicon.ico)."* Entraram no `dcd2fc9`, com mensagem própria |
 | **O repositório se normaliza nas convenções da Regency** | *"normalize the repo in Regency's conventions."* O escopo e o plano são dele ver antes de executar |
 | **Os caminhos virtuais vêm primeiro** | *"start from virtual path."* |
+| **A branch da tradução se chama `rust-port`** | *"call the branch `rust-port`."* Ela parte do `main` depois da normalização de base, e o `main` segue como a linha JS, com `rust/` como está |
+| **O journal dos hooks, `.shortcuts/.virtual/checkpoints.jsonl`, fica versionado como está** | *"the journal stays. it is not the problem."* A fricção na troca de branch, quando aparece, é registrada como ocorrência medida, e a proposta não reabre |
+| **O desnecessário de custo médio se pula, como requisito não funcional** — norma, em [`.constraints/`](../.constraints/README.md), e vale além desta rodada | *"if unnecessary and mid cost, skip it like a nonfunctional requirement."* Aplicada ao resto da normalização, item a item, no [`.plan`](../.plan/README.md), *Adiado por decisão* |
+| **Dos caminhos virtuais, as camadas 1 a 4 vêm primeiro — endereçamento, identidade, ordem e offsets —, e as camadas 5 e 6 ficam adiadas pela medição; o código mora na base, em JS, e serve as duas branches** | *"the virtual paths are decided the exact way you asked now."* A sessão perguntou as duas coisas juntas: as camadas, com a medição de [`INTAKE-VIRTUAL-PATH.md`](../.orders/INTAKE-VIRTUAL-PATH.md) §18 (4,8 % de defasagem desde setembro, um evento que o repositório deixou de produzir), e o lugar do código, com a base em JS como primeira opção |
+| **A `ORD-0013` segue com o que a sessão mediu e anotou, e a medição se completa antes da escolha** | *"what's wrong with ORD-0013? follow it with the same points you noted here. it was already ratified."* A resposta *A* de 2026-10-15 já era a autorização. Baixar as árvores de `cargo-wix` e `cargo-packager`, e o WiX, o Inno Setup e o NSIS, num projeto de rascunho fora do repositório, está autorizado. A proposta da sessão é o caminho A, `glyph install`, e o núcleo JS na página do navegador, sem node, é a distância que a EMS-002 fecha depois, não defeito desta Ordem |
 | **O node fica fora do instalador da `ORD-0013`** — a razão da resposta *A* de 2026-10-15 | *"Node isn't a good idea today, at wet already decorated that EMS-002 will make it all Rust."* A escolha fecha node contra o segundo protocolo, e não dispensa o `[ins]` da spec: todo caminho de instalador é medido contra a régua de três graus antes de um ser escolhido |
 
 ## 2026-10-15
