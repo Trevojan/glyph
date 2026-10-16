@@ -10,14 +10,14 @@ se edita aqui vale na sessão seguinte (ou em `/reload-plugins`).
 
 O nome do comando é o caminho: `commands/a/b/c.md` → `/glyph-markup:a:b:c`.
 
-| comando | faz |
-|---|---|
-| `/glyph-markup:xml` `:ast` `:hgml` `:diag` `<glyph>` | os modos do motor, ao pé da letra, sobre Glyph inline; a resposta volta intacta |
-| `/glyph-markup:expand <COMANDO>` | de que um comando é feito — recebe um nome, não fonte |
-| `/glyph-markup:repo-config:guidelines:changelog:config [glyph]` | viaja até `.changelog/` do repositório atual e deixa o motor perguntar o que muda |
-| `/glyph-markup:engine-config:guidelines:changelog:config [glyph]` | o mesmo, sobre o `.guidelines/` deste repositório |
-| `/glyph-markup:repo-config:guidelines:orders:bundle <glyph>` | mede a fonte, mostra a Ordem aberta, e diz como emitir a próxima `ORD-####` — o motor escreve, depois do Regente |
-| `/glyph-markup:repo-config:guidelines:orders:diag` `:hgml` `:xml` `:ast <ORD-#### \| EMS-###/ORD-####>` | os modos sobre uma Ordem que já existe, chapada ou numa série |
+| comando                                                                                                 | faz                                                                                                              |
+| ------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `/glyph-markup:xml` `:ast` `:hgml` `:diag` `<glyph>`                                                    | os modos do motor, ao pé da letra, sobre Glyph inline; a resposta volta intacta                                  |
+| `/glyph-markup:expand <COMANDO>`                                                                        | de que um comando é feito — recebe um nome, não fonte                                                            |
+| `/glyph-markup:repo-config:guidelines:changelog:config [glyph]`                                         | viaja até `.changelog/` do repositório atual e deixa o motor perguntar o que muda                                |
+| `/glyph-markup:engine-config:guidelines:changelog:config [glyph]`                                       | o mesmo, sobre o `.guidelines/` deste repositório                                                                |
+| `/glyph-markup:repo-config:guidelines:orders:bundle <glyph>`                                            | mede a fonte, mostra a Ordem aberta, e diz como emitir a próxima `ORD-####` — o motor escreve, depois do Regente |
+| `/glyph-markup:repo-config:guidelines:orders:diag` `:hgml` `:xml` `:ast <ORD-#### \| EMS-###/ORD-####>` | os modos sobre uma Ordem que já existe, chapada ou numa série                                                    |
 
 `repo-config` procura `Docs/.guidelines/` e depois `.guidelines/` a partir da
 pasta do projeto; `engine-config` aponta para `${CLAUDE_PLUGIN_ROOT}/.guidelines/`,
