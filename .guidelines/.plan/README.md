@@ -139,11 +139,17 @@ Da `ORD-0001` à `ORD-0012`, fechadas: a nuvem correu da `ORD-0001` à `ORD-0010
 e esta máquina a `ORD-0011` e a `ORD-0012`; o [registro da
 série](../.orders/EMS-001/README.md) guarda o commit e o digest de cada uma. O
 app roda no motor Rust atrás de `?engine=relay`, e o binário `glyph` responde as
-flags do `glyph-cli.js`. A vaga da Ordem aberta é da **`ORD-0013`, o
-instalador**, autorizada pelo Regente em 2026-10-15 com o **segundo protocolo em
-vez de node** — coerente com o Glyph 100% em Rust — e a máquina Windows limpa é
-dele; a medição que o `[ins]` pede corre dentro da Ordem. A `ORD-0014` já tem a
-metade do portão que era do Regente: a árvore medida **aceita**, e a janela pelo
+flags do `glyph-cli.js`. A Ordem aberta é a **`ORD-0013`, o instalador**,
+autorizada pelo Regente em 2026-10-15 com o **segundo protocolo em vez de node**
+— coerente com o Glyph 100% em Rust — e **emitida em 2026-10-16**, com o caminho
+A construído: `--serve`, `--install`, `--uninstall` e as stores da máquina. Falta
+o **val**, que é dele: *"a clean machine installs, opens the app and emits an
+Order"*, na máquina Windows limpa com o binário de release. O [retorno
+da série](../.orders/EMS-001/RETURN.md) nomeia a lacuna para que ela não seja
+achada lá de surpresa — um template salvo na página não chega ao motor, o
+mecanismo é a pergunta 11, e as três opções foram respondidas por princípio e não
+por escolha. A `ORD-0014` já tem a metade do portão que era do Regente: a árvore
+medida **aceita**, e a janela pelo
 `msedge --app`. O instalador é também o que torna o app **standalone** no sentido do
 Regente: o Glyph Explorer mora na máquina de cada usuário, e tudo o que é
 pessoal — os templates e os moulds que ele guarda — fica lá, nunca no
@@ -216,46 +222,49 @@ auditoria, e `node scripts/ladder.js --check` segue no `npm run check`.
 
 As perguntas escritas com opções medidas estão em
 [`PERGUNTAS-ABERTAS.md`](PERGUNTAS-ABERTAS.md) — as sete da primeira rodada e as
-vinte e três do inventário de 2026-10-15, cada uma com a resposta dele. O que
-**ainda não tem resposta** está aqui, em ordem de quanto cada coisa bloqueia.
+vinte e três do inventário de 2026-10-15. **Todas as trinta têm resposta dele**,
+e o `EFF-8` tem duas: uma para `[part]`, uma para "item" e os objetos de
+contexto.
 
-### "Item" não tem definição — a primeira da fila
+Então esta lista é curta de propósito, e o que está **decidido e não construído**
+não mora aqui: mora no §5 e nos intakes, e cada peça abre como proposta medida na
+ORD que a constrói, parando no portão dele — a forma que ele ratificou em
+2026-09-27.
 
-[`INTAKE-EFFECTS.md`](../.orders/INTAKE-EFFECTS.md) §8. Glyph tem comandos,
-literais e casas — não tem valor nem objeto. O Regente desenhou a **fronteira**
-em 2026-10-15 (a inferência se apoia no XSD gerado sobre o conteúdo do XML) e
-**não** a definição: o que "item" é na estrutura, e o modelo de valor, objeto e
-escopo, seguem em branco.
+### O val da `ORD-0013`, e o mecanismo da pergunta 11
 
-O que ela bloqueia hoje — e é mais do que bloqueava antes do inventário:
+A Ordem está emitida e o caminho A construído; o `val` é dele — *"a clean
+machine installs, opens the app and emits an Order"* —, na máquina Windows limpa
+com o binário de release. E uma lacuna está nomeada para não ser achada lá de
+surpresa: **um template que o usuário salva na página não chega ao motor.** O
+mecanismo é a pergunta 11 do [retorno](../.orders/EMS-001/RETURN.md), cujas três
+opções foram respondidas **por princípio e não por escolha** — a escolha é dele.
 
-| bloqueia | desde quando |
+### Os dois itens dos caminhos virtuais
+
+Nomeados pelo §0, construídas as camadas 1 a 4: o `.history/study.md`, vazio
+desde o commit inicial, está fixado como perda conhecida no `KNOWN_EMPTY` do
+módulo, porque cortar o sótão é decisão dele; e **não existe seletor para
+`.pgml`**, então um `.pgml` se endereça pelo arquivo inteiro ou por `@block`.
+
+### Duas medições devidas, e nenhuma tem instrumento escrito
+
+Não são perguntas: são dívidas que uma decisão assumiu.
+
+| medição | quem a devia |
 |---|---|
-| a metade cara dos efeitos: objetos de contexto, efeito condicional por `[SECTION]` | antes |
-| o **D** de [`INTAKE-VARIABLES.md`](../.orders/INTAKE-VARIABLES.md) §4 — ligações fora da cerca | antes, e **cresceu**: com a referência saindo do pacote, o D carrega o enunciado maior |
-| a valência e o rótulo de **`[part]`**, cujo desenho existe e cuja peça é fatia de `[block]` | 2026-10-15 — o desenho chegou e se apoia em "item" |
-| a gramática do seletor do **PIN** (`PIN-selection`) | 2026-10-15 — *"this will come along the \"item\" and \"part\" definition"* |
-| o conteúdo do **`<schema>`**, que reflete seções, blocos, templates, parts e variáveis | 2026-10-15 — o conteúdo foi decidido e nomeia *parts* |
-| o esquema da **`EMS.json`**, que é o XSD pelo outro lado | 2026-10-15 — pela mesma peça |
+| o braço de comparação do §8 — o mini-repo reduz releitura? — e o terceiro braço, o transporte MCP comprando o que o arquivo não compra | [`INTAKE-VIRTUAL-PATH.md`](../.orders/INTAKE-VIRTUAL-PATH.md) §16 as exigia **em ordem** antes do `resources`; o Regente decidiu por B sem elas, e elas seguem devidas |
+| a medição dos objetos de contexto, antes do desenho — *measure before design* | [`INTAKE-EFFECTS.md`](../.orders/INTAKE-EFFECTS.md) §9, a segunda ordem. Com a fronteira de "item" dada, é só isto que falta antes do desenho, e o instrumento não está escrito |
 
-Era a chave da segunda ordem; agora é também a chave do PIN, do `<schema>` e da
-`EMS.json`. Pede medição antes de desenho, e a medição ainda não tem instrumento
-escrito.
+### Duas propostas de agente, sem assinatura
 
-### O `<invoke>` continua ou termina o XML?
+O Regente pediu confirmação da leitura do XSD, e a confirmação veio com
+condição. Condição que um agente escreveu não é norma até ele assinar:
 
-Pergunta do próprio Regente em 2026-10-15, que ninguém havia feito:
-*"will it go on through the Order or is the `<invoke>` the end of the XML?"*
-As duas respostas comissionam trabalho diferente —
-[`PACKAGE_TARGET.md`](../PACKAGE_TARGET.md) §10. A norma que veio com ela já
-vale: nenhuma dependência bloqueante pode existir ao executar uma Ordem.
-
-### Duas perguntas que as respostas de 2026-10-15 criaram
-
-| pergunta | por que é dele |
+| proposta | onde |
 |---|---|
-| o `repair` move **por item** — cada `fix` uma pergunta e um movimento — ou **por lote**, a fila lida inteira e um diff só? | [`INTAKE-PIN-TRAFFIC.md`](../.orders/INTAKE-PIN-TRAFFIC.md) §3 dá ao `repair` uma fila e um movimento que ele não tem. A unidade do movimento decide quantas vezes o Regente é perguntado |
-| entre o XSD da `EMS.json` e o conteúdo do `<schema>`, **qual peça gera qual**? | [`PACKAGE_TARGET.md`](../PACKAGE_TARGET.md) §5 e o §3 do mesmo intake dizem que são a mesma peça vista dos dois lados. Os dois documentos não dizem qual é a fonte e qual é a projeção, e o esquema da `EMS.json` se constrói *"together"* |
+| o XSD vale **gerado pelo motor, nunca escrito à mão**, e falta um portão onde ele confere contra o conteúdo do XML, divergência sendo `fix` e não `note` — sem isso o XSD vira segunda fonte de verdade ao lado do AST | [`INTAKE-EFFECTS.md`](../.orders/INTAKE-EFFECTS.md) §8.1 |
+| a ORD que restaura o `[part]` deve dizer **onde ele se perdeu**: estava nos planos, sumiu sem recusa e sem registro, e nada em `.decisions/`, `.changelog/` ou no sótão o aposenta | [`INTAKE-EFFECTS.md`](../.orders/INTAKE-EFFECTS.md) §8.2 |
 
 ### A E-06, adiada com a direção dada
 
