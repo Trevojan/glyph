@@ -13,6 +13,20 @@
 
 ---
 
+## 2026-10-16
+
+Dois pedidos do Regente, trazidos à sessão pela mão de quem a abriu, e quatro
+respostas dele num questionário da sessão, cada uma a opção que a sessão
+recomendava.
+
+| decisão | razão |
+|---|---|
+| **A tradução para Rust corre numa branch própria, `rust`, e o `main` fica intacto como a linha JS**; a `ORD-0013`, a `ORD-0014` e a EMS-002 correm nela, e nada sai do `main` | *"move Rust project translation to another branch, so to work clean... branches are for different releases... maybe Glyph will still be useful in JS someday."* O `origin/main` não pesa no modelo dele. No questionário, entre manter o `main` intacto, tirar o Rust do `main` e o inverso, ele escolheu o primeiro, que não apaga nada e se reverte |
+| **Os ícones novos entram antes da branch, para que ela os herde** | *"the icons are mine, take along and use the new ones (favicon.ico)."* Entraram no `dcd2fc9`, com mensagem própria |
+| **A normalização nas convenções da Regency é trabalho de base, no `main`, e por agora é só o registro de trabalho** — `.shortcuts/.virtual/ongoing.json`; nenhum nome muda | escolhido no questionário entre só o registro, o registro mais o manifesto de linhagem, e o registro mais a troca dos nomes que a convenção bane (`core/util.js`, o crate `glyph-util`). Feita no `main`, as duas branches a herdam |
+| **Dos caminhos virtuais, as camadas 1 a 4 vêm primeiro: endereçamento, identidade, ordem e offsets**; as camadas 5 e 6, as impressões digitais e o grafo, ficam adiadas pela regra declarada, e reabrem com medição | a medição de 2026-10-16 ([`INTAKE-VIRTUAL-PATH.md`](../.orders/INTAKE-VIRTUAL-PATH.md) §18) dá **4,8 %** de defasagem desde setembro, abaixo da barra de parar; as camadas 1 a 4 respondem ao round-trip, que o git não mede |
+| **A `ORD-0013` é emitida como a sessão a rascunhou**, na branch `rust` | escolhido no questionário entre emitir como está, emitir sem a `[cnst]` das stores na máquina do usuário, e não emitir. A fonte foi medida sem diagnóstico antes da pergunta |
+
 ## 2026-10-15
 
 Respostas do Regente ao inventário de perguntas abertas levantado em 2026-10-15.
