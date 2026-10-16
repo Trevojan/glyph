@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "next": 3533,
+  "next": 3536,
   "files": {
     ".guidelines/.changelog/README.md": { "format": "md", "nodes": [
       {"id":"n1","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":2571,"label":65536,"key":"42f1714aabb7"},
@@ -1975,8 +1975,8 @@
       {"id":"n1dy","sel":"7-why-this-is-a-candidate-order","kind":"heading","parent":"n1dr","prev":"n1dx","next":null,"depth":2,"start":6496,"end":6890,"label":589824,"key":"41dacfa521ad"}
     ] },
     ".guidelines/.orders/INTAKE-EFFECTS.md": { "format": "md", "nodes": [
-      {"id":"n1dz","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":12902,"label":65536,"key":"79ef3bc8222a"},
-      {"id":"n1e0","sel":"preliminary-intake--effects","kind":"heading","parent":"n1dz","prev":null,"next":null,"depth":1,"start":0,"end":12902,"label":131072,"key":"79ef3bc8222a"},
+      {"id":"n1dz","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":16321,"label":65536,"key":"ec444c4a104c"},
+      {"id":"n1e0","sel":"preliminary-intake--effects","kind":"heading","parent":"n1dz","prev":null,"next":null,"depth":1,"start":0,"end":16321,"label":131072,"key":"ec444c4a104c"},
       {"id":"n1e1","sel":"1-what-the-regent-wants","kind":"heading","parent":"n1e0","prev":null,"next":"n1e2","depth":2,"start":395,"end":1001,"label":196608,"key":"77b0bb83b236"},
       {"id":"n1e2","sel":"2-where-it-does-not-go-and-why","kind":"heading","parent":"n1e0","prev":"n1e1","next":"n1e3","depth":2,"start":1001,"end":1750,"label":262144,"key":"2ecaa979cb49"},
       {"id":"n1e3","sel":"3-where-it-does-go--measured","kind":"heading","parent":"n1e0","prev":"n1e2","next":"n1e5","depth":2,"start":1750,"end":3105,"label":327680,"key":"4f24a5f2ba51"},
@@ -1985,11 +1985,13 @@
       {"id":"n1e6","sel":"41-restore-is-the-only-thing-that-breaks-it","kind":"heading","parent":"n1e5","prev":null,"next":null,"depth":3,"start":3855,"end":5884,"label":524288,"key":"5340fdff9213"},
       {"id":"n1e7","sel":"5-the-precedent-logic-was-underestimated","kind":"heading","parent":"n1e0","prev":"n1e5","next":"n1e8","depth":2,"start":5884,"end":6904,"label":589824,"key":"ab0605f1ffe9"},
       {"id":"n1e8","sel":"6-calling-a-condition-by-name","kind":"heading","parent":"n1e0","prev":"n1e7","next":"n1e9","depth":2,"start":6904,"end":8016,"label":655360,"key":"bdc4673a4a6a"},
-      {"id":"n1e9","sel":"7-candidate-emitted-shape","kind":"heading","parent":"n1e0","prev":"n1e8","next":"n1ea","depth":2,"start":8016,"end":8824,"label":720896,"key":"48f3807db1c8"},
-      {"id":"n1ea","sel":"8-what-is-still-missing-before-this-can-be-an-order","kind":"heading","parent":"n1e0","prev":"n1e9","next":"n1eb","depth":2,"start":8824,"end":10735,"label":786432,"key":"1f4a74a23b5b"},
-      {"id":"n1eb","sel":"9-cost-split","kind":"heading","parent":"n1e0","prev":"n1ea","next":"n1ed","depth":2,"start":10735,"end":12357,"label":851968,"key":"facbcaf687ac"},
-      {"id":"n1ec","sel":"91-item-and-root--both-under-a-naming-scheme","kind":"heading","parent":"n1eb","prev":null,"next":null,"depth":3,"start":11168,"end":12357,"label":917504,"key":"d15fd8558147"},
-      {"id":"n1ed","sel":"10-unrelated-finding--closed-with-no-engine-work","kind":"heading","parent":"n1e0","prev":"n1eb","next":null,"depth":2,"start":12357,"end":12902,"label":983040,"key":"88a53d14a7c8"}
+      {"id":"n1e9","sel":"7-candidate-emitted-shape","kind":"heading","parent":"n1e0","prev":"n1e8","next":"n2q5","depth":2,"start":8016,"end":8824,"label":720896,"key":"48f3807db1c8"},
+      {"id":"n2q5","sel":"8-the-two-prerequisites--both-answered-on-2026-10-15","kind":"heading","parent":"n1e0","prev":"n1e9","next":"n1eb","depth":2,"start":8824,"end":14007,"label":753664,"key":"7b9fdcaa76cf"},
+      {"id":"n2q6","sel":"81-item--the-frontier-is-the-answer","kind":"heading","parent":"n2q5","prev":null,"next":"n2q7","depth":3,"start":9163,"end":11422,"label":786432,"key":"c9ab7ab11195"},
+      {"id":"n2q7","sel":"82-part--it-exists-and-it-was-lost-in-silence","kind":"heading","parent":"n2q5","prev":"n2q6","next":null,"depth":3,"start":11422,"end":14007,"label":819200,"key":"da8cb5e796a7"},
+      {"id":"n1eb","sel":"9-cost-split","kind":"heading","parent":"n1e0","prev":"n2q5","next":"n1ed","depth":2,"start":14007,"end":15776,"label":851968,"key":"c791c4e0be72"},
+      {"id":"n1ec","sel":"91-item-and-root--both-under-a-naming-scheme","kind":"heading","parent":"n1eb","prev":null,"next":null,"depth":3,"start":14587,"end":15776,"label":917504,"key":"d15fd8558147"},
+      {"id":"n1ed","sel":"10-unrelated-finding--closed-with-no-engine-work","kind":"heading","parent":"n1e0","prev":"n1eb","next":null,"depth":2,"start":15776,"end":16321,"label":983040,"key":"88a53d14a7c8"}
     ] },
     ".guidelines/.orders/INTAKE-FIELD-2026-09.md": { "format": "md", "nodes": [
       {"id":"n1ee","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":10512,"label":65536,"key":"c40cc308533d"},
