@@ -8,18 +8,24 @@
       "title": "normalizar nas convenções da Regency",
       "state": "review",
       "where": [
-        "99c844e",
-        "f2124a8"
+        ".guidelines/.shortcuts/.virtual/ongoing.json",
+        ".guidelines/.constraints/README.md"
       ],
-      "next": "o Regente vê o plano: o registro está feito; o manifesto e os nomes banidos esperam",
+      "next": "o registro entrou; o manifesto e os nomes banidos foram pulados pela norma de 2026-10-16, com a razão no .plan",
       "source": ".plan/README.md, Aberto: propostas de 2026-10-16"
     },
     {
       "id": "ORD-0013",
       "title": "o instalador, com o segundo protocolo em vez de node",
-      "state": "backlog",
+      "state": "ongoing",
       "source": ".orders/EMS-001/README.md, A Ordem aberta",
-      "next": "emitir na branch rust; o primeiro passo dentro da Ordem é medir todo caminho de instalador contra o filtro"
+      "next": "completar a medição (E e F, D e G, com o download autorizado em 2026-10-16), registrar, e só então escolher; a proposta é A",
+      "who": "DV",
+      "since": "2026-10-16",
+      "where": [
+        "branch:rust-port",
+        "order:ORD-0013"
+      ]
     },
     {
       "id": "ORD-0014",
@@ -28,11 +34,17 @@
       "source": ".orders/EMS-001/EMS-001.pgml"
     },
     {
-      "id": "VP-0",
-      "title": "caminhos virtuais, o primeiro da fila pela palavra do Regente",
-      "state": "blocked",
-      "source": ".plan/README.md §0; Aberto: propostas de 2026-10-16",
-      "blocked_by": "o Regente: quais camadas primeiro (a sessão propõe 1 a 4), e onde o código mora"
+      "id": "VP-1-4",
+      "title": "caminhos virtuais, camadas 1 a 4, em JS na base",
+      "state": "ongoing",
+      "source": ".plan/README.md §0",
+      "who": "DV",
+      "since": "2026-10-16",
+      "where": [
+        "branch:main",
+        ".guidelines/.plan/README.md"
+      ],
+      "next": "a camada 1: árvore por formato e seletor de cardinalidade 1"
     },
     {
       "id": "PLAN-1",
