@@ -52,8 +52,16 @@ impl Out {
     }
 }
 
+mod app;
+
 fn main() {
     let argv: Vec<String> = std::env::args_os().skip(1).map(|a| a.to_string_lossy().into_owned()).collect();
+    if let Some(code) = app::route(&argv) {
+        std::process::exit(code);
+    }
+    if argv.is_empty() && std::io::IsTerminal::is_terminal(&std::io::stdin()) && cfg!(windows) {
+        std::process::exit(app::double_click());
+    }
     if argv.is_empty() {
         let mut bytes = Vec::new();
         if std::io::stdin().read_to_end(&mut bytes).is_ok() && !bytes.is_empty() {
