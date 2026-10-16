@@ -2504,6 +2504,27 @@ function runCliChecks() {
   } finally {
     try { fsx.unlinkSync(tmp); } catch (e) { /* never existed, or already gone */ }
   }
+
+  /* CL-04, CL-05 — the README and the CLI name the same flags. The coupling
+     glyph-cli.js ↔ README.md is the one the history finds with no gate
+     (INTAKE-VIRTUAL-PATH §7 and §18), so it gets one, in both directions */
+  const cliSrc = fsx.readFileSync(CLI, "utf8");
+  const readme = fsx.readFileSync(px.join(ROOT, "README.md"), "utf8");
+  const parsed = new Set([...cliSrc.matchAll(/"(--[a-z][a-z-]*)"/g)].map(m => m[1]));
+  const flagsIn = s => [...s.matchAll(/(?<![\w-])(--[a-z][a-z-]*)/g)].map(m => m[1]);
+  const named = new Set(flagsIn(readme));
+  const undocumented = [...parsed].filter(f => !named.has(f));
+  ok("CL-04", "every flag glyph-cli.js parses is named in the README",
+     undocumented.length ? "parsed and not in README.md: " + undocumented.join(" ") : null);
+  const lines = readme.split("\n");
+  const at = lines.findIndex(l => /^Modes:/.test(l));
+  const modes = at === -1 ? [] : lines.slice(at, lines.findIndex((l, i) => i > at && !l.trim()));
+  const claimed = new Set(flagsIn(lines.filter(l => /glyph-cli\.js/.test(l) || /^#+ `--/.test(l))
+                                   .concat(modes).join("\n")));
+  const unknown = [...claimed].filter(f => !parsed.has(f));
+  ok("CL-05", "every flag the README gives glyph-cli.js is one it parses",
+     at === -1 ? "README.md has no Modes: paragraph"
+       : unknown.length ? "in README.md and not parsed: " + unknown.join(" ") : null);
   return D.length;
 }
 const rCL = runCliChecks();
@@ -3406,7 +3427,7 @@ console.log(" glyph-package" + String(rPK).padStart(4) + "/6");
 console.log(" examples     " + rE + "/5");
 console.log(" snapshot     " + rSN + "/4");
 console.log(" app          " + String(rAP).padStart(4) + "/3");
-console.log(" cli          " + String(rCL).padStart(4) + "/3");
+console.log(" cli          " + String(rCL).padStart(4) + "/5");
 console.log(" diag wording " + String(rDG).padStart(4) + "/3");
 console.log(" spellings    " + String(rSP).padStart(4) + "/3");
 console.log(" raw fence    " + String(rRW).padStart(4) + "/5");
