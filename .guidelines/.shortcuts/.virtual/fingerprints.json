@@ -6,6 +6,12 @@
    "session": "8d995cad",
    "sha256": "e484d62f08dcfecd01ae8af8284d542648100fa74e3a5ebd2956210624921cc5"
   },
+  ".guidelines/.orders/EMS-001/RETURN.md": {
+   "at": "2026-10-16T08:09:19-03:00",
+   "bytes": 96632,
+   "session": "8d995cad",
+   "sha256": "306b83d3e789f606317d761d46202a9c3cdddcf405be6bf1958bfef5b2828635"
+  },
   ".guidelines/.plan/README.md": {
    "at": "2026-10-16T07:53:52-03:00",
    "bytes": 21975,

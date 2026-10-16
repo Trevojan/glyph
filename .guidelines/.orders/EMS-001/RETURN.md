@@ -13,7 +13,7 @@
 | environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed; the local session of 2026-09-26: Windows 11, node v22.17.1, cargo 1.88.0, and Edge as the Chromium the drivers ask for |
 | ground | read in the order the handoff names; `npm run check` (33 buckets, 41 s) and `npm run check:rust` (20 crates, 3 s) green on the clone at `ea8fc59`, before anything was touched |
 | layout | **closed** — its val holds (below), five banks |
-| queue | ORD-0001 to ORD-0012 closed, ORD-0011 at `cf3bb31` and ORD-0012 at `73da9f9`, both on the local machine on 2026-09-26. The queue stops at the gate of ORD-0013, the installer: a clean Windows machine and the Regent, and under ADR B it carries node or a second protocol. First on the plan: the virtual paths, by the Regent's word. The tag `conformance-v0` is on `030ed76`, on the remote since 2026-09-27 |
+| queue | ORD-0001 to ORD-0012 closed, ORD-0011 at `cf3bb31` and ORD-0012 at `73da9f9`, both on the local machine on 2026-09-26. **ORD-0013, the installer, is emitted** at `c3dc3ad` on the branch where the Rust translation runs, on 2026-10-16. Its first step, every installer path measured against the filter, is written below in *ORD-0013, the installer paths measured*, and the choice waits on two things that section names. The tag `conformance-v0` is on `030ed76`, on the remote since 2026-09-27 |
 
 ## Waiting for the Regent
 
@@ -245,6 +245,60 @@ Closed questions; an answered one carries the Regent's answer below its options.
       stays the JS's
 
     Answered by the Regent on 2026-09-26: **a**.
+
+## ORD-0013, the installer paths measured
+
+The spec's `[ins]`: *"measure every installer path against the filter before
+choosing one"*. The filter is the three grades of O7 (`.decisions/`,
+2026-09-27): **note** at depth ≤ 4 and ≤ 12 crates, which enters vendored;
+**ask** at depth 5–6 or 13–40 crates, which enters only with an ADR the Regent
+signs; **fix** at depth ≥ 7 or more than 40 crates, which is refused. Crates and
+depth are read as in INTAKE-RUST-LADDER §9.1, where the crate itself is depth 1.
+Trees come from `cargo tree --offline -e normal,build` in a scratch project.
+Measured on 2026-10-16 on Windows 11 Pro 26200, cargo 1.88.
+
+**What any path ships**: `glyph.exe` at 1 761 792 bytes (release, 2026-09-26)
+and the page, which is `glyph-engine-alias.html`, the CSS, the five scripts and
+the favicon (181 457 bytes) plus `scripts/core/` (176 518). The page loads
+`glyph-parser.js`, and behind `engine=relay` the tables, `esc`, `xesc` and
+`walk` stay that JS core. So the installed app carries **browser JS and no
+node**. That is what A of 2026-10-15 chose. It is not yet the 100 % Rust of
+EMS-002.
+
+**What a clean Windows 11 has**, probed on this machine: `msiexec`, `iexpress`,
+`reg`, `tar`, `curl`, Edge and `winget` ship with the system. PowerShell is
+5.1, and its policy on a clean client is `Restricted`, because `LocalMachine`
+is undefined. No WiX, Inno Setup or NSIS is present.
+
+| path | crates added | depth | grade | the build machine needs | the clean machine needs |
+|---|---|---|---|---|---|
+| **A. the binary installs itself**: `glyph install` copies itself to `%LOCALAPPDATA%\Programs\Glyph`, writes the page out of `include_bytes!`, writes a Start-menu shortcut, and writes its uninstall entry under `HKCU` with `reg.exe` | 0 | — | **note** | nothing new | nothing; SmartScreen warns on an unsigned `.exe`, as for every `.exe` path |
+| B. a zip and an `install.cmd` that runs PowerShell with `-ExecutionPolicy Bypass` | 0 | — | **note** | nothing new | two steps: extract, then run. The zip carries the mark of the web, so the script must `Unblock-File` what it extracts |
+| C. IExpress, a self-extracting `.exe` around A or B | 0 | — | **note** | `iexpress.exe`, in the box | nothing; the tool is legacy and unsigned, and buys nothing over A |
+| D. an MSI, a `.wxs` by hand, built with WiX | 0 | — | n/a — no crate | the .NET SDK and WiX, **not measured**: a download | nothing |
+| E. `cargo-wix` | **not measured** | — | — | the crate tree, **not in the local cache**, plus WiX | nothing |
+| F. `cargo-packager`, `cargo-dist` | **not measured** | — | — | the crate trees, **not in the local cache**, plus NSIS or WiX, which they fetch | nothing |
+| G. Inno Setup or NSIS, a script by hand | 0 | — | n/a | the toolchain, **not measured**: a download | nothing |
+| H. MSIX, or a `winget` manifest | 0 | — | n/a | a signing certificate the machine trusts, or a manifest published to the public `winget` repository | the certificate, or `winget` |
+
+Two crates a self-installer could reach for, measured because they are in the
+local cache, and neither one needed:
+
+| crate | for | crates | depth | grade | without it |
+|---|---|---|---|---|---|
+| `winreg` 0.55 | the uninstall entry | 5 | 4 | note | `reg.exe`, in the box |
+| `embed-resource` 3 | the icon and version inside the `.exe` | 21 | 5 | **ask** | the shortcut points at the `.ico` installed beside the binary |
+
+**What this measures, and what it does not.** A, B and C add no crate and
+grade **note**. A is the only one that leaves the clean machine with nothing to
+do but run one file. It is also the shape the engine already has, because the
+engine serves the page, so the installer is the same binary as the app. Nothing
+here contradicts A of 2026-10-15. D to G are graded by a tool and not a crate,
+so the three grades do not reach them, and E and F are not measured at all:
+their trees are not in the local cache, and measuring them means fetching
+from crates.io. **Until they are measured, "every installer path" is not
+met**, and the session does not choose. Its proposal, once the measurement is
+complete, is A.
 
 ## ORDs closed
 
