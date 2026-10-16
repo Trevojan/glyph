@@ -3405,6 +3405,116 @@ async function runRelay() {
 }
 const rRL = await runRelay();
 
+/* ------------------------------------------------------------------
+ * virtual paths, layers 1 to 4 (.plan §0): an address per format with
+ * cardinality 1, an identity that survives a move, an order that keeps its
+ * labels, and closed coverage. Each case runs on a scratch tree outside the
+ * repository, so nothing is left behind when the suite dies midway.
+ * ------------------------------------------------------------------ */
+async function runVirtualPath() {
+  console.log("\n--- virtual paths — address, identity, order, offsets ---");
+  const D = [];
+  const ok = (id, name, why) => {
+    if (why) { console.log("  ✗ " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  ✓ " + id + ": " + name); D.push(id); }
+  };
+  const VP = await import("./virtual-path.js");
+  const fsx = require("fs"), os = require("os");
+  const at = (text, file, sel) => {
+    try { const r = VP.resolveIn(text, file, sel); return text.slice(r.start, r.end); } catch (e) { return "error: " + e.message; }
+  };
+  const refuses = (text, file, sel) => { try { VP.resolveIn(text, file, sel); return false; } catch (e) { return /resolves to/.test(e.message); } };
+
+  const MD = "# A\nx\n## B `b`\ny\n# C\nz\n## B `b`\nw\n";
+  ok("VP-01", "a heading runs to the next heading of its level or higher",
+     at(MD, "d.md", "b-b") !== "## B `b`\ny\n" ? JSON.stringify(at(MD, "d.md", "b-b")) : null);
+  ok("VP-02", "a repeated heading is slugged -1, as GitHub does",
+     at(MD, "d.md", "b-b-1") !== "## B `b`\nw\n" ? JSON.stringify(at(MD, "d.md", "b-b-1")) : null);
+
+  const JS = '{ "a/b": { "c": [1, 2] }, "d": "e" }';
+  ok("VP-03", "a JSON Pointer reaches a container and a leaf, ~1 escaped",
+     at(JS, "d.json", "/a~1b/c") !== "[1, 2]" || at(JS, "d.json", "/a~1b/c/1") !== "2" || at(JS, "d.json", "/d") !== '"e"'
+       ? "container " + JSON.stringify(at(JS, "d.json", "/a~1b/c")) : null);
+
+  const XML = "<r><i>1</i><i>2</i><j/></r>";
+  ok("VP-04", "an element path names the nth sibling, and a bare name shared by two is refused",
+     at(XML, "d.xml", "/r/i[2]") !== "<i>2</i>" || at(XML, "d.xml", "/r/j") !== "<j/>" || !refuses(XML, "d.xml", "/r/i")
+       ? "i[2] " + JSON.stringify(at(XML, "d.xml", "/r/i[2]")) : null);
+
+  const CODE = "a\n// @block:k\nbody\n// @endblock:k\nprose that names `@block:k` inline\n";
+  let nested = false;
+  try { VP.treeOf("# @block:a\n# @block:b\n# @endblock:b\n# @endblock:a\n", "x.py"); } catch (e) { nested = /do not nest/.test(e.message); }
+  ok("VP-05", "a block is the lines between its markers, a mention in prose is not a marker, and blocks do not nest",
+     at(CODE, "x.js", "@block:k") !== "body\n" ? JSON.stringify(at(CODE, "x.js", "@block:k"))
+       : !nested ? "a nested block was accepted" : null);
+
+  ok("VP-06", "a selector that resolves to nothing is an error, never an empty slice",
+     !refuses(MD, "d.md", "nope") || !refuses(JS, "d.json", "/zz") ? "an absent selector answered" : null);
+
+  /* a scratch repository: .guidelines with three files */
+  const root = fsx.mkdtempSync(path.join(os.tmpdir(), "glyph-vp-"));
+  const put = (f, t) => { fsx.mkdirSync(path.dirname(path.join(root, f)), { recursive: true }); fsx.writeFileSync(path.join(root, f), t); };
+  const idOf = (ix, file, sel) => (ix.files[file].nodes.find(n => n.sel === sel) || {}).id;
+  try {
+    put(".guidelines/a.md", "# One\none\n# Two\ntwo\n# Three\nthree\n");
+    put(".guidelines/b.json", '{ "k": { "v": 1 } }');
+    put(".guidelines/.shortcuts/.virtual/ongoing.json", "{}");
+    const first = VP.build(root).index;
+    ok("VP-07", "the index covers .guidelines and leaves .shortcuts/.virtual out",
+       Object.keys(first.files).join(",") !== ".guidelines/a.md,.guidelines/b.json" ? Object.keys(first.files).join(",") : null);
+
+    /* Three moves above One; a new heading arrives between them */
+    put(".guidelines/a.md", "# Three\nthree\n# One\none\n# New\nnew\n# Two\ntwo\n");
+    const second = VP.build(root, first);
+    const keptIds = ["one", "two", "three"].every(s => idOf(first.index || first, ".guidelines/a.md", s) === idOf(second.index, ".guidelines/a.md", s));
+    ok("VP-08", "a slice moved inside its file keeps its NodeID",
+       !keptIds ? "ids changed: " + ["one", "two", "three"].map(s => idOf(first, ".guidelines/a.md", s) + "→" + idOf(second.index, ".guidelines/a.md", s)).join(" ") : null);
+
+    /* Two's body is rewritten in place: the same selector keeps the id, whatever the digest says */
+    const MOVED = "# Three\nthree\n# One\none\n# New\nnew\n# Two\ntwo\n";
+    put(".guidelines/a.md", MOVED.replace("two\n", "two, rewritten\n"));
+    const edited = VP.build(root, second.index).index;
+    ok("VP-14", "a slice edited in place keeps its NodeID by its selector",
+       idOf(second.index, ".guidelines/a.md", "two") !== idOf(edited, ".guidelines/a.md", "two") ? "the edited heading got a new id" : null);
+    put(".guidelines/a.md", MOVED);
+
+    const lab = (ix, s) => ix.files[".guidelines/a.md"].nodes.find(n => n.sel === s).label;
+    const o = VP.open(root, second.index), A = ".guidelines/a.md#";
+    ok("VP-09", "before(a, b) follows the new order, and only the nodes that moved or arrived get new labels",
+       !o.before(A + "three", A + "one") || !o.before(A + "new", A + "two") || o.before(A + "two", A + "one")
+         ? "the order is wrong"
+         : lab(first, "one") !== lab(second.index, "one") || lab(first, "two") !== lab(second.index, "two")
+           ? "labels of nodes still in order moved" : second.relabels > 2 ? second.relabels + " labels written for 2 nodes" : null);
+
+    /* the file is renamed: its slices keep their ids by digest */
+    fsx.renameSync(path.join(root, ".guidelines/b.json"), path.join(root, ".guidelines/c.json"));
+    const third = VP.build(root, second.index).index;
+    ok("VP-10", "a slice carried to another file keeps its NodeID",
+       idOf(second.index, ".guidelines/b.json", "/k") !== idOf(third, ".guidelines/c.json", "/k") ? "the object under /k got a new id" : null);
+
+    const r = VP.open(root, third).extract(A + "new");
+    ok("VP-11", "the extraction answers its own address and the offsets where the slice sits",
+       r.vp !== A + "new" || fsx.readFileSync(path.join(root, ".guidelines/a.md"), "utf8").slice(r.start, r.end) !== "# New\nnew\n"
+         ? JSON.stringify(r) : null);
+
+    /* closed coverage: a file the index does not hold, and an index behind its files */
+    fsx.writeFileSync(path.join(root, ".guidelines/.shortcuts/.virtual/index.json"), VP.serialise(third));
+    const clean = VP.check(root);
+    put(".guidelines/d.md", "# D\nd\n");
+    const breaches = VP.check(root);
+    ok("VP-12", "the check holds on a current index, and refuses a file the index does not hold",
+       clean.length ? "breached when current: " + clean.join("; ")
+         : !breaches.some(b => /not in the index/.test(b)) || !breaches.some(b => /behind the files/.test(b)) ? breaches.join("; ") : null);
+    put(".guidelines/e.md", "");
+    ok("VP-13", "an empty file breaks closed coverage",
+       !VP.check(root).some(b => /e\.md.*empty/.test(b)) ? "the empty file passed" : null);
+  } finally {
+    fsx.rmSync(root, { recursive: true, force: true });
+  }
+  return D.length;
+}
+const rVP = await runVirtualPath();
+
 
 
 console.log("\n=================================================");
@@ -3442,6 +3552,7 @@ console.log(" global store " + rGS + "/3");
 console.log(" context      " + rCX + "/3");
 console.log(" coverage     " + String(rOC).padStart(4) + "/" + ORACLE_COVERAGE.length);
 console.log(" engine relay " + String(rRL).padStart(4) + "/15");
+console.log(" virtual path " + String(rVP).padStart(4) + "/14");
 console.log("=================================================");
 
 if (EXPORT_ORACLE) {

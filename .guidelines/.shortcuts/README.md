@@ -29,7 +29,7 @@
 | [`.constraints/`](../.constraints/) | o que o projeto **se proíbe** de fazer |
 | [`.changelog/`](../.changelog/) | o que mudou, e como o número de versão se move |
 | [`.orders/`](../.orders/) | as Ordens — o contrato do que foi entregue, exatamente uma aberta por vez, em séries `EMS-###/ORD-####/` — e os intakes que as alimentam |
-| `.shortcuts/` | este arquivo, e [`.virtual/ongoing.json`](.virtual/ongoing.json), o registro de trabalho dos agentes: o que está em andamento, em espera ou só na fila |
+| `.shortcuts/` | este arquivo; [`.virtual/ongoing.json`](.virtual/ongoing.json), o registro de trabalho dos agentes: o que está em andamento, em espera ou só na fila; e [`.virtual/index.json`](.virtual/index.json), o índice dos caminhos virtuais. `node scripts/virtual-path.js resolve <arquivo>#<seletor>` devolve uma fatia com o endereço e os offsets dela, e `list <arquivo>` mostra os seletores de um arquivo |
 
 ## O mapa do motor, em cinco linhas
 
