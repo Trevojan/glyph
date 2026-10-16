@@ -377,9 +377,12 @@ otherwise the Harness may guess or even take blind decisions, leading only to
 rework.
 
 > **A norma vale além do `<invoke>`:** nenhuma dependência bloqueante pode
-> existir ao executar uma Ordem. E a pergunta do próprio Regente — *"will it go
-> on through the Order or is the `<invoke>` the end of the XML?"* — é nova:
-> ninguém a tinha feito, e fica **aberta**.
+> existir ao executar uma Ordem. E a pergunta que ele mesmo levanta no meio da
+> resposta — *"will it go on through the Order or is the `<invoke>` the end of
+> the XML?"* — **ele responde nos dois ramos**, na mesma frase: se segue, a
+> configuração da EMS tem de ter os caminhos validados; se é saída final e não
+> executa como escrito, retorna erro antes de seguir a especificação. Resposta
+> condicional completa, não pergunta aberta.
 
 ### `OT-9.1` — posição de diagnóstico no AST JSON
 
@@ -531,8 +534,10 @@ characteristic of a declared *subject*, or ultimately the formula of an specifie
 *value*. all of this may be written down in the XML for you to digest, but still
 needs inference to find the whole meaning.
 
-> **Amarra-se ao `EFF-8`:** a gramática vem junto da definição de "item" e
-> "part", então `PIN-selection` espera o que o `EFF-8` ainda não tem.
+> **Vem junto do `EFF-8`, e o `EFF-8` chegou:** a gramática acompanha a
+> definição de "item" e "part", e as duas estão respondidas abaixo — o `[part]`
+> com desenho e rótulo-ponteiro, o "item" com a fronteira. Então a gramática é
+> proposta medida na ORD que constrói o PIN, não espera palavra.
 
 ### `PIN-EMS.json` — o esquema da `EMS.json`
 
@@ -599,6 +604,12 @@ beyond, they may also be declared inside a root: `(inside section 'dish')
 an example using all labels: `[part'house-kitchen-pantry-item-salt']`,
 `[part'house-kitchen-pantry-item-salt']`.
 
+> **Desenho inteiro, e um achado dentro dele.** O `[part]` *"was already in the
+> plans"* e sumiu sem recusa e sem registro — desaparecimento silencioso de
+> construto, o que a norma proíbe. A ORD é **restauração**, não feature nova.
+> Desenho normativo, com este exemplo, em
+> [`INTAKE-EFFECTS.md`](../.orders/INTAKE-EFFECTS.md) §8.2.
+
 ### `EFF-8` — "item" e os objetos de contexto
 
 Enunciado: [`INTAKE-EFFECTS.md`](../.orders/INTAKE-EFFECTS.md) §8, primeira
@@ -624,10 +635,13 @@ handmade, it may contain errors or contradictions. but hey, "we are all humans
 after all". the frontier of *item definition* is this. you will always need to
 rely on what the ORD has to offer as input.
 
-> **A fronteira está declarada; a definição, não.** O que a resposta dá é a
-> régua — a inferência se apoia no XSD gerado sobre o conteúdo do XML. O que ela
-> não dá é o que "item" **é** na estrutura, nem o modelo de valor, objeto e
-> escopo. `EFF-8` segue **aberta**, e agora governa também o `PIN-selection`.
+> **A fronteira é a resposta, e é deliberada.** Não é uma definição de *item* no
+> abstrato porque nenhuma se paga: a entrada do usuário pode ser qualquer coisa.
+> A régua é o que a Ordem oferece como entrada — o XSD gerado pelo motor,
+> aplicado ao conteúdo puro do XML. **Confirmado**, com uma ressalva de agente,
+> que ele pediu que fosse conferida: só vale gerado pelo motor, nunca escrito à
+> mão, e falta o portão em que o XSD confere contra o XML com divergência em
+> `fix`. Registro em [`INTAKE-EFFECTS.md`](../.orders/INTAKE-EFFECTS.md) §8.1.
 
 ### `PKG-5` — o conteúdo de `<schema>`
 
