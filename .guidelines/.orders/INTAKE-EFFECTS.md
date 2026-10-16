@@ -207,21 +207,62 @@ worse for the model too.
 - **"Item" has no definition.** Glyph has commands, literals and slots — no value
   and no object. `FIND`'s own definition says *"looks a value up in the context"*,
   so the concept exists in the vocabulary and not in the structure. Defining
-  context objects is the expensive half and deserves its own measurement.
-- `PART` does not exist. `FOREX`, `BOLD`, `VAR`, `ITR`, `FIND`, `SECTION`, `EQ`,
-  `NEQ` all do.
+  context objects is the expensive half and deserves its own measurement. **The
+  Regent drew the frontier on 2026-10-15 without closing the definition:** the
+  inference leans on the engine's generated XSD applied to the XML's own content
+  — *"the XSD is mechanical and offers some structure … you will always need to
+  rely on what the ORD has to offer as input"* —, and he asked for that reading
+  to be confirmed. What "item" **is** in the structure, and the model of value,
+  object and scope, are still unanswered; this is the question at the top of the
+  open list, and it now governs `PIN-selection` as well
+  ([`INTAKE-PIN-TRAFFIC.md`](INTAKE-PIN-TRAFFIC.md) §5).
+- **`PART` exists and is designed; it is built by the ORD that builds effects.**
+  `[part]` is a `[cmd]` that slices `[block]`s the way `[block]`s slice
+  `[section]`s, for a `[section]` whose goal is reachable in more than one way:
+  each `[block]` defines its object and its values, and the `[part]`s use the
+  declared ones, down to user input per boolean or word by word. Its label may be
+  a hierarchical pointer — `[part'dish-ingredients-core']`,
+  `[part'house-kitchen-pantry-item-salt']` — and the items under a root are
+  declared separately, `[item-salt]`, `[item-butter]`. The Regent's design, with
+  the worked PGML example, is in
+  [`PERGUNTAS-ABERTAS.md`](../.plan/PERGUNTAS-ABERTAS.md) §8. The name and the
+  valency enter the vocabulary in that ORD's measured proposal, and the design
+  leans on the same definition of *item* that is still open.
+- `FOREX`, `BOLD`, `VAR`, `ITR`, `FIND`, `SECTION`, `EQ`, `NEQ` all exist.
 
 ## 9. Cost, split
 
 | | |
 |---|---|
-| **First order — small** | serialise `item` vs `root` (the `origin` defect one level up, still open); legalise the anonymous bracket behind the comma discriminator; emit `<effect>` declaratively. Nothing executes, nothing is redefined. |
+| **First order — small** | serialise `origin` at both levels under the Regent's naming scheme (§9.1); legalise the anonymous bracket behind the comma discriminator; emit `<effect>` declaratively. Nothing executes, nothing is redefined. |
 | **Second order — large** | context objects: value, object, scope, conditional effects scoped by `[SECTION]`. A new semantic model. Measure before design. |
 
-## 10. Unrelated finding, worth its own fix
+### 9.1 `item` and `root` — both, under a naming scheme
 
-`->` **does not exist and is dropped in silence.** Measured: `[a]->[b]` parses as
-two root commands and the arrow vanishes with no diagnostic at all. Not part of
-this feature — the Regent was only sketching — but a character sequence that
-disappears without a refusal is the `also="?"` shape §11.5 removed, and it should
-be refused by name.
+The question was *which level carries `origin`*, and the answer is **both**, with
+a name instead of a bare value (the Regent, 2026-10-15): the root of a series of
+items is `root-x`, and each item carries `x-item-##` — *"the first part being the
+related root, then declaring it is an item and finally it's position in the logic
+structure's queue"*. A section's generic `root-` is primarily its name.
+
+The reason given is the reader, not the engine: *"the longer the official XML
+output, the harder it gets to distinguish subjects from a block to another of a
+section."* It does not collide with `PACKAGE_TARGET.md` §3.2 — that rule drops
+the `chain` attribute inside a group because position already encodes `-` versus
+`,`, and this scheme encodes **which root an item belongs to and where it sits in
+the queue**, which position does not give.
+
+It **moves the `xml` hashes**, so it passes through
+[`PACKAGE_TARGET.md`](../PACKAGE_TARGET.md) and `conformance/`, and it is the
+emitted consequence that `HGML_CONVERGENCE.md` §7 records as missing on a field
+that already exists. It unblocks the cheap half, the declarative `<effect>`.
+
+## 10. Unrelated finding — closed, with no engine work
+
+`->` **never existed and never will.** The Regent was writing an example, one
+thing compared to another, not proposing a construct — *"the symbol `->` never
+existed and will never do, as `>` needs to press `SHIFT+.` to be typed"*
+(2026-10-15). The norm *"a retired construct becomes a recogniser"* governs
+retirement, and there is nothing here to retire: `[a]->[b]` parses as two root
+commands, which is what two root commands look like. No recogniser is built and
+no diagnostic is added.
