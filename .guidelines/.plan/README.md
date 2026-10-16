@@ -57,10 +57,16 @@ O que vale em todas as camadas:
   O(log n), extração em O(log n + L) para L bytes devolvidos, e atualização em
   O(k log n) para k nós afetados pela edição, nunca pelo tamanho do repositório.
 
-Antes do código, medido sobre o histórico do git, com os limiares declarados
-antes de rodar: a taxa de defasagem, a localidade das edições em `.md` e a
-co-mudança código↔documento, que também semeia o `sources:`. A primeira ORD
-nasce na série seguinte à EMS-001, ou avulsa, quando o Regente chamar.
+Antes do código, a medição sobre o histórico do git, com os limiares declarados
+antes de rodar, está em
+[`INTAKE-VIRTUAL-PATH.md`](../.orders/INTAKE-VIRTUAL-PATH.md) §18 (2026-10-16,
+`scripts/measure-coupling.js`). Desde setembro, a taxa de defasagem é **4,8 %**,
+abaixo da barra de parar. As edições em `.md` seguem locais, com mediana de
+6,7 %, e a co-mudança código↔documento não tem nenhum par acima da barra. Pela
+regra declarada, as camadas 5 e 6 detectam um evento que o repositório deixou de
+produzir. As camadas 1 a 4 respondem ao round-trip, que o git não mede. Se isso
+muda o que se constrói primeiro é do Regente. A primeira ORD nasce na série
+seguinte à EMS-001, ou avulsa, quando o Regente chamar.
 
 ### 1. `<section>` de cabeçalho, irmã do `<schema/>` — **decidido, faltando fazer**
 
