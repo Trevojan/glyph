@@ -19,7 +19,7 @@
       "title": "o instalador, com o segundo protocolo em vez de node",
       "state": "ongoing",
       "source": ".orders/EMS-001/README.md, A Ordem aberta",
-      "next": "completar a medição (E e F, D e G, com o download autorizado em 2026-10-16), registrar, e só então escolher; a proposta é A",
+      "next": "a medição escolheu A; construir: o motor serve a página na própria origem localhost, o glyph install, e as stores na máquina do usuário",
       "who": "DV",
       "since": "2026-10-16",
       "where": [
