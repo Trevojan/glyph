@@ -1,5 +1,17 @@
 {
  "files": {
+  ".guidelines/.decisions/README.md": {
+   "at": "2026-10-16T07:53:13-03:00",
+   "bytes": 48775,
+   "session": "8d995cad",
+   "sha256": "e484d62f08dcfecd01ae8af8284d542648100fa74e3a5ebd2956210624921cc5"
+  },
+  ".guidelines/.plan/README.md": {
+   "at": "2026-10-16T07:53:52-03:00",
+   "bytes": 21975,
+   "session": "8d995cad",
+   "sha256": "06399119e28f3a1960c9a780b10e3ffb1689e011bbca99d205b71550c99e95bb"
+  },
   ".guidelines/.shortcuts/README.md": {
    "at": "2026-10-16T07:48:19-03:00",
    "bytes": 6776,
