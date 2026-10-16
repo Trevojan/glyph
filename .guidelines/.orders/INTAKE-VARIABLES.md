@@ -229,17 +229,26 @@ half in a second order. This belongs beside it.
 
 ### What D did not deliver, and why
 
-**`<needs var>` outside the `[logic]` fence has nothing to fire on.** A reference
-is recognised *because* its text matches a bound name, so an unresolved one is
-indistinguishable from ordinary prose. Reporting it would require a reference
-**syntax** — a way to write "this literal is a use" — which is vocabulary and
-therefore the Regent's to decide. Everything else in D shipped.
+**`<needs var>` outside the `[logic]` fence had nothing to fire on**, and now it
+does. A reference is recognised *because* its text matches a bound name, so an
+unresolved one was indistinguishable from ordinary prose; reporting it required a
+reference **syntax** — a way to write "this literal is a use" — which is
+vocabulary. The Regent wrote it on 2026-09-27: **a reference to a bound name is
+`[ref'nome']`**, reusing `REF`, and outside the `[logic]` fence a name that does
+not resolve fires `<needs var>`
+([`.decisions/`](../.decisions/README.md)). It moves the emitted document, so it
+enters as an ORD ([`.plan`](../.plan/README.md) §5).
 
-Scope is the whole `glyph-package`, as the Regent's file specifies. Nested
-scopes were not built and were not asked for.
+**Scope grows past the package.** It was the whole `glyph-package` as the
+Regent's file specified, and nested scopes were neither built nor asked for. On
+2026-10-15 he took cross-package references —
+`<needs ref="glyph://…">`, late-bound, resolved by whoever holds the other
+package — which is the condition that **reopens the deferred nested-scope
+decision** ([`INTAKE-VIRTUAL-PATH.md`](INTAKE-VIRTUAL-PATH.md) §16.1). So **D**
+below carries the larger statement, not the contained one.
 
 **A + B + C together are the literal reading of `[rsn]`** — after them the engine
 reads a file, says what is actually wrong, and can hold a document that quotes
-Glyph. **D is what the file's content asks for**, and is a second order either way.
-
-Nothing here proceeds past this record without that answer.
+Glyph. **D is what the file's content asks for**, and is a second order either
+way: it waits on the definition of *item* and the context-object model
+([`INTAKE-EFFECTS.md`](INTAKE-EFFECTS.md) §8), which is open.
