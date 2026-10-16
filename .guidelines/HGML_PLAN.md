@@ -18,14 +18,15 @@ follows is the record of what was decided and the short list of what is left.
 
 ## Decisions taken along the way
 
-**D1 — split `glyph-parser.js` internally?** Not yet. The file has six seams
-already commented in it (VOCABULARY, LEXER, LOGIC BLOCK, PARSER, XML EMITTER,
-AST JSON), so where to cut is not the question. The obstacle is that the browser
-has no `require`: the file is loaded by a plain `<script src>`, so splitting it
-into CommonJS modules keeps Node working and **breaks the browser**. The way out
-is a bundler (`build-core.js`, in the same spirit as `build-templates.js`) that
-concatenates the modules back into one file, which extends a pattern the
-repository already accepts rather than inventing one. Still open.
+**D1 — split `glyph-parser.js` internally?** **Done.** The core lives in
+`scripts/core/`, thirteen modules in a strict direction, and
+`scripts/glyph-parser.js` is the public face everything else consumes;
+`node scripts/seam-graph.js` proves the direction. The obstacle named here — the
+browser has no `require`, so CommonJS modules keep Node working and break the
+browser — was answered the way this note predicted: a bundler concatenates the
+modules back into one file, extending a pattern the repository already accepts.
+The cut and its measurements are in
+[`INTAKE-PARSER-SPLIT.md`](.orders/INTAKE-PARSER-SPLIT.md) §6.
 
 **D3 — canonical reprint or full atomic decomposition?** Full atomic. The cost
 was measured before choosing: a composite averages ~15 hieroglyphs, `HYP`

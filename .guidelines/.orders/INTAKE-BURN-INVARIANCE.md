@@ -109,7 +109,9 @@ filter and `<schema/>` have a burn that is one thing under one rule.
 
 **The gate that was missing is one line of policy, not thirty of code:** a
 formula the glossary spells is the formula the table carries. Where §0 quotes
-a formula, `--check` compares it to `expansions.txt`. Proposed; not built here.
+a formula, `--check` compares it to `expansions.txt`. **Built**, in
+`scripts/build-templates.js` — §7, under the comment that states the norm at
+`:176`, comparing each spelled formula to the table's.
 
 ## 6. V6 — measured, and read against the norm that is in force
 
