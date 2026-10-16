@@ -122,22 +122,29 @@ These survive the fork and are not re-decided later:
 - `I-recogniser`: a retired construct is refused by name with a position, never
   deleted into silence.
 
-## OPEN QUESTIONS
+## QUESTIONS, ANSWERED
 
-**Q7 — which artefact is `glyph-package`?** The blocking one. Everything above is
-ready the moment it is answered.
+**Q7 — which artefact is `glyph-package`?** Answered: **Reading A**.
+`glyph-package` is the single root of every emission, with no conditional form —
+a ratified constraint ([`.constraints/`](../.constraints/README.md),
+[`.decisions/`](../.decisions/README.md), *"Anteriores, ainda em vigor"*).
 
-**Q8 — if Reading A: does `<glyph-package>` replace `<glyph>` as the root for
-every emission, or only where a `<chain>` or `<invoke>` occurs?** A conditional
-root makes every consumer branch on shape. Architect recommendation: replace
-unconditionally, version the root, and let the empty case be the degenerate one.
+**Q8 — does `<glyph-package>` replace `<glyph>` as the root for every emission,
+or only where a `<chain>` or `<invoke>` occurs?** Answered with the architect's
+recommendation: it replaces unconditionally, the root is versioned by `engine`,
+and the empty case is the degenerate one. `PACKAGE_TARGET.md` §2 records it as
+*resolving Q8* under assumption S18.
 
-**Q9 — if Reading B: what emits the layer files?** The order puts "the six layer
-bundle emitters" explicitly *out of scope*, so under B, E1's golden would be the
-expected output of something this order forbids building.
+**Q9 — under Reading B, what emits the layer files?** Moot: Reading A holds, so
+the order never has to emit a golden for something its own scope line forbids
+building. The argument this question carried — under B the order contradicts its
+own scope line, under A it does not — is part of why A was taken.
 
-> Q9 is itself an argument for Reading A: under B, the order contradicts its own
-> scope line. Under A it does not.
+> **Identifier collision, recorded, not fixed.** `PACKAGE_TARGET.md` §10 carries
+> a different `Q9`: *when the six-layer bundle is built, and under what name*.
+> Same subject, two questions, one identifier. Both are closed, so nothing is
+> live; renaming either is a norm decision about how an identifier retires, and
+> it has no home yet ([`.plan`](../.plan/README.md), pendencies).
 
 ## PARENT ACTION
 
