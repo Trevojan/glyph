@@ -278,7 +278,9 @@ substitution with the build gate.
 | — then, if the baseline says reading is the bottleneck — the mini-repo, path **A** (heading-tree wrap, fingerprinted, one more `SOURCES` entry under the existing `--check`) | the build | ~40 lines | the round-trip goal, measurably |
 
 Path **B** (a Markdown model in the engine) and path **C** (guidelines in
-`.pgml`) remain the Regent's, and neither is justified by anything measured.
+`.pgml`) are **out**: the Regent dropped both on 2026-10-15 as unjustified by
+anything measured, so if the mini-repo comes, it comes by path **A**. Either one
+reopens with a measurement in hand, which is the route the norm prefers anyway.
 
 ## 13. The ChatGPT proposal — sized against the repository
 
@@ -517,13 +519,33 @@ URI is `<needs ref="glyph://…">` — the slot the human could not fill because
 the answer lives elsewhere, filled at runtime by an MCP client instead of by a
 human. That is `About_MCP.md`'s closing line applied literally: *"every runtime
 concept of MCP that looks tempting is probably a `<needs>` with a different
-filler."* Not a new category; a `<needs>` whose filler is a server. And it
-reopens the deferred nested-scope decision only if the Regent wants references
-to leave the package — which is the decision `About_MCP.md` says not to make by
-analogy.
+filler."* Not a new category; a `<needs>` whose filler is a server.
+
+### 16.1 The Regent takes it, and names what it costs
+
+**References leave the package.** On 2026-10-15 the Regent chose the late-bound
+form, `<needs ref="glyph://…">`, over waiting for the two measurements:
+*"cross-packaging is a feature we know from UX and Software Development
+experience will be at high demand sooner or later -> sooner, certainly, if the
+user seek to solve multiple ORDs from different sources at a time … it's also
+more fruitful to verify if an MCP may join the ORD without worry about
+integration constraints."*
+
+Recorded honestly, because the document asked for the opposite:
+
+| | |
+|---|---|
+| the ground of the decision | **expected demand, not measurement** — the reason is given, and it is a product judgement about users solving ORDs from different sources at once |
+| the two measurements this section required, in order | **neither was made**: the comparison arm of §8 showing the mini-repo reduces re-reads at all, and the third arm showing MCP transport buys what a file does not |
+| **the deferred nested-scope decision reopens** | it was deferred *by the Regent's word* — [`.plan`](../.plan/README.md), *"the scope is the whole package, as the Regent specified. Nobody asked for more"* — and references leaving the package is exactly the condition that reopens it |
+| what grows | the semantic model of the context object, so `EFF-8` and the **D** of [`INTAKE-VARIABLES.md`](INTAKE-VARIABLES.md) §4 both carry the larger statement |
+
+He may want the measurements back; nothing here hides that they are owed.
 
 ## 17. Housekeeping, outside the study
 
-`.plan/` §4 states the `ORD-xxxxx` bundle **does not exist**. *Measured:* it
-does — `ORD-0010.manifest.json`, 3.4.7.05, 2026-09-08. By the plan's own rule
-the item has closed and belongs in `.changelog/`. Recorded, not moved.
+The plan stated the `ORD-xxxxx` bundle **does not exist**. *Measured:* it does —
+`ORD-0010.manifest.json`, 3.4.7.05, 2026-09-08. By the plan's own rule the item
+had closed, and the plan dropped it: the bundle is in
+[`.changelog/`](../.changelog/README.md) now, under 3.6.9.07, *"o `--bundle` em
+séries"*.
