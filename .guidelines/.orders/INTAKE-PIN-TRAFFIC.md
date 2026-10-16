@@ -70,6 +70,14 @@ repaired from what `EMS.json` declares — the very paths each ORD reads and
 writes. It may rewrite **everything traffic declares**, the source included, and
 it shows the diff and asks before it writes anything.
 
+**Repair is also a queue, and placement is one of its cases** (the Regent,
+2026-10-15). Every `fix` the declared-edge check raises — an Order whose metadata
+does not match the EMS configuration it claims — is enqueued to `repair`, which
+asks to move the misplaced ORD to its correct EMS, or to `.orders/NEM/`. So
+`repair` grows two things it does not have today: a **queue** of findings, and a
+**move** among its operations. Design and reason:
+[`INTAKE-ORDER-COHERENCE.md`](INTAKE-ORDER-COHERENCE.md) §9.
+
 ## 4. The EMS configuration, inside every ORD's package
 
 The rules and the configuration of an EMS travel **inside the `<glyph-package>`
@@ -85,11 +93,14 @@ against `conformance/`.
 ## 5. Settled when built
 
 Each item opens as a measured proposal in the ORD that builds it, and that ORD
-stops at the Regent's gate until he signs it (2026-09-27).
+stops at the Regent's gate until he signs it (2026-09-27). On 2026-10-15 the
+Regent gave each of the four its substance; his words are in
+[`PERGUNTAS-ABERTAS.md`](../.plan/PERGUNTAS-ABERTAS.md) §8 and the decisions in
+[`.decisions/`](../.decisions/README.md).
 
-| | question |
+| | what is settled, and what the ORD still has to do |
 |---|---|
-| vocabulary | `PIN` and its three forms enter `expansions.txt` and `GLOSSARY.md` first, then the JS, then the Rust — the canonical names and the valency of each |
-| selection | the exact grammar of the type selector, and the spelling of the optional id |
-| `EMS.json` | its schema: the fields and their shapes |
-| the generic EMS | its first contents, from the Order Matrices of `.scope/generics/` |
+| vocabulary | **What a PIN means is settled: it declares explicitly an attribute of a `[CMD]`, so the attribute is not left to inference** — *"a pinned attribute on a `[CMD]` is a way to declare it explicitly so it may be handled in many different forms without aching about inference effort"*. Measured example from him: given `[rev'filepath.txt']`, `[pin-rev]` takes the **last input** of that type and fixes it for every PIN call of the same type. The canonical names and the valency of each form still enter `expansions.txt` and `GLOSSARY.md` first, then the JS, then the Rust |
+| selection | **What is PINned is settled: an attribute of a declared *object*, a characteristic of a declared *subject*, or the formula of a specified *value*** — all of it writable in the XML, and still needing inference for the whole meaning. The exact grammar of the type selector **waits on the definition of *item* and *part***, by his word: *"this will come along the \"item\" and \"part\" definition"* — so this item is now downstream of [`INTAKE-EFFECTS.md`](INTAKE-EFFECTS.md) §8 |
+| `EMS.json` | **The first field is settled: the EMS carries the basic XSD structure the ORDs follow**, so that when a specific declaration appears inside an Order the Emission answers from its spec rather than from the input XML or from pure inference — *"the EMS configuration will serve as a map and will hold very low cost to be used: just call where it matches the EMS' XSD pattern pointing to the current ORD being read and proceed the reasoning."* The rest of the schema is built **with** the Regent, against what is already ratified and immutable in the current version: *"let's build it together."* It is the same piece as the contents of `<schema>` seen from the other side ([`PACKAGE_TARGET.md`](../PACKAGE_TARGET.md) §5) |
+| the generic EMS | **Settled: the code session measures `.scope/generics/` and returns the commands and pins by frequency, and the Regent rewrites the `EMS-000` over that list** — *"A, and i rewrite to make it fit. this will be quite an artisan handswork."* The measurement is the deliverable; the contents stay his |
