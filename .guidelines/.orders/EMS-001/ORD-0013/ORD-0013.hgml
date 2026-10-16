@@ -1,0 +1,54 @@
+[block
+  'ORD-0013-installer'
+  [ctx
+    'the spec of EMS-001'
+    '.guidelines/.orders/EMS-001/EMS-001.pgml'
+  [/ctx]
+  [onlyif
+    'ORD-0011 closed'
+    'ORD-0012 closed'
+  [/onlyif]
+  [tgt
+    'an installer for Windows that puts the binary and the page on a clean machine'
+  [/tgt]
+  [cnst
+    'the installed app carries a second protocol and no node: the engine serves the page and answers /engine on its own localhost origin, as proposal A of the return measured it; ADR B stays the protocol of serve-dev.js'
+  [/cnst]
+  [cnst
+    'the engine answers with the stores on the machine of the user, and the templates and moulds the user keeps live there and never in the repository, which ships only the basic sample templates; question 11 of the return'
+  [/cnst]
+  [cnst
+    'every crate passes the measured filter of INTAKE-RUST-LADDER section 9 and enters vendored'
+  [/cnst]
+  [ins
+    'measure every installer path against the filter before choosing one, and write the measurement before the choice'
+  [/ins]
+  [nt
+    'the clean Windows machine belongs to the Regent, and the Regent runs the val'
+  [/nt]
+  [cmp
+    'the installer'
+    'a clean machine installs, opens the app and emits an Order'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+[/block]
