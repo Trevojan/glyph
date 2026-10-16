@@ -305,6 +305,24 @@ needs nothing on either machine, and is the same binary as the app, because
 the engine serves the page. **The measurement does not contradict A of
 2026-10-15.** It confirms A.
 
+**A, built** (2026-10-16), with no crate added:
+
+| piece | where | held by |
+|---|---|---|
+| the engine answers from a given context, and `answer` stays the repository's, byte for byte | `glyph_protocol::answer_in` | the oracle, unchanged: `protocol.json` and the relay suite |
+| `glyph --serve`: the page and its scripts out of the binary, `POST /engine` with the engine, one origin at `127.0.0.1:8732`. The port is fixed because the page keeps the moulds in the browser's storage, which belongs to an origin, port included | `rust/crates/glyph-cli/src/app.rs` | `tests/app.rs`, and the app driven in a browser: the page opens in relay mode, and its 21 calls went to the binary, every one answered with no error in the console |
+| the stores of the machine, `%APPDATA%\Glyph\stores\`, read when they are there; a store that does not read stops the app rather than letting it answer from a guess | the same | `tests/app.rs`, and seen failing when the reader is cut |
+| `--install` and `--uninstall`: the binary in `%LOCALAPPDATA%\Programs\Glyph\`, the stores seeded with the basic templates and never overwritten, the Start-menu shortcut, the uninstall entry under `HKCU`; uninstalling leaves the stores, which are the user's. A double-click installs, then serves | the same | `tests/app.rs`, which runs without touching the registry; the registry half is the val's, on the Regent's clean machine |
+
+**What is left** is the val, *"a clean machine installs, opens the app and
+emits an Order"*, which runs on the Regent's clean machine with the release
+binary. One gap is named so that it is not found there by surprise: **a
+template the user saves in the page does not reach the engine.** The page
+merges it into the JS core, `glyph-transport.js` sends the calls to the engine,
+and the engine answers with the stores on disk. How the page's templates
+reach the engine is question 11, whose three options (a, b, c) were answered
+by principle and not by choice.
+
 ## ORDs closed
 
 | ORD | delivered | commit | digest it matched |

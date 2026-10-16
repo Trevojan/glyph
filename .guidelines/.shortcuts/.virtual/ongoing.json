@@ -17,15 +17,17 @@
     {
       "id": "ORD-0013",
       "title": "o instalador, com o segundo protocolo em vez de node",
-      "state": "ongoing",
+      "state": "blocked",
       "source": ".orders/EMS-001/README.md, A Ordem aberta",
-      "next": "a medição escolheu A; construir: o motor serve a página na própria origem localhost, o glyph install, e as stores na máquina do usuário",
+      "next": "A construído: --serve, --install, --uninstall e as stores da máquina; falta o val",
       "who": "DV",
       "since": "2026-10-16",
       "where": [
         "branch:rust-port",
-        "order:ORD-0013"
-      ]
+        "order:ORD-0013",
+        "rust/crates/glyph-cli/src/app.rs"
+      ],
+      "blocked_by": "o Regente: o val na máquina Windows limpa dele, com o binário de release; e o mecanismo da pergunta 11 (a, b ou c) para os templates salvos na página chegarem ao motor"
     },
     {
       "id": "ORD-0014",
