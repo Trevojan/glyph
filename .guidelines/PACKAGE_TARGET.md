@@ -316,7 +316,18 @@ omitted so that a consumer can distinguish *"this document declares no schema"*
 from *"this document predates schemas"* — which is the same reason the root
 carries `engine`.
 
-Filling it is not in this release and not in this order.
+**What fills it is decided, and is not this release.** On 2026-10-15 the Regent
+ruled that *"the declaration of sections, blocks, templates, parts and variables
+must all reflect inside the `<schema>` definition"*, and that it expands from
+there to value, subject, object and attributes. The consumer §9 demands is named:
+the Harness reading the Order, which the `EMS.json` XSD serves from the other
+side — *"the goal is to make the user's XML input very rich so that you may save
+effort trying to figure it out from nothing"*
+([`.decisions/`](.decisions/README.md);
+[`PERGUNTAS-ABERTAS.md`](.plan/PERGUNTAS-ABERTAS.md) §8). It moves the emitted
+document, so it enters as an ORD and is measured against `conformance/`, and it
+waits on the definition of *item* and *part*
+([`INTAKE-EFFECTS.md`](.orders/INTAKE-EFFECTS.md) §8).
 
 ---
 
@@ -416,7 +427,8 @@ return distinct and re-emit identically (K2).
   emitters are out of scope by the order.
 - **What "production level" means for `_ORBITAL`** — `BUNDLE_TARGET.md` §7 item 4
   says it is ratified by reading, and the reading is not an agent task.
-- **The contents of `<schema>`** — §5.
+- **The contents of `<schema>`** — §5: decided in direction on 2026-10-15, with
+  its consumer named, and shaped in the ORD that builds it. Not here.
 - **A fourth emitted format.** No format enters without a consumer that parses it.
 
 ---
@@ -424,22 +436,36 @@ return distinct and re-emit identically (K2).
 ## 10. Open
 
 **Q10 is closed.** `<invoke>` is the command call and means *function* to the
-model (§4). What remains open from it is narrow and structural, not product:
+model (§4).
 
-**Q11 — does `<invoke>` need a precondition deliverable of its own?** `species`,
-`compositionDepth` and the formula are computed by the engine and dropped by the
-emitter, which is the shape E0 existed to repair for the operator. Emitting
-`<invoke>` therefore requires the same kind of carry, and the order currently
-commissions no step for it. Architect reading: it is inside E1, because unlike
-the operator it needs no lexer change — the store is already loaded and
-`--expand` already answers. If that is wrong, it is a second precondition and
-the order needs it named.
+**Q11 is closed, and carries a norm wider than itself.** `<invoke>` is inside
+E1: the architect reading holds, and no second precondition is commissioned. What
+the Regent added on 2026-10-15 is the basis the element stands on — *"when
+`<invoke>` is used, there must be a basis for the model to rely on"*: the paths
+to a `SKILL.md`, or to a file that comprehends a skill, come **validated from the
+EMS configuration**; what the configuration leaves unresolved, the Explorer
+returns as a `fix` before following the Order's specification; and the Explorer
+carries global generic skills of its own, to resolve the invocation dependency
+faster. The norm, which governs every Order and not only this element:
+**no blocking dependency may be present when executing an Order** — *"otherwise
+the Harness may guess or even take blind decisions, leading only to rework."*
+([`.decisions/`](.decisions/README.md))
 
-**Q12 — the order's `K8` says ten mutations and nine catches** (§6). Twelve
-clauses exist. Stated per clause here; the order should say so too.
+**Open, and new — the Regent's own question.** *"Will it go on through the Order
+or is the `<invoke>` the end of the XML?"* The two answers commission different
+work: if the Order continues, the EMS configuration must hold validated skill
+paths for what comes after; if `<invoke>` is the final output, a call that cannot
+execute as scripted must return an error rather than fall through. Nobody had
+asked this, and nothing here answers it.
 
-**Q9 — when the six-layer bundle is built, and under what name.** The name is now
-free. Blocks nothing here.
+**Q12 is closed.** The order's `K8` says ten mutations and nine catches (§6);
+twelve clauses exist, and the count is arithmetic, not policy. `K8` becomes
+twelve, declared one by one as this document already does — the text that said
+ten becomes twelve, with no note of the correction.
+
+**Q9 is closed on the *when*:** the six-layer bundle enters the queue as an ORD,
+and its name is resolved in that ORD's measured proposal, the way the four PIN
+items are. Blocks nothing here.
 
 ---
 
