@@ -8,11 +8,17 @@ com o pacote que o `--bundle` escreve, e a contagem é desta série.
 
 ## A Ordem aberta
 
-Nenhuma emitida. A vaga é da **`ORD-0013`, o instalador**, autorizada pelo
-Regente em 2026-10-15 — *"we'll follow through A"* —, com o **segundo protocolo
-em vez de node**, coerente com o Glyph 100% em Rust, e a máquina Windows limpa do
-Regente. A medição que o `[ins]` da spec pede corre dentro da Ordem. A sessão de
-código a emite.
+A [**`ORD-0013`**](ORD-0013/ORD-0013.xml), o instalador, autorizada pelo Regente
+em 2026-10-15 — *"we'll follow through A"* —, com o **segundo protocolo em vez de
+node**, e **emitida em 2026-10-16**, zero diagnósticos. O caminho A está
+construído: `--serve`, `--install`, `--uninstall` e as stores da máquina, com o
+detalhe por peça no [retorno](RETURN.md).
+
+**O que falta é o val, e é do Regente:** *"a clean machine installs, opens the
+app and emits an Order"*, na máquina Windows limpa, com o binário de release. O
+retorno nomeia a lacuna para que ela não seja achada lá de surpresa — um template
+que o usuário salva na página não chega ao motor; o mecanismo é a pergunta 11, e
+as três opções foram respondidas por princípio, não por escolha.
 
 A `ORD-0014` tem o seu `[onlyif]` satisfeito pela metade que era do Regente: a
 árvore medida está **aceita**, e a janela vai pelo `msedge --app`

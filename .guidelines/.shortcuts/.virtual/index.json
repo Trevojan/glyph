@@ -1377,10 +1377,10 @@
       {"id":"n2ta","sel":"/glyph-package/block/block/validate/user-input[2]","kind":"element","parent":"n2t7","prev":"n2t9","next":null,"depth":5,"start":1824,"end":1907,"label":1835008,"key":"e945e5a79a0c"}
     ] },
     ".guidelines/.orders/EMS-001/README.md": { "format": "md", "nodes": [
-      {"id":"nuo","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":5912,"label":65536,"key":"6d730a6f1a28"},
-      {"id":"nup","sel":"ems-001--o-glyph-em-rust","kind":"heading","parent":"nuo","prev":null,"next":null,"depth":1,"start":0,"end":5912,"label":131072,"key":"6d730a6f1a28"},
-      {"id":"nuq","sel":"a-ordem-aberta","kind":"heading","parent":"nup","prev":null,"next":"nur","depth":2,"start":390,"end":976,"label":196608,"key":"1ab269c507e5"},
-      {"id":"nur","sel":"ordens-fechadas","kind":"heading","parent":"nup","prev":"nuq","next":null,"depth":2,"start":976,"end":5912,"label":262144,"key":"c65c9ff03b08"}
+      {"id":"nuo","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":6324,"label":65536,"key":"f1e752949a11"},
+      {"id":"nup","sel":"ems-001--o-glyph-em-rust","kind":"heading","parent":"nuo","prev":null,"next":null,"depth":1,"start":0,"end":6324,"label":131072,"key":"f1e752949a11"},
+      {"id":"nuq","sel":"a-ordem-aberta","kind":"heading","parent":"nup","prev":null,"next":"nur","depth":2,"start":390,"end":1388,"label":196608,"key":"4950e7f308cf"},
+      {"id":"nur","sel":"ordens-fechadas","kind":"heading","parent":"nup","prev":"nuq","next":null,"depth":2,"start":1388,"end":6324,"label":262144,"key":"c65c9ff03b08"}
     ] },
     ".guidelines/.orders/EMS-001/RETURN.md": { "format": "md", "nodes": [
       {"id":"nus","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":98999,"label":65536,"key":"8654aaf9f450"},
