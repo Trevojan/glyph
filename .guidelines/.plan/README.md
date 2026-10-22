@@ -67,8 +67,9 @@ abaixo da barra de parar. As edições em `.md` seguem locais, com mediana de
 **Decidido em 2026-10-16** ([`.decisions/`](../.decisions/README.md)): as
 **camadas 1 a 4 vêm primeiro**, e o código mora **na base, em JS**, servindo as
 duas branches. As camadas 5 e 6 ficam adiadas pela medição, e a 7 vem depois
-delas. A `ORD-0013` está aberta, e duas ordens concorrentes são proibidas
-([`.constraints/`](../.constraints/README.md)). Por isso as camadas 1 a 4 correm
+delas. Duas ordens concorrentes são proibidas
+([`.constraints/`](../.constraints/README.md)), e a EMS-001 ocupa a vaga até a
+`ORD-0014` fechar. Por isso as camadas 1 a 4 correm
 como trabalho do plano no `main`, do mesmo jeito que o portão `CL-04`/`CL-05`, e
 não como uma segunda ORD.
 
@@ -135,28 +136,21 @@ A spec da série está em
 fila, do oráculo congelado (`ORD-0001`) à janela própria (`ORD-0014`), cada uma
 presa ao oráculo byte a byte.
 
-Da `ORD-0001` à `ORD-0012`, fechadas: a nuvem correu da `ORD-0001` à `ORD-0010`,
-e esta máquina a `ORD-0011` e a `ORD-0012`; o [registro da
+Da `ORD-0001` à `ORD-0013`, fechadas: a nuvem correu da `ORD-0001` à `ORD-0010`,
+e esta máquina da `ORD-0011` à `ORD-0013`; o [registro da
 série](../.orders/EMS-001/README.md) guarda o commit e o digest de cada uma. O
-app roda no motor Rust atrás de `?engine=relay`, e o binário `glyph` responde as
-flags do `glyph-cli.js`. A Ordem aberta é a **`ORD-0013`, o instalador**,
-autorizada pelo Regente em 2026-10-15 com o **segundo protocolo em vez de node**
-— coerente com o Glyph 100% em Rust — e **emitida em 2026-10-16**, com o caminho
-A construído: `--serve`, `--install`, `--uninstall` e as stores da máquina. Falta
-o **val**, que é dele: *"a clean machine installs, opens the app and emits an
-Order"*, na máquina Windows limpa com o binário de release. O [retorno
-da série](../.orders/EMS-001/RETURN.md) nomeia a lacuna para que ela não seja
-achada lá de surpresa — um template salvo na página não chega ao motor, o
-mecanismo é a pergunta 11, e as três opções foram respondidas por princípio e não
-por escolha. A `ORD-0014` já tem a metade do portão que era do Regente: a árvore
-medida **aceita**, e a janela pelo
-`msedge --app`. O instalador é também o que torna o app **standalone** no sentido do
-Regente: o Glyph Explorer mora na máquina de cada usuário, e tudo o que é
-pessoal — os templates e os moulds que ele guarda — fica lá, nunca no
-repositório público, que entrega só os templates básicos de exemplo. O motor
-Rust responde com as stores da máquina do usuário; hoje, atrás de
-`?engine=relay`, ele responde só com as do repositório, e os templates que a
-página guarda ficam no caminho JS (pergunta 11 do retorno).
+binário `glyph` responde as flags do `glyph-cli.js`, se instala sem crate nenhuma
+e serve o app numa origem localhost sem node, com o motor respondendo pelas
+stores da máquina; o Regente fez o val na máquina Windows limpa em 2026-10-21. A
+vaga é da **`ORD-0014`, a janela própria pelo `msedge --app`**, com o aval dele.
+O instalador é o que torna o app **standalone** no sentido do Regente: o Glyph
+Explorer mora na máquina de cada usuário, e tudo o que é pessoal — os templates
+e os moulds que ele guarda — fica lá, nunca no repositório público, que entrega
+só os templates básicos de exemplo. Um template que o usuário salva na página
+ainda não chega ao motor: o mecanismo é a **opção c da pergunta 11** do
+[retorno](../.orders/EMS-001/RETURN.md), escolhida em 2026-10-21 — o motor
+guarda as stores da máquina, e uma requisição leva só os templates que diferem,
+nomeados pelo digest —, e ele abre a EMS-002.
 
 **O alvo é o Glyph 100% em Rust** — o motor, o núcleo do app e a skill —, com o
 JS saindo peça por peça, cada uma quando o Rust passa o oráculo nela. Até lá o
@@ -230,15 +224,6 @@ Então esta lista é curta de propósito, e o que está **decidido e não constr
 não mora aqui: mora no §5 e nos intakes, e cada peça abre como proposta medida na
 ORD que a constrói, parando no portão dele — a forma que ele ratificou em
 2026-09-27.
-
-### O val da `ORD-0013`, e o mecanismo da pergunta 11
-
-A Ordem está emitida e o caminho A construído; o `val` é dele — *"a clean
-machine installs, opens the app and emits an Order"* —, na máquina Windows limpa
-com o binário de release. E uma lacuna está nomeada para não ser achada lá de
-surpresa: **um template que o usuário salva na página não chega ao motor.** O
-mecanismo é a pergunta 11 do [retorno](../.orders/EMS-001/RETURN.md), cujas três
-opções foram respondidas **por princípio e não por escolha** — a escolha é dele.
 
 ### Os dois itens dos caminhos virtuais
 

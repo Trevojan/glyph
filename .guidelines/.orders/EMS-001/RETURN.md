@@ -13,7 +13,7 @@
 | environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed; the local session of 2026-09-26: Windows 11, node v22.17.1, cargo 1.88.0, and Edge as the Chromium the drivers ask for |
 | ground | read in the order the handoff names; `npm run check` (33 buckets, 41 s) and `npm run check:rust` (20 crates, 3 s) green on the clone at `ea8fc59`, before anything was touched |
 | layout | **closed** — its val holds (below), five banks |
-| queue | ORD-0001 to ORD-0012 closed, ORD-0011 at `cf3bb31` and ORD-0012 at `73da9f9`, both on the local machine on 2026-09-26. **ORD-0013, the installer, is emitted** at `c3dc3ad` on the branch where the Rust translation runs, on 2026-10-16. Its first step, every installer path measured against the filter, is written below in *ORD-0013, the installer paths measured*, and the measurement chose **A**: the binary installs itself. The tag `conformance-v0` is on `030ed76`, on the remote since 2026-09-27 |
+| queue | ORD-0001 to ORD-0013 closed, ORD-0011 at `cf3bb31` and ORD-0012 at `73da9f9`, both on the local machine on 2026-09-26. **ORD-0013, the installer**, emitted at `c3dc3ad` on the branch where the Rust translation runs, on 2026-10-16, and built at `bb3239a`: every installer path measured against the filter, written below in *ORD-0013, the installer paths measured*, and the measurement chose **A**, the binary installs itself. The Regent ran its val on a clean Windows machine and closed it on 2026-10-21. The tag `conformance-v0` is on `030ed76`, on the remote since 2026-09-27 |
 
 ## Waiting for the Regent
 
@@ -320,8 +320,13 @@ binary. One gap is named so that it is not found there by surprise: **a
 template the user saves in the page does not reach the engine.** The page
 merges it into the JS core, `glyph-transport.js` sends the calls to the engine,
 and the engine answers with the stores on disk. How the page's templates
-reach the engine is question 11, whose three options (a, b, c) were answered
-by principle and not by choice.
+reach the engine is question 11, and the Regent chose **c** on 2026-10-21: the
+engine keeps the stores of the machine, and a request carries only the
+templates that differ, named by their digest. It opens EMS-002.
+
+**The val**, run by the Regent on a clean Windows machine with the release
+binary, `sha256` `1e58f512cb90df24556f105a95ce69ef35f46274a7f6f9b21eab5f121e238789`:
+*"já fiz."* ORD-0013 closes on 2026-10-21.
 
 ## ORDs closed
 
@@ -339,6 +344,7 @@ by principle and not by choice.
 | [`ORD-0010`](ORD-0010/ORD-0010.xml) | the protocol: ADR B, signed by the Regent; `glyph-protocol.js` and the binary `glyph-engine` answer the twelve calls `glyph-ui.js` makes, 6 328 requests byte for byte, and `serve-dev.js` relays `POST /engine` | `7eab706` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828`, the case files; `6cbc1de1aed107a7017b12587355ead8cf41869a3e95260c5141ed7bbf7f9042`, `protocol.json` |
 | [`ORD-0011`](ORD-0011/ORD-0011.xml) | the app on the Rust engine: behind `engine=relay`, `glyph-transport.js` swaps the twelve calls, and the 114 sources give the same bytes in every panel through Rust and through JS; `parse` answers the count of commands beside the envelope (question 15) | `cf3bb31` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828` (the cases) and `e95a54e563f6424c6dc93d51be781fb2c744e32f28de5e38b3dab586624b1e78`, `oracle-modules/protocol.json`, 6 634 requests — on Windows, `sha256sum -t`, since Git Bash's binary marker changes the listing |
 | [`ORD-0012`](ORD-0012/ORD-0012.xml) | the Rust CLI: `glyph` answers the flags of `glyph-cli.js` — `--xml --ast --diag --hgml --expand --from-xml`, the source on argv or by `--file`, and `--bundle` with `--out`, flat and in a series — and `glyph-bundle` writes the zip; with `SOURCE_DATE_EPOCH`, the same bytes, the zip's time in UTC (question 16) | `73da9f9` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828` (the cases) and `92986fa15c3fb9d43e5f28cb251d5875fc43e17aad197582834917e05e6c1464`, `oracle-modules/cli.json`, 723 runs in 120 folders — written on Windows: the paths it records carry the platform's separator, so another platform digests its own |
+| [`ORD-0013`](ORD-0013/ORD-0013.xml) | the installer, by the measured path A: `glyph --serve` answers the page and `/engine` on a localhost origin with no node, `--install` and `--uninstall` with no crate, and the engine answers with the stores of the machine; the val on a clean Windows machine, the Regent's, run on 2026-10-21 | `bb3239a` | `1e58f512cb90df24556f105a95ce69ef35f46274a7f6f9b21eab5f121e238789`, the release `glyph.exe` the val installed |
 
 **ORD-0001, the proof**, run at `02c92ee` (the commit that emitted it; the
 closing commit changes no code):

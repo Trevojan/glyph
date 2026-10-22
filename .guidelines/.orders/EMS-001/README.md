@@ -8,22 +8,10 @@ com o pacote que o `--bundle` escreve, e a contagem é desta série.
 
 ## A Ordem aberta
 
-A [**`ORD-0013`**](ORD-0013/ORD-0013.xml), o instalador, autorizada pelo Regente
-em 2026-10-15 — *"we'll follow through A"* —, com o **segundo protocolo em vez de
-node**, e **emitida em 2026-10-16**, zero diagnósticos. O caminho A está
-construído: `--serve`, `--install`, `--uninstall` e as stores da máquina, com o
-detalhe por peça no [retorno](RETURN.md).
-
-**O que falta é o val, e é do Regente:** *"a clean machine installs, opens the
-app and emits an Order"*, na máquina Windows limpa, com o binário de release. O
-retorno nomeia a lacuna para que ela não seja achada lá de surpresa — um template
-que o usuário salva na página não chega ao motor; o mecanismo é a pergunta 11, e
-as três opções foram respondidas por princípio, não por escolha.
-
-A `ORD-0014` tem o seu `[onlyif]` satisfeito pela metade que era do Regente: a
-árvore medida está **aceita**, e a janela vai pelo `msedge --app`
-([`.decisions/`](../../.decisions/README.md), 2026-10-15). Falta a `ORD-0013`
-fechar.
+Nenhuma emitida. A vaga é da **`ORD-0014`, a janela própria**, com o `[onlyif]`
+inteiro satisfeito: a `ORD-0013` fechou, e a árvore medida está **aceita**, com
+a janela pelo `msedge --app` ([`.decisions/`](../../.decisions/README.md),
+2026-10-15). O Regente deu o aval em 2026-10-21.
 
 ## Ordens fechadas
 
@@ -41,3 +29,4 @@ fechar.
 | [`ORD-0010`](ORD-0010/ORD-0010.xml) | o protocolo: o ADR B assinado pelo Regente; `glyph-protocol.js` e o binário `glyph-engine` respondem as doze chamadas do `glyph-ui.js`, e o `serve-dev.js` repassa `POST /engine` | `7eab706` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828` (os casos) e `6cbc1de1aed107a7017b12587355ead8cf41869a3e95260c5141ed7bbf7f9042` (`protocol.json`, 6 328 requisições) |
 | [`ORD-0011`](ORD-0011/ORD-0011.xml) | o app no motor Rust, atrás de `engine=relay`: `glyph-transport.js` troca as doze chamadas, e as 114 fontes dão os mesmos bytes em todo painel pelo Rust e pelo JS; `parse` responde a contagem de comandos ao lado do envelope | `cf3bb31` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828` (os casos) e `e95a54e563f6424c6dc93d51be781fb2c744e32f28de5e38b3dab586624b1e78` (`protocol.json`, 6 634 requisições) |
 | [`ORD-0012`](ORD-0012/ORD-0012.xml) | a CLI Rust: `glyph` responde as flags do `glyph-cli.js` — `--xml --ast --diag --hgml --expand --from-xml`, a fonte no argv ou por `--file`, e `--bundle` com `--out`, chapado ou numa série —, e o `glyph-bundle` escreve o zip; com `SOURCE_DATE_EPOCH`, os mesmos bytes, o horário do zip em UTC | `73da9f9` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828` (os casos) e `92986fa15c3fb9d43e5f28cb251d5875fc43e17aad197582834917e05e6c1464` (`cli.json`, 723 execuções, escrito no Windows) |
+| [`ORD-0013`](ORD-0013/ORD-0013.xml) | o instalador, pelo caminho A medido: `glyph --serve` serve a página e o `/engine` numa origem localhost sem node, `--install` e `--uninstall` sem crate nenhuma, e o motor responde com as stores da máquina; o val na máquina Windows limpa é do Regente, feito em 2026-10-21 | `bb3239a` | `1e58f512cb90df24556f105a95ce69ef35f46274a7f6f9b21eab5f121e238789` — `sha256sum` do `glyph.exe` de release que o val instalou |
