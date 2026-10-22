@@ -1,0 +1,36 @@
+<glyph-package engine="3.6.9.07">
+  <schema/>
+  <block once="true">
+    <block binds="ORD-0014-window">
+      <user-input>ORD-0014-window</user-input>
+      <context>
+        <user-input>the spec of EMS-001</user-input>
+        <user-input>.guidelines/.orders/EMS-001/EMS-001.pgml</user-input>
+      </context>
+      <only-if>
+        <user-input>ORD-0013 closed</user-input>
+        <user-input>the Regent accepts the measured tree</user-input>
+      </only-if>
+      <target>
+        <user-input>the app in a window of its own</user-input>
+      </target>
+      <constraint>
+        <user-input>the window goes by msedge --app on the localhost page the engine serves, with no crate: wry with tao is fix by the three-grade filter, and the filter is applied rather than changed</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the window is an app and not a tab: a profile of its own so Edge does not hand it to a running browser, no address bar, no console window behind it, and the engine stops when the window closes</user-input>
+      </constraint>
+      <constraint>
+        <user-input>where Edge is missing the app opens in the default browser, as it does today</user-input>
+      </constraint>
+      <note>
+        <user-input>the Regent gave the go-ahead on 2026-10-21, unhappy that the Explorer was a web page</user-input>
+      </note>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the window</user-input>
+        <user-input>the app opens in its own window and the Order it emits equals the one the browser emits</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>
