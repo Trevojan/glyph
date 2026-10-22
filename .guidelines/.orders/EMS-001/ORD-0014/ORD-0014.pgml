@@ -1,0 +1,10 @@
+[block'ORD-0014-window'
+  [ctx'the spec of EMS-001','.guidelines/.orders/EMS-001/EMS-001.pgml']
+  [onlyif'ORD-0013 closed','the Regent accepts the measured tree']
+  [tgt'the app in a window of its own']
+  [cnst'the window goes by msedge --app on the localhost page the engine serves, with no crate: wry with tao is fix by the three-grade filter, and the filter is applied rather than changed']
+  [cnst'the window is an app and not a tab: a profile of its own so Edge does not hand it to a running browser, no address bar, no console window behind it, and the engine stops when the window closes']
+  [cnst'where Edge is missing the app opens in the default browser, as it does today']
+  [nt'the Regent gave the go-ahead on 2026-10-21, unhappy that the Explorer was a web page']
+  [val'the window','the app opens in its own window and the Order it emits equals the one the browser emits']
+];

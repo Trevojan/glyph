@@ -1,0 +1,16 @@
+{
+  "order": "ORD-0014",
+  "engine": "3.6.9.07",
+  "emitted": "2026-10-22T00:43:47.674Z",
+  "files": [
+    "ORD-0014.pgml",
+    "ORD-0014.xml",
+    "ORD-0014.json",
+    "ORD-0014.hgml"
+  ],
+  "source": ".guidelines/.orders/EMS-001/ORD-0014.pgml",
+  "diagnostics": {
+    "fix": 0,
+    "total": 0
+  }
+}
