@@ -14,10 +14,10 @@
 |---|---|
 | versão | **3.6.9.07** |
 | suíte | `npm run check` — verde, 34 baldes, 114 fontes declaradas no snapshot; `npm run check:rust` escreve o oráculo no commit sob teste e compila e testa `rust/` |
-| EMS-001 | fechadas da `ORD-0001` à `ORD-0012`, cada uma com o commit e o digest no [registro da série](../.orders/EMS-001/README.md). a Ordem aberta é a `ORD-0013`, o instalador, **emitida** em 2026-10-16 com o segundo protocolo em vez de node e o caminho A construído; o que falta é o **val** na máquina Windows limpa do Regente |
+| EMS-001 | fechadas da `ORD-0001` à `ORD-0013`, cada uma com o commit e o digest no [registro da série](../.orders/EMS-001/README.md); a `ORD-0013`, o instalador, fechou com o val do Regente em 2026-10-21. A vaga é da `ORD-0014`, a janela própria, com o aval dele |
 | último marco | o Glyph responde em Rust (2026-09-26): o app, atrás de `?engine=relay`, dá pelo motor Rust os mesmos bytes que pelo JS nas 114 fontes, em todo painel (`ORD-0011`), e o binário `glyph` responde as flags do `glyph-cli.js` (`ORD-0012`). Antes disso: o layout das séries e as `ORD-0001` a `ORD-0010`, na nuvem (2026-09-25); o trabalho de 2026-09-24, com as stores como objeto de contexto, o oráculo das 114 fontes, o workspace `rust/`, os nomes ratificados e o plugin; o núcleo em treze módulos |
-| próximo | o **val da `ORD-0013`**, que é do Regente: a máquina Windows limpa e o binário de release ([`.plan`](../.plan/README.md) §5). As trinta perguntas dos dois questionários têm resposta dele; o que resta está em [`.plan`](../.plan/README.md), *Aberto, esperando o Regente* — o val e o mecanismo da pergunta 11, duas medições devidas, duas propostas de agente sem assinatura, a E-06 esperando a inspeção dele, e os dois itens dos caminhos virtuais (§0) |
-| última rodada do Regente | **2026-10-15**: vinte e três respostas ao inventário de perguntas abertas, com as palavras dele em [`PERGUNTAS-ABERTAS.md`](../.plan/PERGUNTAS-ABERTAS.md) §8 e as decisões em [`.decisions/`](../.decisions/README.md). A rodada é declarada incompleta por ele |
+| próximo | a **`ORD-0014`**, o Explorer numa janela própria pelo `msedge --app`; depois a spec da **EMS-002**, cuja primeira peça é a opção c da pergunta 11 ([`.plan`](../.plan/README.md) §5). O que resta esperando o Regente está em [`.plan`](../.plan/README.md), *Aberto, esperando o Regente* |
+| última rodada do Regente | **2026-10-21**: o val da `ORD-0013` feito, o aval da `ORD-0014`, os status da escada, a spec da EMS-002 com as tabelas vindas do motor, e a opção c da pergunta 11 — em [`.decisions/`](../.decisions/README.md) |
 
 ## Os sete eixos
 

@@ -13,28 +13,34 @@
    "sha256": "0ceb2b3884259c292eb0928ebe90a7b8e389783c6e96d5e855feab0120ba7d31"
   },
   ".guidelines/.decisions/README.md": {
-   "at": "2026-10-16T11:14:26-03:00",
-   "bytes": 50733,
-   "session": "8d995cad",
-   "sha256": "291cdfad18bc20e895e904008ad2f7d6f410d3250ef982b1e44de03b4c2a8572"
+   "at": "2026-10-21T21:13:10-03:00",
+   "bytes": 54326,
+   "session": "459e9e24",
+   "sha256": "3ac6d7395217a3390cbccc4f8994f1738e77ff0c1daa2829a3dbb44836e2c04f"
+  },
+  ".guidelines/.orders/EMS-001/README.md": {
+   "at": "2026-10-21T21:13:36-03:00",
+   "bytes": 6151,
+   "session": "459e9e24",
+   "sha256": "c5885802e6c64a33af1cc2e83698ee0e30592ae1a0ab7903d6d97522948623b5"
   },
   ".guidelines/.orders/EMS-001/RETURN.md": {
-   "at": "2026-10-16T11:50:53-03:00",
-   "bytes": 99479,
-   "session": "8d995cad",
-   "sha256": "f807b89e1bf86797c74e65857b1c9ac490e8cbeffbc12a7eebea34cc993570d4"
+   "at": "2026-10-21T21:14:05-03:00",
+   "bytes": 99560,
+   "session": "459e9e24",
+   "sha256": "d014e371e1481232a55d2fbb73fa5b4fa72fd9b95e46cd29593ff900e16884d2"
   },
   ".guidelines/.plan/README.md": {
-   "at": "2026-10-16T11:32:24-03:00",
-   "bytes": 23228,
-   "session": "8d995cad",
-   "sha256": "68c72e2e5a77a1f2680ebd7797ee95222dfc8eb89ddae8ac8b83436a02ab2d1b"
+   "at": "2026-10-21T21:14:05-03:00",
+   "bytes": 22637,
+   "session": "459e9e24",
+   "sha256": "ba42334bb6098cf93c987d7724d5ac27c3dbd7009f0ceee9eabdb5cbb4636676"
   },
   ".guidelines/.shortcuts/README.md": {
-   "at": "2026-10-16T11:32:31-03:00",
-   "bytes": 7021,
-   "session": "8d995cad",
-   "sha256": "81cbe2607b3230f85fa5901bd27ad8f746194355e53602d23ed78ce1fc227bb7"
+   "at": "2026-10-21T21:13:37-03:00",
+   "bytes": 6874,
+   "session": "459e9e24",
+   "sha256": "2ae8116f035888d9799bdaeedb0d3c8ed83f0af1d9fa99c70b9a0254c143c04d"
   },
   "CLAUDE.md": {
    "at": "2026-10-16T11:32:04-03:00",

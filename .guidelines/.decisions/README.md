@@ -13,6 +13,19 @@
 
 ---
 
+## 2026-10-21
+
+Palavras do Regente trazidas à sessão em 2026-10-21, em resposta às quatro
+perguntas que ela fez depois de percorrer o app servido pelo binário.
+
+| decisão | razão |
+|---|---|
+| **O val da `ORD-0013` está feito, e a `ORD-0013` fecha** | *"já fiz."* A máquina limpa instalou o binário de release, abriu o app e emitiu uma Ordem |
+| **A `ORD-0014` tem o aval do Regente: o Explorer abre como app, não como aba de navegador** | *"estou insatisfeito com o fato de ser uma página web! quero meu explorer pronto! >:( garanto aval agora mesmo."* A janela vai pelo `msedge --app`, decidido em 2026-10-15 |
+| **Os status do [`ladder.toml`](../.plan/ladder.toml) acompanham o que a EMS-001 entregou** | *"atualize os status."* A escada segue registro da auditoria, e cada módulo diz o estado que o disco mostra |
+| **A EMS-002 tem spec redigida, e a página recebe as tabelas do motor uma vez, ao carregar** | *"sim, faça isso."* Substitui o `classify` respondido pelas tabelas JS da página (pergunta 10c do [retorno](../.orders/EMS-001/RETURN.md)), que contradiz o Glyph 100% em Rust |
+| **Os templates do usuário chegam ao motor pela opção c da pergunta 11** — o motor guarda as stores da máquina, e uma requisição leva só os templates que diferem, nomeados pelo digest | *"\"c\" me parece mais consistente. siga por essa."* |
+
 ## 2026-10-16
 
 Palavras do Regente trazidas à sessão em 2026-10-16 por quem a abriu, em duas

@@ -1,7 +1,7 @@
 {
   "_about": "Registro do trabalho dos agentes: o primeiro relance ao voltar a este repositório. Aponta, nunca copia. O modelo é o do toolkit Regency, library/virtualpath.md §3; o detalhe de cada item mora no source.",
   "schema": 1,
-  "updated": "2026-10-16",
+  "updated": "2026-10-21",
   "items": [
     {
       "id": "REGENCY-NORM",
@@ -15,24 +15,30 @@
       "source": ".plan/README.md, Aberto: propostas de 2026-10-16"
     },
     {
-      "id": "ORD-0013",
-      "title": "o instalador, com o segundo protocolo em vez de node",
-      "state": "blocked",
-      "source": ".orders/EMS-001/README.md, A Ordem aberta",
-      "next": "A construído: --serve, --install, --uninstall e as stores da máquina; falta o val",
-      "who": "DV",
-      "since": "2026-10-16",
-      "where": [
-        "branch:rust-port",
-        "order:ORD-0013"
-      ],
-      "blocked_by": "o Regente: o val na máquina Windows limpa dele, com o binário de release; e o mecanismo da pergunta 11 (a, b ou c) para os templates salvos na página chegarem ao motor"
+      "id": "EMS-002-SPEC",
+      "title": "a spec da EMS-002: o Glyph 100% em Rust, começando pela opção c da pergunta 11 e pelas tabelas vindas do motor",
+      "state": "backlog",
+      "source": ".decisions/README.md, 2026-10-21",
+      "next": "redigir quando a ORD-0014 fechar"
+    },
+    {
+      "id": "LADDER-STATUS",
+      "title": "os status do ladder.toml no estado que a EMS-001 entregou",
+      "state": "backlog",
+      "source": ".decisions/README.md, 2026-10-21"
     },
     {
       "id": "ORD-0014",
       "title": "a janela própria, pelo msedge --app",
-      "state": "backlog",
-      "source": ".orders/EMS-001/EMS-001.pgml"
+      "state": "ongoing",
+      "source": ".orders/EMS-001/EMS-001.pgml",
+      "who": "DV",
+      "since": "2026-10-21",
+      "where": [
+        "branch:rust-port",
+        "order:ORD-0014"
+      ],
+      "next": "emitir pelo motor, depois a janela: msedge --app num perfil próprio, sem console, o servidor parando quando a janela fecha"
     },
     {
       "id": "VP-1-4",
