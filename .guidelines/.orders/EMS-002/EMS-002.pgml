@@ -57,6 +57,15 @@
     [val'the gate','npm run check refuses a source declared by a recovered path and an index whose recoveries do not hold, each seen failing before it counts']
   ]
 
+  [section'ORD-0004-order'
+    [onlyif'ORD-0003 closed']
+    [tgt'glyph-vpath: order maintenance, layer 3 of .plan section 0, as order queries over the positions the index holds']
+    [nt'measured before the code, INTAKE-VIRTUAL-PATH sections 24 and 25: an edit shifts 42.0 percent of the rows it rewrites, under the 50 percent declared; the positions stay absolute']
+    [val'before','for any two references, before answers which comes first, or that one holds the other, in constant time']
+    [val'above and between','above answers what precedes a node in its file, nearest first, and between the nodes from one reference to another in order, each by a search in logarithmic time']
+    [val'the order','the order agrees with the files and offsets of the index on every pair, and answers right after a node is inserted, moved or removed']
+  ]
+
   [section'limits'
     [nev'a selector that answers an empty slice in silence']
     [dont'open an ORD before the ORD it depends on closes']
