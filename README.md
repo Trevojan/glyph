@@ -1,3 +1,7 @@
+---
+sources:
+  - scripts/glyph-cli.js#@block:flags
+---
 # Glyph
 
 A shorthand command notation that describes a logical flow down to the smallest

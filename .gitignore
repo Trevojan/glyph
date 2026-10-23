@@ -12,3 +12,9 @@
 
 # The Rust workspace's build output
 rust/target/
+
+# .guidelines/.shortcuts/.virtual/ holds the virtual-path index glyph-vpath
+# writes; the regency plugin keeps its own session state beside it (journal,
+# lineage fingerprints), which is local and never project content
+.guidelines/.shortcuts/.virtual/*
+!.guidelines/.shortcuts/.virtual/index.json

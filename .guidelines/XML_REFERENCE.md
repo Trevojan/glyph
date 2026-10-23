@@ -1,3 +1,7 @@
+---
+sources:
+  - scripts/glyph-parser.js
+---
 # Glyph → XML — serialisation reference
 
 What `buildXml()` emits, element by element. This is a **serialisation of the

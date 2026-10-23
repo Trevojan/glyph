@@ -43,6 +43,9 @@ export function main() {
   var mode = "xml";
   var src = [];
   var file = null, bundle = false, outDir = null;
+  /* the modes and flags the README documents: README.md declares this block
+     as a source, and glyph-vpath stales the README when the block moves */
+  /* @block:flags */
   for (var ai = 0; ai < argv.length; ai++) {
     var a = argv[ai];
     if (a === "--ast" || a === "--xml" || a === "--diag" ||
@@ -57,6 +60,7 @@ export function main() {
     if (a.slice(0, 7) === "--file=") { file = a.slice(7); continue; }
     src.push(a);
   }
+  /* @endblock:flags */
   var input = src.join(" ");
 
   if (file != null) {

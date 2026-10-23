@@ -1830,29 +1830,32 @@
       ]
     },
     ".guidelines/XML_REFERENCE.md": {
+      "sources": [
+        ["scripts/glyph-parser.js", "4842c472ce266dc0"]
+      ],
       "nodes": [
-        ["", 0, 21020, 1, 531, "d9621850dbc73400"],
-        ["glyph--xml--serialisation-reference", 0, 21020, 1, 531, "d9621850dbc73400"],
-        ["1-document-shape", 973, 2808, 22, 41, "4ebf48f6ab390000"],
-        ["2-naming-rule", 2808, 3313, 63, 14, "80c450902748c800"],
-        ["3-attributes", 3313, 5276, 77, 31, "f0bbd4a89d0a3800"],
-        ["4-operators-delimiters-modes", 5276, 7638, 108, 56, "48fb6aa80b758a40"],
-        ["5-templates-and-placeholders", 7638, 8942, 164, 38, "2a54f0bc30f3c600"],
-        ["6-mood", 8942, 9709, 202, 19, "297ae1f02ec13f00"],
-        ["7-vocabulary", 9709, 14398, 221, 160, "1c9707d05327d180"],
-        ["instructions-105", 9791, 13380, 225, 112, "5916184674db1200"],
-        ["structural-9", 13380, 13783, 337, 16, "f3b8b8e4ef19d480"],
-        ["meta-7", 13783, 14119, 353, 14, "6098214c0a279600"],
-        ["session-shortcuts-5", 14119, 14398, 367, 14, "3f30ff141e8c6800"],
-        ["8-coined-elements", 14398, 14833, 381, 14, "0588f87025f5da80"],
-        ["9-where-the-draft-reference-diverged", 14833, 15273, 395, 12, "498bf1d06ccfd100"],
-        ["10-round-trip", 15273, 16746, 407, 51, "0b10738e238bf600"],
-        ["11-failure--what-a-malformed-construct-produces", 16746, 21020, 458, 74, "0defef4e43ed9200"],
-        ["111-missing-is-not-malformed", 17186, 17880, 466, 15, "34c324481c006400"],
-        ["112-every-refusal-carries-a-position", 17880, 18501, 481, 12, "830e5f44688e8e00"],
-        ["113-the-refusals", 18501, 19601, 493, 14, "e64befe858bb4900"],
-        ["114-what-is-deliberately-not-refused", 19601, 20484, 507, 15, "26c057acab4a9e00"],
-        ["115-no-placeholder-character-reaches-the-deliverable", 20484, 21020, 522, 10, "21272b9a654d5900"]
+        ["", 0, 21065, 1, 535, "bb6e5ff081039a00"],
+        ["glyph--xml--serialisation-reference", 45, 21065, 5, 531, "d9621850dbc73400"],
+        ["1-document-shape", 1018, 2853, 26, 41, "4ebf48f6ab390000"],
+        ["2-naming-rule", 2853, 3358, 67, 14, "80c450902748c800"],
+        ["3-attributes", 3358, 5321, 81, 31, "f0bbd4a89d0a3800"],
+        ["4-operators-delimiters-modes", 5321, 7683, 112, 56, "48fb6aa80b758a40"],
+        ["5-templates-and-placeholders", 7683, 8987, 168, 38, "2a54f0bc30f3c600"],
+        ["6-mood", 8987, 9754, 206, 19, "297ae1f02ec13f00"],
+        ["7-vocabulary", 9754, 14443, 225, 160, "1c9707d05327d180"],
+        ["instructions-105", 9836, 13425, 229, 112, "5916184674db1200"],
+        ["structural-9", 13425, 13828, 341, 16, "f3b8b8e4ef19d480"],
+        ["meta-7", 13828, 14164, 357, 14, "6098214c0a279600"],
+        ["session-shortcuts-5", 14164, 14443, 371, 14, "3f30ff141e8c6800"],
+        ["8-coined-elements", 14443, 14878, 385, 14, "0588f87025f5da80"],
+        ["9-where-the-draft-reference-diverged", 14878, 15318, 399, 12, "498bf1d06ccfd100"],
+        ["10-round-trip", 15318, 16791, 411, 51, "0b10738e238bf600"],
+        ["11-failure--what-a-malformed-construct-produces", 16791, 21065, 462, 74, "0defef4e43ed9200"],
+        ["111-missing-is-not-malformed", 17231, 17925, 470, 15, "34c324481c006400"],
+        ["112-every-refusal-carries-a-position", 17925, 18546, 485, 12, "830e5f44688e8e00"],
+        ["113-the-refusals", 18546, 19646, 497, 14, "e64befe858bb4900"],
+        ["114-what-is-deliberately-not-refused", 19646, 20529, 511, 15, "26c057acab4a9e00"],
+        ["115-no-placeholder-character-reaches-the-deliverable", 20529, 21065, 526, 10, "21272b9a654d5900"]
       ]
     },
     ".guidelines/ast-schema.json": {
@@ -2269,23 +2272,26 @@
       ]
     },
     "README.md": {
+      "sources": [
+        ["scripts/glyph-cli.js#@block:flags", "16429e4cc43e7200"]
+      ],
       "nodes": [
-        ["", 0, 11639, 1, 273, "490f02d0f48f5200"],
-        ["glyph", 0, 11639, 1, 273, "490f02d0f48f5200"],
-        ["run-it", 565, 7146, 17, 170, "c5df97a2afa2f800"],
-        ["the-app--one-click", 576, 1355, 19, 20, "7fbc128e23598800"],
-        ["the-command-line--needs-node", 1355, 1871, 39, 17, "51fb86fcdbc3da00"],
-        ["--bundle--a-ordem-inteira-numerada-como-um-adr", 1871, 3382, 56, 29, "ca6c07deb4782a00"],
-        ["--from-xml--the-way-back", 3382, 4871, 85, 30, "43e6dfb080f10000"],
-        ["hgml--the-atomic-burn", 4871, 5523, 115, 28, "693a2308b898f400"],
-        ["self-describing-xml", 5523, 5897, 143, 13, "70f6dba4f1a95c00"],
-        ["the-server", 5897, 6561, 156, 16, "fe14fa5c514ddc00"],
-        ["the-rust-engine--needs-cargo", 6561, 7146, 172, 15, "638b574661b54800"],
-        ["after-editing", 7146, 7872, 187, 21, "80106c4edae41900"],
-        ["verify", 7872, 8163, 208, 11, "855c56409d0eba00"],
-        ["where-things-live", 8163, 10228, 219, 29, "40ded3d89aa98e00"],
-        ["documentation", 10228, 11176, 248, 17, "d8d559f4fc0dfa00"],
-        ["versioning--appfrontrulescontent", 11176, 11639, 265, 9, "c8ddd09cf5d2de00"]
+        ["", 0, 11694, 1, 277, "a925701e214c3500"],
+        ["glyph", 55, 11694, 5, 273, "490f02d0f48f5200"],
+        ["run-it", 620, 7201, 21, 170, "c5df97a2afa2f800"],
+        ["the-app--one-click", 631, 1410, 23, 20, "7fbc128e23598800"],
+        ["the-command-line--needs-node", 1410, 1926, 43, 17, "51fb86fcdbc3da00"],
+        ["--bundle--a-ordem-inteira-numerada-como-um-adr", 1926, 3437, 60, 29, "ca6c07deb4782a00"],
+        ["--from-xml--the-way-back", 3437, 4926, 89, 30, "43e6dfb080f10000"],
+        ["hgml--the-atomic-burn", 4926, 5578, 119, 28, "693a2308b898f400"],
+        ["self-describing-xml", 5578, 5952, 147, 13, "70f6dba4f1a95c00"],
+        ["the-server", 5952, 6616, 160, 16, "fe14fa5c514ddc00"],
+        ["the-rust-engine--needs-cargo", 6616, 7201, 176, 15, "638b574661b54800"],
+        ["after-editing", 7201, 7927, 191, 21, "80106c4edae41900"],
+        ["verify", 7927, 8218, 212, 11, "855c56409d0eba00"],
+        ["where-things-live", 8218, 10283, 223, 29, "40ded3d89aa98e00"],
+        ["documentation", 10283, 11231, 252, 17, "d8d559f4fc0dfa00"],
+        ["versioning--appfrontrulescontent", 11231, 11694, 269, 9, "c8ddd09cf5d2de00"]
       ]
     }
   }
