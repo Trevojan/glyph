@@ -20,6 +20,7 @@ use glyph_json::Json;
 use glyph_json::number;
 use glyph_util::tree::{Diag, Id, Node, Thrown, Tree};
 use glyph_util::{esc, inherited, inherited_text};
+use std::sync::Arc;
 
 /// `String(v)`; `None` is `undefined`.
 fn js_string(v: Option<&Json>) -> String {
@@ -273,10 +274,11 @@ pub fn bind_holes<X: Clone + Default>(tree: &mut Tree<X>, nodes: &[Id], fills: &
 /// What the expander hands `parse` for a body: the JS passes
 /// `{ session, valency: false, templates: registry, _expanding }`, and no
 /// rules and no expansions — the parse falls back to what is registered.
+/// The registry is the caller's own store, which the body's context shares.
 pub struct SubParse<'a> {
     pub session: bool,
     pub valency: bool,
-    pub templates: &'a Json,
+    pub templates: &'a Arc<Json>,
     pub expanding: Vec<String>,
 }
 
@@ -379,7 +381,7 @@ pub fn constraint_names(rules: Option<&Json>, spec: &Json) -> Result<Vec<String>
 /// `checkTemplateConstraints(segments, opts, G)`.
 pub fn check_template_constraints<X: Clone>(tree: &Tree<X>, ctx: &Context, g: &mut dyn FnMut(Diag)) -> Result<(), Thrown> {
     let registry = &ctx.templates;
-    let rules = ctx.rules.as_ref();
+    let rules = ctx.rules.as_deref();
     let exempt: Vec<String> = match rules.and_then(|r| truthy(r.get("scope"))).and_then(|s| truthy(s.get("exemptUnder"))) {
         Some(Json::Arr(a)) => a.iter().map(|x| js_string(Some(x))).collect(),
         Some(_) => Vec::new(),

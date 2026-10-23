@@ -26,6 +26,7 @@ use glyph_templates::{check_template_constraints, expand_invocations, Parsed, Su
 use glyph_util::tree::{strip_tags, Diag, Emotion, Gloss, Id, Node, Segment, Span, Suggestion, Thrown, Tree, LIMITS};
 use glyph_util::{esc, inherited};
 use glyph_vocab::{derived, get, ALIAS, EDITORIAL_ONLY, EMO, FRAMES, INSTR, META, NAMED_STRUCT, SESSION, SLOTS, STRUCT};
+use std::sync::Arc;
 
 /// What the parser carries beyond the shared node: the Logic a `[logic]`
 /// block read.
@@ -71,9 +72,6 @@ pub struct Parse {
     pub tree: Tree<Extra>,
     pub gaps: Vec<Gap>,
     pub tokens: Vec<Token>,
-    /// The rules store the parse read, which the envelope hashes: the
-    /// compiled rules live beside it, never on it (EMS-002 ORD-0006).
-    pub rules: Option<Json>,
 }
 
 /// A table the JS reads as `TABLE[key]`: a key of its own, or one
@@ -578,9 +576,10 @@ pub fn parse(src: &str, o: &Opts) -> Result<Parse, Thrown> {
     /* expansion first: every later pass must see the body, not the bare call */
     expand_invocations(&mut tree, ctx, o.session, &o.expanding, &mut g, &mut |body, sub: SubParse| {
         /* the JS hands parse the registry alone, and the rules and the
-           composition table fall to what the caller registered */
+           composition table fall to what the caller registered: the same
+           stores, shared */
         let reg = o.registered;
-        let sub_ctx = Context::new(Some(sub.templates.clone()), reg.rules.clone(), reg.expansions.clone());
+        let sub_ctx = Context::shared(Some(Arc::clone(sub.templates)), reg.rules.clone(), reg.expansions.clone());
         let r = parse(body, &Opts { ctx: &sub_ctx, session: sub.session, valency: sub.valency, en: false, expanding: sub.expanding,
                                     registered: reg })?;
         Ok(Parsed { tree: r.tree, gaps: r.gaps.into_iter().map(|p| Diag { at: p.at, code_first: p.code_first, ..Diag::new(&p.sev, &p.lab, p.msg, &p.code) }).collect() })
@@ -758,5 +757,5 @@ pub fn parse(src: &str, o: &Opts) -> Result<Parse, Thrown> {
         Gap { plain: strip_tags(&msg), sev: d.sev, lab, msg, code: if d.code.is_empty() { "Note".into() } else { d.code }, at: d.at,
               code_first: d.code_first }
     }).collect();
-    Ok(Parse { tree, gaps, tokens, rules: ctx.rules.clone() })
+    Ok(Parse { tree, gaps, tokens })
 }

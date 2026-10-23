@@ -21,6 +21,7 @@ use glyph_templates::*;
 use glyph_json::Json;
 use glyph_util::tree::{strip_tags, Diag, Thrown};
 use oracle::{cases, diag_json, diag_of, dump_of, module, tree_of, Must};
+use std::sync::Arc;
 
 fn value(j: &Json) -> Json {
     match j {
@@ -38,7 +39,7 @@ fn value(j: &Json) -> Json {
 /// repository's rules unless the run has none.
 fn context(trees: &Json, run: &Json) -> Context {
     let repo = Context::repository();
-    let mut map = match &repo.templates {
+    let mut map = match &*repo.templates {
         Json::Obj(kv) => kv.clone(),
         v => panic!("the repository's templates are not a map: {v:?}"),
     };
@@ -53,9 +54,9 @@ fn context(trees: &Json, run: &Json) -> Context {
     let rules = if run.get("withRules") == Some(&Json::Bool(true)) { repo.rules.clone() } else { None };
     // a case's own templates, whole (O5, EMS-002 ORD-0011)
     if let Some(own) = run.get("templates") {
-        return Context::new(Some(own.clone()), rules, repo.expansions.clone());
+        return Context::shared(Some(Arc::new(own.clone())), rules, repo.expansions.clone());
     }
-    Context::new(Some(Json::Obj(map)), rules, repo.expansions.clone())
+    Context::shared(Some(Arc::new(Json::Obj(map))), rules, repo.expansions.clone())
 }
 
 fn thrown_at(run: &Json, stage: &str) -> Option<Thrown> {
@@ -86,7 +87,7 @@ fn level(p: &Json, ctx: &Context, expanding: &[String], id: &str, n: &mut Count)
         let chain: Vec<&str> = q.a("expanding").iter().map(|x| x.str().expect("a name")).collect();
         assert_eq!(sub.expanding, chain, "{id}: the templates being expanded");
         assert!(!sub.valency && sub.session, "{id}: what parse is told");
-        let (tree, r, _) = level(q, &Context::new(Some(sub.templates.clone()), None, None), &sub.expanding, id, n);
+        let (tree, r, _) = level(q, &Context::shared(Some(Arc::clone(sub.templates)), None, None), &sub.expanding, id, n);
         r?;
         Ok(Parsed { tree, gaps: q.a("gaps").iter().map(diag_of).collect() })
     });

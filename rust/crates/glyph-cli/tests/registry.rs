@@ -13,6 +13,7 @@ use glyph_parse::{parse, Opts};
 use glyph_stores::{Context, Registered};
 use glyph_xml::to_xml;
 use oracle::{module, Json, Must};
+use std::sync::Arc;
 
 fn gaps(src: &str, o: &Opts) -> Json {
     match parse(src, o) {
@@ -41,14 +42,14 @@ fn answer(src: &str, ctx: &Context, registered: &Registered) -> Json {
 fn a_body_reads_what_the_caller_registered_as_the_js_body_does() {
     let r = module("registry");
     let repo = Context::repository();
-    let mut templates = match &repo.templates {
+    let mut templates = match &*repo.templates {
         Json::Obj(kv) => kv.clone(),
         other => panic!("the repository's templates are not a map: {other:?}"),
     };
     for (k, v) in r.get("templates").and_then(Json::obj).expect("registry.json: no templates") {
         glyph_json::set(&mut templates, k.clone(), v.clone());
     }
-    let ctx = Context::new(Some(Json::Obj(templates)), repo.rules.clone(), repo.expansions.clone());
+    let ctx = Context::shared(Some(Arc::new(Json::Obj(templates))), repo.rules.clone(), repo.expansions.clone());
     let sources = r.a("sources");
     let (none, registered) = (r.a("none"), r.a("registered"));
     assert!(sources.len() > 50 && sources.len() == none.len() && none.len() == registered.len(), "registry.json: the probes do not line up");

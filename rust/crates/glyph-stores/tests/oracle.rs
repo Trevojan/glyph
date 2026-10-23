@@ -83,20 +83,20 @@ fn a_context_reads_each_shape_as_create_context_does() {
     let js = stores().get("context").expect("stores.json: no context");
     let repo = Context::repository();
     let whole = Context::new(Some(templates_value(repo)), None, None);
-    let map = Context::new(Some(repo.templates.clone()), None, None);
+    let map = Context::shared(Some(std::sync::Arc::clone(&repo.templates)), None, None);
     let commands = Context::new(None, None, Some(repo.expansions.as_ref().unwrap().get("commands").unwrap().clone()));
     assert_eq!(digest(&whole.templates), js.s("templatesFromWhole"));
     assert_eq!(digest(&map.templates), js.s("templatesFromMap"));
     assert_eq!(digest(commands.expansions.as_ref().unwrap()), js.s("expansionsFromCommands"));
     let empty = Context::new(None, None, None);
-    let got = Json::Arr(vec![to_json(&empty.templates), empty.rules.as_ref().map_or(Json::Null, to_json),
-                             empty.expansions.as_ref().map_or(Json::Null, to_json)]);
+    let got = Json::Arr(vec![to_json(&empty.templates), empty.rules.as_deref().map_or(Json::Null, to_json),
+                             empty.expansions.as_deref().map_or(Json::Null, to_json)]);
     assert_eq!(&got, js.get("empty").unwrap());
 }
 
 /// `templates.json` whole: the map back under its key, with the file's other fields.
 fn templates_value(repo: &Context) -> Json {
-    Json::Obj(vec![("templates".into(), repo.templates.clone())])
+    Json::Obj(vec![("templates".into(), (*repo.templates).clone())])
 }
 
 #[test]
