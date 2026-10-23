@@ -27,6 +27,8 @@
  *       finds again (§20)
  *   M6  recovery by the path — of what the structure leaves, the slug whose
  *       trigrams are closest, against the slug whose body is (§22)
+ *   M7  what an edit rewrites — of the sections whose index row would change,
+ *       the share whose text is the same and only the coordinates moved (§24)
  *
  * Identity follows renames (`git log -M`) and is keyed by the latest name.
  * Nothing here knows what a `.pgml` is: any repository path can be handed in.
@@ -165,6 +167,8 @@ function m3(commits, from) {
 
 function sections(text) {
   const out = new Map(), lines = text.split("\n"), heads = [];
+  const offset = [0];
+  lines.forEach(l => offset.push(offset[offset.length - 1] + l.length + 1));
   let fence = false;
   lines.forEach((l, i) => {
     if (/^\s*(```|~~~)/.test(l)) fence = !fence;
@@ -191,7 +195,8 @@ function sections(text) {
     const body = lines.slice(h.at + 1, end);
     out.set(h.slug, { set: new Set(body.map(s => s.trim()).filter(Boolean)),
       text: lines.slice(h.at, end).join("\n"), body: body.join("\n"),
-      parent: h.parent ?? null, prev: h.prev, next: h.next });
+      parent: h.parent ?? null, prev: h.prev, next: h.next,
+      line: h.at, lines: end - h.at, start: offset[h.at], end: offset[end] });
   });
   return out;
 }
@@ -330,13 +335,36 @@ function m6(commits, from) {
   return { cases, truths, predictions, right, wrong, precision: ratio(right, predictions), recall: ratio(right, truths) };
 }
 
+/* ---------- M7 ---------- */
+
+function m7(commits, from) {
+  let rewritten = 0, shifted = 0, edits = 0;
+  for (let i = from; i < commits.length; i++) {
+    const c = commits[i];
+    for (const ch of c.docEdits) {
+      if (ch.st === "D") continue;
+      const before = ch.st === "A" ? new Map() : sections(show(c.hash + "^", ch.from) ?? "");
+      const after = sections(show(c.hash, ch.to) ?? "");
+      edits++;
+      for (const [slug, a] of after) {
+        const b = before.get(slug);
+        const moved = b && (b.start !== a.start || b.end !== a.end || b.line !== a.line || b.lines !== a.lines);
+        if (b && b.text === a.text && !moved) continue;
+        rewritten++;
+        if (b && b.text === a.text) shifted++;
+      }
+    }
+  }
+  return { edits, rewritten, shifted, share: ratio(shifted, rewritten) };
+}
+
 /* ---------- report ---------- */
 
 const ratio = (a, b) => b ? a / b : null;
 const pct = x => x == null ? "—" : (100 * x).toFixed(1) + " %";
 
 function measure(commits, from) {
-  return { commits: commits.length - from, m1: m1(commits, from), m2: m2(commits, from), m3: m3(commits, from), m4: m4(commits, from), m5: m5(commits, from), m6: m6(commits, from) };
+  return { commits: commits.length - from, m1: m1(commits, from), m2: m2(commits, from), m3: m3(commits, from), m4: m4(commits, from), m5: m5(commits, from), m6: m6(commits, from), m7: m7(commits, from) };
 }
 
 const commits = assignIdentity(readLog());
@@ -366,6 +394,8 @@ function print(title, r) {
   console.log("  M6  " + r.m6.cases + " breaks the structure leaves, " + r.m6.truths + " with a successor by content: the path predicts " +
               r.m6.predictions + ", right " + r.m6.right + " (wrong onto a deletion " + r.m6.wrong.deleted + ", onto another slug " + r.m6.wrong.other +
               ") → precision " + pct(r.m6.precision) + ", recall " + pct(r.m6.recall));
+  console.log("  M7  " + r.m7.edits + " doc edits rewrite " + r.m7.rewritten + " rows; " + r.m7.shifted +
+              " of them only shifted, the text the same → shift share " + pct(r.m7.share));
   console.log("      post hoc, the same place: " + r.m5.samePlace + " more, " + r.m5.renamedSamePlace + " of them renamed; and it would carry " +
               r.m5.falsePlace + " of the " + r.m5.deleted + " deletions onto a new section");
 }

@@ -772,3 +772,27 @@ Decides **what the order maintenance ORD stores**: shift share `≥ 50 %` →
 stable positions, order labels by Dietz–Sleator and relative offsets, so an
 edit rewrites the rows it touches; `< 50 %` → the positions stay absolute, and
 the ORD is the order queries over them.
+
+## 25. Order maintenance — measured
+
+`node scripts/measure-coupling.js --rev 35fb43e --since 49c392a`: 218 commits,
+the window 117. Measured 2026-10-23.
+
+| | whole history | after `49c392a` | rule (§24) | verdict |
+|---|---|---|---|---|
+| **M7** what an edit rewrites | 390 doc edits rewrite 2 933 rows; **1 232 only shifted: 42.0 %** | 263 edits, 1 719 rows; 806 shifted: 46.9 % | shift share `≥ 50 %` → stable positions | **the positions stay absolute; the ORD is the order queries** |
+
+**What the verdict leaves out, and what it would buy.** Stable positions —
+order labels by Dietz–Sleator and offsets held relative to the previous sibling
+or the parent — would hold still four rows in ten of what a commit rewrites in
+`index.json`. The other six are the edit itself and the sections that hold it,
+which change in either scheme, because a section's fingerprint is its text and
+the text of a section includes what is under it. Four in ten is a quieter
+diff, not a different cost: the build reads every file either way, because the
+check has to.
+
+**The window runs closer to the bar** — 46.9 % against 42.0 % — because the
+documents of this period grow in the middle (the plan, the decisions, the
+intakes) more than at the end. The measure is in the script; the day it crosses
+50 % on a re-run, the verdict turns, and the order queries this ORD builds stay
+as they are, because they read the order and not how it is stored.
