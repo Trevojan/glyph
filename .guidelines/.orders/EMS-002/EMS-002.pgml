@@ -80,6 +80,13 @@
     [val'the Rust follows','glyph_rules::with_cache leaves, the Rust answers the moved oracle byte for byte, and the pin that held the cache in the digest is inverted']
   ]
 
+  [section'ORD-0007-json'
+    [tgt'JSON in a crate of its own under every other, question 4 of the EMS-001 return, answered b']
+    [val'the crate','glyph-json holds what glyph_util::json held and replaces the Value of glyph-stores, one JSON type for the workspace']
+    [val'the graph','crate-graph.js names glyph-json with its oracle, as the floor every crate may reach and that reaches none, seen failing before it counts']
+    [val'the oracle','every crate answers the oracle as before, byte for byte']
+  ]
+
   [section'limits'
     [nev'a selector that answers an empty slice in silence']
     [dont'open an ORD before the ORD it depends on closes']
