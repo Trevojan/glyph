@@ -119,6 +119,13 @@
     [val'the grades','note enters, ask enters only with an ADR the Regent signed, fix is refused; each seen failing before it counts']
   ]
 
+  [section'ORD-0013-once'
+    [tgt'the Rust stops redoing on every call what the JS does once, question 12 of the EMS-001 return, answered b on 2026-09-27']
+    [val'the digest','ck in integer arithmetic answers the bytes the JS writes']
+    [val'the stores','a store is shared and never copied, and the rules compile once a store']
+    [val'the bytes','no emitted byte moves, and the JS is not tuned']
+  ]
+
   [section'limits'
     [nev'a selector that answers an empty slice in silence']
     [dont'open an ORD before the ORD it depends on closes']

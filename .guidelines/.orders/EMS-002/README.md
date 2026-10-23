@@ -8,6 +8,8 @@ pacote que o `--bundle` escreve, e a contagem é desta série.
 
 ## A Ordem aberta
 
+- [`EMS-002/ORD-0013`](ORD-0013/ORD-0013.xml) — o Rust para de refazer a cada chamada o que o JS faz uma vez, a pergunta 12 do retorno da EMS-001; aberta em 2026-10-23
+
 ## Ordens fechadas
 
 | ORD | o que entregou | commit | digest |
