@@ -26,7 +26,7 @@
 use crate::identity::{self, Place};
 use crate::recovery::{self, Recovered};
 use crate::{fingerprint, frontmatter, join, select, split, tree, Format, Lines};
-use glyph_util::json::{parse, stringify, Json};
+use glyph_json::{parse, stringify, Json};
 use std::collections::{HashMap, HashSet};
 use std::path::Path;
 

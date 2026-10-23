@@ -10,7 +10,7 @@
 //! reverse tables are plain objects), and a document deeper than V8's stack
 //! (EMS-001/RETURN.md, ORD-0009).
 
-use glyph_util::json::{number, Json};
+use glyph_json::{number, Json};
 use glyph_util::tree::Thrown;
 use glyph_util::{esc, inherited, inherited_text, js_space, js_trim};
 use glyph_version::VERSION;

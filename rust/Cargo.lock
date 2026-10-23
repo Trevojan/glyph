@@ -10,6 +10,7 @@ version = "0.0.0"
 name = "glyph-burn"
 version = "0.0.0"
 dependencies = [
+ "glyph-json",
  "glyph-parse",
  "glyph-rules",
  "glyph-stores",
@@ -24,6 +25,7 @@ dependencies = [
  "glyph-burn",
  "glyph-envelope",
  "glyph-inverse",
+ "glyph-json",
  "glyph-parse",
  "glyph-protocol",
  "glyph-stores",
@@ -44,6 +46,7 @@ dependencies = [
 name = "glyph-envelope"
 version = "0.0.0"
 dependencies = [
+ "glyph-json",
  "glyph-parse",
  "glyph-stores",
  "glyph-util",
@@ -57,6 +60,7 @@ version = "0.0.0"
 dependencies = [
  "glyph-burn",
  "glyph-envelope",
+ "glyph-json",
  "glyph-parse",
  "glyph-stores",
  "glyph-util",
@@ -66,9 +70,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "glyph-json"
+version = "0.0.0"
+dependencies = [
+ "glyph-util",
+]
+
+[[package]]
 name = "glyph-lex"
 version = "0.0.0"
 dependencies = [
+ "glyph-json",
  "glyph-stores",
  "glyph-util",
  "glyph-vocab",
@@ -78,6 +90,7 @@ dependencies = [
 name = "glyph-logic"
 version = "0.0.0"
 dependencies = [
+ "glyph-json",
  "glyph-lex",
  "glyph-util",
 ]
@@ -97,6 +110,7 @@ dependencies = [
 name = "glyph-parse"
 version = "0.0.0"
 dependencies = [
+ "glyph-json",
  "glyph-lex",
  "glyph-logic",
  "glyph-rules",
@@ -113,6 +127,7 @@ dependencies = [
  "glyph-burn",
  "glyph-envelope",
  "glyph-inverse",
+ "glyph-json",
  "glyph-lex",
  "glyph-logic",
  "glyph-parse",
@@ -126,6 +141,7 @@ dependencies = [
 name = "glyph-rules"
 version = "0.0.0"
 dependencies = [
+ "glyph-json",
  "glyph-stores",
  "glyph-util",
 ]
@@ -138,6 +154,7 @@ version = "0.0.0"
 name = "glyph-stores"
 version = "0.0.0"
 dependencies = [
+ "glyph-json",
  "glyph-util",
  "glyph-vocab",
 ]
@@ -146,6 +163,7 @@ dependencies = [
 name = "glyph-templates"
 version = "0.0.0"
 dependencies = [
+ "glyph-json",
  "glyph-rules",
  "glyph-stores",
  "glyph-util",
@@ -161,11 +179,15 @@ dependencies = [
 [[package]]
 name = "glyph-util"
 version = "0.0.0"
+dependencies = [
+ "glyph-json",
+]
 
 [[package]]
 name = "glyph-version"
 version = "0.0.0"
 dependencies = [
+ "glyph-json",
  "glyph-util",
 ]
 
@@ -173,6 +195,7 @@ dependencies = [
 name = "glyph-vocab"
 version = "0.0.0"
 dependencies = [
+ "glyph-json",
  "glyph-util",
 ]
 
@@ -181,13 +204,14 @@ name = "glyph-vpath"
 version = "0.0.0"
 dependencies = [
  "glyph-envelope",
- "glyph-util",
+ "glyph-json",
 ]
 
 [[package]]
 name = "glyph-xml"
 version = "0.0.0"
 dependencies = [
+ "glyph-json",
  "glyph-parse",
  "glyph-stores",
  "glyph-util",

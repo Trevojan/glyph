@@ -10,7 +10,8 @@
 
 use glyph_parse::{parse, Extra, Opts};
 use glyph_rules::{compile_rules, Compiled};
-use glyph_stores::{entry_of, expansion_registry, Context, Value};
+use glyph_stores::{entry_of, expansion_registry, Context};
+use glyph_json::Json;
 use glyph_util::tree::{Id, Thrown, Tree, LIMITS};
 use glyph_util::{js_space, js_trim};
 
@@ -168,7 +169,7 @@ pub fn burn_list(tree: &Tree<Extra>, list: &[Id], o: &BurnOpts, compiled: Option
         /* the arguments first: an operand is not part of the formula it is
            passed to, so it must not inherit that formula's chain */
         let operands = burn_list(tree, &nd.children, o, compiled, chain, depth + 1, st)?;
-        if e.is_none_or(|e| e.get("species").and_then(Value::str) == Some("atom")) {
+        if e.is_none_or(|e| e.get("species").and_then(Json::str) == Some("atom")) {
             out.push(Burnt::Atom { canonical, children: operands, unburned: false, via: None, blended: false });
             continue;
         }
@@ -184,8 +185,8 @@ pub fn burn_list(tree: &Tree<Extra>, list: &[Id], o: &BurnOpts, compiled: Option
            and any other value is a list the parser finds nothing in */
         let formula = match e.and_then(|e| e.get("formula")) {
             None => return Err(Thrown("Cannot read properties of undefined (reading 'length')".into())),
-            Some(Value::Null) => return Err(Thrown("Cannot read properties of null (reading 'length')".into())),
-            Some(Value::Str(f)) => f.clone(),
+            Some(Json::Null) => return Err(Thrown("Cannot read properties of null (reading 'length')".into())),
+            Some(Json::Str(f)) => f.clone(),
             Some(_) => String::new(),
         };
         let fctx = Context::new(None, None, ctx.expansions.clone());

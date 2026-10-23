@@ -8,8 +8,8 @@
 //!
 //! Shared by `#[path]` and not by a crate: it is test scaffolding, not the
 //! engine, so `crate-graph.js` has no arrow to hold it to. It reads with
-//! `glyph_util::json`, so every crate that includes it has `glyph-util` among
-//! its dev-dependencies.
+//! `glyph-json` and rebuilds trees with `glyph_util::tree`, so every crate that
+//! includes it has both among its dev-dependencies.
 
 #![allow(dead_code)]
 
@@ -21,7 +21,7 @@ use std::sync::{Mutex, OnceLock};
 /// The command that writes the oracle, named by every failure to find it.
 pub const WRITE_IT: &str = "node scripts/test-corpus.js --export-oracle";
 
-pub use glyph_util::json::{parse, Json};
+pub use glyph_json::{parse, Json};
 
 /// What a test asks of a value it trusts: the answer, or a failure naming
 /// the key.

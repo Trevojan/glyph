@@ -10,5 +10,5 @@ name = "glyph-vpath"
 path = "src/main.rs"
 
 [dependencies]
-glyph-util = { path = "../glyph-util" }
+glyph-json = { path = "../glyph-json" }
 glyph-envelope = { path = "../glyph-envelope" }

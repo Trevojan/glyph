@@ -5,7 +5,7 @@
 #[path = "../../../testkit/oracle.rs"]
 mod oracle;
 
-use glyph_util::json::{self, Json};
+use glyph_json::{self as json, Json};
 use glyph_vocab::*;
 use oracle::Must;
 use std::collections::BTreeSet;

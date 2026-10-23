@@ -16,7 +16,7 @@ use glyph_burn::{to_hgml, BurnOpts};
 use glyph_envelope::{to_ast, AstOpts};
 use glyph_parse::{parse, Opts};
 use glyph_stores::{atoms_of, depth_of, formula_of, species_of, Context};
-use glyph_util::json::{number, stringify_indent, Json};
+use glyph_json::{number, stringify_indent, Json};
 use glyph_util::tree::Thrown;
 use glyph_xml::to_xml;
 use std::io::{Read, Write};

@@ -4,13 +4,13 @@
 //!
 //! EMS-001 ORD-0009. `serialize_ast` is the projection and `to_ast` the one
 //! call; the envelope is a `Json` value built in the JS's key order, so
-//! `glyph_util::json::stringify` writes the bytes `JSON.stringify` writes. A
+//! `glyph_json::stringify` writes the bytes `JSON.stringify` writes. A
 //! value JSON drops — the function `Object` a session word or a mood holds as
 //! its gloss — is dropped here too.
 
 use glyph_parse::{parse, Extra, Gap, Opts};
-use glyph_stores::{Context, Value};
-use glyph_util::json::{stringify, Json};
+use glyph_stores::Context;
+use glyph_json::{stringify, Json};
 use glyph_util::tree::{Emotion, Gloss, Id, Segment, Thrown, Tree, LIMITS};
 use glyph_version::VERSION;
 use glyph_vocab::el_name;
@@ -35,21 +35,9 @@ pub fn ck(s: &str) -> String {
     format!("{a:08x}{b:08x}")
 }
 
-/// A store as JSON, in the key order the JS enumerates.
-pub fn json_of(v: &Value) -> Json {
-    match v {
-        Value::Null => Json::Null,
-        Value::Bool(b) => Json::Bool(*b),
-        Value::Num(n) => Json::Num(*n),
-        Value::Str(s) => Json::Str(s.clone()),
-        Value::Arr(a) => Json::Arr(a.iter().map(json_of).collect()),
-        Value::Obj(kv) => Json::Obj(kv.iter().map(|(k, v)| (k.clone(), json_of(v))).collect()),
-    }
-}
-
 /// `storeCk`: a store's fingerprint by its serialised form; null when none.
-pub fn store_ck(store: Option<&Value>) -> Json {
-    store.map_or(Json::Null, |s| Json::Str(ck(&stringify(&json_of(s)))))
+pub fn store_ck(store: Option<&Json>) -> Json {
+    store.map_or(Json::Null, |s| Json::Str(ck(&stringify(s))))
 }
 
 /// What the envelope is asked for beyond the parse.
@@ -283,7 +271,7 @@ fn segment_json(tree: &Tree<Extra>, sg: &Segment, truncated: &mut usize, panel: 
 
 /// `serializeAST(segments, gaps, opts)`. `rules` is the rules store as the
 /// parse left it; `source` is the text the envelope describes.
-pub fn serialize_ast(tree: &Tree<Extra>, gaps: &[Gap], ctx: &Context, rules: Option<&Value>, source: Option<&str>, o: &AstOpts) -> Json {
+pub fn serialize_ast(tree: &Tree<Extra>, gaps: &[Gap], ctx: &Context, rules: Option<&Json>, source: Option<&str>, o: &AstOpts) -> Json {
     let mut truncated = 0;
     let segments: Vec<Json> = tree.segments.iter().map(|sg| segment_json(tree, sg, &mut truncated, o.panel)).collect();
     let mut diagnostics: Vec<Json> = gaps.iter().map(|g| {

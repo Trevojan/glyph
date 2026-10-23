@@ -6,7 +6,12 @@ license-file.workspace = true
 publish = false
 
 [dependencies]
+glyph-json = { path = "../glyph-json" }
 glyph-util = { path = "../glyph-util" }
 glyph-stores = { path = "../glyph-stores" }
 glyph-parse = { path = "../glyph-parse" }
 glyph-rules = { path = "../glyph-rules" }
+
+[dev-dependencies]
+glyph-util = { path = "../glyph-util" }
+glyph-json = { path = "../glyph-json" }

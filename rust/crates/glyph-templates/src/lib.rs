@@ -15,41 +15,42 @@
 //! lower-case name the prototype holds never expands; and a param written as a
 //! string is a repeat param, because `"x".repeat` is `String.prototype.repeat`.
 
-use glyph_stores::{Context, Value};
-use glyph_util::json::number;
+use glyph_stores::Context;
+use glyph_json::Json;
+use glyph_json::number;
 use glyph_util::tree::{Diag, Id, Node, Thrown, Tree};
 use glyph_util::{esc, inherited, inherited_text};
 
 /// `String(v)`; `None` is `undefined`.
-fn js_string(v: Option<&Value>) -> String {
+fn js_string(v: Option<&Json>) -> String {
     match v {
         None => "undefined".into(),
-        Some(Value::Null) => "null".into(),
-        Some(Value::Bool(b)) => b.to_string(),
-        Some(Value::Num(n)) => number(*n),
-        Some(Value::Str(s)) => s.clone(),
-        Some(Value::Arr(a)) => a.iter().map(|x| match x {
-            Value::Null => String::new(),
+        Some(Json::Null) => "null".into(),
+        Some(Json::Bool(b)) => b.to_string(),
+        Some(Json::Num(n)) => number(*n),
+        Some(Json::Str(s)) => s.clone(),
+        Some(Json::Arr(a)) => a.iter().map(|x| match x {
+            Json::Null => String::new(),
             x => js_string(Some(x)),
         }).collect::<Vec<_>>().join(","),
-        Some(Value::Obj(_)) => "[object Object]".into(),
+        Some(Json::Obj(_)) => "[object Object]".into(),
     }
 }
 /// `esc(v)`: null and absence read as the empty string.
-fn esc_v(v: Option<&Value>) -> String {
+fn esc_v(v: Option<&Json>) -> String {
     match v {
-        None | Some(Value::Null) => String::new(),
+        None | Some(Json::Null) => String::new(),
         v => esc(&js_string(v)),
     }
 }
-fn truthy(v: Option<&Value>) -> Option<&Value> {
+fn truthy(v: Option<&Json>) -> Option<&Json> {
     v.filter(|v| v.truthy())
 }
 
 /// `registry[String(name).toLowerCase()] || registry[name]`: a key the
 /// prototype holds answers before the name as written is tried, and it has no
 /// body and no constraints.
-fn definition<'a>(registry: &'a Value, name: &str) -> Option<&'a Value> {
+fn definition<'a>(registry: &'a Json, name: &str) -> Option<&'a Json> {
     for key in [name.to_lowercase(), name.to_string()] {
         match registry.get(&key) {
             Some(d) if d.truthy() => return Some(d),
@@ -70,18 +71,18 @@ pub struct Param {
 }
 
 impl Param {
-    fn of(p: &Value) -> Param {
+    fn of(p: &Json) -> Param {
         let v = p.get("name").filter(|n| n.truthy()).unwrap_or(p);
-        Param { text: js_string(Some(v)), is_str: matches!(v, Value::Str(_)), truthy: v.truthy() }
+        Param { text: js_string(Some(v)), is_str: matches!(v, Json::Str(_)), truthy: v.truthy() }
     }
 }
 
 /// `p && p.repeat`: an object's own `repeat`, and every non-empty string,
 /// which answers with `String.prototype.repeat`.
-fn repeats(p: &Value) -> bool {
+fn repeats(p: &Json) -> bool {
     match p {
-        Value::Str(s) => !s.is_empty(),
-        Value::Obj(_) => p.get("repeat").is_some_and(Value::truthy),
+        Json::Str(s) => !s.is_empty(),
+        Json::Obj(_) => p.get("repeat").is_some_and(Json::truthy),
         _ => false,
     }
 }
@@ -275,7 +276,7 @@ pub fn bind_holes<X: Clone + Default>(tree: &mut Tree<X>, nodes: &[Id], fills: &
 pub struct SubParse<'a> {
     pub session: bool,
     pub valency: bool,
-    pub templates: &'a Value,
+    pub templates: &'a Json,
     pub expanding: Vec<String>,
 }
 
@@ -321,7 +322,7 @@ pub fn expand_invocations<X: Clone + Default>(
         }
         let body = tree.graft(sub.tree);
 
-        let raw_params = def.get("params").and_then(Value::arr).unwrap_or(&[]);
+        let raw_params = def.get("params").and_then(Json::arr).unwrap_or(&[]);
         let params: Vec<Param> = raw_params.iter().map(Param::of).collect();
         let repeat = raw_params.iter().find(|p| repeats(p)).map(Param::of);
         let fills = collect_fills(tree, inv, repeat.as_ref())?;
@@ -352,9 +353,9 @@ pub fn expand_invocations<X: Clone + Default>(
 /// `constraintNames(rulesStore, spec)`: a class resolves through the rules
 /// store, a bare name is itself, upper-cased. A class with no store names
 /// nothing, and the constraint does not fire.
-pub fn constraint_names(rules: Option<&Value>, spec: &Value) -> Result<Vec<String>, Thrown> {
-    let items: Vec<&Value> = match spec {
-        Value::Arr(a) => a.iter().collect(),
+pub fn constraint_names(rules: Option<&Json>, spec: &Json) -> Result<Vec<String>, Thrown> {
+    let items: Vec<&Json> = match spec {
+        Json::Arr(a) => a.iter().collect(),
         v => vec![v],
     };
     let mut out = Vec::new();
@@ -366,7 +367,7 @@ pub fn constraint_names(rules: Option<&Value>, spec: &Value) -> Result<Vec<Strin
         };
         let classes = rules.and_then(|r| truthy(r.get("classes")));
         match classes.and_then(|c| c.get(class)) {
-            Some(Value::Arr(a)) => out.extend(a.iter().map(|x| js_string(Some(x)).to_uppercase())),
+            Some(Json::Arr(a)) => out.extend(a.iter().map(|x| js_string(Some(x)).to_uppercase())),
             Some(v) if v.truthy() => return Err(Thrown("cls.forEach is not a function".into())),
             None if inherited(class) => return Err(Thrown("cls.forEach is not a function".into())),
             _ => {}
@@ -380,7 +381,7 @@ pub fn check_template_constraints<X: Clone>(tree: &Tree<X>, ctx: &Context, g: &m
     let registry = &ctx.templates;
     let rules = ctx.rules.as_ref();
     let exempt: Vec<String> = match rules.and_then(|r| truthy(r.get("scope"))).and_then(|s| truthy(s.get("exemptUnder"))) {
-        Some(Value::Arr(a)) => a.iter().map(|x| js_string(Some(x))).collect(),
+        Some(Json::Arr(a)) => a.iter().map(|x| js_string(Some(x))).collect(),
         Some(_) => Vec::new(),
         None => vec!["OVR".into(), "BYP".into()],
     };
@@ -413,7 +414,7 @@ pub fn check_template_constraints<X: Clone>(tree: &Tree<X>, ctx: &Context, g: &m
                 continue;
             }
             let def = definition(registry, n(inv).template.as_deref().unwrap_or_default());
-            let Some(cons) = def.and_then(|d| truthy(d.get("constraints"))).and_then(Value::arr) else { continue };
+            let Some(cons) = def.and_then(|d| truthy(d.get("constraints"))).and_then(Json::arr) else { continue };
             if cons.is_empty() {
                 continue;
             }

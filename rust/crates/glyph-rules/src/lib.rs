@@ -13,35 +13,36 @@
 //! through that same lookup (ORD-0004) — makes `checkRules` throw, and the
 //! port stops there with the JS's message.
 
-use glyph_stores::{Context, Value};
-use glyph_util::json::number;
+use glyph_stores::Context;
+use glyph_json::Json;
+use glyph_json::number;
 use glyph_util::tree::{Diag, Id, Thrown, Tree};
 use glyph_util::{esc, inherited};
 use std::collections::HashSet;
 
 /// `String(v)`; `None` is `undefined`.
-fn js_string(v: Option<&Value>) -> String {
+fn js_string(v: Option<&Json>) -> String {
     match v {
         None => "undefined".into(),
-        Some(Value::Null) => "null".into(),
-        Some(Value::Bool(b)) => b.to_string(),
-        Some(Value::Num(n)) => number(*n),
-        Some(Value::Str(s)) => s.clone(),
-        Some(Value::Arr(a)) => a.iter().map(|x| match x {
-            Value::Null => String::new(),
+        Some(Json::Null) => "null".into(),
+        Some(Json::Bool(b)) => b.to_string(),
+        Some(Json::Num(n)) => number(*n),
+        Some(Json::Str(s)) => s.clone(),
+        Some(Json::Arr(a)) => a.iter().map(|x| match x {
+            Json::Null => String::new(),
             x => js_string(Some(x)),
         }).collect::<Vec<_>>().join(","),
-        Some(Value::Obj(_)) => "[object Object]".into(),
+        Some(Json::Obj(_)) => "[object Object]".into(),
     }
 }
 /// `esc(v)`: null and absence read as the empty string.
-fn esc_v(v: Option<&Value>) -> String {
+fn esc_v(v: Option<&Json>) -> String {
     match v {
-        None | Some(Value::Null) => String::new(),
+        None | Some(Json::Null) => String::new(),
         v => esc(&js_string(v)),
     }
 }
-fn truthy(v: Option<&Value>) -> Option<&Value> {
+fn truthy(v: Option<&Json>) -> Option<&Json> {
     v.filter(|v| v.truthy())
 }
 
@@ -52,27 +53,27 @@ pub fn pair_key(a: &str, b: &str) -> String {
 
 /// `expandNames`: `@class` resolved against the store's classes; a bare name
 /// is itself.
-pub fn expand_names(store: &Value, name: Option<&Value>) -> Vec<String> {
+pub fn expand_names(store: &Json, name: Option<&Json>) -> Vec<String> {
     let text = js_string(name);
     match text.strip_prefix('@') {
         None => vec![text],
-        Some(class) => store.get("classes").and_then(|c| c.get(class)).and_then(Value::arr)
+        Some(class) => store.get("classes").and_then(|c| c.get(class)).and_then(Json::arr)
             .map(|a| a.iter().map(|x| js_string(Some(x))).collect()).unwrap_or_default(),
     }
 }
 
 pub struct Order<'a> {
-    pub rule: &'a Value,
+    pub rule: &'a Json,
     pub first: String,
     pub then: Vec<String>,
 }
 pub struct Pre<'a> {
-    pub rule: &'a Value,
+    pub rule: &'a Json,
     pub target: String,
     pub accept: Vec<String>,
 }
 pub struct Blend<'a> {
-    pub rule: &'a Value,
+    pub rule: &'a Json,
     pub when: Vec<String>,
     pub emit: String,
     pub means: String,
@@ -80,16 +81,16 @@ pub struct Blend<'a> {
 
 /// The store, compiled: the pairs by key, in the order each key first appears.
 pub struct Compiled<'a> {
-    pub pairs: Vec<(String, &'a Value)>,
+    pub pairs: Vec<(String, &'a Json)>,
     pub order: Vec<Order<'a>>,
     pub pre: Vec<Pre<'a>>,
     pub blends: Vec<Blend<'a>>,
 }
 
-pub fn compile_rules(store: &Value) -> Compiled<'_> {
+pub fn compile_rules(store: &Json) -> Compiled<'_> {
     let mut c = Compiled { pairs: Vec::new(), order: Vec::new(), pre: Vec::new(), blends: Vec::new() };
-    for r in store.get("rules").and_then(Value::arr).unwrap_or(&[]) {
-        match r.get("kind").and_then(Value::str) {
+    for r in store.get("rules").and_then(Json::arr).unwrap_or(&[]) {
+        match r.get("kind").and_then(Json::str) {
             Some("pair") => {
                 let k = pair_key(&js_string(r.get("a")), &js_string(r.get("b")));
                 match c.pairs.iter_mut().find(|(x, _)| *x == k) {
@@ -99,7 +100,7 @@ pub fn compile_rules(store: &Value) -> Compiled<'_> {
             }
             /* a blend that cannot say what it means is refused here, not warned about */
             Some("blend") => {
-                let when = r.get("when").and_then(Value::arr).unwrap_or(&[]);
+                let when = r.get("when").and_then(Json::arr).unwrap_or(&[]);
                 if truthy(r.get("means")).is_none() || truthy(r.get("emit")).is_none() || when.len() < 2 {
                     continue;
                 }
@@ -115,7 +116,7 @@ pub fn compile_rules(store: &Value) -> Compiled<'_> {
             /* a set in the JS: each name once, where it first came */
             Some("precondition") => {
                 let mut accept: Vec<String> = Vec::new();
-                for x in r.get("requiresBefore").and_then(Value::arr).unwrap_or(&[]).iter().flat_map(|n| expand_names(store, Some(n))) {
+                for x in r.get("requiresBefore").and_then(Json::arr).unwrap_or(&[]).iter().flat_map(|n| expand_names(store, Some(n))) {
                     if !accept.contains(&x) {
                         accept.push(x);
                     }
@@ -132,7 +133,7 @@ pub fn compile_rules(store: &Value) -> Compiled<'_> {
 pub fn check_rules<X: Clone>(tree: &Tree<X>, ctx: &Context, g: &mut dyn FnMut(Diag)) -> Result<(), Thrown> {
     let Some(store) = ctx.rules.as_ref() else { return Ok(()) };
     let c = compile_rules(store);
-    let exempt: Vec<String> = store.get("scope").and_then(|s| s.get("exemptUnder")).and_then(Value::arr)
+    let exempt: Vec<String> = store.get("scope").and_then(|s| s.get("exemptUnder")).and_then(Json::arr)
         .map(|a| a.iter().map(|x| js_string(Some(x))).collect()).unwrap_or_default();
     let n = |id: Id| &tree.nodes[id];
     let canon = |id: Id| n(id).canonical.clone().unwrap_or_default();
@@ -156,7 +157,7 @@ pub fn check_rules<X: Clone>(tree: &Tree<X>, ctx: &Context, g: &mut dyn FnMut(Di
         false
     };
     let mut seen: HashSet<String> = HashSet::new();
-    let mut fire = |r: &Value, id: String, msg: String, en: String, g: &mut dyn FnMut(Diag)| {
+    let mut fire = |r: &Json, id: String, msg: String, en: String, g: &mut dyn FnMut(Diag)| {
         if !seen.insert(id) {
             return;
         }
@@ -169,7 +170,7 @@ pub fn check_rules<X: Clone>(tree: &Tree<X>, ctx: &Context, g: &mut dyn FnMut(Di
         g(Diag::new(&sev, label.as_deref().unwrap_or("regra"), msg + &pt, &format!("Rule:{}", js_string(r.get("id"))))
             .en(label.as_deref().unwrap_or("rule"), en + &us));
     };
-    let report_pair = |x: Id, y: Id, fire: &mut dyn FnMut(&Value, String, String, String)| {
+    let report_pair = |x: Id, y: Id, fire: &mut dyn FnMut(&Json, String, String, String)| {
         let key = pair_key(&canon(x), &canon(y));
         let Some((_, r)) = c.pairs.iter().find(|(k, _)| *k == key) else { return };
         if under_exempt(x) || under_exempt(y) {

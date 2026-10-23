@@ -5,7 +5,7 @@
 #[path = "../../../testkit/oracle.rs"]
 mod oracle;
 
-use glyph_util::json::{number, parse, stringify, stringify_indent, Json};
+use glyph_json::{number, parse, stringify, stringify_indent, Json};
 
 #[test]
 fn every_oracle_file_reads_and_writes_back_to_its_bytes() {

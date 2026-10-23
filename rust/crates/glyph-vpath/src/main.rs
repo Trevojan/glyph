@@ -31,7 +31,7 @@
 //! found by its content, with a warning and its score, and the miss is
 //! logged. Neither ever blocks.
 
-use glyph_util::json::{stringify, Json};
+use glyph_json::{stringify, Json};
 use glyph_vpath::identity::{self, Place};
 use glyph_vpath::index::{self, Index};
 use glyph_vpath::order::Order;
@@ -323,7 +323,7 @@ fn misses(root: &Path) -> Result<(), Vec<String>> {
     let log = std::fs::read_to_string(root.join(recovery::MISSES)).unwrap_or_default();
     let mut count: BTreeMap<(String, String), usize> = BTreeMap::new();
     for line in log.lines().filter(|l| !l.trim().is_empty()) {
-        let j = glyph_util::json::parse(line).map_err(|e| vec![format!("{}: {e}", recovery::MISSES)])?;
+        let j = glyph_json::parse(line).map_err(|e| vec![format!("{}: {e}", recovery::MISSES)])?;
         let field = |k: &str| j.get(k).and_then(Json::str).unwrap_or_default().to_string();
         *count.entry((field("asked"), field("answered"))).or_default() += 1;
     }

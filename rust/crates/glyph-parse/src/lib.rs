@@ -20,7 +20,8 @@
 use glyph_lex::{classify, js_trim, suggest, tokenize, Token};
 use glyph_logic::{parse_logic, Logic};
 use glyph_rules::check_rules;
-use glyph_stores::{entry_of, expansion_registry, Context, Value};
+use glyph_stores::{entry_of, expansion_registry, Context};
+use glyph_json::Json;
 use glyph_templates::{check_template_constraints, expand_invocations, Parsed, SubParse};
 use glyph_util::tree::{strip_tags, Diag, Emotion, Gloss, Id, Node, Segment, Span, Suggestion, Thrown, Tree, LIMITS};
 use glyph_util::{esc, inherited};
@@ -70,7 +71,7 @@ pub struct Parse {
     pub tokens: Vec<Token>,
     /// The rules store the parse read, which the envelope hashes: the
     /// compiled rules live beside it, never on it (EMS-002 ORD-0006).
-    pub rules: Option<Value>,
+    pub rules: Option<Json>,
 }
 
 /// A table the JS reads as `TABLE[key]`: a key of its own, or one
@@ -699,8 +700,8 @@ pub fn parse(src: &str, o: &Opts) -> Result<Parse, Thrown> {
             let Some(canonical) = tree.nodes[id].canonical.clone().filter(|c| !c.is_empty()) else { continue };
             let Some(e) = entry_of(&canonical, ctx) else { continue };
             let nd = &mut tree.nodes[id];
-            nd.species = e.get("species").and_then(Value::str).map(str::to_string);
-            nd.composition_depth = Some(e.get("depth").and_then(Value::num));
+            nd.species = e.get("species").and_then(Json::str).map(str::to_string);
+            nd.composition_depth = Some(e.get("depth").and_then(Json::num));
         }
     }
 
