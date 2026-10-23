@@ -8,8 +8,6 @@ pacote que o `--bundle` escreve, e a contagem é desta série.
 
 ## A Ordem aberta
 
-- [`EMS-002/ORD-0004`](ORD-0004/ORD-0004.xml) — a manutenção de ordem dos caminhos virtuais, as consultas sobre as posições do índice; aberta em 2026-10-23
-
 ## Ordens fechadas
 
 | ORD | o que entregou | commit | digest |
@@ -17,3 +15,4 @@ pacote que o `--bundle` escreve, e a contagem é desta série.
 | [`ORD-0001`](ORD-0001/ORD-0001.xml) | `glyph-vpath`, os caminhos virtuais, camadas 1, 4, 5 e 6 do `.plan` §0, chaveadas pelo slug: as árvores por extensão, o índice dos 134 arquivos em 1 750 nós com bytes, linhas e impressão digital, o resolvedor, o `sources:` semeado e o portão no `npm run check`, cada brecha vista falhando | `b8bcbe3` e `6f8a1c2` | `fc5b4f241ff9b345cdb7d9ef994e9c51211683a0a4543b186dca31160b2f9c69` — `sha256sum` do `index.json` em `6f8a1c2` |
 | [`ORD-0002`](ORD-0002/ORD-0002.xml) | o `NodeID`, camada 2 do `.plan` §0: a identidade passa de um build ao seguinte só pela estrutura, por cinco regras em ordem; o pai de cada nó no índice, os caminhos antigos como apelidos que respondem com aviso, `node` e `up`, e o portão que recusa uma fonte por caminho antigo e uma identidade que não se sustenta; a migração deu `n1` a `n1789` ao índice da `ORD-0001` | `1abdc2a` | `4b327f203896c592cb9508b317a5cf56aea5120ff2792e4840d30e3fe6433213` — `sha256sum` do `index.json` em `1abdc2a` |
 | [`ORD-0003`](ORD-0003/ORD-0003.xml) | o índice de recuperação, camada 7 do `.plan` §0, pelo conteúdo: a seção que o `NodeID` não alcança volta pela sucessora de maior Jaccard das linhas, de 0,5 para cima e sem empate, sem lhe dar identidade; o texto antigo do cache ou do git, conferido pela impressão digital; a resposta por uma recuperação avisa com a nota e vai para o log das falhas; o portão recusa a fonte por caminho recuperado e a recuperação que não se sustenta | `2440e38` | `7ea852e9661be01d5f736f202de4290460d4462796b63cd1c52a8b5089334215` — `sha256sum` do `index.json` em `2440e38` |
+| [`ORD-0004`](ORD-0004/ORD-0004.xml) | a manutenção de ordem, camada 3 do `.plan` §0, como consultas sobre as posições do índice: a ordem ordenada uma vez na carga, `before` em tempo constante, `above` e `between` por busca; nada novo guardado, e as posições estáveis por Dietz–Sleator recusadas pelo M7 | `94a4d09` | `dfecdf9d4fc96da84fe6c67c8fccdbaabb95ec0dec4cd89213492e4a0e766b03` — `sha256sum` do `index.json` em `94a4d09`, contra o qual a ordem foi provada em cada um dos 1,7 milhão de pares |
