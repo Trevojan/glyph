@@ -50,20 +50,20 @@ fn the_digest_of_every_generated_table_equals_the_js_store() {
     }
 }
 
-/* Pinned, with the reason. The JS hangs its compiled rules on the rules store
+/* Inverted, with the reason. The JS hung its compiled rules on the rules store
    itself (`store.__compiled`, rules.js), enumerable, so the envelope's
-   `stores.rules` is the digest of the store and the engine's cache together:
-   9 921 bytes of rules.json become 18 258 hashed. Every envelope agrees on that
-   one digest, and it is not the store's. When the JS keeps its cache elsewhere
-   the two meet and this fails: invert it then, do not delete it. */
+   `stores.rules` was the digest of the store and the engine's cache together:
+   9 921 bytes of rules.json became 18 258 hashed. Since EMS-002 ORD-0006 the
+   JS keeps them beside the store, keyed by it, and every envelope hashes the
+   store alone; a cache that comes back onto the store fails this. */
 #[test]
-fn the_envelope_hashes_the_rules_with_the_engines_cache() {
+fn the_envelope_hashes_the_rules_store_alone() {
     let store = digest(Context::repository().rules.as_ref().unwrap());
     let recorded: std::collections::BTreeSet<&str> = oracle::cases().iter()
         .filter_map(|c| c.get("ast").and_then(|a| a.get("stores")))
         .map(|s| s.s("rules")).collect();
     assert_eq!(recorded.len(), 1, "the envelopes disagree on the rules: {recorded:?}");
-    assert!(!recorded.contains(store.as_str()), "the envelope now hashes the rules store alone: invert this pin");
+    assert!(recorded.contains(store.as_str()), "the envelope hashes something besides the rules store: {recorded:?} against {store}");
 }
 
 #[test]

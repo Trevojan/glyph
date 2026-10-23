@@ -19,7 +19,7 @@
 
 use glyph_lex::{classify, js_trim, suggest, tokenize, Token};
 use glyph_logic::{parse_logic, Logic};
-use glyph_rules::{check_rules, with_cache};
+use glyph_rules::check_rules;
 use glyph_stores::{entry_of, expansion_registry, Context, Value};
 use glyph_templates::{check_template_constraints, expand_invocations, Parsed, SubParse};
 use glyph_util::tree::{strip_tags, Diag, Emotion, Gloss, Id, Node, Segment, Span, Suggestion, Thrown, Tree, LIMITS};
@@ -68,8 +68,8 @@ pub struct Parse {
     pub tree: Tree<Extra>,
     pub gaps: Vec<Gap>,
     pub tokens: Vec<Token>,
-    /// The rules store as the parse leaves it: the JS's `checkRules` hangs its
-    /// compiled rules on the store object, and the envelope hashes that.
+    /// The rules store the parse read, which the envelope hashes: the
+    /// compiled rules live beside it, never on it (EMS-002 ORD-0006).
     pub rules: Option<Value>,
 }
 
@@ -753,5 +753,5 @@ pub fn parse(src: &str, o: &Opts) -> Result<Parse, Thrown> {
         Gap { plain: strip_tags(&msg), sev: d.sev, lab, msg, code: if d.code.is_empty() { "Note".into() } else { d.code }, at: d.at,
               code_first: d.code_first }
     }).collect();
-    Ok(Parse { tree, gaps, tokens, rules: ctx.rules.as_ref().map(with_cache) })
+    Ok(Parse { tree, gaps, tokens, rules: ctx.rules.clone() })
 }

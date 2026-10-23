@@ -822,7 +822,6 @@ function runHgmlChecks() {
      (function () {
        const store = JSON.parse(JSON.stringify(RULESTORE));
        store.rules.push({ id:"no-means", kind:"blend", when:["REV","DIST"], emit:"x" });
-       delete store.__compiled;
        const out = G.toHGML(blendSrc, { expansions:require("../.guidelines/expansions.json"), rules:store });
        return /\[x/.test(out) ? "it emitted an element that cannot say what it means" : null;
      })());
@@ -1855,8 +1854,8 @@ function runSnapshotChecks() {
        them, their digests, and what is read off them — for every name the
        composition table and the vocabulary know, and three it does not —
        with the stores loaded and with none. The digests are of the stores as
-       read from disk: by now the suite's parses have hung `__compiled` on the
-       rules object (rules.js), and the envelope's `stores.rules` hashes it */
+       read from disk, which is what the envelope's `stores.rules` hashes: the
+       compiled rules live beside the store (rules.js), never on it */
     const EXP = SNAP_OPTS.expansions;
     const fresh = f => JSON.parse(fs.readFileSync(path.resolve(__dirname, "../.guidelines/" + f), "utf8"));
     const names = [...new Set([...Object.keys(EXP.commands),
@@ -3286,11 +3285,9 @@ function runContextGuard() {
   const ruleCodes = o => (G.parse("[mand'x'][opt'x']", o).gaps || []).map(g => g.code);
   /* the baseline is a loose store that is present and empty — it cannot fall
      back, in this engine or in one without contexts, so it measures the rules
-     alone and not the mechanism under test. `__compiled` is cleared because
-     compileRules caches onto the store object itself, and a copy would carry
-     the original's compiled rules along with it */
+     alone and not the mechanism under test */
   const noRules = ruleCodes(Object.assign({}, loose,
-    { rules: Object.assign({}, RULESTORE, { rules: [], __compiled: undefined }) }));
+    { rules: Object.assign({}, RULESTORE, { rules: [] }) }));
   const fromRules = ruleCodes(loose).filter(c => noRules.indexOf(c) === -1);
   const leaked = ruleCodes(G.createContext({ templates: TPL.templates }))
     .filter(c => fromRules.indexOf(c) !== -1);
