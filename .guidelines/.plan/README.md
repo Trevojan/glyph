@@ -162,8 +162,6 @@ espera o Regente no §5 dele.
 Decidido em 2026-09-27, ainda não construído — cada item uma ORD quando o
 Regente chamar, o JS primeiro onde o oráculo muda:
 
-- **o zip de uma ORD de série só atrás de uma flag** (pergunta 1): o `--bundle`
-  escreve a pasta, e o zip quando pedido;
 - **o `classify` pelas tabelas da página** (pergunta 10): atrás de
   `?engine=relay`, uma requisição por chamada, menos o `classify`, que a página
   responde com as tabelas que já carrega — o L-01 deixa de fazer 8 000 idas;
