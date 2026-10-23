@@ -8,8 +8,6 @@ pacote que o `--bundle` escreve, e a contagem é desta série.
 
 ## A Ordem aberta
 
-- [`EMS-002/ORD-0007`](ORD-0007/ORD-0007.xml) — o JSON num crate próprio, a pergunta 4 do retorno da EMS-001; aberta em 2026-10-23
-
 ## Ordens fechadas
 
 | ORD | o que entregou | commit | digest |
@@ -20,3 +18,4 @@ pacote que o `--bundle` escreve, e a contagem é desta série.
 | [`ORD-0004`](ORD-0004/ORD-0004.xml) | a manutenção de ordem, camada 3 do `.plan` §0, como consultas sobre as posições do índice: a ordem ordenada uma vez na carga, `before` em tempo constante, `above` e `between` por busca; nada novo guardado, e as posições estáveis por Dietz–Sleator recusadas pelo M7 | `94a4d09` | `dfecdf9d4fc96da84fe6c67c8fccdbaabb95ec0dec4cd89213492e4a0e766b03` — `sha256sum` do `index.json` em `94a4d09`, contra o qual a ordem foi provada em cada um dos 1,7 milhão de pares |
 | [`ORD-0005`](ORD-0005/ORD-0005.xml) | a fonte declarada fora do BMP, a pergunta 2 do retorno da EMS-001: a `P-35`, o snapshot de 114 para 115 fontes por decisão, nenhum hash anterior movido; o Rust responde o caso novo byte a byte, e o `lev` que conta caracteres, o mutante que o oráculo de 114 casos deixava vivo, morre | `2f8dd85` | `5fd8784b5189bee185663f843c225b37d2948502fb0d4dcaaf67a60ab443c9e0` (os casos, 115 arquivos, `LC_ALL=C sha256sum *.json \| sha256sum` em `rust/target/oracle/`) e `b97a1d0ef781f8779704f6262613208084182b70eb34bfb09dfec6b756f3b3d5` (`util.json`) |
 | [`ORD-0006`](ORD-0006/ORD-0006.xml) | as regras compiladas fora da store, a pergunta 3 do retorno da EMS-001: o JS as guarda num `WeakMap` chaveado pela store, o envelope hashea a store sozinha, os 115 hashes de `ast` movidos por decisão e nenhum de `xml` ou `hgml`; o `with_cache` sai do Rust, e o pino que segurava o cache no digest invertido | `37be708` | `86600fec025a1db860876091c6ba2df68c80ecdad1129f588cd06af9e5cfec83` (os casos), `a1b8cee2754a0b5bd5a3799f9ed2447dbb38c085c95097b9f9abcd9239a940c1` (`ast.json`) e `2c41220c1dd911afa6271839da73154c5bc6417bf627ffd48b0bd664d30ef119` (`stores.json`) |
+| [`ORD-0007`](ORD-0007/ORD-0007.xml) | o JSON num crate próprio, a pergunta 4 do retorno da EMS-001: `glyph-json` leva o que o `glyph_util::json` guardava e toma o lugar do `Value` do `glyph-stores`, um tipo de JSON para o workspace; o `crate-graph.js` o nomeia como o chão, com o oráculo da plataforma, visto falhando antes de contar; nenhuma projeção se move | `ab37357` | `86600fec025a1db860876091c6ba2df68c80ecdad1129f588cd06af9e5cfec83` — os casos, o mesmo digest da `ORD-0006` |
