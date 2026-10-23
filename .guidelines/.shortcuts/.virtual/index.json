@@ -1,7 +1,7 @@
 {
   "note": "written by glyph-vpath build, EMS-002; never edited by hand",
   "depth": 2,
-  "next": 1792,
+  "next": 1793,
   "files": {
     ".guidelines/.changelog/README.md": {
       "nodes": [
@@ -1171,8 +1171,8 @@
     },
     ".guidelines/.orders/INTAKE-VIRTUAL-PATH.md": {
       "nodes": [
-        ["n775", "", 0, 42197, 1, 716, "dbbbdfbce948aa00", "", ""],
-        ["n776", "preliminary-intake--the-computed-context-mini-repo-and-virtual-path", 0, 42197, 1, 716, "dbbbdfbce948aa00", "7b04b188e0722800", "n775"],
+        ["n775", "", 0, 43610, 1, 740, "a0d4476094595600", "", ""],
+        ["n776", "preliminary-intake--the-computed-context-mini-repo-and-virtual-path", 0, 43610, 1, 740, "a0d4476094595600", "96e099d0eccdce00", "n775"],
         ["n777", "1-the-goal-as-the-regent-states-it", 861, 1330, 17, 9, "21adcdb852ab8900", "64260344f1480e00", "n776"],
         ["n778", "2-the-cost-model--corrected-by-cláudio-and-adopted", 1330, 2307, 26, 16, "585ebd60d6d69c00", "bf8c289ca0479400", "n776"],
         ["n779", "3-glyph-reads-and-tracks-guidelines--already-true-three-times", 2307, 3204, 42, 12, "feac6a40458e7e00", "a3cd1f1e676c2000", "n776"],
@@ -1207,7 +1207,8 @@
         ["n808", "19-the-october-re-measurement--measured", 33606, 36782, 580, 47, "ef8893301cfb4400", "a47243660ef32000", "n776"],
         ["n809", "20-the-nodeid--what-structure-alone-recovers-threshold", 36782, 38603, 627, 32, "d68be616cc4fc900", "0a7de2ac1722f200", "n776"],
         ["n810", "21-the-nodeid--measured", 38603, 40320, 659, 27, "1b92115cb4b94200", "4dc7dad64ace2c00", "n776"],
-        ["n1791", "22-the-recovery-index--what-the-path-alone-recovers-threshold", 40320, 42197, 686, 31, "98eed0fe8a2b9c00", "34162e3655023e70", "n776"]
+        ["n1791", "22-the-recovery-index--what-the-path-alone-recovers-threshold", 40320, 42198, 686, 32, "b3f2f01c10012200", "3aeac8743ee7f600", "n776"],
+        ["n1792", "23-the-recovery-index--measured", 42198, 43610, 718, 23, "3c382a88d2f01400", "0e512218972fa200", "n776"]
       ]
     },
     ".guidelines/.orders/ORD-2026-08-30-01.dispatch.json": {

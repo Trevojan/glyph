@@ -714,3 +714,27 @@ right predictions / cases whose truth is not *none*. Over the whole history.
 Decides **how layer 7 recovers**: precision `≥ 90 %` **and** recall `≥ 80 %` →
 by the path, at query time, nothing stored; otherwise → by the content, at build
 time, against the previous version of the file from git.
+
+## 23. The recovery index — measured
+
+`node scripts/measure-coupling.js --rev 6173ad5 --since 49c392a`: 213 commits,
+the window 112. Measured 2026-10-23.
+
+| | whole history | after `49c392a` | rule (§22) | verdict |
+|---|---|---|---|---|
+| breaks the structure leaves | 231, **12** with a successor by content | 14, 8 | — | — |
+| **M6** by the path | predicts 14, right 5: **precision 35.7 %, recall 41.7 %**; the 9 wrong all fall on a deletion | predicts 3, right 2: 66.7 %, 25.0 % | precision `≥ 90 %` and recall `≥ 80 %` | **fails: layer 7 recovers by the content** |
+
+**Why the path fails.** A slug that changes only in its version or its number
+has trigrams close to the new one, and those are the five it gets right. A
+slug that changes in its words does not, and a deleted section often leaves a
+sibling whose slug looks like its own — *what is a chain* beside *what is not
+a chain*. The path tells two headings apart; it does not tell what lives under
+them.
+
+**What the content rule is.** It is the definition of the truth here — line-set
+Jaccard `≥ 0.5`, the largest unique — so its precision cannot be measured
+from the history, only its reach: the 12 of the whole history and the 8 of the
+window are what it recovers by construction. It never fires on a deletion,
+because a deletion is a section with no such successor. What it costs is the
+old text, which the index does not keep.
