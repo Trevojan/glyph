@@ -22,6 +22,9 @@
  *       touching more than 15 files left out
  *   M4  anchor survival — a heading slug that disappears is moved, renamed
  *       (its body reappears under a new slug, line-set Jaccard >= 0.5) or deleted
+ *   M5  structural recovery — of the breaks whose content lived on, keyed by
+ *       path, the share the same text, the same body or the same file renamed
+ *       finds again (§20)
  *
  * Identity follows renames (`git log -M`) and is keyed by the latest name.
  * Nothing here knows what a `.pgml` is: any repository path can be handed in.
@@ -167,12 +170,26 @@ function sections(text) {
     if (m) heads.push({ level: m[1].length, text: m[2], at: i });
   });
   const seen = new Map();
+  heads.forEach(h => {
+    const base = slug(h.text), k = seen.get(base) || 0;
+    seen.set(base, k + 1);
+    h.slug = k ? base + "-" + k : base;
+  });
+  heads.forEach((h, j) => {
+    for (let p = j - 1; p >= 0; p--) if (heads[p].level < h.level) { h.parent = heads[p].slug; break; }
+  });
+  heads.forEach((h, j) => {
+    const sibs = heads.filter(o => o.parent === h.parent && o.level === h.level), at = sibs.indexOf(h);
+    h.prev = at > 0 ? sibs[at - 1].slug : null;
+    h.next = at < sibs.length - 1 ? sibs[at + 1].slug : null;
+  });
   heads.forEach((h, j) => {
     let end = lines.length;
     for (const n of heads.slice(j + 1)) if (n.level <= h.level) { end = n.at; break; }
-    const base = slug(h.text), k = seen.get(base) || 0;
-    seen.set(base, k + 1);
-    out.set(k ? base + "-" + k : base, new Set(lines.slice(h.at + 1, end).map(s => s.trim()).filter(Boolean)));
+    const body = lines.slice(h.at + 1, end);
+    out.set(h.slug, { set: new Set(body.map(s => s.trim()).filter(Boolean)),
+      text: lines.slice(h.at, end).join("\n"), body: body.join("\n"),
+      parent: h.parent ?? null, prev: h.prev, next: h.next });
   });
   return out;
 }
@@ -195,8 +212,8 @@ function m4(commits, from) {
       const before = ch.st === "A" ? new Map() : sections(show(c.hash + "^", ch.from) ?? "");
       const after = ch.st === "D" ? new Map() : sections(show(c.hash, ch.to) ?? "");
       if (ch.st === "R") carriedByFileRename += [...before.keys()].filter(s => after.has(s)).length;
-      for (const [s, body] of before) if (!after.has(s)) removed.push({ file: ch.name, s, body });
-      for (const [s, body] of after) if (!before.has(s)) added.push({ file: ch.name, s, body });
+      for (const [s, sec] of before) if (!after.has(s)) removed.push({ file: ch.name, s, body: sec.set });
+      for (const [s, sec] of after) if (!before.has(s)) added.push({ file: ch.name, s, body: sec.set });
     }
     created += added.length;
     for (const r of removed) {
@@ -209,13 +226,68 @@ function m4(commits, from) {
     carriedByFileRename };
 }
 
+/* ---------- M5 ---------- */
+
+function m5(commits, from) {
+  let lived = 0, recovered = 0, renamedLived = 0, renamedRecovered = 0, samePlace = 0, renamedSamePlace = 0, deleted = 0, falsePlace = 0;
+  const by = { text: 0, body: 0, file: 0 };
+  for (let i = from; i < commits.length; i++) {
+    const c = commits[i];
+    if (!c.docEdits.length) continue;
+    const removed = [], added = [];
+    for (const ch of c.docEdits) {
+      const before = ch.st === "A" ? new Map() : sections(show(c.hash + "^", ch.from) ?? "");
+      const after = ch.st === "D" ? new Map() : sections(show(c.hash, ch.to) ?? "");
+      const keep = ch.from === ch.to;
+      for (const [s, sec] of before) if (!keep || !after.has(s)) removed.push({ file: ch.from, s, ...sec });
+      for (const [s, sec] of after) if (!keep || !before.has(s)) added.push({ file: ch.to, s, ...sec });
+    }
+    const unique = (list, f) => list.length === 1 ? list[0] : null;
+    /* rule 3: an old file pairs with the new file that holds more than half
+       of its slugs again, by the same slug or the same text */
+    const pairs = new Map();
+    for (const file of new Set(removed.map(r => r.file))) {
+      const mine = removed.filter(r => r.file === file);
+      const votes = new Map();
+      for (const r of mine) {
+        const there = added.filter(a => a.s === r.s || a.text === r.text).map(a => a.file);
+        for (const f of new Set(there)) votes.set(f, (votes.get(f) || 0) + 1);
+      }
+      for (const [f, n] of votes) if (n * 2 > mine.length) pairs.set(file, f);
+    }
+    for (const r of removed) {
+      const moved = added.some(a => a.s === r.s && a.file !== r.file);
+      const renamed = !moved && added.some(a => jaccard(a.set, r.set) >= JACCARD);
+      if (!moved && !renamed) {
+        /* a deletion the same place would wrongly carry: its precision */
+        const home = pairs.get(r.file) ?? r.file;
+        if (unique(added.filter(a => a.file === home && a.parent === r.parent && a.prev === r.prev && a.next === r.next))) falsePlace++;
+        deleted++;
+        continue;
+      }
+      lived++;
+      if (renamed) renamedLived++;
+      const how = unique(added.filter(a => a.text === r.text)) ? "text"
+        : r.body.trim() && unique(added.filter(a => a.body === r.body)) ? "body"
+        : pairs.has(r.file) && added.some(a => a.file === pairs.get(r.file) && a.s === r.s) ? "file" : null;
+      if (how) { recovered++; by[how]++; if (renamed) renamedRecovered++; continue; }
+      /* post hoc, apart from the rate (§21): the same place — the same parent
+         and the same neighbours, in the same file or the one it paired with */
+      const home = pairs.get(r.file) ?? r.file;
+      const place = added.filter(a => a.file === home && a.parent === r.parent && a.prev === r.prev && a.next === r.next);
+      if (unique(place)) { samePlace++; if (renamed) renamedSamePlace++; }
+    }
+  }
+  return { lived, recovered, rate: ratio(recovered, lived), by, renamedLived, renamedRecovered, samePlace, renamedSamePlace, deleted, falsePlace };
+}
+
 /* ---------- report ---------- */
 
 const ratio = (a, b) => b ? a / b : null;
 const pct = x => x == null ? "—" : (100 * x).toFixed(1) + " %";
 
 function measure(commits, from) {
-  return { commits: commits.length - from, m1: m1(commits, from), m2: m2(commits, from), m3: m3(commits, from), m4: m4(commits, from) };
+  return { commits: commits.length - from, m1: m1(commits, from), m2: m2(commits, from), m3: m3(commits, from), m4: m4(commits, from), m5: m5(commits, from) };
 }
 
 const commits = assignIdentity(readLog());
@@ -239,6 +311,11 @@ function print(title, r) {
   r.m3.pairs.forEach(p => console.log("        " + p.code + " ↔ " + p.doc + "  support " + p.support + ", lift " + p.lift.toFixed(2)));
   console.log("  M4  " + r.m4.created + " slugs created: moved " + r.m4.moved + ", renamed " + r.m4.renamed + ", deleted " + r.m4.deleted +
               " → break rate " + pct(r.m4.rate) + "; " + r.m4.carriedByFileRename + " slug(s) carried by a file rename");
+  console.log("  M5  " + r.m5.lived + " content-lived breaks by path: recovered " + r.m5.recovered + " → " + pct(r.m5.rate) +
+              " (text " + r.m5.by.text + ", body " + r.m5.by.body + ", file " + r.m5.by.file + "); of the renamed, " +
+              r.m5.renamedRecovered + " of " + r.m5.renamedLived);
+  console.log("      post hoc, the same place: " + r.m5.samePlace + " more, " + r.m5.renamedSamePlace + " of them renamed; and it would carry " +
+              r.m5.falsePlace + " of the " + r.m5.deleted + " deletions onto a new section");
 }
 console.log("measure-coupling " + result.repo + " at " + result.rev);
 print("whole history", result.whole);

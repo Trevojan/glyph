@@ -655,3 +655,30 @@ Rate = recovered / content-lived breaks, over the whole history.
 Decides **the scope of the NodeID ORD**: `≥ 80 %` → the ORD carries identity
 by structure alone, and similarity stays in layer 7; `< 80 %` → the ORD also
 carries similarity matching, with a content signature per node in the index.
+
+## 21. The NodeID — measured
+
+`node scripts/measure-coupling.js --rev 798baed --since 49c392a`, the stamp of
+§20 as the last commit: 208 commits, the window 107. Measured 2026-10-23.
+
+| | whole history | after `49c392a` | rule (§20) | verdict |
+|---|---|---|---|---|
+| **M5** structural recovery | **91.1 %** — 113 of 124 content-lived breaks: the same text 93, the same body 10, the same file renamed 10 | 30.0 % — 3 of 10, all by the same body | `≥ 80 %` → structure | **identity by structure alone; similarity stays in layer 7** |
+| of them, renamed headings | 10 of 21 | 3 of 10 | — | — |
+
+**What the verdict leaves to layer 7.** The whole-history rate is carried by
+the reorganisation of September, whose 103 file renames moved sections with
+their text intact. The breaks that keep happening are **headings renamed while
+their body changes** — the version in a title, a row added under *os sete
+eixos*, and this session's own §0 heading, renamed twice as the work moved —
+and structure recovers 3 of the 10 in the window. That is the case the
+recovery index exists for.
+
+**A fourth structural rule, measured after the verdict and refused.** *The same
+place* — the same parent and the same neighbours, in the same file or the one
+it paired with — recovers the other 11 renamed headings of the whole history
+and 7 of the window. It would also carry **17 of the 219 deletions** onto the
+new section that took their place, 3 of the 6 in the window: 11 right of 28.
+A false identity is worse than a break, because a break is refused aloud and a
+false identity answers an old path with other text. The rule stays out of
+the NodeID ORD, and its count stays in the script, apart from the rate.
