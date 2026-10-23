@@ -48,6 +48,15 @@
     [val'the gate','npm run check refuses a source declared by an old path and an index whose identities, parents or aliases do not hold, each seen failing before it counts']
   ]
 
+  [section'ORD-0003-recovery'
+    [onlyif'ORD-0002 closed']
+    [tgt'glyph-vpath: the recovery index, layer 7 of .plan section 0, by the content']
+    [nt'measured before the code, INTAKE-VIRTUAL-PATH sections 22 and 23: by the path, precision 35.7 percent and recall 41.7 percent; layer 7 recovers by the content']
+    [val'the recovery','a heading renamed while its body changes is found again by its old path and its old NodeID, and a deletion is not']
+    [val'the index miss','every answer through a recovery warns with its score, never blocks, and is written to the log of misses']
+    [val'the gate','npm run check refuses a source declared by a recovered path and an index whose recoveries do not hold, each seen failing before it counts']
+  ]
+
   [section'limits'
     [nev'a selector that answers an empty slice in silence']
     [dont'open an ORD before the ORD it depends on closes']
