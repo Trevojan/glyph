@@ -17,7 +17,7 @@
 import { LIMITS, pad, hgmlLit } from "./util.js";
 import { rulesOf, expansionsOf, formulaContextOf, expansionRegistry, entryOf } from "./stores.js";
 import { parse } from "./parser.js";
-import { compileRules } from "./rules.js";
+import { compiledOf } from "./rules.js";
 
 /* ======================================================
    7. .hgml — HIEROGLYPH MARKDOWN, the atomic burn
@@ -95,7 +95,7 @@ export var burnBlends = [];        /* what fired, so the output can declare itse
 export function applyBlends(list, opts) {
   var store = rulesOf(opts);
   if (!store) return list;
-  var comp = store.__compiled || (store.__compiled = compileRules(store));
+  var comp = compiledOf(store);
   if (!comp || !comp.blends.length || !list.length) return list;
   var out = list, i;
   for (i = 0; i < comp.blends.length; i++) {

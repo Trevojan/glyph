@@ -6,6 +6,9 @@
  * checkRules walks the tree against it. `hard` becomes `fix`, `tension`
  * becomes `ask`. Editing the file changes the rule without touching code —
  * the blend that fires in the burn is compiled here too, and read there.
+ * compiledOf keeps what compileRules answers beside the store, keyed by it,
+ * and never on it: the store object is never written, so the envelope's
+ * `stores.rules` is the digest of the store alone (EMS-002 ORD-0006).
  */
 
 import { esc, walk } from "./util.js";
@@ -27,6 +30,13 @@ export function pairKey(a, b) { return a < b ? a + "|" + b : b + "|" + a; }
 export function expandNames(store, name) {
   if (String(name).charAt(0) !== "@") return [name];
   return ((store.classes || {})[String(name).slice(1)] || []).slice();
+}
+
+var COMPILED = new WeakMap();
+export function compiledOf(store) {
+  var c = COMPILED.get(store);
+  if (!c) { c = compileRules(store); COMPILED.set(store, c); }
+  return c;
 }
 
 export function compileRules(store) {
@@ -73,7 +83,7 @@ export function compileRules(store) {
 export function checkRules(segments, opts, G) {
   var store = rulesOf(opts);
   if (!store) return;
-  var C = store.__compiled || (store.__compiled = compileRules(store));
+  var C = compiledOf(store);
   var exempt = {};
   ((store.scope && store.scope.exemptUnder) || []).forEach(function (x) { exempt[x] = 1; });
   var seen = {};
