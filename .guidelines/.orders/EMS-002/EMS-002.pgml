@@ -52,5 +52,6 @@
       [ph-item'each ORD of the series, the commit that closed it and the digest it matched']
       [ph-scope'EMS-002']
     ]
+    [--track[ph-item'ORD-0001, glyph-vpath: the trees by extension, the index of 134 files in 1 750 nodes with bytes, lines and fingerprint, the resolver, sources seeded and the gate in npm run check, each breach seen failing, at b8bcbe3 and 6f8a1c2; sha256 fc5b4f241ff9b345cdb7d9ef994e9c51211683a0a4543b186dca31160b2f9c69 of the index at 6f8a1c2'][ph-scope'EMS-002']]
   ]
 ];

@@ -15,9 +15,9 @@
 | versão | **3.6.9.07** |
 | suíte | `npm run check` — verde, 34 baldes, 114 fontes declaradas no snapshot; `npm run check:rust` escreve o oráculo no commit sob teste e compila e testa `rust/` |
 | EMS-001 | fechadas da `ORD-0001` à `ORD-0012`, cada uma com o commit e o digest no [registro da série](../.orders/EMS-001/README.md). A fila para na `ORD-0013`, o instalador, que pede uma máquina Windows limpa e o Regente |
-| último marco | o Glyph responde em Rust (2026-09-26): o app, atrás de `?engine=relay`, dá pelo motor Rust os mesmos bytes que pelo JS nas 114 fontes, em todo painel (`ORD-0011`), e o binário `glyph` responde as flags do `glyph-cli.js` (`ORD-0012`). Antes disso: o layout das séries e as `ORD-0001` a `ORD-0010`, na nuvem (2026-09-25); o trabalho de 2026-09-24, com as stores como objeto de contexto, o oráculo das 114 fontes, o workspace `rust/`, os nomes ratificados e o plugin; o núcleo em treze módulos |
-| EMS-002 | aberta em 2026-10-23, o Glyph 100% em Rust: a Ordem aberta é a `ORD-0001`, `glyph-vpath`, os caminhos virtuais ([registro da série](../.orders/EMS-002/README.md)) |
-| próximo | fechar a `EMS-002/ORD-0001`: as camadas 1, 4, 5 e 6 do [`.plan`](../.plan/README.md) §0, chaveadas pelo slug, como a re-medição decidiu ([`INTAKE-VIRTUAL-PATH.md`](../.orders/INTAKE-VIRTUAL-PATH.md) §19). A EMS-001 espera no portão da `ORD-0013` (§5) |
+| último marco | os caminhos virtuais (2026-10-23): `glyph-vpath` resolve `arquivo#seletor` para uma fatia exata, com offsets, sobre um índice de `.guidelines/` que o `npm run check` mantém honesto, e o `README.md` fica defasado quando as flags da CLI mudam sem ele (`EMS-002/ORD-0001`). Antes disso: o Glyph responde em Rust (2026-09-26): o app, atrás de `?engine=relay`, dá pelo motor Rust os mesmos bytes que pelo JS nas 114 fontes, em todo painel (`ORD-0011`), e o binário `glyph` responde as flags do `glyph-cli.js` (`ORD-0012`). Antes disso: o layout das séries e as `ORD-0001` a `ORD-0010`, na nuvem (2026-09-25); o trabalho de 2026-09-24, com as stores como objeto de contexto, o oráculo das 114 fontes, o workspace `rust/`, os nomes ratificados e o plugin; o núcleo em treze módulos |
+| EMS-002 | aberta em 2026-10-23, o Glyph 100% em Rust ([registro da série](../.orders/EMS-002/README.md)): a `ORD-0001`, `glyph-vpath`, fechada — os caminhos virtuais, camadas 1, 4, 5 e 6, e o índice em `.virtual/` sob o `npm run check`. Nenhuma Ordem aberta |
+| próximo | a próxima ORD da EMS-002, quando o Regente chamar: o `NodeID` dos caminhos virtuais ([`.plan`](../.plan/README.md) §0) ou uma das decididas no §5. A EMS-001 espera no portão da `ORD-0013` |
 
 ## Os sete eixos
 
@@ -48,6 +48,7 @@
 | quando a pergunta é | abra |
 |---|---|
 | "que elemento esse comando emite?" | [`XML_REFERENCE.md`](../XML_REFERENCE.md) |
+| "qual trecho de qual arquivo?" | `npm run vpath -- resolve 'arquivo#seletor' --text`, e `npm run vpath -- list arquivo` para os seletores — o índice está em `.virtual/` |
 | "o que essa notação significa?" | [`GLOSSARY.md`](../GLOSSARY.md) §0.1, §0.3 |
 | "o documento emitido pode fazer isso?" | [`PACKAGE_TARGET.md`](../PACKAGE_TARGET.md) |
 | "isto é domínio ou síntese?" | [`PROMOTION_BOUNDARY.md`](../PROMOTION_BOUNDARY.md) §2 |
