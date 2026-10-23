@@ -59,7 +59,8 @@ Closed questions; an answered one carries the Regent's answer below its options.
 
    Answered by the Regent on 2026-09-27: **a** — the JS keeps its compiled rules
    off the store object first, the envelope hashes the store alone, and the
-   `ast` hashes move by decision; the Rust follows. Not built yet.
+   `ast` hashes move by decision; the Rust follows. Built by
+   [`EMS-002/ORD-0006`](../EMS-002/README.md).
 4. **JSON sits in `glyph-util`, which `vocabulary.js` and `stores.js` do not
    import. Where does it belong in the crate graph?**
    - a. the platform, reachable from every crate: `crate-graph.js` learns one
