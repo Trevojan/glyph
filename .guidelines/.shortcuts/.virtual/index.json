@@ -781,29 +781,29 @@
     },
     ".guidelines/.orders/EMS-001/RETURN.md": {
       "nodes": [
-        ["n505", "", 0, 91576, 1, 1271, "9ce6812682648000", "", ""],
-        ["n506", "ems-001--the-return-of-the-sessions-that-run-the-queue", 0, 91576, 1, 1271, "9ce6812682648000", "9309381e96b7d600", "n505"],
+        ["n505", "", 0, 91757, 1, 1273, "f0a080c2f3b92300", "", ""],
+        ["n506", "ems-001--the-return-of-the-sessions-that-run-the-queue", 0, 91757, 1, 1273, "f0a080c2f3b92300", "f808c0f01d978400", "n505"],
         ["n507", "where-the-session-is", 523, 1445, 9, 9, "fe4eda90724bc400", "bb62389e6d00fe80", "n506"],
         ["n508", "waiting-for-the-regent", 1445, 2064, 18, 12, "8ae9a4176d068800", "2dc52ed65149bd00", "n506"],
-        ["n509", "questions-for-the-regent", 2064, 14192, 30, 208, "2747a13e1a8f7e80", "3bddeab8f8a53900", "n506"],
-        ["n510", "ords-closed", 14192, 30312, 238, 242, "ce60748c44e0e700", "bcf461c4d2e6fe00", "n506"],
-        ["n511", "open-and-why", 30312, 40012, 480, 143, "6512663490fd1a00", "e9a0dd9ea7161800", "n506"],
-        ["n512", "ord-0010s-adr-signed-b", 30719, 40012, 488, 135, "a5111136934f4e00", "97cf60109b1c9200", "n511"],
-        ["n513", "ord-0009-how-it-was-read", 40012, 44581, 623, 70, "efa7db908ab52200", "d3afbf7636beeb00", "n506"],
-        ["n514", "ord-0008-how-it-was-read", 44581, 46713, 693, 34, "e26e3c6a832b4000", "497a78a427176100", "n506"],
-        ["n515", "ord-0007-how-it-was-read", 46713, 49336, 727, 41, "a45f3c14a7fbf500", "46a91e6e8e746980", "n506"],
-        ["n516", "ord-0006-how-it-was-read", 49336, 52491, 768, 48, "58ba7bcc61d4bac0", "e06ac39442886a00", "n506"],
-        ["n517", "ord-0005-how-it-was-read", 52491, 53107, 816, 13, "a621d4cec1448a00", "1157b9a0c3fa1800", "n506"],
-        ["n518", "ord-0004-how-it-was-read", 53107, 53882, 829, 14, "b7ff61be9dbf4600", "b51e2c2e89a6ae00", "n506"],
-        ["n519", "ord-0003-how-it-was-read", 53882, 54756, 843, 15, "1d72c796b4656d80", "8057cceed7069c00", "n506"],
-        ["n520", "the-layout-built", 54756, 56456, 858, 36, "33b95d6ca0e6ff00", "98368a9495a29f80", "n506"],
-        ["n521", "measured", 56456, 76643, 894, 284, "01885ede570fe600", "98f599685da79000", "n506"],
-        ["n522", "the-session-measured", 76643, 91576, 1178, 94, "760ada486974d900", "a27e8fda33543000", "n506"]
+        ["n509", "questions-for-the-regent", 2064, 14373, 30, 210, "f25e2caeae866000", "9e44018e93b1d200", "n506"],
+        ["n510", "ords-closed", 14373, 30493, 240, 242, "ce60748c44e0e700", "bcf461c4d2e6fe00", "n506"],
+        ["n511", "open-and-why", 30493, 40193, 482, 143, "6512663490fd1a00", "e9a0dd9ea7161800", "n506"],
+        ["n512", "ord-0010s-adr-signed-b", 30900, 40193, 490, 135, "a5111136934f4e00", "97cf60109b1c9200", "n511"],
+        ["n513", "ord-0009-how-it-was-read", 40193, 44762, 625, 70, "efa7db908ab52200", "d3afbf7636beeb00", "n506"],
+        ["n514", "ord-0008-how-it-was-read", 44762, 46894, 695, 34, "e26e3c6a832b4000", "497a78a427176100", "n506"],
+        ["n515", "ord-0007-how-it-was-read", 46894, 49517, 729, 41, "a45f3c14a7fbf500", "46a91e6e8e746980", "n506"],
+        ["n516", "ord-0006-how-it-was-read", 49517, 52672, 770, 48, "58ba7bcc61d4bac0", "e06ac39442886a00", "n506"],
+        ["n517", "ord-0005-how-it-was-read", 52672, 53288, 818, 13, "a621d4cec1448a00", "1157b9a0c3fa1800", "n506"],
+        ["n518", "ord-0004-how-it-was-read", 53288, 54063, 831, 14, "b7ff61be9dbf4600", "b51e2c2e89a6ae00", "n506"],
+        ["n519", "ord-0003-how-it-was-read", 54063, 54937, 845, 15, "1d72c796b4656d80", "8057cceed7069c00", "n506"],
+        ["n520", "the-layout-built", 54937, 56637, 860, 36, "33b95d6ca0e6ff00", "98368a9495a29f80", "n506"],
+        ["n521", "measured", 56637, 76824, 896, 284, "01885ede570fe600", "98f599685da79000", "n506"],
+        ["n522", "the-session-measured", 76824, 91757, 1180, 94, "760ada486974d900", "a27e8fda33543000", "n506"]
       ]
     },
     ".guidelines/.orders/EMS-002/EMS-002.pgml": {
       "nodes": [
-        ["n523", "", 0, 16775, 1, 155, "fbd378f0128be200", "", ""]
+        ["n523", "", 0, 17450, 1, 156, "9efd78a888453600", "", ""]
       ]
     },
     ".guidelines/.orders/EMS-002/ORD-0001/ORD-0001.hgml": {
@@ -1549,10 +1549,10 @@
     },
     ".guidelines/.orders/EMS-002/README.md": {
       "nodes": [
-        ["n598", "", 0, 7076, 1, 28, "94427eea47f7c300", "", ""],
-        ["n599", "ems-002--o-glyph-100-em-rust", 0, 7076, 1, 28, "94427eea47f7c300", "b5c93af02f65dd00", "n598"],
-        ["n600", "a-ordem-aberta", 396, 586, 9, 4, "335f1414324c7480", "b34fdad89bc56900", "n599"],
-        ["n601", "ordens-fechadas", 586, 7076, 13, 16, "88c0fea847e06a00", "532e44764da4e100", "n599"]
+        ["n598", "", 0, 7821, 1, 27, "97c7fe563af8fe00", "", ""],
+        ["n599", "ems-002--o-glyph-100-em-rust", 0, 7821, 1, 27, "97c7fe563af8fe00", "02135f62c5854200", "n598"],
+        ["n600", "a-ordem-aberta", 396, 415, 9, 2, "5941cf30e1126c00", "", "n599"],
+        ["n601", "ordens-fechadas", 415, 7821, 11, 17, "e7560d1868c8e400", "4e5c9f6e74f1e400", "n599"]
       ]
     },
     ".guidelines/.orders/HANDOFF-2026-08-30.ast.json": {
@@ -2213,16 +2213,16 @@
     },
     ".guidelines/.plan/README.md": {
       "nodes": [
-        ["n1142", "", 0, 14508, 1, 216, "f689f8481f42fb00", "", ""],
-        ["n1143", "plano--o-que-vem-a-seguir", 0, 14508, 1, 216, "f689f8481f42fb00", "1c36bba4fe226a00", "n1142"],
-        ["n1144", "autorizado-pelo-regente-ainda-não-construído", 217, 12296, 7, 187, "e4e77c4ebca89000", "a65f6564c364da00", "n1143"],
+        ["n1142", "", 0, 14312, 1, 213, "80c6ee00ddac7200", "", ""],
+        ["n1143", "plano--o-que-vem-a-seguir", 0, 14312, 1, 213, "80c6ee00ddac7200", "665655b60e291600", "n1142"],
+        ["n1144", "autorizado-pelo-regente-ainda-não-construído", 217, 12100, 7, 184, "d2b05b36fc6a2c00", "30e3e3a6fa9efc00", "n1143"],
         ["n1870", "0-caminhos-virtuais--guidelinesshortcutsvirtual--construído-as-sete-camadas-pela-ems-002", 269, 5363, 9, 81, "da71f09e759c7600", "cb44836834464e80", "n1144"],
         ["n1146", "1-section-de-cabeçalho-irmã-do-schema--decidido-faltando-fazer", 5363, 6025, 90, 13, "29a759a8aecd1500", "f13677d632797d00", "n1144"],
         ["n1147", "2-gatilhos-de-re-ferência", 6025, 6930, 103, 19, "20d81a5623895800", "b5f416c6e3cdac00", "n1144"],
         ["n2168", "3-quatro-defeitos-medidos-o-que-foi-consertado-nos-dois-motores-e-o-que-resta", 6930, 8430, 122, 9, "786704c42b944200", "cb0635c024735200", "n1144"],
-        ["n1149", "5-o-glyph-em-rust--a-série-ems-001", 8430, 12296, 131, 63, "6836fc2ada69007d", "293fc280430d5d00", "n1144"],
-        ["n1150", "aberto-esperando-o-regente", 12296, 13826, 194, 11, "7d12d970664cbc00", "05888320d62c0600", "n1143"],
-        ["n1151", "adiado-por-decisão-não-por-esquecimento", 13826, 14508, 205, 12, "110118b8258d7d80", "009590141c1d2c00", "n1143"]
+        ["n1149", "5-o-glyph-em-rust--a-série-ems-001", 8430, 12100, 131, 60, "2f1cfdd6045b7200", "8c1e3348d77bc100", "n1144"],
+        ["n1150", "aberto-esperando-o-regente", 12100, 13630, 191, 11, "7d12d970664cbc00", "05888320d62c0600", "n1143"],
+        ["n1151", "adiado-por-decisão-não-por-esquecimento", 13630, 14312, 202, 12, "110118b8258d7d80", "009590141c1d2c00", "n1143"]
       ]
     },
     ".guidelines/.plan/ladder.toml": {
@@ -2232,14 +2232,14 @@
     },
     ".guidelines/.shortcuts/README.md": {
       "nodes": [
-        ["n1153", "", 0, 7820, 1, 83, "df69e9bc3b896820", "", ""],
-        ["n1154", "atalhos--comece-por-aqui", 0, 7820, 1, 83, "df69e9bc3b896820", "919f97c0fbe14c00", "n1153"],
-        ["n1155", "onde-estou", 442, 2965, 11, 11, "4aee35fc82c31660", "a6486d5ee14fd580", "n1154"],
-        ["n1156", "os-sete-eixos", 2965, 3651, 22, 12, "6357d5140827f600", "092e74a89f1df300", "n1154"],
-        ["n1157", "o-mapa-do-motor-em-cinco-linhas", 3651, 4578, 34, 12, "537763c2149d2400", "2caeb09a05c9d600", "n1154"],
-        ["n1158", "os-documentos-que-mais-se-consulta", 4578, 6483, 46, 18, "b14515f455f59aa0", "99bdc846d8830680", "n1154"],
-        ["n1159", "os-outros-documentos", 6483, 7481, 64, 14, "bcf7ae04a2ded000", "078ded0802e8e000", "n1154"],
-        ["n1160", "vocabulário-do-projeto", 7481, 7820, 78, 6, "d5b16db424152200", "0656413c7ac4f500", "n1154"]
+        ["n1153", "", 0, 7685, 1, 83, "51c0a25885d19a00", "", ""],
+        ["n1154", "atalhos--comece-por-aqui", 0, 7685, 1, 83, "51c0a25885d19a00", "0f6ac2d8e692c800", "n1153"],
+        ["n1155", "onde-estou", 442, 2830, 11, 11, "94b6fac452a90200", "612bbef6d40b8200", "n1154"],
+        ["n1156", "os-sete-eixos", 2830, 3516, 22, 12, "6357d5140827f600", "092e74a89f1df300", "n1154"],
+        ["n1157", "o-mapa-do-motor-em-cinco-linhas", 3516, 4443, 34, 12, "537763c2149d2400", "2caeb09a05c9d600", "n1154"],
+        ["n1158", "os-documentos-que-mais-se-consulta", 4443, 6348, 46, 18, "b14515f455f59aa0", "99bdc846d8830680", "n1154"],
+        ["n1159", "os-outros-documentos", 6348, 7346, 64, 14, "bcf7ae04a2ded000", "078ded0802e8e000", "n1154"],
+        ["n1160", "vocabulário-do-projeto", 7346, 7685, 78, 6, "d5b16db424152200", "0656413c7ac4f500", "n1154"]
       ]
     },
     ".guidelines/.sources/COMPILER_LESSONS.md": {

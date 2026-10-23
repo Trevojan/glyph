@@ -183,9 +183,6 @@ Regente chamar, o JS primeiro onde o oráculo muda:
 - **os três resíduos do §3, só no Rust** (O4): o Rust responde certo, e o teste
   diferencial nomeia cada um como diferença conhecida; cada resíduo espera o
   Regente dizer qual resposta é a certa, e os dois motores respondem igual até lá;
-- **o Rust para de refazer a cada chamada o que o JS faz uma vez** (pergunta 12):
-  as regras compiladas uma vez por contexto e o `ck` em aritmética inteira, só no
-  Rust; o JS não é afinado.
 
 O que a spec revoga está assinado, e entre isso está a escada como
 ordem de trabalho: [`ladder.toml`](ladder.toml) fica como o registro da
