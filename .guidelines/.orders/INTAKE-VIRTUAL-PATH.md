@@ -527,3 +527,52 @@ analogy.
 `.plan/` §4 states the `ORD-xxxxx` bundle **does not exist**. *Measured:* it
 does — `ORD-0010.manifest.json`, 3.4.7.05, 2026-09-08. By the plan's own rule
 the item has closed and belongs in `.changelog/`. Recorded, not moved.
+
+## 18. The October re-measurement, before the code — thresholds
+
+The Regent put the virtual paths first in line, in seven layers
+([`.plan`](../.plan/README.md) §0), and asked for the history to be measured
+before the code. The design is decided; what the four measures below decide is
+**its shape** — the severity of the stale gate, the granularity of the
+fingerprint, the seed of `sources:`, and whether the first ORD can key on the
+slug or must carry the `NodeID` from the start. Declared in this section and
+committed before `scripts/measure-coupling.js` exists; the commit is the stamp.
+
+**Universe.** Every commit reachable from the stamp commit, oldest first;
+reported twice: the whole history, and the commits after `49c392a` — the
+window §7 never saw, so an out-of-sample test of it. *Code* = `*.js`, `*.rs`,
+`*.py`. *Doc* = `*.md`. **Identity follows renames** (`git log -M`, git's
+default similarity), keyed by the latest name — not the basename, which §6
+used and which now collides (`README.md` in thirteen folders). **Declared
+exclusions**, both sides, before measuring — §7 found them post hoc:
+generated files (`scripts/glyph-data.js`, everything under
+`.claude/skills/glyph-markup/`), logs (`CHANGELOG.md`, `CHANGELIST*`), the
+attic (`.guidelines/.history/`), and, for M3 only, commits touching more than
+15 files (moves carried together).
+
+**M1 — staleness rate**, defined as §6 (k = 3, lagged / (co-updated +
+lagged), unpaired reported apart). Decides **the severity of a stale
+fingerprint in `npm run check`**: `≥ 25 %` → `fix`, the gate refuses and
+re-stamping is a deliberate act in the commit; `< 10 %` → `note`, printed and
+passing; between → M2's verdict decides (local → `fix`, wholesale → `note`).
+
+**M2 — edit locality**, defined as §6. Decides **the granularity of the
+fingerprint**: median `< 20 %` → per node (section, key, block); median
+`> 50 %` → per file; between → per file.
+
+**M3 — co-change coupling**, defined as §6, over the declared exclusions.
+Decides **the seed of `sources:`**: each pair with lift `> 2` and support
+`≥ 3` becomes a proposed `sources:` line in the document's frontmatter,
+marked *gated* where a check already ties the two; no pair → `sources:`
+starts empty and is written by hand.
+
+**M4 — anchor survival.** For each commit and each changed doc, the heading
+slugs before and after (GitHub's slug rule). A slug that disappears is
+**moved** if the same slug appears in another doc of the same commit,
+**renamed** if its section body reappears under a new slug of the same commit
+with line-set Jaccard `≥ 0.5`, **deleted** otherwise. Breaks = moved +
+renamed: a `file#slug` that stopped resolving while its content lived on.
+Rate = breaks / slugs ever created. Decides **the key of the first ORD**:
+`< 5 %` → the index keys on the slug, and `NodeID` and the recovery index
+(layers 2 and 7) follow in later ORDs; `≥ 5 %` → the slug is not identity
+enough, and the first ORD carries the `NodeID` with recovery by content.
