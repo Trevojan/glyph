@@ -42,7 +42,7 @@ suíte; o segundo escreve o oráculo no commit sob teste e roda `cargo test` em
 Editou um arquivo de `.guidelines/`, o `README.md` ou este? Rode
 `npm run vpath -- build`: o índice em `.guidelines/.shortcuts/.virtual/` cobre
 todos eles, e o `check` recusa o que mudou sem ele. Uma fatia se lê com
-`npm run vpath -- resolve 'arquivo#seletor' --text`.
+`npm run vpath -- resolve 'arquivo#seletor' --text`, ou pelo `NodeID` do nó.
 
 Editou `.guidelines/rules.json`, `templates.json`, `expansions.txt` ou
 `GLOSSARY.md`? Rode `node scripts/build-templates.js` antes de verificar: essas

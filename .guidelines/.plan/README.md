@@ -6,7 +6,7 @@
 
 ## Autorizado pelo Regente, ainda não construído
 
-### 0. Caminhos virtuais — `.guidelines/.shortcuts/.virtual/` — **camadas 1, 4, 5 e 6 construídas; 2, 3 e 7 a seguir**
+### 0. Caminhos virtuais — `.guidelines/.shortcuts/.virtual/` — **camadas 1, 2, 4, 5 e 6 construídas; 3 e 7 a seguir**
 
 > *"quero que seja feito um sistema que implemente `.guidelines/.shortcuts/.virtual/`
 > e defina os caminhos virtuais com offsets e tudo o mais […] a síntese deve
@@ -65,22 +65,24 @@ declarados num commit anterior ao script
 propostas fora do `RETURN.md`, que é log; e a primeira ORD chaveia pelo slug,
 com o `NodeID`, a manutenção de ordem e o índice de recuperação nas seguintes.
 
-A [`EMS-002/ORD-0001`](../.orders/EMS-002/README.md), fechada, construiu as
-camadas 1, 4, 5 e 6 no crate `glyph-vpath`: as árvores por extensão, o índice
-(`.guidelines/.shortcuts/.virtual/index.json`, 134 arquivos, 1 750 nós, JSON e
-XML até a profundidade 2), o resolvedor, o `sources:` semeado no `README.md` e
-no `XML_REFERENCE.md`, e o portão no `npm run check`. Uma fatia se lê com
-`npm run vpath -- resolve 'arquivo#seletor' --text`. Abertas, cada uma uma ORD
-quando o Regente chamar:
+O crate `glyph-vpath` constrói as camadas 1, 2, 4, 5 e 6, pelas
+[`ORD-0001` e `ORD-0002` da EMS-002](../.orders/EMS-002/README.md): as árvores
+por extensão; o índice (`.guidelines/.shortcuts/.virtual/index.json`, JSON e
+XML até a profundidade 2), com o `NodeID` de cada nó, o pai dele e os caminhos
+antigos como apelidos; o resolvedor; o `sources:` semeado no `README.md` e no
+`XML_REFERENCE.md`; e o portão no `npm run check`. A identidade passa de um
+build ao seguinte só pela estrutura — o mesmo caminho, o mesmo texto, o mesmo
+corpo, o mesmo arquivo renomeado —, como o M5 decidiu
+([`INTAKE-VIRTUAL-PATH.md`](../.orders/INTAKE-VIRTUAL-PATH.md) §21). Uma fatia
+se lê com `npm run vpath -- resolve 'arquivo#seletor' --text`, ou pelo
+`NodeID`; `up` dá a cadeia de pais. Abertas, cada uma uma ORD quando o Regente
+chamar:
 
-- **o `NodeID`** (camada 2): a identidade que sobrevive ao slug renomeado — 19
-  dos 827 slugs do histórico quebraram com o conteúdo vivo, quase todos por
-  título com versão, numeração que desliza ou cabeçalho que declara o estado;
-- **a manutenção de ordem** (camada 3), `before(a, b)` sob edição;
-- **o índice de recuperação** (camada 7), só onde a identidade falhar, cada uso
-  registrado como *index miss*;
-- **um arquivo renomeado**: hoje o `file#slug` dele deixa de resolver e o
-  portão recusa o arquivo sumido; a camada 2 é a que o segue.
+- **o índice de recuperação** (camada 7): o cabeçalho renomeado com o corpo
+  mudado, que a estrutura não segue — 7 das 10 quebras com o conteúdo vivo
+  depois de `49c392a`, quase todas por título com versão, numeração que desliza
+  ou cabeçalho que declara o estado; cada uso registrado como *index miss*;
+- **a manutenção de ordem** (camada 3), `before(a, b)` sob edição.
 
 ### 1. `<section>` de cabeçalho, irmã do `<schema/>` — **decidido, faltando fazer**
 
