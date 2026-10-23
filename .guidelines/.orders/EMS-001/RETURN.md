@@ -70,7 +70,8 @@ Closed questions; an answered one carries the Regent's answer below its options.
    - c. as it is: `glyph-stores` keeps its own `Value`
 
    Answered by the Regent on 2026-09-27: **b** — JSON becomes a crate of its own
-   under every other, with an oracle entry in `crate-graph.js`. Not built yet.
+   under every other, with an oracle entry in `crate-graph.js`. Built by
+   [`EMS-002/ORD-0007`](../EMS-002/README.md): `glyph-json`, the floor.
 5. **ORD-0006's val names diagnostics that `parser.js` raises.** Of the 23
    diagnostics of the T-, C- and K-cases, `templates.js` and `rules.js` raise
    14; `parser.js` raises the other 9 (`PlaceholderPending` six times,

@@ -162,9 +162,6 @@ espera o Regente no §5 dele.
 Decidido em 2026-09-27, ainda não construído — cada item uma ORD quando o
 Regente chamar, o JS primeiro onde o oráculo muda:
 
-- **JSON num crate próprio** (pergunta 4), abaixo de todos, com entrada de oráculo
-  no `crate-graph.js`, no lugar do `glyph_util::json` e do `Value` do
-  `glyph-stores`;
 - **o corpo de um template lê o que o chamador registrou** (pergunta 6): o Rust
   guarda um registro ao lado do contexto, e um corpo que quebra uma regra lê igual
   na CLI e no app pelos dois motores;
