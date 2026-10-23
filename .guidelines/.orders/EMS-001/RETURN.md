@@ -102,8 +102,9 @@ Closed questions; an answered one carries the Regent's answer below its options.
 
    Answered by the Regent on 2026-09-27: **c** — the Rust keeps a registry of its own
    beside the context, so a body reads what the caller registered, in the
-   CLI and the app as in the JS. Not built yet: the Rust hands a body no
-   rules and no composition table today.
+   CLI and the app as in the JS. Built by [`EMS-002/ORD-0008`](../EMS-002/README.md):
+   the Rust's `Registered` beside the context, and the JS protocol registering
+   as the CLI does.
 7. **ORD-0007's val names the envelope's digest, and the envelope is
    `emit-ast.js` — `glyph-envelope`, ORD-0009's, which opens only after
    ORD-0008.** Which reading holds?

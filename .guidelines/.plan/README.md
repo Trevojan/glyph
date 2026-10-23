@@ -162,9 +162,6 @@ espera o Regente no §5 dele.
 Decidido em 2026-09-27, ainda não construído — cada item uma ORD quando o
 Regente chamar, o JS primeiro onde o oráculo muda:
 
-- **o corpo de um template lê o que o chamador registrou** (pergunta 6): o Rust
-  guarda um registro ao lado do contexto, e um corpo que quebra uma regra lê igual
-  na CLI e no app pelos dois motores;
 - **o zip de uma ORD de série só atrás de uma flag** (pergunta 1): o `--bundle`
   escreve a pasta, e o zip quando pedido;
 - **o `classify` pelas tabelas da página** (pergunta 10): atrás de
