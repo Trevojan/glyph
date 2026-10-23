@@ -1,7 +1,7 @@
 {
   "note": "written by glyph-vpath build, EMS-002; never edited by hand",
   "depth": 2,
-  "next": 1870,
+  "next": 1871,
   "files": {
     ".guidelines/.changelog/README.md": {
       "nodes": [
@@ -803,7 +803,7 @@
     },
     ".guidelines/.orders/EMS-002/EMS-002.pgml": {
       "nodes": [
-        ["n523", "", 0, 7878, 1, 86, "3068e0faaad6d280", "", ""]
+        ["n523", "", 0, 8337, 1, 87, "c2ff9bb80f9e2000", "", ""]
       ]
     },
     ".guidelines/.orders/EMS-002/ORD-0001/ORD-0001.hgml": {
@@ -1036,10 +1036,10 @@
     },
     ".guidelines/.orders/EMS-002/README.md": {
       "nodes": [
-        ["n598", "", 0, 2300, 1, 19, "92b468d226c29b00", "", ""],
-        ["n599", "ems-002--o-glyph-100-em-rust", 0, 2300, 1, 19, "92b468d226c29b00", "68bffe88833f3400", "n598"],
-        ["n600", "a-ordem-aberta", 396, 579, 9, 4, "dc8ab5806e336800", "3e715ef4ff377180", "n599"],
-        ["n601", "ordens-fechadas", 579, 2300, 13, 7, "f9bb98ceace8a740", "02a460d815a01f40", "n599"]
+        ["n598", "", 0, 2651, 1, 18, "6dc6eeeee56b2600", "", ""],
+        ["n599", "ems-002--o-glyph-100-em-rust", 0, 2651, 1, 18, "6dc6eeeee56b2600", "04095c2253dac400", "n598"],
+        ["n600", "a-ordem-aberta", 396, 415, 9, 2, "5941cf30e1126c00", "", "n599"],
+        ["n601", "ordens-fechadas", 415, 2651, 11, 8, "be35c7d0fbdbf700", "a9cfe650da040700", "n599"]
       ]
     },
     ".guidelines/.orders/HANDOFF-2026-08-30.ast.json": {
@@ -1700,16 +1700,16 @@
     },
     ".guidelines/.plan/README.md": {
       "nodes": [
-        ["n1142", "", 0, 15059, 1, 232, "f9ce7e19c26a5000", "", ""],
-        ["n1143", "plano--o-que-vem-a-seguir", 0, 15059, 1, 232, "f9ce7e19c26a5000", "8a0df8a467f8d900", "n1142"],
-        ["n1144", "autorizado-pelo-regente-ainda-não-construído", 217, 12847, 7, 203, "322bf5c6c349b800", "73191ba86a9b3080", "n1143"],
-        ["n1830", "0-caminhos-virtuais--guidelinesshortcutsvirtual--camadas-1-2-4-5-6-e-7-construídas-3-a-seguir", 269, 5070, 9, 77, "ab5d4998a8f1b600", "a33473b4c7e36700", "n1144"],
-        ["n1146", "1-section-de-cabeçalho-irmã-do-schema--decidido-faltando-fazer", 5070, 5732, 86, 13, "29a759a8aecd1500", "f13677d632797d00", "n1144"],
-        ["n1147", "2-gatilhos-de-re-ferência", 5732, 6637, 99, 19, "20d81a5623895800", "b5f416c6e3cdac00", "n1144"],
-        ["n1148", "3-quatro-defeitos-medidos-e-não-consertados-no-js", 6637, 7611, 118, 9, "8465e25409755a00", "03548e187034d080", "n1144"],
-        ["n1149", "5-o-glyph-em-rust--a-série-ems-001", 7611, 12847, 127, 83, "af0ccf1e4b152a00", "eadb41722fb4e300", "n1144"],
-        ["n1150", "aberto-esperando-o-regente", 12847, 14377, 210, 11, "7d12d970664cbc00", "05888320d62c0600", "n1143"],
-        ["n1151", "adiado-por-decisão-não-por-esquecimento", 14377, 15059, 221, 12, "110118b8258d7d80", "009590141c1d2c00", "n1143"]
+        ["n1142", "", 0, 15352, 1, 236, "5ba287b0368fa600", "", ""],
+        ["n1143", "plano--o-que-vem-a-seguir", 0, 15352, 1, 236, "5ba287b0368fa600", "986654887609fc00", "n1142"],
+        ["n1144", "autorizado-pelo-regente-ainda-não-construído", 217, 13140, 7, 207, "4c78b6cc7bc0ec00", "87edadc0626e3400", "n1143"],
+        ["n1870", "0-caminhos-virtuais--guidelinesshortcutsvirtual--construído-as-sete-camadas-pela-ems-002", 269, 5363, 9, 81, "da71f09e759c7600", "cb44836834464e80", "n1144"],
+        ["n1146", "1-section-de-cabeçalho-irmã-do-schema--decidido-faltando-fazer", 5363, 6025, 90, 13, "29a759a8aecd1500", "f13677d632797d00", "n1144"],
+        ["n1147", "2-gatilhos-de-re-ferência", 6025, 6930, 103, 19, "20d81a5623895800", "b5f416c6e3cdac00", "n1144"],
+        ["n1148", "3-quatro-defeitos-medidos-e-não-consertados-no-js", 6930, 7904, 122, 9, "8465e25409755a00", "03548e187034d080", "n1144"],
+        ["n1149", "5-o-glyph-em-rust--a-série-ems-001", 7904, 13140, 131, 83, "af0ccf1e4b152a00", "eadb41722fb4e300", "n1144"],
+        ["n1150", "aberto-esperando-o-regente", 13140, 14670, 214, 11, "7d12d970664cbc00", "05888320d62c0600", "n1143"],
+        ["n1151", "adiado-por-decisão-não-por-esquecimento", 14670, 15352, 225, 12, "110118b8258d7d80", "009590141c1d2c00", "n1143"]
       ]
     },
     ".guidelines/.plan/ladder.toml": {
@@ -1719,14 +1719,14 @@
     },
     ".guidelines/.shortcuts/README.md": {
       "nodes": [
-        ["n1153", "", 0, 7266, 1, 83, "9928253cf9a0b000", "", ""],
-        ["n1154", "atalhos--comece-por-aqui", 0, 7266, 1, 83, "9928253cf9a0b000", "637a558880b94800", "n1153"],
-        ["n1155", "onde-estou", 442, 2447, 11, 11, "9f73c440d0ae9600", "4384c0780c357300", "n1154"],
-        ["n1156", "os-sete-eixos", 2447, 3133, 22, 12, "6357d5140827f600", "092e74a89f1df300", "n1154"],
-        ["n1157", "o-mapa-do-motor-em-cinco-linhas", 3133, 4060, 34, 12, "537763c2149d2400", "2caeb09a05c9d600", "n1154"],
-        ["n1158", "os-documentos-que-mais-se-consulta", 4060, 5929, 46, 18, "280d0060068fdba0", "9cf292765ce29800", "n1154"],
-        ["n1159", "os-outros-documentos", 5929, 6927, 64, 14, "bcf7ae04a2ded000", "078ded0802e8e000", "n1154"],
-        ["n1160", "vocabulário-do-projeto", 6927, 7266, 78, 6, "d5b16db424152200", "0656413c7ac4f500", "n1154"]
+        ["n1153", "", 0, 7263, 1, 83, "b743d0401c9e2700", "", ""],
+        ["n1154", "atalhos--comece-por-aqui", 0, 7263, 1, 83, "b743d0401c9e2700", "1ed2c718fc8e3f00", "n1153"],
+        ["n1155", "onde-estou", 442, 2408, 11, 11, "171fdae8832ad800", "e28812165b062600", "n1154"],
+        ["n1156", "os-sete-eixos", 2408, 3094, 22, 12, "6357d5140827f600", "092e74a89f1df300", "n1154"],
+        ["n1157", "o-mapa-do-motor-em-cinco-linhas", 3094, 4021, 34, 12, "537763c2149d2400", "2caeb09a05c9d600", "n1154"],
+        ["n1158", "os-documentos-que-mais-se-consulta", 4021, 5926, 46, 18, "b14515f455f59aa0", "99bdc846d8830680", "n1154"],
+        ["n1159", "os-outros-documentos", 5926, 6924, 64, 14, "bcf7ae04a2ded000", "078ded0802e8e000", "n1154"],
+        ["n1160", "vocabulário-do-projeto", 6924, 7263, 78, 6, "d5b16db424152200", "0656413c7ac4f500", "n1154"]
       ]
     },
     ".guidelines/.sources/COMPILER_LESSONS.md": {
@@ -2475,6 +2475,7 @@
   },
   "aliases": {},
   "recovered": [
-    [".guidelines/.plan/README.md#0-caminhos-virtuais--guidelinesshortcutsvirtual--camadas-1-2-4-5-e-6-construídas-3-e-7-a-seguir", "n1790", "n1830", 64]
+    [".guidelines/.plan/README.md#0-caminhos-virtuais--guidelinesshortcutsvirtual--camadas-1-2-4-5-6-e-7-construídas-3-a-seguir", "n1830", "n1870", 81],
+    [".guidelines/.plan/README.md#0-caminhos-virtuais--guidelinesshortcutsvirtual--camadas-1-2-4-5-e-6-construídas-3-e-7-a-seguir", "n1790", "n1870", 64]
   ]
 }
