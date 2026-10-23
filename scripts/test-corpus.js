@@ -368,10 +368,9 @@ const CONSTRAINTS = [
  * One declared source per diagnostic code the arrays above never reached.
  * Eight of these had no test anywhere in this file; the others were tested
  * with inline sources, which have no id and so never reached the snapshot or
- * the oracle a port is held to. Declared, they travel in both. Projected with
- * the repository's stores, like every snapshot source — TemplateCycle needs a
- * cyclic store and stays in T-06/T-07 until the snapshot honours a case's own
- * opts.
+ * the oracle a port is held to. Declared, they travel in both. TemplateCycle
+ * is not among them: it needs a cyclic store, and T-07 and T-08 bring one,
+ * which the snapshot honours (O5, EMS-002 ORD-0011).
  * ------------------------------------------------------------------ */
 const ORACLE_COVERAGE = [
   { id:"OC-01", src:"[crit: a,b,c]", code:"AmbiguousSlotOrder" },
@@ -1673,10 +1672,11 @@ const rE = runExampleChecks();
  * result checksummed. Taken BEFORE the cut, this is what proves afterwards that
  * nothing else moved.
  *
- * Stores are passed explicitly and identically for every case, rather than per
- * case: what a refactor must preserve is `same input + same stores -> same
- * bytes`, and a uniform maximal store exercises more of the engine than the
- * narrower per-case opts do.
+ * Stores are passed explicitly: the repository's three for every case, with
+ * the stores a case brings laid over them. What a refactor must preserve is
+ * `same input + same stores -> same bytes`; the maximal set exercises more of
+ * the engine than a case's narrower opts do, and a store a case brings of its
+ * own — a cyclic template — is projected with it (O5, EMS-002 ORD-0011).
  *
  *   node scripts/test-corpus.js --update-snapshot
  *
@@ -1698,6 +1698,12 @@ function runSnapshotChecks() {
   const SNAP_OPTS = { templates: TPL.templates, rules: RULESTORE,
                       expansions: require("../.guidelines/expansions.json") };
 
+  /* a case is projected with its own stores laid over these (O5, EMS-002
+     ORD-0011): the stores it names replace the repository's, the rest stay */
+  const caseOpts = c => c.opts ? { ...SNAP_OPTS, ...c.opts } : SNAP_OPTS;
+  const ownStores = c => Object.keys(c.opts || {}).filter(k => c.opts[k] !== SNAP_OPTS[k])
+    .reduce((o, k) => (o[k] = c.opts[k], o), {});
+
   const sum = s => crypto.createHash("sha256").update(s, "utf8").digest("hex").slice(0, 16);
 
   /* the eight declared arrays; the inline sources of the X/H/F/D checks are
@@ -1714,14 +1720,15 @@ function runSnapshotChecks() {
        every version bump invalidate all 101 entries at once and bury real
        drift in the noise. The snapshot measures SHAPE; the stamp is recorded
        once in the file's own `engine` field, where it belongs. */
+    const O = caseOpts(c);
     const astShape = s => {
-      const a = G.toAST(s, SNAP_OPTS);
+      const a = G.toAST(s, O);
       delete a.version;
       return JSON.stringify(a);
     };
-    [["xml", s => G.toXML(s, SNAP_OPTS)],
+    [["xml", s => G.toXML(s, O)],
      ["ast", astShape],
-     ["hgml", s => G.toHGML(s, SNAP_OPTS)]].forEach(pair => {
+     ["hgml", s => G.toHGML(s, O)]].forEach(pair => {
       try { one[pair[0]] = sum(pair[1](c.src)); }
       catch (e) { one[pair[0]] = "THREW"; threw.push(c.id + "." + pair[0] + ": " + e.message); }
     });
@@ -1772,15 +1779,17 @@ function runSnapshotChecks() {
     const texts = [];
     CORPUS.forEach(c => {
       if (!c || !c.id || typeof c.src !== "string") return;
-      const ast = guard(() => { const a = G.toAST(c.src, SNAP_OPTS); delete a.version; return a; });
+      const O = caseOpts(c), own = ownStores(c);
+      const ast = guard(() => { const a = G.toAST(c.src, O); delete a.version; return a; });
       const text = JSON.stringify({
         id: c.id, engine: G.VERSION, src: c.src, digest: now[c.id],
-        tokens: guard(() => G.tokenize(c.src, SNAP_OPTS)),
-        diagnostics: guard(() => (G.parse(c.src, SNAP_OPTS).gaps || [])
+        ...(Object.keys(own).length ? { stores: own } : {}),
+        tokens: guard(() => G.tokenize(c.src, O)),
+        diagnostics: guard(() => (G.parse(c.src, O).gaps || [])
           .map(g => ({ sev: g.sev, code: g.code, plain: g.plain }))),
-        xml: guard(() => G.toXML(c.src, SNAP_OPTS)),
+        xml: guard(() => G.toXML(c.src, O)),
         ast: ast,
-        hgml: guard(() => G.toHGML(c.src, SNAP_OPTS))
+        hgml: guard(() => G.toHGML(c.src, O))
       }, null, 1) + "\n";
       fs.writeFileSync(path.join(dir, c.id + ".json"), text);
       texts.push(text);
@@ -2090,7 +2099,9 @@ function runSnapshotChecks() {
     };
     const runTrees = (id, src, templates, rules) => {
       const ctx = G.createContext({ templates: templates, rules: rules, expansions: SNAP_OPTS.expansions });
-      const run = { id: id, src: src, probe: templates !== TPL.templates, withRules: !!rules };
+      const run = { id: id, src: src, probe: templates === probeTemplates, withRules: !!rules };
+      /* a case's own templates travel whole (O5, EMS-002 ORD-0011) */
+      if (templates !== TPL.templates && templates !== probeTemplates) run.templates = templates;
       const base = G.parse(src, { ...SNAP_OPTS, templates: {}, rules: null });
       expandLevel(base, ctx, run);
       const caught = [], Gc = catcher(caught);
@@ -2114,7 +2125,7 @@ function runSnapshotChecks() {
         throw new Error("trees.json: the run of " + id + " is not what parse does");
       treeRuns.push(run);
     };
-    CORPUS.forEach(c => { if (c && c.id && typeof c.src === "string") runTrees(c.id, c.src, TPL.templates, RULESTORE); });
+    CORPUS.forEach(c => { if (c && c.id && typeof c.src === "string") runTrees(c.id, c.src, caseOpts(c).templates, caseOpts(c).rules); });
     TEMPLATE_PROBES.forEach((src, k) => runTrees("probe-" + (k + 1), src, probeTemplates, RULESTORE));
     BARE_PROBES.forEach((src, k) => runTrees("bare-" + (k + 1), src, probeTemplates, null));
     /* compileRules, over the repository's store and a probe store: a key met
@@ -2171,15 +2182,22 @@ function runSnapshotChecks() {
     const NO_SESSION = ["constructor", "[constructor]", "rd", "[ctx] prose ist"];
     const NO_VALENCY = ["[gt'a']", "[ctx]", "[cat'a']"];
     const parseRuns = [], xmlRuns = [];
-    /* emit-xml.js (from ORD-0008): toXML over the same sources and options,
-       plain and with `describe` */
-    const runXml = (id, src, opts) => {
-      const run = { id: id, src: src };
-      if (opts.templates !== SNAP_OPTS.templates) run.probeTemplates = true;
+    /* how a run's stores differ from the uniform set, so a port can build
+       them again: the probe templates by name, a case's own templates whole
+       (ORD-0011), no rules, a composition store of its own, and the flags */
+    const marks = (run, opts) => {
+      if (opts.templates === probeTemplates) run.probeTemplates = true;
+      else if (opts.templates !== SNAP_OPTS.templates) run.templates = opts.templates;
       if (opts.rules !== SNAP_OPTS.rules) run.withRules = false;
       if (opts.expansions !== SNAP_OPTS.expansions) run.expansions = opts.expansions;
       if (opts.session === false) run.session = false;
       if (opts.valency === false) run.valency = false;
+    };
+    /* emit-xml.js (from ORD-0008): toXML over the same sources and options,
+       plain and with `describe` */
+    const runXml = (id, src, opts) => {
+      const run = { id: id, src: src };
+      marks(run, opts);
       for (const [k, o] of [["xml", opts], ["describe", { ...opts, describe: true }]]) {
         try { run[k] = G.toXML(src, o); } catch (e) { run[k] = { thrown: e.message }; }
       }
@@ -2191,11 +2209,7 @@ function runSnapshotChecks() {
     const astRuns = [];
     const runAst = (id, src, opts, probe) => {
       const run = { id: id, src: src };
-      if (opts.templates !== SNAP_OPTS.templates) run.probeTemplates = true;
-      if (opts.rules !== SNAP_OPTS.rules) run.withRules = false;
-      if (opts.expansions !== SNAP_OPTS.expansions) run.expansions = opts.expansions;
-      if (opts.session === false) run.session = false;
-      if (opts.valency === false) run.valency = false;
+      marks(run, opts);
       const variants = [["full", opts]];
       if (probe) variants.push(["panel", { ...opts, projection: "panel" }], ["pt", { ...opts, lang: "pt" }],
                                ["embed", { ...opts, uri: "file:///x.pgml", embedSource: true }]);
@@ -2209,11 +2223,7 @@ function runSnapshotChecks() {
     const hgmlRuns = [];
     const runHgml = (id, src, opts, probe) => {
       const run = { id: id, src: src };
-      if (opts.templates !== SNAP_OPTS.templates) run.probeTemplates = true;
-      if (opts.rules !== SNAP_OPTS.rules) run.withRules = false;
-      if (opts.expansions !== SNAP_OPTS.expansions) run.expansions = opts.expansions;
-      if (opts.session === false) run.session = false;
-      if (opts.valency === false) run.valency = false;
+      marks(run, opts);
       for (const [k, o] of probe ? [["hgml", opts], ["keepText", { ...opts, keepText: true }]] : [["hgml", opts]]) {
         try { run[k] = G.toHGML(src, o); } catch (e) { run[k] = { thrown: e.message }; }
       }
@@ -2224,11 +2234,7 @@ function runSnapshotChecks() {
       runHgml(id, src, opts, !/^[A-Z]+-\d+$/.test(id));
       runAst(id, src, opts, !/^[A-Z]+-\d+$/.test(id));
       const run = { id: id, src: src };
-      if (opts.templates !== SNAP_OPTS.templates) run.probeTemplates = true;
-      if (opts.rules !== SNAP_OPTS.rules) run.withRules = false;
-      if (opts.expansions !== SNAP_OPTS.expansions) run.expansions = opts.expansions;
-      if (opts.session === false) run.session = false;
-      if (opts.valency === false) run.valency = false;
+      marks(run, opts);
       for (const lang of ["pt", "en"]) {
         let r;
         try { r = G.parse(src, lang === "en" ? { ...opts, lang: "en" } : opts); }
@@ -2240,7 +2246,7 @@ function runSnapshotChecks() {
       }
       parseRuns.push(run);
     };
-    CORPUS.forEach(c => { if (c && c.id && typeof c.src === "string") runParse(c.id, c.src, SNAP_OPTS); });
+    CORPUS.forEach(c => { if (c && c.id && typeof c.src === "string") runParse(c.id, c.src, caseOpts(c)); });
     PARSE_PROBES.forEach((src, k) => runParse("probe-" + (k + 1), src, SNAP_OPTS));
     NO_SESSION.forEach((src, k) => runParse("nosession-" + (k + 1), src, { ...SNAP_OPTS, session: false }));
     NO_VALENCY.forEach((src, k) => runParse("novalency-" + (k + 1), src, { ...SNAP_OPTS, valency: false }));

@@ -44,7 +44,10 @@ fn the_digest_of_every_generated_table_equals_the_js_store() {
        templates and the composition store; the rules, below */
     for case in oracle::cases() {
         let Some(recorded) = case.get("ast").and_then(|a| a.get("stores")) else { continue };
-        for (name, d) in [&mine[0], &mine[2]] {
+        /* a case that brings its own templates was read under them (O5) */
+        let ctx = repo.with(case.get("stores").unwrap_or(&Json::Null));
+        let templates = digest(&ctx.templates);
+        for (name, d) in [("templates", &templates), (mine[2].0, &mine[2].1)] {
             assert_eq!(d, recorded.s(name), "{}: stores.{name}", case.s("id"));
         }
     }

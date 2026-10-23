@@ -48,6 +48,20 @@ impl Context {
         static REPO: OnceLock<Context> = OnceLock::new();
         REPO.get_or_init(|| Context::new(Some(templates_json()), Some(rules_json()), Some(expansions_store())))
     }
+
+    /// These stores with the ones `over` names laid on top, as the JS spreads
+    /// one `opts` over another (`{ ...opts, ...over }`): `templates`, `rules`
+    /// and `expansions` replace theirs whole, a `null` empties it, and what
+    /// `over` does not name stays. How a declared case brings its own stores
+    /// (O5, EMS-002 ORD-0011).
+    pub fn with(&self, over: &Json) -> Context {
+        let named = |k: &str| over.get(k).map(|v| (!matches!(v, Json::Null)).then(|| v.clone()));
+        Context::new(
+            named("templates").unwrap_or_else(|| Some(self.templates.clone())),
+            named("rules").unwrap_or_else(|| self.rules.clone()),
+            named("expansions").unwrap_or_else(|| self.expansions.clone()),
+        )
+    }
 }
 
 /// What the caller registered with `useRules` and `useExpansions`: the stores
