@@ -8,8 +8,6 @@ pacote que o `--bundle` escreve, e a contagem é desta série.
 
 ## A Ordem aberta
 
-- [`EMS-002/ORD-0010`](ORD-0010/ORD-0010.xml) — o `classify` pelas tabelas da página, a pergunta 10 do retorno da EMS-001; aberta em 2026-10-23
-
 ## Ordens fechadas
 
 | ORD | o que entregou | commit | digest |
@@ -23,3 +21,4 @@ pacote que o `--bundle` escreve, e a contagem é desta série.
 | [`ORD-0007`](ORD-0007/ORD-0007.xml) | o JSON num crate próprio, a pergunta 4 do retorno da EMS-001: `glyph-json` leva o que o `glyph_util::json` guardava e toma o lugar do `Value` do `glyph-stores`, um tipo de JSON para o workspace; o `crate-graph.js` o nomeia como o chão, com o oráculo da plataforma, visto falhando antes de contar; nenhuma projeção se move | `ab37357` | `86600fec025a1db860876091c6ba2df68c80ecdad1129f588cd06af9e5cfec83` — os casos, o mesmo digest da `ORD-0006` |
 | [`ORD-0008`](ORD-0008/ORD-0008.xml) | o corpo de um template lê o que o chamador registrou, a pergunta 6 do retorno da EMS-001: o `Registered` do Rust ao lado do contexto, o do repositório na CLI e no `glyph-engine`; o protocolo JS registra rodando como o motor; o `registry.json` prende 63 sondas nos dois estados, e um corpo que quebra uma regra lê igual na CLI e no app pelos dois motores; o oráculo dos casos não se move | `64f995a` | `4a245e6c231a0f9003fafe0dfe510cdd96297a6ec5085b3c20a0f5ec34914494` (`registry.json`) e `86600fec025a1db860876091c6ba2df68c80ecdad1129f588cd06af9e5cfec83` (os casos, o mesmo da `ORD-0006`) |
 | [`ORD-0009`](ORD-0009/ORD-0009.xml) | o zip de uma ORD de série só atrás de uma flag, a pergunta 1 do retorno da EMS-001: `--zip`, nos dois motores, o JS primeiro — numa série, o `ORD-####.zip` ao lado da pasta, sem mover a contagem; o README e o comando de bundle do plugin o documentam, e o export o roda numa série e fora dela | `f038b9c` | `487a2691f110814bc6ea9024ab16ade6157633d22f818a0a5383514d14ee3cd8` (`cli.json`, 731 execuções, escrito no Linux) |
+| [`ORD-0010`](ORD-0010/ORD-0010.xml) | o `classify` pelas tabelas da página, a pergunta 10 do retorno da EMS-001: atrás de `engine=relay`, uma requisição por chamada, menos o `classify`; o RL-16 prende o conjunto trocado. Medido no Chromium, pelo `serve-dev.js`, as 115 fontes digitadas: de 11 163 requisições para 575, o L-01 de 8 005 por tecla para 5, nenhum painel diferente, pelo motor JS e pelo Rust | `936e91d` | `5c3228dcd2f1609ff08325bf6c27bd8fcb1979902001d18e6d5304f9ab8a4c95` — `sha256sum` do `glyph-transport.js` em `936e91d` |
