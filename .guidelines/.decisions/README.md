@@ -19,6 +19,7 @@
 |---|---|
 | **Os caminhos virtuais abrem a EMS-002, como a `ORD-0001` dela** | respondido no questionário de 2026-10-23: *"EMS-002, ORD-0001"*. A série seguinte já carregava o alvo 100% Rust; a spec é [`EMS-002.pgml`](../.orders/EMS-002/EMS-002.pgml), e a EMS-001 segue esperando no portão da `ORD-0013` |
 | **O resolvedor e o índice se constroem em Rust, num crate novo, `glyph-vpath`** | respondido no mesmo questionário: *"Rust, crate nova"* — uma capacidade sem contraparte JS nasce só no Rust, e nada fica para portar depois; o portão no `npm run check` chama o binário |
+| **Snapshot ampliado: 114 → 115 fontes, nenhum hash movido** | a resposta **a** da pergunta 2 do [retorno da EMS-001](../.orders/EMS-001/RETURN.md), de 2026-09-27, executada pela [`EMS-002/ORD-0005`](../.orders/EMS-002/README.md): a `P-35` é a fonte declarada com caracteres fora do BMP. Os 114 hashes anteriores são idênticos; o SN-03 recusou a fonte nova antes de o snapshot se mover |
 | **O `RETURN.md` de uma série é log, e fica fora do `sources:`, como o `CHANGELOG.md`** | respondido no mesmo questionário: *"Log: fica fora"*. Seis dos oito pares do M3 terminavam nele ([`INTAKE-VIRTUAL-PATH.md`](../.orders/INTAKE-VIRTUAL-PATH.md) §19); o `sources:` nasce com os outros dois |
 
 ## 2026-09-27
