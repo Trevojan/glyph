@@ -802,7 +802,7 @@
     },
     ".guidelines/.orders/EMS-002/EMS-002.pgml": {
       "nodes": [
-        ["", 0, 3981, 1, 56, "7e5486482b91e200"]
+        ["", 0, 4350, 1, 57, "948c6010fdf26800"]
       ]
     },
     ".guidelines/.orders/EMS-002/ORD-0001/ORD-0001.hgml": {
@@ -864,10 +864,10 @@
     },
     ".guidelines/.orders/EMS-002/README.md": {
       "nodes": [
-        ["", 0, 605, 1, 16, "64cacaf89d65ef00"],
-        ["ems-002--o-glyph-100-em-rust", 0, 605, 1, 16, "64cacaf89d65ef00"],
-        ["a-ordem-aberta", 396, 524, 9, 4, "db06b18ae8ae1300"],
-        ["ordens-fechadas", 524, 605, 13, 4, "79b9b948e1bd3280"]
+        ["", 0, 972, 1, 15, "0906c3d8151abe00"],
+        ["ems-002--o-glyph-100-em-rust", 0, 972, 1, 15, "0906c3d8151abe00"],
+        ["a-ordem-aberta", 396, 415, 9, 2, "5941cf30e1126c00"],
+        ["ordens-fechadas", 415, 972, 11, 5, "04a50d32553d3000"]
       ]
     },
     ".guidelines/.orders/HANDOFF-2026-08-30.ast.json": {
@@ -1522,16 +1522,16 @@
     },
     ".guidelines/.plan/README.md": {
       "nodes": [
-        ["", 0, 13950, 1, 216, "ead3414c0c23cdc0"],
-        ["plano--o-que-vem-a-seguir", 0, 13950, 1, 216, "ead3414c0c23cdc0"],
-        ["autorizado-pelo-regente-ainda-não-construído", 217, 11738, 7, 187, "ddeec2b0036e0000"],
-        ["0-caminhos-virtuais--guidelinesshortcutsvirtual--em-construção-ems-002ord-0001", 269, 3961, 9, 61, "b5c4313cf697a400"],
-        ["1-section-de-cabeçalho-irmã-do-schema--decidido-faltando-fazer", 3961, 4623, 70, 13, "29a759a8aecd1500"],
-        ["2-gatilhos-de-re-ferência", 4623, 5528, 83, 19, "20d81a5623895800"],
-        ["3-quatro-defeitos-medidos-e-não-consertados-no-js", 5528, 6502, 102, 9, "8465e25409755a00"],
-        ["5-o-glyph-em-rust--a-série-ems-001", 6502, 11738, 111, 83, "af0ccf1e4b152a00"],
-        ["aberto-esperando-o-regente", 11738, 13268, 194, 11, "7d12d970664cbc00"],
-        ["adiado-por-decisão-não-por-esquecimento", 13268, 13950, 205, 12, "110118b8258d7d80"]
+        ["", 0, 14916, 1, 231, "f4165ac0eb832600"],
+        ["plano--o-que-vem-a-seguir", 0, 14916, 1, 231, "f4165ac0eb832600"],
+        ["autorizado-pelo-regente-ainda-não-construído", 217, 12704, 7, 202, "9e3cc5e6bca21200"],
+        ["0-caminhos-virtuais--guidelinesshortcutsvirtual--camadas-1-4-5-e-6-construídas-2-3-e-7-a-seguir", 269, 4927, 9, 76, "f8719850161bfe00"],
+        ["1-section-de-cabeçalho-irmã-do-schema--decidido-faltando-fazer", 4927, 5589, 85, 13, "29a759a8aecd1500"],
+        ["2-gatilhos-de-re-ferência", 5589, 6494, 98, 19, "20d81a5623895800"],
+        ["3-quatro-defeitos-medidos-e-não-consertados-no-js", 6494, 7468, 117, 9, "8465e25409755a00"],
+        ["5-o-glyph-em-rust--a-série-ems-001", 7468, 12704, 126, 83, "af0ccf1e4b152a00"],
+        ["aberto-esperando-o-regente", 12704, 14234, 209, 11, "7d12d970664cbc00"],
+        ["adiado-por-decisão-não-por-esquecimento", 14234, 14916, 220, 12, "110118b8258d7d80"]
       ]
     },
     ".guidelines/.plan/ladder.toml": {
@@ -1541,14 +1541,14 @@
     },
     ".guidelines/.shortcuts/README.md": {
       "nodes": [
-        ["", 0, 6392, 1, 82, "d7f41c3067944800"],
-        ["atalhos--comece-por-aqui", 0, 6392, 1, 82, "d7f41c3067944800"],
-        ["onde-estou", 442, 1871, 11, 11, "4aa9597cbfed1480"],
-        ["os-sete-eixos", 1871, 2557, 22, 12, "6357d5140827f600"],
-        ["o-mapa-do-motor-em-cinco-linhas", 2557, 3484, 34, 12, "537763c2149d2400"],
-        ["os-documentos-que-mais-se-consulta", 3484, 5055, 46, 17, "0ce071d0a2b2de00"],
-        ["os-outros-documentos", 5055, 6053, 63, 14, "bcf7ae04a2ded000"],
-        ["vocabulário-do-projeto", 6053, 6392, 77, 6, "d5b16db424152200"]
+        ["", 0, 6877, 1, 83, "8ea8b134ab88ce00"],
+        ["atalhos--comece-por-aqui", 0, 6877, 1, 83, "8ea8b134ab88ce00"],
+        ["onde-estou", 442, 2179, 11, 11, "2cbc83d016087780"],
+        ["os-sete-eixos", 2179, 2865, 22, 12, "6357d5140827f600"],
+        ["o-mapa-do-motor-em-cinco-linhas", 2865, 3792, 34, 12, "537763c2149d2400"],
+        ["os-documentos-que-mais-se-consulta", 3792, 5540, 46, 18, "6aa3e93076afb200"],
+        ["os-outros-documentos", 5540, 6538, 64, 14, "bcf7ae04a2ded000"],
+        ["vocabulário-do-projeto", 6538, 6877, 78, 6, "d5b16db424152200"]
       ]
     },
     ".guidelines/.sources/COMPILER_LESSONS.md": {
