@@ -23,7 +23,7 @@ fn every_rule_diagnostic_equals_the_js() {
         let id = run.s("id");
         let Some(want) = run.get("rules") else { continue };
         let with_rules = run.get("withRules") == Some(&Json::Bool(true));
-        let ctx = Context::new(None, if with_rules { repo.rules.clone() } else { None }, None);
+        let ctx = Context::shared(None, if with_rules { repo.rules.clone() } else { None }, None);
         let tree = tree_of(run.get("after").expect("after"));
         let mut got = Vec::new();
         let result = check_rules(&tree, &ctx, &mut |d| got.push(diag_json(&d)));
@@ -54,10 +54,10 @@ fn described(c: &Compiled) -> Json {
     let strs = |v: &[String]| Json::Arr(v.iter().map(|x| s(x)).collect());
     Json::Obj(vec![
         ("pairs".into(), Json::Arr(c.pairs.iter().map(|(k, r)| Json::Arr(vec![s(k), id(r)])).collect())),
-        ("order".into(), Json::Arr(c.order.iter().map(|o| Json::Arr(vec![id(o.rule), s(&o.first), strs(&o.then)])).collect())),
-        ("pre".into(), Json::Arr(c.pre.iter().map(|p| Json::Arr(vec![id(p.rule), s(&p.target), strs(&p.accept)])).collect())),
+        ("order".into(), Json::Arr(c.order.iter().map(|o| Json::Arr(vec![id(&o.rule), s(&o.first), strs(&o.then)])).collect())),
+        ("pre".into(), Json::Arr(c.pre.iter().map(|p| Json::Arr(vec![id(&p.rule), s(&p.target), strs(&p.accept)])).collect())),
         ("blends".into(), Json::Arr(c.blends.iter()
-            .map(|b| Json::Arr(vec![id(b.rule), strs(&b.when), s(&b.emit), s(&b.means)])).collect())),
+            .map(|b| Json::Arr(vec![id(&b.rule), strs(&b.when), s(&b.emit), s(&b.means)])).collect())),
     ])
 }
 

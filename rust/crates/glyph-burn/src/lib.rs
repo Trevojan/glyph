@@ -9,7 +9,7 @@
 //! `toHGML` resets; here they are a `Burning` the calls pass along.
 
 use glyph_parse::{parse, Extra, Opts};
-use glyph_rules::{compile_rules, Compiled};
+use glyph_rules::{compiled_of, Compiled};
 use glyph_stores::{entry_of, expansion_registry, Context};
 use glyph_json::Json;
 use glyph_util::tree::{Id, Thrown, Tree, LIMITS};
@@ -189,7 +189,7 @@ pub fn burn_list(tree: &Tree<Extra>, list: &[Id], o: &BurnOpts, compiled: Option
             Some(Json::Str(f)) => f.clone(),
             Some(_) => String::new(),
         };
-        let fctx = Context::new(None, None, ctx.expansions.clone());
+        let fctx = Context::shared(None, None, ctx.expansions.clone());
         let sub = parse(&formula, &Opts { ctx: &fctx, session: o.parse.session, valency: false, en: false, expanding: Vec::new(),
                                           registered: o.parse.registered })?;
         let next = [chain, &[key]].concat();
@@ -209,10 +209,9 @@ pub struct BurntSegment {
 
 /// `burn(segments, opts)`: the tree reduced to hieroglyphs.
 pub fn burn(tree: &Tree<Extra>, o: &BurnOpts, st: &mut Burning) -> Result<Vec<BurntSegment>, Thrown> {
-    let rules = o.parse.ctx.rules.as_ref();
-    let compiled = rules.map(compile_rules);
+    let compiled = o.parse.ctx.rules.as_ref().map(compiled_of);
     tree.segments.iter().map(|sg| Ok(BurntSegment {
-        children: burn_list(tree, &sg.children, o, compiled.as_ref(), &[], 0, st)?, is_return: sg.is_return, breaks: sg.breaks,
+        children: burn_list(tree, &sg.children, o, compiled.as_deref(), &[], 0, st)?, is_return: sg.is_return, breaks: sg.breaks,
     })).collect()
 }
 
@@ -278,7 +277,7 @@ pub fn to_hgml(src: &str, o: &BurnOpts) -> Result<String, Thrown> {
     /* the burn that used a blend declares it, so the output explains itself
        to a reader who does not have rules.json */
     if !st.blends.is_empty() {
-        let compiled = ctx.rules.as_ref().map(compile_rules).expect("a blend fired, so the store is loaded");
+        let compiled = ctx.rules.as_ref().map(compiled_of).expect("a blend fired, so the store is loaded");
         let mut decl = vec!["# patterns applied to this burn:".to_string()];
         for &i in &st.blends {
             let b = &compiled.blends[i];

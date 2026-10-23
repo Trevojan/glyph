@@ -267,9 +267,9 @@ fn segment_json(tree: &Tree<Extra>, sg: &Segment, truncated: &mut usize, panel: 
     seg
 }
 
-/// `serializeAST(segments, gaps, opts)`. `rules` is the rules store as the
-/// parse left it; `source` is the text the envelope describes.
-pub fn serialize_ast(tree: &Tree<Extra>, gaps: &[Gap], ctx: &Context, rules: Option<&Json>, source: Option<&str>, o: &AstOpts) -> Json {
+/// `serializeAST(segments, gaps, opts)`: the stores are the context's, as
+/// the JS reads them off `opts`; `source` is the text the envelope describes.
+pub fn serialize_ast(tree: &Tree<Extra>, gaps: &[Gap], ctx: &Context, source: Option<&str>, o: &AstOpts) -> Json {
     let mut truncated = 0;
     let segments: Vec<Json> = tree.segments.iter().map(|sg| segment_json(tree, sg, &mut truncated, o.panel)).collect();
     let mut diagnostics: Vec<Json> = gaps.iter().map(|g| {
@@ -285,8 +285,8 @@ pub fn serialize_ast(tree: &Tree<Extra>, gaps: &[Gap], ctx: &Context, rules: Opt
         ("schema".into(), Json::Num(AST_SCHEMA)),
         ("version".into(), s(VERSION)),
         ("source".into(), source.map_or(Json::Null, |t| src_descriptor(t, o))),
-        ("stores".into(), Json::Obj(vec![("templates".into(), store_ck(Some(&ctx.templates))), ("rules".into(), store_ck(rules)),
-                                          ("expansions".into(), store_ck(ctx.expansions.as_ref()))])),
+        ("stores".into(), Json::Obj(vec![("templates".into(), store_ck(Some(&ctx.templates))), ("rules".into(), store_ck(ctx.rules.as_deref())),
+                                          ("expansions".into(), store_ck(ctx.expansions.as_deref()))])),
         ("projection".into(), s(if o.panel { "panel" } else { "full" })),
         ("segments".into(), Json::Arr(segments)),
     ];
@@ -308,5 +308,5 @@ pub fn serialize_ast(tree: &Tree<Extra>, gaps: &[Gap], ctx: &Context, rules: Opt
 /// the caller names a language; here the caller's `Opts` says which.
 pub fn to_ast(src: &str, o: &Opts, a: &AstOpts) -> Result<Json, Thrown> {
     let p = parse(src, o)?;
-    Ok(serialize_ast(&p.tree, &p.gaps, o.ctx, p.rules.as_ref(), Some(src), a))
+    Ok(serialize_ast(&p.tree, &p.gaps, o.ctx, Some(src), a))
 }

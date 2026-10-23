@@ -17,6 +17,7 @@ use glyph_json::Json;
 use glyph_util::tree::Thrown;
 use glyph_xml::to_xml;
 use oracle::{module, Must};
+use std::sync::Arc;
 
 /// The stores a recorded call named; `None` for a store of the suite's own.
 fn context(flags: &Json) -> Option<Context> {
@@ -25,8 +26,8 @@ fn context(flags: &Json) -> Option<Context> {
     if [pick("templates"), pick("rules"), pick("expansions")].contains(&Some("other")) {
         return None;
     }
-    Some(Context::new(
-        (pick("templates") == Some("repo")).then(|| repo.templates.clone()),
+    Some(Context::shared(
+        (pick("templates") == Some("repo")).then(|| Arc::clone(&repo.templates)),
         if pick("rules") == Some("repo") { repo.rules.clone() } else { None },
         if pick("expansions") == Some("repo") { repo.expansions.clone() } else { None },
     ))

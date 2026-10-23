@@ -9,36 +9,46 @@
 //! reference. There is no global store: a call answers for the context it is
 //! given, all three stores or none, which is what `createContext` guarantees
 //! the JS. `tests/oracle.rs` holds every table's digest to the JS store's.
+//!
+//! A store is shared, never copied: the context holds each behind an `Arc`,
+//! and a context made from loaded stores holds the same ones, as the JS hands
+//! the same object on (EMS-002 ORD-0013).
 
 use glyph_json::Json;
 use glyph_vocab::{get, FRAMES, NAMED_STRUCT, SLOTS};
-use std::sync::OnceLock;
+use std::sync::{Arc, OnceLock};
 
 include!(concat!(env!("OUT_DIR"), "/stores.rs"));
 
 /// The three stores, answering for all of them together.
 #[derive(Debug, Clone, PartialEq)]
 pub struct Context {
-    pub templates: Json,
-    pub rules: Option<Json>,
-    pub expansions: Option<Json>,
+    pub templates: Arc<Json>,
+    pub rules: Option<Arc<Json>>,
+    pub expansions: Option<Arc<Json>>,
 }
 
 impl Context {
     /// `createContext`: `templates.json` whole or the map inside it, the rules
     /// or none, `expansions.json` whole or its bare `commands` map.
     pub fn new(templates: Option<Json>, rules: Option<Json>, expansions: Option<Json>) -> Context {
+        Context::shared(templates.map(Arc::new), rules.map(Arc::new), expansions.map(Arc::new))
+    }
+
+    /// `createContext` over stores already loaded: a store that needs no
+    /// unwrapping is held as it is.
+    pub fn shared(templates: Option<Arc<Json>>, rules: Option<Arc<Json>>, expansions: Option<Arc<Json>>) -> Context {
         let templates = match templates {
             Some(t) => match t.get("templates").filter(|m| m.truthy()) {
-                Some(m) => m.clone(),
+                Some(m) => Arc::new(m.clone()),
                 None if t.truthy() => t,
-                None => Json::Obj(Vec::new()),
+                None => Arc::new(Json::Obj(Vec::new())),
             },
-            None => Json::Obj(Vec::new()),
+            None => Arc::new(Json::Obj(Vec::new())),
         };
-        let rules = rules.filter(Json::truthy);
-        let expansions = expansions.filter(Json::truthy).map(|e| {
-            if e.get("commands").is_some_and(Json::truthy) { e } else { Json::Obj(vec![("commands".into(), e)]) }
+        let rules = rules.filter(|r| r.truthy());
+        let expansions = expansions.filter(|e| e.truthy()).map(|e| {
+            if e.get("commands").is_some_and(Json::truthy) { e } else { Arc::new(Json::Obj(vec![("commands".into(), Arc::unwrap_or_clone(e))])) }
         });
         Context { templates, rules, expansions }
     }
@@ -55,9 +65,9 @@ impl Context {
     /// `over` does not name stays. How a declared case brings its own stores
     /// (O5, EMS-002 ORD-0011).
     pub fn with(&self, over: &Json) -> Context {
-        let named = |k: &str| over.get(k).map(|v| (!matches!(v, Json::Null)).then(|| v.clone()));
-        Context::new(
-            named("templates").unwrap_or_else(|| Some(self.templates.clone())),
+        let named = |k: &str| over.get(k).map(|v| (!matches!(v, Json::Null)).then(|| Arc::new(v.clone())));
+        Context::shared(
+            named("templates").unwrap_or_else(|| Some(Arc::clone(&self.templates))),
             named("rules").unwrap_or_else(|| self.rules.clone()),
             named("expansions").unwrap_or_else(|| self.expansions.clone()),
         )
@@ -72,8 +82,8 @@ impl Context {
 /// and the engine register.
 #[derive(Debug, Clone, PartialEq, Default)]
 pub struct Registered {
-    pub rules: Option<Json>,
-    pub expansions: Option<Json>,
+    pub rules: Option<Arc<Json>>,
+    pub expansions: Option<Arc<Json>>,
 }
 
 impl Registered {
@@ -100,7 +110,7 @@ pub fn template_registry(ctx: &Context) -> &Json {
 
 /// The composition store, when it carries a `commands` table.
 pub fn expansion_registry(ctx: &Context) -> Option<&Json> {
-    ctx.expansions.as_ref().filter(|s| s.get("commands").is_some_and(Json::truthy))
+    ctx.expansions.as_deref().filter(|s| s.get("commands").is_some_and(Json::truthy))
 }
 
 pub fn entry_of<'a>(name: &str, ctx: &'a Context) -> Option<&'a Json> {

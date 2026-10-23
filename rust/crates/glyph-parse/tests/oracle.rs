@@ -13,6 +13,7 @@ use glyph_stores::Context;
 use glyph_json::Json;
 use glyph_util::tree::Thrown;
 use oracle::{dump_of, module, Must};
+use std::sync::Arc;
 
 fn gap_json(g: &Gap) -> Json {
     let s = |v: &str| Json::Str(v.to_string());
@@ -39,7 +40,7 @@ fn value(j: &Json) -> Json {
 /// says so.
 fn context(run: &Json) -> Context {
     let repo = Context::repository();
-    let mut map = match &repo.templates {
+    let mut map = match &*repo.templates {
         Json::Obj(kv) => kv.clone(),
         v => panic!("the repository's templates are not a map: {v:?}"),
     };
@@ -52,12 +53,12 @@ fn context(run: &Json) -> Context {
         }
     }
     let rules = if run.get("withRules") == Some(&Json::Bool(false)) { None } else { repo.rules.clone() };
-    let expansions = run.get("expansions").map_or(repo.expansions.clone(), |e| Some(value(e)));
+    let expansions = run.get("expansions").map_or(repo.expansions.clone(), |e| Some(Arc::new(value(e))));
     // a case's own templates, whole (O5, EMS-002 ORD-0011)
     if let Some(own) = run.get("templates") {
-        return Context::new(Some(own.clone()), rules, expansions);
+        return Context::shared(Some(Arc::new(own.clone())), rules, expansions);
     }
-    Context::new(Some(Json::Obj(map)), rules, expansions)
+    Context::shared(Some(Arc::new(Json::Obj(map))), rules, expansions)
 }
 
 #[test]
