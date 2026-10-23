@@ -533,3 +533,98 @@ fn the_gate_refuses_a_source_by_a_recovered_path_and_a_recovery_that_does_not_ho
         r.refused(what);
     }
 }
+
+// ---------- EMS-002 ORD-0004: order maintenance ----------
+
+use glyph_vpath::order::{Order, Relation};
+
+#[test]
+fn before_tells_which_comes_first_or_which_holds_the_other() {
+    let r = Repo::new("before");
+    r.put(".guidelines/doc.md", DOC);
+    r.put(".guidelines/other.md", "# Other\n");
+    r.build();
+    let idx = r.index();
+    let order = Order::of(&idx);
+    let id = |v: &str| r.id(v);
+    let rel = |a: &str, b: &str| order.relation(&idx, &id(a), &id(b)).unwrap();
+    assert_eq!(rel(".guidelines/doc.md#alpha", ".guidelines/doc.md#beta"), Relation::Before);
+    assert_eq!(rel(".guidelines/doc.md#gamma", ".guidelines/doc.md#alpha"), Relation::After);
+    assert_eq!(rel(".guidelines/doc.md#doc", ".guidelines/doc.md#beta"), Relation::Holds);
+    assert_eq!(rel(".guidelines/doc.md#beta", ".guidelines/doc.md"), Relation::Inside);
+    assert_eq!(rel(".guidelines/doc.md", ".guidelines/doc.md#doc"), Relation::Holds, "two equal ranges: the first in order holds");
+    assert_eq!(rel(".guidelines/doc.md#gamma", ".guidelines/other.md"), Relation::Before, "files in the order the index lists them");
+    assert_eq!(rel(".guidelines/doc.md#beta", ".guidelines/doc.md#beta"), Relation::Same);
+    let (ok, out, _) = vpath(&r, &["before", ".guidelines/doc.md#beta", &id(".guidelines/doc.md#alpha")]);
+    assert!(ok && out == "after\n", "{out}");
+}
+
+#[test]
+fn above_and_between_read_the_order() {
+    let r = Repo::new("above");
+    r.put(".guidelines/doc.md", DOC);
+    r.build();
+    let idx = r.index();
+    let order = Order::of(&idx);
+    let id = |v: &str| r.id(v);
+    assert_eq!(order.above(&idx, &id(".guidelines/doc.md#gamma"), 5).unwrap(),
+               [id(".guidelines/doc.md#beta"), id(".guidelines/doc.md#alpha")], "nearest first, and never what holds it");
+    assert_eq!(order.above(&idx, &id(".guidelines/doc.md#alpha"), 5).unwrap(), Vec::<String>::new());
+    let span: Vec<String> = order.between(&id(".guidelines/doc.md#alpha"), &id(".guidelines/doc.md#gamma")).unwrap()
+        .iter().map(|&(f, n)| idx.files[f].nodes[n].selector.clone()).collect();
+    assert_eq!(span, ["alpha", "beta", "gamma"]);
+    assert!(order.between(&id(".guidelines/doc.md#gamma"), &id(".guidelines/doc.md#alpha")).unwrap_err().contains("comes before"));
+    let (ok, out, _) = vpath(&r, &["above", ".guidelines/doc.md#gamma", "1"]);
+    assert!(ok && out.starts_with(&id(".guidelines/doc.md#beta")) && out.lines().count() == 1, "{out}");
+    let (ok, _, err) = vpath(&r, &["between", ".guidelines/doc.md#gamma", ".guidelines/doc.md#alpha"]);
+    assert!(!ok && err.contains("comes before"), "{err}");
+    let (ok, _, err) = vpath(&r, &["above", ".guidelines/doc.md#nothing"]);
+    assert!(!ok && err.contains("names no node of the index"), "{err}");
+}
+
+#[test]
+fn the_order_answers_after_an_insertion_a_move_and_a_removal() {
+    let r = Repo::new("reorder");
+    r.put(".guidelines/doc.md", DOC);
+    r.build();
+    let (alpha, beta, gamma) = (r.id(".guidelines/doc.md#alpha"), r.id(".guidelines/doc.md#beta"), r.id(".guidelines/doc.md#gamma"));
+    r.put(".guidelines/doc.md", "# Doc\n## Gamma\ngamma one\n## Alpha\nalpha one\nalpha two\n## Inserted\nnew text\n## Beta\nbeta one\nbeta two\n");
+    r.build();
+    let idx = r.index();
+    let order = Order::of(&idx);
+    let inserted = r.id(".guidelines/doc.md#inserted");
+    assert_eq!(r.id(".guidelines/doc.md#gamma"), gamma, "the moved section keeps its NodeID");
+    assert_eq!(order.relation(&idx, &gamma, &alpha), Some(Relation::Before), "and its new place");
+    assert_eq!(order.relation(&idx, &alpha, &inserted), Some(Relation::Before));
+    assert_eq!(order.relation(&idx, &inserted, &beta), Some(Relation::Before));
+    r.put(".guidelines/doc.md", "# Doc\n## Gamma\ngamma one\n## Alpha\nalpha one\nalpha two\n## Inserted\nnew text\n");
+    r.build();
+    let idx = r.index();
+    assert_eq!(Order::of(&idx).rank(&beta), None, "a removed node has no place in the order");
+    let (ok, _, err) = vpath(&r, &["before", &beta, &alpha]);
+    assert!(!ok && err.contains("is no NodeID"), "{err}");
+}
+
+#[test]
+fn the_order_of_this_repository_agrees_with_its_files_and_offsets_on_every_pair() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../..");
+    let idx = index::committed(&root).unwrap().unwrap().1;
+    let order = Order::of(&idx);
+    // an independent sort: the path as a string, the start, the longer first
+    let mut all: Vec<(&str, usize, usize, &str)> = idx.files.iter()
+        .flat_map(|e| e.nodes.iter().map(move |n| (e.path.as_str(), n.start, n.end, n.id.as_str()))).collect();
+    all.sort_by(|a, b| (a.0, a.1, std::cmp::Reverse(a.2)).cmp(&(b.0, b.1, std::cmp::Reverse(b.2))));
+    let ranks: Vec<usize> = all.iter().map(|x| order.rank(x.3).unwrap()).collect();
+    assert_eq!(ranks, (0..all.len()).collect::<Vec<_>>(), "the order is the sort of the index's files and offsets");
+    let mut pairs = 0usize;
+    for (i, a) in all.iter().enumerate() {
+        for b in &all[i + 1..] {
+            let rel = order.relation(&idx, a.3, b.3).unwrap();
+            let holds = a.0 == b.0 && a.1 <= b.1 && b.2 <= a.2;
+            assert_eq!(rel, if holds { Relation::Holds } else { Relation::Before }, "{} and {}", a.3, b.3);
+            assert_eq!(order.relation(&idx, b.3, a.3).unwrap(), if holds { Relation::Inside } else { Relation::After });
+            pairs += 1;
+        }
+    }
+    assert!(pairs > 1_000_000, "every pair: {pairs}");
+}

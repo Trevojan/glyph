@@ -1,5 +1,5 @@
 //! glyph-vpath — the virtual paths, from the command line. EMS-002 ORD-0001
-//! to ORD-0003.
+//! to ORD-0004.
 //!
 //!   glyph-vpath build                 write the index
 //!   glyph-vpath check                 exit 1 on a breach; prints nothing on success
@@ -11,6 +11,11 @@
 //!   glyph-vpath node REF              the record of a node: path, parent, previous,
 //!                                     next and depth
 //!   glyph-vpath up REF                the chain of parents, the node first
+//!   glyph-vpath before A B            how A stands to B: before, after, holds,
+//!                                     inside or same
+//!   glyph-vpath above REF [N]         the N nodes of its file that end where it
+//!                                     starts or before, nearest first (default 3)
+//!   glyph-vpath between A B           every node from A to B, in order
 //!   glyph-vpath list FILE             the selectors of a file, with their lines
 //!   glyph-vpath code FILE             the documents that declare FILE as a source
 //!   glyph-vpath misses                the index misses logged, most asked first
@@ -29,6 +34,7 @@
 use glyph_util::json::{stringify, Json};
 use glyph_vpath::identity::{self, Place};
 use glyph_vpath::index::{self, Index};
+use glyph_vpath::order::Order;
 use glyph_vpath::recovery::{self, Recovered};
 use glyph_vpath::{fingerprint, join, select, split, tree, Format, Lines};
 use std::collections::{BTreeMap, HashMap};
@@ -47,7 +53,7 @@ fn main() -> ExitCode {
     let text = args.iter().position(|a| a == "--text").map(|i| args.remove(i)).is_some();
     let (cmd, rest) = match args.split_first() {
         Some((c, r)) => (c.as_str(), r),
-        None => return fail(&["usage: glyph-vpath build | check | stamp DOC... | resolve REF... [--text] | node REF | up REF | list FILE | code FILE | misses".into()]),
+        None => return fail(&["usage: glyph-vpath build | check | stamp DOC... | resolve REF... [--text] | node REF | up REF | before A B | above REF [N] | between A B | list FILE | code FILE | misses".into()]),
     };
     let result = match cmd {
         "build" => write(&root, &[]),
@@ -56,6 +62,9 @@ fn main() -> ExitCode {
         "resolve" if !rest.is_empty() => resolve(&root, rest, text),
         "node" if rest.len() == 1 => node(&root, &rest[0]),
         "up" if rest.len() == 1 => up(&root, &rest[0]),
+        "before" if rest.len() == 2 => before(&root, &rest[0], &rest[1]),
+        "above" if rest.len() == 1 || rest.len() == 2 => above(&root, &rest[0], rest.get(1).map(String::as_str)),
+        "between" if rest.len() == 2 => between(&root, &rest[0], &rest[1]),
         "list" if rest.len() == 1 => list(&root, &rest[0]),
         "code" if rest.len() == 1 => code(&root, &rest[0]),
         "misses" => misses(&root),
@@ -322,6 +331,49 @@ fn misses(root: &Path) -> Result<(), Vec<String>> {
     rows.sort_by(|a, b| b.1.cmp(&a.1).then_with(|| a.0.cmp(&b.0)));
     for ((asked, answered), n) in rows {
         emit(&format!("{n:>5}  {asked} → {answered}\n"));
+    }
+    Ok(())
+}
+
+/// The index, its places and its order, for the order queries.
+fn ordered(root: &Path) -> Result<(Index, HashMap<String, Place>, Order), Vec<String>> {
+    let idx = committed(root)?.unwrap_or_default();
+    let places = identity::places(&idx);
+    let order = Order::of(&idx);
+    Ok((idx, places, order))
+}
+
+fn line_of(idx: &Index, places: &HashMap<String, Place>, id: &str) -> String {
+    let p = &places[id];
+    let n = &idx.files[p.file].nodes[p.node];
+    format!("{id:<7} {} · lines {}+{}\n", idx.path_of(p), n.line, n.lines)
+}
+
+fn before(root: &Path, a: &str, b: &str) -> Result<(), Vec<String>> {
+    let (idx, places, order) = ordered(root)?;
+    let ia = id_of(&idx, &places, a).map_err(|e| vec![e])?;
+    let ib = id_of(&idx, &places, b).map_err(|e| vec![e])?;
+    let rel = order.relation(&idx, &ia, &ib).expect("both NodeIDs are in the order");
+    emit(&format!("{}\n", rel.word()));
+    Ok(())
+}
+
+fn above(root: &Path, reference: &str, count: Option<&str>) -> Result<(), Vec<String>> {
+    let count = count.map_or(Ok(3), |c| c.parse::<usize>().map_err(|_| vec![format!("`{c}` is not a count")]))?;
+    let (idx, places, order) = ordered(root)?;
+    let id = id_of(&idx, &places, reference).map_err(|e| vec![e])?;
+    for m in order.above(&idx, &id, count).expect("the NodeID is in the order") {
+        emit(&line_of(&idx, &places, &m));
+    }
+    Ok(())
+}
+
+fn between(root: &Path, a: &str, b: &str) -> Result<(), Vec<String>> {
+    let (idx, places, order) = ordered(root)?;
+    let ia = id_of(&idx, &places, a).map_err(|e| vec![e])?;
+    let ib = id_of(&idx, &places, b).map_err(|e| vec![e])?;
+    for &(f, n) in order.between(&ia, &ib).map_err(|e| vec![e])? {
+        emit(&line_of(&idx, &places, &idx.files[f].nodes[n].id));
     }
     Ok(())
 }
