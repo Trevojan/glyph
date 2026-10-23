@@ -1,7 +1,7 @@
 {
   "note": "written by glyph-vpath build, EMS-002; never edited by hand",
   "depth": 2,
-  "next": 2020,
+  "next": 2057,
   "files": {
     ".guidelines/.changelog/README.md": {
       "nodes": [
@@ -803,7 +803,7 @@
     },
     ".guidelines/.orders/EMS-002/EMS-002.pgml": {
       "nodes": [
-        ["n523", "", 0, 12754, 1, 119, "205141a84dbbe400", "", ""]
+        ["n523", "", 0, 13145, 1, 125, "c5397506689ad800", "", ""]
       ]
     },
     ".guidelines/.orders/EMS-002/ORD-0001/ORD-0001.hgml": {
@@ -1262,12 +1262,69 @@
         ["n2019", "/glyph-package/block", 48, 2643, 3, 36, "64b3f9686167d200", "", "n2017"]
       ]
     },
+    ".guidelines/.orders/EMS-002/ORD-0009/ORD-0009.hgml": {
+      "nodes": [
+        ["n2020", "", 0, 1629, 1, 72, "e1da08a8980a6a00", "", ""]
+      ]
+    },
+    ".guidelines/.orders/EMS-002/ORD-0009/ORD-0009.json": {
+      "nodes": [
+        ["n2021", "", 0, 11790, 1, 397, "08f01000b6b03700", "", ""],
+        ["n2022", "/type", 12, 22, 2, 1, "6cfcf51e0b22b400", "", "n2021"],
+        ["n2023", "/schema", 36, 37, 3, 1, "370cabd49014b848", "", "n2021"],
+        ["n2024", "/version", 52, 62, 4, 1, "329156f83f19d000", "", "n2021"],
+        ["n2025", "/source", 76, 198, 5, 7, "2a75c5b009133800", "", "n2021"],
+        ["n2026", "/source/length", 92, 95, 6, 1, "cdde433cb92c5200", "", "n2025"],
+        ["n2027", "/source/checksum", 113, 131, 7, 1, "279e7f36fe2dc600", "", "n2025"],
+        ["n2028", "/source/encoding", 149, 156, 8, 1, "51d8d6a8889ada00", "", "n2025"],
+        ["n2029", "/source/newline", 173, 177, 9, 1, "cec09c50a37ddc00", "", "n2025"],
+        ["n2030", "/source/uri", 190, 194, 10, 1, "e4ee48ec82cd2c00", "", "n2025"],
+        ["n2031", "/stores", 212, 324, 12, 5, "cf0c850bc5b9d200", "", "n2021"],
+        ["n2032", "/stores/templates", 231, 249, 13, 1, "84d05340a5f9c600", "", "n2031"],
+        ["n2033", "/stores/rules", 264, 282, 14, 1, "d5b9fc50a6a48000", "", "n2031"],
+        ["n2034", "/stores/expansions", 302, 320, 15, 1, "64207926a2040000", "", "n2031"],
+        ["n2035", "/projection", 342, 348, 17, 1, "8e0b2f6630c6ec00", "", "n2021"],
+        ["n2036", "/segments", 364, 11767, 18, 378, "59fc78574f435b00", "", "n2021"],
+        ["n2037", "/segments/0", 370, 11763, 19, 376, "72555ca099d40c00", "", "n2036"],
+        ["n2038", "/diagnostics", 11786, 11788, 396, 1, "721635809ba5e8c0", "", "n2021"]
+      ]
+    },
+    ".guidelines/.orders/EMS-002/ORD-0009/ORD-0009.manifest.json": {
+      "nodes": [
+        ["n2039", "", 0, 301, 1, 16, "61ca0de67b07c400", "", ""],
+        ["n2040", "/order", 13, 23, 2, 1, "c23b4aaf7d4efa00", "", "n2039"],
+        ["n2041", "/engine", 37, 47, 3, 1, "329156f83f19d000", "", "n2039"],
+        ["n2042", "/emitted", 62, 88, 4, 1, "433e1d9868d0e800", "", "n2039"],
+        ["n2043", "/files", 101, 188, 5, 6, "dc732f50e2d3eb00", "", "n2039"],
+        ["n2044", "/files/0", 107, 122, 6, 1, "6bc82f560dcbed00", "", "n2043"],
+        ["n2045", "/files/1", 128, 142, 7, 1, "7a50ece0aacf0600", "", "n2043"],
+        ["n2046", "/files/2", 148, 163, 8, 1, "c365c76073d0e600", "", "n2043"],
+        ["n2047", "/files/3", 169, 184, 9, 1, "47af7fd05260df10", "", "n2043"],
+        ["n2048", "/source", 202, 245, 11, 1, "f59586a62740ca00", "", "n2039"],
+        ["n2049", "/diagnostics", 264, 298, 12, 4, "83b9246074dcc400", "", "n2039"],
+        ["n2050", "/diagnostics/fix", 277, 278, 13, 1, "350ca8b09bec4d20", "", "n2049"],
+        ["n2051", "/diagnostics/total", 293, 294, 14, 1, "350ca8b09bec4d20", "", "n2049"]
+      ]
+    },
+    ".guidelines/.orders/EMS-002/ORD-0009/ORD-0009.pgml": {
+      "nodes": [
+        ["n2052", "", 0, 980, 1, 10, "69715aa8f3f03a00", "", ""]
+      ]
+    },
+    ".guidelines/.orders/EMS-002/ORD-0009/ORD-0009.xml": {
+      "nodes": [
+        ["n2053", "", 0, 1903, 1, 37, "a6f8894cd8e44700", "", ""],
+        ["n2054", "/glyph-package", 0, 1903, 1, 37, "a6f8894cd8e44700", "", "n2053"],
+        ["n2055", "/glyph-package/schema", 36, 45, 2, 1, "9047f1df86dca200", "", "n2054"],
+        ["n2056", "/glyph-package/block", 48, 1886, 3, 34, "432c2bc6a80a5180", "", "n2054"]
+      ]
+    },
     ".guidelines/.orders/EMS-002/README.md": {
       "nodes": [
-        ["n598", "", 0, 4971, 1, 22, "26f45f6262c74b00", "", ""],
-        ["n599", "ems-002--o-glyph-100-em-rust", 0, 4971, 1, 22, "26f45f6262c74b00", "68d844167e7a9800", "n598"],
-        ["n600", "a-ordem-aberta", 396, 415, 9, 2, "5941cf30e1126c00", "", "n599"],
-        ["n601", "ordens-fechadas", 415, 4971, 11, 12, "10a92f18aeab8600", "ab666f88adf07600", "n599"]
+        ["n598", "", 0, 5130, 1, 24, "5c39626e13ffba00", "", ""],
+        ["n599", "ems-002--o-glyph-100-em-rust", 0, 5130, 1, 24, "5c39626e13ffba00", "ac7dcffe96fc2d00", "n598"],
+        ["n600", "a-ordem-aberta", 396, 574, 9, 4, "75400c0e7b486e00", "f634c174559c7c00", "n599"],
+        ["n601", "ordens-fechadas", 574, 5130, 13, 12, "10a92f18aeab8600", "ab666f88adf07600", "n599"]
       ]
     },
     ".guidelines/.orders/HANDOFF-2026-08-30.ast.json": {
@@ -1947,14 +2004,14 @@
     },
     ".guidelines/.shortcuts/README.md": {
       "nodes": [
-        ["n1153", "", 0, 7429, 1, 83, "ceb0ff2870703c00", "", ""],
-        ["n1154", "atalhos--comece-por-aqui", 0, 7429, 1, 83, "ceb0ff2870703c00", "9f5c8394aab2ac00", "n1153"],
-        ["n1155", "onde-estou", 442, 2574, 11, 11, "e5ad649ef02e2c00", "84ff8828da28a600", "n1154"],
-        ["n1156", "os-sete-eixos", 2574, 3260, 22, 12, "6357d5140827f600", "092e74a89f1df300", "n1154"],
-        ["n1157", "o-mapa-do-motor-em-cinco-linhas", 3260, 4187, 34, 12, "537763c2149d2400", "2caeb09a05c9d600", "n1154"],
-        ["n1158", "os-documentos-que-mais-se-consulta", 4187, 6092, 46, 18, "b14515f455f59aa0", "99bdc846d8830680", "n1154"],
-        ["n1159", "os-outros-documentos", 6092, 7090, 64, 14, "bcf7ae04a2ded000", "078ded0802e8e000", "n1154"],
-        ["n1160", "vocabulário-do-projeto", 7090, 7429, 78, 6, "d5b16db424152200", "0656413c7ac4f500", "n1154"]
+        ["n1153", "", 0, 7465, 1, 83, "464d710469f57400", "", ""],
+        ["n1154", "atalhos--comece-por-aqui", 0, 7465, 1, 83, "464d710469f57400", "4a3fefa8c7c2c800", "n1153"],
+        ["n1155", "onde-estou", 442, 2610, 11, 11, "f5a196182a327600", "08385bde771a4c00", "n1154"],
+        ["n1156", "os-sete-eixos", 2610, 3296, 22, 12, "6357d5140827f600", "092e74a89f1df300", "n1154"],
+        ["n1157", "o-mapa-do-motor-em-cinco-linhas", 3296, 4223, 34, 12, "537763c2149d2400", "2caeb09a05c9d600", "n1154"],
+        ["n1158", "os-documentos-que-mais-se-consulta", 4223, 6128, 46, 18, "b14515f455f59aa0", "99bdc846d8830680", "n1154"],
+        ["n1159", "os-outros-documentos", 6128, 7126, 64, 14, "bcf7ae04a2ded000", "078ded0802e8e000", "n1154"],
+        ["n1160", "vocabulário-do-projeto", 7126, 7465, 78, 6, "d5b16db424152200", "0656413c7ac4f500", "n1154"]
       ]
     },
     ".guidelines/.sources/COMPILER_LESSONS.md": {
