@@ -8,6 +8,8 @@ pacote que o `--bundle` escreve, e a contagem é desta série.
 
 ## A Ordem aberta
 
+- [`EMS-002/ORD-0009`](ORD-0009/ORD-0009.xml) — o zip de uma ORD de série só atrás de uma flag, a pergunta 1 do retorno da EMS-001; aberta em 2026-10-23
+
 ## Ordens fechadas
 
 | ORD | o que entregou | commit | digest |
