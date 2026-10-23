@@ -1,0 +1,10 @@
+[block'ORD-0012-crate-weight'
+  [ctx'the spec of EMS-002','.guidelines/.orders/EMS-002/EMS-002.pgml']
+  [tgt'the ruler of the crates at the gate, O7 of INTAKE-RUST-LADDER, answered on 2026-09-27']
+  [ctx'the norm is in .constraints: note, depth up to 4 and up to 12 crates, enters vendored; ask, depth 5 to 6 or 13 to 40 crates, enters only with an ADR the Regent signs; fix, depth 7 or more or more than 40 crates, is refused; crate-graph.js refuses an external crate that is not vendored, and nothing measures how deep one goes']
+  [cnst'a tree is measured as INTAKE-RUST-LADDER section 9 measures it: cargo tree with normal and build edges, depth 1 the crate itself, crates the distinct packages']
+  [cnst'an ADR the Regent signed is a row of .decisions whose decision names the crate between backticks and says ADR; the gate reads it and never writes one']
+  [cnst'the workspace holds no external crate today, so the ruler grades recorded trees to be seen failing, one for each grade']
+  [val'the ruler','check:rust measures the tree of every external crate as INTAKE-RUST-LADDER section 9 measures it, and grades it note, ask or fix as .constraints says']
+  [val'the grades','note enters, ask enters only with an ADR the Regent signed, fix is refused; each seen failing before it counts']
+];

@@ -113,6 +113,12 @@
     [val'the oracle','TemplateCycle enters the oracle, the case files and the runs say which stores a case brings, and the Rust answers them byte for byte']
   ]
 
+  [section'ORD-0012-crate-weight'
+    [tgt'the ruler of the crates at the gate, O7 of INTAKE-RUST-LADDER, answered on 2026-09-27']
+    [val'the ruler','check:rust measures the tree of every external crate as INTAKE-RUST-LADDER section 9 measures it, and grades it note, ask or fix as .constraints says']
+    [val'the grades','note enters, ask enters only with an ADR the Regent signed, fix is refused; each seen failing before it counts']
+  ]
+
   [section'limits'
     [nev'a selector that answers an empty slice in silence']
     [dont'open an ORD before the ORD it depends on closes']
