@@ -10,8 +10,9 @@
 //! Markdown and blocks to any depth, JSON and XML to depth `DEPTH`, the deeper
 //! ones read from the file when asked. `id` is the NodeID (`identity`), `body`
 //! the fingerprint of a section without its heading line, `parent` the NodeID
-//! of the node that holds it. The index keeps the next free NodeID and the
-//! aliases, the old paths of nodes that moved. A row of six, the shape of
+//! of the node that holds it. The index keeps the next free NodeID, the
+//! aliases, the old paths of nodes that moved, and the recoveries, the old
+//! paths of sections found again by their content (`recovery`). A row of six, the shape of
 //! EMS-002 ORD-0001, is still read: it has no NodeID, and the next build gives
 //! it one.
 //!
@@ -23,6 +24,7 @@
 //! (INTAKE-VIRTUAL-PATH §19, M1 → `fix`).
 
 use crate::identity::{self, Place};
+use crate::recovery::{self, Recovered};
 use crate::{fingerprint, frontmatter, join, select, split, tree, Format, Lines};
 use glyph_util::json::{parse, stringify, Json};
 use std::collections::{HashMap, HashSet};
@@ -69,6 +71,10 @@ pub struct Index {
     pub files: Vec<Entry>,
     /// `(old virtual path, NodeID)`, sorted by path
     pub aliases: Vec<(String, String)>,
+    /// sorted by path
+    pub recovered: Vec<Recovered>,
+    /// what the last build could not try, said and not written
+    pub notes: Vec<String>,
 }
 
 impl Index {
@@ -77,6 +83,10 @@ impl Index {
     }
     pub fn alias(&self, vpath: &str) -> Option<&str> {
         self.aliases.iter().find(|(p, _)| p == vpath).map(|(_, id)| id.as_str())
+    }
+    /// The recovery of an old path or an old NodeID.
+    pub fn recovery(&self, reference: &str) -> Option<&Recovered> {
+        self.recovered.iter().find(|r| r.path == reference || r.id == reference)
     }
     /// The live virtual path of a node, from its place.
     pub fn path_of(&self, place: &Place) -> String {
@@ -137,6 +147,7 @@ pub fn resolve_source(root: &Path, vpath: &str) -> Result<String, String> {
 /// it declares with the fingerprint it has now, or why it does not resolve.
 pub struct Read {
     pub entry: Entry,
+    pub text: String,
     pub sources: Vec<(String, Result<String, String>)>,
 }
 
@@ -168,7 +179,7 @@ pub fn read_entry(root: &Path, file: &str) -> Result<Read, Vec<String>> {
     } else {
         Vec::new()
     };
-    if errors.is_empty() { Ok(Read { entry: Entry { path: file.to_string(), nodes: indexed, sources: Vec::new() }, sources }) } else { Err(errors) }
+    if errors.is_empty() { Ok(Read { entry: Entry { path: file.to_string(), nodes: indexed, sources: Vec::new() }, text, sources }) } else { Err(errors) }
 }
 
 /// The whole index, every file of the universe; `restamp` names the documents
@@ -184,10 +195,12 @@ pub fn build(root: &Path, previous: Option<&Index>, restamp: &[String]) -> Resul
     }
     let mut files: Vec<Entry> = reads.iter().map(|r| r.entry.clone()).collect();
     let carried = identity::carry(previous, &mut files);
-
-    // the stamps follow the document's NodeID, so a document renamed keeps them
     let empty = Index::default();
     let prev = previous.unwrap_or(&empty);
+    let texts: HashMap<String, String> = reads.iter().map(|r| (r.entry.path.clone(), r.text.clone())).collect();
+    let (recovered, notes) = recovery::recover(root, prev, &files, &texts, &carried.vanished, &carried.fresh);
+
+    // the stamps follow the document's NodeID, so a document renamed keeps them
     let live: HashMap<String, String> = files.iter()
         .flat_map(|e| e.nodes.iter().map(move |n| (n.id.clone(), join(&e.path, &n.selector)))).collect();
     let by_root: HashMap<&str, &Entry> = prev.files.iter().filter(|e| !e.nodes[0].id.is_empty()).map(|e| (e.nodes[0].id.as_str(), e)).collect();
@@ -200,9 +213,11 @@ pub fn build(root: &Path, previous: Option<&Index>, restamp: &[String]) -> Resul
                     let kept = unchanged.and_then(|p| p.sources.iter().find(|s| &s.0 == vpath)).map(|s| s.1.clone());
                     e.sources.push((vpath.clone(), kept.unwrap_or_else(|| fp.clone())));
                 }
-                Err(why) => match carried.aliases.iter().find(|(p, _)| p == vpath) {
-                    Some((_, id)) => errors.push(format!("{} declares `{vpath}`, which moved: write `{}`", e.path, live[id])),
-                    None => errors.push(format!("{} declares a source that does not resolve: {why}", e.path)),
+                Err(why) => match (carried.aliases.iter().find(|(p, _)| p == vpath), recovered.iter().find(|r| &r.path == vpath)) {
+                    (Some((_, id)), _) => errors.push(format!("{} declares `{vpath}`, which moved: write `{}`", e.path, live[id])),
+                    (None, Some(r)) => errors.push(format!("{} declares `{vpath}`, which went; by its content it is `{}`, Jaccard 0.{:02}: \
+                                                            write the path that holds what the document means", e.path, live[&r.to], r.score)),
+                    (None, None) => errors.push(format!("{} declares a source that does not resolve: {why}", e.path)),
                 },
             }
         }
@@ -210,7 +225,7 @@ pub fn build(root: &Path, previous: Option<&Index>, restamp: &[String]) -> Resul
     if !errors.is_empty() {
         return Err(errors);
     }
-    Ok(Index { next: carried.next, files, aliases: carried.aliases })
+    Ok(Index { next: carried.next, files, aliases: carried.aliases, recovered, notes })
 }
 
 /// One node per line, so a diff of the index shows which slices moved.
@@ -236,7 +251,13 @@ pub fn render(index: &Index) -> String {
         out.push_str(if k == 0 { "\n" } else { ",\n" });
         out.push_str(&format!("    {}: {}", s(p), s(id)));
     }
-    out.push_str(if index.aliases.is_empty() { "}\n}\n" } else { "\n  }\n}\n" });
+    out.push_str(if index.aliases.is_empty() { "},\n" } else { "\n  },\n" });
+    out.push_str("  \"recovered\": [");
+    for (k, r) in index.recovered.iter().enumerate() {
+        out.push_str(if k == 0 { "\n" } else { ",\n" });
+        out.push_str(&format!("    [{}, {}, {}, {}]", s(&r.path), s(&r.id), s(&r.to), r.score));
+    }
+    out.push_str(if index.recovered.is_empty() { "]\n}\n" } else { "\n  ]\n}\n" });
     out
 }
 
@@ -273,13 +294,19 @@ pub fn load(text: &str) -> Result<Index, String> {
     for (p, id) in json.get("aliases").and_then(Json::obj).unwrap_or(&[]) {
         aliases.push((p.clone(), st(id)?));
     }
+    let mut recovered = Vec::new();
+    for r in json.get("recovered").and_then(Json::arr).unwrap_or(&[]) {
+        let f = r.arr().filter(|f| f.len() == 4).ok_or_else(bad)?;
+        recovered.push(Recovered { path: st(&f[0])?, id: st(&f[1])?, to: st(&f[2])?, score: num(&f[3])? as u32 });
+    }
     let next = json.get("next").map_or(Ok(0), |n| num(n).map(|n| n as u64))?;
-    Ok(Index { next, files, aliases })
+    Ok(Index { next, files, aliases, recovered, notes: Vec::new() })
 }
 
 /// What the identity of an index promises: every NodeID once, below `next`;
 /// every parent a node of the same file, before it; every alias a live
-/// NodeID, on a path that is not live. An index with no NodeID at all is the
+/// NodeID, on a path that is not live; every recovery a live successor, for a
+/// path and a NodeID that are not, scored from 50 to 100. An index with no NodeID at all is the
 /// shape of ORD-0001, and promises nothing yet.
 pub fn validate(index: &Index) -> Vec<String> {
     let all: Vec<&Indexed> = index.files.iter().flat_map(|e| e.nodes.iter()).collect();
@@ -313,6 +340,17 @@ pub fn validate(index: &Index) -> Vec<String> {
         }
         if live.contains(p) {
             errors.push(format!("the alias `{p}` is a live path"));
+        }
+    }
+    for r in &index.recovered {
+        if !seen.contains(r.to.as_str()) {
+            errors.push(format!("the recovery of `{}` points at `{}`, which is no node", r.path, r.to));
+        }
+        if live.contains(&r.path) || seen.contains(r.id.as_str()) {
+            errors.push(format!("the recovery of `{}` ({}) names a node that lives", r.path, r.id));
+        }
+        if !(50..=100).contains(&r.score) {
+            errors.push(format!("the recovery of `{}` scores {}, outside 50 to 100", r.path, r.score));
         }
     }
     errors

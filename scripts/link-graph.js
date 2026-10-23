@@ -8,7 +8,9 @@
  * The index points and never copies, so a document nobody links to is a
  * document nobody finds, and a link that resolves to nothing is a pointer into
  * the dark. This reads every Markdown document of `.guidelines/` (the attic,
- * `.history/`, aside), `README.md` and `CLAUDE.md`, and refuses:
+ * `.history/`, aside, and `.shortcuts/.virtual/`, where glyph-vpath keeps its
+ * index and the cache of the text it indexed), `README.md` and `CLAUDE.md`,
+ * and refuses:
  *
  *   1. an internal link whose file or folder does not exist
  *   2. a document of `.guidelines/` farther than two links from
@@ -34,7 +36,7 @@ const docs = [];
 (function walk(dir) {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
     const p = path.join(dir, e.name);
-    if (e.isDirectory()) { if (e.name !== ".history") walk(p); }
+    if (e.isDirectory()) { if (e.name !== ".history" && rel(p) !== ".guidelines/.shortcuts/.virtual") walk(p); }
     else if (e.name.endsWith(".md")) docs.push(rel(p));
   }
 })(path.join(ROOT, ".guidelines"));
