@@ -57,9 +57,13 @@ O que vale em todas as camadas:
   O(log n), extração em O(log n + L) para L bytes devolvidos, e atualização em
   O(k log n) para k nós afetados pela edição, nunca pelo tamanho do repositório.
 
-Antes do código, medido sobre o histórico do git, com os limiares declarados
-antes de rodar: a taxa de defasagem, a localidade das edições em `.md` e a
-co-mudança código↔documento, que também semeia o `sources:`. A primeira ORD
+Medido antes do código, sobre os 202 commits do histórico, com os limiares
+declarados num commit anterior ao script
+([`INTAKE-VIRTUAL-PATH.md`](../.orders/INTAKE-VIRTUAL-PATH.md) §18 e §19,
+`scripts/measure-coupling.js`): a impressão digital defasada é `fix` no
+`npm run check`; a granularidade é o nó; o `sources:` nasce com oito linhas
+propostas, seis delas no `RETURN.md` da EMS-001; e a primeira ORD chaveia pelo
+slug, com o `NodeID` e o índice de recuperação nas seguintes. A primeira ORD
 nasce na série seguinte à EMS-001, ou avulsa, quando o Regente chamar.
 
 ### 1. `<section>` de cabeçalho, irmã do `<schema/>` — **decidido, faltando fazer**
