@@ -14,7 +14,8 @@
 //! node's byte range, line range and fingerprint, and its NodeID (`identity`,
 //! EMS-002 ORD-0002), the identity a node keeps when its path changes; what the
 //! identity does not reach, the recovery index (`recovery`, ORD-0003) finds by
-//! its content. Order maintenance is an ORD of its own.
+//! its content. The order of the nodes (`order`, ORD-0004) is the index's
+//! own, sorted once at load: `before`, `above` and `between` read it.
 
 pub mod block;
 pub mod frontmatter;
@@ -22,6 +23,7 @@ pub mod identity;
 pub mod index;
 pub mod json;
 pub mod markdown;
+pub mod order;
 pub mod recovery;
 pub mod xml;
 
