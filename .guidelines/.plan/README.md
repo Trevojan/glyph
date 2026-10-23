@@ -162,9 +162,6 @@ espera o Regente no §5 dele.
 Decidido em 2026-09-27, ainda não construído — cada item uma ORD quando o
 Regente chamar, o JS primeiro onde o oráculo muda:
 
-- **o cache das regras sai de cima da store** (pergunta 3): o JS guarda as regras
-  compiladas fora do objeto, o envelope hashea só a store, os hashes de `ast` se
-  movem por decisão, e o `glyph_rules::with_cache` do Rust sai;
 - **JSON num crate próprio** (pergunta 4), abaixo de todos, com entrada de oráculo
   no `crate-graph.js`, no lugar do `glyph_util::json` e do `Value` do
   `glyph-stores`;
