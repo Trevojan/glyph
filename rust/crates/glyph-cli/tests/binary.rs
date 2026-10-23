@@ -31,9 +31,11 @@ fn the_five_examples_come_out_byte_exact() {
     }
 }
 
+/// Every case read with the repository's stores: the binary loads those and
+/// no other, so a case that brings its own (O5) is the library's to answer.
 #[test]
-fn all_114_come_out_as_the_oracle() {
-    for case in cases() {
+fn every_case_with_the_repository_stores_comes_out_as_the_oracle() {
+    for case in cases().iter().filter(|c| c.get("stores").is_none()) {
         let out = glyph(case.s("src"));
         assert!(out.status.success(), "{}: {:?}", case.s("id"), String::from_utf8_lossy(&out.stderr));
         assert_eq!(String::from_utf8(out.stdout).expect("UTF-8"), case.s("xml"), "{}: the XML", case.s("id"));

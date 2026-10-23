@@ -41,6 +41,10 @@ fn context(run: &Json) -> Context {
     }
     let rules = if run.get("withRules") == Some(&Json::Bool(false)) { None } else { repo.rules.clone() };
     let expansions = run.get("expansions").map_or(repo.expansions.clone(), |e| Some(value(e)));
+    // a case's own templates, whole (O5, EMS-002 ORD-0011)
+    if let Some(own) = run.get("templates") {
+        return Context::new(Some(own.clone()), rules, expansions);
+    }
     Context::new(Some(Json::Obj(map)), rules, expansions)
 }
 
@@ -49,7 +53,8 @@ fn the_hgml_digest_of_every_case_equals_the_snapshot() {
     let repo = Context::repository();
     for case in cases() {
         let id = case.s("id");
-        let o = Opts::new(repo);
+        let ctx = repo.with(case.get("stores").unwrap_or(&Json::Null));
+        let o = Opts::new(&ctx);
         let got = to_hgml(case.s("src"), &BurnOpts { parse: &o, keep_text: false }).unwrap_or_else(|e| panic!("{id}: {e:?}"));
         assert_eq!(got, case.s("hgml"), "{id}: the burn");
         assert_eq!(&sha256(got.as_bytes())[..16], snapshot_digest(id, "hgml"), "{id}: the hgml digest");

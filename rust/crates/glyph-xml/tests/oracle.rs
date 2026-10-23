@@ -40,6 +40,10 @@ fn context(run: &Json) -> Context {
     }
     let rules = if run.get("withRules") == Some(&Json::Bool(false)) { None } else { repo.rules.clone() };
     let expansions = run.get("expansions").map_or(repo.expansions.clone(), |e| Some(value(e)));
+    // a case's own templates, whole (O5, EMS-002 ORD-0011)
+    if let Some(own) = run.get("templates") {
+        return Context::new(Some(own.clone()), rules, expansions);
+    }
     Context::new(Some(Json::Obj(map)), rules, expansions)
 }
 
@@ -47,7 +51,8 @@ fn context(run: &Json) -> Context {
 fn the_xml_of_every_case_equals_the_oracle() {
     let repo = Context::repository();
     for case in cases() {
-        let got = to_xml(case.s("src"), &Opts::new(repo), false).unwrap_or_else(|e| panic!("{}: {e:?}", case.s("id")));
+        let ctx = repo.with(case.get("stores").unwrap_or(&Json::Null));
+        let got = to_xml(case.s("src"), &Opts::new(&ctx), false).unwrap_or_else(|e| panic!("{}: {e:?}", case.s("id")));
         assert_eq!(got, case.s("xml"), "{}: the XML", case.s("id"));
     }
     println!("{} cases", cases().len());

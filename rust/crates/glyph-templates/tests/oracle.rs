@@ -51,6 +51,10 @@ fn context(trees: &Json, run: &Json) -> Context {
         }
     }
     let rules = if run.get("withRules") == Some(&Json::Bool(true)) { repo.rules.clone() } else { None };
+    // a case's own templates, whole (O5, EMS-002 ORD-0011)
+    if let Some(own) = run.get("templates") {
+        return Context::new(Some(own.clone()), rules, repo.expansions.clone());
+    }
     Context::new(Some(Json::Obj(map)), rules, repo.expansions.clone())
 }
 
