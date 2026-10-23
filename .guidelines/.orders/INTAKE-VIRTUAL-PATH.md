@@ -576,3 +576,50 @@ Rate = breaks / slugs ever created. Decides **the key of the first ORD**:
 `< 5 %` → the index keys on the slug, and `NodeID` and the recovery index
 (layers 2 and 7) follow in later ORDs; `≥ 5 %` → the slug is not identity
 enough, and the first ORD carries the `NodeID` with recovery by content.
+
+## 19. The October re-measurement — measured
+
+`node scripts/measure-coupling.js --rev 32abcc1 --since 49c392a`, the stamp
+commit as the last of the universe. 202 commits; the window after `49c392a` is
+101. Measured 2026-10-23.
+
+| | whole history | after `49c392a` | rule (§18) | verdict |
+|---|---|---|---|---|
+| **M1** staleness | **19.5 %** — 128 code commits: 70 co-updated, 17 lagged, 41 unpaired | 5.0 % — 56: 38, 2, 16 | between → M2 | M2 is local → **`fix`** |
+| **M2** locality | **median 6.5 %**, q1 2.3 %, q3 14.3 %; 85 % under a fifth, 5 % over half; 284 edits | median 6.6 %; 88 %, 2 %; 203 edits | `< 20 %` → node | **per node** |
+| **M3** coupling | **8 pairs**, 192 commits, 10 mass left out | 0 pairs | each pair a `sources:` line | **8 proposed lines** |
+| **M4** anchor breaks | **2.3 %** — 827 slugs created: 0 moved, 19 renamed, 219 deleted | 3.3 % — 246: 0, 8, 6 | `< 5 %` → slug | **the slug keys the first ORD** |
+
+**The seed of `sources:`**, each pair a proposed line in the document's
+frontmatter:
+
+| document | sources | support | lift | today |
+|---|---|---|---|---|
+| `.guidelines/XML_REFERENCE.md` | `scripts/glyph-parser.js` | 6 | 2.29 | gated — the suite's `D` bucket |
+| `README.md` | `scripts/glyph-cli.js` | 3 | 8.73 | **ungated**, as in §7: the README names the CLI's modes and nothing checks them |
+| `.guidelines/.orders/EMS-001/RETURN.md` | `rust/testkit/oracle.rs` (6), `rust/crates/glyph-util/src/lib.rs` (4), `glyph-util/src/tree.rs`, `glyph-parse/src/lib.rs`, `glyph-protocol/src/lib.rs`, `scripts/glyph-protocol.js` (3 each) | 3–6 | 3.10 | ungated |
+
+**What the numbers say beyond the verdicts.**
+
+- **Staleness fell by three quarters in the second half** — 23.4 % (§7) to
+  5.0 % — while the gates grew: `build-skill --check` on the version, the
+  link graph, the seam and crate graphs. The whole-history verdict stands,
+  and it is cheap: a `fix` that fires one commit in twenty.
+- **Six of the eight pairs end in `RETURN.md`**, the journal of the sessions
+  that ran the EMS-001 queue. It co-changes with the code it reports on the
+  way `CHANGELOG.md` does, and `CHANGELOG.md` is excluded as a log. Whether a
+  return is a log or a document that rots is the Regent's to say; by the
+  declared rule its six lines are proposed.
+- **The 19 renamed anchors are this repository's own rule at work**: titles
+  stamped with the version (`… v3.5.8.06` → `… v3.6.9.07`), numbering that
+  shifts (`§3.4` → `§3.5`), and headings that *declare the state*
+  (`os seis eixos` → `os sete eixos`). The slug breaks because the prose is
+  kept true. A heading carrying a version is an anchor that breaks on every
+  release.
+- **A file rename breaks `file#slug` too**, and M4 does not count it: identity
+  follows renames by declaration. Counted, 103 more slugs break — **14.8 %**
+  over the whole history, and still **3.3 %** in the window, where no doc was
+  renamed. The 103 are the reorganisation of 2026-09-04 to 09-06. The verdict
+  stands on the declared definition; the condition that would flip it is a
+  second reorganisation, and the index has to name a file that moved, not
+  return nothing.
