@@ -124,11 +124,13 @@ fs.readdirSync(path.join(HERE, "core")).filter(f => f.endsWith(".js")).sort().fo
        fs.readFileSync(path.join(HERE, "core", f), "utf8").replace(/\r\n/g, "\n")));
 
 /* normative, at source level: the generic shape of the output and everything
-   needed to explain it, including §11, the failure treatment */
+   needed to explain it, including §11, the failure treatment. The frontmatter
+   stays behind: its `sources` point into the repository, and the skill
+   travels without it. */
 ["XML_REFERENCE.md", "GLOSSARY.md"].forEach(f =>
   emit(path.join("references", f),
        banner(".guidelines/" + f, "md") +
-       fs.readFileSync(path.join(GUIDE, f), "utf8").replace(/\r\n/g, "\n")));
+       fs.readFileSync(path.join(GUIDE, f), "utf8").replace(/\r\n/g, "\n").replace(/^---\n[\s\S]*?\n---\n/, "")));
 
 /* perishable, one level below: bound to one input and one engine version, and
    saying so. Generated from the conformance vectors so the two cannot drift —
