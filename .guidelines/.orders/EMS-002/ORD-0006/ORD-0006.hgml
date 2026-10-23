@@ -1,0 +1,94 @@
+[block
+  'ORD-0006-rules-cache'
+  [ctx
+    'the spec of EMS-002'
+    '.guidelines/.orders/EMS-002/EMS-002.pgml'
+  [/ctx]
+  [tgt
+    'the compiled rules leave the rules store, question 3 of the EMS-001 return, answered a'
+  [/tgt]
+  [ctx
+    'rules.js and burn.js hang the compiled rules on the store object as __compiled, enumerable, so the envelope stores.rules is the digest of the store and the engine cache together, and the Rust reproduces it with glyph_rules::with_cache'
+  [/ctx]
+  [cnst
+    'the JS first: the compiled rules are kept beside the store, keyed by it, and the store object is never written'
+  [/cnst]
+  [cnst
+    'the snapshot moves by decision, the answer a of question 3, and the decision is written; an xml or hgml hash that moves is a regression, not the decision'
+  [/cnst]
+  [cmp
+    'the JS first'
+    'the JS keeps its compiled rules off the store object, and the envelope hashes the rules store alone'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+  [cmp
+    'the snapshot'
+    'the ast hashes move by decision, and no xml or hgml hash moves'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+  [cmp
+    'the Rust follows'
+    'glyph_rules::with_cache leaves, the Rust answers the moved oracle byte for byte, and the pin that held the cache in the digest is inverted, not deleted'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+[/block]

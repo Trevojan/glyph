@@ -73,6 +73,13 @@
     [val'the survivor','lev counting characters instead of UTF-16 units, the mutant no case of the oracle killed, dies']
   ]
 
+  [section'ORD-0006-rules-cache'
+    [tgt'the compiled rules leave the rules store, question 3 of the EMS-001 return, answered a']
+    [val'the JS first','the JS keeps its compiled rules off the store object, and the envelope hashes the rules store alone']
+    [val'the snapshot','the ast hashes move by decision, and no xml or hgml hash moves']
+    [val'the Rust follows','glyph_rules::with_cache leaves, the Rust answers the moved oracle byte for byte, and the pin that held the cache in the digest is inverted']
+  ]
+
   [section'limits'
     [nev'a selector that answers an empty slice in silence']
     [dont'open an ORD before the ORD it depends on closes']

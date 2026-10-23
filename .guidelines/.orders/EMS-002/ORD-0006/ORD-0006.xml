@@ -1,0 +1,39 @@
+<glyph-package engine="3.6.9.07">
+  <schema/>
+  <block once="true">
+    <block binds="ORD-0006-rules-cache">
+      <user-input>ORD-0006-rules-cache</user-input>
+      <context>
+        <user-input>the spec of EMS-002</user-input>
+        <user-input>.guidelines/.orders/EMS-002/EMS-002.pgml</user-input>
+      </context>
+      <target>
+        <user-input>the compiled rules leave the rules store, question 3 of the EMS-001 return, answered a</user-input>
+      </target>
+      <context>
+        <user-input>rules.js and burn.js hang the compiled rules on the store object as __compiled, enumerable, so the envelope stores.rules is the digest of the store and the engine cache together, and the Rust reproduces it with glyph_rules::with_cache</user-input>
+      </context>
+      <constraint>
+        <user-input>the JS first: the compiled rules are kept beside the store, keyed by it, and the store object is never written</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the snapshot moves by decision, the answer a of question 3, and the decision is written; an xml or hgml hash that moves is a regression, not the decision</user-input>
+      </constraint>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the JS first</user-input>
+        <user-input>the JS keeps its compiled rules off the store object, and the envelope hashes the rules store alone</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the snapshot</user-input>
+        <user-input>the ast hashes move by decision, and no xml or hgml hash moves</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the Rust follows</user-input>
+        <user-input>glyph_rules::with_cache leaves, the Rust answers the moved oracle byte for byte, and the pin that held the cache in the digest is inverted, not deleted</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>
