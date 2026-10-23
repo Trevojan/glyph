@@ -13,6 +13,14 @@
 
 ---
 
+## 2026-10-23
+
+| decisão | razão |
+|---|---|
+| **Os caminhos virtuais abrem a EMS-002, como a `ORD-0001` dela** | respondido no questionário de 2026-10-23: *"EMS-002, ORD-0001"*. A série seguinte já carregava o alvo 100% Rust; a spec é [`EMS-002.pgml`](../.orders/EMS-002/EMS-002.pgml), e a EMS-001 segue esperando no portão da `ORD-0013` |
+| **O resolvedor e o índice se constroem em Rust, num crate novo, `glyph-vpath`** | respondido no mesmo questionário: *"Rust, crate nova"* — uma capacidade sem contraparte JS nasce só no Rust, e nada fica para portar depois; o portão no `npm run check` chama o binário |
+| **O `RETURN.md` de uma série é log, e fica fora do `sources:`, como o `CHANGELOG.md`** | respondido no mesmo questionário: *"Log: fica fora"*. Seis dos oito pares do M3 terminavam nele ([`INTAKE-VIRTUAL-PATH.md`](../.orders/INTAKE-VIRTUAL-PATH.md) §19); o `sources:` nasce com os outros dois |
+
 ## 2026-09-27
 
 | decisão | razão |

@@ -1,0 +1,56 @@
+[block'glyph-rust-whole'
+  [ctx'Glyph 100% in Rust, the engine, the core of the app and the skill, with the JS leaving piece by piece; this is the spec of EMS-002, the second series of orders Glyph emits, and it commissions the series and implements nothing','the repository root','engine 3.6.9.07, EMS-001 closed from ORD-0001 to ORD-0012 and waiting at the gate of ORD-0013']
+  [skl'glyph-markup'[ins'hear this spec, ground before building, and stop at the gate of the Regent']]
+
+  [section'species'
+    [dfn'virtual path','file, delimiter and selector: the extension decides how the selector reads, and the path resolves to one exact slice with offsets']
+    [dfn'index','.guidelines/.shortcuts/.virtual/index.json, the durable state the engine writes and a resolver without judgement reads']
+    [dfn'sources','the list a document declares in its frontmatter: the slices it is written from, each a virtual path']
+    [nt'the ORD count resets in each series: EMS-002 counts from ORD-0001']
+    [nt'the vocabulary of the project lives in .guidelines/GLOSSARY.md section 8']
+  ]
+
+  [section'direction'
+    [intn'Glyph 100% in Rust: the JS leaves piece by piece, each piece when the Rust passes the oracle on it']
+    [cnst'until a piece leaves, the JS is the reference, and it changes only where the oracle must change']
+    [cnst'a capability with no JS counterpart is built in Rust only']
+    [cnst'every crate passes the graded filter of .constraints: note enters vendored, ask enters with an ADR the Regent signs, fix is refused']
+    [nt'EMS-001 closes as written, at ORD-0014, and this series does not reopen it']
+  ]
+
+  [section'queue'
+    [cnst'an ORD enters the queue when the Regent calls it, and its number is its place in the queue']
+    [nt'the candidates are the items decided and not built in .guidelines/.plan/README.md section 5']
+    [nt'the EMS.json of this series enters with the ORD that builds the EMS configuration; until then its rules live in this spec']
+  ]
+
+  [section'exceptions'
+    [exc]
+  ]
+
+  [section'ORD-0001-virtual-paths'
+    [tgt'glyph-vpath: the virtual paths of .plan section 0, layers 1, 4, 5 and 6, keyed by the slug']
+    [nt'measured before the code, INTAKE-VIRTUAL-PATH sections 18 and 19: a stale source is fix, the fingerprint is per node, sources starts from the seeds of M3, and the slug keys this ORD']
+    [nt'the NodeID, order maintenance and the recovery index, layers 2, 3 and 7, are ORDs of their own']
+    [val'the trees','the extension decides the selector: .md by heading slug, .json by JSON Pointer, .xml by element path, code and text by @block and @endblock; an empty selector is the whole file; zero nodes or many is an error, never an empty slice']
+    [val'the index','every file of .guidelines, the attic and the index aside, with README.md and CLAUDE.md, in the index; each node with its byte range, its line range and its fingerprint, and every entry resolves to content that is not empty']
+    [val'the resolver','many paths read each file once, the answer carries the offsets, the slice arrives under its own virtual path, and a fingerprint that no longer matches is refused']
+    [val'sources','a document declares its sources in its frontmatter, the index answers which documents a file feeds by inversion, and the seeds of INTAKE-VIRTUAL-PATH section 19 enter']
+    [val'the gate','npm run check refuses an index that drifted, a file left out, a source that does not resolve and a stale source, each seen failing before it counts']
+  ]
+
+  [section'limits'
+    [nev'a selector that answers an empty slice in silence']
+    [dont'open an ORD before the ORD it depends on closes']
+    [cnst'prose declares the state, never the correction']
+    [cnst'no worktrees']
+  ]
+
+  [section'conclude'
+    [ins'update the where-am-I table of .shortcuts at each ORD that closes']
+    [--track
+      [ph-item'each ORD of the series, the commit that closed it and the digest it matched']
+      [ph-scope'EMS-002']
+    ]
+  ]
+];
