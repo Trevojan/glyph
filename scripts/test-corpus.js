@@ -3415,6 +3415,17 @@ async function runRelay() {
   } finally {
     server.kill();
   }
+
+  /* the page behind engine=relay (EMS-002 ORD-0010, question 10 of the
+     EMS-001 return, answered c): one request a call, but classify, which the
+     page answers from the tables it already loads — a keystroke on L-01 made
+     8 005 requests, one classify a command token */
+  const TRANSPORT = await import("./glyph-transport.js");
+  const swapped = Object.keys(TRANSPORT.relayCore()).sort();
+  const asked = PROTOCOL.CALLS.filter(c => c !== "classify").map(c => c === "toXML" ? "buildXml" : c === "toAST" ? "serializeAST" : c).sort();
+  ok("RL-16", "the transport swaps every call but classify",
+     JSON.stringify(swapped) === JSON.stringify(asked) ? null
+       : "swaps " + swapped.join(",") + " — the page answers classify, and the engine the other eleven");
   return D.length;
 }
 const rRL = await runRelay();
@@ -3455,7 +3466,7 @@ console.log(" bundle ORD   " + String(rZP).padStart(4) + "/16");
 console.log(" global store " + rGS + "/3");
 console.log(" context      " + rCX + "/3");
 console.log(" coverage     " + String(rOC).padStart(4) + "/" + ORACLE_COVERAGE.length);
-console.log(" engine relay " + String(rRL).padStart(4) + "/15");
+console.log(" engine relay " + String(rRL).padStart(4) + "/16");
 console.log("=================================================");
 
 if (EXPORT_ORACLE) {
