@@ -1113,8 +1113,8 @@
     },
     ".guidelines/.orders/INTAKE-VIRTUAL-PATH.md": {
       "nodes": [
-        ["", 0, 36781, 1, 625, "bf32b5d0e7cd4200"],
-        ["preliminary-intake--the-computed-context-mini-repo-and-virtual-path", 0, 36781, 1, 625, "bf32b5d0e7cd4200"],
+        ["", 0, 38602, 1, 657, "1c2ccae829626c00"],
+        ["preliminary-intake--the-computed-context-mini-repo-and-virtual-path", 0, 38602, 1, 657, "1c2ccae829626c00"],
         ["1-the-goal-as-the-regent-states-it", 861, 1330, 17, 9, "21adcdb852ab8900"],
         ["2-the-cost-model--corrected-by-cláudio-and-adopted", 1330, 2307, 26, 16, "585ebd60d6d69c00"],
         ["3-glyph-reads-and-tracks-guidelines--already-true-three-times", 2307, 3204, 42, 12, "feac6a40458e7e00"],
@@ -1146,7 +1146,8 @@
         ["16-mcp-resources--the-same-primitive-at-a-different-binding-time", 26887, 30304, 472, 53, "627d16e4c2aa1900"],
         ["17-housekeeping-outside-the-study", 30304, 30574, 525, 6, "84b47532d3c49400"],
         ["18-the-october-re-measurement-before-the-code--thresholds", 30574, 33606, 531, 49, "5006a2c836076c00"],
-        ["19-the-october-re-measurement--measured", 33606, 36781, 580, 46, "84d154d08d068d00"]
+        ["19-the-october-re-measurement--measured", 33606, 36782, 580, 47, "ef8893301cfb4400"],
+        ["20-the-nodeid--what-structure-alone-recovers-threshold", 36782, 38602, 627, 31, "d33a27582ba25560"]
       ]
     },
     ".guidelines/.orders/ORD-2026-08-30-01.dispatch.json": {
