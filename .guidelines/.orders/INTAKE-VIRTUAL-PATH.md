@@ -682,3 +682,35 @@ new section that took their place, 3 of the 6 in the window: 11 right of 28.
 A false identity is worse than a break, because a break is refused aloud and a
 false identity answers an old path with other text. The rule stays out of
 the NodeID ORD, and its count stays in the script, apart from the rate.
+
+## 22. The recovery index — what the path alone recovers, threshold
+
+The Regent called layer 7 on 2026-10-23. It answers a path that no node and no
+alias holds any more, and §21 says which case it is for: a heading renamed
+while its body changes. Two ways to recover it, at two costs:
+
+- **by the path** — a q-gram search of the asked slug against the slugs that
+  live now. Nothing is stored; the search runs when a path misses.
+- **by the content** — a line-set similarity between the section that went and
+  the sections that came. The index keeps fingerprints, not text, so the old
+  text has to come from somewhere: the previous version of the file, read from
+  git at build time and checked against the fingerprint the index holds for it.
+
+Declared here and committed before `M6` exists in `scripts/measure-coupling.js`.
+
+**Universe, exclusions and breaks** as §20: path-keyed, per commit. The cases
+are the removed slugs **the structure did not recover** (rules 1 to 3 of §20) —
+what reaches layer 7.
+
+**M6 — recovery by the path.** For each case, the **truth** is the added slug of
+the commit whose section body has the largest line-set Jaccard with the removed
+one, when that is `≥ 0.5` and the largest is unique; otherwise the slug was
+deleted and the truth is *none*. The **prediction** is the added slug, in the
+same file or the one it paired with by rule 3, whose character-trigram Jaccard
+with the removed slug is largest, when that is `≥ 0.5` and the largest is
+unique; otherwise *none*. Precision = right predictions / predictions; recall =
+right predictions / cases whose truth is not *none*. Over the whole history.
+
+Decides **how layer 7 recovers**: precision `≥ 90 %` **and** recall `≥ 80 %` →
+by the path, at query time, nothing stored; otherwise → by the content, at build
+time, against the previous version of the file from git.
