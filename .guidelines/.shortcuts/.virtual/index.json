@@ -802,7 +802,7 @@
     },
     ".guidelines/.orders/EMS-002/EMS-002.pgml": {
       "nodes": [
-        ["", 0, 4350, 1, 57, "948c6010fdf26800"]
+        ["", 0, 5236, 1, 66, "e21e3dc8eb5faa00"]
       ]
     },
     ".guidelines/.orders/EMS-002/ORD-0001/ORD-0001.hgml": {
@@ -862,12 +862,69 @@
         ["/glyph-package/block", 48, 3011, 3, 46, "506437a8032aa200"]
       ]
     },
+    ".guidelines/.orders/EMS-002/ORD-0002/ORD-0002.hgml": {
+      "nodes": [
+        ["", 0, 3516, 1, 156, "46eb8aacbd718c00"]
+      ]
+    },
+    ".guidelines/.orders/EMS-002/ORD-0002/ORD-0002.json": {
+      "nodes": [
+        ["", 0, 20093, 1, 652, "f3d8e2d0f4bf4000"],
+        ["/type", 12, 22, 2, 1, "6cfcf51e0b22b400"],
+        ["/schema", 36, 37, 3, 1, "370cabd49014b848"],
+        ["/version", 52, 62, 4, 1, "329156f83f19d000"],
+        ["/source", 76, 199, 5, 7, "17d58a90680cf740"],
+        ["/source/length", 92, 96, 6, 1, "995ef404271ae200"],
+        ["/source/checksum", 114, 132, 7, 1, "4c8fc1be02d30a00"],
+        ["/source/encoding", 150, 157, 8, 1, "51d8d6a8889ada00"],
+        ["/source/newline", 174, 178, 9, 1, "cec09c50a37ddc00"],
+        ["/source/uri", 191, 195, 10, 1, "e4ee48ec82cd2c00"],
+        ["/stores", 213, 325, 12, 5, "5cc3db2874638080"],
+        ["/stores/templates", 232, 250, 13, 1, "84d05340a5f9c600"],
+        ["/stores/rules", 265, 283, 14, 1, "44e11ee057e03600"],
+        ["/stores/expansions", 303, 321, 15, 1, "64207926a2040000"],
+        ["/projection", 343, 349, 17, 1, "8e0b2f6630c6ec00"],
+        ["/segments", 365, 20070, 18, 633, "c7b2bb480eacb000"],
+        ["/segments/0", 371, 20066, 19, 631, "96755c88640a4800"],
+        ["/diagnostics", 20089, 20091, 651, 1, "721635809ba5e8c0"]
+      ]
+    },
+    ".guidelines/.orders/EMS-002/ORD-0002/ORD-0002.manifest.json": {
+      "nodes": [
+        ["", 0, 301, 1, 16, "a374386e1b5cb100"],
+        ["/order", 13, 23, 2, 1, "b829f1d09b8b4c00"],
+        ["/engine", 37, 47, 3, 1, "329156f83f19d000"],
+        ["/emitted", 62, 88, 4, 1, "9e8614747495c600"],
+        ["/files", 101, 188, 5, 6, "ff110b2803560b00"],
+        ["/files/0", 107, 122, 6, 1, "5d41fab8ff516000"],
+        ["/files/1", 128, 142, 7, 1, "47577b08d9a76e00"],
+        ["/files/2", 148, 163, 8, 1, "ca5332a213673c00"],
+        ["/files/3", 169, 184, 9, 1, "11eabf40c2fdbc00"],
+        ["/source", 202, 245, 11, 1, "b92da3f0ec391c00"],
+        ["/diagnostics", 264, 298, 12, 4, "83b9246074dcc400"],
+        ["/diagnostics/fix", 277, 278, 13, 1, "350ca8b09bec4d20"],
+        ["/diagnostics/total", 293, 294, 14, 1, "350ca8b09bec4d20"]
+      ]
+    },
+    ".guidelines/.orders/EMS-002/ORD-0002/ORD-0002.pgml": {
+      "nodes": [
+        ["", 0, 1989, 1, 16, "17294880fa0e0778"]
+      ]
+    },
+    ".guidelines/.orders/EMS-002/ORD-0002/ORD-0002.xml": {
+      "nodes": [
+        ["", 0, 3672, 1, 61, "e70a391ada8bfc00"],
+        ["/glyph-package", 0, 3672, 1, 61, "e70a391ada8bfc00"],
+        ["/glyph-package/schema", 36, 45, 2, 1, "9047f1df86dca200"],
+        ["/glyph-package/block", 48, 3655, 3, 58, "df86fe00dfc60200"]
+      ]
+    },
     ".guidelines/.orders/EMS-002/README.md": {
       "nodes": [
-        ["", 0, 972, 1, 15, "0906c3d8151abe00"],
-        ["ems-002--o-glyph-100-em-rust", 0, 972, 1, 15, "0906c3d8151abe00"],
-        ["a-ordem-aberta", 396, 415, 9, 2, "5941cf30e1126c00"],
-        ["ordens-fechadas", 415, 972, 11, 5, "04a50d32553d3000"]
+        ["", 0, 1111, 1, 17, "de13d9483d3cf800"],
+        ["ems-002--o-glyph-100-em-rust", 0, 1111, 1, 17, "de13d9483d3cf800"],
+        ["a-ordem-aberta", 396, 554, 9, 4, "2e86f8c8127f5c00"],
+        ["ordens-fechadas", 554, 1111, 13, 5, "04a50d32553d3000"]
       ]
     },
     ".guidelines/.orders/HANDOFF-2026-08-30.ast.json": {
@@ -1543,14 +1600,14 @@
     },
     ".guidelines/.shortcuts/README.md": {
       "nodes": [
-        ["", 0, 6877, 1, 83, "8ea8b134ab88ce00"],
-        ["atalhos--comece-por-aqui", 0, 6877, 1, 83, "8ea8b134ab88ce00"],
-        ["onde-estou", 442, 2179, 11, 11, "2cbc83d016087780"],
-        ["os-sete-eixos", 2179, 2865, 22, 12, "6357d5140827f600"],
-        ["o-mapa-do-motor-em-cinco-linhas", 2865, 3792, 34, 12, "537763c2149d2400"],
-        ["os-documentos-que-mais-se-consulta", 3792, 5540, 46, 18, "6aa3e93076afb200"],
-        ["os-outros-documentos", 5540, 6538, 64, 14, "bcf7ae04a2ded000"],
-        ["vocabulário-do-projeto", 6538, 6877, 78, 6, "d5b16db424152200"]
+        ["", 0, 6803, 1, 83, "6c3b9c969ba3aa00"],
+        ["atalhos--comece-por-aqui", 0, 6803, 1, 83, "6c3b9c969ba3aa00"],
+        ["onde-estou", 442, 2105, 11, 11, "2471f2a8afa0dd00"],
+        ["os-sete-eixos", 2105, 2791, 22, 12, "6357d5140827f600"],
+        ["o-mapa-do-motor-em-cinco-linhas", 2791, 3718, 34, 12, "537763c2149d2400"],
+        ["os-documentos-que-mais-se-consulta", 3718, 5466, 46, 18, "6aa3e93076afb200"],
+        ["os-outros-documentos", 5466, 6464, 64, 14, "bcf7ae04a2ded000"],
+        ["vocabulário-do-projeto", 6464, 6803, 78, 6, "d5b16db424152200"]
       ]
     },
     ".guidelines/.sources/COMPILER_LESSONS.md": {

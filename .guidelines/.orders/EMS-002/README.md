@@ -8,6 +8,8 @@ pacote que o `--bundle` escreve, e a contagem é desta série.
 
 ## A Ordem aberta
 
+- [`EMS-002/ORD-0002`](ORD-0002/ORD-0002.xml) — o `NodeID` dos caminhos virtuais, a identidade só pela estrutura; aberta em 2026-10-23
+
 ## Ordens fechadas
 
 | ORD | o que entregou | commit | digest |

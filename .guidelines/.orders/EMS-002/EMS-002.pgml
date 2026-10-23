@@ -39,6 +39,15 @@
     [val'the gate','npm run check refuses an index that drifted, a file left out, a source that does not resolve and a stale source, each seen failing before it counts']
   ]
 
+  [section'ORD-0002-node-id'
+    [onlyif'ORD-0001 closed']
+    [tgt'glyph-vpath: the NodeID, layer 2 of .plan section 0, identity carried by structure alone']
+    [nt'measured before the code, INTAKE-VIRTUAL-PATH sections 20 and 21: structure recovers 113 of 124 breaks whose content lived on; a heading renamed over a changed body is layer 7']
+    [val'the identity','every node carries a NodeID that passes from one build to the next by the same path, the same text, the same body or the same file renamed, and a NodeID resolves to its node in constant time']
+    [val'the aliases','the old path of a node that moved resolves to the node it became, with a warning naming the new path, and never blocks']
+    [val'the gate','npm run check refuses a source declared by an old path and an index whose identities, parents or aliases do not hold, each seen failing before it counts']
+  ]
+
   [section'limits'
     [nev'a selector that answers an empty slice in silence']
     [dont'open an ORD before the ORD it depends on closes']

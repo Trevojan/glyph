@@ -1,0 +1,61 @@
+<glyph-package engine="3.6.9.07">
+  <schema/>
+  <block once="true">
+    <block binds="ORD-0002-node-id">
+      <user-input>ORD-0002-node-id</user-input>
+      <context>
+        <user-input>the spec of EMS-002</user-input>
+        <user-input>.guidelines/.orders/EMS-002/EMS-002.pgml</user-input>
+      </context>
+      <only-if>
+        <user-input>ORD-0001 closed</user-input>
+      </only-if>
+      <target>
+        <user-input>glyph-vpath: the NodeID, layer 2 of .plan section 0, identity carried by structure alone</user-input>
+      </target>
+      <constraint>
+        <user-input>a NodeID is n and a number, given once and never given again; the index keeps the next number</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the identity passes from one build to the next by five rules, in order: the same path and the same text; the same text, found once; the same path; the same body under a new heading, found once; and the same file renamed, when more than half of its nodes went to one new file</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the index keeps the parent of each node; the previous and the next sibling and the depth follow from the order, computed once on load</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the old path of a node that moved stays as an alias of its NodeID, and a live path wins over an alias</user-input>
+      </constraint>
+      <constraint>
+        <user-input>a source is declared by its path; the NodeID is how the index keeps it, not how a document writes it</user-input>
+      </constraint>
+      <never force="editorial">
+        <user-input>the same place as a rule of identity: it carries 17 of 219 deletions onto a new section, INTAKE-VIRTUAL-PATH section 21</user-input>
+      </never>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the identity</user-input>
+        <user-input>every node carries a NodeID; a section moved, a key or a block renamed, a heading renamed over the same body and a file renamed keep theirs; an edit in place keeps it; a deleted node takes its NodeID with it; a NodeID resolves to its node in constant time</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the aliases</user-input>
+        <user-input>the old path of a node that moved resolves to the node it became, with a warning naming the new path, and never blocks</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the structure</user-input>
+        <user-input>up answers the chain of parents of a node, and node answers its record: path, parent, previous, next and depth</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the gate</user-input>
+        <user-input>npm run check refuses a source declared by an old path, naming the path to write, and an index whose NodeIDs repeat or whose parents and aliases point at nothing, each seen failing before it counts</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the migration</user-input>
+        <user-input>the first build gives NodeIDs to the index of ORD-0001 and keeps every stamp</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>
