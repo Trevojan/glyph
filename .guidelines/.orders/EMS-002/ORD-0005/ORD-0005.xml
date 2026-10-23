@@ -1,0 +1,39 @@
+<glyph-package engine="3.6.9.07">
+  <schema/>
+  <block once="true">
+    <block binds="ORD-0005-astral">
+      <user-input>ORD-0005-astral</user-input>
+      <context>
+        <user-input>the spec of EMS-002</user-input>
+        <user-input>.guidelines/.orders/EMS-002/EMS-002.pgml</user-input>
+      </context>
+      <target>
+        <user-input>a declared source with characters outside the BMP, question 2 of the EMS-001 return, answered a</user-input>
+      </target>
+      <context>
+        <user-input>the oracle holds no character outside the BMP: the lexer probes hold its spans to UTF-16 units, and lev and every later projection are held only by the corpus, so lev counting characters lives through all of it</user-input>
+      </context>
+      <constraint>
+        <user-input>the snapshot moves by decision, the answer a of question 2, and the decision is written; an earlier hash that moves is a regression, not the decision</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the JS is the reference and does not change; where the Rust answers otherwise, the Rust is what is fixed</user-input>
+      </constraint>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the source</user-input>
+        <user-input>a declared source whose literals and prose carry characters outside the BMP enters the corpus, and the snapshot moves by decision, no earlier hash moved</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the oracle</user-input>
+        <user-input>the Rust answers the new case byte for byte, tokens, diagnostics, XML, envelope and burn, and every module the export writes</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the survivor</user-input>
+        <user-input>lev counting characters instead of UTF-16 units, the mutant no case of the oracle killed, dies against the new case</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>

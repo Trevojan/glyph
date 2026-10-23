@@ -1,0 +1,10 @@
+[block'ORD-0005-astral'
+  [ctx'the spec of EMS-002','.guidelines/.orders/EMS-002/EMS-002.pgml']
+  [tgt'a declared source with characters outside the BMP, question 2 of the EMS-001 return, answered a']
+  [ctx'the oracle holds no character outside the BMP: the lexer probes hold its spans to UTF-16 units, and lev and every later projection are held only by the corpus, so lev counting characters lives through all of it']
+  [cnst'the snapshot moves by decision, the answer a of question 2, and the decision is written; an earlier hash that moves is a regression, not the decision']
+  [cnst'the JS is the reference and does not change; where the Rust answers otherwise, the Rust is what is fixed']
+  [val'the source','a declared source whose literals and prose carry characters outside the BMP enters the corpus, and the snapshot moves by decision, no earlier hash moved']
+  [val'the oracle','the Rust answers the new case byte for byte, tokens, diagnostics, XML, envelope and burn, and every module the export writes']
+  [val'the survivor','lev counting characters instead of UTF-16 units, the mutant no case of the oracle killed, dies against the new case']
+];
