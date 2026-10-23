@@ -623,3 +623,35 @@ frontmatter:
   stands on the declared definition; the condition that would flip it is a
   second reorganisation, and the index has to name a file that moved, not
   return nothing.
+
+## 20. The NodeID — what structure alone recovers, threshold
+
+The Regent called layer 2 on 2026-10-23. A `NodeID` is only as good as the
+rule that carries it from one build to the next, and the rule decides the size
+of the ORD: **structural** matching needs nothing but the fingerprints the
+index already keeps; **similarity** matching needs a signature of each node's
+content stored beside it, and is what layer 7, the recovery index, is for.
+Declared here and committed before `M5` exists in `scripts/measure-coupling.js`.
+
+**Universe and exclusions** as §18. **Breaks** are counted by path: in each
+commit, each changed doc's slugs before and after, keyed `file#slug`, so a
+file rename removes every slug of the old name. A removed slug whose content
+lived on — the same slug in another doc of the commit, or its section body
+under a new slug with line-set Jaccard `≥ 0.5`, the M4 definitions — is a
+**content-lived break**; the rest are deletions, out of the count.
+
+**M5 — structural recovery.** A content-lived break is recovered when one of
+the three structural rules finds its successor among the commit's added slugs:
+
+1. **the same text**: its section, heading included, appears unchanged at
+   exactly one added slug;
+2. **the same body**: its section without the heading line, not empty,
+   appears unchanged at exactly one added slug;
+3. **the same file renamed**: more than half of the old file's slugs reappear
+   in one new file with the same slug or the same text, and the slug is there.
+
+Rate = recovered / content-lived breaks, over the whole history.
+
+Decides **the scope of the NodeID ORD**: `≥ 80 %` → the ORD carries identity
+by structure alone, and similarity stays in layer 7; `< 80 %` → the ORD also
+carries similarity matching, with a content signature per node in the index.
