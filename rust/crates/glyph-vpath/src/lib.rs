@@ -11,12 +11,13 @@
 //!
 //! An empty selector is the whole file. A selector that names zero nodes or
 //! many is an error, never an empty slice. The index (`index`) keeps every
-//! node's byte range, line range and fingerprint; the slug keys it, as the
-//! re-measurement of INTAKE-VIRTUAL-PATH §19 decided, and the `NodeID`, order
+//! node's byte range, line range and fingerprint, and its NodeID (`identity`,
+//! EMS-002 ORD-0002), the identity a node keeps when its path changes; order
 //! maintenance and the recovery index are ORDs of their own.
 
 pub mod block;
 pub mod frontmatter;
+pub mod identity;
 pub mod index;
 pub mod json;
 pub mod markdown;

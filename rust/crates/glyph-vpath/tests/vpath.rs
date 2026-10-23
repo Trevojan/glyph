@@ -214,3 +214,187 @@ fn this_repository_passes_its_own_gate() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../..");
     assert_eq!(index::check(&root), Vec::<String>::new());
 }
+
+// ---------- EMS-002 ORD-0002: the NodeID ----------
+
+impl Repo {
+    fn index(&self) -> Index {
+        index::committed(&self.0).unwrap().unwrap().1
+    }
+    fn id(&self, vpath: &str) -> String {
+        let idx = self.index();
+        let (file, selector) = glyph_vpath::split(vpath);
+        idx.entry(file).and_then(|e| e.node(selector)).map(|n| n.id.clone()).unwrap_or_else(|| panic!("{vpath} is not in the index"))
+    }
+    fn alias(&self, vpath: &str) -> Option<String> {
+        self.index().alias(vpath).map(str::to_string)
+    }
+}
+
+const DOC: &str = "# Doc\n## Alpha\nalpha one\nalpha two\n## Beta\nbeta one\nbeta two\n## Gamma\ngamma one\n";
+
+#[test]
+fn a_node_keeps_its_id_through_an_edit_a_move_and_a_rename_over_the_same_body() {
+    let r = Repo::new("ids");
+    r.put(".guidelines/doc.md", DOC);
+    r.put(".guidelines/other.md", "# Other\n");
+    r.build();
+    let (alpha, beta, gamma) = (r.id(".guidelines/doc.md#alpha"), r.id(".guidelines/doc.md#beta"), r.id(".guidelines/doc.md#gamma"));
+
+    // 3. an edit in place
+    r.put(".guidelines/doc.md", &DOC.replace("alpha two", "alpha two, edited"));
+    r.build();
+    assert_eq!(r.id(".guidelines/doc.md#alpha"), alpha, "an edit in place keeps the NodeID");
+
+    // 2. a section moved to another file, unchanged
+    r.put(".guidelines/doc.md", "# Doc\n## Alpha\nalpha one\nalpha two, edited\n## Gamma\ngamma one\n");
+    r.put(".guidelines/other.md", "# Other\n## Beta\nbeta one\nbeta two\n");
+    r.build();
+    assert_eq!(r.id(".guidelines/other.md#beta"), beta, "a section moved keeps its NodeID");
+    assert_eq!(r.alias(".guidelines/doc.md#beta"), Some(beta.clone()), "and its old path is an alias");
+
+    // 4. a heading renamed over the same body
+    r.put(".guidelines/doc.md", "# Doc\n## Alpha\nalpha one\nalpha two, edited\n## Gamma, renamed\ngamma one\n");
+    r.build();
+    assert_eq!(r.id(".guidelines/doc.md#gamma-renamed"), gamma, "a heading renamed over the same body keeps its NodeID");
+    assert_eq!(r.alias(".guidelines/doc.md#gamma"), Some(gamma.clone()));
+
+    // layer 7, not this one: a heading renamed while its body changes is a new node
+    r.put(".guidelines/doc.md", "# Doc\n## Alpha, renamed\nalpha one\nalpha three\n## Gamma, renamed\ngamma one\n");
+    r.build();
+    let fresh = r.id(".guidelines/doc.md#alpha-renamed");
+    assert_ne!(fresh, alpha, "similarity is the recovery index's, by INTAKE-VIRTUAL-PATH §21");
+    let numbers = |id: &str| id[1..].parse::<u64>().unwrap();
+    assert!(numbers(&fresh) >= r.index().next - 1 && numbers(&fresh) > numbers(&gamma), "a new node takes a new number");
+    assert_eq!(r.alias(".guidelines/doc.md#alpha"), None, "a node that is gone takes its NodeID and its paths with it");
+    assert_eq!(index::validate(&r.index()), Vec::<String>::new());
+}
+
+#[test]
+fn content_beats_position_in_json_and_a_renamed_key_or_block_keeps_its_id() {
+    let r = Repo::new("positions");
+    r.put(".guidelines/list.json", "{\"items\": [\"apple\", \"pear\"], \"old\": {\"x\": 1}}\n");
+    r.put(".guidelines/notes.txt", "# @block:first\nsome text\n# @endblock:first\n");
+    r.build();
+    let (apple, pear, old) = (r.id(".guidelines/list.json#/items/0"), r.id(".guidelines/list.json#/items/1"), r.id(".guidelines/list.json#/old"));
+    let block = r.id(".guidelines/notes.txt#@block:first");
+    r.put(".guidelines/list.json", "{\"items\": [\"fig\", \"apple\", \"pear\"], \"new\": {\"x\": 1}}\n");
+    r.put(".guidelines/notes.txt", "# @block:renamed\nsome text\n# @endblock:renamed\n");
+    r.build();
+    assert_eq!(r.id(".guidelines/list.json#/items/1"), apple, "the element follows its content, not its index");
+    assert_eq!(r.id(".guidelines/list.json#/items/2"), pear);
+    assert!(![apple.clone(), pear.clone()].contains(&r.id(".guidelines/list.json#/items/0")), "the inserted element is new");
+    assert_eq!(r.alias(".guidelines/list.json#/items/0"), None, "a live path wins over an alias");
+    assert_eq!(r.id(".guidelines/list.json#/new"), old, "a renamed key keeps its NodeID");
+    assert_eq!(r.id(".guidelines/notes.txt#@block:renamed"), block, "a renamed block keeps its NodeID");
+}
+
+#[test]
+fn a_renamed_file_keeps_its_ids_edited_or_not() {
+    let r = Repo::new("files");
+    r.put(".guidelines/a.md", DOC);
+    r.put(".guidelines/b.md", "# Bee\n## One\nfirst\n## Two\nsecond\n");
+    r.build();
+    let (a_root, a_beta) = (r.id(".guidelines/a.md"), r.id(".guidelines/a.md#beta"));
+    let (b_root, b_two) = (r.id(".guidelines/b.md"), r.id(".guidelines/b.md#two"));
+    std::fs::rename(r.0.join(".guidelines/a.md"), r.0.join(".guidelines/a2.md")).unwrap();
+    std::fs::remove_file(r.0.join(".guidelines/b.md")).unwrap();
+    r.put(".guidelines/b2.md", "# Bee\n## One\nfirst\n## Two\nsecond, edited\n## Three\nthird\n");
+    r.build();
+    assert_eq!(r.id(".guidelines/a2.md"), a_root, "renamed unchanged: the root follows");
+    assert_eq!(r.id(".guidelines/a2.md#beta"), a_beta);
+    assert_eq!(r.id(".guidelines/b2.md"), b_root, "renamed and edited: more than half went to one file");
+    assert_eq!(r.id(".guidelines/b2.md#two"), b_two, "and the edited section follows by its selector");
+    assert_eq!(r.alias(".guidelines/a.md#beta"), Some(a_beta), "the old paths are aliases");
+    assert_eq!(r.alias(".guidelines/b.md"), Some(b_root));
+    assert_eq!(r.check(), Vec::<String>::new());
+}
+
+#[test]
+fn an_old_path_answers_the_node_it_became_with_a_warning() {
+    let r = Repo::new("alias");
+    r.put(".guidelines/doc.md", DOC);
+    r.build();
+    let beta = r.id(".guidelines/doc.md#beta");
+    r.put(".guidelines/doc.md", &DOC.replace("## Beta", "## Beta, renamed"));
+    r.build();
+    let (ok, out, err) = vpath(&r, &["resolve", ".guidelines/doc.md#beta"]);
+    assert!(ok, "an old path never blocks: {err}");
+    assert!(err.contains("`.guidelines/doc.md#beta` moved; it is `.guidelines/doc.md#beta-renamed`"), "{err}");
+    assert!(out.contains(&format!("\"id\":\"{beta}\"")) && out.contains("\"moved_from\":\".guidelines/doc.md#beta\""), "{out}");
+    let (ok, text, _) = vpath(&r, &["resolve", &beta, "--text"]);
+    assert!(ok && text.starts_with(&format!("--- .guidelines/doc.md#beta-renamed · {beta} · lines 5+3")), "{text}");
+    let (_, up, _) = vpath(&r, &["up", &beta]);
+    let chain: Vec<&str> = up.lines().map(|l| l.split_whitespace().nth(1).unwrap()).collect();
+    assert_eq!(chain, [".guidelines/doc.md#beta-renamed", ".guidelines/doc.md#doc", ".guidelines/doc.md"]);
+    let (_, node, _) = vpath(&r, &["node", ".guidelines/doc.md#beta-renamed"]);
+    let alpha = r.id(".guidelines/doc.md#alpha");
+    let gamma = r.id(".guidelines/doc.md#gamma");
+    assert!(node.contains(&format!("\"prev\":\"{alpha}\",\"next\":\"{gamma}\",\"depth\":2")), "{node}");
+}
+
+#[test]
+fn the_gate_refuses_a_source_by_an_old_path_and_an_identity_that_does_not_hold() {
+    let r = Repo::new("idgate");
+    r.put(".guidelines/doc.md", DOC);
+    r.put(".guidelines/GUIDE.md", "---\nsources:\n  - .guidelines/doc.md#beta\n---\n# Guide\n");
+    r.build();
+    r.put(".guidelines/doc.md", &DOC.replace("## Beta", "## Beta, renamed"));
+    r.refused("declares `.guidelines/doc.md#beta`, which moved: write `.guidelines/doc.md#beta-renamed`");
+    r.put(".guidelines/GUIDE.md", "---\nsources:\n  - .guidelines/doc.md#beta-renamed\n---\n# Guide\n");
+    r.build();
+    assert_eq!(r.check(), Vec::<String>::new());
+
+    let good = std::fs::read_to_string(r.0.join(index::PATH)).unwrap();
+    let alpha = r.id(".guidelines/doc.md#alpha");
+    let gamma = r.id(".guidelines/doc.md#gamma");
+    let breaks = [
+        (good.replacen(&format!("[\"{gamma}\""), &format!("[\"{alpha}\""), 1), "repeats"),
+        (good.replacen(&format!("\"{alpha}\", \"alpha\""), &format!("\"{alpha}\", \"alpha\"").replace(&alpha, "n999"), 1), "not a NodeID below"),
+        (good.replacen(&format!(", \"{}\"]", r.id(".guidelines/doc.md#doc")), ", \"n1\"]", 1), "is no node before it"),
+        (good.replacen("\"aliases\": {", "\"aliases\": {\n    \".guidelines/gone.md\": \"n998\",", 1), "which is no node"),
+        (good.replacen("\"aliases\": {", "\"aliases\": {\n    \".guidelines/doc.md#alpha\": \"n1\",", 1), "is a live path"),
+    ];
+    for (text, what) in breaks {
+        r.put(index::PATH, &text);
+        r.refused(what);
+    }
+}
+
+#[test]
+fn the_first_build_gives_ids_to_an_index_of_ord_0001_and_keeps_its_stamps() {
+    let r = Repo::new("migrate");
+    r.build();
+    let idx = r.index();
+    // the shape ORD-0001 wrote: six fields a row, no next, no aliases
+    let mut v1 = String::from("{\n  \"depth\": 2,\n  \"files\": {");
+    for (k, e) in idx.files.iter().enumerate() {
+        let rows: Vec<String> = e.nodes.iter().map(|n| format!("[\"{}\", {}, {}, {}, {}, \"{}\"]", n.selector, n.start, n.end, n.line, n.lines, n.fingerprint)).collect();
+        let sources: Vec<String> = e.sources.iter().map(|(v, _)| format!("[\"{v}\", \"stamped-in-v1\"]")).collect();
+        v1.push_str(&format!("{}\"{}\": {{\"sources\": [{}], \"nodes\": [{}]}}", if k == 0 { "" } else { "," }, e.path, sources.join(","), rows.join(",")));
+    }
+    v1.push_str("}\n}\n");
+    r.put(index::PATH, &v1);
+    assert_eq!(index::validate(&index::load(&v1).unwrap()), Vec::<String>::new(), "an index with no NodeID promises nothing yet");
+    r.refused("drifted");
+    r.build();
+    let migrated = r.index();
+    assert!(migrated.files.iter().all(|e| e.nodes.iter().all(|n| !n.id.is_empty())));
+    assert_eq!(migrated.entry(".guidelines/GUIDE.md").unwrap().sources[0].1, "stamped-in-v1", "the stamps are kept");
+    let once = std::fs::read_to_string(r.0.join(index::PATH)).unwrap();
+    r.build();
+    assert_eq!(std::fs::read_to_string(r.0.join(index::PATH)).unwrap(), once, "a second build writes the same bytes");
+}
+
+#[test]
+fn every_node_finds_its_place_once() {
+    let r = Repo::new("places");
+    r.put(".guidelines/doc.md", DOC);
+    r.build();
+    let idx = r.index();
+    let places = glyph_vpath::identity::places(&idx);
+    assert_eq!(places.len(), idx.files.iter().map(|e| e.nodes.len()).sum::<usize>());
+    let beta = &places[&r.id(".guidelines/doc.md#beta")];
+    assert_eq!((beta.prev.clone(), beta.next.clone(), beta.depth),
+               (Some(r.id(".guidelines/doc.md#alpha")), Some(r.id(".guidelines/doc.md#gamma")), 2));
+}
