@@ -50,6 +50,32 @@ impl Context {
     }
 }
 
+/// What the caller registered with `useRules` and `useExpansions`: the stores
+/// a template's body is parsed with, since the JS expander hands the body's
+/// parse the call's templates alone and the rest falls to the registry. It
+/// lives beside the context, never in it (EMS-002 ORD-0008): none is what the
+/// suite registers until its last bucket, the repository's is what the CLI
+/// and the engine register.
+#[derive(Debug, Clone, PartialEq, Default)]
+pub struct Registered {
+    pub rules: Option<Json>,
+    pub expansions: Option<Json>,
+}
+
+impl Registered {
+    pub fn none() -> &'static Registered {
+        static NONE: OnceLock<Registered> = OnceLock::new();
+        NONE.get_or_init(Registered::default)
+    }
+    pub fn repository() -> &'static Registered {
+        static REPO: OnceLock<Registered> = OnceLock::new();
+        REPO.get_or_init(|| {
+            let c = Context::repository();
+            Registered { rules: c.rules.clone(), expansions: c.expansions.clone() }
+        })
+    }
+}
+
 /// The store as `build-templates.js` writes `expansions.json`, compiled here
 /// from `expansions.txt` and `GLOSSARY.md`.
 pub const EXPANSIONS_JSON: &str = include_str!(concat!(env!("OUT_DIR"), "/expansions.json"));

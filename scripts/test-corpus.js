@@ -2252,6 +2252,35 @@ function runSnapshotChecks() {
     ["[ctx[sum'x']]", "[ref'x'][nt'y']"].forEach((src, k) => runParse("store-" + (k + 1), src, { ...SNAP_OPTS, expansions: PROBE_EXPANSIONS }));
     BARE_PROBES.forEach((src, k) => runParse("tpl-bare-" + (k + 1), src, { ...SNAP_OPTS, templates: probeTemplates, rules: null }));
     fs.writeFileSync(path.join(mods, "parse.json"), JSON.stringify({ engine: G.VERSION, runs: parseRuns }, null, 1) + "\n");
+
+    /* registry.json (EMS-002 ORD-0008): a template's body is parsed with what
+       useRules and useExpansions registered, never with the call's stores, so
+       each probe answers twice — with nothing registered, the state every file
+       above is written in, and with the repository's stores registered, as the
+       CLI and the engine run — and the registry is emptied again after */
+    const REGISTRY_EXTRAS = { ...PROBE_TEMPLATES, clash: { body: "[mand'x'][opt'x']" }, nested: { body: "[crit[--clash]]" } };
+    const regOpts = { ...SNAP_OPTS, templates: { ...TPL.templates, ...REGISTRY_EXTRAS } };
+    const REGISTRY_PROBES = ["[--clash]", "[--clash][--clash]", "[crit[--clash]]", "[ovr[--clash]]", "[--nested]"]
+      .concat(TEMPLATE_PROBES, TEMPLATES.map(c => c.src));
+    const regAnswer = src => {
+      const one = {};
+      for (const lang of ["pt", "en"]) {
+        try { one[lang] = G.parse(src, lang === "en" ? { ...regOpts, lang: "en" } : regOpts).gaps.map(g => ({ sev: g.sev, code: g.code, plain: g.plain })); }
+        catch (e) { one[lang] = { thrown: e.message }; }
+      }
+      one.xml = guard(() => G.toXML(src, regOpts));
+      one.hgml = guard(() => G.toHGML(src, regOpts));
+      return one;
+    };
+    const unregistered = REGISTRY_PROBES.map(regAnswer);
+    G.useRules(SNAP_OPTS.rules);
+    G.useExpansions(SNAP_OPTS.expansions);
+    const registered = REGISTRY_PROBES.map(regAnswer);
+    G.useRules(null);
+    G.useExpansions(null);
+    fs.writeFileSync(path.join(mods, "registry.json"), JSON.stringify({
+      engine: G.VERSION, templates: REGISTRY_EXTRAS, sources: REGISTRY_PROBES, none: unregistered, registered: registered
+    }, null, 1) + "\n");
     /* and the emitter's own branches: a literal named after a member of the
        prototype, a mood the prototype answers, return blocks, a chain against
        a conjunction, an imperative, bindings and their references */

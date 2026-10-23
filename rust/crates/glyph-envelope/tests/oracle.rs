@@ -89,7 +89,7 @@ fn every_envelope_equals_the_js() {
             ("embed", true, AstOpts { uri: Some("file:///x.pgml".into()), embed_source: true, panel: false }),
         ] {
             let Some(want) = run.get(k) else { continue };
-            let o = Opts { ctx: &ctx, session, valency, en, expanding: Vec::new() };
+            let o = Opts { ctx: &ctx, session, valency, en, expanding: Vec::new(), registered: glyph_stores::Registered::none() };
             let got = to_ast(src, &o, &a);
             match want.get("thrown") {
                 Some(t) => {

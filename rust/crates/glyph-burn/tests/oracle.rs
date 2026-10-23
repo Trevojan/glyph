@@ -66,7 +66,7 @@ fn every_burn_equals_the_js() {
         let (id, src) = (run.s("id"), run.s("src"));
         let ctx = context(run);
         let o = Opts { ctx: &ctx, session: run.get("session") != Some(&Json::Bool(false)),
-                       valency: run.get("valency") != Some(&Json::Bool(false)), en: false, expanding: Vec::new() };
+                       valency: run.get("valency") != Some(&Json::Bool(false)), en: false, expanding: Vec::new(), registered: glyph_stores::Registered::none() };
         for (k, keep_text) in [("hgml", false), ("keepText", true)] {
             let Some(want) = run.get(k) else { continue };
             let got = to_hgml(src, &BurnOpts { parse: &o, keep_text });

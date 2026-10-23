@@ -190,7 +190,8 @@ pub fn burn_list(tree: &Tree<Extra>, list: &[Id], o: &BurnOpts, compiled: Option
             Some(_) => String::new(),
         };
         let fctx = Context::new(None, None, ctx.expansions.clone());
-        let sub = parse(&formula, &Opts { ctx: &fctx, session: o.parse.session, valency: false, en: false, expanding: Vec::new() })?;
+        let sub = parse(&formula, &Opts { ctx: &fctx, session: o.parse.session, valency: false, en: false, expanding: Vec::new(),
+                                          registered: o.parse.registered })?;
         let next = [chain, &[key]].concat();
         let burned = burn_list(&sub.tree, &body_of(&sub.tree), o, compiled, &next, 0, st)?;
         out.extend(inject_subject(burned, operands));

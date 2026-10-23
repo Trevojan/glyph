@@ -33,6 +33,11 @@
  * reads as "". The answer is {"ok": value}, or {"thrown": message} where the
  * engine throws; a line that is not a JSON object answers
  * {"thrown":"bad request"}, and an unknown call {"thrown":"no such call"}.
+ *
+ * Run as the engine, it registers the stores it answers with, as the CLI and
+ * the page do: a template's body is parsed with what is registered, so a body
+ * that breaks a rule reads the same here as in the page (EMS-002 ORD-0008).
+ * Imported, it registers nothing, and the importer's registry is its own.
  */
 "use strict";
 import { createRequire } from "node:module";
@@ -88,6 +93,9 @@ export function answer(line) {
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
+  G.useTemplates({ templates: STORES.templates });
+  G.useRules(STORES.rules);
+  G.useExpansions(STORES.expansions);
   const out = process.stdout;
   readline.createInterface({ input: process.stdin, crlfDelay: Infinity })
     .on("line", line => { out.write(answer(line) + "\n"); });

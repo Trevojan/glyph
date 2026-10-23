@@ -20,7 +20,7 @@
 use glyph_lex::{classify, js_trim, suggest, tokenize, Token};
 use glyph_logic::{parse_logic, Logic};
 use glyph_rules::check_rules;
-use glyph_stores::{entry_of, expansion_registry, Context};
+use glyph_stores::{entry_of, expansion_registry, Context, Registered};
 use glyph_json::Json;
 use glyph_templates::{check_template_constraints, expand_invocations, Parsed, SubParse};
 use glyph_util::tree::{strip_tags, Diag, Emotion, Gloss, Id, Node, Segment, Span, Suggestion, Thrown, Tree, LIMITS};
@@ -42,11 +42,13 @@ pub struct Opts<'a> {
     pub en: bool,
     /// `opts._expanding`: the templates being expanded around this parse.
     pub expanding: Vec<String>,
+    /// What the caller registered, which a template's body is parsed with.
+    pub registered: &'a Registered,
 }
 
 impl<'a> Opts<'a> {
     pub fn new(ctx: &'a Context) -> Opts<'a> {
-        Opts { ctx, session: true, valency: true, en: false, expanding: Vec::new() }
+        Opts { ctx, session: true, valency: true, en: false, expanding: Vec::new(), registered: Registered::none() }
     }
 }
 
@@ -576,9 +578,11 @@ pub fn parse(src: &str, o: &Opts) -> Result<Parse, Thrown> {
     /* expansion first: every later pass must see the body, not the bare call */
     expand_invocations(&mut tree, ctx, o.session, &o.expanding, &mut g, &mut |body, sub: SubParse| {
         /* the JS hands parse the registry alone, and the rules and the
-           composition table fall to what is registered, which here is none */
-        let sub_ctx = Context::new(Some(sub.templates.clone()), None, None);
-        let r = parse(body, &Opts { ctx: &sub_ctx, session: sub.session, valency: sub.valency, en: false, expanding: sub.expanding })?;
+           composition table fall to what the caller registered */
+        let reg = o.registered;
+        let sub_ctx = Context::new(Some(sub.templates.clone()), reg.rules.clone(), reg.expansions.clone());
+        let r = parse(body, &Opts { ctx: &sub_ctx, session: sub.session, valency: sub.valency, en: false, expanding: sub.expanding,
+                                    registered: reg })?;
         Ok(Parsed { tree: r.tree, gaps: r.gaps.into_iter().map(|p| Diag { at: p.at, code_first: p.code_first, ..Diag::new(&p.sev, &p.lab, p.msg, &p.code) }).collect() })
     })?;
 
