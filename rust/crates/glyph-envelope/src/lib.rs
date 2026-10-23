@@ -20,17 +20,15 @@ pub const AST_SCHEMA: f64 = 2.0;
 
 /// `ck`: two FNV-1a runs over UTF-16 units, as the JS computes them — the
 /// XOR on signed 32-bit integers and the product in a double, which drops the
-/// low bits past 2⁵³ before `>>> 0` keeps 32 of them.
+/// low bits past 2⁵³ before `>>> 0` keeps 32 of them. The product is the one
+/// step in a double, since the digest is what that product gives; it holds an
+/// integer below 2⁶³, so the rest is integer arithmetic (EMS-002 ORD-0013).
 pub fn ck(s: &str) -> String {
-    fn uint32(x: f64) -> u32 {
-        let m = x.trunc() % 4294967296.0;
-        (if m < 0.0 { m + 4294967296.0 } else { m }) as u32
-    }
     let (mut a, mut b): (u32, u32) = (0x811c9dc5, 0x01000193);
     for (i, c) in s.encode_utf16().enumerate() {
-        let c = c as i32;
-        a = uint32(f64::from((a as i32) ^ c) * 16777619.0);
-        b = uint32(f64::from((b as i32) ^ (uint32(f64::from(c) + i as f64) as i32)) * 2246822507.0);
+        let c = u32::from(c);
+        a = (f64::from((a ^ c) as i32) * 16777619.0) as i64 as u32;
+        b = (f64::from((b ^ c.wrapping_add(i as u32)) as i32) * 2246822507.0) as i64 as u32;
     }
     format!("{a:08x}{b:08x}")
 }
