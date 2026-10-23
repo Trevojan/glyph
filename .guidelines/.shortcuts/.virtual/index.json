@@ -1,0 +1,2292 @@
+{
+  "note": "written by glyph-vpath build, EMS-002 ORD-0001; never edited by hand",
+  "depth": 2,
+  "files": {
+    ".guidelines/.changelog/README.md": {
+      "nodes": [
+        ["", 0, 2635, 1, 45, "9e49a408e3bc4800"],
+        ["changelog--como-o-número-se-move", 0, 2635, 1, 45, "9e49a408e3bc4800"],
+        ["o-esquema", 247, 865, 7, 17, "fa16f238b379db80"],
+        ["o-que-cada-release-decidiu", 865, 2210, 24, 14, "7d47199e7ccdc100"],
+        ["a-regra-que-se-aprende-relendo", 2210, 2635, 38, 8, "72770d6e934c5800"]
+      ]
+    },
+    ".guidelines/.constraints/README.md": {
+      "nodes": [
+        ["", 0, 4763, 1, 50, "eee6c1028a07a980"],
+        ["restrições--o-que-o-projeto-se-proíbe", 0, 4763, 1, 50, "eee6c1028a07a980"],
+        ["do-artefato", 231, 1633, 7, 10, "344d879602ff2b00"],
+        ["do-método", 1633, 2550, 17, 12, "47d0eca8542a7300"],
+        ["da-escrita", 2550, 4085, 29, 13, "4831f6b482f9ea00"],
+        ["do-processo", 4085, 4763, 42, 9, "3d1c8c28bfd25800"]
+      ]
+    },
+    ".guidelines/.decisions/README.md": {
+      "nodes": [
+        ["", 0, 32906, 1, 149, "37291042ca676e00"],
+        ["decisões--quem-decidiu-e-por-quê", 0, 32906, 1, 149, "37291042ca676e00"],
+        ["formato", 310, 382, 9, 7, "b5f95da43600fc00"],
+        ["2026-10-23", 382, 1309, 16, 8, "cbd85c56348499c0"],
+        ["2026-09-27", 1309, 16911, 24, 40, "7011bef07428a350"],
+        ["2026-09-26", 16911, 18554, 64, 9, "752c7c50e2663900"],
+        ["2026-09-25", 18554, 19751, 73, 8, "d890ff866d173200"],
+        ["2026-09-24", 19751, 28133, 81, 29, "3277c0c0c74b8c00"],
+        ["2026-09-06", 28133, 30330, 110, 13, "e4bcd520bd70e600"],
+        ["2026-09-05", 30330, 31809, 123, 13, "67e05df081ec8a00"],
+        ["anteriores-ainda-em-vigor", 31809, 32824, 136, 11, "126b256ee8e23600"],
+        ["decisões-que-um-agente-tomou-e-o-regente-ainda-não-ratificou", 32824, 32906, 147, 3, "ef0d5e44c5d00b00"]
+      ]
+    },
+    ".guidelines/.orders/BRIEFING-2026-09-24.md": {
+      "nodes": [
+        ["", 0, 10718, 1, 155, "e66799709cad5600"],
+        ["briefing--2026-09-24-o-glyph-em-rust-pelo-caminho-curto", 0, 10718, 1, 155, "e66799709cad5600"],
+        ["1-a-direção--decidida-pelo-regente", 317, 1648, 8, 15, "32428cb05a1e2e80"],
+        ["2-a-correção-de-alvo-que-mais-importa", 1648, 2290, 23, 6, "242fa0267e0f2560"],
+        ["3-a-escada-de-38-passos-o-que-sobrevive-e-o-que-morre", 2290, 3182, 29, 21, "36a5be3095df8400"],
+        ["4-wry--tao-medidos", 3182, 4043, 50, 16, "310189d422f26500"],
+        ["5-os-nomes-ratificados", 4043, 5035, 66, 17, "aaf822a2a358c000"],
+        ["6-estado-do-repositório--commitado-em-sete-passos", 5035, 6772, 83, 25, "6b4d00946ba60600"],
+        ["7-dois-defeitos-achados-e-corrigidos", 6772, 7330, 108, 5, "a69a99ecd7160c00"],
+        ["8-o-que-o-regente-decidiu-e-o-que-ainda-espera", 7330, 9790, 113, 29, "ae18b83c1659e080"],
+        ["9-como-retomar", 9790, 10718, 142, 14, "ae78189e0346df60"]
+      ]
+    },
+    ".guidelines/.orders/E0b-ARCHITECT-RETURN.md": {
+      "nodes": [
+        ["", 0, 6390, 1, 145, "69114ee61adf6800"],
+        ["e0b--architect-return", 0, 6390, 1, 145, "69114ee61adf6800"],
+        ["status", 184, 397, 6, 10, "f9ea0bbc1a2fc200"],
+        ["the-finding", 397, 1653, 16, 35, "51a37c0c3448a200"],
+        ["why-it-blocks-rather-than-resolves", 1653, 2643, 51, 20, "887c48247fc11000"],
+        ["what-the-evidence-leans-toward-and-why-that-is-not-enough", 2643, 3832, 71, 25, "8755a60a665be700"],
+        ["architecture--what-is-settled-under-either-reading", 3832, 4954, 96, 20, "603ac2e088c9dc38"],
+        ["invariants-the-implementation-must-preserve", 4954, 5423, 116, 9, "468af852f013a200"],
+        ["open-questions", 5423, 6219, 125, 17, "f34d4c8ce08b7a00"],
+        ["parent-action", 6219, 6390, 142, 4, "288d1b7615199f00"]
+      ]
+    },
+    ".guidelines/.orders/E2-PLAN.md": {
+      "nodes": [
+        ["", 0, 5445, 1, 125, "2b6267d0dfa9fe00"],
+        ["e2--what-the-rederivation-actually-is", 0, 5445, 1, 125, "2b6267d0dfa9fe00"],
+        ["0-the-headline", 211, 733, 6, 16, "4886255e5d2e4900"],
+        ["1-why-so-little-changes", 733, 1349, 22, 12, "347b8dfa97893a00"],
+        ["2-method-and-why-it-is-not-derivation-from-an-implementation", 1349, 2240, 34, 17, "117fc3a007239e00"],
+        ["3-the-change", 2240, 3667, 51, 43, "75691ae4161fe200"],
+        ["p-06--scriptstest-corpusjs50", 2258, 3158, 53, 23, "311e03da3c407480"],
+        ["d-4-07--scriptstest-corpusjs963", 3158, 3667, 76, 18, "c90e55eeaf82ed80"],
+        ["4-the-buckets-the-sweep-does-not-reach-and-what-each-needs", 3667, 4590, 94, 13, "6b1d28601a232400"],
+        ["5-what-e2-does-not-close", 4590, 5223, 107, 13, "dc976dbeae987c80"],
+        ["6-order-of-application", 5223, 5445, 120, 6, "cc82538ef44f6000"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/EMS-001.pgml": {
+      "nodes": [
+        ["", 0, 15294, 1, 174, "69449778dc542340"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0001/ORD-0001.hgml": {
+      "nodes": [
+        ["", 0, 615, 1, 35, "cf3b5294a252b800"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0001/ORD-0001.json": {
+      "nodes": [
+        ["", 0, 5527, 1, 201, "783b41f899623800"],
+        ["/type", 12, 22, 2, 1, "6cfcf51e0b22b400"],
+        ["/schema", 36, 37, 3, 1, "370cabd49014b848"],
+        ["/version", 52, 62, 4, 1, "d8e79ed86d16e400"],
+        ["/source", 76, 198, 5, 7, "7c2a87700e54d680"],
+        ["/source/length", 92, 95, 6, 1, "2dfb85f43387aa80"],
+        ["/source/checksum", 113, 131, 7, 1, "9ff14ed0895be200"],
+        ["/source/encoding", 149, 156, 8, 1, "51d8d6a8889ada00"],
+        ["/source/newline", 173, 177, 9, 1, "cec09c50a37ddc00"],
+        ["/source/uri", 190, 194, 10, 1, "e4ee48ec82cd2c00"],
+        ["/stores", 212, 324, 12, 5, "d76ade5f46ffe000"],
+        ["/stores/templates", 231, 249, 13, 1, "84d05340a5f9c600"],
+        ["/stores/rules", 264, 282, 14, 1, "44e11ee057e03600"],
+        ["/stores/expansions", 302, 320, 15, 1, "72ed34c8e6bc4980"],
+        ["/projection", 342, 348, 17, 1, "8e0b2f6630c6ec00"],
+        ["/segments", 364, 5504, 18, 182, "eb99abe78fb3a300"],
+        ["/segments/0", 370, 5500, 19, 180, "a53e820cbf0c3c00"],
+        ["/diagnostics", 5523, 5525, 200, 1, "721635809ba5e8c0"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0001/ORD-0001.manifest.json": {
+      "nodes": [
+        ["", 0, 301, 1, 16, "af6054901fdc6e00"],
+        ["/order", 13, 23, 2, 1, "522712a72699de00"],
+        ["/engine", 37, 47, 3, 1, "d8e79ed86d16e400"],
+        ["/emitted", 62, 88, 4, 1, "df1c978c7e12d400"],
+        ["/files", 101, 188, 5, 6, "a10a6bb852f1ba00"],
+        ["/files/0", 107, 122, 6, 1, "324f46b04af8a400"],
+        ["/files/1", 128, 142, 7, 1, "3101a5fa44e2ce00"],
+        ["/files/2", 148, 163, 8, 1, "75cfb78e5c262c00"],
+        ["/files/3", 169, 184, 9, 1, "6193008a2f718400"],
+        ["/source", 202, 245, 11, 1, "3a593dc81cce2100"],
+        ["/diagnostics", 264, 298, 12, 4, "83b9246074dcc400"],
+        ["/diagnostics/fix", 277, 278, 13, 1, "350ca8b09bec4d20"],
+        ["/diagnostics/total", 293, 294, 14, 1, "350ca8b09bec4d20"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0001/ORD-0001.pgml": {
+      "nodes": [
+        ["", 0, 299, 1, 5, "939ff958ef2f6600"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0001/ORD-0001.xml": {
+      "nodes": [
+        ["", 0, 794, 1, 20, "81c15328e47f5a60"],
+        ["/glyph-package", 0, 794, 1, 20, "81c15328e47f5a60"],
+        ["/glyph-package/schema", 36, 45, 2, 1, "9047f1df86dca200"],
+        ["/glyph-package/block", 48, 777, 3, 17, "b59788685412b200"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0002/ORD-0002.hgml": {
+      "nodes": [
+        ["", 0, 630, 1, 38, "3269de9029dda000"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0002/ORD-0002.json": {
+      "nodes": [
+        ["", 0, 6578, 1, 238, "b2996970e57b2700"],
+        ["/type", 12, 22, 2, 1, "6cfcf51e0b22b400"],
+        ["/schema", 36, 37, 3, 1, "370cabd49014b848"],
+        ["/version", 52, 62, 4, 1, "d8e79ed86d16e400"],
+        ["/source", 76, 198, 5, 7, "f82fc7d8fe31cc00"],
+        ["/source/length", 92, 95, 6, 1, "2cfb8460ad9be000"],
+        ["/source/checksum", 113, 131, 7, 1, "679eeb8ec5814a00"],
+        ["/source/encoding", 149, 156, 8, 1, "51d8d6a8889ada00"],
+        ["/source/newline", 173, 177, 9, 1, "cec09c50a37ddc00"],
+        ["/source/uri", 190, 194, 10, 1, "e4ee48ec82cd2c00"],
+        ["/stores", 212, 324, 12, 5, "d76ade5f46ffe000"],
+        ["/stores/templates", 231, 249, 13, 1, "84d05340a5f9c600"],
+        ["/stores/rules", 264, 282, 14, 1, "44e11ee057e03600"],
+        ["/stores/expansions", 302, 320, 15, 1, "72ed34c8e6bc4980"],
+        ["/projection", 342, 348, 17, 1, "8e0b2f6630c6ec00"],
+        ["/segments", 364, 6555, 18, 219, "45ca106006388100"],
+        ["/segments/0", 370, 6551, 19, 217, "d31366c86a1ce000"],
+        ["/diagnostics", 6574, 6576, 237, 1, "721635809ba5e8c0"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0002/ORD-0002.manifest.json": {
+      "nodes": [
+        ["", 0, 301, 1, 16, "ee8824c0e5e5fc00"],
+        ["/order", 13, 23, 2, 1, "b829f1d09b8b4c00"],
+        ["/engine", 37, 47, 3, 1, "d8e79ed86d16e400"],
+        ["/emitted", 62, 88, 4, 1, "42962fd8bae34200"],
+        ["/files", 101, 188, 5, 6, "ff110b2803560b00"],
+        ["/files/0", 107, 122, 6, 1, "5d41fab8ff516000"],
+        ["/files/1", 128, 142, 7, 1, "47577b08d9a76e00"],
+        ["/files/2", 148, 163, 8, 1, "ca5332a213673c00"],
+        ["/files/3", 169, 184, 9, 1, "11eabf40c2fdbc00"],
+        ["/source", 202, 245, 11, 1, "108d348a0f8c1200"],
+        ["/diagnostics", 264, 298, 12, 4, "83b9246074dcc400"],
+        ["/diagnostics/fix", 277, 278, 13, 1, "350ca8b09bec4d20"],
+        ["/diagnostics/total", 293, 294, 14, 1, "350ca8b09bec4d20"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0002/ORD-0002.pgml": {
+      "nodes": [
+        ["", 0, 298, 1, 6, "218872302b529800"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0002/ORD-0002.xml": {
+      "nodes": [
+        ["", 0, 845, 1, 23, "1c331ca06902da00"],
+        ["/glyph-package", 0, 845, 1, 23, "1c331ca06902da00"],
+        ["/glyph-package/schema", 36, 45, 2, 1, "9047f1df86dca200"],
+        ["/glyph-package/block", 48, 828, 3, 20, "0b0b020ee74eee00"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0003/ORD-0003.hgml": {
+      "nodes": [
+        ["", 0, 715, 1, 38, "fa62c3ff91bab540"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0003/ORD-0003.json": {
+      "nodes": [
+        ["", 0, 6664, 1, 238, "a8437cc7baa75a00"],
+        ["/type", 12, 22, 2, 1, "6cfcf51e0b22b400"],
+        ["/schema", 36, 37, 3, 1, "370cabd49014b848"],
+        ["/version", 52, 62, 4, 1, "d8e79ed86d16e400"],
+        ["/source", 76, 198, 5, 7, "ded021488c011100"],
+        ["/source/length", 92, 95, 6, 1, "4c5f06c06273da00"],
+        ["/source/checksum", 113, 131, 7, 1, "6b6576408beeb600"],
+        ["/source/encoding", 149, 156, 8, 1, "51d8d6a8889ada00"],
+        ["/source/newline", 173, 177, 9, 1, "cec09c50a37ddc00"],
+        ["/source/uri", 190, 194, 10, 1, "e4ee48ec82cd2c00"],
+        ["/stores", 212, 324, 12, 5, "d76ade5f46ffe000"],
+        ["/stores/templates", 231, 249, 13, 1, "84d05340a5f9c600"],
+        ["/stores/rules", 264, 282, 14, 1, "44e11ee057e03600"],
+        ["/stores/expansions", 302, 320, 15, 1, "72ed34c8e6bc4980"],
+        ["/projection", 342, 348, 17, 1, "8e0b2f6630c6ec00"],
+        ["/segments", 364, 6641, 18, 219, "e31aa5d0f9bf3600"],
+        ["/segments/0", 370, 6637, 19, 217, "e4d4332431ef9000"],
+        ["/diagnostics", 6660, 6662, 237, 1, "721635809ba5e8c0"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0003/ORD-0003.manifest.json": {
+      "nodes": [
+        ["", 0, 301, 1, 16, "a8dcab60f04db780"],
+        ["/order", 13, 23, 2, 1, "a22c0dc5107cba00"],
+        ["/engine", 37, 47, 3, 1, "d8e79ed86d16e400"],
+        ["/emitted", 62, 88, 4, 1, "1443ed36eed29400"],
+        ["/files", 101, 188, 5, 6, "72524cc431f6bde0"],
+        ["/files/0", 107, 122, 6, 1, "a12e332605937300"],
+        ["/files/1", 128, 142, 7, 1, "8a55d128ae30c600"],
+        ["/files/2", 148, 163, 8, 1, "f2ada240ff17da00"],
+        ["/files/3", 169, 184, 9, 1, "32fd12ee434da600"],
+        ["/source", 202, 245, 11, 1, "08f43fced4901200"],
+        ["/diagnostics", 264, 298, 12, 4, "83b9246074dcc400"],
+        ["/diagnostics/fix", 277, 278, 13, 1, "350ca8b09bec4d20"],
+        ["/diagnostics/total", 293, 294, 14, 1, "350ca8b09bec4d20"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0003/ORD-0003.pgml": {
+      "nodes": [
+        ["", 0, 383, 1, 6, "39485058330cd400"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0003/ORD-0003.xml": {
+      "nodes": [
+        ["", 0, 936, 1, 23, "0bea3f3a3ca29a00"],
+        ["/glyph-package", 0, 936, 1, 23, "0bea3f3a3ca29a00"],
+        ["/glyph-package/schema", 36, 45, 2, 1, "9047f1df86dca200"],
+        ["/glyph-package/block", 48, 919, 3, 20, "fadb74e62d68e200"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0004/ORD-0004.hgml": {
+      "nodes": [
+        ["", 0, 621, 1, 38, "7f210988d53f4000"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0004/ORD-0004.json": {
+      "nodes": [
+        ["", 0, 6569, 1, 238, "52c7fc387346ba00"],
+        ["/type", 12, 22, 2, 1, "6cfcf51e0b22b400"],
+        ["/schema", 36, 37, 3, 1, "370cabd49014b848"],
+        ["/version", 52, 62, 4, 1, "d8e79ed86d16e400"],
+        ["/source", 76, 198, 5, 7, "87cccdc0c51a38c0"],
+        ["/source/length", 92, 95, 6, 1, "36f95588be963c00"],
+        ["/source/checksum", 113, 131, 7, 1, "ae7965703cd74800"],
+        ["/source/encoding", 149, 156, 8, 1, "51d8d6a8889ada00"],
+        ["/source/newline", 173, 177, 9, 1, "cec09c50a37ddc00"],
+        ["/source/uri", 190, 194, 10, 1, "e4ee48ec82cd2c00"],
+        ["/stores", 212, 324, 12, 5, "d76ade5f46ffe000"],
+        ["/stores/templates", 231, 249, 13, 1, "84d05340a5f9c600"],
+        ["/stores/rules", 264, 282, 14, 1, "44e11ee057e03600"],
+        ["/stores/expansions", 302, 320, 15, 1, "72ed34c8e6bc4980"],
+        ["/projection", 342, 348, 17, 1, "8e0b2f6630c6ec00"],
+        ["/segments", 364, 6546, 18, 219, "fbf8eb504427ee40"],
+        ["/segments/0", 370, 6542, 19, 217, "b89f9c804d556a00"],
+        ["/diagnostics", 6565, 6567, 237, 1, "721635809ba5e8c0"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0004/ORD-0004.manifest.json": {
+      "nodes": [
+        ["", 0, 301, 1, 16, "88c98d7f49275a00"],
+        ["/order", 13, 23, 2, 1, "981ab4e65d02fe00"],
+        ["/engine", 37, 47, 3, 1, "d8e79ed86d16e400"],
+        ["/emitted", 62, 88, 4, 1, "2876a698d1373400"],
+        ["/files", 101, 188, 5, 6, "8246be00e3236fc0"],
+        ["/files/0", 107, 122, 6, 1, "fc66c8a87f1bb000"],
+        ["/files/1", 128, 142, 7, 1, "a606f0ce28604000"],
+        ["/files/2", 148, 163, 8, 1, "53c8370290493800"],
+        ["/files/3", 169, 184, 9, 1, "2ae73600af692e00"],
+        ["/source", 202, 245, 11, 1, "055c37684b9ef000"],
+        ["/diagnostics", 264, 298, 12, 4, "83b9246074dcc400"],
+        ["/diagnostics/fix", 277, 278, 13, 1, "350ca8b09bec4d20"],
+        ["/diagnostics/total", 293, 294, 14, 1, "350ca8b09bec4d20"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0004/ORD-0004.pgml": {
+      "nodes": [
+        ["", 0, 289, 1, 6, "a9b5305a43aa7d00"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0004/ORD-0004.xml": {
+      "nodes": [
+        ["", 0, 837, 1, 23, "a70f8ad03891ae00"],
+        ["/glyph-package", 0, 837, 1, 23, "a70f8ad03891ae00"],
+        ["/glyph-package/schema", 36, 45, 2, 1, "9047f1df86dca200"],
+        ["/glyph-package/block", 48, 820, 3, 20, "421adc60f8e34100"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0005/ORD-0005.hgml": {
+      "nodes": [
+        ["", 0, 554, 1, 38, "dcf1290026dec200"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0005/ORD-0005.json": {
+      "nodes": [
+        ["", 0, 6502, 1, 238, "88e1fe28e9c34480"],
+        ["/type", 12, 22, 2, 1, "6cfcf51e0b22b400"],
+        ["/schema", 36, 37, 3, 1, "370cabd49014b848"],
+        ["/version", 52, 62, 4, 1, "d8e79ed86d16e400"],
+        ["/source", 76, 198, 5, 7, "835b19e0e825b900"],
+        ["/source/length", 92, 95, 6, 1, "27ea336055bbac00"],
+        ["/source/checksum", 113, 131, 7, 1, "67c2248a1a6a0200"],
+        ["/source/encoding", 149, 156, 8, 1, "51d8d6a8889ada00"],
+        ["/source/newline", 173, 177, 9, 1, "cec09c50a37ddc00"],
+        ["/source/uri", 190, 194, 10, 1, "e4ee48ec82cd2c00"],
+        ["/stores", 212, 324, 12, 5, "d76ade5f46ffe000"],
+        ["/stores/templates", 231, 249, 13, 1, "84d05340a5f9c600"],
+        ["/stores/rules", 264, 282, 14, 1, "44e11ee057e03600"],
+        ["/stores/expansions", 302, 320, 15, 1, "72ed34c8e6bc4980"],
+        ["/projection", 342, 348, 17, 1, "8e0b2f6630c6ec00"],
+        ["/segments", 364, 6479, 18, 219, "f65fd6c82eda7200"],
+        ["/segments/0", 370, 6475, 19, 217, "01516b489520e6c0"],
+        ["/diagnostics", 6498, 6500, 237, 1, "721635809ba5e8c0"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0005/ORD-0005.manifest.json": {
+      "nodes": [
+        ["", 0, 301, 1, 16, "bc329bd827825600"],
+        ["/order", 13, 23, 2, 1, "ba1d2903d1f46c00"],
+        ["/engine", 37, 47, 3, 1, "d8e79ed86d16e400"],
+        ["/emitted", 62, 88, 4, 1, "400bee808015bc00"],
+        ["/files", 101, 188, 5, 6, "41c985c7d2eb51d0"],
+        ["/files/0", 107, 122, 6, 1, "04269a7016643c00"],
+        ["/files/1", 128, 142, 7, 1, "1868f7e03e5c8200"],
+        ["/files/2", 148, 163, 8, 1, "2814160c205f4e00"],
+        ["/files/3", 169, 184, 9, 1, "683faebada109800"],
+        ["/source", 202, 245, 11, 1, "e6114a12fc341800"],
+        ["/diagnostics", 264, 298, 12, 4, "83b9246074dcc400"],
+        ["/diagnostics/fix", 277, 278, 13, 1, "350ca8b09bec4d20"],
+        ["/diagnostics/total", 293, 294, 14, 1, "350ca8b09bec4d20"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0005/ORD-0005.pgml": {
+      "nodes": [
+        ["", 0, 222, 1, 6, "212a8a1e91782a00"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0005/ORD-0005.xml": {
+      "nodes": [
+        ["", 0, 770, 1, 23, "65e940900efa4400"],
+        ["/glyph-package", 0, 770, 1, 23, "65e940900efa4400"],
+        ["/glyph-package/schema", 36, 45, 2, 1, "9047f1df86dca200"],
+        ["/glyph-package/block", 48, 753, 3, 20, "67b7e0c8e3485100"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0006/ORD-0006.hgml": {
+      "nodes": [
+        ["", 0, 667, 1, 38, "da1afde8d1f65400"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0006/ORD-0006.json": {
+      "nodes": [
+        ["", 0, 6617, 1, 238, "0f2b711cd1f0f800"],
+        ["/type", 12, 22, 2, 1, "6cfcf51e0b22b400"],
+        ["/schema", 36, 37, 3, 1, "370cabd49014b848"],
+        ["/version", 52, 62, 4, 1, "d8e79ed86d16e400"],
+        ["/source", 76, 198, 5, 7, "dfe53ec7a4748b00"],
+        ["/source/length", 92, 95, 6, 1, "cf530908d30cd77c"],
+        ["/source/checksum", 113, 131, 7, 1, "08e7cba87dc34d00"],
+        ["/source/encoding", 149, 156, 8, 1, "51d8d6a8889ada00"],
+        ["/source/newline", 173, 177, 9, 1, "cec09c50a37ddc00"],
+        ["/source/uri", 190, 194, 10, 1, "e4ee48ec82cd2c00"],
+        ["/stores", 212, 324, 12, 5, "d76ade5f46ffe000"],
+        ["/stores/templates", 231, 249, 13, 1, "84d05340a5f9c600"],
+        ["/stores/rules", 264, 282, 14, 1, "44e11ee057e03600"],
+        ["/stores/expansions", 302, 320, 15, 1, "72ed34c8e6bc4980"],
+        ["/projection", 342, 348, 17, 1, "8e0b2f6630c6ec00"],
+        ["/segments", 364, 6594, 18, 219, "d15307503adb0400"],
+        ["/segments/0", 370, 6590, 19, 217, "ac6364b0e0b93c00"],
+        ["/diagnostics", 6613, 6615, 237, 1, "721635809ba5e8c0"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0006/ORD-0006.manifest.json": {
+      "nodes": [
+        ["", 0, 301, 1, 16, "9089e2e0acb00200"],
+        ["/order", 13, 23, 2, 1, "2020082c46e5da00"],
+        ["/engine", 37, 47, 3, 1, "d8e79ed86d16e400"],
+        ["/emitted", 62, 88, 4, 1, "5dc434f67c501280"],
+        ["/files", 101, 188, 5, 6, "2af1bc230da1e000"],
+        ["/files/0", 107, 122, 6, 1, "6425cad0b7057200"],
+        ["/files/1", 128, 142, 7, 1, "6ab3f29ad434ea00"],
+        ["/files/2", 148, 163, 8, 1, "081e2048333ae600"],
+        ["/files/3", 169, 184, 9, 1, "db563988c3455000"],
+        ["/source", 202, 245, 11, 1, "8c970e0a25fd0c00"],
+        ["/diagnostics", 264, 298, 12, 4, "83b9246074dcc400"],
+        ["/diagnostics/fix", 277, 278, 13, 1, "350ca8b09bec4d20"],
+        ["/diagnostics/total", 293, 294, 14, 1, "350ca8b09bec4d20"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0006/ORD-0006.pgml": {
+      "nodes": [
+        ["", 0, 335, 1, 6, "09384740ff565400"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0006/ORD-0006.xml": {
+      "nodes": [
+        ["", 0, 893, 1, 23, "217dc48a535e4700"],
+        ["/glyph-package", 0, 893, 1, 23, "217dc48a535e4700"],
+        ["/glyph-package/schema", 36, 45, 2, 1, "9047f1df86dca200"],
+        ["/glyph-package/block", 48, 876, 3, 20, "ffd48d08b4bddd80"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0007/ORD-0007.hgml": {
+      "nodes": [
+        ["", 0, 639, 1, 40, "eccf1d470f96f300"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0007/ORD-0007.json": {
+      "nodes": [
+        ["", 0, 7201, 1, 260, "16d0a5a8621bf080"],
+        ["/type", 12, 22, 2, 1, "6cfcf51e0b22b400"],
+        ["/schema", 36, 37, 3, 1, "370cabd49014b848"],
+        ["/version", 52, 62, 4, 1, "d8e79ed86d16e400"],
+        ["/source", 76, 198, 5, 7, "1e23e010c7d68200"],
+        ["/source/length", 92, 95, 6, 1, "2dfb85f43387aa80"],
+        ["/source/checksum", 113, 131, 7, 1, "6765fc8e19060100"],
+        ["/source/encoding", 149, 156, 8, 1, "51d8d6a8889ada00"],
+        ["/source/newline", 173, 177, 9, 1, "cec09c50a37ddc00"],
+        ["/source/uri", 190, 194, 10, 1, "e4ee48ec82cd2c00"],
+        ["/stores", 212, 324, 12, 5, "d76ade5f46ffe000"],
+        ["/stores/templates", 231, 249, 13, 1, "84d05340a5f9c600"],
+        ["/stores/rules", 264, 282, 14, 1, "44e11ee057e03600"],
+        ["/stores/expansions", 302, 320, 15, 1, "72ed34c8e6bc4980"],
+        ["/projection", 342, 348, 17, 1, "8e0b2f6630c6ec00"],
+        ["/segments", 364, 7178, 18, 241, "13c091f8e7431e00"],
+        ["/segments/0", 370, 7174, 19, 239, "a11190a0fecee800"],
+        ["/diagnostics", 7197, 7199, 259, 1, "721635809ba5e8c0"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0007/ORD-0007.manifest.json": {
+      "nodes": [
+        ["", 0, 301, 1, 16, "ff2a6b6e3fc83900"],
+        ["/order", 13, 23, 2, 1, "4a2288e1bbd74800"],
+        ["/engine", 37, 47, 3, 1, "d8e79ed86d16e400"],
+        ["/emitted", 62, 88, 4, 1, "a48e8e88b3b25a00"],
+        ["/files", 101, 188, 5, 6, "148db98036691a00"],
+        ["/files/0", 107, 122, 6, 1, "a95c1888ca7d1400"],
+        ["/files/1", 128, 142, 7, 1, "a0649442f9bc4200"],
+        ["/files/2", 148, 163, 8, 1, "5c898a4869a50200"],
+        ["/files/3", 169, 184, 9, 1, "71ec4c3072a21400"],
+        ["/source", 202, 245, 11, 1, "c49cdf709783f400"],
+        ["/diagnostics", 264, 298, 12, 4, "83b9246074dcc400"],
+        ["/diagnostics/fix", 277, 278, 13, 1, "350ca8b09bec4d20"],
+        ["/diagnostics/total", 293, 294, 14, 1, "350ca8b09bec4d20"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0007/ORD-0007.pgml": {
+      "nodes": [
+        ["", 0, 299, 1, 6, "d376c296e3f37200"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0007/ORD-0007.xml": {
+      "nodes": [
+        ["", 0, 910, 1, 25, "b45428bffdf23a00"],
+        ["/glyph-package", 0, 910, 1, 25, "b45428bffdf23a00"],
+        ["/glyph-package/schema", 36, 45, 2, 1, "9047f1df86dca200"],
+        ["/glyph-package/block", 48, 893, 3, 22, "4a6fc9d027a23a00"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0008/ORD-0008.hgml": {
+      "nodes": [
+        ["", 0, 725, 1, 38, "ef2c7c4437376d00"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0008/ORD-0008.json": {
+      "nodes": [
+        ["", 0, 6675, 1, 238, "cfeefb891e961000"],
+        ["/type", 12, 22, 2, 1, "6cfcf51e0b22b400"],
+        ["/schema", 36, 37, 3, 1, "370cabd49014b848"],
+        ["/version", 52, 62, 4, 1, "d8e79ed86d16e400"],
+        ["/source", 76, 198, 5, 7, "45e5d3efd8a22600"],
+        ["/source/length", 92, 95, 6, 1, "5361505c5257e200"],
+        ["/source/checksum", 113, 131, 7, 1, "c78861600284e400"],
+        ["/source/encoding", 149, 156, 8, 1, "51d8d6a8889ada00"],
+        ["/source/newline", 173, 177, 9, 1, "cec09c50a37ddc00"],
+        ["/source/uri", 190, 194, 10, 1, "e4ee48ec82cd2c00"],
+        ["/stores", 212, 324, 12, 5, "d76ade5f46ffe000"],
+        ["/stores/templates", 231, 249, 13, 1, "84d05340a5f9c600"],
+        ["/stores/rules", 264, 282, 14, 1, "44e11ee057e03600"],
+        ["/stores/expansions", 302, 320, 15, 1, "72ed34c8e6bc4980"],
+        ["/projection", 342, 348, 17, 1, "8e0b2f6630c6ec00"],
+        ["/segments", 364, 6652, 18, 219, "019f93e8390f8600"],
+        ["/segments/0", 370, 6648, 19, 217, "b7e1a0e8c0ac93d0"],
+        ["/diagnostics", 6671, 6673, 237, 1, "721635809ba5e8c0"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0008/ORD-0008.manifest.json": {
+      "nodes": [
+        ["", 0, 301, 1, 16, "144f44c8f08b5000"],
+        ["/order", 13, 23, 2, 1, "a038d69230c8b600"],
+        ["/engine", 37, 47, 3, 1, "d8e79ed86d16e400"],
+        ["/emitted", 62, 88, 4, 1, "3b3b8916665acb00"],
+        ["/files", 101, 188, 5, 6, "5800329864b4b600"],
+        ["/files/0", 107, 122, 6, 1, "291d764e4710aa00"],
+        ["/files/1", 128, 142, 7, 1, "3a9514c87e1b0600"],
+        ["/files/2", 148, 163, 8, 1, "17af2d16d43e0600"],
+        ["/files/3", 169, 184, 9, 1, "541dbc880c8b0400"],
+        ["/source", 202, 245, 11, 1, "143abb60248ad300"],
+        ["/diagnostics", 264, 298, 12, 4, "83b9246074dcc400"],
+        ["/diagnostics/fix", 277, 278, 13, 1, "350ca8b09bec4d20"],
+        ["/diagnostics/total", 293, 294, 14, 1, "350ca8b09bec4d20"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0008/ORD-0008.pgml": {
+      "nodes": [
+        ["", 0, 393, 1, 6, "93c973b6ef0df400"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0008/ORD-0008.xml": {
+      "nodes": [
+        ["", 0, 948, 1, 23, "c8689b58afa37800"],
+        ["/glyph-package", 0, 948, 1, 23, "c8689b58afa37800"],
+        ["/glyph-package/schema", 36, 45, 2, 1, "9047f1df86dca200"],
+        ["/glyph-package/block", 48, 931, 3, 20, "5390a65034d75180"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0009/ORD-0009.hgml": {
+      "nodes": [
+        ["", 0, 705, 1, 38, "279d8b6446bef200"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0009/ORD-0009.json": {
+      "nodes": [
+        ["", 0, 6654, 1, 238, "c4be43d04e2db300"],
+        ["/type", 12, 22, 2, 1, "6cfcf51e0b22b400"],
+        ["/schema", 36, 37, 3, 1, "370cabd49014b848"],
+        ["/version", 52, 62, 4, 1, "d8e79ed86d16e400"],
+        ["/source", 76, 198, 5, 7, "267198fdee868000"],
+        ["/source/length", 92, 95, 6, 1, "455cbd24f79d3600"],
+        ["/source/checksum", 113, 131, 7, 1, "575cb972f77d0d00"],
+        ["/source/encoding", 149, 156, 8, 1, "51d8d6a8889ada00"],
+        ["/source/newline", 173, 177, 9, 1, "cec09c50a37ddc00"],
+        ["/source/uri", 190, 194, 10, 1, "e4ee48ec82cd2c00"],
+        ["/stores", 212, 324, 12, 5, "d76ade5f46ffe000"],
+        ["/stores/templates", 231, 249, 13, 1, "84d05340a5f9c600"],
+        ["/stores/rules", 264, 282, 14, 1, "44e11ee057e03600"],
+        ["/stores/expansions", 302, 320, 15, 1, "72ed34c8e6bc4980"],
+        ["/projection", 342, 348, 17, 1, "8e0b2f6630c6ec00"],
+        ["/segments", 364, 6631, 18, 219, "95f7dd89c485e200"],
+        ["/segments/0", 370, 6627, 19, 217, "ad155020dfc13a00"],
+        ["/diagnostics", 6650, 6652, 237, 1, "721635809ba5e8c0"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0009/ORD-0009.manifest.json": {
+      "nodes": [
+        ["", 0, 301, 1, 16, "be2e4c4031622400"],
+        ["/order", 13, 23, 2, 1, "c23b4aaf7d4efa00"],
+        ["/engine", 37, 47, 3, 1, "d8e79ed86d16e400"],
+        ["/emitted", 62, 88, 4, 1, "4fa5cda8d4b05200"],
+        ["/files", 101, 188, 5, 6, "dc732f50e2d3eb00"],
+        ["/files/0", 107, 122, 6, 1, "6bc82f560dcbed00"],
+        ["/files/1", 128, 142, 7, 1, "7a50ece0aacf0600"],
+        ["/files/2", 148, 163, 8, 1, "c365c76073d0e600"],
+        ["/files/3", 169, 184, 9, 1, "47af7fd05260df10"],
+        ["/source", 202, 245, 11, 1, "f1e787bc9ab89400"],
+        ["/diagnostics", 264, 298, 12, 4, "83b9246074dcc400"],
+        ["/diagnostics/fix", 277, 278, 13, 1, "350ca8b09bec4d20"],
+        ["/diagnostics/total", 293, 294, 14, 1, "350ca8b09bec4d20"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0009/ORD-0009.pgml": {
+      "nodes": [
+        ["", 0, 373, 1, 6, "993c50e23af98e00"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0009/ORD-0009.xml": {
+      "nodes": [
+        ["", 0, 927, 1, 23, "731c74e0be820100"],
+        ["/glyph-package", 0, 927, 1, 23, "731c74e0be820100"],
+        ["/glyph-package/schema", 36, 45, 2, 1, "9047f1df86dca200"],
+        ["/glyph-package/block", 48, 910, 3, 20, "d2d7240a3f61c600"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0010/ORD-0010.hgml": {
+      "nodes": [
+        ["", 0, 933, 1, 44, "6f4eee443d72e400"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0010/ORD-0010.json": {
+      "nodes": [
+        ["", 0, 8956, 1, 312, "6af2b2483f325600"],
+        ["/type", 12, 22, 2, 1, "6cfcf51e0b22b400"],
+        ["/schema", 36, 37, 3, 1, "370cabd49014b848"],
+        ["/version", 52, 62, 4, 1, "d8e79ed86d16e400"],
+        ["/source", 76, 198, 5, 7, "36871a9f7ad23400"],
+        ["/source/length", 92, 95, 6, 1, "32a9f6d86826da00"],
+        ["/source/checksum", 113, 131, 7, 1, "bb0a9e2a11429600"],
+        ["/source/encoding", 149, 156, 8, 1, "51d8d6a8889ada00"],
+        ["/source/newline", 173, 177, 9, 1, "cec09c50a37ddc00"],
+        ["/source/uri", 190, 194, 10, 1, "e4ee48ec82cd2c00"],
+        ["/stores", 212, 324, 12, 5, "d76ade5f46ffe000"],
+        ["/stores/templates", 231, 249, 13, 1, "84d05340a5f9c600"],
+        ["/stores/rules", 264, 282, 14, 1, "44e11ee057e03600"],
+        ["/stores/expansions", 302, 320, 15, 1, "72ed34c8e6bc4980"],
+        ["/projection", 342, 348, 17, 1, "8e0b2f6630c6ec00"],
+        ["/segments", 364, 8933, 18, 293, "0f8f2e48e3082e00"],
+        ["/segments/0", 370, 8929, 19, 291, "735645e08a32f740"],
+        ["/diagnostics", 8952, 8954, 311, 1, "721635809ba5e8c0"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0010/ORD-0010.manifest.json": {
+      "nodes": [
+        ["", 0, 301, 1, 16, "673103d06677e700"],
+        ["/order", 13, 23, 2, 1, "14bee3de2192fe00"],
+        ["/engine", 37, 47, 3, 1, "d8e79ed86d16e400"],
+        ["/emitted", 62, 88, 4, 1, "a3518e3e10c17500"],
+        ["/files", 101, 188, 5, 6, "32d6044c4bf2f600"],
+        ["/files/0", 107, 122, 6, 1, "50818882ac950800"],
+        ["/files/1", 128, 142, 7, 1, "2c65548a6947c680"],
+        ["/files/2", 148, 163, 8, 1, "5cc3423e4210bdc0"],
+        ["/files/3", 169, 184, 9, 1, "b11a75aaa269da00"],
+        ["/source", 202, 245, 11, 1, "ab60b3cac5072e00"],
+        ["/diagnostics", 264, 298, 12, 4, "83b9246074dcc400"],
+        ["/diagnostics/fix", 277, 278, 13, 1, "350ca8b09bec4d20"],
+        ["/diagnostics/total", 293, 294, 14, 1, "350ca8b09bec4d20"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0010/ORD-0010.pgml": {
+      "nodes": [
+        ["", 0, 576, 1, 8, "41e35158f7ae9000"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0010/ORD-0010.xml": {
+      "nodes": [
+        ["", 0, 1244, 1, 29, "f5021942e886d700"],
+        ["/glyph-package", 0, 1244, 1, 29, "f5021942e886d700"],
+        ["/glyph-package/schema", 36, 45, 2, 1, "9047f1df86dca200"],
+        ["/glyph-package/block", 48, 1227, 3, 26, "3bb5f1e41afff800"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0011/ORD-0011.hgml": {
+      "nodes": [
+        ["", 0, 1790, 1, 57, "8a43356433899200"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0011/ORD-0011.json": {
+      "nodes": [
+        ["", 0, 14276, 1, 471, "881b9d5941321000"],
+        ["/type", 12, 22, 2, 1, "6cfcf51e0b22b400"],
+        ["/schema", 36, 37, 3, 1, "370cabd49014b848"],
+        ["/version", 52, 62, 4, 1, "d8e79ed86d16e400"],
+        ["/source", 76, 199, 5, 7, "d5eee73f0b806c00"],
+        ["/source/length", 92, 96, 6, 1, "5759105041a15200"],
+        ["/source/checksum", 114, 132, 7, 1, "77615dfef90a0400"],
+        ["/source/encoding", 150, 157, 8, 1, "51d8d6a8889ada00"],
+        ["/source/newline", 174, 178, 9, 1, "cec09c50a37ddc00"],
+        ["/source/uri", 191, 195, 10, 1, "e4ee48ec82cd2c00"],
+        ["/stores", 213, 325, 12, 5, "d76ade5f46ffe000"],
+        ["/stores/templates", 232, 250, 13, 1, "84d05340a5f9c600"],
+        ["/stores/rules", 265, 283, 14, 1, "44e11ee057e03600"],
+        ["/stores/expansions", 303, 321, 15, 1, "72ed34c8e6bc4980"],
+        ["/projection", 343, 349, 17, 1, "8e0b2f6630c6ec00"],
+        ["/segments", 365, 14253, 18, 452, "29400b49d77cb300"],
+        ["/segments/0", 371, 14249, 19, 450, "34d42fe0a31e2400"],
+        ["/diagnostics", 14272, 14274, 470, 1, "721635809ba5e8c0"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0011/ORD-0011.manifest.json": {
+      "nodes": [
+        ["", 0, 301, 1, 16, "c4239b783a548280"],
+        ["/order", 13, 23, 2, 1, "36c157fb824ed800"],
+        ["/engine", 37, 47, 3, 1, "d8e79ed86d16e400"],
+        ["/emitted", 62, 88, 4, 1, "58eac65c7f7ac800"],
+        ["/files", 101, 188, 5, 6, "f92d7a587afea000"],
+        ["/files/0", 107, 122, 6, 1, "ef54f43808480000"],
+        ["/files/1", 128, 142, 7, 1, "579b8f36e84e6c00"],
+        ["/files/2", 148, 163, 8, 1, "2a3720689d349300"],
+        ["/files/3", 169, 184, 9, 1, "d8f9eb4012a4a000"],
+        ["/source", 202, 245, 11, 1, "bd5bedfa774d0000"],
+        ["/diagnostics", 264, 298, 12, 4, "83b9246074dcc400"],
+        ["/diagnostics/fix", 277, 278, 13, 1, "350ca8b09bec4d20"],
+        ["/diagnostics/total", 293, 294, 14, 1, "350ca8b09bec4d20"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0011/ORD-0011.pgml": {
+      "nodes": [
+        ["", 0, 1377, 1, 12, "522252e69bee3500"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0011/ORD-0011.xml": {
+      "nodes": [
+        ["", 0, 2307, 1, 42, "fcce801ee33e6400"],
+        ["/glyph-package", 0, 2307, 1, 42, "fcce801ee33e6400"],
+        ["/glyph-package/schema", 36, 45, 2, 1, "9047f1df86dca200"],
+        ["/glyph-package/block", 48, 2290, 3, 39, "73b5ace0cd705c00"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0012/ORD-0012.hgml": {
+      "nodes": [
+        ["", 0, 866, 1, 41, "932bd91c9b234200"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0012/ORD-0012.json": {
+      "nodes": [
+        ["", 0, 7856, 1, 275, "df7c9ac7a31ed000"],
+        ["/type", 12, 22, 2, 1, "6cfcf51e0b22b400"],
+        ["/schema", 36, 37, 3, 1, "370cabd49014b848"],
+        ["/version", 52, 62, 4, 1, "d8e79ed86d16e400"],
+        ["/source", 76, 198, 5, 7, "f007b174dc30b0c0"],
+        ["/source/length", 92, 95, 6, 1, "b79dfc4024541fe0"],
+        ["/source/checksum", 113, 131, 7, 1, "10dfaa0eb62f6600"],
+        ["/source/encoding", 149, 156, 8, 1, "51d8d6a8889ada00"],
+        ["/source/newline", 173, 177, 9, 1, "cec09c50a37ddc00"],
+        ["/source/uri", 190, 194, 10, 1, "e4ee48ec82cd2c00"],
+        ["/stores", 212, 324, 12, 5, "d76ade5f46ffe000"],
+        ["/stores/templates", 231, 249, 13, 1, "84d05340a5f9c600"],
+        ["/stores/rules", 264, 282, 14, 1, "44e11ee057e03600"],
+        ["/stores/expansions", 302, 320, 15, 1, "72ed34c8e6bc4980"],
+        ["/projection", 342, 348, 17, 1, "8e0b2f6630c6ec00"],
+        ["/segments", 364, 7833, 18, 256, "589090981ec54200"],
+        ["/segments/0", 370, 7829, 19, 254, "1a5d8390d4d1df74"],
+        ["/diagnostics", 7852, 7854, 274, 1, "721635809ba5e8c0"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0012/ORD-0012.manifest.json": {
+      "nodes": [
+        ["", 0, 301, 1, 16, "118e5f8830d31200"],
+        ["/order", 13, 23, 2, 1, "1cc36da4f7404600"],
+        ["/engine", 37, 47, 3, 1, "d8e79ed86d16e400"],
+        ["/emitted", 62, 88, 4, 1, "7dcee998c5a36400"],
+        ["/files", 101, 188, 5, 6, "8100f7b87ebe2800"],
+        ["/files/0", 107, 122, 6, 1, "a7b58d6a931a2e00"],
+        ["/files/1", 128, 142, 7, 1, "02defdb07bf20400"],
+        ["/files/2", 148, 163, 8, 1, "77f7897078f8ee00"],
+        ["/files/3", 169, 184, 9, 1, "81cadb305047c200"],
+        ["/source", 202, 245, 11, 1, "2de05a767f079a00"],
+        ["/diagnostics", 264, 298, 12, 4, "83b9246074dcc400"],
+        ["/diagnostics/fix", 277, 278, 13, 1, "350ca8b09bec4d20"],
+        ["/diagnostics/total", 293, 294, 14, 1, "350ca8b09bec4d20"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0012/ORD-0012.pgml": {
+      "nodes": [
+        ["", 0, 520, 1, 7, "994ab688b51f0800"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/ORD-0012/ORD-0012.xml": {
+      "nodes": [
+        ["", 0, 1128, 1, 26, "28260d4080f86200"],
+        ["/glyph-package", 0, 1128, 1, 26, "28260d4080f86200"],
+        ["/glyph-package/schema", 36, 45, 2, 1, "9047f1df86dca200"],
+        ["/glyph-package/block", 48, 1111, 3, 23, "8f3b8630f8f31200"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/README.md": {
+      "nodes": [
+        ["", 0, 5403, 1, 26, "c7c099107b0e1200"],
+        ["ems-001--o-glyph-em-rust", 0, 5403, 1, 26, "c7c099107b0e1200"],
+        ["a-ordem-aberta", 403, 422, 9, 2, "5941cf30e1126c00"],
+        ["ordens-fechadas", 422, 5403, 11, 16, "208e9502c6c63a00"]
+      ]
+    },
+    ".guidelines/.orders/EMS-001/RETURN.md": {
+      "nodes": [
+        ["", 0, 91241, 1, 1266, "90bdd4268c10e340"],
+        ["ems-001--the-return-of-the-sessions-that-run-the-queue", 0, 91241, 1, 1266, "90bdd4268c10e340"],
+        ["where-the-session-is", 523, 1445, 9, 9, "fe4eda90724bc400"],
+        ["waiting-for-the-regent", 1445, 2064, 18, 12, "8ae9a4176d068800"],
+        ["questions-for-the-regent", 2064, 13857, 30, 203, "74b9c298e8ad6a00"],
+        ["ords-closed", 13857, 29977, 233, 242, "ce60748c44e0e700"],
+        ["open-and-why", 29977, 39677, 475, 143, "6512663490fd1a00"],
+        ["ord-0010s-adr-signed-b", 30384, 39677, 483, 135, "a5111136934f4e00"],
+        ["ord-0009-how-it-was-read", 39677, 44246, 618, 70, "efa7db908ab52200"],
+        ["ord-0008-how-it-was-read", 44246, 46378, 688, 34, "e26e3c6a832b4000"],
+        ["ord-0007-how-it-was-read", 46378, 49001, 722, 41, "a45f3c14a7fbf500"],
+        ["ord-0006-how-it-was-read", 49001, 52156, 763, 48, "58ba7bcc61d4bac0"],
+        ["ord-0005-how-it-was-read", 52156, 52772, 811, 13, "a621d4cec1448a00"],
+        ["ord-0004-how-it-was-read", 52772, 53547, 824, 14, "b7ff61be9dbf4600"],
+        ["ord-0003-how-it-was-read", 53547, 54421, 838, 15, "1d72c796b4656d80"],
+        ["the-layout-built", 54421, 56121, 853, 36, "33b95d6ca0e6ff00"],
+        ["measured", 56121, 76308, 889, 284, "01885ede570fe600"],
+        ["the-session-measured", 76308, 91241, 1173, 94, "760ada486974d900"]
+      ]
+    },
+    ".guidelines/.orders/EMS-002/EMS-002.pgml": {
+      "nodes": [
+        ["", 0, 3981, 1, 56, "7e5486482b91e200"]
+      ]
+    },
+    ".guidelines/.orders/EMS-002/ORD-0001/ORD-0001.hgml": {
+      "nodes": [
+        ["", 0, 3058, 1, 144, "dbe50f80bd824340"]
+      ]
+    },
+    ".guidelines/.orders/EMS-002/ORD-0001/ORD-0001.json": {
+      "nodes": [
+        ["", 0, 15474, 1, 504, "a6a682d0b6603200"],
+        ["/type", 12, 22, 2, 1, "6cfcf51e0b22b400"],
+        ["/schema", 36, 37, 3, 1, "370cabd49014b848"],
+        ["/version", 52, 62, 4, 1, "329156f83f19d000"],
+        ["/source", 76, 199, 5, 7, "592626af12c53900"],
+        ["/source/length", 92, 96, 6, 1, "53d24b6c5ebba180"],
+        ["/source/checksum", 114, 132, 7, 1, "bc19611e77428400"],
+        ["/source/encoding", 150, 157, 8, 1, "51d8d6a8889ada00"],
+        ["/source/newline", 174, 178, 9, 1, "cec09c50a37ddc00"],
+        ["/source/uri", 191, 195, 10, 1, "e4ee48ec82cd2c00"],
+        ["/stores", 213, 325, 12, 5, "5cc3db2874638080"],
+        ["/stores/templates", 232, 250, 13, 1, "84d05340a5f9c600"],
+        ["/stores/rules", 265, 283, 14, 1, "44e11ee057e03600"],
+        ["/stores/expansions", 303, 321, 15, 1, "64207926a2040000"],
+        ["/projection", 343, 349, 17, 1, "8e0b2f6630c6ec00"],
+        ["/segments", 365, 15451, 18, 485, "92932067c0d99000"],
+        ["/segments/0", 371, 15447, 19, 483, "86a1477870e1ac00"],
+        ["/diagnostics", 15470, 15472, 503, 1, "721635809ba5e8c0"]
+      ]
+    },
+    ".guidelines/.orders/EMS-002/ORD-0001/ORD-0001.manifest.json": {
+      "nodes": [
+        ["", 0, 301, 1, 16, "d73721862ffc6a00"],
+        ["/order", 13, 23, 2, 1, "522712a72699de00"],
+        ["/engine", 37, 47, 3, 1, "329156f83f19d000"],
+        ["/emitted", 62, 88, 4, 1, "a589065e26669c00"],
+        ["/files", 101, 188, 5, 6, "a10a6bb852f1ba00"],
+        ["/files/0", 107, 122, 6, 1, "324f46b04af8a400"],
+        ["/files/1", 128, 142, 7, 1, "3101a5fa44e2ce00"],
+        ["/files/2", 148, 163, 8, 1, "75cfb78e5c262c00"],
+        ["/files/3", 169, 184, 9, 1, "6193008a2f718400"],
+        ["/source", 202, 245, 11, 1, "fe2d3fc2c7845400"],
+        ["/diagnostics", 264, 298, 12, 4, "83b9246074dcc400"],
+        ["/diagnostics/fix", 277, 278, 13, 1, "350ca8b09bec4d20"],
+        ["/diagnostics/total", 293, 294, 14, 1, "350ca8b09bec4d20"]
+      ]
+    },
+    ".guidelines/.orders/EMS-002/ORD-0001/ORD-0001.pgml": {
+      "nodes": [
+        ["", 0, 1588, 1, 12, "aeb1769065202300"]
+      ]
+    },
+    ".guidelines/.orders/EMS-002/ORD-0001/ORD-0001.xml": {
+      "nodes": [
+        ["", 0, 3028, 1, 49, "10a3fcc8a1eb0f00"],
+        ["/glyph-package", 0, 3028, 1, 49, "10a3fcc8a1eb0f00"],
+        ["/glyph-package/schema", 36, 45, 2, 1, "9047f1df86dca200"],
+        ["/glyph-package/block", 48, 3011, 3, 46, "506437a8032aa200"]
+      ]
+    },
+    ".guidelines/.orders/EMS-002/README.md": {
+      "nodes": [
+        ["", 0, 605, 1, 16, "64cacaf89d65ef00"],
+        ["ems-002--o-glyph-100-em-rust", 0, 605, 1, 16, "64cacaf89d65ef00"],
+        ["a-ordem-aberta", 396, 524, 9, 4, "db06b18ae8ae1300"],
+        ["ordens-fechadas", 524, 605, 13, 4, "79b9b948e1bd3280"]
+      ]
+    },
+    ".guidelines/.orders/HANDOFF-2026-08-30.ast.json": {
+      "nodes": [
+        ["", 0, 62100, 1, 1892, "887e04ae26dda400"],
+        ["/type", 12, 22, 2, 1, "6cfcf51e0b22b400"],
+        ["/schema", 36, 37, 3, 1, "370cabd49014b848"],
+        ["/version", 52, 62, 4, 1, "fac80e020ba9ee00"],
+        ["/source", 76, 5525, 5, 8, "a03f8d48e3237800"],
+        ["/source/length", 92, 96, 6, 1, "80b6a7a0e87c9800"],
+        ["/source/checksum", 114, 132, 7, 1, "975a11c87ebede00"],
+        ["/source/encoding", 150, 157, 8, 1, "51d8d6a8889ada00"],
+        ["/source/newline", 174, 178, 9, 1, "cec09c50a37ddc00"],
+        ["/source/uri", 191, 235, 10, 1, "daaecdb670b34c00"],
+        ["/source/text", 249, 5521, 11, 1, "7d5222d04c234d00"],
+        ["/stores", 5539, 5651, 13, 5, "a0b084b832d35a00"],
+        ["/stores/templates", 5558, 5576, 14, 1, "84d05340a5f9c600"],
+        ["/stores/rules", 5591, 5609, 15, 1, "ab355f78ff058500"],
+        ["/stores/expansions", 5629, 5647, 16, 1, "a0397f10eb70b800"],
+        ["/projection", 5669, 5675, 18, 1, "8e0b2f6630c6ec00"],
+        ["/segments", 5691, 62076, 19, 1872, "01cf5250782fae00"],
+        ["/segments/0", 5697, 11330, 20, 190, "2a05de17f3684800"],
+        ["/segments/1", 11336, 19246, 210, 262, "3b262e384d412c00"],
+        ["/segments/2", 19252, 33045, 472, 442, "c28b9ac8fa19b000"],
+        ["/segments/3", 33051, 39711, 914, 226, "78a3fd80d3799600"],
+        ["/segments/4", 39717, 47582, 1140, 262, "e9052b6f3a990200"],
+        ["/segments/5", 47588, 54222, 1402, 226, "e201572039a6a400"],
+        ["/segments/6", 54228, 62072, 1628, 262, "e34b1700db450600"],
+        ["/diagnostics", 62095, 62097, 1891, 1, "721635809ba5e8c0"]
+      ]
+    },
+    ".guidelines/.orders/HANDOFF-2026-08-30.pgml": {
+      "nodes": [
+        ["", 0, 5214, 1, 56, "ff56a4d807aa8800"]
+      ]
+    },
+    ".guidelines/.orders/HANDOFF-2026-08-30.xml": {
+      "nodes": [
+        ["", 0, 8365, 1, 166, "60b11d5e775cfb00"],
+        ["/glyph", 0, 8364, 1, 166, "f251bfe0f5cbd900"],
+        ["/glyph/block[1]", 10, 870, 2, 17, "236bbae801b76000"],
+        ["/glyph/block[2]", 873, 2073, 19, 23, "20220c1075956e00"],
+        ["/glyph/block[3]", 2076, 4351, 42, 38, "de5fea01feb35200"],
+        ["/glyph/block[4]", 4354, 5250, 80, 20, "71a0100c0f160200"],
+        ["/glyph/block[5]", 5253, 6368, 100, 23, "f7d68e20932bde00"],
+        ["/glyph/block[6]", 6371, 7241, 123, 20, "5f886f88c2721520"],
+        ["/glyph/block[7]", 7244, 8355, 143, 23, "9367bbeb51dae600"]
+      ]
+    },
+    ".guidelines/.orders/HANDOFF-2026-09-24.pgml": {
+      "nodes": [
+        ["", 0, 8551, 1, 94, "65bb2030784e2e00"]
+      ]
+    },
+    ".guidelines/.orders/HANDOFF-2026-09-24.xml": {
+      "nodes": [
+        ["", 0, 14087, 1, 247, "d653ab5a5d3cc000"],
+        ["/glyph-package", 0, 14086, 1, 247, "0b04a7747bc0fa00"],
+        ["/glyph-package/schema", 36, 45, 2, 1, "9047f1df86dca200"],
+        ["/glyph-package/block", 48, 14069, 3, 244, "d80afb7033f15c00"]
+      ]
+    },
+    ".guidelines/.orders/HANDOFF-2026-09-26.pgml": {
+      "nodes": [
+        ["", 0, 2792, 1, 35, "9bf485f674c0dc00"]
+      ]
+    },
+    ".guidelines/.orders/HANDOFF-2026-09-26.xml": {
+      "nodes": [
+        ["", 0, 4704, 1, 84, "5d5831e815c6ac00"],
+        ["/glyph-package", 0, 4703, 1, 84, "6307d7729d076000"],
+        ["/glyph-package/schema", 36, 45, 2, 1, "9047f1df86dca200"],
+        ["/glyph-package/block", 48, 4686, 3, 81, "32856d7ab6f80e00"]
+      ]
+    },
+    ".guidelines/.orders/INTAKE-BURN-INVARIANCE.md": {
+      "nodes": [
+        ["", 0, 6873, 1, 137, "7560f7b8b987ba00"],
+        ["preliminary-intake--is-the-burn-a-canonical-form", 0, 6873, 1, 137, "7560f7b8b987ba00"],
+        ["1-what-synonymy-means-in-glyph", 754, 2044, 16, 25, "239c74789733f200"],
+        ["2-three-strengths-of-same-and-the-thresholds", 2044, 2635, 41, 12, "dfdd14c6993bde00"],
+        ["3-measured", 2635, 3055, 53, 14, "c4ca006065c45c00"],
+        ["4-diagnosis--the-brackets-are-the-rule-one-table-line-contradicted-it", 3055, 4705, 67, 32, "6faf234ef5404a00"],
+        ["5-what-this-decided", 4705, 5430, 99, 15, "22a3f6a64d833e00"],
+        ["6-v6--measured-and-read-against-the-norm-that-is-in-force", 5430, 6471, 114, 17, "b4764ab279d912c0"],
+        ["7-why-this-is-a-candidate-order", 6471, 6873, 131, 7, "cc43120c596f12c0"]
+      ]
+    },
+    ".guidelines/.orders/INTAKE-EFFECTS.md": {
+      "nodes": [
+        ["", 0, 10180, 1, 227, "2afc9a1cdc1caea0"],
+        ["preliminary-intake--effects", 0, 10180, 1, 227, "2afc9a1cdc1caea0"],
+        ["1-what-the-regent-wants", 399, 1007, 10, 12, "1ead87263b6b9a00"],
+        ["2-where-it-does-not-go-and-why", 1007, 1762, 22, 15, "fd77ed9440c06500"],
+        ["3-where-it-does-go--measured", 1762, 3135, 37, 37, "75afb98815c0d800"],
+        ["31-the-one-hard-problem", 2410, 3135, 58, 16, "8ba173d81edd6000"],
+        ["4-the-line-declared-never-applied", 3135, 5926, 74, 58, "272ed56e4608a780"],
+        ["41-restore-is-the-only-thing-that-breaks-it", 3888, 5926, 91, 41, "09125fee6689bc00"],
+        ["5-the-precedent-logic-was-underestimated", 5926, 6950, 132, 25, "0e59e63c3decd200"],
+        ["6-calling-a-condition-by-name", 6950, 8067, 157, 22, "4c26dc10a4e87600"],
+        ["7-candidate-emitted-shape", 8067, 8879, 179, 26, "1f1f3f6ca857c400"],
+        ["8-what-is-still-missing-before-this-can-be-an-order", 8879, 9352, 205, 9, "8d036a9e8bacf180"],
+        ["9-cost-split", 9352, 9789, 214, 7, "56066808c3d2cd00"],
+        ["10-unrelated-finding-worth-its-own-fix", 9789, 10180, 221, 7, "6e453a4c56005100"]
+      ]
+    },
+    ".guidelines/.orders/INTAKE-FIELD-2026-09.md": {
+      "nodes": [
+        ["", 0, 10181, 1, 137, "be10d13ea501ad40"],
+        ["field-intake--the-engine-used-on-a-client-project", 0, 10181, 1, 137, "be10d13ea501ad40"],
+        ["1-finding-1--the-burn-does-not-re-read-clean-h-09-confirmed-in-the-field", 722, 3142, 13, 36, "b0c5107cd67bb400"],
+        ["2-finding-2--rev--dist-burn-as-heavy--fixed-in-two-halves", 3142, 5398, 49, 35, "3694d9c0bc4c2800"],
+        ["3-finding-3--four-structural-problems-in-the-kit-not-in-the-engine", 5398, 7090, 84, 12, "cfaebb3e059f5c00"],
+        ["4-finding-4--an-fsm-in-front-of-the-model-sized-not-adopted", 7090, 9327, 96, 29, "185d64808bbe4c00"],
+        ["5-what-this-intake-changed-elsewhere", 9327, 10181, 125, 13, "5371e3501923de00"]
+      ]
+    },
+    ".guidelines/.orders/INTAKE-FORMAL-ANALYSIS.md": {
+      "nodes": [
+        ["", 0, 21234, 1, 370, "87bb4ad62d545500"],
+        ["formal-analysis--intakes-a-b-and-c", 0, 21234, 1, 370, "87bb4ad62d545500"],
+        ["0-notation-and-measured-constants", 821, 1949, 15, 22, "7d5384f26c4ee200"],
+        ["1-c--the-burn-as-a-normal-form", 1949, 8079, 37, 107, "435dc0a8c61f0e00"],
+        ["11-the-burn-β", 2143, 3636, 42, 24, "1123a8e059630800"],
+        ["12-the-equivalence--and-what-normal-form-claims", 3636, 4634, 66, 19, "6e7dcdba7d5e7e00"],
+        ["13-the-dialect-theorem--where--and-φ-disagree", 4634, 5953, 85, 24, "83c81d621f6d9200"],
+        ["14-conjunction-order--preserved-by-requirement", 5953, 6469, 109, 9, "d27a16eec79fee00"],
+        ["15-operations-and-cost", 6469, 7189, 118, 11, "6d6bf2f826fb62a0"],
+        ["16-invariants", 7189, 8079, 129, 15, "4781021e76014c00"],
+        ["2-b--the-declared-edge-graph-between-orders", 8079, 13711, 144, 99, "e828da7619057a00"],
+        ["21-objects", 8293, 9116, 149, 19, "6e1eacb490b65700"],
+        ["22-why-the-edge-is-declared-not-inferred--the-correct-statement", 9116, 10883, 168, 30, "5e8bfbbe4f7d5000"],
+        ["23-operations-and-cost", 10883, 11645, 198, 11, "192b3c70c177b640"],
+        ["24-invariants", 11645, 12476, 209, 12, "bdaf12bea68e8f80"],
+        ["25-defeasible-logic--the-vocabulary-and-its-honest-reach", 12476, 13711, 221, 22, "f7c9a58e2b993e80"],
+        ["3-a--reference-resolution-over-a-document-forest", 13711, 18846, 243, 89, "ef4861e42744a600"],
+        ["31-objects", 13916, 14500, 248, 11, "1a335abc8f580000"],
+        ["32-operations-and-cost", 14500, 15188, 259, 11, "a13dfa14b9a06b00"],
+        ["33-rebuild-against-incremental--the-crossover", 15188, 16199, 270, 17, "8dd361c8224940c0"],
+        ["34-euler-tour--where-it-applies-and-the-volume-that-would-justify-it", 16199, 16967, 287, 14, "1a9c4abc052c4c00"],
+        ["35-order-maintenance--why-the-heading-path-is-the-stable-id-here", 16967, 18080, 301, 18, "8b53958eab8c5e00"],
+        ["36-invariants", 18080, 18846, 319, 13, "864b44b6c58e5600"],
+        ["4-the-shared-primitive--a--b", 18846, 19846, 332, 22, "1c173b86777de000"],
+        ["5-what-is-proved-what-is-measured-what-is-still-assumed", 19846, 21234, 354, 17, "3073b6b63bd34900"]
+      ]
+    },
+    ".guidelines/.orders/INTAKE-ORDER-COHERENCE.md": {
+      "nodes": [
+        ["", 0, 6972, 1, 129, "63fae9f4a32b4e00"],
+        ["preliminary-intake--coherence-between-emitted-orders", 0, 6972, 1, 129, "63fae9f4a32b4e00"],
+        ["1-between-orders--nothing-not-even-informal", 596, 1126, 12, 10, "5394dc6885706c00"],
+        ["2-inside-one-order--exists-disciplined-and-is-the-mould", 1126, 1891, 22, 18, "0fccc3f42bed9f00"],
+        ["3-the-finding-nobody-asked-for--orders-do-not-share-an-identity", 1891, 2464, 40, 10, "cfbbaaf8b38c7e00"],
+        ["4-declared-edges-never-inferred", 2464, 3764, 50, 24, "d1bef5b0df26b400"],
+        ["5-required-not-nullable--the-distinction-that-changes-step-1", 3764, 4754, 74, 17, "f21092c85e688800"],
+        ["6-the-honest-limit", 4754, 5315, 91, 10, "20448290c33f9000"],
+        ["7-where-the-relation-is-read-from-and-what-that-decides", 5315, 5998, 101, 13, "05f2e7dc32820e00"],
+        ["8-where-this-sits-among-the-other-intakes", 5998, 6972, 114, 16, "6c963cc8e2dfa800"]
+      ]
+    },
+    ".guidelines/.orders/INTAKE-PARSER-SPLIT.md": {
+      "nodes": [
+        ["", 0, 10499, 1, 163, "baf9b8800f15ee00"],
+        ["preliminary-intake--splitting-glyph-parserjs-into-a-directory", 0, 10499, 1, 163, "baf9b8800f15ee00"],
+        ["1-what-the-file-is-measured", 690, 2831, 13, 31, "2bf62de8f1313e80"],
+        ["2-consumers--what-must-not-notice", 2831, 3988, 44, 16, "bc6d08c058454100"],
+        ["3-proposed-layout", 3988, 5658, 60, 27, "7fe20b6e8ce72800"],
+        ["4-order-of-moves--leaves-first-one-module-per-commit-green-at-each", 5658, 6869, 87, 18, "d9d851a8551e6400"],
+        ["5-what-the-split-makes-cheap-and-is-not-the-split", 6869, 7339, 105, 9, "1f19ec747ac7f400"],
+        ["6-what-the-cut-measured--the-state-after", 7339, 10499, 114, 50, "88346938f8957d80"]
+      ]
+    },
+    ".guidelines/.orders/INTAKE-PIN-TRAFFIC.md": {
+      "nodes": [
+        ["", 0, 5241, 1, 95, "0d662b7a7a69b1a0"],
+        ["preliminary-intake--pin-traffic-and-the-ems-the-user-drives", 0, 5241, 1, 95, "0d662b7a7a69b1a0"],
+        ["1-pin--a-conditional-the-user-writes-in-the-editor", 335, 1700, 8, 25, "de1f97ac431dd600"],
+        ["2-the-ems-and-the-ord-as-the-user-drives-them", 1700, 3189, 33, 24, "ed4a1b901b197600"],
+        ["3-traffic-and-the-paths", 3189, 3983, 57, 16, "e03e63b4c23bca00"],
+        ["4-the-ems-configuration-inside-every-ords-package", 3983, 4648, 73, 12, "ccb213602f83d580"],
+        ["5-settled-when-built", 4648, 5241, 85, 11, "4a1dadbaef5d6c00"]
+      ]
+    },
+    ".guidelines/.orders/INTAKE-RUST-LADDER.md": {
+      "nodes": [
+        ["", 0, 26750, 1, 339, "abbf4a3af2de9a80"],
+        ["preliminary-intake--the-rust-ladder-audited-against-the-engine-it-ports", 0, 26750, 1, 339, "abbf4a3af2de9a80"],
+        ["1-the-engine-the-ladder-ports--measured-first", 1062, 2712, 18, 15, "0568c1de73129680"],
+        ["2-the-ladder-as-a-graph", 2712, 3177, 33, 9, "d4f028c0b4d0fa00"],
+        ["3-facts-the-draft-states-that-are-not-true-of-this-repository", 3177, 4344, 42, 11, "02528d588f76d000"],
+        ["4-redundancy-and-duplication", 4344, 5584, 53, 14, "b747e8f08e1c4200"],
+        ["5-capability-the-draft-would-lose", 5584, 6153, 67, 11, "cd764a6e54bdfc00"],
+        ["6-where-the-structure-fights-rust", 6153, 7740, 78, 15, "01ee4ade95544900"],
+        ["7-the-workspace", 7740, 8570, 93, 15, "518932d830837458"],
+        ["8-the-regents-answers-and-what-they-leave-open", 8570, 9651, 108, 10, "c6308600e789e800"],
+        ["9-dependencies--measured-before-adopted", 9651, 18043, 118, 107, "e1a72e9e1cdf3200"],
+        ["91-the-trees-measured", 10124, 12081, 127, 34, "5c154c865d40b100"],
+        ["92-classified-against-the-criterion", 12081, 16133, 161, 24, "39b268702eae0200"],
+        ["93-vendoring-in-practice", 16133, 18043, 185, 40, "43bd18f0c2699400"],
+        ["10-interactive-concepts--a-registry-that-grows-without-reform", 18043, 19226, 225, 20, "b2e13b8042bd3a00"],
+        ["11-template--six-meanings-six-names", 19226, 24090, 245, 58, "377577a010c59280"],
+        ["111-modelo-measured-before-renaming", 20755, 21632, 265, 13, "a9b377e48ce11600"],
+        ["112-applied--nothing-emitted-moved", 21632, 22486, 278, 11, "12d5393eb746e4e0"],
+        ["113-waiting--each-touches-an-emitted-document-or-a-format-on-disk", 22486, 24090, 289, 14, "4e0459de84df1680"],
+        ["12-spelling--the-convention-measured", 24090, 26750, 303, 37, "642906b09fade000"]
+      ]
+    },
+    ".guidelines/.orders/INTAKE-RUST.md": {
+      "nodes": [
+        ["", 0, 14252, 1, 200, "957dc09896d80800"],
+        ["preliminary-intake--migrating-the-engine-to-rust", 0, 14252, 1, 200, "957dc09896d80800"],
+        ["1-what-the-argument-is-not--capacity-measured-and-set-aside", 904, 1722, 15, 16, "598d43e4ad8d6e00"],
+        ["2-what-a-compiler-would-verify-here--the-argument-made-concrete", 1722, 5730, 31, 34, "85d79ec084be62c0"],
+        ["3-the-steelman--the-strongest-case-for-rust-on-the-corrected-motivation", 5730, 7698, 65, 34, "f36d27be15ec7200"],
+        ["4-the-defeater--the-strongest-case-against", 7698, 10849, 99, 52, "8d25c8be04ee5000"],
+        ["5-what-would-be-measured--since-the-value-itself-cannot-be", 10849, 12224, 151, 18, "75fcbecc61013800"],
+        ["6-ordering-whatever-is-decided--and-the-plan-if-it-is-rust", 12224, 14252, 169, 32, "6ea7e686841dad00"]
+      ]
+    },
+    ".guidelines/.orders/INTAKE-VARIABLES.md": {
+      "nodes": [
+        ["", 0, 11194, 1, 245, "0d5601fa55b8bd00"],
+        ["preliminary-intake--variables-and-the-bracket-a-literal-cannot-hold", 0, 11194, 1, 245, "0d5601fa55b8bd00"],
+        ["1-the-attachment-verified", 425, 5618, 10, 119, "54bf3a2e8b470e00"],
+        ["11-the-cause-is-not-the-escape-a-glyph-literal-cannot-contain-", 853, 2316, 22, 31, "e3c502705c9227c0"],
+        ["12-the-diagnostic-gives-advice-that-is-already-followed", 2316, 2812, 53, 10, "f8c63a4ecdbca300"],
+        ["12b-the-readme-documents-this--and-gets-two-of-the-five-characters-wrong", 2812, 3775, 63, 22, "fd1436b2ea068b00"],
+        ["13-the-fence-already-carries-a-bracket-and-it-is-the-only-thing-that-does", 3775, 4550, 85, 19, "76d009c61732e000"],
+        ["14-the-vocabulary--ten-names-that-do-not-exist", 4550, 4922, 104, 8, "274cd446d8bb0e00"],
+        ["15-note-is-refused-while-note-is-emitted--measured", 4922, 5366, 112, 11, "c9273a823e56a800"],
+        ["16-what-the-file-uses-correctly", 5366, 5618, 123, 6, "02c20f9cd8b4c000"],
+        ["2-the-claim-the-file-makes-measured-against-the-engine", 5618, 7002, 129, 43, "c25d6b702ba24400"],
+        ["21-the-machinery-exists-one-layer-down", 6457, 7002, 155, 17, "9f5f0eb8ddead800"],
+        ["3-what-this-settles-that-was-already-open", 7002, 7772, 172, 12, "ecdb56bf3592a900"],
+        ["4-rsn--deal-with-files-with-this-kind-of-content-split", 7772, 9423, 184, 33, "427054042c1181c0"],
+        ["a--the-engine-cannot-read-a-file-at-all-small-independent", 7887, 8340, 188, 8, "9371bc56720ff200"],
+        ["b--the-diagnostic-in-12-names-the-wrong-character-trivial", 8340, 8493, 196, 4, "b653ed4660b33400"],
+        ["c--a-verbatim-fence-so-glyph-can-quote-glyph-small-to-medium", 8493, 8890, 200, 8, "e83001e05c48f280"],
+        ["d--variables-that-bind-outside-the-fence-large-measure-before-design", 8890, 9423, 208, 9, "80d5f18ca6982000"],
+        ["5-delivered--34705", 9423, 11194, 217, 29, "b1e95ae8a72b4a00"],
+        ["what-d-did-not-deliver-and-why", 10341, 11194, 230, 16, "fc7dede2379b9200"]
+      ]
+    },
+    ".guidelines/.orders/INTAKE-VIRTUAL-PATH.md": {
+      "nodes": [
+        ["", 0, 36781, 1, 625, "bf32b5d0e7cd4200"],
+        ["preliminary-intake--the-computed-context-mini-repo-and-virtual-path", 0, 36781, 1, 625, "bf32b5d0e7cd4200"],
+        ["1-the-goal-as-the-regent-states-it", 861, 1330, 17, 9, "21adcdb852ab8900"],
+        ["2-the-cost-model--corrected-by-cláudio-and-adopted", 1330, 2307, 26, 16, "585ebd60d6d69c00"],
+        ["3-glyph-reads-and-tracks-guidelines--already-true-three-times", 2307, 3204, 42, 12, "feac6a40458e7e00"],
+        ["4-who-triggers-the-recompute--the-build-gate", 3204, 3574, 54, 7, "74b78bb6f0db2500"],
+        ["5-xml-or-json", 3574, 4060, 61, 9, "3a59df6c30de4000"],
+        ["6-thresholds--declared-before-measuring", 4060, 5413, 70, 25, "61411386427d6000"],
+        ["7-measured", 5413, 8258, 95, 57, "5de14f2cd5742e00"],
+        ["m1--234--ambiguous-band-16-points-under-the-bar", 5429, 6469, 97, 20, "3d07c4d43f7d5c00"],
+        ["m2--median-8--decisively-local-and-bimodal", 6469, 6954, 117, 10, "dd1cea403dc37ec0"],
+        ["m3--35-pairs-raw-3-real-after-two-confounds-are-removed", 6954, 8258, 127, 25, "f67f99eee121bc00"],
+        ["8-what-the-measurements-decide--and-the-round-trip-baseline", 8258, 12451, 152, 78, "89367ea63d3efe00"],
+        ["81-protocol--declared-before-counting", 8838, 10395, 163, 27, "980557413385c200"],
+        ["82-measured--eleven-sessions", 10395, 11930, 190, 30, "f9915b20a1584a00"],
+        ["83-what-it-does-not-say", 11930, 12451, 220, 10, "80bf79ca91a576c0"],
+        ["9-ownership-inversion--evaluated", 12451, 13190, 230, 14, "9061a8f6c19bd800"],
+        ["10-virtual-path--nine-holes-held-as-backlog", 13190, 14123, 244, 19, "be74c88a7ce59000"],
+        ["11-what-survives-of-gepeto", 14123, 14568, 263, 9, "e5073ba4add23600"],
+        ["12-the-smallest-verifiable-step-and-what-it-is-not", 14568, 15392, 272, 11, "abaf143a33fffa00"],
+        ["13-the-chatgpt-proposal--sized-against-the-repository", 15392, 21257, 283, 98, "34a0b840cdc8d300"],
+        ["survives-the-size-filter", 16455, 19299, 299, 48, "5bb0ace0db74d900"],
+        ["solution-looking-for-a-problem", 19299, 20824, 347, 26, "938c725c0c004b80"],
+        ["what-this-adds-to-12", 20824, 21257, 373, 8, "eddd7db0b493e800"],
+        ["14-effect-on-hgml_planmd-and-hgml_convergencemd", 21257, 21387, 381, 4, "22c1f8d8fbe64400"],
+        ["15-timing--the-regents-counterpoint-and-the-split-it-forces", 21387, 26887, 385, 87, "5b77c7d894840100"],
+        ["design-now--the-contract-a-winning-bet", 22484, 24275, 403, 22, "e6e1b432f3f11c00"],
+        ["defer--the-mechanism-early-design-is-a-losing-bet", 24275, 25374, 425, 20, "bb9c10184edad430"],
+        ["the-bridge--the-measurement-is-portable-and-the-target-exists", 25374, 26372, 445, 17, "e94d82fc76f6af00"],
+        ["the-honest-risk-of-the-split", 26372, 26887, 462, 10, "15da108814e4e600"],
+        ["16-mcp-resources--the-same-primitive-at-a-different-binding-time", 26887, 30304, 472, 53, "627d16e4c2aa1900"],
+        ["17-housekeeping-outside-the-study", 30304, 30574, 525, 6, "84b47532d3c49400"],
+        ["18-the-october-re-measurement-before-the-code--thresholds", 30574, 33606, 531, 49, "5006a2c836076c00"],
+        ["19-the-october-re-measurement--measured", 33606, 36781, 580, 46, "84d154d08d068d00"]
+      ]
+    },
+    ".guidelines/.orders/ORD-2026-08-30-01.dispatch.json": {
+      "nodes": [
+        ["", 0, 69287, 1, 1032, "44290728a7934a00"],
+        ["/schema", 14, 15, 2, 1, "340ca71c160082b8"],
+        ["/id", 25, 44, 3, 1, "112b71107242ca00"],
+        ["/version", 59, 60, 4, 1, "3d0cb548cb4aa078"],
+        ["/language", 76, 83, 5, 1, "a4f668006f494c00"],
+        ["/home", 95, 248, 6, 1, "83d05b6091468c00"],
+        ["/supersedes", 266, 1506, 7, 30, "a3ffe9f7bbfba680"],
+        ["/supersedes/0", 272, 365, 8, 4, "dc7fc960e732a100"],
+        ["/supersedes/1", 371, 522, 12, 4, "7e13384c1b2c5c00"],
+        ["/supersedes/2", 528, 720, 16, 4, "24869af82f52d600"],
+        ["/supersedes/3", 726, 943, 20, 4, "5a450050b6808c00"],
+        ["/supersedes/4", 949, 1114, 24, 4, "fd61ed1cf9054800"],
+        ["/supersedes/5", 1120, 1348, 28, 4, "5243bd70ccc0ec00"],
+        ["/supersedes/6", 1354, 1502, 32, 4, "50146147ac0dd600"],
+        ["/immutable", 1523, 1527, 37, 1, "895d0f0442fce600"],
+        ["/release", 1542, 1552, 38, 1, "fac80e020ba9ee00"],
+        ["/class", 1565, 2023, 39, 13, "bf06392f1fa20c00"],
+        ["/class/from", 1579, 1583, 40, 1, "ebc91f38133a8900"],
+        ["/class/to", 1595, 1599, 41, 1, "cecb30285fc0ce00"],
+        ["/class/label", 1614, 1717, 42, 1, "d3402ccafae6d400"],
+        ["/class/question_cap", 1739, 1740, 43, 1, "310ca264b39b76d0"],
+        ["/class/spent", 1755, 1756, 44, 1, "310ca264b39b76d0"],
+        ["/class/remaining", 1775, 1776, 45, 1, "350ca8b09bec4d20"],
+        ["/class/remainder_converted_to", 1808, 1832, 46, 1, "7e4f999076bf4200"],
+        ["/class/questions_spent_in_v4", 1863, 2019, 47, 4, "b0719768f7353800"],
+        ["/regent_decisions", 2047, 8349, 52, 38, "04e5cc4872d02400"],
+        ["/regent_decisions/format", 2063, 2088, 53, 1, "7ae9dee67b7ee400"],
+        ["/regent_decisions/skill_folder", 2110, 2230, 54, 5, "3d6fcef82c9e4880"],
+        ["/regent_decisions/S5_release_digit", 2256, 2279, 59, 1, "fed496a26d964800"],
+        ["/regent_decisions/S6_empty_schema", 2304, 2354, 60, 1, "86a9d130c19d4000"],
+        ["/regent_decisions/S7_source_raw", 2377, 2524, 61, 1, "c7e206e47a356a00"],
+        ["/regent_decisions/S8_references", 2547, 2668, 62, 1, "50b1b4e0adec6100"],
+        ["/regent_decisions/S9_order_as_vector", 2696, 2706, 63, 1, "9ec22f509ca88100"],
+        ["/regent_decisions/language", 2724, 2757, 64, 1, "261825c8c2d6d3a0"],
+        ["/regent_decisions/S10_language_sweep", 2785, 2837, 65, 1, "356593cc1cbf3080"],
+        ["/regent_decisions/order_home", 2857, 2949, 66, 1, "45f5dea49e587c40"],
+        ["/regent_decisions/skill_layout", 2971, 3383, 67, 1, "47a639b096f7fa00"],
+        ["/regent_decisions/divide_operator", 3408, 3616, 68, 1, "a59dd47e076b6c00"],
+        ["/regent_decisions/malformed_input", 3641, 3844, 69, 1, "d28be7d0b8182e00"],
+        ["/regent_decisions/duplication_resolved", 3874, 4166, 70, 1, "e68501de1d6b2cc0"],
+        ["/regent_decisions/backslash", 4185, 4269, 71, 1, "af11d840d2c0d200"],
+        ["/regent_decisions/source_of_truth", 4294, 4759, 72, 1, "08ddf6d68acb6000"],
+        ["/regent_decisions/Q2_diagnostic_positions", 4792, 5051, 73, 1, "d9458efce8d2b600"],
+        ["/regent_decisions/extension", 5070, 5350, 74, 1, "cfa8bfc01249db00"],
+        ["/regent_decisions/no_format_is_dropped", 5380, 5596, 75, 1, "10c47b80a3f98800"],
+        ["/regent_decisions/target_of_v4", 5618, 5765, 76, 1, "af0a92ce34ae9100"],
+        ["/regent_decisions/branch", 5781, 5938, 77, 1, "39242388a2856400"],
+        ["/regent_decisions/cadence", 5955, 6031, 78, 1, "23274df6fc37d600"],
+        ["/regent_decisions/glyph_package_referent", 6063, 6387, 79, 1, "dbe9808eca371200"],
+        ["/regent_decisions/root_replacement", 6413, 6582, 80, 1, "a8c8c6c8cf883f00"],
+        ["/regent_decisions/invoke_element", 6606, 6834, 81, 1, "77ce2f60a85cba00"],
+        ["/regent_decisions/fromXML", 6851, 7191, 82, 1, "83530ed23f315900"],
+        ["/regent_decisions/line_endings", 7213, 7516, 83, 1, "d9d04a381b815800"],
+        ["/regent_decisions/six_layer_bundle", 7542, 7687, 84, 1, "ff5ca1b094c8e400"],
+        ["/regent_decisions/promotion_boundary", 7715, 7865, 85, 1, "006d91a05ec93200"],
+        ["/regent_decisions/tracing", 7882, 7952, 86, 1, "bafa42bb2f507a00"],
+        ["/regent_decisions/orbital_production_level", 7986, 8107, 87, 1, "c44e7678bc03d640"],
+        ["/regent_decisions/language_sweep_scope", 8137, 8345, 88, 1, "db6665f034c4cac0"],
+        ["/verified_findings", 8374, 29688, 90, 271, "148513d05649d500"],
+        ["/verified_findings/0", 8380, 8600, 91, 5, "ea8c56e0252e0000"],
+        ["/verified_findings/1", 8606, 8812, 96, 5, "1a695c2f16298200"],
+        ["/verified_findings/2", 8818, 9082, 101, 6, "e49b3e401b13ee00"],
+        ["/verified_findings/3", 9088, 10078, 107, 8, "d9f5351093473900"],
+        ["/verified_findings/4", 10084, 10282, 115, 5, "65d799f0e9db7000"],
+        ["/verified_findings/5", 10288, 10564, 120, 6, "2c34e86882354a00"],
+        ["/verified_findings/6", 10570, 10726, 126, 5, "4968e12858d59300"],
+        ["/verified_findings/7", 10732, 11443, 131, 6, "c99d8724536c0400"],
+        ["/verified_findings/8", 11449, 11619, 137, 5, "a18aa7f8023ed500"],
+        ["/verified_findings/9", 11625, 11931, 142, 5, "e2f696f03106d580"],
+        ["/verified_findings/10", 11937, 12366, 147, 6, "e0a50678c9b7f400"],
+        ["/verified_findings/11", 12372, 12648, 153, 6, "1ea90010c6858200"],
+        ["/verified_findings/12", 12654, 13033, 159, 5, "48a2bc87891e7800"],
+        ["/verified_findings/13", 13039, 13433, 164, 5, "7be4e5e373020600"],
+        ["/verified_findings/14", 13439, 13809, 169, 5, "fbd54f9724317c80"],
+        ["/verified_findings/15", 13815, 14255, 174, 5, "931631c0e4df7600"],
+        ["/verified_findings/16", 14261, 14668, 179, 5, "12fc2ab044898e00"],
+        ["/verified_findings/17", 14674, 15867, 184, 8, "af646b543d41da00"],
+        ["/verified_findings/18", 15873, 16476, 192, 6, "62ef2808a6bd6800"],
+        ["/verified_findings/19", 16482, 16770, 198, 5, "106b7d08baaeae00"],
+        ["/verified_findings/20", 16776, 17176, 203, 5, "dc89b5c71804e400"],
+        ["/verified_findings/21", 17182, 17779, 208, 5, "56e44f846c392500"],
+        ["/verified_findings/22", 17785, 18205, 213, 5, "cc520158355b0f80"],
+        ["/verified_findings/23", 18211, 18862, 218, 6, "213c2418c55bc780"],
+        ["/verified_findings/24", 18868, 19634, 224, 7, "c69add40a2fb9500"],
+        ["/verified_findings/25", 19640, 20406, 231, 7, "c69add40a2fb9500"],
+        ["/verified_findings/26", 20412, 20790, 238, 5, "429ae5e443b5dc00"],
+        ["/verified_findings/27", 20796, 21180, 243, 6, "88e7d63ff069d700"],
+        ["/verified_findings/28", 21186, 21607, 249, 6, "fa4564888e40ff80"],
+        ["/verified_findings/29", 21613, 22008, 255, 5, "7888d47012cf7a00"],
+        ["/verified_findings/30", 22014, 22289, 260, 5, "962da837b5769ec0"],
+        ["/verified_findings/31", 22295, 22651, 265, 6, "fa92e05f9a3d74a0"],
+        ["/verified_findings/32", 22657, 22931, 271, 5, "605603d70d83de00"],
+        ["/verified_findings/33", 22937, 23226, 276, 5, "90b4ae30d632ef00"],
+        ["/verified_findings/34", 23232, 23691, 281, 6, "950133008c07b3a0"],
+        ["/verified_findings/35", 23697, 24108, 287, 6, "33d175e8d1595000"],
+        ["/verified_findings/36", 24114, 24563, 293, 5, "6065ea9409a7d300"],
+        ["/verified_findings/37", 24569, 24929, 298, 5, "6f33738088583400"],
+        ["/verified_findings/38", 24935, 25266, 303, 5, "c6120fd09b312800"],
+        ["/verified_findings/39", 25272, 25699, 308, 5, "46cce63488336200"],
+        ["/verified_findings/40", 25705, 26014, 313, 5, "90fbf7280e42bb00"],
+        ["/verified_findings/41", 26020, 26456, 318, 5, "ad270487dfcfde00"],
+        ["/verified_findings/42", 26462, 27278, 323, 8, "de99ede0e2ed0300"],
+        ["/verified_findings/43", 27284, 27671, 331, 5, "c5cd45f7e68e3e00"],
+        ["/verified_findings/44", 27677, 28061, 336, 5, "3359284784ac7800"],
+        ["/verified_findings/45", 28067, 28421, 341, 5, "9f213443198abc00"],
+        ["/verified_findings/46", 28427, 28941, 346, 6, "f2524c541e2ad900"],
+        ["/verified_findings/47", 28947, 29684, 352, 8, "574f567fe6a5b800"],
+        ["/four_guarantees", 29711, 30360, 361, 10, "3ef69af04b346e80"],
+        ["/four_guarantees/note", 29725, 29860, 362, 1, "a25b408c91389800"],
+        ["/four_guarantees/items", 29875, 30154, 363, 6, "a182249791baf800"],
+        ["/four_guarantees/why_they_were_missing", 30185, 30356, 369, 1, "7e07cfc072b4e500"],
+        ["/deliverables", 30380, 41090, 371, 156, "2b8368f88125b600"],
+        ["/deliverables/0", 30386, 30654, 372, 10, "e3fa53f303052c00"],
+        ["/deliverables/1", 30660, 32146, 382, 24, "35478fd85fe51000"],
+        ["/deliverables/2", 32152, 32764, 406, 8, "dce8871875b2a180"],
+        ["/deliverables/3", 32770, 33613, 414, 17, "5b81ff585a6fe140"],
+        ["/deliverables/4", 33619, 34435, 431, 12, "d5841838d674b800"],
+        ["/deliverables/5", 34441, 36283, 443, 33, "723142674ab04300"],
+        ["/deliverables/6", 36289, 37803, 476, 17, "c427fd780800d7a0"],
+        ["/deliverables/7", 37809, 39254, 493, 13, "3a7f2628dd3fd400"],
+        ["/deliverables/8", 39260, 40434, 506, 12, "a745a85f086dcb00"],
+        ["/deliverables/9", 40440, 41086, 518, 8, "3dcab5b7115ed800"],
+        ["/done_when", 41107, 45783, 527, 95, "75894a38d7bdf680"],
+        ["/done_when/0", 41113, 41459, 528, 5, "8536b3fcd6d0a600"],
+        ["/done_when/1", 41465, 41598, 533, 5, "84d206b8d68af100"],
+        ["/done_when/2", 41604, 41837, 538, 5, "7d858668bf94d200"],
+        ["/done_when/3", 41843, 42054, 543, 5, "957f6764c5e40000"],
+        ["/done_when/4", 42060, 42191, 548, 5, "5ff4adf84caa3600"],
+        ["/done_when/5", 42197, 42311, 553, 4, "f14f2d94673ed980"],
+        ["/done_when/6", 42317, 42454, 557, 4, "ce432bc492066800"],
+        ["/done_when/7", 42460, 42592, 561, 4, "febf8453165cf500"],
+        ["/done_when/8", 42598, 42980, 565, 5, "cecd2f586a077100"],
+        ["/done_when/9", 42986, 43129, 570, 4, "480a18a022fe0580"],
+        ["/done_when/10", 43135, 43290, 574, 4, "b14a96e7ce05e300"],
+        ["/done_when/11", 43296, 43527, 578, 4, "e73dac4033645800"],
+        ["/done_when/12", 43533, 43738, 582, 4, "989f022727683800"],
+        ["/done_when/13", 43744, 43947, 586, 4, "c87565d8b6dca600"],
+        ["/done_when/14", 43953, 44181, 590, 4, "55062f78f2f79200"],
+        ["/done_when/15", 44187, 44356, 594, 4, "342e1f87e9cea080"],
+        ["/done_when/16", 44362, 44553, 598, 4, "ea85d4e7e131fb80"],
+        ["/done_when/17", 44559, 44763, 602, 4, "9564d763f8d09300"],
+        ["/done_when/18", 44769, 45047, 606, 4, "141589d442e23000"],
+        ["/done_when/19", 45053, 45400, 610, 5, "0b85cd18c1aa6900"],
+        ["/done_when/20", 45406, 45779, 615, 6, "60ecc04f77d95400"],
+        ["/locks", 45796, 50419, 622, 39, "6fdf457793136600"],
+        ["/locks/0", 45802, 46000, 623, 1, "26782e1886f38600"],
+        ["/locks/1", 46006, 46076, 624, 1, "86c26b58d8169b00"],
+        ["/locks/2", 46082, 46155, 625, 1, "d9cda36e8d23e200"],
+        ["/locks/3", 46161, 46213, 626, 1, "4be1daa0a00d6c00"],
+        ["/locks/4", 46219, 46313, 627, 1, "6efed7ce13c11a00"],
+        ["/locks/5", 46319, 46359, 628, 1, "0a61b222a17b6600"],
+        ["/locks/6", 46365, 46585, 629, 1, "bfdbaff2d7222800"],
+        ["/locks/7", 46591, 46652, 630, 1, "d93622e6794c0000"],
+        ["/locks/8", 46658, 46717, 631, 1, "09913858e46a6600"],
+        ["/locks/9", 46723, 46760, 632, 1, "02bed5e059c6c800"],
+        ["/locks/10", 46766, 46796, 633, 1, "b3f98074c93f3800"],
+        ["/locks/11", 46802, 46938, 634, 1, "acbe42769c7cf200"],
+        ["/locks/12", 46944, 47038, 635, 1, "a021bf084da2d000"],
+        ["/locks/13", 47044, 47132, 636, 1, "5a33863a3213ee00"],
+        ["/locks/14", 47138, 47196, 637, 1, "2751fcc8e7a69c00"],
+        ["/locks/15", 47202, 47329, 638, 1, "3ae67b9e17dcf240"],
+        ["/locks/16", 47335, 47476, 639, 1, "36f3bf284fb68100"],
+        ["/locks/17", 47482, 47623, 640, 1, "09d508aeae029600"],
+        ["/locks/18", 47629, 47758, 641, 1, "f0251c32d0277a00"],
+        ["/locks/19", 47764, 47900, 642, 1, "5825219275e08400"],
+        ["/locks/20", 47906, 48021, 643, 1, "3d42ea8eda10ea00"],
+        ["/locks/21", 48027, 48221, 644, 1, "e0a94e880c7f0600"],
+        ["/locks/22", 48227, 48332, 645, 1, "74d1c21006d9b400"],
+        ["/locks/23", 48338, 48446, 646, 1, "ec270ce2d18466f0"],
+        ["/locks/24", 48452, 48556, 647, 1, "f1524500051daa00"],
+        ["/locks/25", 48562, 48695, 648, 1, "6277729828bfda00"],
+        ["/locks/26", 48701, 48864, 649, 1, "b5370842170f5400"],
+        ["/locks/27", 48870, 48977, 650, 1, "289ad2ce3a67c180"],
+        ["/locks/28", 48983, 49116, 651, 1, "de0c57fe519a3300"],
+        ["/locks/29", 49122, 49255, 652, 1, "de0c57fe519a3300"],
+        ["/locks/30", 49261, 49412, 653, 1, "9751bdd84592c700"],
+        ["/locks/31", 49418, 49598, 654, 1, "f765520273e52f00"],
+        ["/locks/32", 49604, 49761, 655, 1, "8f21d87c1f1cb600"],
+        ["/locks/33", 49767, 49993, 656, 1, "34209de254701600"],
+        ["/locks/34", 49999, 50122, 657, 1, "51ecc18cc92c3700"],
+        ["/locks/35", 50128, 50328, 658, 1, "e92db88cb2d45800"],
+        ["/locks/36", 50334, 50415, 659, 1, "52995e8092325400"],
+        ["/assumptions", 50438, 52156, 661, 35, "e771ad98b5ad2400"],
+        ["/assumptions/0", 50444, 50778, 662, 6, "1a35ee38e83dd400"],
+        ["/assumptions/1", 50784, 51050, 668, 6, "40bb2cbb888c9a00"],
+        ["/assumptions/2", 51056, 51422, 674, 6, "a8b337c08e231300"],
+        ["/assumptions/3", 51428, 51650, 680, 5, "bc092a27fc569080"],
+        ["/assumptions/4", 51656, 51861, 685, 5, "f76db8b87f7a6180"],
+        ["/assumptions/5", 51867, 52152, 690, 5, "a0e906ef9a24da00"],
+        ["/cascade", 52171, 53722, 696, 48, "893d18a79940de00"],
+        ["/cascade/correction_loop", 52196, 52334, 697, 5, "bfb2d040bca18100"],
+        ["/cascade/subagents", 52353, 53718, 702, 41, "24f6638842b42e00"],
+        ["/open_regent_questions", 53751, 54202, 744, 14, "6dd3b0805b0b3c00"],
+        ["/open_regent_questions/0", 53757, 53938, 745, 6, "71140318ff142700"],
+        ["/open_regent_questions/1", 53944, 54198, 751, 6, "5271fba788da3c00"],
+        ["/blast_radius", 54222, 54604, 758, 12, "c4c9ff20ff9e5180"],
+        ["/blast_radius/measured", 54240, 54244, 759, 1, "895d0f0442fce600"],
+        ["/blast_radius/method", 54260, 54311, 760, 1, "79e960187f6e6400"],
+        ["/blast_radius/vectors_failing", 54336, 54337, 761, 1, "340ca71c160082b8"],
+        ["/blast_radius/which", 54352, 54379, 762, 1, "35f4261e48a94e00"],
+        ["/blast_radius/shape_changed_still_passing", 54416, 54450, 763, 4, "40da34b06af21900"],
+        ["/blast_radius/untouched", 54469, 54472, 767, 1, "e030c180cfffd780"],
+        ["/blast_radius/reference_edits", 54497, 54600, 768, 1, "d1e87fba85d38c00"],
+        ["/root_cause", 54622, 55789, 770, 10, "2e546608562b4e00"],
+        ["/root_cause/name", 54636, 54723, 771, 1, "7fa8d390fd45c000"],
+        ["/root_cause/note", 54737, 54889, 772, 1, "85eb92c0d6159c00"],
+        ["/root_cause/instances", 54908, 55785, 773, 6, "bd9d69a44f6eaa00"],
+        ["/architecture_resolved", 55818, 57186, 780, 7, "1093ae2819065b00"],
+        ["/architecture_resolved/chainOp", 55835, 56048, 781, 1, "32196e9e58cf7a00"],
+        ["/architecture_resolved/shape", 56063, 56240, 782, 1, "6e61350e11e51400"],
+        ["/architecture_resolved/blast_radius", 56262, 56515, 783, 1, "a66cddb01b64c2c0"],
+        ["/architecture_resolved/backslash_treatment", 56544, 56801, 784, 1, "cf20cae820c38300"],
+        ["/architecture_resolved/astLean_reversal", 56827, 57182, 785, 1, "83f65d3004271980"],
+        ["/consumer_map", 57206, 58134, 787, 25, "cdadfb90485f0b00"],
+        ["/consumer_map/purpose", 57223, 57412, 788, 1, "024f33e82472cf00"],
+        ["/consumer_map/formats", 57429, 58130, 789, 22, "7d79f1c7f1d6c380"],
+        ["/retired_assumptions", 58161, 58690, 812, 17, "abf630909204e000"],
+        ["/retired_assumptions/0", 58167, 58329, 813, 5, "ed3a2a57c5cdfe00"],
+        ["/retired_assumptions/1", 58335, 58507, 818, 5, "b2c907efaa912000"],
+        ["/retired_assumptions/2", 58513, 58686, 823, 5, "a311df004c36b800"],
+        ["/resolved_questions", 58716, 60664, 829, 62, "b02a441076a53400"],
+        ["/resolved_questions/0", 58722, 58871, 830, 6, "68f8c9706aca8000"],
+        ["/resolved_questions/1", 58877, 59047, 836, 6, "1570867027d39e00"],
+        ["/resolved_questions/2", 59053, 59225, 842, 6, "529984503edc71c0"],
+        ["/resolved_questions/3", 59231, 59594, 848, 6, "1fcb6db0fd726400"],
+        ["/resolved_questions/4", 59600, 59843, 854, 6, "9b8be530a144b400"],
+        ["/resolved_questions/5", 59849, 60001, 860, 6, "78725ab08a61f540"],
+        ["/resolved_questions/6", 60007, 60155, 866, 6, "0285c1486275ca00"],
+        ["/resolved_questions/7", 60161, 60337, 872, 6, "95c0da53c32b7600"],
+        ["/resolved_questions/8", 60343, 60486, 878, 6, "a3d077abc8534980"],
+        ["/resolved_questions/9", 60492, 60660, 884, 6, "ec192fdc94f4a840"],
+        ["/deferred", 60680, 67144, 891, 98, "958213045ee31400"],
+        ["/deferred/note", 60694, 60873, 892, 1, "224d2dad4b1daa00"],
+        ["/deferred/position", 60891, 60901, 893, 1, "8c2594819387d900"],
+        ["/deferred/items", 60916, 66417, 894, 79, "2472c8fb3325f400"],
+        ["/deferred/rejected", 66435, 67042, 973, 14, "034e1ea0b5574200"],
+        ["/deferred/status", 67058, 67140, 987, 1, "77daa318cbfe6c00"],
+        ["/mechanisms", 67162, 67676, 989, 9, "16755e00d6d7b000"],
+        ["/mechanisms/0", 67168, 67672, 990, 7, "6cc8c18016303c00"],
+        ["/blast_radius_E3b", 67700, 68501, 998, 29, "e537c2507b234e00"],
+        ["/blast_radius_E3b/measured", 67718, 67722, 999, 1, "895d0f0442fce600"],
+        ["/blast_radius_E3b/method", 67738, 67832, 1000, 1, "e12351e6b3246600"],
+        ["/blast_radius_E3b/green_immediately", 67859, 68131, 1001, 16, "535a4f008bf4e000"],
+        ["/blast_radius_E3b/pinned_awaiting_E4", 68159, 68161, 1017, 1, "8ef29b12d2232a00"],
+        ["/blast_radius_E3b/which", 68176, 68341, 1018, 1, "0c78127ca4b30200"],
+        ["/blast_radius_E3b/rederived_late", 68365, 68385, 1019, 3, "b008b450b0148800"],
+        ["/blast_radius_E3b/regenerated", 68406, 68497, 1022, 4, "2d8df57853b18000"],
+        ["/status", 68515, 68585, 1027, 1, "5806bde8e1c5b800"],
+        ["/post_release", 68605, 69284, 1028, 4, "d3ab2818f116cd80"],
+        ["/post_release/Q4", 68617, 68999, 1029, 1, "fba01580a202e800"],
+        ["/post_release/app_launch", 69019, 69280, 1030, 1, "f80dcf3ee9e90700"]
+      ]
+    },
+    ".guidelines/.orders/ORD-2026-08-30-01.hgml": {
+      "nodes": [
+        ["", 0, 14582, 1, 349, "bb1c4748f14ab100"]
+      ]
+    },
+    ".guidelines/.orders/ORD-2026-08-30-01.pgml": {
+      "nodes": [
+        ["", 0, 12293, 1, 91, "509626480c8fd600"]
+      ]
+    },
+    ".guidelines/.orders/ORD-2026-08-30-01.xml": {
+      "nodes": [
+        ["", 0, 17491, 1, 270, "e0cd37466fcb4200"],
+        ["/glyph", 0, 17490, 1, 270, "cb970f68a414c800"],
+        ["/glyph/block[1]", 10, 2060, 2, 29, "f63ed178ff034600"],
+        ["/glyph/block[2]", 2063, 4139, 31, 32, "95f08ad01970de00"],
+        ["/glyph/block[3]", 4142, 5935, 63, 29, "4003efedc5086200"],
+        ["/glyph/block[4]", 5938, 7402, 92, 23, "83bec02ac61c6960"],
+        ["/glyph/block[5]", 7405, 11440, 115, 59, "7d96ed2ed8719400"],
+        ["/glyph/block[6]", 11443, 13499, 174, 38, "620b72d8e458e400"],
+        ["/glyph/block[7]", 13502, 15357, 212, 29, "a3047578b6acdd00"],
+        ["/glyph/block[8]", 15360, 17481, 241, 29, "aad921aa7e284c00"]
+      ]
+    },
+    ".guidelines/.orders/parked/restructure-glyph-repo/ORD-0011.hgml": {
+      "nodes": [
+        ["", 0, 6156, 1, 185, "05418a786ecbcb80"]
+      ]
+    },
+    ".guidelines/.orders/parked/restructure-glyph-repo/ORD-0011.json": {
+      "nodes": [
+        ["", 0, 72543, 1, 2125, "09b255306a62ad00"],
+        ["/type", 12, 22, 2, 1, "6cfcf51e0b22b400"],
+        ["/schema", 36, 37, 3, 1, "370cabd49014b848"],
+        ["/version", 52, 62, 4, 1, "d8e79ed86d16e400"],
+        ["/source", 76, 199, 5, 7, "8e5c46409a1fa900"],
+        ["/source/length", 92, 96, 6, 1, "95a3c11ad0ec8000"],
+        ["/source/checksum", 114, 132, 7, 1, "e25ae51ad7431980"],
+        ["/source/encoding", 150, 157, 8, 1, "51d8d6a8889ada00"],
+        ["/source/newline", 174, 178, 9, 1, "cec09c50a37ddc00"],
+        ["/source/uri", 191, 195, 10, 1, "e4ee48ec82cd2c00"],
+        ["/stores", 213, 325, 12, 5, "d76ade5f46ffe000"],
+        ["/stores/templates", 232, 250, 13, 1, "84d05340a5f9c600"],
+        ["/stores/rules", 265, 283, 14, 1, "44e11ee057e03600"],
+        ["/stores/expansions", 303, 321, 15, 1, "72ed34c8e6bc4980"],
+        ["/projection", 343, 349, 17, 1, "8e0b2f6630c6ec00"],
+        ["/segments", 365, 72520, 18, 2106, "c8732118ef956200"],
+        ["/segments/0", 371, 72516, 19, 2104, "9644fcb024071e00"],
+        ["/diagnostics", 72539, 72541, 2124, 1, "721635809ba5e8c0"]
+      ]
+    },
+    ".guidelines/.orders/parked/restructure-glyph-repo/ORD-0011.manifest.json": {
+      "nodes": [
+        ["", 0, 299, 1, 16, "71647cf89a297c80"],
+        ["/order", 13, 23, 2, 1, "36c157fb824ed800"],
+        ["/engine", 37, 47, 3, 1, "d8e79ed86d16e400"],
+        ["/emitted", 62, 88, 4, 1, "7ace331038df9500"],
+        ["/files", 101, 188, 5, 6, "f92d7a587afea000"],
+        ["/files/0", 107, 122, 6, 1, "ef54f43808480000"],
+        ["/files/1", 128, 142, 7, 1, "579b8f36e84e6c00"],
+        ["/files/2", 148, 163, 8, 1, "2a3720689d349300"],
+        ["/files/3", 169, 184, 9, 1, "d8f9eb4012a4a000"],
+        ["/source", 202, 243, 11, 1, "645754e879298400"],
+        ["/diagnostics", 262, 296, 12, 4, "83b9246074dcc400"],
+        ["/diagnostics/fix", 275, 276, 13, 1, "350ca8b09bec4d20"],
+        ["/diagnostics/total", 291, 292, 14, 1, "350ca8b09bec4d20"]
+      ]
+    },
+    ".guidelines/.orders/parked/restructure-glyph-repo/ORD-0011.pgml": {
+      "nodes": [
+        ["", 0, 4906, 1, 67, "c5897b88bcecc800"]
+      ]
+    },
+    ".guidelines/.orders/parked/restructure-glyph-repo/ORD-0011.xml": {
+      "nodes": [
+        ["", 0, 9337, 1, 178, "1fabb3f819aed200"],
+        ["/glyph-package", 0, 9337, 1, 178, "1fabb3f819aed200"],
+        ["/glyph-package/schema", 36, 45, 2, 1, "9047f1df86dca200"],
+        ["/glyph-package/block", 48, 9320, 3, 175, "83bddf18998d8700"]
+      ]
+    },
+    ".guidelines/.plan/PERGUNTAS-ABERTAS.md": {
+      "nodes": [
+        ["", 0, 19722, 1, 312, "a59537987aabe000"],
+        ["perguntas-abertas--para-o-regente-preencher", 0, 19722, 1, 312, "a59537987aabe000"],
+        ["1---consertar-ou-aposentar", 402, 3264, 9, 28, "0d671b481f54a600"],
+        ["o-que-acontece-hoje-medido", 443, 837, 10, 8, "9c364b90c0179280"],
+        ["opções", 837, 3264, 18, 19, "27b4c3d2770c2e00"],
+        ["2--dentro-de-literal--as-duas-aspas-discordam", 3264, 5413, 37, 27, "b1d1b65e14640800"],
+        ["o-que-acontece-hoje-medido-1", 3320, 3866, 38, 8, "261309d85af28800"],
+        ["opções-1", 3866, 5413, 46, 18, "fce3fa803b8d4b00"],
+        ["3-parâmetro-de-template-escrito-nu", 5413, 7072, 64, 27, "97bc6b56b4e65e00"],
+        ["o-que-acontece-hoje-medido-2", 5453, 6061, 65, 9, "9703d7505c3f1500"],
+        ["opções-2", 6061, 7072, 74, 17, "2bc5a5ff5bdae000"],
+        ["4-a-section-de-cabeçalho--o-exemplo-trabalhado", 7072, 12313, 91, 103, "0d22de70e192bc00"],
+        ["a-fonte", 7284, 7656, 96, 9, "4cfb1d682bb5ac00"],
+        ["o-que-o-motor-emite-hoje-34705--colado-da-saída-real", 7656, 9572, 105, 36, "a44c2ae0b613be00"],
+        ["e-aqui-apareceu-uma-coisa-que-eu-não-sabia", 8717, 9572, 136, 5, "1dc56ca6be32dc00"],
+        ["opção-a--inventário-só-nome-e-origem", 9572, 9984, 141, 13, "6d1ff42c62b3f000"],
+        ["opção-b--declaração-nome-origem-e-o-que-ele-produz", 9984, 10829, 154, 17, "bdb40b086e57e200"],
+        ["opção-c--b-mais-os-caminhos-de-arquivo", 10829, 12313, 171, 23, "3ea3dce8dadd5000"],
+        ["5-ponteiro-de-aposentadoria", 12313, 14887, 194, 23, "a00f4412a3e65c00"],
+        ["a-situação", 12345, 12817, 195, 6, "46c87fa0cff68800"],
+        ["o-que-seria", 12817, 13014, 201, 5, "c89a17ae5407d700"],
+        ["opções-3", 13014, 14887, 206, 11, "ad9aa7a8d2830a00"],
+        ["6-o-que-o-motor-diz-quando-não-tem-o-que-sugerir", 14887, 16086, 217, 18, "aae33ae0c6ff4400"],
+        ["hoje", 14941, 15193, 218, 5, "a70eea6af2f2a160"],
+        ["opções-4", 15193, 16086, 223, 12, "161d111a23c33600"],
+        ["o-que-eu-faço-sem-você", 16086, 16755, 235, 10, "2aa677b8fcdc2600"],
+        ["7-glossarymd-2-contradiz-glossarymd-0--texto-normativo", 16755, 19722, 245, 68, "0436056ee59e2300"],
+        ["o-que-está-escrito", 17042, 17526, 251, 13, "1c68220693cdf800"],
+        ["o-que-medi", 17526, 18114, 264, 15, "41724d9e14feca00"],
+        ["como-segui-sem-você", 18114, 18614, 279, 11, "62fe103c21db0400"],
+        ["opções-5", 18614, 19722, 290, 23, "d4bb798859a66800"]
+      ]
+    },
+    ".guidelines/.plan/README.md": {
+      "nodes": [
+        ["", 0, 13950, 1, 216, "ead3414c0c23cdc0"],
+        ["plano--o-que-vem-a-seguir", 0, 13950, 1, 216, "ead3414c0c23cdc0"],
+        ["autorizado-pelo-regente-ainda-não-construído", 217, 11738, 7, 187, "ddeec2b0036e0000"],
+        ["0-caminhos-virtuais--guidelinesshortcutsvirtual--em-construção-ems-002ord-0001", 269, 3961, 9, 61, "b5c4313cf697a400"],
+        ["1-section-de-cabeçalho-irmã-do-schema--decidido-faltando-fazer", 3961, 4623, 70, 13, "29a759a8aecd1500"],
+        ["2-gatilhos-de-re-ferência", 4623, 5528, 83, 19, "20d81a5623895800"],
+        ["3-quatro-defeitos-medidos-e-não-consertados-no-js", 5528, 6502, 102, 9, "8465e25409755a00"],
+        ["5-o-glyph-em-rust--a-série-ems-001", 6502, 11738, 111, 83, "af0ccf1e4b152a00"],
+        ["aberto-esperando-o-regente", 11738, 13268, 194, 11, "7d12d970664cbc00"],
+        ["adiado-por-decisão-não-por-esquecimento", 13268, 13950, 205, 12, "110118b8258d7d80"]
+      ]
+    },
+    ".guidelines/.plan/ladder.toml": {
+      "nodes": [
+        ["", 0, 23127, 1, 627, "cd220026999a6180"]
+      ]
+    },
+    ".guidelines/.shortcuts/README.md": {
+      "nodes": [
+        ["", 0, 6392, 1, 82, "d7f41c3067944800"],
+        ["atalhos--comece-por-aqui", 0, 6392, 1, 82, "d7f41c3067944800"],
+        ["onde-estou", 442, 1871, 11, 11, "4aa9597cbfed1480"],
+        ["os-sete-eixos", 1871, 2557, 22, 12, "6357d5140827f600"],
+        ["o-mapa-do-motor-em-cinco-linhas", 2557, 3484, 34, 12, "537763c2149d2400"],
+        ["os-documentos-que-mais-se-consulta", 3484, 5055, 46, 17, "0ce071d0a2b2de00"],
+        ["os-outros-documentos", 5055, 6053, 63, 14, "bcf7ae04a2ded000"],
+        ["vocabulário-do-projeto", 6053, 6392, 77, 6, "d5b16db424152200"]
+      ]
+    },
+    ".guidelines/.sources/COMPILER_LESSONS.md": {
+      "nodes": [
+        ["", 0, 7555, 1, 161, "e96d86ce8741d600"],
+        ["o-que-os-compiladores-já-pagaram-para-aprender", 0, 7555, 1, 161, "e96d86ce8741d600"],
+        ["0-a-medição-que-vale-mais-que-a-bibliografia", 460, 1428, 11, 26, "a488692482676100"],
+        ["1-o-resultado-contra-intuitivo-e-é-o-que-decide-o-desenho", 1428, 2515, 37, 22, "3961770e9a6ba8e0"],
+        ["2-o-que-decide-legibilidade-medido", 2515, 3266, 59, 15, "5d5cc9964f3af840"],
+        ["3-o-corpus-de-erros-reais", 3266, 4461, 74, 27, "245d252ae5c0b000"],
+        ["4-os-princípios-que-rust-e-elm-convergiram", 4461, 5214, 101, 16, "9320ea0cf1f7ee00"],
+        ["5-as-armadilhas-do-did-you-mean-que-já-foram-pagas", 5214, 6326, 117, 19, "40b6e0280f8c5800"],
+        ["6-onde-a-lógica-de-programação-entra", 6326, 7170, 136, 19, "d6cafddcd0ae0a00"],
+        ["7-o-que-este-documento-não-autoriza", 7170, 7555, 155, 7, "5a847fb89850cc00"]
+      ]
+    },
+    ".guidelines/.sources/README.md": {
+      "nodes": [
+        ["", 0, 3825, 1, 43, "fd52ebca438d6c80"],
+        ["fontes--o-que-veio-de-fora-e-o-que-decidiu", 0, 3825, 1, 43, "fd52ebca438d6c80"],
+        ["documentos", 329, 1506, 9, 9, "f41e2d1852a36a00"],
+        ["referências-externas-por-assunto", 1506, 3504, 18, 20, "c7097ae8d0d35600"],
+        ["mensagem-de-erro--o-que-funciona", 1545, 2349, 20, 6, "ac34cb8022b8be00"],
+        ["erros-reais-medidos", 2349, 2684, 26, 4, "74244be65c0e2600"],
+        ["sugestão-did-you-mean--armadilhas-já-pagas", 2684, 3504, 30, 8, "33de117ced6b3800"],
+        ["a-fonte-primária-e-ela-é-interna", 3504, 3825, 38, 6, "5f6a41325d30a300"]
+      ]
+    },
+    ".guidelines/.sources/VIRTUAL_PATHS.md": {
+      "nodes": [
+        ["", 0, 2165, 1, 17, "989a3c6e39118000"],
+        ["data-flow-for-diagramming", 1414, 2165, 10, 8, "11f1c538ea90ec00"]
+      ]
+    },
+    ".guidelines/.sources/VIRTUAL_PATHS_CONVERSATION.md": {
+      "nodes": [
+        ["", 0, 22424, 1, 186, "4bb132187209f500"],
+        ["component-roles", 1340, 16718, 42, 98, "8acdbfcc469eb400"],
+        ["status-blocked-na-pergunta-como-posta", 16718, 17802, 140, 10, "4e438c6c24284800"],
+        ["onde-a-pergunta-se-resolve-sem-dado-nenhum", 17802, 18965, 150, 10, "f14383985ea88400"],
+        ["a-parte-empírica-é-respondível-hoje-e-de-graça", 18965, 20502, 160, 12, "5f62e23c8e220c00"],
+        ["sobre-ast-ou-xml", 20502, 21100, 172, 4, "a5814aecbf433000"],
+        ["veredito-limitado", 21100, 22424, 176, 11, "3beb352425b7f800"]
+      ]
+    },
+    ".guidelines/BUNDLE_TARGET.md": {
+      "nodes": [
+        ["", 0, 9539, 1, 209, "dcb4452e8913f200"],
+        ["bundle-target--what-production-level-output-means-here", 0, 9539, 1, 209, "dcb4452e8913f200"],
+        ["0-why-a-compiler-and-not-a-yaml-file", 795, 1819, 18, 24, "aa63db584e74bc00"],
+        ["1-the-six-layers", 1819, 2866, 42, 20, "dbb04319e07bcf80"],
+        ["2-three-invariants", 2866, 5085, 62, 41, "f2a6bd70fd1c0600"],
+        ["3-how-a-source-declares-a-layer", 5085, 5817, 103, 20, "0b9d964834322380"],
+        ["4-worked-example--what-flowpgml-is-missing", 5817, 7302, 123, 32, "4688650cdb9c3580"],
+        ["5-what-the-validator-must-reject", 7302, 8173, 155, 23, "68a8317c942b8c40"],
+        ["6-what-is-deliberately-not-copied", 8173, 8689, 178, 13, "b5974160ac7bae00"],
+        ["7-open--regent", 8689, 9222, 191, 13, "58b658b6d9380e00"],
+        ["8-status", 9222, 9539, 204, 6, "8ddcb7681755d400"]
+      ]
+    },
+    ".guidelines/DMHP_IMPORTS.md": {
+      "nodes": [
+        ["", 0, 8312, 1, 184, "655514508c686a00"],
+        ["dmhp--what-is-worth-taking-and-what-is-not", 0, 8312, 1, 184, "655514508c686a00"],
+        ["0-the-honest-comparison-first", 262, 844, 7, 15, "7764dc1464e63c00"],
+        ["1-what-is-worth-taking", 844, 5782, 22, 110, "1079f52cf1d05e00"],
+        ["d-01--atomic-writes-and-an-all-or-nothing-build", 872, 2368, 24, 33, "e305c91c24bbbe00"],
+        ["d-02--content-addressed-identity-for-conformance-vectors", 2368, 3378, 57, 22, "a74708129c54ca00"],
+        ["d-03--a-generatedauthored-split-at-field-level-not-only-at-file-level", 3378, 4282, 79, 18, "5382290e4b626a00"],
+        ["d-04--duplicate-and-conflicting-are-different-words", 4282, 4925, 97, 16, "5f7da0ae157a4e00"],
+        ["d-05--an-output-diff-across-the-corpus-before-the-emitter-changes", 4925, 5782, 113, 19, "56e94e344d014600"],
+        ["2-what-is-not-worth-taking", 5782, 6574, 132, 15, "8d8c1650dd734e00"],
+        ["3-returned-to-the-regent--a-defect-in-dmhp", 6574, 8312, 147, 38, "8076cd38dd26b000"]
+      ]
+    },
+    ".guidelines/FORMULA_REVIEW.md": {
+      "nodes": [
+        ["", 0, 3145, 1, 61, "8a06719867e60600"],
+        ["formula-review--what-changed-between-the-two-passes", 0, 3145, 1, 61, "8a06719867e60600"],
+        ["mistakes-in-the-first-pass", 261, 1629, 7, 26, "dfcc3d643991b600"],
+        ["two-formulas-withdrawn", 1629, 1929, 33, 7, "fda6717a8d2da500"],
+        ["what-the-first-pass-missed", 1929, 3145, 40, 22, "e062ba1647d9f300"]
+      ]
+    },
+    ".guidelines/FUSIONS_WORKSHEET.md": {
+      "nodes": [
+        ["", 0, 7984, 1, 160, "dcdb36a0479b2200"],
+        ["fusions-worksheet--historical-document-v17", 0, 7984, 1, 160, "dcdb36a0479b2200"],
+        ["how-to-fill-it-in", 2218, 3187, 47, 28, "1298afa62ee51000"],
+        ["house-1--dir--evaluation-4-commands", 3187, 4167, 75, 14, "36929ca86480c400"],
+        ["house-2--ass--background-4-commands", 4167, 4854, 89, 12, "fb861eecf3541800"],
+        ["house-3--ass--elaboration-3-commands", 4854, 5400, 101, 11, "53d5057a25343e00"],
+        ["house-4--dir--solutionhood", 5400, 5788, 112, 12, "1dce7aee0451a300"],
+        ["houses-5-to-12--complete-resolutions", 5788, 7144, 124, 19, "b70e320496f56400"],
+        ["after-filling-it-in", 7144, 7984, 143, 18, "2f9c2434c3ded480"]
+      ]
+    },
+    ".guidelines/GLOSSARY.md": {
+      "nodes": [
+        ["", 0, 30233, 1, 474, "31b42d62d194f100"],
+        ["glyphs-and-hieroglyphs--normative-glossary-v36907", 0, 30233, 1, 474, "31b42d62d194f100"],
+        ["versioning--appfrontrulescontent", 791, 1170, 17, 13, "cb7751ea4bc99c80"],
+        ["0-legend--the-species", 1170, 1870, 30, 16, "2d44739296a2f000"],
+        ["01-formula-notation--normative", 1870, 3032, 46, 31, "60c7f37ec4caa400"],
+        ["why-conjunction-carries-order", 2375, 3032, 60, 17, "040cacb863aa2800"],
+        ["02-base-and-core--the-disambiguation", 3032, 3601, 77, 13, "f4dab0409e5f7400"],
+        ["03-operand-binding--normative", 3601, 5446, 90, 40, "27261f2c43720a00"],
+        ["1-hieroglyph-operators", 5446, 9767, 130, 67, "4c74383cd29a2000"],
+        ["2-hieroglyph-primitives", 9767, 11425, 197, 27, "e36709ae984ba800"],
+        ["3-composite-glyphs", 11425, 14950, 224, 43, "fdf08bd64270ba00"],
+        ["4-engine-and-modes", 14950, 15896, 267, 21, "7298ded8c84e6600"],
+        ["5-the-proposed-formulas--the-reason-for-each", 15896, 18014, 288, 42, "9d0f7b08e2283800"],
+        ["6-the-record-of-what-was-closed", 18014, 18319, 330, 8, "79d36c7c20991400"],
+        ["7-where-this-stands", 18319, 21659, 338, 73, "dda4ad081cd41c00"],
+        ["the-hgml-emitter", 18843, 20481, 353, 34, "98efa7fe1c0ec400"],
+        ["self-describing-output", 20481, 21131, 387, 15, "d60030665d962400"],
+        ["what-remains", 21131, 21659, 402, 9, "c597c12eb7459900"],
+        ["8-project-vocabulary--the-terms-outside-the-language", 21659, 30233, 411, 64, "a54a0a301e7c3000"],
+        ["who-decides", 22201, 23245, 422, 10, "351010d60dade340"],
+        ["how-work-is-ordered", 23245, 28005, 432, 22, "f2ad10e620e12e00"],
+        ["the-rust-app", 28005, 29397, 454, 12, "22c531807a7b0400"],
+        ["the-names-the-regent-ratified", 29397, 30233, 466, 9, "f666217a2147ca00"]
+      ]
+    },
+    ".guidelines/HGML_CONVERGENCE.md": {
+      "nodes": [
+        ["", 0, 12549, 1, 292, "e3bff9fe97c49a00"],
+        ["convergência-do-hgml--várias-fontes-uma-intenção", 203, 12549, 5, 288, "7b6c7230158baf00"],
+        ["1-a-primeira-surpresa-o-eixo-caro-já-converge", 613, 1616, 14, 27, "d7c06f76f983a400"],
+        ["objetivo-1--simplifique-x-no-núcleo", 782, 1040, 19, 8, "54f45a86c487fb00"],
+        ["objetivo-2--sempre-puxe-o-contexto-sobre-x", 1040, 1616, 27, 14, "90c8ecf87e4ec400"],
+        ["2-onde-quebra--três-classes-todas-mecânicas", 1616, 4821, 41, 89, "2c6c54f874070340"],
+        ["21-a-queima-está-invertida-nos-dois-sentidos--e-01-é-que-está-errado", 1671, 2692, 43, 27, "7adac868cc195400"],
+        ["21b-mas-a-queima-perde-a-distinção-que-01-declara-normativa", 2692, 3479, 70, 23, "a8ff00a092e58c00"],
+        ["22-escrever-a-fórmula-dentro-do-próprio-composto-duplica", 3479, 4018, 93, 19, "ec53cf8e920c2c00"],
+        ["23-a-posição-do-literal--retificado-não-era-defeito", 4018, 4821, 112, 18, "2d8f8ce6f2e13200"],
+        ["3-o-precedente-já-está-no-código", 4821, 5919, 130, 24, "b77341045f925880"],
+        ["4-uma-correção-ao-passo-a-passo-e-ela-deixa-a-obra-mais-barata", 5919, 7530, 154, 35, "bae8ef48798ff600"],
+        ["5-decidido-pelo-regente", 7530, 8745, 189, 30, "943d22708f8fc500"],
+        ["raio-de-alcance-medido", 8312, 8745, 206, 13, "c05fba002a2be000"],
+        ["6-hgml-depois-do-ast--esforço-e-ganho", 8745, 10154, 219, 23, "10d89f6ced2c3600"],
+        ["7-a-pergunta-do-alw--preservado-não-coberto", 10154, 11284, 242, 26, "bbab413a066c2000"],
+        ["8-método", 11284, 11617, 268, 9, "91d55528734a3800"],
+        ["9-o-que-foi-implementado--34705", 11617, 12549, 277, 16, "bbe377443a9a5000"]
+      ]
+    },
+    ".guidelines/HGML_PLAN.md": {
+      "nodes": [
+        ["", 0, 3944, 1, 83, "d1bb94eee84403ac"],
+        ["hgml--plan-and-state", 0, 3944, 1, 83, "d1bb94eee84403ac"],
+        ["state", 186, 753, 6, 13, "5244fb86dc6451a0"],
+        ["decisions-taken-along-the-way", 753, 2147, 19, 25, "7052af5441edfe00"],
+        ["what-is-left", 2147, 3944, 44, 40, "39307a200dac5800"],
+        ["every-composite-re-reads-its-own-burn", 2164, 2602, 46, 8, "3d73b6cab69d9e00"],
+        ["the-pattern-layer", 2602, 3565, 54, 23, "284a266c1503d800"],
+        ["separating-interface-data-from-engine-data", 3565, 3944, 77, 7, "89d2600049258980"]
+      ]
+    },
+    ".guidelines/OPERATOR_TARGET.md": {
+      "nodes": [
+        ["", 0, 34107, 1, 670, "3e39e46cfdfb2980"],
+        ["operator-target--carrying---and--from-the-parse-tree-to-the-xml-and-back", 0, 34107, 1, 670, "3e39e46cfdfb2980"],
+        ["0-the-honest-defeater", 499, 3785, 12, 62, "72834210634a4b00"],
+        ["01-where-the-first-draft-of-this-document-diverged", 2839, 3785, 60, 14, "91041df4ec513600"],
+        ["1-where-the-operator-is-discarded", 3785, 5825, 74, 49, "2b907c6000aab000"],
+        ["2-how-the-ast-carries-it", 5825, 8878, 123, 75, "1e628dbca6779200"],
+        ["21-origin-is-exported-no-new-field-is-added", 5855, 6128, 125, 11, "9589606465008800"],
+        ["22-chainelement-is-narrowed-and-is-not-derivable-from-origin", 6128, 7333, 136, 27, "938567d0ccf75200"],
+        ["23-what-follows-inside-the-engine", 7333, 7647, 163, 7, "6983946a5a94aa00"],
+        ["24-astlean-must-drop-the-uninformative-values", 7647, 8375, 170, 17, "2d0b619c2ebc1200"],
+        ["25-origin-is-suppressed-on-a-placeholder-name", 8375, 8878, 187, 11, "23d1004c46101600"],
+        ["3-how-the-xml-carries-it", 8878, 12415, 198, 81, "d7d882aabdbc5600"],
+        ["31-one-attribute-on-bare-elements-only", 8908, 9784, 200, 25, "24f98db83e7f9200"],
+        ["32-why-the-attribute-is-not-emitted-on-bracketed-children", 9784, 10525, 225, 15, "41dad5a862bcb200"],
+        ["33-the-four-guarantees-one-at-a-time", 10525, 11850, 240, 27, "ade2e3a2d04ebc00"],
+        ["34-projection-into-chain-later", 11850, 12415, 267, 12, "e0cf6188e2d54c80"],
+        ["4-how-fromxml-reads-it-back", 12415, 14549, 279, 51, "dd416f0045f71a00"],
+        ["41-two-malformed-inputs-the-reader-must-name-not-repair-silently", 13829, 14549, 317, 13, "baaea08686fbf900"],
+        ["5-two-removals--finishing-a-deletion-decided-at-v17", 14549, 21834, 330, 117, "5ac7923e978e4a80"],
+        ["51-this-is-propagation-not-change", 14610, 16395, 332, 23, "633cfd4e2a2eba00"],
+        ["52-why-the-two-travel-together", 16395, 16834, 355, 9, "da43d2becfead800"],
+        ["53-inventory--the-divide-operator", 16834, 18072, 364, 14, "e9a6acc85275fc00"],
+        ["54-inventory--the-backslash-emotion-delimiter", 18072, 19554, 378, 22, "228809aecf512600"],
+        ["55-what-the-deletions-leave-behind-and-why-6-is-mandatory", 19554, 20009, 400, 9, "0e2ede4092654200"],
+        ["56-why-nothing-caught-this--the-doc-tests-blind-spot", 20009, 21176, 409, 20, "8aeae988cb8f99c0"],
+        ["57-xml_referencemd", 21176, 21834, 429, 18, "0a1fc058901d8600"],
+        ["6--in-a-chain-position-is-invalid--bucket-n-not-bucket-i", 21834, 25168, 447, 72, "ed85bb88b930b080"],
+        ["61-the-verified-behaviour", 21903, 22580, 449, 16, "e65ca8e00a941600"],
+        ["62-three-defects-three-required-behaviours", 22580, 24590, 465, 38, "af91882468ac9a00"],
+        ["63-what-the-diagnostics-need-that-does-not-exist-yet", 24590, 25168, 503, 16, "2e776094910cfa00"],
+        ["7-blast-radius", 25168, 29380, 519, 77, "68ccc5442fd37e00"],
+        ["71-the-173-vectors--still-1-with-both-removals-in-place", 25188, 27428, 521, 39, "78eba8ee0c8c2c00"],
+        ["72-xml_referencemd-rows", 27428, 28895, 560, 25, "32ade7ae84703c00"],
+        ["73-not-in-the-blast-radius", 28895, 29380, 585, 11, "76d348c09c1bd880"],
+        ["8-negative-vectors-this-change-requires", 29380, 32924, 596, 46, "1763b4a0a5a30b80"],
+        ["81-bucket-f--round-trip-is-the-invariant", 29425, 31147, 598, 16, "6d6e67c60d18fd00"],
+        ["82-bucket-n--each-requires-a-fix-diagnostic", 31147, 32204, 614, 11, "2f6bedf8616f0540"],
+        ["83-bucket-d--the-blind-spot-itself", 32204, 32536, 625, 6, "5cb7df78d6349400"],
+        ["84-guard", 32536, 32924, 631, 11, "b0c0eb4017326a00"],
+        ["9-open--regent", 32924, 33409, 642, 13, "b64d18b0d15da400"],
+        ["10-status", 33409, 34107, 655, 16, "9535dc60de522200"]
+      ]
+    },
+    ".guidelines/PACKAGE_TARGET.md": {
+      "nodes": [
+        ["", 0, 21610, 1, 497, "df5eb260f0a6b800"],
+        ["package-target--the-glyph-package-document", 0, 21610, 1, 497, "df5eb260f0a6b800"],
+        ["0-what-this-is-and-what-it-is-not", 332, 1026, 8, 16, "c143baf0bea67800"],
+        ["1-why-this-is-a-delta-and-not-a-grammar", 1026, 2113, 24, 23, "6e13d21e4c611180"],
+        ["2-the-root", 2113, 3203, 47, 25, "adedc9046e774600"],
+        ["3-chain", 3203, 5924, 72, 80, "ded238002edbfa00"],
+        ["31-the-grouping-rule", 3220, 3974, 74, 28, "4d2ebd80bc691e00"],
+        ["32-the-attribute-does-not-survive-the-grouping", 3974, 4658, 102, 17, "fad5074806577800"],
+        ["33-a-run-of-one-is-still-a-run", 4658, 4923, 119, 6, "481a88e49003a000"],
+        ["34-consecutive-extends-open-separate-runs", 4923, 5653, 125, 19, "96842560c0021e00"],
+        ["35-what-is-not-a-chain", 5653, 5924, 144, 8, "53364df68430d600"],
+        ["3b-holds--conjunction-between-bracketed-siblings", 5924, 8213, 152, 65, "c78f0e689850da00"],
+        ["3b1-why-it-exists", 6145, 6926, 157, 20, "10d04950cc628000"],
+        ["3b2-the-grouping-rule", 6926, 7480, 177, 23, "5e7bc44ca50c4800"],
+        ["3b3-the-attribute-does-not-survive-the-grouping", 7480, 7918, 200, 8, "95eb5e7080488200"],
+        ["3b4-what-is-not-a-holds", 7918, 8213, 208, 9, "4031065429f30400"],
+        ["4-invoke--the-command-call", 8213, 12101, 217, 87, "a560c8442a079600"],
+        ["41-a-command-is-a-function-and-the-xml-never-said-so", 8390, 9607, 222, 26, "a2254f4427a2e800"],
+        ["42-shape", 9607, 10535, 248, 23, "9749455e58a795e0"],
+        ["43-emitted-for-composites-only", 10535, 11006, 271, 10, "bac71d4e33018b00"],
+        ["44-template-is-unchanged", 11006, 11441, 281, 9, "d023da404fc4be00"],
+        ["45-divergence-from-operator_targetmd", 11441, 12101, 290, 14, "9097bc582bcafc80"],
+        ["5-schema", 12101, 12603, 304, 19, "abf2a48c61ec0200"],
+        ["6-refusals", 12603, 15590, 323, 53, "13688f604a209200"],
+        ["7-the-four-guarantees", 15590, 16660, 376, 17, "bd7a01617ed94500"],
+        ["8-round-trip", 16660, 17493, 393, 20, "0d8117a09dae1c00"],
+        ["9-deliberately-not-specified-here", 17493, 17945, 413, 11, "7abd1c2c4014b000"],
+        ["10-open", 17945, 18956, 424, 22, "4d3d3a401e914400"],
+        ["11-diagnostics-are-not-carried-in-the-document", 18956, 21317, 446, 46, "a4bbe7a4af8d3800"],
+        ["111-two-findings-this-section-is-built-on", 20108, 21317, 470, 22, "4b3c5deee4cbfa00"],
+        ["12-status", 21317, 21610, 492, 6, "c937e3cc0b838100"]
+      ]
+    },
+    ".guidelines/PROMOTION_BOUNDARY.md": {
+      "nodes": [
+        ["", 0, 5163, 1, 129, "ef8d41b0ecc56400"],
+        ["promotion-boundary--where-domain-ends-and-synthesis-begins", 159, 5163, 4, 126, "2411c40081bb5000"],
+        ["0-what-the-norm-is-for", 709, 1179, 14, 10, "84842f58a0b2e600"],
+        ["1-the-measurement-this-rests-on", 1179, 1955, 24, 22, "892efab03223fe00"],
+        ["2-the-boundary--three-tiers", 1955, 3545, 46, 43, "ff962b667a0d7c00"],
+        ["tier-d--domain-mechanical-and-never-inferred", 1991, 2554, 48, 13, "2118bc8608309a00"],
+        ["tier-p--promotable-only-where-the-table-decides", 2554, 3136, 61, 16, "5c0d5042e9579200"],
+        ["tier-s--synthesis-refused", 3136, 3545, 77, 12, "e43a138887b1ad00"],
+        ["3-the-consequence-already-applied", 3545, 3932, 89, 9, "1d64827eb4ea5ac0"],
+        ["4-the-declared-gap-in-the-sample", 3932, 4760, 98, 19, "4f1e49aa3a86b800"],
+        ["5-ratification--the-regents", 4760, 5163, 117, 13, "0e2e7b8072104300"]
+      ]
+    },
+    ".guidelines/PROMOTION_MEASUREMENT.md": {
+      "nodes": [
+        ["", 0, 4226, 1, 100, "68f76690d2b74a00"],
+        ["promotion--the-measurement-before-the-promoter", 202, 4226, 5, 96, "035379c8d5a18a00"],
+        ["why-it-comes-first", 389, 1313, 10, 20, "5a6966d84a6e9c00"],
+        ["what-was-measured", 1313, 1771, 30, 16, "424740a62b0b0e00"],
+        ["the-result-and-it-is-not-the-one-that-was-expected", 1771, 2631, 46, 24, "598c3260dc941ac0"],
+        ["what-this-changes", 2631, 3462, 70, 17, "048ffb80a8c16a00"],
+        ["the-gap-in-the-sample-stated-rather-than-papered-over", 3462, 4226, 87, 14, "0d13c2a0cf532000"]
+      ]
+    },
+    ".guidelines/SIGNATURES.md": {
+      "nodes": [
+        ["", 0, 5825, 1, 135, "3e4529b03c7cf400"],
+        ["signatures-and-arities--normative-table-v1300", 0, 5825, 1, 135, "3e4529b03c7cf400"],
+        ["arity-is-not-an-error--it-is-a-severity", 498, 1414, 12, 22, "de08f41042374600"],
+        ["1-strict-arity--2-positions-8", 1414, 1911, 34, 13, "bbc44c76698d4c40"],
+        ["2-n-ary--take-a-list-6", 1911, 2162, 47, 8, "ab4109d8ca016200"],
+        ["3-one-slot-60", 2162, 2914, 55, 17, "10c9651c328ce000"],
+        ["ctx--three-positions-by-convention", 2665, 2914, 66, 6, "81c9d7203673bc00"],
+        ["4-zero-arity-44", 2914, 3995, 72, 22, "be7aee48e78eae00"],
+        ["where-species-and-arity-disagree", 3553, 3995, 86, 8, "097414c46852fc00"],
+        ["5-mandatory-name-2", 3995, 4264, 94, 10, "65c05caebd568400"],
+        ["6-polarity-and-modality", 4264, 5064, 104, 17, "58662eaeacb1a400"],
+        ["7-auto-closing", 5064, 5825, 121, 15, "710f944025f73640"]
+      ]
+    },
+    ".guidelines/XML_REFERENCE.md": {
+      "nodes": [
+        ["", 0, 21020, 1, 531, "d9621850dbc73400"],
+        ["glyph--xml--serialisation-reference", 0, 21020, 1, 531, "d9621850dbc73400"],
+        ["1-document-shape", 973, 2808, 22, 41, "4ebf48f6ab390000"],
+        ["2-naming-rule", 2808, 3313, 63, 14, "80c450902748c800"],
+        ["3-attributes", 3313, 5276, 77, 31, "f0bbd4a89d0a3800"],
+        ["4-operators-delimiters-modes", 5276, 7638, 108, 56, "48fb6aa80b758a40"],
+        ["5-templates-and-placeholders", 7638, 8942, 164, 38, "2a54f0bc30f3c600"],
+        ["6-mood", 8942, 9709, 202, 19, "297ae1f02ec13f00"],
+        ["7-vocabulary", 9709, 14398, 221, 160, "1c9707d05327d180"],
+        ["instructions-105", 9791, 13380, 225, 112, "5916184674db1200"],
+        ["structural-9", 13380, 13783, 337, 16, "f3b8b8e4ef19d480"],
+        ["meta-7", 13783, 14119, 353, 14, "6098214c0a279600"],
+        ["session-shortcuts-5", 14119, 14398, 367, 14, "3f30ff141e8c6800"],
+        ["8-coined-elements", 14398, 14833, 381, 14, "0588f87025f5da80"],
+        ["9-where-the-draft-reference-diverged", 14833, 15273, 395, 12, "498bf1d06ccfd100"],
+        ["10-round-trip", 15273, 16746, 407, 51, "0b10738e238bf600"],
+        ["11-failure--what-a-malformed-construct-produces", 16746, 21020, 458, 74, "0defef4e43ed9200"],
+        ["111-missing-is-not-malformed", 17186, 17880, 466, 15, "34c324481c006400"],
+        ["112-every-refusal-carries-a-position", 17880, 18501, 481, 12, "830e5f44688e8e00"],
+        ["113-the-refusals", 18501, 19601, 493, 14, "e64befe858bb4900"],
+        ["114-what-is-deliberately-not-refused", 19601, 20484, 507, 15, "26c057acab4a9e00"],
+        ["115-no-placeholder-character-reaches-the-deliverable", 20484, 21020, 522, 10, "21272b9a654d5900"]
+      ]
+    },
+    ".guidelines/ast-schema.json": {
+      "nodes": [
+        ["", 0, 8327, 1, 230, "cfc0f51161dcb400"],
+        ["/schema", 14, 15, 2, 1, "370cabd49014b848"],
+        ["/note", 27, 509, 3, 1, "80a6a26eb9234000"],
+        ["/appliesTo", 526, 714, 4, 1, "565b718ebc71e100"],
+        ["/envelope", 730, 1588, 5, 21, "1c5b7c77fd262600"],
+        ["/envelope/required", 748, 892, 6, 10, "5bec0f3c34cf5f00"],
+        ["/envelope/optional", 910, 940, 16, 3, "a78fc00be35a0000"],
+        ["/envelope/constants", 959, 1038, 19, 5, "1bd2ece099c11300"],
+        ["/envelope/note", 1052, 1584, 24, 1, "2fb292ded378ad00"],
+        ["/diagnostic", 1606, 2100, 26, 23, "b0c680f87d750000"],
+        ["/diagnostic/required", 1624, 1694, 27, 6, "7c3965770500a000"],
+        ["/diagnostic/optional", 1712, 1730, 33, 3, "1a198b28c1495600"],
+        ["/diagnostic/at", 1742, 2032, 36, 7, "bc08c778ddaf4500"],
+        ["/diagnostic/severity", 2050, 2096, 43, 5, "a732bee80adcee00"],
+        ["/nodes", 2113, 5895, 49, 135, "0b4ae0506b517600"],
+        ["/nodes/Segment", 2130, 2432, 50, 12, "da5b321cd53d8700"],
+        ["/nodes/Command", 2449, 3266, 62, 32, "d180b4cf2e793800"],
+        ["/nodes/Literal", 3283, 4131, 94, 21, "e951ad50e2670800"],
+        ["/nodes/Raw", 4144, 4563, 115, 16, "62985d6459a80b00"],
+        ["/nodes/Verbatim", 4581, 4840, 131, 8, "5917a630578bbc00"],
+        ["/nodes/Text", 4854, 4935, 139, 7, "4d6799f00cd5e600"],
+        ["/nodes/ModeOff", 4952, 5032, 146, 7, "c8c7b7804ee42400"],
+        ["/nodes/Template", 5050, 5379, 153, 11, "6a83cc4cd7b29500"],
+        ["/nodes/Logic", 5394, 5510, 164, 9, "f3435eaf3f395200"],
+        ["/nodes/Truncated", 5529, 5891, 173, 10, "183861942caa9800"],
+        ["/rules", 5908, 7007, 184, 13, "b09cd82054e4f200"],
+        ["/rules/0", 5914, 5997, 185, 1, "9d9f58246fd1ec00"],
+        ["/rules/1", 6003, 6082, 186, 1, "a1b5eaf8970dc300"],
+        ["/rules/2", 6088, 6151, 187, 1, "07d00616fae97400"],
+        ["/rules/3", 6157, 6272, 188, 1, "2477de7a1503f200"],
+        ["/rules/4", 6278, 6330, 189, 1, "a72602f03c446b80"],
+        ["/rules/5", 6336, 6392, 190, 1, "31bb04d004d90100"],
+        ["/rules/6", 6398, 6528, 191, 1, "97423de0d6890400"],
+        ["/rules/7", 6534, 6660, 192, 1, "f38ce41e662bec00"],
+        ["/rules/8", 6666, 6770, 193, 1, "1c6864d8fc11c200"],
+        ["/rules/9", 6776, 6844, 194, 1, "921dafeec0cae800"],
+        ["/rules/10", 6850, 7003, 195, 1, "b8dd225e0c53df00"],
+        ["/at", 7017, 7436, 197, 7, "e6e0e0a7892af300"],
+        ["/at/required", 7035, 7063, 198, 4, "73cf6b70fba2dc00"],
+        ["/at/note", 7077, 7432, 202, 1, "aa4b8640f6791600"],
+        ["/source", 7450, 7860, 204, 18, "63531ed8da50fc00"],
+        ["/source/required", 7468, 7556, 205, 7, "d8a2af803b59bb00"],
+        ["/source/optional", 7574, 7594, 212, 3, "350dd320132c8600"],
+        ["/source/newline", 7611, 7658, 215, 5, "5eadd5af0feec980"],
+        ["/source/note", 7672, 7856, 220, 1, "e0940fa6878c2a00"],
+        ["/stores", 7874, 8324, 222, 8, "e8a0228fc2586700"],
+        ["/stores/required", 7892, 7952, 223, 5, "148c26c86cc5b200"],
+        ["/stores/note", 7966, 8320, 228, 1, "713983def5d78b00"]
+      ]
+    },
+    ".guidelines/corpus-snapshot.json": {
+      "nodes": [
+        ["", 0, 14065, 1, 577, "b59ae5b61a127c00"],
+        ["/note", 12, 313, 2, 1, "a3eb619e87b97600"],
+        ["/engine", 327, 337, 3, 1, "329156f83f19d000"],
+        ["/count", 350, 353, 4, 1, "723624842846f900"],
+        ["/cases", 366, 14062, 5, 572, "1a031e98d90a9400"],
+        ["/cases/P-01", 380, 486, 6, 5, "2f8074c8fb6d1c00"],
+        ["/cases/P-02", 500, 606, 11, 5, "1b5c85f745e2a600"],
+        ["/cases/P-03", 620, 726, 16, 5, "7fac27b4af64ee00"],
+        ["/cases/P-04", 740, 846, 21, 5, "51145660641de000"],
+        ["/cases/P-05", 860, 966, 26, 5, "2ecbe020d360f400"],
+        ["/cases/P-06", 980, 1086, 31, 5, "817372a8fa013f00"],
+        ["/cases/P-07", 1100, 1206, 36, 5, "a5baea48cf0c7800"],
+        ["/cases/P-08", 1220, 1326, 41, 5, "609aec90e9f73600"],
+        ["/cases/P-10", 1340, 1446, 46, 5, "5b000d8f85c26200"],
+        ["/cases/P-13", 1460, 1566, 51, 5, "0ae35743550ebc00"],
+        ["/cases/P-14", 1580, 1686, 56, 5, "0f4ff4d80128ca00"],
+        ["/cases/P-15", 1700, 1806, 61, 5, "6c69bda894d1be00"],
+        ["/cases/P-16", 1820, 1926, 66, 5, "d9ceaec8f5e25e20"],
+        ["/cases/P-17", 1940, 2046, 71, 5, "2723a120d608ca00"],
+        ["/cases/P-18", 2060, 2166, 76, 5, "bc2416206ccc3a40"],
+        ["/cases/P-19", 2180, 2286, 81, 5, "e3fd52548f436900"],
+        ["/cases/P-20", 2300, 2406, 86, 5, "0264d6ff5967f020"],
+        ["/cases/P-21", 2420, 2526, 91, 5, "f8939f107eff2e00"],
+        ["/cases/P-22", 2540, 2646, 96, 5, "174139b8a8058400"],
+        ["/cases/P-23", 2660, 2766, 101, 5, "b5b2c5fb02df4420"],
+        ["/cases/P-24", 2780, 2886, 106, 5, "fce9bb8c13877a00"],
+        ["/cases/P-25", 2900, 3006, 111, 5, "68ae4d30e2973820"],
+        ["/cases/P-26", 3020, 3126, 116, 5, "bd981050a68c1b00"],
+        ["/cases/P-27", 3140, 3246, 121, 5, "6b63451099224c00"],
+        ["/cases/P-28", 3260, 3366, 126, 5, "727683c8f1872600"],
+        ["/cases/P-29", 3380, 3486, 131, 5, "2841ced488372d00"],
+        ["/cases/P-30", 3500, 3606, 136, 5, "fe07388749cc3600"],
+        ["/cases/P-31", 3620, 3726, 141, 5, "8f410d20bfab4200"],
+        ["/cases/P-32", 3740, 3846, 146, 5, "bf3534837b6fca00"],
+        ["/cases/P-33", 3860, 3966, 151, 5, "b3e55048de81a540"],
+        ["/cases/P-34", 3980, 4086, 156, 5, "1c26c03026388000"],
+        ["/cases/I-01", 4100, 4206, 161, 5, "696f04f426c92e00"],
+        ["/cases/I-02", 4220, 4326, 166, 5, "ce1dab0fc6976800"],
+        ["/cases/I-06", 4340, 4446, 171, 5, "378fc9c413285a00"],
+        ["/cases/I-08", 4460, 4566, 176, 5, "ead2ca508f140c00"],
+        ["/cases/I-09", 4580, 4686, 181, 5, "74780db874015c00"],
+        ["/cases/I-10", 4700, 4806, 186, 5, "eee731d3c4772600"],
+        ["/cases/N-13", 4820, 4926, 191, 5, "09ab3e98c2e3ec00"],
+        ["/cases/N-03", 4940, 5046, 196, 5, "e2f9afc0d1667a20"],
+        ["/cases/N-04", 5060, 5166, 201, 5, "3609dbc8cfe2a600"],
+        ["/cases/N-05", 5180, 5286, 206, 5, "eb006f80cd4d4000"],
+        ["/cases/N-09", 5300, 5406, 211, 5, "011c82eca5807400"],
+        ["/cases/N-11", 5420, 5526, 216, 5, "82a78837d5094940"],
+        ["/cases/N-12", 5540, 5646, 221, 5, "84963e0cfbcb4c00"],
+        ["/cases/N-22", 5660, 5766, 226, 5, "8c500d1c8c521a00"],
+        ["/cases/N-14", 5780, 5886, 231, 5, "10f8db0c4ec6a500"],
+        ["/cases/N-15", 5900, 6006, 236, 5, "4d6960a8775c1800"],
+        ["/cases/N-16", 6020, 6126, 241, 5, "8f7934709bcbe600"],
+        ["/cases/N-17", 6140, 6246, 246, 5, "e0b286f08d512000"],
+        ["/cases/N-18", 6260, 6366, 251, 5, "7e1acc38db5e6400"],
+        ["/cases/N-19", 6380, 6486, 256, 5, "ecc4ccbf2906d400"],
+        ["/cases/N-20", 6500, 6606, 261, 5, "5cf7f21c7fd1c400"],
+        ["/cases/N-21", 6620, 6726, 266, 5, "ebd4e53883739700"],
+        ["/cases/R-01", 6740, 6846, 271, 5, "817372a8fa013f00"],
+        ["/cases/R-02", 6860, 6966, 276, 5, "c4c860781314ac00"],
+        ["/cases/R-03", 6980, 7086, 281, 5, "49b3f64848e86a00"],
+        ["/cases/R-04", 7100, 7206, 286, 5, "fc7f03fb79f3bc20"],
+        ["/cases/R-05", 7220, 7326, 291, 5, "a463625c28dcfc00"],
+        ["/cases/L-01", 7340, 7446, 296, 5, "a761e25f3f5d4400"],
+        ["/cases/L-02", 7460, 7566, 301, 5, "d59bf2209d468500"],
+        ["/cases/L-03", 7580, 7686, 306, 5, "6d810ac8fa3f8e00"],
+        ["/cases/L-04", 7700, 7806, 311, 5, "68d9e83040c32a00"],
+        ["/cases/L-05", 7820, 7926, 316, 5, "e87b9a28098f6a00"],
+        ["/cases/L-06", 7940, 8046, 321, 5, "e87b9a28098f6a00"],
+        ["/cases/L-07", 8060, 8166, 326, 5, "126452cf3b293400"],
+        ["/cases/L-08", 8180, 8286, 331, 5, "425a18876e2bc800"],
+        ["/cases/T-01", 8300, 8406, 336, 5, "bf17e6d80dae6c00"],
+        ["/cases/T-02", 8420, 8526, 341, 5, "bf17e6d80dae6c00"],
+        ["/cases/T-03", 8540, 8646, 346, 5, "6f21214444b91c00"],
+        ["/cases/T-04", 8660, 8766, 351, 5, "db2bf26f073a6600"],
+        ["/cases/T-05", 8780, 8886, 356, 5, "b1e37700192e8c00"],
+        ["/cases/T-06", 8900, 9006, 361, 5, "0ccd6da8770fac00"],
+        ["/cases/T-07", 9020, 9126, 366, 5, "346880c80195a600"],
+        ["/cases/T-08", 9140, 9246, 371, 5, "7ac0fb4861328600"],
+        ["/cases/T-09", 9260, 9366, 376, 5, "a163be0881ce4c00"],
+        ["/cases/T-10", 9380, 9486, 381, 5, "cc0fdfb0f0e33600"],
+        ["/cases/T-11", 9500, 9606, 386, 5, "319c71077d12e400"],
+        ["/cases/T-12", 9620, 9726, 391, 5, "440b93d0e01b5c00"],
+        ["/cases/K-01", 9740, 9846, 396, 5, "7609799867ab4400"],
+        ["/cases/K-02", 9860, 9966, 401, 5, "7da2ec5fc4b90800"],
+        ["/cases/K-03", 9980, 10086, 406, 5, "bc13900ff88a1000"],
+        ["/cases/K-04", 10100, 10206, 411, 5, "de066c40ccee6be8"],
+        ["/cases/K-05", 10220, 10326, 416, 5, "cdb5ca241ea859e0"],
+        ["/cases/K-06", 10340, 10446, 421, 5, "8a1039387a899200"],
+        ["/cases/K-07", 10460, 10566, 426, 5, "792f7c4832236e00"],
+        ["/cases/K-08", 10580, 10686, 431, 5, "e2ec6df8067a0f00"],
+        ["/cases/K-09", 10700, 10806, 436, 5, "e2ec6df8067a0f00"],
+        ["/cases/C-01", 10820, 10926, 441, 5, "39bfcf5880bf2000"],
+        ["/cases/C-02", 10940, 11046, 446, 5, "9f6cf353b4eee620"],
+        ["/cases/C-03", 11060, 11166, 451, 5, "47bc6114324e4700"],
+        ["/cases/C-04", 11180, 11286, 456, 5, "fba2a4a8f7935400"],
+        ["/cases/C-05", 11300, 11406, 461, 5, "5d5ed91cf0f1c000"],
+        ["/cases/C-06", 11420, 11526, 466, 5, "b595f3602852ea00"],
+        ["/cases/C-07", 11540, 11646, 471, 5, "acdfd9882e7e0600"],
+        ["/cases/C-08", 11660, 11766, 476, 5, "fd2a1bbb906c2c00"],
+        ["/cases/C-09", 11780, 11886, 481, 5, "39bfcf5880bf2000"],
+        ["/cases/C-10", 11900, 12006, 486, 5, "665f6174fd205e00"],
+        ["/cases/C-11", 12020, 12126, 491, 5, "0b806388cce9a000"],
+        ["/cases/C-12", 12140, 12246, 496, 5, "1f3d1a585e636d00"],
+        ["/cases/C-13", 12260, 12366, 501, 5, "552afe18e2fd9620"],
+        ["/cases/C-14", 12380, 12486, 506, 5, "eaec892ce3131e00"],
+        ["/cases/C-15", 12500, 12606, 511, 5, "84ffe8d3170eae00"],
+        ["/cases/OC-01", 12621, 12727, 516, 5, "536b2cdc5f066820"],
+        ["/cases/OC-02", 12742, 12848, 521, 5, "dd1a4c2056951a00"],
+        ["/cases/OC-03", 12863, 12969, 526, 5, "1cb3703031da1a00"],
+        ["/cases/OC-04", 12984, 13090, 531, 5, "f4ecb43f77a42600"],
+        ["/cases/OC-05", 13105, 13211, 536, 5, "d1dd45e026042200"],
+        ["/cases/OC-06", 13226, 13332, 541, 5, "541c19506a71eb00"],
+        ["/cases/OC-07", 13347, 13453, 546, 5, "47350af09ceafc00"],
+        ["/cases/OC-08", 13468, 13574, 551, 5, "fdbb2578d008d600"],
+        ["/cases/OC-09", 13589, 13695, 556, 5, "81634108154c8800"],
+        ["/cases/OC-10", 13710, 13816, 561, 5, "3e6754dfd28dcf00"],
+        ["/cases/OC-11", 13831, 13937, 566, 5, "014ae63008896400"],
+        ["/cases/OC-12", 13952, 14058, 571, 5, "637ab91f62794600"]
+      ]
+    },
+    ".guidelines/expansions.json": {
+      "nodes": [
+        ["", 0, 24758, 1, 1012, "6abc6a58d4f2fe00"],
+        ["/schema", 14, 15, 2, 1, "370cabd49014b848"],
+        ["/note", 27, 442, 3, 1, "b32c8df24d2af200"],
+        ["/atoms", 455, 457, 4, 1, "8b019f50bb4f4500"],
+        ["/composites", 475, 477, 5, 1, "87f051767a74e540"],
+        ["/maxDepth", 493, 494, 6, 1, "330ca588a7c3e1f8"],
+        ["/commands", 510, 24755, 7, 1005, "c51de280eba4a000"],
+        ["/commands/TRUE", 524, 637, 8, 6, "bb210528d89db400"],
+        ["/commands/FLS", 650, 765, 14, 6, "8b6bcb34044bf200"],
+        ["/commands/POS", 778, 915, 20, 6, "3585cbc0c7517000"],
+        ["/commands/NGT", 928, 1067, 26, 6, "e2ead638e42cb200"],
+        ["/commands/DONT", 1081, 1233, 32, 6, "60ef5f54183d7600"],
+        ["/commands/DENY", 1247, 1414, 38, 6, "13ae4f58a2bdfe00"],
+        ["/commands/PRIO", 1428, 1580, 44, 6, "9c5a3abfdcc10600"],
+        ["/commands/OVR", 1593, 1729, 50, 6, "cb8185e87c915000"],
+        ["/commands/DFN", 1742, 1920, 56, 6, "fe783c688ce34600"],
+        ["/commands/CMP", 1933, 2080, 62, 6, "0dc3d2406d0eab00"],
+        ["/commands/CNST", 2094, 2243, 68, 6, "90a1e104a1503000"],
+        ["/commands/ASK", 2256, 2410, 74, 6, "11e695305f427100"],
+        ["/commands/ELAB", 2424, 2558, 80, 6, "14b6ce486b63d300"],
+        ["/commands/CLAR", 2572, 2703, 86, 6, "55032c4707cdec00"],
+        ["/commands/COND", 2717, 2852, 92, 6, "727c1320770f6a80"],
+        ["/commands/FMT", 2865, 3003, 98, 6, "1ddbf798e57d2800"],
+        ["/commands/ITR", 3016, 3145, 104, 6, "fdc318174ff14c00"],
+        ["/commands/CONF", 3159, 3293, 110, 6, "df8a04d0be54b800"],
+        ["/commands/UNLS", 3307, 3464, 116, 6, "70c08840bba78600"],
+        ["/commands/ONLYIF", 3480, 3608, 122, 6, "5722542892398e00"],
+        ["/commands/ONLYW", 3623, 3753, 128, 6, "58b97ac8e1491800"],
+        ["/commands/INSTOF", 3769, 3905, 134, 6, "90fd9b9faab76200"],
+        ["/commands/AVD", 3918, 4069, 140, 6, "1fc8113fb72f6800"],
+        ["/commands/RDY", 4082, 4206, 146, 6, "6ab1fbc0fbd90000"],
+        ["/commands/INS", 4219, 4343, 152, 6, "8f0b6444593ed980"],
+        ["/commands/WARN", 4357, 4505, 158, 6, "a3efa6ef34b1ac00"],
+        ["/commands/BYP", 4518, 4651, 164, 6, "925bc9b827accd00"],
+        ["/commands/FIND", 4665, 4828, 170, 6, "b1cc04df4d5aa600"],
+        ["/commands/GT", 4840, 4972, 176, 6, "a41c7ee46cac8400"],
+        ["/commands/GTE", 4985, 5150, 182, 6, "901a57c35c383800"],
+        ["/commands/LT", 5162, 5288, 188, 6, "c763bc80a46e9600"],
+        ["/commands/LTE", 5301, 5459, 194, 6, "7a1b90b87638df80"],
+        ["/commands/EQ", 5471, 5583, 200, 6, "daca38209f5f8800"],
+        ["/commands/NEQ", 5596, 5714, 206, 6, "da4c77d02615f000"],
+        ["/commands/GET", 5727, 5888, 212, 6, "27ff2d640a66c300"],
+        ["/commands/SUB", 5901, 6039, 218, 6, "030b8f47fad58000"],
+        ["/commands/ADD", 6052, 6191, 224, 6, "f1b969cfbe45a400"],
+        ["/commands/SWITCH", 6207, 6352, 230, 6, "8acadfc9d5eab400"],
+        ["/commands/GO", 6364, 6496, 236, 6, "61c21cb40bbb2c00"],
+        ["/commands/ERROR", 6511, 6643, 242, 6, "597e1b479e3e1000"],
+        ["/commands/MAND", 6657, 6866, 248, 6, "c6ba49382793c380"],
+        ["/commands/OPT", 6879, 7007, 254, 6, "5e3c2ec8a0464000"],
+        ["/commands/ALW", 7020, 7148, 260, 6, "d04cf18c82fb6800"],
+        ["/commands/NEV", 7161, 7328, 266, 6, "9f237bc4abfcab00"],
+        ["/commands/PT", 7340, 7481, 272, 6, "d3e81458dda35600"],
+        ["/commands/VAR", 7494, 7636, 278, 6, "91804437c2b4e700"],
+        ["/commands/PARAM", 7651, 7779, 284, 6, "15b6879457b81900"],
+        ["/commands/PH", 7791, 7940, 290, 6, "8a2e1b979e140800"],
+        ["/commands/DEF", 7953, 8076, 296, 6, "c9fdf25cecafb700"],
+        ["/commands/TPL", 8089, 8270, 302, 6, "aecdcab340a3a200"],
+        ["/commands/CORE", 8284, 8417, 308, 6, "c4c4a67fe6581300"],
+        ["/commands/CTX", 8430, 8539, 314, 6, "d93473c835fbfc00"],
+        ["/commands/TGT", 8552, 8675, 320, 6, "97655bf8e454fb00"],
+        ["/commands/SPEC", 8689, 8831, 326, 6, "7423f4cffda2a380"],
+        ["/commands/LOGIC", 8846, 8982, 332, 6, "320df03885786180"],
+        ["/commands/WHR", 8995, 9130, 338, 6, "e3e03a6fa5947400"],
+        ["/commands/HGH", 9143, 9266, 344, 6, "8c8ea378d8ebe100"],
+        ["/commands/LOW", 9279, 9401, 350, 6, "c9ae3928182f2300"],
+        ["/commands/BOLD", 9415, 9548, 356, 6, "7404a3d0e1023000"],
+        ["/commands/LIGHT", 9563, 9697, 362, 6, "90a81510213c9800"],
+        ["/commands/ATC", 9710, 9860, 368, 6, "f212eb0080cabd80"],
+        ["/commands/EX", 9872, 10018, 374, 6, "6b7f8687be593600"],
+        ["/commands/RWK", 10031, 10181, 380, 6, "0e0bd93fe082dc00"],
+        ["/commands/IMPR", 10195, 10356, 386, 6, "aab0f9707ef2e720"],
+        ["/commands/REV", 10369, 10540, 392, 6, "f026d0e85d4fac00"],
+        ["/commands/SKEP", 10554, 10695, 398, 6, "939acea74dbb2300"],
+        ["/commands/DIST", 10709, 10849, 404, 6, "5cc46d3f88121d80"],
+        ["/commands/REAL", 10863, 11012, 410, 6, "5e308e03b6051c00"],
+        ["/commands/REF", 11025, 11150, 416, 6, "33db4ba493ef9000"],
+        ["/commands/SEEAL", 11165, 11299, 422, 6, "fa7f85685069c400"],
+        ["/commands/NT", 11311, 11437, 428, 6, "13fe9f287cfb4400"],
+        ["/commands/EXC", 11450, 11587, 434, 6, "fb6c2cb713447c00"],
+        ["/commands/LIM", 11600, 11749, 440, 6, "f3b62da83a8d6c00"],
+        ["/commands/REQ", 11762, 12030, 446, 6, "db496cd084516000"],
+        ["/commands/EXT", 12043, 12184, 452, 6, "6ebdd10f0377ee00"],
+        ["/commands/RSN", 12197, 12323, 458, 6, "e549b2efe57b1e00"],
+        ["/commands/FIN", 12336, 12460, 464, 6, "090dc710065f2580"],
+        ["/commands/IF", 12472, 12597, 470, 6, "22a9b4e89de8a200"],
+        ["/commands/SECTION", 12614, 12760, 476, 6, "058c19381814b9d8"],
+        ["/commands/BLOCK", 12775, 12931, 482, 6, "2ad0ae788f6a3800"],
+        ["/commands/SKL", 12944, 13098, 488, 6, "b6d576784ce08a30"],
+        ["/commands/NONE", 13112, 13259, 494, 6, "41596e977de90c80"],
+        ["/commands/TOBLOCK", 13276, 13430, 500, 6, "62b58018111e6700"],
+        ["/commands/TOSECTION", 13449, 13605, 506, 6, "a0272b00ced7a000"],
+        ["/commands/HMN", 13618, 13756, 512, 6, "7eed58e7411f4200"],
+        ["/commands/QUICK", 13771, 13959, 518, 6, "4c0aa43f3a66c000"],
+        ["/commands/OFF", 13972, 14116, 524, 6, "4063e660e176f200"],
+        ["/commands/ON", 14128, 14267, 530, 6, "6e6b24f79dd081ec"],
+        ["/commands/VRFY", 14281, 14540, 536, 13, "3fef83687d440c00"],
+        ["/commands/VAL", 14553, 14912, 549, 18, "9cc9d74807d95800"],
+        ["/commands/CRIT", 14926, 15253, 567, 15, "14f4521c322ba780"],
+        ["/commands/EVAL", 15267, 15678, 582, 19, "951171c002ec0f80"],
+        ["/commands/SCRU", 15692, 16279, 601, 27, "f0a21790e9288800"],
+        ["/commands/TRYFR", 16294, 16679, 628, 18, "5fa3597849ea0a00"],
+        ["/commands/PROB", 16693, 16925, 646, 11, "d762af78e73c2700"],
+        ["/commands/SIMP", 16939, 17184, 657, 12, "2869c890579ffc00"],
+        ["/commands/GEN", 17197, 17468, 669, 13, "36c0cedc88609000"],
+        ["/commands/SUM", 17481, 17718, 682, 11, "8c6fc8cbb9b28500"],
+        ["/commands/CAT", 17731, 17966, 693, 12, "65e3d0e85d74cc00"],
+        ["/commands/QST", 17979, 18365, 705, 16, "c490f86fa560a000"],
+        ["/commands/DRVF", 18379, 18708, 721, 16, "6d8fc818794a4800"],
+        ["/commands/FOREX", 18723, 19136, 737, 19, "b539c5803a11e200"],
+        ["/commands/FBK", 19149, 19525, 756, 18, "c4cbab2c34b0f700"],
+        ["/commands/RESTR", 19540, 19913, 774, 18, "d4353e70984af400"],
+        ["/commands/DEPR", 19927, 20220, 792, 14, "ece25d2821be5400"],
+        ["/commands/HYP", 20233, 20678, 806, 21, "7b8ea0a8bc341600"],
+        ["/commands/IMAG", 20692, 20942, 827, 13, "da94e0106cf04400"],
+        ["/commands/ALT", 20955, 21216, 840, 13, "2f22aa08314d0200"],
+        ["/commands/ASSM", 21230, 21499, 853, 13, "85d34490f8c1e000"],
+        ["/commands/RTNL", 21513, 21788, 866, 13, "eb7c3194b88c3e00"],
+        ["/commands/BRST", 21802, 22119, 879, 15, "8bb524e002b99280"],
+        ["/commands/CNSD", 22133, 22464, 894, 15, "8178989886049400"],
+        ["/commands/PROP", 22478, 22792, 909, 14, "cc3280b06ca49f00"],
+        ["/commands/CTRD", 22806, 23093, 923, 13, "c70b6bcf7f56ca00"],
+        ["/commands/CNCL", 23107, 23382, 936, 13, "39d73b24effcc100"],
+        ["/commands/JUST", 23396, 23671, 949, 13, "62eeb7c460dd3e00"],
+        ["/commands/INTN", 23685, 23936, 962, 12, "eaaea97481670000"],
+        ["/commands/RMBR", 23950, 24192, 974, 12, "a5a31074ecff6a00"],
+        ["/commands/FRGT", 24206, 24448, 986, 12, "d143ef18416c7000"],
+        ["/commands/LRN", 24461, 24751, 998, 13, "db1117a87c17db00"]
+      ]
+    },
+    ".guidelines/expansions.txt": {
+      "nodes": [
+        ["", 0, 3982, 1, 166, "f99c46d133786400"]
+      ]
+    },
+    ".guidelines/glyph-grammar.ebnf": {
+      "nodes": [
+        ["", 0, 4239, 1, 91, "9d36b28a5f2fbe80"]
+      ]
+    },
+    ".guidelines/rules.json": {
+      "nodes": [
+        ["", 0, 12482, 1, 354, "d56e863849616800"],
+        ["/schema", 14, 15, 2, 1, "370cabd49014b848"],
+        ["/note", 27, 912, 3, 1, "3c232e4c5a84ee00"],
+        ["/classes", 927, 1421, 4, 39, "44f1b0b82f004000"],
+        ["/classes/thinking", 945, 1033, 5, 8, "31d543cf9889f200"],
+        ["/classes/subject", 1050, 1166, 13, 10, "8f82aca8165a7600"],
+        ["/classes/condition", 1185, 1291, 23, 9, "cff04a9c8c0e9e00"],
+        ["/classes/coarsen", 1308, 1354, 32, 5, "a39b2158d36ff800"],
+        ["/classes/exit", 1368, 1417, 37, 5, "f07168a05b8b7700"],
+        ["/classNote", 1438, 2049, 43, 1, "dafe0100fd59ce00"],
+        ["/scope", 2062, 2356, 44, 9, "06f82688da7ff800"],
+        ["/scope/sameTarget", 2082, 2145, 45, 1, "ec0d1270476e6c00"],
+        ["/scope/within", 2161, 2208, 46, 1, "dfe9f5c89af1f300"],
+        ["/scope/exemptUnder", 2229, 2261, 47, 4, "94195e1818e91600"],
+        ["/scope/exemptWhy", 2280, 2352, 51, 1, "7fb244b68b4e0600"],
+        ["/rules", 2369, 11820, 53, 275, "5eacb230f001cf40"],
+        ["/rules/0", 2375, 2673, 54, 10, "fe3fe7c8f8021a00"],
+        ["/rules/1", 2679, 3019, 64, 10, "a31e1a2837dd8600"],
+        ["/rules/2", 3025, 3311, 74, 10, "cec110882f819a00"],
+        ["/rules/3", 3317, 3596, 84, 10, "e05d979030378200"],
+        ["/rules/4", 3602, 3914, 94, 10, "43854290a4531e00"],
+        ["/rules/5", 3920, 4242, 104, 10, "c58ba817834c6600"],
+        ["/rules/6", 4248, 4875, 114, 11, "ee32421c706a1200"],
+        ["/rules/7", 4881, 5242, 125, 10, "e9a220d0bddd2400"],
+        ["/rules/8", 5248, 5613, 135, 10, "81462468a98aca00"],
+        ["/rules/9", 5619, 5975, 145, 10, "f20f0518c289d400"],
+        ["/rules/10", 5981, 6243, 155, 10, "a2b029a05fba9e00"],
+        ["/rules/11", 6249, 6538, 165, 10, "cbbcf050a85c9980"],
+        ["/rules/12", 6544, 6820, 175, 10, "c3443c7006d1b100"],
+        ["/rules/13", 6826, 7100, 185, 10, "aa10dd208147a000"],
+        ["/rules/14", 7106, 7391, 195, 10, "e1a0256b9251c000"],
+        ["/rules/15", 7397, 7672, 205, 10, "542549dfd8903400"],
+        ["/rules/16", 7678, 8042, 215, 10, "2ec7bab7d0ac2600"],
+        ["/rules/17", 8048, 8366, 225, 10, "3d739058a65c63e0"],
+        ["/rules/18", 8372, 8653, 235, 10, "d65773b8c3a4bd00"],
+        ["/rules/19", 8659, 8948, 245, 10, "0cb1e9c468dec000"],
+        ["/rules/20", 8954, 9283, 255, 10, "f276c6d0ee917380"],
+        ["/rules/21", 9289, 9645, 265, 10, "ac8a9010b4dff800"],
+        ["/rules/22", 9651, 10078, 275, 14, "badccf507aec4600"],
+        ["/rules/23", 10084, 10389, 289, 12, "f9dec6e0f7fa2a00"],
+        ["/rules/24", 10395, 10705, 301, 12, "969e3a1f90e2de00"],
+        ["/rules/25", 10711, 11816, 313, 14, "554cbd88c4d84400"],
+        ["/notRules", 11836, 12479, 328, 26, "76dd6244c2045100"],
+        ["/notRules/0", 11842, 11952, 329, 4, "8164ae6893f31600"],
+        ["/notRules/1", 11958, 12061, 333, 4, "83ee2b783bd46000"],
+        ["/notRules/2", 12067, 12149, 337, 4, "50009f4805620400"],
+        ["/notRules/3", 12155, 12266, 341, 4, "40a5be84bdf10e00"],
+        ["/notRules/4", 12272, 12348, 345, 4, "d25a1b149b285000"],
+        ["/notRules/5", 12354, 12475, 349, 4, "bd83b2106adc0800"]
+      ]
+    },
+    ".guidelines/targets.json": {
+      "nodes": [
+        ["", 0, 1809, 1, 45, "a720993c3d117ac0"],
+        ["/schema", 14, 15, 2, 1, "340ca71c160082b8"],
+        ["/note", 27, 458, 3, 1, "009b1606de5d4c00"],
+        ["/harnesses", 476, 1537, 5, 32, "a34a3d3837f50200"],
+        ["/harnesses/0", 482, 1135, 6, 14, "49afe570b8466d80"],
+        ["/harnesses/1", 1141, 1341, 20, 8, "c5693610ea76f200"],
+        ["/harnesses/2", 1347, 1533, 28, 8, "8f3a1f43319dc200"],
+        ["/roles", 1551, 1806, 38, 7, "5ab1b25847091fb0"],
+        ["/roles/0", 1557, 1601, 39, 1, "b892b72877ae2a00"],
+        ["/roles/1", 1607, 1653, 40, 1, "fd53a1a02738ea00"],
+        ["/roles/2", 1659, 1700, 41, 1, "c12844e043aa7500"],
+        ["/roles/3", 1706, 1751, 42, 1, "5470f90828e86800"],
+        ["/roles/4", 1757, 1802, 43, 1, "4bc822505b1a8c00"]
+      ]
+    },
+    ".guidelines/templates.json": {
+      "nodes": [
+        ["", 0, 8060, 1, 89, "1a58e0b0091b5400"],
+        ["/schema", 14, 15, 2, 1, "340ca71c160082b8"],
+        ["/note", 27, 1671, 3, 1, "be0115e83923b400"],
+        ["/templates", 1688, 8057, 4, 85, "eb4c2f0846bc7800"],
+        ["/templates/germinate", 1707, 2560, 5, 8, "649c95a848ffa800"],
+        ["/templates/scientific-review", 2588, 3203, 14, 8, "49b50cdb583b0e0c"],
+        ["/templates/reinforce", 3223, 3631, 23, 8, "72f71b50b0a6a600"],
+        ["/templates/insight", 3649, 4153, 32, 8, "b526493c913e0000"],
+        ["/templates/fertilize", 4173, 4901, 41, 8, "542fe2186479de00"],
+        ["/templates/best-of", 4919, 5852, 50, 11, "08c9132021cb7800"],
+        ["/templates/loop", 5867, 7475, 62, 17, "fcbebdb0470aae00"],
+        ["/templates/track", 7491, 8053, 80, 8, "5ba258880c39ae00"]
+      ]
+    },
+    "CLAUDE.md": {
+      "nodes": [
+        ["", 0, 3079, 1, 67, "572aaeee5f763e00"],
+        ["glyph", 0, 3079, 1, 67, "572aaeee5f763e00"],
+        ["comece-por-aqui--sempre", 172, 1109, 6, 17, "710c7e584e152600"],
+        ["escrever-glyph", 1109, 1432, 23, 7, "d4617a26b07f7600"],
+        ["verificar", 1432, 2345, 30, 22, "5d591e68a8590400"],
+        ["duas-restrições-que-pegam-todo-agente-novo", 2345, 2911, 52, 12, "002419a0c833ea00"],
+        ["vocabulário", 2911, 3079, 64, 4, "747e80fce684da00"]
+      ]
+    },
+    "README.md": {
+      "nodes": [
+        ["", 0, 11639, 1, 273, "490f02d0f48f5200"],
+        ["glyph", 0, 11639, 1, 273, "490f02d0f48f5200"],
+        ["run-it", 565, 7146, 17, 170, "c5df97a2afa2f800"],
+        ["the-app--one-click", 576, 1355, 19, 20, "7fbc128e23598800"],
+        ["the-command-line--needs-node", 1355, 1871, 39, 17, "51fb86fcdbc3da00"],
+        ["--bundle--a-ordem-inteira-numerada-como-um-adr", 1871, 3382, 56, 29, "ca6c07deb4782a00"],
+        ["--from-xml--the-way-back", 3382, 4871, 85, 30, "43e6dfb080f10000"],
+        ["hgml--the-atomic-burn", 4871, 5523, 115, 28, "693a2308b898f400"],
+        ["self-describing-xml", 5523, 5897, 143, 13, "70f6dba4f1a95c00"],
+        ["the-server", 5897, 6561, 156, 16, "fe14fa5c514ddc00"],
+        ["the-rust-engine--needs-cargo", 6561, 7146, 172, 15, "638b574661b54800"],
+        ["after-editing", 7146, 7872, 187, 21, "80106c4edae41900"],
+        ["verify", 7872, 8163, 208, 11, "855c56409d0eba00"],
+        ["where-things-live", 8163, 10228, 219, 29, "40ded3d89aa98e00"],
+        ["documentation", 10228, 11176, 248, 17, "d8d559f4fc0dfa00"],
+        ["versioning--appfrontrulescontent", 11176, 11639, 265, 9, "c8ddd09cf5d2de00"]
+      ]
+    }
+  }
+}

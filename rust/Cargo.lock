@@ -177,6 +177,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "glyph-vpath"
+version = "0.0.0"
+dependencies = [
+ "glyph-envelope",
+ "glyph-util",
+]
+
+[[package]]
 name = "glyph-xml"
 version = "0.0.0"
 dependencies = [

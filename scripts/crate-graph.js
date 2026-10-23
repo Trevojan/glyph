@@ -13,7 +13,7 @@
  * `import` lines again rather than trusting a copy of them.
  *
  * Read from the Cargo.toml files as text, so the check needs Node and not a
- * Rust toolchain — `npm run check` stays runnable on a machine without cargo.
+ * Rust toolchain.
  *
  *   1. every JS core module has one crate, and every crate has a known oracle
  *   2. a core crate depends only on the crates its oracle's imports map to
@@ -64,7 +64,8 @@ const TOOLS = {
   "glyph-protocol": { oracle: "scripts/glyph-protocol.js", tools: [] },
   "glyph-cli":    { oracle: "scripts/glyph-cli.js",
                     tools: ["glyph-schema", "glyph-diff", "glyph-trace", "glyph-bundle", "glyph-protocol"] },
-  "glyph-lsp":    { oracle: "— (new capability; M12–M15)", tools: ["glyph-trace"] }
+  "glyph-lsp":    { oracle: "— (new capability; M12–M15)", tools: ["glyph-trace"] },
+  "glyph-vpath":  { oracle: "— (new capability; .plan §0, EMS-002 ORD-0001)", tools: [] }
 };
 
 const errors = [];
