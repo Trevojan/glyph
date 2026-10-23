@@ -1,0 +1,69 @@
+[block
+  'ORD-0011-case-stores'
+  [ctx
+    'the spec of EMS-002'
+    '.guidelines/.orders/EMS-002/EMS-002.pgml'
+  [/ctx]
+  [tgt
+    'the snapshot honours the stores of each case, O5 of INTAKE-RUST-LADDER, answered on 2026-09-27'
+  [/tgt]
+  [ctx
+    'the snapshot and the oracle project every declared case with one uniform set of stores, the repository ones, so a case that brings its own templates is projected without them, and TemplateCycle, whose cases bring a cyclic store, never reaches the oracle'
+  [/ctx]
+  [cnst
+    'a case is projected with its stores laid over the repository ones, the reading the decision names: measured before the code, it moves exactly T-07, T-08 and T-09, the two cycles among them; the case stores alone would move 36 cases, the C and K cases with them'
+  [/cnst]
+  [cnst
+    'the snapshot moves by decision, and the decision is written; a hash that moves outside the T cases is a regression, not the decision'
+  [/cnst]
+  [cmp
+    'the snapshot'
+    'each declared case is projected with its own stores laid over the repository ones, the T hashes move by decision, and no other hash moves'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+  [cmp
+    'the oracle'
+    'TemplateCycle enters the oracle, the case files and the runs say which stores a case brings, and the Rust answers them byte for byte'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+[/block]

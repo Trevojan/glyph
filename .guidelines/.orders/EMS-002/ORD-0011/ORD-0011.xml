@@ -1,0 +1,34 @@
+<glyph-package engine="3.6.9.07">
+  <schema/>
+  <block once="true">
+    <block binds="ORD-0011-case-stores">
+      <user-input>ORD-0011-case-stores</user-input>
+      <context>
+        <user-input>the spec of EMS-002</user-input>
+        <user-input>.guidelines/.orders/EMS-002/EMS-002.pgml</user-input>
+      </context>
+      <target>
+        <user-input>the snapshot honours the stores of each case, O5 of INTAKE-RUST-LADDER, answered on 2026-09-27</user-input>
+      </target>
+      <context>
+        <user-input>the snapshot and the oracle project every declared case with one uniform set of stores, the repository ones, so a case that brings its own templates is projected without them, and TemplateCycle, whose cases bring a cyclic store, never reaches the oracle</user-input>
+      </context>
+      <constraint>
+        <user-input>a case is projected with its stores laid over the repository ones, the reading the decision names: measured before the code, it moves exactly T-07, T-08 and T-09, the two cycles among them; the case stores alone would move 36 cases, the C and K cases with them</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the snapshot moves by decision, and the decision is written; a hash that moves outside the T cases is a regression, not the decision</user-input>
+      </constraint>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the snapshot</user-input>
+        <user-input>each declared case is projected with its own stores laid over the repository ones, the T hashes move by decision, and no other hash moves</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the oracle</user-input>
+        <user-input>TemplateCycle enters the oracle, the case files and the runs say which stores a case brings, and the Rust answers them byte for byte</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>
