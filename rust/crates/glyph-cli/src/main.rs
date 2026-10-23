@@ -15,7 +15,7 @@
 use glyph_burn::{to_hgml, BurnOpts};
 use glyph_envelope::{to_ast, AstOpts};
 use glyph_parse::{parse, Opts};
-use glyph_stores::{atoms_of, depth_of, formula_of, species_of, Context};
+use glyph_stores::{atoms_of, depth_of, formula_of, species_of, Context, Registered};
 use glyph_json::{number, stringify_indent, Json};
 use glyph_util::tree::Thrown;
 use glyph_xml::to_xml;
@@ -63,9 +63,16 @@ fn main() {
     cli(argv)
 }
 
+/// The options of every parse here: the CLI registers the repository's stores
+/// before it reads, as `glyph-cli.js` does, so a template's body is parsed with
+/// them (EMS-002 ORD-0008).
+fn registered(ctx: &Context) -> Opts<'_> {
+    Opts { registered: Registered::repository(), ..Opts::new(ctx) }
+}
+
 /// ORD-0008: the XML of stdin, and nothing after it.
 fn first_binary(src: &str) {
-    match to_xml(src, &Opts::new(Context::repository()), false) {
+    match to_xml(src, &registered(Context::repository()), false) {
         Ok(xml) => Out { out: xml.into_bytes(), err: Vec::new() }.exit(0),
         Err(thrown) => Out { out: Vec::new(), err: Vec::new() }.thrown("TypeError", thrown),
     }
@@ -172,7 +179,7 @@ fn moment() -> f64 {
 fn cli(argv: Vec<String>) {
     let mut o = Out { out: Vec::new(), err: Vec::new() };
     let ctx = Context::repository();
-    let opts = Opts::new(ctx);
+    let opts = registered(ctx);
     let mut mode = "xml";
     let mut src: Vec<String> = Vec::new();
     let (mut file, mut bundle, mut out_dir): (Option<String>, bool, Option<String>) = (None, false, None);
@@ -232,7 +239,7 @@ fn cli(argv: Vec<String>) {
     }
 
     // toAST with no language answers in en-EU, as the envelope's default
-    let ast_opts = Opts { en: true, ..Opts::new(ctx) };
+    let ast_opts = Opts { en: true, ..registered(ctx) };
     let ast_text = |src: &str| to_ast(src, &ast_opts, &AstOpts::default()).map(|a| stringify_indent(&a, "  "));
 
     if bundle {

@@ -33,7 +33,7 @@ fn context(flags: &Json) -> Option<Context> {
 }
 fn opts<'a>(ctx: &'a Context, flags: &Json) -> Opts<'a> {
     Opts { ctx, session: flags.get("session") != Some(&Json::Bool(false)), valency: flags.get("valency") != Some(&Json::Bool(false)),
-           en: false, expanding: Vec::new() }
+           en: false, expanding: Vec::new(), registered: glyph_stores::Registered::none() }
 }
 fn back_json(b: &Back) -> (Json, Json) {
     (Json::Str(b.src.clone()), Json::Arr(b.diag.iter().map(|d| Json::Obj(vec![
