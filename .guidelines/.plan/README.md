@@ -6,7 +6,7 @@
 
 ## Autorizado pelo Regente, ainda não construído
 
-### 0. Caminhos virtuais — `.guidelines/.shortcuts/.virtual/` — **decidido, primeiro da fila**
+### 0. Caminhos virtuais — `.guidelines/.shortcuts/.virtual/` — **em construção, `EMS-002/ORD-0001`**
 
 > *"quero que seja feito um sistema que implemente `.guidelines/.shortcuts/.virtual/`
 > e defina os caminhos virtuais com offsets e tudo o mais […] a síntese deve
@@ -61,10 +61,11 @@ Medido antes do código, sobre os 202 commits do histórico, com os limiares
 declarados num commit anterior ao script
 ([`INTAKE-VIRTUAL-PATH.md`](../.orders/INTAKE-VIRTUAL-PATH.md) §18 e §19,
 `scripts/measure-coupling.js`): a impressão digital defasada é `fix` no
-`npm run check`; a granularidade é o nó; o `sources:` nasce com oito linhas
-propostas, seis delas no `RETURN.md` da EMS-001; e a primeira ORD chaveia pelo
-slug, com o `NodeID` e o índice de recuperação nas seguintes. A primeira ORD
-nasce na série seguinte à EMS-001, ou avulsa, quando o Regente chamar.
+`npm run check`; a granularidade é o nó; o `sources:` nasce com as duas linhas
+propostas fora do `RETURN.md`, que é log; e a primeira ORD chaveia pelo slug,
+com o `NodeID`, a manutenção de ordem e o índice de recuperação nas seguintes.
+A primeira ORD é a [`EMS-002/ORD-0001`](../.orders/EMS-002/README.md), aberta,
+num crate Rust novo, `glyph-vpath`.
 
 ### 1. `<section>` de cabeçalho, irmã do `<schema/>` — **decidido, faltando fazer**
 

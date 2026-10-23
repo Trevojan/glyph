@@ -16,7 +16,8 @@
 | suíte | `npm run check` — verde, 34 baldes, 114 fontes declaradas no snapshot; `npm run check:rust` escreve o oráculo no commit sob teste e compila e testa `rust/` |
 | EMS-001 | fechadas da `ORD-0001` à `ORD-0012`, cada uma com o commit e o digest no [registro da série](../.orders/EMS-001/README.md). A fila para na `ORD-0013`, o instalador, que pede uma máquina Windows limpa e o Regente |
 | último marco | o Glyph responde em Rust (2026-09-26): o app, atrás de `?engine=relay`, dá pelo motor Rust os mesmos bytes que pelo JS nas 114 fontes, em todo painel (`ORD-0011`), e o binário `glyph` responde as flags do `glyph-cli.js` (`ORD-0012`). Antes disso: o layout das séries e as `ORD-0001` a `ORD-0010`, na nuvem (2026-09-25); o trabalho de 2026-09-24, com as stores como objeto de contexto, o oráculo das 114 fontes, o workspace `rust/`, os nomes ratificados e o plugin; o núcleo em treze módulos |
-| próximo | primeiro do plano, os caminhos virtuais ([`.plan`](../.plan/README.md) §0), quando o Regente os chamar. A EMS-001 espera no portão da `ORD-0013` (§5), e o que espera o Regente está no [retorno](../.orders/EMS-001/RETURN.md) |
+| EMS-002 | aberta em 2026-10-23, o Glyph 100% em Rust: a Ordem aberta é a `ORD-0001`, `glyph-vpath`, os caminhos virtuais ([registro da série](../.orders/EMS-002/README.md)) |
+| próximo | fechar a `EMS-002/ORD-0001`: as camadas 1, 4, 5 e 6 do [`.plan`](../.plan/README.md) §0, chaveadas pelo slug, como a re-medição decidiu ([`INTAKE-VIRTUAL-PATH.md`](../.orders/INTAKE-VIRTUAL-PATH.md) §19). A EMS-001 espera no portão da `ORD-0013` (§5) |
 
 ## Os sete eixos
 
@@ -54,7 +55,7 @@
 | "o que o estudo de setembro mediu e decidiu?" | [`.orders/INTAKE-FIELD-2026-09.md`](../.orders/INTAKE-FIELD-2026-09.md) §5 aponta os outros sete |
 | "Rust?" | [`.orders/INTAKE-RUST.md`](../.orders/INTAKE-RUST.md) — os dois lados, pesados; o Regente decidiu migrar ([`.decisions/`](../.decisions/README.md), 2026-09-24) |
 | "a escada de migração perde alguma coisa?" | [`.orders/INTAKE-RUST-LADDER.md`](../.orders/INTAKE-RUST-LADDER.md) — a escada medida contra o motor, e o que o vendoring compra (§9); §8 é o que espera o Regente |
-| "o que se constrói em Rust, e em que ordem?" | [`.plan/`](../.plan/README.md) §5, a série EMS-001 |
+| "o que se constrói em Rust, e em que ordem?" | [`.plan/`](../.plan/README.md) §5, as séries EMS-001 e [EMS-002](../.orders/EMS-002/README.md) |
 | "duas fontes, uma intenção?" | [`HGML_CONVERGENCE.md`](../HGML_CONVERGENCE.md) |
 | "como escrever um exemplo de conformidade?" | [`conformance/README.md`](../../conformance/README.md) |
 | "como escrevo Glyph?" | a skill em [`.claude/skills/glyph-markup/`](../../.claude/skills/glyph-markup/) — gerada, e provada contra o motor |
