@@ -87,6 +87,13 @@
     [val'the oracle','every crate answers the oracle as before, byte for byte']
   ]
 
+  [section'ORD-0008-registered'
+    [tgt'a template body reads what the caller registered, question 6 of the EMS-001 return, answered c']
+    [val'the registry','the Rust keeps what the caller registered beside the context, and a template body reads it, as the JS body reads useRules and useExpansions']
+    [val'the callers','the CLI and the engine behind the app register the repository stores in both engines, the JS protocol first, so a body that breaks a rule reads the same in the CLI and in the app by both engines']
+    [val'the oracle','the export records template bodies with nothing registered and with the repository registered, the Rust answers both byte for byte, and the oracle of the cases does not move']
+  ]
+
   [section'limits'
     [nev'a selector that answers an empty slice in silence']
     [dont'open an ORD before the ORD it depends on closes']
