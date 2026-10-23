@@ -47,7 +47,8 @@ Closed questions; an answered one carries the Regent's answer below its options.
    - c. later, when ORD-0004 opens
 
    Answered by the Regent on 2026-09-27: **a** — a declared source with a character
-   outside the BMP, the snapshot moved by decision. Not built yet: [`.plan`](../../.plan/README.md) §5.
+   outside the BMP, the snapshot moved by decision. Built by [`EMS-002/ORD-0005`](../EMS-002/README.md):
+   `P-35`, 115 sources, and `lev` counting characters dies against it.
 3. **The envelope's `stores.rules` hashes the engine's cache with the store.
    What does the Rust envelope (ORD-0009) answer?**
    - a. the JS keeps its compiled rules off the store object; the envelope then
