@@ -738,3 +738,37 @@ from the history, only its reach: the 12 of the whole history and the 8 of the
 window are what it recovers by construction. It never fires on a deletion,
 because a deletion is a section with no such successor. What it costs is the
 old text, which the index does not keep.
+
+## 24. Order maintenance — what an edit rewrites, threshold
+
+The Regent called layer 3 on 2026-10-23. Two things are asked of it, and they
+cost differently:
+
+- **the order queries** — `before(a, b)`, what comes above a node, what lies
+  between two — are answered by the index as it is: a build materialises every
+  node with its file and its offset, so the order is a sort at load, O(1) to
+  compare and O(log n) to search, with nothing stored;
+- **the update in O(k log n)** — an edit that touches k nodes rewrites k rows
+  of the index, never the rows after it. Today a row holds absolute offsets
+  and lines, so an edit early in a file shifts every row below it, and the
+  diff of `index.json` grows with the file, not with the edit. Holding the
+  rows still asks for **stable positions**: an order label per node, kept
+  across builds and given between its neighbours when a node arrives
+  (Dietz–Sleator), and offsets held relative to the previous sibling or the
+  parent.
+
+Declared here and committed before `M7` exists in `scripts/measure-coupling.js`.
+
+**Universe and exclusions** as §18; Markdown docs, each edited file of each
+commit, its sections keyed by slug before and after (M4's reading).
+
+**M7 — what an edit rewrites.** A section of the after-version is **rewritten**
+when it is new or when its row would differ: its text, or its start, end,
+first line or line count. It is **shifted** when its text is the same and only
+its coordinates moved. Shift share = shifted / rewritten, summed over the
+whole history.
+
+Decides **what the order maintenance ORD stores**: shift share `≥ 50 %` →
+stable positions, order labels by Dietz–Sleator and relative offsets, so an
+edit rewrites the rows it touches; `< 50 %` → the positions stay absolute, and
+the ORD is the order queries over them.
