@@ -26,10 +26,14 @@ use crate::index::{Entry, Index};
 use crate::join;
 use std::collections::{BTreeMap, HashMap, HashSet};
 
-/// What one build carries: the next free number and the aliases.
+/// What one build carries: the next free number and the aliases, and what no
+/// rule reached — the old nodes that went and the new nodes it numbered —,
+/// which is where the recovery index starts (`recovery`).
 pub struct Carried {
     pub next: u64,
     pub aliases: Vec<(String, String)>,
+    pub vanished: Vec<(usize, usize)>,
+    pub fresh: Vec<(usize, usize)>,
 }
 
 /// Gives every node of `files` its NodeID and its parent.
@@ -126,7 +130,9 @@ pub fn carry(previous: Option<&Index>, files: &mut [Entry]) -> Carried {
         aliases.insert(was, old_node(k).id.clone());
     }
     aliases.retain(|path, _| !live.contains(path));
-    Carried { next, aliases: aliases.into_iter().collect() }
+    let vanished = (0..old.len()).filter(|&k| !taken[k]).map(|k| old[k]).collect();
+    let fresh = (0..slots.len()).filter(|&s| given[s].is_none()).map(|s| slots[s]).collect();
+    Carried { next, aliases: aliases.into_iter().collect(), vanished, fresh }
 }
 
 /// Matches what is left by a key found exactly once on each side.

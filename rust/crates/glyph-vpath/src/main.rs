@@ -1,5 +1,5 @@
 //! glyph-vpath — the virtual paths, from the command line. EMS-002 ORD-0001
-//! and ORD-0002.
+//! to ORD-0003.
 //!
 //!   glyph-vpath build                 write the index
 //!   glyph-vpath check                 exit 1 on a breach; prints nothing on success
@@ -13,6 +13,7 @@
 //!   glyph-vpath up REF                the chain of parents, the node first
 //!   glyph-vpath list FILE             the selectors of a file, with their lines
 //!   glyph-vpath code FILE             the documents that declare FILE as a source
+//!   glyph-vpath misses                the index misses logged, most asked first
 //!
 //!   REF           a virtual path, `file#selector`, or a NodeID, `n42`
 //!   --root DIR    the repository (default: the nearest folder up that holds .guidelines/)
@@ -20,11 +21,15 @@
 //! A resolution reads each file once however many references name it, and
 //! refuses a file whose fingerprint no longer matches the index: the offsets it
 //! holds would point at other text. An old path of a node that moved answers
-//! the node it became, with a warning naming the new path; it never blocks.
+//! the node it became, with a warning naming the new path; an old path or
+//! NodeID of a section that went answers the successor the recovery index
+//! found by its content, with a warning and its score, and the miss is
+//! logged. Neither ever blocks.
 
 use glyph_util::json::{stringify, Json};
 use glyph_vpath::identity::{self, Place};
 use glyph_vpath::index::{self, Index};
+use glyph_vpath::recovery::{self, Recovered};
 use glyph_vpath::{fingerprint, join, select, split, tree, Format, Lines};
 use std::collections::{BTreeMap, HashMap};
 use std::path::{Path, PathBuf};
@@ -42,7 +47,7 @@ fn main() -> ExitCode {
     let text = args.iter().position(|a| a == "--text").map(|i| args.remove(i)).is_some();
     let (cmd, rest) = match args.split_first() {
         Some((c, r)) => (c.as_str(), r),
-        None => return fail(&["usage: glyph-vpath build | check | stamp DOC... | resolve REF... [--text] | node REF | up REF | list FILE | code FILE".into()]),
+        None => return fail(&["usage: glyph-vpath build | check | stamp DOC... | resolve REF... [--text] | node REF | up REF | list FILE | code FILE | misses".into()]),
     };
     let result = match cmd {
         "build" => write(&root, &[]),
@@ -53,6 +58,7 @@ fn main() -> ExitCode {
         "up" if rest.len() == 1 => up(&root, &rest[0]),
         "list" if rest.len() == 1 => list(&root, &rest[0]),
         "code" if rest.len() == 1 => code(&root, &rest[0]),
+        "misses" => misses(&root),
         _ => Err(vec![format!("`{cmd}`: not a command, or its arguments are missing")]),
     };
     match result {
@@ -99,8 +105,10 @@ fn write(root: &Path, restamp: &[String]) -> Result<(), Vec<String>> {
     let path = root.join(index::PATH);
     std::fs::create_dir_all(path.parent().expect("the index lives in a folder")).map_err(|e| vec![e.to_string()])?;
     std::fs::write(&path, index::render(&new)).map_err(|e| vec![e.to_string()])?;
+    recovery::write_cache(root, &new).map_err(|e| vec![format!("{}: {e}", recovery::CACHE)])?;
+    new.notes.iter().for_each(|n| eprintln!("glyph-vpath: note: {n}"));
     let nodes: usize = new.files.iter().map(|f| f.nodes.len()).sum();
-    emit(&format!("{}: {} files, {} nodes, {} aliases\n", index::PATH, new.files.len(), nodes, new.aliases.len()));
+    emit(&format!("{}: {} files, {} nodes, {} aliases, {} recovered\n", index::PATH, new.files.len(), nodes, new.aliases.len(), new.recovered.len()));
     Ok(())
 }
 
@@ -108,22 +116,34 @@ fn is_id(s: &str) -> bool {
     s.strip_prefix('n').is_some_and(|d| !d.is_empty() && d.bytes().all(|b| b.is_ascii_digit()))
 }
 
-/// A reference, read: the live path it names, and the old path when it named
-/// the node by an alias.
+/// A reference, read: the live path it names, and how it got there when it
+/// named the node by an alias or by a recovery.
 struct Target {
     path: String,
-    moved_from: Option<String>,
+    via: Via,
+}
+
+enum Via {
+    Direct,
+    Moved(String),
+    Recovered(String, Recovered),
 }
 
 fn target(idx: &Index, places: &HashMap<String, Place>, reference: &str) -> Result<Target, String> {
+    if let Some(place) = places.get(reference) {
+        return Ok(Target { path: idx.path_of(place), via: Via::Direct });
+    }
+    if let Some(place) = idx.alias(reference).and_then(|id| places.get(id)) {
+        return Ok(Target { path: idx.path_of(place), via: Via::Moved(reference.to_string()) });
+    }
+    if let Some(r) = idx.recovery(reference) {
+        let place = places.get(&r.to).ok_or_else(|| format!("`{reference}` is recovered as `{}`, which is no node", r.to))?;
+        return Ok(Target { path: idx.path_of(place), via: Via::Recovered(reference.to_string(), r.clone()) });
+    }
     if is_id(reference) {
-        let place = places.get(reference).ok_or_else(|| format!("`{reference}` is no NodeID of the index"))?;
-        return Ok(Target { path: idx.path_of(place), moved_from: None });
+        return Err(format!("`{reference}` is no NodeID of the index"));
     }
-    match idx.alias(reference).and_then(|id| places.get(id)) {
-        Some(place) => Ok(Target { path: idx.path_of(place), moved_from: Some(reference.to_string()) }),
-        None => Ok(Target { path: reference.to_string(), moved_from: None }),
-    }
+    Ok(Target { path: reference.to_string(), via: Via::Direct })
 }
 
 /// The NodeID a reference names: the node must be in the index.
@@ -142,8 +162,13 @@ fn resolve(root: &Path, references: &[String], text: bool) -> Result<(), Vec<Str
     for r in references {
         match target(&idx, &places, r) {
             Ok(t) => {
-                if let Some(old) = &t.moved_from {
-                    eprintln!("glyph-vpath: `{old}` moved; it is `{}`", t.path);
+                match &t.via {
+                    Via::Direct => {}
+                    Via::Moved(old) => eprintln!("glyph-vpath: `{old}` moved; it is `{}`", t.path),
+                    Via::Recovered(old, rec) => {
+                        eprintln!("glyph-vpath: `{old}` went; by its content it is `{}`, Jaccard 0.{:02} — an index miss", t.path, rec.score);
+                        recovery::log_miss(root, old, &t.path, rec);
+                    }
                 }
                 targets.push(Some(t));
             }
@@ -194,8 +219,10 @@ fn resolve(root: &Path, references: &[String], text: bool) -> Result<(), Vec<Str
                 head.push_str(&format!(" · {id}"));
             }
             head.push_str(&format!(" · lines {line}+{count} · bytes {start}..{end}"));
-            if let Some(old) = &t.moved_from {
-                head.push_str(&format!(" · moved from {old}"));
+            match &t.via {
+                Via::Direct => {}
+                Via::Moved(old) => head.push_str(&format!(" · moved from {old}")),
+                Via::Recovered(old, rec) => head.push_str(&format!(" · recovered from {old}, Jaccard 0.{:02}", rec.score)),
             }
             emit(&format!("{head}\n{slice}{}", if slice.ends_with('\n') { "" } else { "\n" }));
         } else {
@@ -211,8 +238,13 @@ fn resolve(root: &Path, references: &[String], text: bool) -> Result<(), Vec<Str
                 ("lines".into(), Json::Num(count as f64)),
                 ("fingerprint".into(), Json::Str(fingerprint(slice))),
             ];
-            if let Some(old) = &t.moved_from {
-                record.push(("moved_from".into(), Json::Str(old.clone())));
+            match &t.via {
+                Via::Direct => {}
+                Via::Moved(old) => record.push(("moved_from".into(), Json::Str(old.clone()))),
+                Via::Recovered(old, rec) => {
+                    record.push(("recovered_from".into(), Json::Str(old.clone())));
+                    record.push(("score".into(), Json::Num(f64::from(rec.score) / 100.0)));
+                }
             }
             emit(&(stringify(&Json::Obj(record)) + "\n"));
         }
@@ -274,6 +306,22 @@ fn code(root: &Path, file: &str) -> Result<(), Vec<String>> {
         for (vpath, _) in e.sources.iter().filter(|(v, _)| split(v).0 == file) {
             emit(&format!("{} ← {vpath}\n", e.path));
         }
+    }
+    Ok(())
+}
+
+fn misses(root: &Path) -> Result<(), Vec<String>> {
+    let log = std::fs::read_to_string(root.join(recovery::MISSES)).unwrap_or_default();
+    let mut count: BTreeMap<(String, String), usize> = BTreeMap::new();
+    for line in log.lines().filter(|l| !l.trim().is_empty()) {
+        let j = glyph_util::json::parse(line).map_err(|e| vec![format!("{}: {e}", recovery::MISSES)])?;
+        let field = |k: &str| j.get(k).and_then(Json::str).unwrap_or_default().to_string();
+        *count.entry((field("asked"), field("answered"))).or_default() += 1;
+    }
+    let mut rows: Vec<_> = count.into_iter().collect();
+    rows.sort_by(|a, b| b.1.cmp(&a.1).then_with(|| a.0.cmp(&b.0)));
+    for ((asked, answered), n) in rows {
+        emit(&format!("{n:>5}  {asked} → {answered}\n"));
     }
     Ok(())
 }

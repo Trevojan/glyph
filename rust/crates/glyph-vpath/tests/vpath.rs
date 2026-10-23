@@ -86,9 +86,12 @@ impl Repo {
         std::fs::create_dir_all(p.parent().unwrap()).unwrap();
         std::fs::write(p, text).unwrap();
     }
+    /// As `glyph-vpath build` does: the index, then the cache of its text.
     fn build(&self) {
         let old = index::committed(&self.0).unwrap().map(|(_, i)| i);
-        self.write(index::build(&self.0, old.as_ref(), &[]).unwrap());
+        let new = index::build(&self.0, old.as_ref(), &[]).unwrap();
+        glyph_vpath::recovery::write_cache(&self.0, &new).unwrap();
+        self.write(new);
     }
     fn write(&self, idx: Index) {
         self.put(index::PATH, &index::render(&idx));
@@ -397,4 +400,136 @@ fn every_node_finds_its_place_once() {
     let beta = &places[&r.id(".guidelines/doc.md#beta")];
     assert_eq!((beta.prev.clone(), beta.next.clone(), beta.depth),
                (Some(r.id(".guidelines/doc.md#alpha")), Some(r.id(".guidelines/doc.md#gamma")), 2));
+}
+
+// ---------- EMS-002 ORD-0003: the recovery index ----------
+
+const SPEC: &str = "# Spec\n## Old name\nline one\nline two\nline three\nline four\n## Other\nunrelated text\n";
+const RENAMED: &str = "# Spec\n## New name\nline one\nline two\nline three\nline five\n## Other\nunrelated text\n";
+
+impl Repo {
+    fn recovery(&self, reference: &str) -> Option<glyph_vpath::recovery::Recovered> {
+        self.index().recovery(reference).cloned()
+    }
+    fn git(&self, args: &[&str]) {
+        let ok = Command::new("git").arg("-C").arg(&self.0)
+            .args(["-c", "user.name=t", "-c", "user.email=t@t", "-c", "commit.gpgsign=false"]).args(args)
+            .output().map(|o| o.status.success()).unwrap_or(false);
+        assert!(ok, "git {args:?}");
+    }
+}
+
+#[test]
+fn a_heading_renamed_while_its_body_changes_is_recovered_by_its_content() {
+    let r = Repo::new("recover");
+    r.put(".guidelines/spec.md", SPEC);
+    r.build();
+    let old = r.id(".guidelines/spec.md#old-name");
+    r.put(".guidelines/spec.md", RENAMED);
+    r.build();
+    let new = r.id(".guidelines/spec.md#new-name");
+    assert_ne!(new, old, "recovery is not identity: the successor keeps its own NodeID");
+    let rec = r.recovery(".guidelines/spec.md#old-name").expect("recovered by the path");
+    assert_eq!((rec.id.as_str(), rec.to.as_str(), rec.score), (old.as_str(), new.as_str(), 60), "three of five lines: Jaccard 0.60");
+    assert_eq!(r.recovery(&old).map(|x| x.to), Some(new.clone()), "and by the old NodeID");
+    assert_eq!(index::validate(&r.index()), Vec::<String>::new());
+    assert_eq!(r.check(), Vec::<String>::new());
+
+    let (ok, out, err) = vpath(&r, &["resolve", ".guidelines/spec.md#old-name"]);
+    assert!(ok, "an index miss never blocks: {err}");
+    assert!(err.contains("went; by its content it is `.guidelines/spec.md#new-name`, Jaccard 0.60 — an index miss"), "{err}");
+    assert!(out.contains(&format!("\"id\":\"{new}\"")) && out.contains("\"recovered_from\":\".guidelines/spec.md#old-name\",\"score\":0.6"), "{out}");
+    let (ok, text, _) = vpath(&r, &["resolve", &old, "--text"]);
+    assert!(ok && text.contains(&format!("recovered from {old}, Jaccard 0.60")), "{text}");
+    let (_, misses, _) = vpath(&r, &["misses"]);
+    assert_eq!(misses, format!("    1  .guidelines/spec.md#old-name → .guidelines/spec.md#new-name\n    1  {old} → .guidelines/spec.md#new-name\n"));
+
+    // the successor renamed again over the same body: the recovery follows its NodeID
+    r.put(".guidelines/spec.md", &RENAMED.replace("## New name", "## Newer name"));
+    r.build();
+    assert_eq!(r.recovery(".guidelines/spec.md#old-name").map(|x| x.to), Some(new.clone()));
+    let (_, out, _) = vpath(&r, &["resolve", ".guidelines/spec.md#old-name"]);
+    assert!(out.contains("\"path\":\".guidelines/spec.md#newer-name\""), "{out}");
+}
+
+#[test]
+fn a_deletion_and_a_tie_are_not_recovered() {
+    let r = Repo::new("norecover");
+    r.put(".guidelines/spec.md", SPEC);
+    r.build();
+    r.put(".guidelines/spec.md", "# Spec\n## Something else\nnothing in common\n## Other\nunrelated text\n");
+    r.build();
+    assert_eq!(r.recovery(".guidelines/spec.md#old-name"), None, "a deletion has no successor");
+    let (ok, _, err) = vpath(&r, &["resolve", ".guidelines/spec.md#old-name"]);
+    assert!(!ok && err.contains("names no node"), "{err}");
+
+    let r = Repo::new("tie");
+    r.put(".guidelines/spec.md", SPEC);
+    r.build();
+    r.put(".guidelines/spec.md", "# Spec\n## Twin a\nline one\nline two\nline three\n## Twin b\nline one\nline two\nline three\n## Other\nunrelated text\n");
+    r.build();
+    assert_eq!(r.recovery(".guidelines/spec.md#old-name"), None, "two successors that tie are none");
+}
+
+#[test]
+fn the_old_text_comes_from_the_cache_then_from_git_and_only_when_it_is_the_one_indexed() {
+    // no cache and no git: nothing to compare, and the build says so
+    let r = Repo::new("nowhere");
+    r.put(".guidelines/spec.md", SPEC);
+    r.build();
+    std::fs::remove_dir_all(r.0.join(glyph_vpath::recovery::CACHE)).unwrap();
+    r.put(".guidelines/spec.md", RENAMED);
+    let old = index::committed(&r.0).unwrap().map(|(_, i)| i);
+    let new = index::build(&r.0, old.as_ref(), &[]).unwrap();
+    assert!(new.recovered.is_empty());
+    assert!(new.notes.iter().any(|n| n.contains(".guidelines/spec.md#old-name: went, and the text it had is neither in the cache nor in git at HEAD")), "{:?}", new.notes);
+
+    // git at HEAD, when the cache is gone
+    let r = Repo::new("fromgit");
+    r.put(".guidelines/spec.md", SPEC);
+    r.build();
+    r.git(&["init", "-q"]);
+    r.git(&["add", "-A"]);
+    r.git(&["commit", "-q", "-m", "spec"]);
+    std::fs::remove_dir_all(r.0.join(glyph_vpath::recovery::CACHE)).unwrap();
+    r.put(".guidelines/spec.md", RENAMED);
+    r.build();
+    assert!(r.recovery(".guidelines/spec.md#old-name").is_some(), "the old text read from git at HEAD");
+
+    // a cache that is not the text indexed is not taken
+    let r = Repo::new("stalecache");
+    r.put(".guidelines/spec.md", SPEC);
+    r.build();
+    r.put(&format!("{}/.guidelines/spec.md", glyph_vpath::recovery::CACHE), "# Spec\n## Old name\nsomething else entirely\n");
+    r.put(".guidelines/spec.md", RENAMED);
+    let old = index::committed(&r.0).unwrap().map(|(_, i)| i);
+    assert!(index::build(&r.0, old.as_ref(), &[]).unwrap().recovered.is_empty(), "the fingerprint decides which old text is the old text");
+}
+
+#[test]
+fn the_gate_refuses_a_source_by_a_recovered_path_and_a_recovery_that_does_not_hold() {
+    let r = Repo::new("recgate");
+    r.put(".guidelines/spec.md", SPEC);
+    r.put(".guidelines/GUIDE.md", "---\nsources:\n  - .guidelines/spec.md#old-name\n---\n# Guide\n");
+    r.build();
+    r.put(".guidelines/spec.md", RENAMED);
+    r.refused("declares `.guidelines/spec.md#old-name`, which went; by its content it is `.guidelines/spec.md#new-name`, Jaccard 0.60");
+    r.put(".guidelines/GUIDE.md", "---\nsources:\n  - .guidelines/spec.md#new-name\n---\n# Guide\n");
+    r.build();
+    assert_eq!(r.check(), Vec::<String>::new());
+
+    let good = std::fs::read_to_string(r.0.join(index::PATH)).unwrap();
+    let rec = r.recovery(".guidelines/spec.md#old-name").unwrap();
+    let live = r.id(".guidelines/spec.md#other");
+    let line = format!("[\".guidelines/spec.md#old-name\", \"{}\", \"{}\", {}]", rec.id, rec.to, rec.score);
+    let breaks = [
+        (line.replace(&rec.to, "n999"), "which is no node"),
+        (line.replace(&rec.id, &live), "names a node that lives"),
+        (line.replace(".guidelines/spec.md#old-name", ".guidelines/spec.md#other"), "names a node that lives"),
+        (line.replace(&format!(", {}]", rec.score), ", 40]"), "outside 50 to 100"),
+    ];
+    for (bad, what) in breaks {
+        r.put(index::PATH, &good.replace(&line, &bad));
+        r.refused(what);
+    }
 }
