@@ -36,8 +36,8 @@ npm run check:rust
 
 O primeiro roda os dois `--check` de geração, `check-globals`, o DAG, os grafos
 de costura, de crates e de links, a escada, o índice dos caminhos virtuais e a
-suíte; o segundo escreve o oráculo no commit sob teste e roda `cargo test` em
-`rust/`. Os dois pedem `cargo`. **Um passo por commit, verde em cada um.**
+suíte; o segundo mede e gradua cada crate externa, escreve o oráculo no commit
+sob teste e roda `cargo test` em `rust/`. Os dois pedem `cargo`. **Um passo por commit, verde em cada um.**
 
 Editou um arquivo de `.guidelines/`, o `README.md` ou este? Rode
 `npm run vpath -- build`: o índice em `.guidelines/.shortcuts/.virtual/` cobre
