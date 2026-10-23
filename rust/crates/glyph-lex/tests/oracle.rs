@@ -6,7 +6,7 @@
 mod oracle;
 
 use glyph_lex::{tokenize, Token};
-use glyph_util::json::{self, Json};
+use glyph_json::{self as json, Json};
 use oracle::Must;
 
 pub fn token_json(t: &Token) -> Json {

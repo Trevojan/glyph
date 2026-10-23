@@ -15,8 +15,9 @@
 //! variable no line defines.
 
 use glyph_parse::{collect_bindings, binding_of, parse, Extra, Opts};
-use glyph_stores::{atoms_of, def_of, depth_of, formula_of, species_of, stands_alone, Context, Value};
-use glyph_util::json::number;
+use glyph_stores::{atoms_of, def_of, depth_of, formula_of, species_of, stands_alone, Context};
+use glyph_json::Json;
+use glyph_json::number;
 use glyph_util::tree::{Gloss, Id, Thrown, Tree, LIMITS};
 use glyph_util::{inherited, inherited_text, js_space, js_trim, xesc};
 use glyph_version::VERSION;
@@ -43,13 +44,13 @@ fn gloss_arg(g: &Option<Gloss>) -> Option<&str> {
         _ => None,
     }
 }
-fn js_value(v: Option<&Value>) -> String {
+fn js_value(v: Option<&Json>) -> String {
     match v {
-        None | Some(Value::Null) => String::new(),
-        Some(Value::Str(s)) => s.clone(),
-        Some(Value::Num(n)) => number(*n),
-        Some(Value::Bool(b)) => b.to_string(),
-        Some(Value::Arr(_) | Value::Obj(_)) => "[object Object]".into(),
+        None | Some(Json::Null) => String::new(),
+        Some(Json::Str(s)) => s.clone(),
+        Some(Json::Num(n)) => number(*n),
+        Some(Json::Bool(b)) => b.to_string(),
+        Some(Json::Arr(_) | Json::Obj(_)) => "[object Object]".into(),
     }
 }
 

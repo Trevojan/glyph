@@ -1,8 +1,12 @@
-//! JSON, read and written as `JSON.parse` and `JSON.stringify` do.
+//! glyph-json — JSON, read and written as `JSON.parse` and `JSON.stringify` do.
 //!
 //! The JS engine has both from its platform; the Rust has neither without a
 //! crate from outside the repository, and the output has to be the JS's bytes,
-//! so they are written here (INTAKE-RUST-LADDER.md §9.2). An object keeps the
+//! so they are written here (INTAKE-RUST-LADDER.md §9.2). The crate is the
+//! floor of the workspace, under every other and reaching none, and `Json` is
+//! its one JSON type — the stores are `Json` too, as the JS reads them with
+//! `JSON.parse` (EMS-002 ORD-0007). `tests/json.rs` holds it to every file
+//! the oracle writes. An object keeps the
 //! JS's property order: array-index keys first, ascending, then every other key
 //! in the order it was first written. A duplicate key keeps its first place and
 //! takes the last value.
@@ -36,6 +40,16 @@ impl Json {
     }
     pub fn num(&self) -> Option<f64> {
         if let Json::Num(n) = self { Some(*n) } else { None }
+    }
+    /// JS truthiness: `null`, `false`, `0`, `NaN` and `""` are false.
+    pub fn truthy(&self) -> bool {
+        match self {
+            Json::Null => false,
+            Json::Bool(b) => *b,
+            Json::Num(n) => *n != 0.0 && !n.is_nan(),
+            Json::Str(s) => !s.is_empty(),
+            Json::Arr(_) | Json::Obj(_) => true,
+        }
     }
 }
 

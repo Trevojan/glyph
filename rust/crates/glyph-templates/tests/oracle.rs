@@ -16,20 +16,20 @@
 mod oracle;
 
 use glyph_rules::check_rules;
-use glyph_stores::{Context, Value};
+use glyph_stores::Context;
 use glyph_templates::*;
-use glyph_util::json::Json;
+use glyph_json::Json;
 use glyph_util::tree::{strip_tags, Diag, Thrown};
 use oracle::{cases, diag_json, diag_of, dump_of, module, tree_of, Must};
 
-fn value(j: &Json) -> Value {
+fn value(j: &Json) -> Json {
     match j {
-        Json::Null => Value::Null,
-        Json::Bool(b) => Value::Bool(*b),
-        Json::Num(n) => Value::Num(*n),
-        Json::Str(s) => Value::Str(s.clone()),
-        Json::Arr(a) => Value::Arr(a.iter().map(value).collect()),
-        Json::Obj(kv) => Value::Obj(kv.iter().map(|(k, v)| (k.clone(), value(v))).collect()),
+        Json::Null => Json::Null,
+        Json::Bool(b) => Json::Bool(*b),
+        Json::Num(n) => Json::Num(*n),
+        Json::Str(s) => Json::Str(s.clone()),
+        Json::Arr(a) => Json::Arr(a.iter().map(value).collect()),
+        Json::Obj(kv) => Json::Obj(kv.iter().map(|(k, v)| (k.clone(), value(v))).collect()),
     }
 }
 
@@ -39,7 +39,7 @@ fn value(j: &Json) -> Value {
 fn context(trees: &Json, run: &Json) -> Context {
     let repo = Context::repository();
     let mut map = match &repo.templates {
-        Value::Obj(kv) => kv.clone(),
+        Json::Obj(kv) => kv.clone(),
         v => panic!("the repository's templates are not a map: {v:?}"),
     };
     if run.get("probe") == Some(&Json::Bool(true)) {
@@ -51,7 +51,7 @@ fn context(trees: &Json, run: &Json) -> Context {
         }
     }
     let rules = if run.get("withRules") == Some(&Json::Bool(true)) { repo.rules.clone() } else { None };
-    Context::new(Some(Value::Obj(map)), rules, repo.expansions.clone())
+    Context::new(Some(Json::Obj(map)), rules, repo.expansions.clone())
 }
 
 fn thrown_at(run: &Json, stage: &str) -> Option<Thrown> {

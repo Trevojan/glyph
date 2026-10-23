@@ -6,6 +6,7 @@ license-file.workspace = true
 publish = false
 
 [dependencies]
+glyph-json = { path = "../glyph-json" }
 glyph-util = { path = "../glyph-util" }
 glyph-stores = { path = "../glyph-stores" }
 glyph-lex = { path = "../glyph-lex" }
@@ -16,3 +17,7 @@ glyph-xml = { path = "../glyph-xml" }
 glyph-envelope = { path = "../glyph-envelope" }
 glyph-burn = { path = "../glyph-burn" }
 glyph-inverse = { path = "../glyph-inverse" }
+
+[dev-dependencies]
+glyph-util = { path = "../glyph-util" }
+glyph-json = { path = "../glyph-json" }

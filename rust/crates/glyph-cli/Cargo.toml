@@ -14,6 +14,7 @@ name = "glyph-engine"
 path = "src/engine.rs"
 
 [dependencies]
+glyph-json = { path = "../glyph-json" }
 glyph-version = { path = "../glyph-version" }
 glyph-stores = { path = "../glyph-stores" }
 glyph-parse = { path = "../glyph-parse" }
@@ -26,4 +27,5 @@ glyph-protocol = { path = "../glyph-protocol" }
 glyph-util = { path = "../glyph-util" }
 
 [dev-dependencies]
+glyph-json = { path = "../glyph-json" }
 glyph-util = { path = "../glyph-util" }

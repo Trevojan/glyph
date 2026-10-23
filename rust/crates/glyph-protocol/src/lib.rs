@@ -11,7 +11,7 @@ use glyph_lex::{classify, suggest, tokenize, Token};
 use glyph_logic::{expand_expr, free_vars, parse_logic};
 use glyph_parse::{parse, Opts};
 use glyph_stores::Context;
-use glyph_util::json::{parse as parse_json, stringify, Json};
+use glyph_json::{parse as parse_json, stringify, Json};
 use glyph_util::tree::Thrown;
 use glyph_vocab::el_name;
 use glyph_xml::to_xml;

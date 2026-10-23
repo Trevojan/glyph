@@ -8,7 +8,7 @@
 mod oracle;
 
 use glyph_protocol::answer;
-use glyph_util::json::{parse, Json};
+use glyph_json::{parse, Json};
 use oracle::{module, Must};
 
 const TWELVE: [&str; 12] = ["tokenize", "classify", "suggest", "elName", "parseLogic", "expandExpr", "freeVars",

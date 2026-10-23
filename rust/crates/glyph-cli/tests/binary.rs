@@ -6,7 +6,7 @@
 #[path = "../../../testkit/oracle.rs"]
 mod oracle;
 
-use glyph_util::json::{parse, Json};
+use glyph_json::{parse, Json};
 use oracle::{cases, Must};
 use std::io::Write;
 use std::process::{Command, Stdio};

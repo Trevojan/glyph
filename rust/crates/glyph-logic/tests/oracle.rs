@@ -8,7 +8,7 @@
 mod oracle;
 
 use glyph_logic::*;
-use glyph_util::json::Json;
+use glyph_json::Json;
 use oracle::Must;
 
 fn s(v: &str) -> Json {

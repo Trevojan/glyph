@@ -8,8 +8,8 @@
 mod oracle;
 
 use glyph_rules::*;
-use glyph_stores::{Context, Value};
-use glyph_util::json::Json;
+use glyph_stores::Context;
+use glyph_json::Json;
 use glyph_util::tree::Thrown;
 use oracle::{diag_json, module, tree_of, Must};
 
@@ -36,21 +36,21 @@ fn every_rule_diagnostic_equals_the_js() {
     println!("{checked} trees, {raised} diagnostics");
 }
 
-fn value(j: &Json) -> Value {
+fn value(j: &Json) -> Json {
     match j {
-        Json::Null => Value::Null,
-        Json::Bool(b) => Value::Bool(*b),
-        Json::Num(n) => Value::Num(*n),
-        Json::Str(s) => Value::Str(s.clone()),
-        Json::Arr(a) => Value::Arr(a.iter().map(value).collect()),
-        Json::Obj(kv) => Value::Obj(kv.iter().map(|(k, v)| (k.clone(), value(v))).collect()),
+        Json::Null => Json::Null,
+        Json::Bool(b) => Json::Bool(*b),
+        Json::Num(n) => Json::Num(*n),
+        Json::Str(s) => Json::Str(s.clone()),
+        Json::Arr(a) => Json::Arr(a.iter().map(value).collect()),
+        Json::Obj(kv) => Json::Obj(kv.iter().map(|(k, v)| (k.clone(), value(v))).collect()),
     }
 }
 
 /// `compileRules`, as the export describes it: each part by its rule's id.
 fn described(c: &Compiled) -> Json {
     let s = |v: &str| Json::Str(v.to_string());
-    let id = |r: &Value| s(r.get("id").and_then(Value::str).expect("a rule's id"));
+    let id = |r: &Json| s(r.get("id").and_then(Json::str).expect("a rule's id"));
     let strs = |v: &[String]| Json::Arr(v.iter().map(|x| s(x)).collect());
     Json::Obj(vec![
         ("pairs".into(), Json::Arr(c.pairs.iter().map(|(k, r)| Json::Arr(vec![s(k), id(r)])).collect())),

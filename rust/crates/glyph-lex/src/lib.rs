@@ -9,7 +9,8 @@
 //! `Object.prototype` answering a lookup in `EMO` and `SESSION`, and `[off]`
 //! finding `[ON]` in an upper-cased copy whose indices can drift.
 
-use glyph_stores::{Context, Value};
+use glyph_stores::Context;
+use glyph_json::Json;
 use glyph_vocab::{derived, get, ALIAS, EMO, INSTR, META, MODE, SESSION, STRUCT};
 
 /// One token. The fields a kind does not carry stay `None`; `to_json` in the
@@ -546,20 +547,20 @@ pub fn classify(name: &str, ctx: &Context, session: bool) -> Class {
     class("unknown", &up, "")
 }
 
-fn js_string(v: &Value) -> String {
+fn js_string(v: &Json) -> String {
     match v {
-        Value::Str(s) => s.clone(),
-        Value::Num(n) => n.to_string(),
-        Value::Bool(b) => b.to_string(),
-        Value::Null => "null".into(),
-        Value::Arr(_) | Value::Obj(_) => String::new(),
+        Json::Str(s) => s.clone(),
+        Json::Num(n) => n.to_string(),
+        Json::Bool(b) => b.to_string(),
+        Json::Null => "null".into(),
+        Json::Arr(_) | Json::Obj(_) => String::new(),
     }
 }
 
 /// A blend's `emit`, a name only the rules store knows.
-pub fn blend_of<'a>(up: &str, ctx: &'a Context) -> Option<&'a Value> {
+pub fn blend_of<'a>(up: &str, ctx: &'a Context) -> Option<&'a Json> {
     ctx.rules.as_ref()?.get("rules")?.arr()?.iter().find(|r| {
-        r.get("kind").and_then(Value::str) == Some("blend")
+        r.get("kind").and_then(Json::str) == Some("blend")
             && r.get("emit").filter(|e| e.truthy()).map(js_string).unwrap_or_default().to_uppercase() == up
     })
 }

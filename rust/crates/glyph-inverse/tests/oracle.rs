@@ -13,7 +13,7 @@ use glyph_envelope::{to_ast, AstOpts};
 use glyph_inverse::{from_ast, from_xml, Back, STACK_DEPTH};
 use glyph_parse::{parse, Opts};
 use glyph_stores::Context;
-use glyph_util::json::Json;
+use glyph_json::Json;
 use glyph_util::tree::Thrown;
 use glyph_xml::to_xml;
 use oracle::{module, Must};

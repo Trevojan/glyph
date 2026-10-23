@@ -10,19 +10,19 @@ mod oracle;
 
 use glyph_envelope::{to_ast, AstOpts};
 use glyph_parse::Opts;
-use glyph_stores::{Context, Value};
-use glyph_util::json::{stringify, Json};
+use glyph_stores::Context;
+use glyph_json::{stringify, Json};
 use glyph_util::tree::Thrown;
 use oracle::{cases, module, sha256, snapshot_digest, Must};
 
-fn value(j: &Json) -> Value {
+fn value(j: &Json) -> Json {
     match j {
-        Json::Null => Value::Null,
-        Json::Bool(b) => Value::Bool(*b),
-        Json::Num(n) => Value::Num(*n),
-        Json::Str(s) => Value::Str(s.clone()),
-        Json::Arr(a) => Value::Arr(a.iter().map(value).collect()),
-        Json::Obj(kv) => Value::Obj(kv.iter().map(|(k, v)| (k.clone(), value(v))).collect()),
+        Json::Null => Json::Null,
+        Json::Bool(b) => Json::Bool(*b),
+        Json::Num(n) => Json::Num(*n),
+        Json::Str(s) => Json::Str(s.clone()),
+        Json::Arr(a) => Json::Arr(a.iter().map(value).collect()),
+        Json::Obj(kv) => Json::Obj(kv.iter().map(|(k, v)| (k.clone(), value(v))).collect()),
     }
 }
 
@@ -30,7 +30,7 @@ fn value(j: &Json) -> Value {
 fn context(run: &Json) -> Context {
     let repo = Context::repository();
     let mut map = match &repo.templates {
-        Value::Obj(kv) => kv.clone(),
+        Json::Obj(kv) => kv.clone(),
         v => panic!("the repository's templates are not a map: {v:?}"),
     };
     if run.get("probeTemplates") == Some(&Json::Bool(true)) {
@@ -43,7 +43,7 @@ fn context(run: &Json) -> Context {
     }
     let rules = if run.get("withRules") == Some(&Json::Bool(false)) { None } else { repo.rules.clone() };
     let expansions = run.get("expansions").map_or(repo.expansions.clone(), |e| Some(value(e)));
-    Context::new(Some(Value::Obj(map)), rules, expansions)
+    Context::new(Some(Json::Obj(map)), rules, expansions)
 }
 
 fn without_version(j: Json) -> Json {

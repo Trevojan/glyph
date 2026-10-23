@@ -152,7 +152,7 @@ pub fn write_cache(root: &Path, index: &Index) -> std::io::Result<()> {
 pub fn log_miss(root: &Path, asked: &str, answered: &str, r: &Recovered) {
     use std::io::Write;
     let at = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).map_or(0, |d| d.as_secs());
-    let s = |t: &str| glyph_util::json::stringify(&glyph_util::json::Json::Str(t.to_string()));
+    let s = |t: &str| glyph_json::stringify(&glyph_json::Json::Str(t.to_string()));
     let line = format!("{{\"at\":{at},\"asked\":{},\"answered\":{},\"to\":{},\"score\":{}}}\n", s(asked), s(answered), s(&r.to), r.score);
     let path = root.join(MISSES);
     let _ = path.parent().map(std::fs::create_dir_all);

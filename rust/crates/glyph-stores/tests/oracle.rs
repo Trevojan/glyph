@@ -6,24 +6,24 @@
 mod oracle;
 
 use glyph_stores::*;
-use glyph_util::json::{self, Json};
+use glyph_json::{self as json, Json};
 use oracle::Must;
 
-fn to_json(v: &Value) -> Json {
+fn to_json(v: &Json) -> Json {
     match v {
-        Value::Null => Json::Null,
-        Value::Bool(b) => Json::Bool(*b),
-        Value::Num(n) => Json::Num(*n),
-        Value::Str(s) => Json::Str(s.clone()),
-        Value::Arr(a) => Json::Arr(a.iter().map(to_json).collect()),
-        Value::Obj(kv) => {
+        Json::Null => Json::Null,
+        Json::Bool(b) => Json::Bool(*b),
+        Json::Num(n) => Json::Num(*n),
+        Json::Str(s) => Json::Str(s.clone()),
+        Json::Arr(a) => Json::Arr(a.iter().map(to_json).collect()),
+        Json::Obj(kv) => {
             let mut o = Vec::new();
             kv.iter().for_each(|(k, v)| json::set(&mut o, k.clone(), to_json(v)));
             Json::Obj(o)
         }
     }
 }
-fn digest(v: &Value) -> String {
+fn digest(v: &Json) -> String {
     oracle::ck(&json::stringify(&to_json(v)))
 }
 fn stores() -> &'static Json {
@@ -92,8 +92,8 @@ fn a_context_reads_each_shape_as_create_context_does() {
 }
 
 /// `templates.json` whole: the map back under its key, with the file's other fields.
-fn templates_value(repo: &Context) -> Value {
-    Value::Obj(vec![("templates".into(), repo.templates.clone())])
+fn templates_value(repo: &Context) -> Json {
+    Json::Obj(vec![("templates".into(), repo.templates.clone())])
 }
 
 #[test]
