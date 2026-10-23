@@ -162,9 +162,6 @@ espera o Regente no §5 dele.
 Decidido em 2026-09-27, ainda não construído — cada item uma ORD quando o
 Regente chamar, o JS primeiro onde o oráculo muda:
 
-- **o `classify` pelas tabelas da página** (pergunta 10): atrás de
-  `?engine=relay`, uma requisição por chamada, menos o `classify`, que a página
-  responde com as tabelas que já carrega — o L-01 deixa de fazer 8 000 idas;
 - **o snapshot respeita os stores de cada caso** (O5): os hashes dos casos T se
   movem por decisão, e o `TemplateCycle` entra no oráculo;
 - **uma ORD de renomeações** (O8, O9, O10): o `SKEP` do `vocabulary.js` passa a

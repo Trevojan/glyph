@@ -141,7 +141,8 @@ Closed questions; an answered one carries the Regent's answer below its options.
       already loads
 
     Answered by the Regent on 2026-09-27: **c** — one request a call, and `classify`
-    answered from the tables the page already loads. Not built yet.
+    answered from the tables the page already loads. Built by
+    [`EMS-002/ORD-0010`](../EMS-002/README.md): L-01 costs 5 requests a keystroke.
 11. **The page merges the user's templates into the store (`useTemplates`,
     `glyph-ui.js` line 1010). Where do they live once the engine is a
     process?**
