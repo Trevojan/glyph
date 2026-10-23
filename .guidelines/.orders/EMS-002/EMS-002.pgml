@@ -66,6 +66,13 @@
     [val'the order','the order agrees with the files and offsets of the index on every pair, and answers right after a node is inserted, moved or removed']
   ]
 
+  [section'ORD-0005-astral'
+    [tgt'a declared source with characters outside the BMP, question 2 of the EMS-001 return, answered a']
+    [val'the source','a declared source whose literals and prose carry characters outside the BMP enters the corpus, and the snapshot moves by decision, no earlier hash moved']
+    [val'the oracle','the Rust answers the new case byte for byte, and every module the export writes']
+    [val'the survivor','lev counting characters instead of UTF-16 units, the mutant no case of the oracle killed, dies']
+  ]
+
   [section'limits'
     [nev'a selector that answers an empty slice in silence']
     [dont'open an ORD before the ORD it depends on closes']
