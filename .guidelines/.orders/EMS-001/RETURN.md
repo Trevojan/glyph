@@ -37,7 +37,7 @@ Closed questions; an answered one carries the Regent's answer below its options.
    - c. the folder, and the zip only behind a flag
 
    Answered by the Regent on 2026-09-27: **c** — the folder, and the zip only behind a
-   flag. Not built yet: [`.plan`](../../.plan/README.md) §5.
+   flag. Built by [`EMS-002/ORD-0009`](../EMS-002/README.md): `--zip`.
 2. **The oracle holds no character outside the BMP. Does the corpus gain a
    source that does?** The lexer's probes now hold its spans to UTF-16 units;
    `lev` and every later projection are still held only by the corpus.
