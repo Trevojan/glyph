@@ -176,7 +176,16 @@ const POSITIVE = [
     xml:["<for-example>","<example>"] },
   { id:"P-34", name:"ONLYIF is a necessary condition, COND a generic gate.",
     src:"[ONLYIF'o teste passar'][COND'houver tempo']", clean:true,
-    cmds:["ONLYIF","COND"], xml:["<only-if>","<condition>"] }
+    cmds:["ONLYIF","COND"], xml:["<only-if>","<condition>"] },
+  /* the one declared source with characters outside the BMP (EMS-002
+     ORD-0005, question 2 of the EMS-001 return, answered a): each of them is
+     two UTF-16 units and one character, so lev and every projection after
+     the lexer are held to the units the JS counts, in a literal, in a
+     criticised operand and in the prose after the commands */
+  { id:"P-35", name:"Letters and signs outside the BMP travel whole.",
+    src:"[nt'𝔾 é a letra do glifo, 🜂 o fogo'][crit'𝔊𝔩𝔶𝔭𝔥 😀'] 🜂 prosa fora", clean:true,
+    cmds:["NT","CRIT"], xml:["<user-input>𝔾 é a letra do glifo, 🜂 o fogo</user-input>",
+                             "<user-input>𝔊𝔩𝔶𝔭𝔥 😀</user-input>", "<off>🜂 prosa fora</off>"] }
 ];
 
 const INCOMPLETE = [
