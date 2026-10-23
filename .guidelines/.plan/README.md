@@ -168,9 +168,6 @@ Regente chamar, o JS primeiro onde o oráculo muda:
   `templates.json` e do `rules.json`; o comentário do XML de fonte vazia diz
   mould; a chave `glyph.moldes.user.v1` migra uma vez, sem perder mould
   nenhum; e a categoria `molde` do vocabulário vira `frame`;
-- **a régua das crates no portão** (O7): o `check:rust` mede a árvore de cada crate
-  externa e aplica *note*, *ask* e *fix*; `wry` + `tao` é *fix*, e a janela da
-  `ORD-0014` vai pelo `msedge --app`;
 - **a sintaxe de referência `[ref'nome']`**: um nome ligado que não resolve, fora
   da cerca `[logic]`, dispara `<needs var>`;
 - **o alarme de inferência profunda**: composto de profundidade 5 ou mais sem

@@ -8,8 +8,6 @@ pacote que o `--bundle` escreve, e a contagem é desta série.
 
 ## A Ordem aberta
 
-- [`EMS-002/ORD-0012`](ORD-0012/ORD-0012.xml) — a régua das crates no portão, a O7 do `INTAKE-RUST-LADDER`; aberta em 2026-10-23
-
 ## Ordens fechadas
 
 | ORD | o que entregou | commit | digest |
@@ -25,3 +23,4 @@ pacote que o `--bundle` escreve, e a contagem é desta série.
 | [`ORD-0009`](ORD-0009/ORD-0009.xml) | o zip de uma ORD de série só atrás de uma flag, a pergunta 1 do retorno da EMS-001: `--zip`, nos dois motores, o JS primeiro — numa série, o `ORD-####.zip` ao lado da pasta, sem mover a contagem; o README e o comando de bundle do plugin o documentam, e o export o roda numa série e fora dela | `f038b9c` | `487a2691f110814bc6ea9024ab16ade6157633d22f818a0a5383514d14ee3cd8` (`cli.json`, 731 execuções, escrito no Linux) |
 | [`ORD-0010`](ORD-0010/ORD-0010.xml) | o `classify` pelas tabelas da página, a pergunta 10 do retorno da EMS-001: atrás de `engine=relay`, uma requisição por chamada, menos o `classify`; o RL-16 prende o conjunto trocado. Medido no Chromium, pelo `serve-dev.js`, as 115 fontes digitadas: de 11 163 requisições para 575, o L-01 de 8 005 por tecla para 5, nenhum painel diferente, pelo motor JS e pelo Rust | `936e91d` | `5c3228dcd2f1609ff08325bf6c27bd8fcb1979902001d18e6d5304f9ab8a4c95` — `sha256sum` do `glyph-transport.js` em `936e91d` |
 | [`ORD-0011`](ORD-0011/ORD-0011.xml) | o snapshot respeita os stores de cada caso, a O5 do `INTAKE-RUST-LADDER`: os stores do caso sobre os do repositório no snapshot, nos arquivos de caso e nas corridas; T-07, T-08 e T-09 movidos por decisão e nenhum outro; o `TemplateCycle` no oráculo; `Context::with` no Rust | `e900c7a` | `7dcf5a1121360749d482c02bc9a8d23806f47626315c4cf0cce876432140a318` — os casos |
+| [`ORD-0012`](ORD-0012/ORD-0012.xml) | a régua das crates no portão, a O7 do `INTAKE-RUST-LADDER`: `scripts/crate-weight.js` no `check:rust` mede a árvore de cada crate externa como o §9 mede e gradua *note*, *ask* e *fix*; *ask* entra só com ADR assinada em `.decisions`; visto falhando em árvores gravadas, uma por grau; o workspace não tem crate externa hoje | `18b4392` | `82812a7cf6624f95ec7327870cd1e0a4c443f4773779076ebd78100845c3c79e` — `sha256sum` do `crate-weight.js` em `18b4392` |
