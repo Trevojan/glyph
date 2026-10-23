@@ -35,9 +35,14 @@ npm run check:rust
 ```
 
 O primeiro roda os dois `--check` de geração, `check-globals`, o DAG, os grafos
-de costura, de crates e de links, a escada e a suíte; o segundo escreve o oráculo no
-commit sob teste e roda `cargo test` em `rust/`. **Um passo por commit, verde em
-cada um.**
+de costura, de crates e de links, a escada, o índice dos caminhos virtuais e a
+suíte; o segundo escreve o oráculo no commit sob teste e roda `cargo test` em
+`rust/`. Os dois pedem `cargo`. **Um passo por commit, verde em cada um.**
+
+Editou um arquivo de `.guidelines/`, o `README.md` ou este? Rode
+`npm run vpath -- build`: o índice em `.guidelines/.shortcuts/.virtual/` cobre
+todos eles, e o `check` recusa o que mudou sem ele. Uma fatia se lê com
+`npm run vpath -- resolve 'arquivo#seletor' --text`.
 
 Editou `.guidelines/rules.json`, `templates.json`, `expansions.txt` ou
 `GLOSSARY.md`? Rode `node scripts/build-templates.js` antes de verificar: essas
