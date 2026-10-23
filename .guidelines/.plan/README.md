@@ -119,13 +119,13 @@ Decidíveis hoje, sem mecanismo novo:
 realmente escreveu (§0 do `COMPILER_LESSONS.md`). Precisa de **filtro
 semântico** — categoria, espécie, tabela de composição — não de limiar melhor.
 
-### 3. Quatro defeitos, medidos e não consertados no JS
+### 3. Quatro defeitos medidos: o que foi consertado nos dois motores, e o que resta
 
-| | medido |
+| | estado |
 |---|---|
-| `;;` **migra** | `[nt'a'];;[nt'b']` volta como `[nt'a'][nt'b'];;` — a quebra sai de entre os blocos e vai para o fim. E some inteira na queima. |
-| `;` é **assimétrico entre aspas** | encerra um literal de crase, não encerra um de apóstrofo. As duas formas deveriam ser intercambiáveis. |
-| param de template nu vira prosa | `[--germinate a,b]` → `PlaceholderPending` ×2 e os valores caem como `<off>`. Param de template é **sempre literal** — as duas aspas servem, a palavra nua não. |
+| `;;` | consertado nos dois motores em 2026-09-06 (`1342488`): `[nt'a'];;[nt'b']` vai e volta exato, o `<break/>` entre os blocos. **Resta:** na queima `;;` e `;` dão a mesma linha em branco; distinguir os dois no `.hgml` é pergunta do Regente. |
+| `;` dentro de literal | consertado nos dois motores em 2026-09-06 (`f6d07ae`): dentro de um literal, só a aspa que o abriu o fecha. **Resta:** a quebra de linha encerra um literal de apóstrofo e não um de crase; é decisão do Regente, porque hoje a quebra limita o estrago de um apóstrofo sem fechar. |
+| param de template nu | o deslize é recusado desde 2026-09-06 (`03aedad`): um parâmetro que não é literal antes de um literal é `fix` `TemplateParamNotLiteral`. **Resta:** a palavra nua sem literal depois (`[--germinate a,b]`) cai como `<off>` com `PlaceholderPending` ×2, e a mensagem chama a palavra nua de `[?`; entre recusar (a) e aceitar como literal (b), do [§3 das perguntas](PERGUNTAS-ABERTAS.md), o Regente não escolheu. |
 | o `toXML` do JS **cresce com o quadrado das linhas** | L-03, L-02 e L-01 levam 23 ms, 0,44 s e 6,2 s; 84% do L-02 é a passada estrutural (`packageSpan`, `packageIndent` e o seu `^ +`). O port em Rust lê cada linha uma vez e faz o L-01 em 0,13 s. Fixado por decisão (pergunta 13 do [retorno](../.orders/EMS-001/RETURN.md)): o JS não é consertado, e as fontes longas vão pelo Rust |
 
 ### 5. O Glyph em Rust — a série EMS-001
@@ -180,8 +180,9 @@ Regente chamar, o JS primeiro onde o oráculo muda:
   mesmo passo;
 - **o blend `REV` + `DIST` só no mesmo alvo**: o `sameTarget` passa a conferir o
   alvo, e alvos diferentes queimam como dois comandos;
-- **os três defeitos antigos do §3, só no Rust** (O4): o Rust responde certo, e o
-  teste diferencial nomeia cada um como diferença conhecida;
+- **os três resíduos do §3, só no Rust** (O4): o Rust responde certo, e o teste
+  diferencial nomeia cada um como diferença conhecida; cada resíduo espera o
+  Regente dizer qual resposta é a certa, e os dois motores respondem igual até lá;
 - **o Rust para de refazer a cada chamada o que o JS faz uma vez** (pergunta 12):
   as regras compiladas uma vez por contexto e o `ck` em aritmética inteira, só no
   Rust; o JS não é afinado.
