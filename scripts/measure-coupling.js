@@ -25,6 +25,8 @@
  *   M5  structural recovery — of the breaks whose content lived on, keyed by
  *       path, the share the same text, the same body or the same file renamed
  *       finds again (§20)
+ *   M6  recovery by the path — of what the structure leaves, the slug whose
+ *       trigrams are closest, against the slug whose body is (§22)
  *
  * Identity follows renames (`git log -M`) and is keyed by the latest name.
  * Nothing here knows what a `.pgml` is: any repository path can be handed in.
@@ -228,33 +230,44 @@ function m4(commits, from) {
 
 /* ---------- M5 ---------- */
 
+/* the slugs a commit removed and added, keyed by path, and the files rule 3
+   pairs: an old file with the new file that holds more than half of its slugs
+   again, by the same slug or the same text */
+function breaks(c) {
+  const removed = [], added = [];
+  for (const ch of c.docEdits) {
+    const before = ch.st === "A" ? new Map() : sections(show(c.hash + "^", ch.from) ?? "");
+    const after = ch.st === "D" ? new Map() : sections(show(c.hash, ch.to) ?? "");
+    const keep = ch.from === ch.to;
+    for (const [s, sec] of before) if (!keep || !after.has(s)) removed.push({ file: ch.from, s, ...sec });
+    for (const [s, sec] of after) if (!keep || !before.has(s)) added.push({ file: ch.to, s, ...sec });
+  }
+  const pairs = new Map();
+  for (const file of new Set(removed.map(r => r.file))) {
+    const mine = removed.filter(r => r.file === file);
+    const votes = new Map();
+    for (const r of mine) {
+      const there = added.filter(a => a.s === r.s || a.text === r.text).map(a => a.file);
+      for (const f of new Set(there)) votes.set(f, (votes.get(f) || 0) + 1);
+    }
+    for (const [f, n] of votes) if (n * 2 > mine.length) pairs.set(file, f);
+  }
+  return { removed, added, pairs };
+}
+const unique = list => list.length === 1 ? list[0] : null;
+/* rules 1 to 3 of §20: how the structure finds a removed slug again, or null */
+const structural = (r, added, pairs) =>
+  unique(added.filter(a => a.text === r.text)) ? "text"
+    : r.body.trim() && unique(added.filter(a => a.body === r.body)) ? "body"
+    : pairs.has(r.file) && added.some(a => a.file === pairs.get(r.file) && a.s === r.s) ? "file" : null;
+
 function m5(commits, from) {
   let lived = 0, recovered = 0, renamedLived = 0, renamedRecovered = 0, samePlace = 0, renamedSamePlace = 0, deleted = 0, falsePlace = 0;
   const by = { text: 0, body: 0, file: 0 };
   for (let i = from; i < commits.length; i++) {
     const c = commits[i];
     if (!c.docEdits.length) continue;
-    const removed = [], added = [];
-    for (const ch of c.docEdits) {
-      const before = ch.st === "A" ? new Map() : sections(show(c.hash + "^", ch.from) ?? "");
-      const after = ch.st === "D" ? new Map() : sections(show(c.hash, ch.to) ?? "");
-      const keep = ch.from === ch.to;
-      for (const [s, sec] of before) if (!keep || !after.has(s)) removed.push({ file: ch.from, s, ...sec });
-      for (const [s, sec] of after) if (!keep || !before.has(s)) added.push({ file: ch.to, s, ...sec });
-    }
-    const unique = (list, f) => list.length === 1 ? list[0] : null;
-    /* rule 3: an old file pairs with the new file that holds more than half
-       of its slugs again, by the same slug or the same text */
-    const pairs = new Map();
-    for (const file of new Set(removed.map(r => r.file))) {
-      const mine = removed.filter(r => r.file === file);
-      const votes = new Map();
-      for (const r of mine) {
-        const there = added.filter(a => a.s === r.s || a.text === r.text).map(a => a.file);
-        for (const f of new Set(there)) votes.set(f, (votes.get(f) || 0) + 1);
-      }
-      for (const [f, n] of votes) if (n * 2 > mine.length) pairs.set(file, f);
-    }
+    const { removed, added, pairs } = breaks(c);
     for (const r of removed) {
       const moved = added.some(a => a.s === r.s && a.file !== r.file);
       const renamed = !moved && added.some(a => jaccard(a.set, r.set) >= JACCARD);
@@ -267,9 +280,7 @@ function m5(commits, from) {
       }
       lived++;
       if (renamed) renamedLived++;
-      const how = unique(added.filter(a => a.text === r.text)) ? "text"
-        : r.body.trim() && unique(added.filter(a => a.body === r.body)) ? "body"
-        : pairs.has(r.file) && added.some(a => a.file === pairs.get(r.file) && a.s === r.s) ? "file" : null;
+      const how = structural(r, added, pairs);
       if (how) { recovered++; by[how]++; if (renamed) renamedRecovered++; continue; }
       /* post hoc, apart from the rate (§21): the same place — the same parent
          and the same neighbours, in the same file or the one it paired with */
@@ -281,13 +292,51 @@ function m5(commits, from) {
   return { lived, recovered, rate: ratio(recovered, lived), by, renamedLived, renamedRecovered, samePlace, renamedSamePlace, deleted, falsePlace };
 }
 
+/* ---------- M6 ---------- */
+
+const trigrams = t => t.length < 3 ? new Set([t]) : new Set([...Array(t.length - 2).keys()].map(i => t.slice(i, i + 3)));
+
+/* the one candidate whose score is largest and at least JACCARD, or null */
+function best(candidates, score) {
+  let top = null, at = -1, tie = false;
+  for (const a of candidates) {
+    const x = score(a);
+    if (x > at) { top = a; at = x; tie = false; } else if (x === at) tie = true;
+  }
+  return top && at >= JACCARD && !tie ? top : null;
+}
+
+function m6(commits, from) {
+  let cases = 0, truths = 0, predictions = 0, right = 0;
+  const wrong = { deleted: 0, other: 0 };
+  for (let i = from; i < commits.length; i++) {
+    const c = commits[i];
+    if (!c.docEdits.length) continue;
+    const { removed, added, pairs } = breaks(c);
+    for (const r of removed) {
+      if (structural(r, added, pairs)) continue;
+      cases++;
+      const truth = best(added, a => jaccard(a.set, r.set));
+      const home = pairs.get(r.file) ?? r.file;
+      const mine = trigrams(r.s);
+      const guess = best(added.filter(a => a.file === home), a => jaccard(trigrams(a.s), mine));
+      if (truth) truths++;
+      if (!guess) continue;
+      predictions++;
+      if (truth && guess.file === truth.file && guess.s === truth.s) right++;
+      else wrong[truth ? "other" : "deleted"]++;
+    }
+  }
+  return { cases, truths, predictions, right, wrong, precision: ratio(right, predictions), recall: ratio(right, truths) };
+}
+
 /* ---------- report ---------- */
 
 const ratio = (a, b) => b ? a / b : null;
 const pct = x => x == null ? "—" : (100 * x).toFixed(1) + " %";
 
 function measure(commits, from) {
-  return { commits: commits.length - from, m1: m1(commits, from), m2: m2(commits, from), m3: m3(commits, from), m4: m4(commits, from), m5: m5(commits, from) };
+  return { commits: commits.length - from, m1: m1(commits, from), m2: m2(commits, from), m3: m3(commits, from), m4: m4(commits, from), m5: m5(commits, from), m6: m6(commits, from) };
 }
 
 const commits = assignIdentity(readLog());
@@ -314,6 +363,9 @@ function print(title, r) {
   console.log("  M5  " + r.m5.lived + " content-lived breaks by path: recovered " + r.m5.recovered + " → " + pct(r.m5.rate) +
               " (text " + r.m5.by.text + ", body " + r.m5.by.body + ", file " + r.m5.by.file + "); of the renamed, " +
               r.m5.renamedRecovered + " of " + r.m5.renamedLived);
+  console.log("  M6  " + r.m6.cases + " breaks the structure leaves, " + r.m6.truths + " with a successor by content: the path predicts " +
+              r.m6.predictions + ", right " + r.m6.right + " (wrong onto a deletion " + r.m6.wrong.deleted + ", onto another slug " + r.m6.wrong.other +
+              ") → precision " + pct(r.m6.precision) + ", recall " + pct(r.m6.recall));
   console.log("      post hoc, the same place: " + r.m5.samePlace + " more, " + r.m5.renamedSamePlace + " of them renamed; and it would carry " +
               r.m5.falsePlace + " of the " + r.m5.deleted + " deletions onto a new section");
 }
