@@ -107,6 +107,12 @@
     [val'the swap','the suite holds the calls the transport swaps to the eleven, seen failing before it counts']
   ]
 
+  [section'ORD-0011-case-stores'
+    [tgt'the snapshot honours the stores of each case, O5 of INTAKE-RUST-LADDER, answered on 2026-09-27']
+    [val'the snapshot','each declared case is projected with its own stores laid over the repository ones, the T hashes move by decision, and no other hash moves']
+    [val'the oracle','TemplateCycle enters the oracle, the case files and the runs say which stores a case brings, and the Rust answers them byte for byte']
+  ]
+
   [section'limits'
     [nev'a selector that answers an empty slice in silence']
     [dont'open an ORD before the ORD it depends on closes']

@@ -1,0 +1,9 @@
+[block'ORD-0011-case-stores'
+  [ctx'the spec of EMS-002','.guidelines/.orders/EMS-002/EMS-002.pgml']
+  [tgt'the snapshot honours the stores of each case, O5 of INTAKE-RUST-LADDER, answered on 2026-09-27']
+  [ctx'the snapshot and the oracle project every declared case with one uniform set of stores, the repository ones, so a case that brings its own templates is projected without them, and TemplateCycle, whose cases bring a cyclic store, never reaches the oracle']
+  [cnst'a case is projected with its stores laid over the repository ones, the reading the decision names: measured before the code, it moves exactly T-07, T-08 and T-09, the two cycles among them; the case stores alone would move 36 cases, the C and K cases with them']
+  [cnst'the snapshot moves by decision, and the decision is written; a hash that moves outside the T cases is a regression, not the decision']
+  [val'the snapshot','each declared case is projected with its own stores laid over the repository ones, the T hashes move by decision, and no other hash moves']
+  [val'the oracle','TemplateCycle enters the oracle, the case files and the runs say which stores a case brings, and the Rust answers them byte for byte']
+];
