@@ -7,7 +7,7 @@
 //!
 //! EMS-001 ORD-0012, flag parity: with arguments, the command line of
 //! `glyph-cli.js` — `--xml --ast --diag --hgml --expand --from-xml`, the source
-//! on argv or by `--file`, and `--bundle` with `--out` — answering its bytes,
+//! on argv or by `--file`, and `--bundle` with `--out` and `--zip` — answering its bytes,
 //! read with the repository's three stores. The moment a bundle carries is
 //! SOURCE_DATE_EPOCH's when it is set, and the zip's time is UTC (question 16
 //! of the EMS-001 return).
@@ -183,6 +183,7 @@ fn cli(argv: Vec<String>) {
     let mut mode = "xml";
     let mut src: Vec<String> = Vec::new();
     let (mut file, mut bundle, mut out_dir): (Option<String>, bool, Option<String>) = (None, false, None);
+    let mut zip = false;
     let mut i = 0;
     while i < argv.len() {
         let a = argv[i].as_str();
@@ -193,6 +194,7 @@ fn cli(argv: Vec<String>) {
                 file = argv.get(i).cloned();
             }
             "--bundle" => bundle = true,
+            "--zip" => zip = true,
             "--out" => {
                 i += 1;
                 out_dir = argv.get(i).cloned();
@@ -327,14 +329,17 @@ fn cli(argv: Vec<String>) {
                 o.exit(2);
             }
             o.log(&format!("{dest}{}  ({bytes} bytes, 5 arquivos)", std::path::MAIN_SEPARATOR));
-        } else {
+        }
+        // outside a series the zip is the bundle; in one, it comes beside the
+        // folder only with --zip (EMS-002 ORD-0009)
+        if !series || zip {
             let entries: Vec<(&str, &[u8])> = five.iter().map(|(n, t)| (n.as_str(), t.as_bytes())).collect();
-            let zip = glyph_bundle::zip_store(&entries, ms as i64);
+            let packed = glyph_bundle::zip_store(&entries, ms as i64);
             let dest = join(&dir, &format!("{id}.zip"));
-            if let Err(e) = std::fs::write(&dest, &zip) {
+            if let Err(e) = std::fs::write(&dest, &packed) {
                 o.thrown("Error", Thrown(e.to_string()));
             }
-            o.log(&format!("{dest}  ({} bytes, 5 arquivos)", zip.len()));
+            o.log(&format!("{dest}  ({} bytes, 5 arquivos)", packed.len()));
         }
         // a refusal does not stop the emission, but the author has to know
         if refused > 0 {

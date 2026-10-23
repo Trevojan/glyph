@@ -65,7 +65,9 @@ node scripts/glyph-cli.js --file fonte.pgml --bundle --out .guidelines/.orders/E
 
 Numa série — o `--out` é uma pasta `EMS-###` — a Ordem sai como a pasta
 `ORD-####/` com as quatro projeções e o manifesto, e o número é a maior pasta
-`ORD-####` daquela série, mais um: a contagem reinicia em cada série. Fora de uma
+`ORD-####` daquela série, mais um: a contagem reinicia em cada série. Com
+`--zip`, a série escreve também `ORD-####.zip` ao lado da pasta, e a contagem,
+que conta pastas, não se move. Fora de uma
 série, sai `ORD-####.zip` com os mesmos cinco arquivos, numerado pelo maior
 `ORD-####` do destino seguido de nada ou de um ponto, e um ID datado como
 `ORD-2026-08-30-01` não conta como 2026. É a regra de um ADR, e pela mesma razão.
