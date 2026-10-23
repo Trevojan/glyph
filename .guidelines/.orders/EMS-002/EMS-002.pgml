@@ -100,6 +100,13 @@
     [val'the oracle','the export runs the flag in a series and outside one, and the Rust answers the same bytes and the same files']
   ]
 
+  [section'ORD-0010-classify'
+    [tgt'classify answered by the page from the tables it loads, question 10 of the EMS-001 return, answered c']
+    [val'the requests','behind engine=relay, every call but classify is one request, and classify is answered by the page; L-01 stops making 8 000 trips']
+    [val'the panels','the declared sources give the same bytes in every panel through the relay and through the JS']
+    [val'the swap','the suite holds the calls the transport swaps to the eleven, seen failing before it counts']
+  ]
+
   [section'limits'
     [nev'a selector that answers an empty slice in silence']
     [dont'open an ORD before the ORD it depends on closes']
