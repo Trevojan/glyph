@@ -177,7 +177,9 @@ Closed questions; an answered one carries the Regent's answer below its options.
     Answered by the Regent on 2026-09-27: *"go gradually switching JS for Rust.
     each distinction you find is a step closer to 100% Rust-coded <- this is
     the goal."* Read as **b**: only the Rust changes, and the JS is not tuned
-    further. Not built yet.
+    further. Built by [`EMS-002/ORD-0013`](../EMS-002/README.md): `ck` in
+    integer arithmetic around its product, the stores shared and the rules
+    compiled once a store; the empty `toAST` takes 285 µs.
 13. **The JS `toXML` grows with the square of the lines.** L-03, L-02 and L-01
     take 23 ms, 0.44 s and 6.2 s, and 84% of L-02's is the structural pass
     (`packageSpan`, `packageIndent` and its `^ +`), which the port reads once
