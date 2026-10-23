@@ -42,7 +42,7 @@ export function main() {
   var argv = process.argv.slice(2);
   var mode = "xml";
   var src = [];
-  var file = null, bundle = false, outDir = null;
+  var file = null, bundle = false, outDir = null, zip = false;
   /* the modes and flags the README documents: README.md declares this block
      as a source, and glyph-vpath stales the README when the block moves */
   /* @block:flags */
@@ -56,6 +56,7 @@ export function main() {
        "order.pgml" and answered about that. */
     if (a === "--file" || a === "-f") { file = argv[++ai]; continue; }
     if (a === "--bundle") { bundle = true; continue; }
+    if (a === "--zip") { zip = true; continue; }
     if (a === "--out") { outDir = argv[++ai]; continue; }
     if (a.slice(0, 7) === "--file=") { file = a.slice(7); continue; }
     src.push(a);
@@ -105,6 +106,9 @@ export function main() {
    * Numa serie -- o --out e uma pasta EMS-### -- a ORD e a pasta ORD-####/
    * com os cinco arquivos que o zip leva, e o numero conta so as pastas ORD
    * daquela serie: a contagem reinicia em cada uma. Fora de uma serie, o zip.
+   * Com --zip, a serie escreve tambem o zip, ORD-####.zip ao lado da pasta;
+   * fora de uma serie, --zip pede o que o --bundle ja escreve (EMS-002
+   * ORD-0009, a pergunta 1 do retorno da EMS-001).
    *
    * O app nao consegue fazer isso -- o navegador nao enxerga pasta -- entao la
    * o numero vem do localStorage e o campo fica editavel. A diferenca e
@@ -168,6 +172,11 @@ export function main() {
         process.exit(2);
       }
       console.log(dest + path.sep + "  (" + bytes + " bytes, 5 arquivos)");
+      if (zip) {
+        var packed = zipStore(five, when);
+        fs.writeFileSync(dest + ".zip", packed);
+        console.log(dest + ".zip  (" + packed.length + " bytes, 5 arquivos)");
+      }
     } else {
       var zip = zipStore(five, when);
       var dest = path.join(dir, id + ".zip");

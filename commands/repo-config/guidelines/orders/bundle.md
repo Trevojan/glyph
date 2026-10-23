@@ -58,7 +58,8 @@ GLYPH`
    Numa série, o número vem das pastas `ORD-####/` dela — a maior, mais um;
    a contagem reinicia em cada série, e a spec, um rascunho ou um ID datado
    não contam — e o resultado é a pasta `ORD-####/` com `.pgml`, `.xml`,
-   `.json`, `.hgml` e o manifesto. Sem `--out`, a Ordem sai chapada em
+   `.json`, `.hgml` e o manifesto; com `--zip`, também o `ORD-####.zip` ao
+   lado da pasta, só quando pedido. Sem `--out`, a Ordem sai chapada em
    `.orders/` como `ORD-####.zip` com os mesmos cinco, numerada pelo maior
    `ORD-####` seguido de nada ou de um ponto. Depois, a linha "A Ordem aberta"
    do `README.md` da série é do Regente escrever, não sua.

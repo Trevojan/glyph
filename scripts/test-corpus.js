@@ -3603,12 +3603,15 @@ if (EXPORT_ORACLE) {
   const b = (args, env) => ({ args: args, env: env === undefined ? E : env });
   kase({ files: { "src.pgml": "[in[tgt`acentuação e c-cedilha: fichação`]]", "ORD-2026-08-30-01.pgml": "[nt'datada']" } },
     [b(["--file", "src.pgml", "--bundle"]), b(["--file", "src.pgml", "--bundle", "--out", "."]),
-     b(["[mand'x'][opt'x']", "--bundle"]), b(["--bundle", "--out", "./", "--file", "src.pgml"])]);
+     b(["[mand'x'][opt'x']", "--bundle"]), b(["--bundle", "--out", "./", "--file", "src.pgml"]),
+     b(["--file", "src.pgml", "--bundle", "--zip"])]);
   kase({ dirs: ["out", "EMS-001/ORD-2026-08-30-01", "EMS-002"],
          files: { "src.pgml": "[crit'the parser'][logic-risk[x = 2][/logic]", "EMS-001/EMS-001.pgml": "[nt'a spec']", "EMS-001/ORD-0007.pgml": "[nt'draft']" } },
     [b(["--file", "src.pgml", "--bundle", "--out", "EMS-001"]), b(["--file", "src.pgml", "--bundle", "--out", "EMS-001/"]),
      b(["--file", "src.pgml", "--bundle", "--out", "EMS-002"]), b(["[crit'x']", "--bundle", "--out", "out"]),
-     b(["--file", "src.pgml", "--bundle", "--out", "out/../EMS-001"])]);
+     b(["--file", "src.pgml", "--bundle", "--out", "out/../EMS-001"]),
+     /* EMS-002 ORD-0009: the zip of a series ORD, beside its folder, only when asked */
+     b(["--file", "src.pgml", "--bundle", "--out", "EMS-002", "--zip"]), b(["--zip", "--file", "src.pgml", "--bundle", "--out", "EMS-002"])]);
   kase({ files: { "src.pgml": "[crit'x']" } }, [b(["--file", "src.pgml", "--bundle", "--out", "nowhere"])], true);
   fsx.rmSync(root, { recursive: true, force: true });
   fsx.writeFileSync(path.join(mods, "cli.json"), JSON.stringify({ engine: G.VERSION, cases: cases }, null, 1) + "\n");

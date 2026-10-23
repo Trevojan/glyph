@@ -2737,25 +2737,25 @@
     },
     "README.md": {
       "sources": [
-        ["scripts/glyph-cli.js#@block:flags", "16429e4cc43e7200"]
+        ["scripts/glyph-cli.js#@block:flags", "14f9ad4e10950400"]
       ],
       "nodes": [
-        ["n1774", "", 0, 11694, 1, 277, "a925701e214c3500", "", ""],
-        ["n1775", "glyph", 55, 11694, 5, 273, "490f02d0f48f5200", "ca50fea816abfe00", "n1774"],
-        ["n1776", "run-it", 620, 7201, 21, 170, "c5df97a2afa2f800", "17c1f778a217ce00", "n1775"],
+        ["n1774", "", 0, 11811, 1, 279, "75f0b29023954200", "", ""],
+        ["n1775", "glyph", 55, 11811, 5, 275, "2873cff8ed0cf800", "b2bb8e683027f080", "n1774"],
+        ["n1776", "run-it", 620, 7318, 21, 172, "bb2341a423b31600", "3b2f5be6b44ae000", "n1775"],
         ["n1777", "the-app--one-click", 631, 1410, 23, 20, "7fbc128e23598800", "904a908640f185a8", "n1776"],
         ["n1778", "the-command-line--needs-node", 1410, 1926, 43, 17, "51fb86fcdbc3da00", "548f3202b39e6200", "n1776"],
-        ["n1779", "--bundle--a-ordem-inteira-numerada-como-um-adr", 1926, 3437, 60, 29, "ca6c07deb4782a00", "532a11802110f400", "n1776"],
-        ["n1780", "--from-xml--the-way-back", 3437, 4926, 89, 30, "43e6dfb080f10000", "7d38cba86b4b5500", "n1776"],
-        ["n1781", "hgml--the-atomic-burn", 4926, 5578, 119, 28, "693a2308b898f400", "0429fc0e67efce00", "n1776"],
-        ["n1782", "self-describing-xml", 5578, 5952, 147, 13, "70f6dba4f1a95c00", "f535b1e6cec4e340", "n1776"],
-        ["n1783", "the-server", 5952, 6616, 160, 16, "fe14fa5c514ddc00", "a51f2920b2a6c000", "n1776"],
-        ["n1784", "the-rust-engine--needs-cargo", 6616, 7201, 176, 15, "638b574661b54800", "fcbb7ba49ffae100", "n1776"],
-        ["n1785", "after-editing", 7201, 7927, 191, 21, "80106c4edae41900", "a64b1dda83ba7a00", "n1775"],
-        ["n1786", "verify", 7927, 8218, 212, 11, "855c56409d0eba00", "c8127ff02d41e100", "n1775"],
-        ["n1787", "where-things-live", 8218, 10283, 223, 29, "40ded3d89aa98e00", "4f64392828518400", "n1775"],
-        ["n1788", "documentation", 10283, 11231, 252, 17, "d8d559f4fc0dfa00", "6272f92c56c1eb00", "n1775"],
-        ["n1789", "versioning--appfrontrulescontent", 11231, 11694, 269, 9, "c8ddd09cf5d2de00", "41dcbb5e365a4c00", "n1775"]
+        ["n1779", "--bundle--a-ordem-inteira-numerada-como-um-adr", 1926, 3554, 60, 31, "cb9ad3cea5553200", "7cfa1ce821761a00", "n1776"],
+        ["n1780", "--from-xml--the-way-back", 3554, 5043, 91, 30, "43e6dfb080f10000", "7d38cba86b4b5500", "n1776"],
+        ["n1781", "hgml--the-atomic-burn", 5043, 5695, 121, 28, "693a2308b898f400", "0429fc0e67efce00", "n1776"],
+        ["n1782", "self-describing-xml", 5695, 6069, 149, 13, "70f6dba4f1a95c00", "f535b1e6cec4e340", "n1776"],
+        ["n1783", "the-server", 6069, 6733, 162, 16, "fe14fa5c514ddc00", "a51f2920b2a6c000", "n1776"],
+        ["n1784", "the-rust-engine--needs-cargo", 6733, 7318, 178, 15, "638b574661b54800", "fcbb7ba49ffae100", "n1776"],
+        ["n1785", "after-editing", 7318, 8044, 193, 21, "80106c4edae41900", "a64b1dda83ba7a00", "n1775"],
+        ["n1786", "verify", 8044, 8335, 214, 11, "855c56409d0eba00", "c8127ff02d41e100", "n1775"],
+        ["n1787", "where-things-live", 8335, 10400, 225, 29, "40ded3d89aa98e00", "4f64392828518400", "n1775"],
+        ["n1788", "documentation", 10400, 11348, 254, 17, "d8d559f4fc0dfa00", "6272f92c56c1eb00", "n1775"],
+        ["n1789", "versioning--appfrontrulescontent", 11348, 11811, 271, 9, "c8ddd09cf5d2de00", "41dcbb5e365a4c00", "n1775"]
       ]
     }
   },
