@@ -163,8 +163,6 @@ Decidido em 2026-09-27, ainda não construído — cada item uma ORD quando o
 Regente chamar, o JS primeiro onde o oráculo muda. Os que movem o emitido formam
 um lote, e a versão se move uma vez quando ele fecha (decidido em 2026-10-25):
 
-- **o alarme de inferência profunda**: composto de profundidade 5 ou mais sem
-  operando pergunta (`ask`);
 - **dois diagnósticos para um comando sem efeito**: *não trabalha* (`note`), um
   comando conhecido sem efeito na posição em que está; *não sabe* (`fix`), fora
   do vocabulário;
