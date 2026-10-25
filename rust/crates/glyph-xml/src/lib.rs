@@ -21,7 +21,7 @@ use glyph_json::number;
 use glyph_util::tree::{Gloss, Id, Thrown, Tree, LIMITS};
 use glyph_util::{inherited, inherited_text, js_space, js_trim, xesc};
 use glyph_version::VERSION;
-use glyph_vocab::{derived, el_name, get, FRAMES, SLOTS};
+use glyph_vocab::{derived, el_name, get, FRAMES, OPERAND_ATTR, SLOTS};
 
 /// `pad`: two spaces a level, up to the ceiling.
 pub fn pad(d: usize) -> String {
@@ -125,6 +125,32 @@ enum Frame {
 
 /// `emit`: one node and everything under it, iteratively — a tail frame holds
 /// the lines that close a node, pushed before its children so they come after.
+/// `operandAttr`: the operand of a PT or an IF travels as an attribute —
+/// `[pt'1.1'` is `<part n="1.1">`, `[if'x'` is `<if cond="x">` (decided
+/// 2026-09-27) — when it carries nothing else: no template slot, no
+/// reference, some text. The attribute's name and the literal.
+fn operand_attr(tree: &Tree<Extra>, id: Id, binds: &[String]) -> Option<(&'static str, Id)> {
+    let nd = &tree.nodes[id];
+    let name = get(OPERAND_ATTR, nd.canonical.as_deref()?)?;
+    if nd.chain_element == Some(true) {
+        return None;
+    }
+    let lit = nd.children.iter().copied().find(|&c| {
+        let k = &tree.nodes[c];
+        k.is_literal() && k.form.as_deref() != Some("raw") && k.role.as_deref() != Some("result")
+    })?;
+    let k = &tree.nodes[lit];
+    if k.bound_slot.as_deref().is_some_and(|s| !s.is_empty()) {
+        return None;
+    }
+    let v = js_trim(k.v.as_deref().unwrap_or(""));
+    /* `binds` is a plain object: a member of the prototype is bound */
+    if v.is_empty() || (k.is_binder != Some(true) && (binds.contains(&v) || inherited(&v))) {
+        return None;
+    }
+    Some((name, lit))
+}
+
 pub fn emit(tree: &mut Tree<Extra>, root: Id, start: usize, l: &mut Vec<String>, ctx: &Context, describe: bool, binds: &[String]) {
     let mut stack = vec![Frame::Node(root, start)];
     while let Some(f) = stack.pop() {
@@ -211,6 +237,7 @@ pub fn emit(tree: &mut Tree<Extra>, root: Id, start: usize, l: &mut Vec<String>,
         };
         let join = (!bare && origin.as_deref() == Some("item")).then(|| "join=\"item\"".to_string());
         let (canonical, tier) = (nd.canonical.clone().unwrap_or_default(), nd.tier.clone().unwrap_or_default());
+        let moved = if tier == "unknown" || tier == "empty" { None } else { operand_attr(tree, id, binds) };
         let (open, close) = if tier == "unknown" || tier == "empty" {
             let mut at = vec![format!("tag=\"{}\"", xesc(nd.raw.as_deref().unwrap_or("")))];
             if let Some(Some(s)) = &nd.suggestion {
@@ -230,6 +257,9 @@ pub fn emit(tree: &mut Tree<Extra>, root: Id, start: usize, l: &mut Vec<String>,
             }
             attrs.extend(chain.clone());
             attrs.extend(join.clone());
+            if let Some((a, lit)) = moved {
+                attrs.push(format!("{a}=\"{}\"", xesc(tree.nodes[lit].v.as_deref().unwrap_or(""))));
+            }
             /* a primitive that received an operand */
             if stands_alone(&canonical, ctx)
                 && nd.children.iter().any(|&c| tree.nodes[c].is_canonical() && tree.nodes[c].chain_element != Some(true)) {
@@ -276,7 +306,9 @@ pub fn emit(tree: &mut Tree<Extra>, root: Id, start: usize, l: &mut Vec<String>,
             .map(|f| f.first().copied().unwrap_or("").replacen('*', "", 1))
             .or_else(|| deep_inference(tree, id, ctx).map(|_| "the subject".to_string()));
 
-        if nd.children.is_empty() && needs.is_none() && slot_needs.is_empty() {
+        /* the frame counts the operand where it was written; the element does not repeat it */
+        let all: Vec<Id> = nd.children.iter().copied().filter(|&c| moved.is_none_or(|(_, lit)| c != lit)).collect();
+        if all.is_empty() && needs.is_none() && slot_needs.is_empty() {
             l.push(format!("{}{open}/>", pad(d)));
             continue;
         }
@@ -291,7 +323,7 @@ pub fn emit(tree: &mut Tree<Extra>, root: Id, start: usize, l: &mut Vec<String>,
             .map(|v| format!("{}<needs var=\"{}\">referenciado e nunca ligado</needs>", pad(d + 1), xesc(v))));
         tail.push(format!("{}</{close}>", pad(d)));
         stack.push(Frame::Tail(tail));
-        push_kids(&mut stack, &nd.children, d + 1);
+        push_kids(&mut stack, &all, d + 1);
     }
 }
 

@@ -362,6 +362,13 @@ Object.keys(FORMER_ELEMENT).forEach(function (old) {
   ELEMENT_INPUT[key] = { canonical:hit.canonical, tier:hit.tier };
 });
 
+/* OPERAND_ATTR — the commands whose operand travels as an attribute of the
+   element instead of a <user-input> (decided 2026-09-27): the number of a
+   part and the condition of an if. */
+export var OPERAND_ATTR = {
+  PT:"n", IF:"cond"
+};
+
 /* the element a retired spelling names now, or null */
 export function formerElement(name) {
   var key = String(name).toUpperCase().replace(/[^A-Z0-9]+/g, "");

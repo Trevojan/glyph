@@ -102,10 +102,15 @@ Session shortcuts are the exception — they serialise as the shortcut itself
 | `imperative` | any primitive | a primitive that received a bracketed command | it stands alone by the legend, and here it is commanding an operand |
 | `ref` | `<user-input>` | a literal whose text is a bound name | the binding it refers to, resolved across the whole package |
 | `role` | `<user-input>` | position | `result` when the literal follows a bracketed nest; absent means operand |
+| `n` | `<part>` | `[pt'1.1'` | the part's number: the operand literal, when it carries no slot, no reference and some text; otherwise it stays `<user-input>` |
+| `cond` | `<if>` | `[if'x'` | the condition, under the same rule |
 | `means` `made-of` | any element | — | only under `toXML(src,{describe:true})` |
 
-An attribute never carries instruction content. Content goes in element text or
-in children.
+An attribute carries no instruction content but two operands the Regent named
+on 2026-09-27: the number of a `<part>` (`n`) and the condition of an `<if>`
+(`cond`). All other content goes in element text or in children, and `fromXML()`
+reads `n` and `cond` back as the literal they were. Which command takes which
+attribute is `OPERAND_ATTR` in `vocabulary.js`.
 
 ---
 
