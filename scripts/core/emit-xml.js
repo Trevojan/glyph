@@ -13,7 +13,7 @@
 import { xesc, pad, walk, valueChildren } from "./util.js";
 import { FRAMES, SLOTS, elName, GLOSS_REVERSE } from "./vocabulary.js";
 import { speciesOf, depthOf, formulaOf, defOf, atomsOf, standsAlone } from "./stores.js";
-import { parse, collectBindings, bindingOf } from "./parser.js";
+import { parse, collectBindings, bindingOf, unboundRefs } from "./parser.js";
 import { VERSION } from "./version.js";
 
 /* ======================================================
@@ -349,6 +349,10 @@ export function emit(root, startDepth, L, opts) {
     var tail = [];
     slotNeeds.forEach(function (s) {
       tail.push(pad(d + 1) + '<needs slot="' + s.pos + '">' + xesc(s.want) + "</needs>");
+    });
+    /* a name a reference writes and nothing binds */
+    if (opts && opts.__binds) unboundRefs(nd, opts.__binds).forEach(function (v) {
+      tail.push(pad(d + 1) + '<needs var="' + xesc(v) + '">referenciado e nunca ligado</needs>');
     });
     tail.push(pad(d) + "</" + closeName + ">");
     stack.push({ tail:tail });

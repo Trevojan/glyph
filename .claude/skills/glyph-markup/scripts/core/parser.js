@@ -500,7 +500,8 @@ export function parse(input, opts) {
      later reference ambiguous, and choosing one would be the silent wrong
      answer this release exists to remove. Raised here rather than in
      buildXml because a diagnostic belongs to the parse. */
-  collectBindings(segments, G);
+  var bound = collectBindings(segments, G);
+  checkReferences(segments, bound, G);
 
   // ---- templates ----
   var defd = {}, invoked = [];
@@ -572,6 +573,31 @@ export function bindingOf(nd) {
   /* the literal DECLARES the name, so it is not also a reference to it */
   lit.isBinder = true;
   return v;
+}
+
+/* A reference to a name is written `[ref'nome']` (decided 2026-09-27). A
+   name-shaped literal under REF that no command of the package binds is
+   asked for: outside the [logic] fence it is what UndefinedVariable is inside
+   it, and buildXml writes <needs var> beside the literal, which stays. Prose
+   under REF is not a name, so it stays prose and asks nothing. */
+export function unboundRefs(nd, binds) {
+  if (!nd || nd.canonical !== "REF") return [];
+  return (nd.children || []).filter(function (c) { return c.literal && c.form !== "raw" && !c.isBinder; })
+    .map(function (c) { return String(c.v == null ? "" : c.v).trim(); })
+    .filter(function (v) { return BIND_NAME.test(v) && !binds[v]; });
+}
+
+export function checkReferences(segments, binds, G) {
+  (segments || []).forEach(function (sg) {
+    walk(sg.children, function (nd) {
+      unboundRefs(nd, binds).forEach(function (v) {
+        G("ask", "referência solta",
+          "<code>" + esc(v) + "</code> é referenciado e nunca ligado. Entrada externa, ou falta a ligação?",
+          "UnboundReference",
+          "unbound reference", "<code>" + esc(v) + "</code> is referenced and never bound. External input, or a missing binding?");
+      });
+    });
+  });
 }
 
 export function collectBindings(segments, G) {
