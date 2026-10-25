@@ -18,3 +18,4 @@ rust/target/
 # lineage fingerprints), which is local and never project content
 .guidelines/.shortcuts/.virtual/*
 !.guidelines/.shortcuts/.virtual/index.json
+!.guidelines/.shortcuts/.virtual/ongoing.json

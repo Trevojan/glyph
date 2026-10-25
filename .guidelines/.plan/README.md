@@ -163,11 +163,13 @@ Decidido em 2026-09-27, ainda não construído — cada item uma ORD quando o
 Regente chamar, o JS primeiro onde o oráculo muda. Os que movem o emitido formam
 um lote, e a versão se move uma vez quando ele fecha (decidido em 2026-10-25):
 
-- **dois diagnósticos para um comando sem efeito**: *não trabalha* (`note`), um
-  comando conhecido sem efeito na posição em que está; *não sabe* (`fix`), fora
-  do vocabulário — este já é o `UnknownCommand`. Espera o Regente: quais posições
-  deixam um comando conhecido sem efeito não está escrito em lugar nenhum, e a
-  leitura que a sessão de 2026-09-27 propôs não ficou no repositório;
+- **um comando conhecido nunca some** (2026-10-25): nas 14 posições medidas em
+  que um comando conhecido some sem diagnóstico, cada uma percorre as regras
+  correntes; onde uma serve, o comando entra por ela, e onde nenhuma serve, um
+  protocolo próprio. O *não sabe* segue `fix`, o `UnknownCommand`;
+- **um humor dentro de um template, só no Rust** (2026-10-25): `/eth/` cujo
+  comando aberto mais interno é um template lança no JS; o Rust responde com o
+  documento, e os testes do oráculo nomeiam a diferença;
 
 O que a spec revoga está assinado, e entre isso está a escada como
 ordem de trabalho: [`ladder.toml`](ladder.toml) fica como o registro da
