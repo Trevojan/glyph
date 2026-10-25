@@ -188,8 +188,14 @@ pub fn emit(tree: &mut Tree<Extra>, root: Id, start: usize, l: &mut Vec<String>,
             l.push(format!("{}<off>{}</off>", pad(d), xesc(nd.v.as_deref().unwrap_or(""))));
             continue;
         }
+        /* one `[off]` region, one <off> (XML_REFERENCE §4): a region with no
+           raw child is the element with nothing in it */
         if nd.mode.as_deref().is_some_and(|m| !m.is_empty()) {
-            push_kids(&mut stack, &nd.children, d);
+            if nd.children.is_empty() {
+                l.push(format!("{}<off></off>", pad(d)));
+            } else {
+                push_kids(&mut stack, &nd.children, d);
+            }
             continue;
         }
         if nd.raw_fence == Some(true) {

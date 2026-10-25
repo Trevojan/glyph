@@ -126,7 +126,8 @@ attribute is `OPERAND_ATTR` in `vocabulary.js`.
 | `-` extend | opens a chain: `[in-rwk` puts `<chain><rework/></chain>` inside `<instruction>` |
 | `,` after an extend | continues that chain — the next member of the same `<chain>` |
 | `,` between bracketed siblings | opens a `<holds>`: `[a],[b]` puts both inside one `<holds>` |
-| `[off]` … `[on]` | `<off>` — read as prose, token parsing suspended |
+| `[off]` … `[on]` | `<off>` — read as prose, token parsing suspended; a region with nothing in it, `[off][on]` or an `[off]` that ends the source, is `<off></off>`, read back as `[off][on]` |
+| `[on]` with no `[off]` open | `<mode-on/>` — the command ON written closed, with the note `UnmatchedOnMode`; the command OFF with nothing inside is written back `[modeoff]`, never as the switch |
 | `r-` / `R:` | `<user-expectative expects="…">` |
 | `[logic]` … `[/logic]` | `<logic>` with a `<rule>` per line |
 | `[raw]` … `[/raw]` | `<raw>` — carried verbatim, no grammar at all, brackets included |

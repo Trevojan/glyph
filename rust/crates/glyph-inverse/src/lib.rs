@@ -409,7 +409,11 @@ fn from_xml_node(el: &El, diag: &mut Vec<Diag>, depth: usize) -> Result<String, 
     match tag {
         "#text" | "mood" | "break" => return Ok(String::new()),
         "user-input" => return Ok(as_literal(&xml_text(el))),
-        "off" => return Ok(format!(" {} ", lit_safe_xml(&xml_text(el)))),
+        /* an <off> with nothing in it is an `[off]` region with nothing in it */
+        "off" => {
+            let prose = lit_safe_xml(&xml_text(el));
+            return Ok(if prose.is_empty() { "[off][on]".into() } else { format!(" {prose} ") });
+        }
         "raw" => return Ok(format!("[raw]{}[/raw]", xml_text(el))),
         "logic" => return Ok(from_xml_logic(el)),
         "template" => return from_xml_template(el, diag, depth),
@@ -458,7 +462,15 @@ fn from_xml_node(el: &El, diag: &mut Vec<Diag>, depth: usize) -> Result<String, 
     let colon = el.attr("name").filter(|n| !n.is_empty()).map_or(String::new(), |n| format!(":{}", lit_safe_xml(n)));
     /* the number of a part and the condition of an if come back as the literal they were */
     let operand = get(OPERAND_ATTR, &name.to_uppercase()).and_then(|a| el.attr(a)).map_or(String::new(), as_literal);
-    Ok(format!("{lead}[{name}{colon}{operand}{}]", xml_kids(el, diag, depth)?))
+    Ok(format!("{lead}{}", not_switch(format!("[{name}{colon}{operand}{}]", xml_kids(el, diag, depth)?))))
+}
+
+/// `notSwitch`: the command OFF with nothing inside is written `[modeoff]`,
+/// the element's own name read back as input, never `[off]`, the switch that
+/// opens a verbatim region.
+fn not_switch(cmd: String) -> String {
+    let switch = cmd.strip_prefix('[').and_then(|c| c.strip_suffix(']')).is_some_and(|c| js_trim(c).eq_ignore_ascii_case("off"));
+    if switch { "[modeoff]".into() } else { cmd }
 }
 
 /// `packageUnpass`: `<chain>` and `<holds>` given back as the operators
@@ -697,7 +709,7 @@ pub fn from_ast(env: &Json) -> Back {
                     return format!("{}{name}", if item { "," } else { "-" });
                 }
                 let colon = if truthy(n.get("name")) { format!(":{}", lit_safe_xml(&text_of(n.get("name")))) } else { String::new() };
-                format!("{}[{name}{colon}{}]", if item { "," } else { "" }, kids(n.get("body"), diag, lit))
+                format!("{}{}", if item { "," } else { "" }, not_switch(format!("[{name}{colon}{}]", kids(n.get("body"), diag, lit))))
             }
             _ => {
                 diag.push(Diag { sev: "note", code: "AstUnknownNode",

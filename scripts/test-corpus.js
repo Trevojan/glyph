@@ -384,7 +384,10 @@ const ORACLE_COVERAGE = [
   { id:"OC-09", src:"[logic]\ny = z + 1\n[/logic]", code:"UndefinedVariable" },
   { id:"OC-10", src:"[--reinforce[ctx],`interprete`]", code:"TemplateParamNotLiteral" },
   { id:"OC-11", src:"[nt`a ] b`]", code:"TruncatedLiteral" },
-  { id:"OC-12", src:"[raw] never closed", code:"UnclosedRaw" }
+  { id:"OC-12", src:"[raw] never closed", code:"UnclosedRaw" },
+  /* the inclusion of 2026-10-25 (EMS-002 ORD-0024): a stray [on] is the
+     command ON, and says nothing was off */
+  { id:"OC-13", src:"[crit'x'][on] the rest is read", code:"UnmatchedOnMode" }
 ];
 
 const RULE_CASES = [
@@ -1154,6 +1157,9 @@ function runReferenceChecks() {
        gone from the grammar (C-01) and now from the engine; the refusal that
        replaced it lives in bucket N, where a malformed construct belongs. */
     { id: "4-09", src: "[off]hello [ins'x'][on]", expect: x => /<off>hello \[ins'x'\]<\/off>/.test(x) },
+    /* the row added by EMS-002 ORD-0024: an [on] with no [off] open is the
+       command ON written closed */
+    { id: "4-15", src: "[on]x", expect: x => /<mode-on\/>\s*<off>x<\/off>/.test(x) },
     /* the two rows added on 2026-09-05: `,` between bracketed siblings, and
        the verbatim fence. D-08 requires a probe per documented row, which is
        what keeps §4 from drifting away from the engine. */
@@ -2210,7 +2216,10 @@ function runSnapshotChecks() {
       "[fbk]", "[fbk'plan b']", "[fbk: x]", "[rev-fbk]", "[fbk[ctx]]", "[hyp]",
       "[pt'1.1']", "[if'a > b'[ctx'x']]", "[sum'ready'[ctx]][if'ready']", "[if'']", "[pt:intro'1.1'[ctx]]", "[if`it's \"x\"`]", "[if]",
       "[--germinate a,b]", "[--reinforce rule,`why`]", "[--reinforce `r`,`w` and more]",
-      "[--t=/eth/]", "[--zz/eth/]", "[--reinforce'a''b'/eth/]", "[--t=[ctx'x']/eth/]"
+      "[--t=/eth/]", "[--zz/eth/]", "[--reinforce'a''b'/eth/]", "[--t=[ctx'x']/eth/]",
+      "[on]", "[on]x", "[ctx[on]]", "[ctx'x'][on]", "[on];", "r- [on]", "[off]a[on][on]b", "[off]a[on]b", "[on", "[modeon]",
+      "[ctx-[on]]", "[off]", "[ctx'x'][off]", "[ctx[off]", "[off][on]", "[off] ", "off", "on", "[ctx off]", "[ctx,off]",
+      "[off;[ctx'a']", "[ctx'a'],[off", "[on'x']", "[off'x']", "[ctx-on]"
     ];
     const NO_SESSION = ["constructor", "[constructor]", "rd", "[ctx] prose ist"];
     const NO_VALENCY = ["[gt'a']", "[ctx]", "[cat'a']"];
@@ -3107,6 +3116,74 @@ function runImperativeChecks() {
 }
 const rIM = runImperativeChecks();
 
+/* ------------------------------------------------------------------ *
+ * the mode words -- [off] and [on] never vanish
+ *
+ * The inclusion decided on 2026-10-25 (EMS-002 ORD-0024). Measured before it:
+ * a stray [on] left the XML byte-identical to the source without it, an [off]
+ * as the last characters left no trace, and the bare words off and on were
+ * prose with no diagnostic while the other 142 known names asked.
+ * ------------------------------------------------------------------ */
+function runModeWordChecks() {
+  console.log("\n--- the mode words ---");
+  const D = [];
+  const ok = (id, name, why) => {
+    if (why) { console.log("  ✗ " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  ✓ " + id + ": " + name); D.push(id); }
+  };
+  const opts = { templates: TPL.templates, rules: RULESTORE,
+                 expansions: require("../.guidelines/expansions.json") };
+  const codes = src => G.parse(src, opts).gaps.map(g => g.code);
+  const count = (s, sub) => s.split(sub).length - 1;
+  const back = src => { const x = G.toXML(src, opts); return [x, G.fromXML(x, opts).src]; };
+  const same = src => { const [x, s] = back(src); return G.toXML(s, opts) === x; };
+  const sameAst = src => { const env = G.toAST(src, opts); return G.toXML(G.fromAST(env, opts).src, opts) === G.toXML(src, opts); };
+
+  const one = G.parse("[on]", opts), oneGap = one.gaps.filter(g => g.code === "UnmatchedOnMode");
+  ok("MO-01", "a stray [on] is the command ON, with a note at its place",
+     ((one.segments[0] || { children: [] }).children[0] || {}).canonical !== "ON" ? "no command ON in the tree"
+       : G.toXML("[on]", opts).indexOf("<mode-on/>") === -1 ? "no <mode-on/> in the XML"
+       : G.toHGML("[on]", opts).indexOf("[on[/on]") === -1 ? "no [on in the burn"
+       : !(oneGap.length === 1 && oneGap[0].sev === "note" && oneGap[0].at && oneGap[0].at.s === 0 && oneGap[0].at.e === 4) ? "the note: " + JSON.stringify(oneGap)
+       : null);
+
+  const STRAY = ["[on]", "[on]x", "[ctx[on]]", "[ctx'x'][on]", "[on];", "r- [on]", "[off]a[on][on]b"];
+  const lost = STRAY.filter(s => count(G.toXML(s, opts), "<mode-on/>") !== 1 || codes(s).filter(c => c === "UnmatchedOnMode").length !== 1);
+  ok("MO-02", "every stray [on] reaches <mode-on/> with one note", lost.length ? "lost in " + lost.join(", ") : null);
+
+  ok("MO-03", "the [on] that closes a region is not the command",
+     G.toXML("[off]a[on]b", opts).indexOf("mode-on") === -1 && codes("[off]a[on]b").indexOf("UnmatchedOnMode") === -1 ? null
+       : "the closing [on] became a command");
+
+  const trips = ["[on]", "[on", "[modeon]", "[off]a[on][on]b"].filter(s => !same(s) || !sameAst(s));
+  ok("MO-04", "a stray [on], [on and [modeon] come back to the same XML, both ways",
+     trips.length ? "lost on the way back: " + trips.join(", ") : null);
+
+  ok("MO-05", "a chain before a stray [on] does not dangle",
+     codes("[ctx-[on]]").indexOf("DanglingChain") === -1 ? null : "[ctx-[on]] is a DanglingChain");
+
+  const eof = ["[off]", "[ctx'x'][off]"].filter(s => codes(s).indexOf("UnclosedOffMode") === -1 || G.toXML(s, opts).indexOf("<off></off>") === -1);
+  ok("MO-06", "an [off] at the end raises UnclosedOffMode and leaves its empty region",
+     eof.length ? "silent in " + eof.join(", ") : null);
+
+  const empty = ["[off]", "[off][on]", "[off] "].filter(s => !same(s));
+  ok("MO-07", "an empty region comes back", empty.length ? "lost on the way back: " + empty.join(", ") : null);
+
+  const loose = ["off", "on", "OFF", "[ctx off]"].filter(s => codes(s).indexOf("LooseCommandWord") === -1);
+  ok("MO-08", "the bare words off and on ask like every known name", loose.length ? "silent: " + loose.join(", ") : null);
+
+  const sw = ["[off", "[off;[ctx'a']", "[ctx'a'],[off"].filter(s => { const [x, b] = back(s); return /\[off\]/.test(b) || G.toXML(b, opts) !== x; });
+  ok("MO-09", "the empty command OFF comes back as [modeoff], never as the switch",
+     sw.length ? "came back as the switch: " + sw.join(", ") : null);
+
+  const cmd = ["[on'x']", "[off'x']", "[ctx-on]"].filter(s => !/mode-o(n|ff)/.test(G.toXML(s, opts)) || !same(s));
+  ok("MO-10", "the mode words with an operand or as a link keep their element both ways",
+     cmd.length ? "lost: " + cmd.join(", ") : null);
+
+  return D.length;
+}
+const rMO = runModeWordChecks();
+
 
 /* ------------------------------------------------------------------ *
  * o bundle da Ordem -- ORD-0001, numerado como um ADR
@@ -3572,14 +3649,15 @@ console.log(" snapshot     " + rSN + "/4");
 console.log(" app          " + String(rAP).padStart(4) + "/3");
 console.log(" cli          " + String(rCL).padStart(4) + "/3");
 console.log(" diag wording " + String(rDG).padStart(4) + "/3");
-console.log(" spellings    " + String(rSP).padStart(4) + "/3");
+console.log(" spellings    " + String(rSP).padStart(4) + "/4");
 console.log(" raw fence    " + String(rRW).padStart(4) + "/5");
-console.log(" literal role " + String(rRO).padStart(4) + "/5");
-console.log(" bindings     " + String(rBD).padStart(4) + "/6");
+console.log(" literal role " + String(rRO).padStart(4) + "/9");
+console.log(" bindings     " + String(rBD).padStart(4) + "/10");
 console.log(" suggest      " + String(rSG).padStart(4) + "/4");
 console.log(" aspas        " + String(rQT).padStart(4) + "/3");
 console.log(" param template" + String(rTP).padStart(4) + "/4");
-console.log(" imperativo   " + String(rIM).padStart(4) + "/5");
+console.log(" imperativo   " + String(rIM).padStart(4) + "/10");
+console.log(" mode words   " + String(rMO).padStart(4) + "/10");
 console.log(" bundle ORD   " + String(rZP).padStart(4) + "/16");
 console.log(" global store " + rGS + "/3");
 console.log(" context      " + rCX + "/3");

@@ -232,7 +232,14 @@ export function emit(root, startDepth, L, opts) {
       continue;
     }
     if (nd.text) { L.push(pad(d) + "<off>" + xesc(nd.v) + "</off>"); continue; }
-    if (nd.mode) { pushKids(nd.children || [], d); continue; }
+    /* one `[off]` region, one <off> (XML_REFERENCE §4): its prose is the raw
+       child, and a region with none — `[off][on]`, or `[off]` ending the
+       source — is the element with nothing in it, as `[off] [on]` already is */
+    if (nd.mode) {
+      if ((nd.children || []).length) pushKids(nd.children, d);
+      else L.push(pad(d) + "<off></off>");
+      continue;
+    }
     /* verbatim: the body is text, and the element carries no children */
     if (nd.rawFence) { L.push(pad(d) + "<raw>" + xesc(nd.v || "") + "</raw>"); continue; }
     if (nd.logic) { emitLogic(nd.logic, d, L); continue; }

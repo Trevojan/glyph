@@ -15,7 +15,7 @@
  */
 
 import { LIMITS, esc, walk, stripTags, valueChildren } from "./util.js";
-import { INSTR, PTBR, EDITORIAL_ONLY, ALIAS, STRUCT, META, EMO, SESSION, FRAMES, NAMED_STRUCT, SLOTS, GLOSS_REVERSE, formerElement } from "./vocabulary.js";
+import { INSTR, PTBR, EDITORIAL_ONLY, ALIAS, STRUCT, META, MODE, EMO, SESSION, FRAMES, NAMED_STRUCT, SLOTS, GLOSS_REVERSE, formerElement } from "./vocabulary.js";
 import { templateRegistry, expansionRegistry, entryOf } from "./stores.js";
 import { tokenize, classify, suggest } from "./lexer.js";
 import { parseLogic } from "./logic.js";
@@ -75,8 +75,14 @@ export function parse(input, opts) {
   for (var i = 0; i < tokens.length; i++) {
     var tk = tokens[i];
 
-    if (tk.k === "open" || tk.k === "bareTag") {
-      var cl = classify(tk.v, opts);
+    /* `[on]` with no `[off]` open is the command ON written closed: the same
+       node `[on` and `]` make, and the spelling fromXML writes <mode-on/> as.
+       Its use is the marker itself — interpretation is on from here — and it
+       reaches every projection; the note names that nothing was off. */
+    var strayOn = tk.k === "mode" && !!tk.stray;
+    if (tk.k === "open" || tk.k === "bareTag" || strayOn) {
+      var cmdName = strayOn ? "on" : tk.v;
+      var cl = classify(cmdName, opts);
       var parentNode = top();
       var inPH = !!(parentNode && parentNode.canonical === "PH");
       if (tk.k === "open" && !tk.v)
@@ -89,7 +95,7 @@ export function parse(input, opts) {
          and no chain attribute can reach a <needs slot="…">. */
       var isSlotName = inPH && tk.k === "bareTag";
       var nd = {
-        id:++uid, raw:tk.v, tier:cl.tier, canonical:cl.canonical, gloss:cl.gloss,
+        id:++uid, raw:cmdName, tier:cl.tier, canonical:cl.canonical, gloss:cl.gloss,
         alias:!!cl.alias, children:[], emotions:[], colon:null, autoClosed:false, tok:tk,
         editorial:!!EDITORIAL_ONLY[cl.canonical],
         /* which operator produced the edge to this node's parent */
@@ -116,7 +122,7 @@ export function parse(input, opts) {
           "does not exist", "<code>[" + esc(tk.v) + "</code> is outside the vocabulary." + (sg ? " → <code>[" + sg.name.toLowerCase() + "</code>" + (INSTR[sg.name] ? " (" + INSTR[sg.name] + ")" : "") + "?" : " See the table."));
       }
       /* a retired element name is read, and named */
-      var was = formerElement(tk.v);
+      var was = formerElement(cmdName);
       if (was && GLOSS_REVERSE[was] && cl.canonical === GLOSS_REVERSE[was].canonical) {
         var now = cl.canonical.toLowerCase();
         G("note", "grafia antiga",
@@ -126,6 +132,15 @@ export function parse(input, opts) {
       }
       attach(nd);
       if (tk.k === "open") stack.push(nd);
+      if (strayOn) {
+        seg.pendingMode = null;
+        G("note", "modo texto",
+          "<code>[on]</code> sem <code>[off]</code> aberto antes: nada estava desligado. " +
+          "Fica como o comando <code>&lt;mode-on/&gt;</code>.", "UnmatchedOnMode",
+          "text mode",
+          "<code>[on]</code> with no <code>[off]</code> open before it: nothing was off. " +
+          "It stays as the command <code>&lt;mode-on/&gt;</code>.", tk);
+      }
       pendingOrigin = null;
       continue;
     }
@@ -270,7 +285,8 @@ export function parse(input, opts) {
       case "extend": {
         pendingOrigin = "extend";
         var nx2 = tokens[i+1];
-        if (!nx2 || (nx2.k !== "open" && nx2.k !== "bareTag" && nx2.k !== "literal" && nx2.k !== "text"))
+        if (!nx2 || (nx2.k !== "open" && nx2.k !== "bareTag" && nx2.k !== "literal" && nx2.k !== "text" &&
+                     !(nx2.k === "mode" && nx2.stray)))
           G("fix", "pendurado", "<code>-</code> sem cadeia. Ex.: <code>[rw-cr</code>.", "DanglingChain",
           "dangling", "<code>-</code> with no chain. E.g. <code>[rw-cr</code>.");
         break;
@@ -363,7 +379,7 @@ export function parse(input, opts) {
            at all. */
         else if (/^[A-Za-z][A-Za-z0-9_.]*$/.test(v)) {
           var uw = v.toUpperCase(), lw = v.toLowerCase();
-          var known = INSTR[uw] || ALIAS[uw] || STRUCT[uw] || META[uw] ||
+          var known = INSTR[uw] || ALIAS[uw] || STRUCT[uw] || META[uw] || MODE[uw] ||
                       (opts.session !== false && SESSION[lw]);
           if (known)
             G("ask", "comando solto",
