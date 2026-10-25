@@ -1,0 +1,42 @@
+{
+  "_about": "Registro do trabalho dos agentes: o primeiro relance ao voltar a este repositorio. Aponta, nunca copia.",
+  "schema": 1,
+  "updated": "2026-10-25",
+  "items": [
+    {
+      "id": "EMS-002-INCLUSION",
+      "title": "um comando conhecido nunca some: as 14 posições medidas",
+      "state": "backlog",
+      "who": "DV",
+      "since": "2026-10-25",
+      "source": ".guidelines/.decisions/README.md#2026-10-25",
+      "next": "o mapa de cada posição para a regra corrente que a acolhe, num intake; depois uma ORD por regra"
+    },
+    {
+      "id": "EMS-002-MOOD-TEMPLATE",
+      "title": "um humor dentro de um template, só no Rust",
+      "state": "backlog",
+      "who": "DV",
+      "since": "2026-10-25",
+      "source": ".guidelines/.decisions/README.md#2026-10-25"
+    },
+    {
+      "id": "VERSION-BATCH",
+      "title": "a versão se move uma vez quando o lote das que movem o emitido fecha",
+      "state": "backlog",
+      "who": "DV",
+      "since": "2026-10-25",
+      "source": ".guidelines/.decisions/README.md#2026-10-25",
+      "next": "depois da inclusão e do humor no template; cada dígito pela maior mudança do lote, pela tabela do .changelog"
+    },
+    {
+      "id": "EMS-001-ORD-0013",
+      "title": "o instalador",
+      "state": "blocked",
+      "who": "DV",
+      "since": "2026-09-27",
+      "blocked_by": "o Regente e uma máquina Windows limpa; sob a ADR B leva node ou um segundo protocolo",
+      "source": ".guidelines/.plan/README.md#5-o-glyph-em-rust--a-série-ems-001"
+    }
+  ]
+}
