@@ -97,7 +97,7 @@ fn every_round_trip_the_suite_runs_equals_the_js() {
                 };
                 let o = opts(&ctx, flags);
                 let out = to_hgml(t.s("src"), &BurnOpts { parse: &o, keep_text: false }).unwrap_or_else(|e| panic!("#{n}: {e:?}"));
-                assert_eq!(out, t.s("out"), "#{n}: the burn");
+                assert_eq!(oracle::known::semicolons(&out), t.s("out"), "#{n}: the burn");
                 let fix = match parse(&out, &o) {
                     Ok(p) => Json::Arr(p.gaps.iter().filter(|g| g.sev == "fix").map(|g| Json::Str(g.code.clone())).collect()),
                     Err(Thrown(m)) => Json::Obj(vec![("thrown".into(), Json::Str(m))]),

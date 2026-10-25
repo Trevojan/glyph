@@ -124,7 +124,9 @@ survived in `glyph-grammar.ebnf` and was corrected alongside it.
 slots** — each becomes a `<needs>`.
 
 `;;` **also closes**, and additionally marks the break: the `<break/>` lands
-between the block it ends and the next one. Until 2026-09-05 it closed
+between the block it ends and the next one, and in the Rust's burn the line
+`;;` stands between the two blocks where `;` writes a blank line — the JS
+writes the blank line for both until it leaves (O4, 2026-10-25). Until 2026-09-05 it closed
 *nothing* and only split the reply, warning with `LinebreakInsideBlock` — and
 measured, that design did not hold: everything fell into one `<block>`, the
 `<break/>` landed *after* it instead of between, the way back rewrote `;;` at
