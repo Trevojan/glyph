@@ -277,7 +277,7 @@ const LONG = [
     src:"[ins".repeat(400) + ";", maxXmlBytes:40000 },
   { id:"L-04", name:"r- block preserves the content, not just the summary",
     src:"r-[tgt`user command blocks`[skep[crit-[scru",
-    xml:["<user-input>user command blocks</user-input>", 'expects="target,skeptic,criticise,scrutinise"'] },
+    xml:["<user-input>user command blocks</user-input>", 'expects="target,sceptic,criticise,scrutinise"'] },
   { id:"L-05", name:"deep nesting gets flagged",
     src:"[ins".repeat(12) + ";", code:"DeepNesting" },
   { id:"L-06", name:"`;` closing a lot at once gets flagged",
@@ -2177,7 +2177,7 @@ function runSnapshotChecks() {
       "[sum'toString'[ctx]]", "[sum'__proto__'[ctx]]", "[sum'two words'[ctx]]", "[sum[ctx]'late']", "[sum'x'-ctx]",
       "[xyzzy]", "[summ]", "[constructor]", "[__proto__'x']", "[pos[constructor]]", "[rw-cr-ctx]", "[a-b,c]",
       "[ctx[--germinate'x']]", "[mand'x'][opt'x']", "[ctx'x'][ctx'y'];[ctx]", "[CTX'Upper']", "[cx'alias']",
-      "[heavyreview]", "[ctx`x`'y'[sum]'z']", "[ctx]]", "[--t'a'", "[ctx[--t]]]"
+      "[heavyreview]", "[ctx`x`'y'[sum]'z']", "[ctx]]", "[--t'a'", "[ctx[--t]]]", "[skeptic'x']", "[sceptic'x']"
     ];
     const NO_SESSION = ["constructor", "[constructor]", "rd", "[ctx] prose ist"];
     const NO_VALENCY = ["[gt'a']", "[ctx]", "[cat'a']"];
@@ -2632,6 +2632,17 @@ function runSpellingChecks() {
   ok("SP-03", "a hyphenated element name does not become one command",
      chained && chained.canonical === "INSTOF"
        ? "[instead-of] now parses as INSTOF; the hyphen is the chain operator and must stay one"
+       : null);
+
+  /* SP-04 — a retired element name is still read, both ways, and named (O10) */
+  const wrote = G.parse("[skeptic'x']", opts);
+  const fwd = wrote.segments[0] && wrote.segments[0].children[0];
+  const back = G.fromXML(G.toXML("[skep'x']", opts).replace(/sceptic>/g, "skeptic>"), opts);
+  ok("SP-04", "[skeptic and <skeptic> still read as SKEP, each with a note naming sceptic",
+     !fwd || fwd.canonical !== "SKEP" ? "[skeptic no longer reads as SKEP"
+       : !wrote.gaps.some(g => g.sev === "note" && g.code === "FormerElementName") ? "[skeptic reads, but nothing names [sceptic"
+       : !/^\[skep'x'\]$/.test(back.src) ? "<skeptic> came back as " + JSON.stringify(back.src)
+       : !back.diag.some(d => d.sev === "note" && d.code === "XmlFormerElement") ? "<skeptic> reads, but nothing names <sceptic>"
        : null);
 
   return D.length;

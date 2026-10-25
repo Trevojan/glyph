@@ -13,7 +13,7 @@
  */
 
 import { esc } from "./util.js";
-import { SESSION, GLOSS_REVERSE, EMO_REVERSE } from "./vocabulary.js";
+import { SESSION, GLOSS_REVERSE, EMO_REVERSE, FORMER_ELEMENT } from "./vocabulary.js";
 import { VERSION } from "./version.js";
 
 /* ======================================================
@@ -258,6 +258,13 @@ export function fromXmlNode(el, diag) {
   }
 
   var hit = GLOSS_REVERSE[tag];
+  /* a retired element name is read, and named */
+  if (!hit && Object.prototype.hasOwnProperty.call(FORMER_ELEMENT, tag)) {
+    hit = GLOSS_REVERSE[FORMER_ELEMENT[tag]];
+    diag.push({ sev:"note", code:"XmlFormerElement",
+      msg:"<code>&lt;" + esc(tag) + "&gt;</code> is the former name of <code>&lt;" + FORMER_ELEMENT[tag] + "&gt;</code> — " +
+          "lido como <code>[" + hit.canonical.toLowerCase() + "</code>." });
+  }
   var name = hit ? hit.canonical.toLowerCase() : (SESSION[tag] ? tag : null);
   if (!name) {
     diag.push({ sev:"note", code:"XmlUnknownElement",

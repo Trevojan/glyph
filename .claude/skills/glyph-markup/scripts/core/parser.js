@@ -15,7 +15,7 @@
  */
 
 import { LIMITS, esc, walk, stripTags, valueChildren } from "./util.js";
-import { INSTR, PTBR, EDITORIAL_ONLY, ALIAS, STRUCT, META, EMO, SESSION, FRAMES, NAMED_STRUCT, SLOTS } from "./vocabulary.js";
+import { INSTR, PTBR, EDITORIAL_ONLY, ALIAS, STRUCT, META, EMO, SESSION, FRAMES, NAMED_STRUCT, SLOTS, GLOSS_REVERSE, formerElement } from "./vocabulary.js";
 import { templateRegistry, expansionRegistry, entryOf } from "./stores.js";
 import { tokenize, classify, suggest } from "./lexer.js";
 import { parseLogic } from "./logic.js";
@@ -114,6 +114,15 @@ export function parse(input, opts) {
           (sg ? " → <code>[" + sg.name.toLowerCase() + "</code>" +
                 (PTBR[sg.name] ? " (" + PTBR[sg.name] + ")" : "") + "?" : " Veja a tabela."), "UnknownCommand",
           "does not exist", "<code>[" + esc(tk.v) + "</code> is outside the vocabulary." + (sg ? " → <code>[" + sg.name.toLowerCase() + "</code>" + (INSTR[sg.name] ? " (" + INSTR[sg.name] + ")" : "") + "?" : " See the table."));
+      }
+      /* a retired element name is read, and named */
+      var was = formerElement(tk.v);
+      if (was && GLOSS_REVERSE[was] && cl.canonical === GLOSS_REVERSE[was].canonical) {
+        var now = cl.canonical.toLowerCase();
+        G("note", "grafia antiga",
+          "<code>[" + esc(tk.v) + "</code> é a grafia antiga de <code>[" + was + "</code>, e é lido como <code>[" + now + "</code>.",
+          "FormerElementName", "former spelling",
+          "<code>[" + esc(tk.v) + "</code> is the former spelling of <code>[" + was + "</code>, and reads as <code>[" + now + "</code>.");
       }
       attach(nd);
       if (tk.k === "open") stack.push(nd);

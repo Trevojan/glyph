@@ -846,7 +846,7 @@
       "species": "atom",
       "depth": 0,
       "def": "Takes a sceptical stance towards a proposition.",
-      "element": "skeptic"
+      "element": "sceptic"
     },
     "DIST": {
       "species": "atom",

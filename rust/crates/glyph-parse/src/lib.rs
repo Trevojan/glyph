@@ -25,7 +25,7 @@ use glyph_json::Json;
 use glyph_templates::{check_template_constraints, expand_invocations, Parsed, SubParse};
 use glyph_util::tree::{strip_tags, Diag, Emotion, Gloss, Id, Node, Segment, Span, Suggestion, Thrown, Tree, LIMITS};
 use glyph_util::{esc, inherited};
-use glyph_vocab::{derived, get, ALIAS, EDITORIAL_ONLY, EMO, FRAMES, INSTR, META, NAMED_STRUCT, SESSION, SLOTS, STRUCT};
+use glyph_vocab::{derived, former_element, get, ALIAS, EDITORIAL_ONLY, EMO, FRAMES, INSTR, META, NAMED_STRUCT, SESSION, SLOTS, STRUCT};
 use std::sync::Arc;
 
 /// What the parser carries beyond the shared node: the Logic a `[logic]`
@@ -267,6 +267,16 @@ impl State<'_, '_> {
             nd.suggestion = Some(sg.map(|s| Suggestion { name: s.name.into(), how: s.how.into() }));
             self.fix("não existe", format!("<code>[{}</code> fora do vocabulário.{pt}", esc(v)), "UnknownCommand",
                      "does not exist", format!("<code>[{}</code> is outside the vocabulary.{en}", esc(v)));
+        }
+        /* a retired element name is read, and named */
+        if let Some(was) = former_element(v)
+            && derived().gloss_reverse.iter().any(|(k, hit)| k == was && hit.canonical == cl.canonical)
+        {
+            let now = cl.canonical.to_lowercase();
+            self.g(Diag::new("note", "grafia antiga",
+                             format!("<code>[{}</code> é a grafia antiga de <code>[{was}</code>, e é lido como <code>[{now}</code>.", esc(v)),
+                             "FormerElementName")
+                .en("former spelling", format!("<code>[{}</code> is the former spelling of <code>[{was}</code>, and reads as <code>[{now}</code>.", esc(v))));
         }
         let id = self.add(nd);
         self.attach(id);
