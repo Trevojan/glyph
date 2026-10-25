@@ -68,7 +68,7 @@ fn the_hgml_digest_of_every_case_equals_the_snapshot() {
 fn every_burn_equals_the_js() {
     let runs = module("hgml").a("runs");
     assert!(runs.len() > 114, "hgml.json holds {} runs — write it again: {}", runs.len(), oracle::WRITE_IT);
-    let (mut n, mut thrown, mut undone) = (0, 0, 0);
+    let (mut n, mut thrown, mut undone, mut moods) = (0, 0, 0, 0);
     for run in runs {
         let (id, src) = (run.s("id"), run.s("src"));
         let ctx = context(run);
@@ -84,15 +84,24 @@ fn every_burn_equals_the_js() {
                     undone += usize::from(back != got);
                     assert_eq!(back, *w, "{id} {k}: the burn");
                 }
-                w => {
-                    assert_eq!(got.err(), Some(Thrown(w.s("thrown").to_string())), "{id} {k}: what toHGML throws");
-                    thrown += 1;
-                }
+                w => match oracle::known::template_mood(src, "hgml", k) {
+                    /* the JS throws, and the Rust answers the document (2026-10-25) */
+                    Some(decided) => {
+                        assert_eq!(w.s("thrown"), oracle::known::template_mood_js(), "{id} {k}: the JS throws something else");
+                        assert_eq!(got.unwrap_or_else(|e| panic!("{id} {k}: the port throws a named source: {e:?}")), decided.str().expect("the burn"), "{id} {k}: the burn");
+                        moods += 1;
+                    }
+                    None => {
+                        assert_eq!(got.err(), Some(Thrown(w.s("thrown").to_string())), "{id} {k}: what toHGML throws");
+                        thrown += 1;
+                    }
+                },
             }
             n += 1;
         }
     }
     /* the known difference is reached, so the undo is not undoing nothing */
     assert!(undone > 0, "no burn in hgml.json writes `;;` between two blocks");
+    assert_eq!(moods, 2 * oracle::known::template_mood_sources(), "a source named for the template mood is not in hgml.json");
     println!("{} runs, {n} burns, {thrown} throws, {undone} with `;;` between blocks (O4)", runs.len());
 }

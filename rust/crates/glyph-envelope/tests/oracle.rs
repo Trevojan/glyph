@@ -82,7 +82,7 @@ fn the_ast_digest_of_every_case_equals_the_snapshot() {
 fn every_envelope_equals_the_js() {
     let runs = module("ast").a("runs");
     assert!(runs.len() > 114, "ast.json holds {} runs — write it again: {}", runs.len(), oracle::WRITE_IT);
-    let (mut n, mut thrown, mut named) = (0, 0, 0);
+    let (mut n, mut thrown, mut named, mut moods) = (0, 0, 0, 0);
     for run in runs {
         let (id, src) = (run.s("id"), run.s("src"));
         let ctx = context(run);
@@ -98,10 +98,18 @@ fn every_envelope_equals_the_js() {
             let o = Opts { ctx: &ctx, session, valency, en, expanding: Vec::new(), registered: glyph_stores::Registered::none() };
             let got = to_ast(src, &o, &a);
             match want.get("thrown") {
-                Some(t) => {
-                    assert_eq!(got.err(), Some(Thrown(t.str().expect("a message").to_string())), "{id} {k}: what toAST throws");
-                    thrown += 1;
-                }
+                Some(t) => match oracle::known::template_mood(src, "ast", k) {
+                    /* the JS throws, and the Rust answers the document (2026-10-25) */
+                    Some(decided) => {
+                        assert_eq!(t.str(), Some(oracle::known::template_mood_js()), "{id} {k}: the JS throws something else");
+                        assert_eq!(got.unwrap_or_else(|e| panic!("{id} {k}: the port throws a named source: {e:?}")), decided, "{id} {k}: the envelope");
+                        moods += 1;
+                    }
+                    None => {
+                        assert_eq!(got.err(), Some(Thrown(t.str().expect("a message").to_string())), "{id} {k}: what toAST throws");
+                        thrown += 1;
+                    }
+                },
                 None => {
                     /* a probe O4's third residual reaches carries the diagnostics
                        the decision gives it, and the JS's envelope must differ */
@@ -120,5 +128,6 @@ fn every_envelope_equals_the_js() {
         }
     }
     assert!(named > 0, "no envelope in ast.json reaches O4's third residual");
+    assert_eq!(moods, 4 * oracle::known::template_mood_sources(), "a source named for the template mood is not in ast.json");
     println!("{} runs, {n} envelopes, {thrown} throws, {named} named for O4", runs.len());
 }

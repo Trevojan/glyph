@@ -63,7 +63,7 @@ fn the_xml_of_every_case_equals_the_oracle() {
 fn every_xml_run_equals_the_js() {
     let runs = module("xml").a("runs");
     assert!(runs.len() > 114, "xml.json holds {} runs — write it again: {}", runs.len(), oracle::WRITE_IT);
-    let (mut bytes, mut thrown) = (0, 0);
+    let (mut bytes, mut thrown, mut moods) = (0, 0, 0);
     for run in runs {
         let (id, src) = (run.s("id"), run.s("src"));
         let ctx = context(run);
@@ -78,12 +78,21 @@ fn every_xml_run_equals_the_js() {
                     assert_eq!(got.as_deref().map_err(|e| e.clone()), Ok(want.as_str()), "{id} {k}");
                     bytes += want.len();
                 }
-                want => {
-                    assert_eq!(got.err(), Some(Thrown(want.s("thrown").to_string())), "{id} {k}: what toXML throws");
-                    thrown += 1;
-                }
+                want => match oracle::known::template_mood(src, "xml", k) {
+                    /* the JS throws, and the Rust answers the document (2026-10-25) */
+                    Some(decided) => {
+                        assert_eq!(want.s("thrown"), oracle::known::template_mood_js(), "{id} {k}: the JS throws something else");
+                        assert_eq!(got.map_err(|e| e.clone()), Ok(decided.str().expect("the XML").to_string()), "{id} {k}");
+                        moods += 1;
+                    }
+                    None => {
+                        assert_eq!(got.err(), Some(Thrown(want.s("thrown").to_string())), "{id} {k}: what toXML throws");
+                        thrown += 1;
+                    }
+                },
             }
         }
     }
+    assert_eq!(moods, 2 * oracle::known::template_mood_sources(), "a source named for the template mood is not in xml.json");
     println!("{} runs, {bytes} bytes of XML, {thrown} throws", runs.len());
 }

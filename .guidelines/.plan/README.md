@@ -119,13 +119,14 @@ Decidíveis hoje, sem mecanismo novo:
 realmente escreveu (§0 do `COMPILER_LESSONS.md`). Precisa de **filtro
 semântico** — categoria, espécie, tabela de composição — não de limiar melhor.
 
-### 3. Quatro defeitos medidos: o que foi consertado nos dois motores, e o que o Rust conserta
+### 3. Cinco defeitos medidos: o que foi consertado nos dois motores, e o que o Rust conserta
 
 | | estado |
 |---|---|
 | `;;` | consertado nos dois motores em 2026-09-06 (`1342488`): `[nt'a'];;[nt'b']` vai e volta exato, o `<break/>` entre os blocos. Na queima do Rust, `;;` é a linha `;;` entre os blocos desde a `EMS-002/ORD-0019`; a do JS dá a mesma linha em branco para `;;` e `;` até sair, e os testes do oráculo nomeiam a diferença. |
 | `;` dentro de literal | consertado nos dois motores em 2026-09-06 (`f6d07ae`): dentro de um literal, só a aspa que o abriu o fecha. No lexer do Rust, só a aspa que abriu um literal o fecha, também na quebra de linha, desde a `EMS-002/ORD-0020`; o do JS encerra o apóstrofo na quebra de linha até sair, e o teste do oráculo nomeia a diferença. |
 | param de template nu | o deslize é recusado desde 2026-09-06 (`03aedad`): um parâmetro que não é literal antes de um literal é `fix` `TemplateParamNotLiteral`. **Resta:** a palavra nua sem literal depois (`[--germinate a,b]`) cai como `<off>` com `PlaceholderPending` ×2, e a mensagem chama a palavra nua de `[?`, no JS até sair; no Rust, desde a `EMS-002/ORD-0021`, a palavra nua numa posição de parâmetro dá `fix` `TemplateParamNotLiteral` que a nomeia e mostra a forma entre aspas, a opção (a) do [§3 das perguntas](PERGUNTAS-ABERTAS.md), e os testes do oráculo nomeiam a diferença. |
+| humor dentro de um template | `/eth/` cujo comando aberto mais interno é um template: o JS lança `TypeError` (`parser.js:263`, o nó de template não tem lista de humores) até sair; o Rust responde com o documento — o humor colore a seção, primeiro no bloco — desde a `EMS-002/ORD-0023`, e os testes do oráculo nomeiam a diferença com os bytes em `rust/testkit/known/template-moods.json`. |
 | o `toXML` do JS **cresce com o quadrado das linhas** | L-03, L-02 e L-01 levam 23 ms, 0,44 s e 6,2 s; 84% do L-02 é a passada estrutural (`packageSpan`, `packageIndent` e o seu `^ +`). O port em Rust lê cada linha uma vez e faz o L-01 em 0,13 s. Fixado por decisão (pergunta 13 do [retorno](../.orders/EMS-001/RETURN.md)): o JS não é consertado, e as fontes longas vão pelo Rust |
 
 ### 5. O Glyph em Rust — a série EMS-001

@@ -1,7 +1,7 @@
 {
   "note": "written by glyph-vpath build, EMS-002; never edited by hand",
   "depth": 2,
-  "next": 2579,
+  "next": 2580,
   "files": {
     ".guidelines/.changelog/README.md": {
       "nodes": [
@@ -2784,16 +2784,16 @@
     },
     ".guidelines/.plan/README.md": {
       "nodes": [
-        ["n1142", "", 0, 13808, 1, 200, "384f7f06e950d000", "", ""],
-        ["n1143", "plano--o-que-vem-a-seguir", 0, 13808, 1, 200, "384f7f06e950d000", "0f7e92fcb1553e80", "n1142"],
-        ["n1144", "autorizado-pelo-regente-ainda-não-construído", 217, 11596, 7, 171, "34bf7b40e6ea2e40", "bb4be8300936bc00", "n1143"],
+        ["n1142", "", 0, 14211, 1, 201, "6e3046c4c96ed600", "", ""],
+        ["n1143", "plano--o-que-vem-a-seguir", 0, 14211, 1, 201, "6e3046c4c96ed600", "93772eceac6efb00", "n1142"],
+        ["n1144", "autorizado-pelo-regente-ainda-não-construído", 217, 11999, 7, 172, "23db8b82e8f88f40", "25245ce8315c1400", "n1143"],
         ["n1870", "0-caminhos-virtuais--guidelinesshortcutsvirtual--construído-as-sete-camadas-pela-ems-002", 269, 5363, 9, 81, "da71f09e759c7600", "cb44836834464e80", "n1144"],
         ["n1146", "1-section-de-cabeçalho-irmã-do-schema--decidido-faltando-fazer", 5363, 6025, 90, 13, "29a759a8aecd1500", "f13677d632797d00", "n1144"],
         ["n1147", "2-gatilhos-de-re-ferência", 6025, 6930, 103, 19, "20d81a5623895800", "b5f416c6e3cdac00", "n1144"],
-        ["n2207", "3-quatro-defeitos-medidos-o-que-foi-consertado-nos-dois-motores-e-o-que-o-rust-conserta", 6930, 8726, 122, 9, "1376f82055b63a00", "e466e9b41ebf1680", "n1144"],
-        ["n1149", "5-o-glyph-em-rust--a-série-ems-001", 8726, 11596, 131, 47, "edff2346c7f87c00", "1c2be3c8f5c09e00", "n1144"],
-        ["n1150", "aberto-esperando-o-regente", 11596, 13126, 178, 11, "7d12d970664cbc00", "05888320d62c0600", "n1143"],
-        ["n1151", "adiado-por-decisão-não-por-esquecimento", 13126, 13808, 189, 12, "110118b8258d7d80", "009590141c1d2c00", "n1143"]
+        ["n2579", "3-cinco-defeitos-medidos-o-que-foi-consertado-nos-dois-motores-e-o-que-o-rust-conserta", 6930, 9129, 122, 10, "be899c38e29b3000", "26df2198549efa00", "n1144"],
+        ["n1149", "5-o-glyph-em-rust--a-série-ems-001", 9129, 11999, 132, 47, "edff2346c7f87c00", "1c2be3c8f5c09e00", "n1144"],
+        ["n1150", "aberto-esperando-o-regente", 11999, 13529, 179, 11, "7d12d970664cbc00", "05888320d62c0600", "n1143"],
+        ["n1151", "adiado-por-decisão-não-por-esquecimento", 13529, 14211, 190, 12, "110118b8258d7d80", "009590141c1d2c00", "n1143"]
       ]
     },
     ".guidelines/.plan/ladder.toml": {
@@ -3562,6 +3562,7 @@
   "aliases": {},
   "recovered": [
     [".guidelines/.plan/README.md#0-caminhos-virtuais--guidelinesshortcutsvirtual--camadas-1-2-4-5-6-e-7-construídas-3-a-seguir", "n1830", "n1870", 81],
-    [".guidelines/.plan/README.md#0-caminhos-virtuais--guidelinesshortcutsvirtual--camadas-1-2-4-5-e-6-construídas-3-e-7-a-seguir", "n1790", "n1870", 64]
+    [".guidelines/.plan/README.md#0-caminhos-virtuais--guidelinesshortcutsvirtual--camadas-1-2-4-5-e-6-construídas-3-e-7-a-seguir", "n1790", "n1870", 64],
+    [".guidelines/.plan/README.md#3-quatro-defeitos-medidos-o-que-foi-consertado-nos-dois-motores-e-o-que-o-rust-conserta", "n2207", "n2579", 85]
   ]
 }

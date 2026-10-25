@@ -1,0 +1,1669 @@
+{
+ "_about": "A mood whose innermost open command is a template (decided 2026-10-25, the Rust only): the JS throws, and the Rust answers the document. These are the bytes each source takes, per oracle module and answer. The JS reference that made them gives the template node an emotions list filled as a command's is, and no projection changes: the XML carries the mood first in the block, the envelope in segment.mood, the burn writes none. The testkit reads them with the oracle's own engine and repository stores in place of the ones written here.",
+ "engine": "3.6.9.07",
+ "js": "Cannot read properties of undefined (reading 'push')",
+ "sources": {
+  "[--t=/eth/]": {
+   "parse": {
+    "tree": {
+     "nodes": [
+      {
+       "origin": "root",
+       "template": "t",
+       "isDef": true,
+       "emotions": [
+        {
+         "name": "eth",
+         "gloss": "enthusiasm",
+         "order": 0
+        }
+       ],
+       "tok": {
+        "k": "tpl",
+        "s": 0,
+        "e": 5
+       },
+       "children": [],
+       "parent": null
+      }
+     ],
+     "segments": [
+      {
+       "children": [
+        0
+       ],
+       "mood": [
+        {
+         "name": "eth",
+         "gloss": "enthusiasm",
+         "order": 0
+        }
+       ],
+       "autoClosed": 0,
+       "breaks": 0,
+       "cause": "eof"
+      }
+     ]
+    },
+    "pt": [
+     {
+      "sev": "fix",
+      "lab": "tpl vazio",
+      "msg": "<code>[--t=</code> sem corpo.",
+      "code": "EmptyTemplateDefinition",
+      "at": null,
+      "plain": "[--t= sem corpo."
+     }
+    ],
+    "en": [
+     {
+      "sev": "fix",
+      "lab": "empty tpl",
+      "msg": "<code>[--t=</code> has no body.",
+      "code": "EmptyTemplateDefinition",
+      "at": null,
+      "plain": "[--t= has no body."
+     }
+    ]
+   },
+   "xml": {
+    "xml": "<glyph-package engine=\"3.6.9.07\">\n  <schema/>\n  <block once=\"true\">\n    <mood dominant=\"enthusiasm\"/>\n    <template name=\"t\" define=\"true\"/>\n  </block>\n</glyph-package>",
+    "describe": "<glyph-package engine=\"3.6.9.07\">\n  <schema/>\n  <block once=\"true\">\n    <mood dominant=\"enthusiasm\"/>\n    <template name=\"t\" define=\"true\"/>\n  </block>\n</glyph-package>"
+   },
+   "ast": {
+    "full": {
+     "type": "GlyphAST",
+     "schema": 2,
+     "version": "3.6.9.07",
+     "source": {
+      "length": 11,
+      "checksum": "ca5955e8ad5c3710",
+      "encoding": "utf-8",
+      "newline": "lf",
+      "uri": null
+     },
+     "stores": {
+      "templates": "7356ea9b88319980",
+      "rules": "767e5432cdc6d400",
+      "expansions": "6862eb9f3b5c18fa"
+     },
+     "projection": "full",
+     "segments": [
+      {
+       "type": "Segment",
+       "mood": [
+        {
+         "name": "eth",
+         "gloss": "enthusiasm",
+         "order": 0
+        }
+       ],
+       "isReturn": false,
+       "continues": false,
+       "breaks": 0,
+       "autoClosedCount": 0,
+       "body": [
+        {
+         "type": "Template",
+         "name": "t",
+         "isDefinition": true,
+         "expanded": false,
+         "at": {
+          "s": 0,
+          "e": 5
+         },
+         "body": []
+        }
+       ]
+      }
+     ],
+     "diagnostics": [
+      {
+       "code": "EmptyTemplateDefinition",
+       "severity": "fix",
+       "label": "empty tpl",
+       "message": "[--t= has no body."
+      }
+     ]
+    },
+    "panel": {
+     "type": "GlyphAST",
+     "schema": 2,
+     "version": "3.6.9.07",
+     "source": {
+      "length": 11,
+      "checksum": "ca5955e8ad5c3710",
+      "encoding": "utf-8",
+      "newline": "lf",
+      "uri": null
+     },
+     "stores": {
+      "templates": "7356ea9b88319980",
+      "rules": "767e5432cdc6d400",
+      "expansions": "6862eb9f3b5c18fa"
+     },
+     "projection": "panel",
+     "segments": [
+      {
+       "type": "Segment",
+       "mood": [
+        {
+         "name": "eth",
+         "gloss": "enthusiasm",
+         "order": 0
+        }
+       ],
+       "breaks": 0,
+       "autoClosedCount": 0,
+       "body": [
+        {
+         "type": "Template",
+         "name": "t",
+         "isDefinition": true,
+         "body": []
+        }
+       ]
+      }
+     ],
+     "diagnostics": [
+      {
+       "code": "EmptyTemplateDefinition",
+       "severity": "fix",
+       "label": "empty tpl",
+       "message": "[--t= has no body."
+      }
+     ]
+    },
+    "pt": {
+     "type": "GlyphAST",
+     "schema": 2,
+     "version": "3.6.9.07",
+     "source": {
+      "length": 11,
+      "checksum": "ca5955e8ad5c3710",
+      "encoding": "utf-8",
+      "newline": "lf",
+      "uri": null
+     },
+     "stores": {
+      "templates": "7356ea9b88319980",
+      "rules": "767e5432cdc6d400",
+      "expansions": "6862eb9f3b5c18fa"
+     },
+     "projection": "full",
+     "segments": [
+      {
+       "type": "Segment",
+       "mood": [
+        {
+         "name": "eth",
+         "gloss": "enthusiasm",
+         "order": 0
+        }
+       ],
+       "isReturn": false,
+       "continues": false,
+       "breaks": 0,
+       "autoClosedCount": 0,
+       "body": [
+        {
+         "type": "Template",
+         "name": "t",
+         "isDefinition": true,
+         "expanded": false,
+         "at": {
+          "s": 0,
+          "e": 5
+         },
+         "body": []
+        }
+       ]
+      }
+     ],
+     "diagnostics": [
+      {
+       "code": "EmptyTemplateDefinition",
+       "severity": "fix",
+       "label": "tpl vazio",
+       "message": "[--t= sem corpo."
+      }
+     ]
+    },
+    "embed": {
+     "type": "GlyphAST",
+     "schema": 2,
+     "version": "3.6.9.07",
+     "source": {
+      "length": 11,
+      "checksum": "ca5955e8ad5c3710",
+      "encoding": "utf-8",
+      "newline": "lf",
+      "uri": "file:///x.pgml",
+      "text": "[--t=/eth/]"
+     },
+     "stores": {
+      "templates": "7356ea9b88319980",
+      "rules": "767e5432cdc6d400",
+      "expansions": "6862eb9f3b5c18fa"
+     },
+     "projection": "full",
+     "segments": [
+      {
+       "type": "Segment",
+       "mood": [
+        {
+         "name": "eth",
+         "gloss": "enthusiasm",
+         "order": 0
+        }
+       ],
+       "isReturn": false,
+       "continues": false,
+       "breaks": 0,
+       "autoClosedCount": 0,
+       "body": [
+        {
+         "type": "Template",
+         "name": "t",
+         "isDefinition": true,
+         "expanded": false,
+         "at": {
+          "s": 0,
+          "e": 5
+         },
+         "body": []
+        }
+       ]
+      }
+     ],
+     "diagnostics": [
+      {
+       "code": "EmptyTemplateDefinition",
+       "severity": "fix",
+       "label": "empty tpl",
+       "message": "[--t= has no body."
+      }
+     ]
+    }
+   },
+   "hgml": {
+    "hgml": "",
+    "keepText": ""
+   }
+  },
+  "[--zz/eth/]": {
+   "parse": {
+    "tree": {
+     "nodes": [
+      {
+       "origin": "root",
+       "template": "zz",
+       "isDef": false,
+       "emotions": [
+        {
+         "name": "eth",
+         "gloss": "enthusiasm",
+         "order": 0
+        }
+       ],
+       "tok": {
+        "k": "tpl",
+        "s": 0,
+        "e": 5
+       },
+       "children": [],
+       "parent": null
+      }
+     ],
+     "segments": [
+      {
+       "children": [
+        0
+       ],
+       "mood": [
+        {
+         "name": "eth",
+         "gloss": "enthusiasm",
+         "order": 0
+        }
+       ],
+       "autoClosed": 0,
+       "breaks": 0,
+       "cause": "eof"
+      }
+     ]
+    },
+    "pt": [
+     {
+      "sev": "note",
+      "lab": "tpl indefinido",
+      "msg": "<code>[--zz</code> não definido aqui. TPL não persiste entre sessões. Redefina: <code>[--zz=…</code>.",
+      "code": "UndefinedTemplate",
+      "at": null,
+      "plain": "[--zz não definido aqui. TPL não persiste entre sessões. Redefina: [--zz=…."
+     }
+    ],
+    "en": [
+     {
+      "sev": "note",
+      "lab": "tpl undefined",
+      "msg": "<code>[--zz</code> is not defined here. TPL does not persist between sessions. Redefine it: <code>[--zz=…</code>.",
+      "code": "UndefinedTemplate",
+      "at": null,
+      "plain": "[--zz is not defined here. TPL does not persist between sessions. Redefine it: [--zz=…."
+     }
+    ]
+   },
+   "xml": {
+    "xml": "<glyph-package engine=\"3.6.9.07\">\n  <schema/>\n  <block once=\"true\">\n    <mood dominant=\"enthusiasm\"/>\n    <template name=\"zz\"/>\n  </block>\n</glyph-package>",
+    "describe": "<glyph-package engine=\"3.6.9.07\">\n  <schema/>\n  <block once=\"true\">\n    <mood dominant=\"enthusiasm\"/>\n    <template name=\"zz\"/>\n  </block>\n</glyph-package>"
+   },
+   "ast": {
+    "full": {
+     "type": "GlyphAST",
+     "schema": 2,
+     "version": "3.6.9.07",
+     "source": {
+      "length": 11,
+      "checksum": "fbe5f180f12d2c00",
+      "encoding": "utf-8",
+      "newline": "lf",
+      "uri": null
+     },
+     "stores": {
+      "templates": "7356ea9b88319980",
+      "rules": "767e5432cdc6d400",
+      "expansions": "6862eb9f3b5c18fa"
+     },
+     "projection": "full",
+     "segments": [
+      {
+       "type": "Segment",
+       "mood": [
+        {
+         "name": "eth",
+         "gloss": "enthusiasm",
+         "order": 0
+        }
+       ],
+       "isReturn": false,
+       "continues": false,
+       "breaks": 0,
+       "autoClosedCount": 0,
+       "body": [
+        {
+         "type": "Template",
+         "name": "zz",
+         "isDefinition": false,
+         "expanded": false,
+         "at": {
+          "s": 0,
+          "e": 5
+         },
+         "body": []
+        }
+       ]
+      }
+     ],
+     "diagnostics": [
+      {
+       "code": "UndefinedTemplate",
+       "severity": "note",
+       "label": "tpl undefined",
+       "message": "[--zz is not defined here. TPL does not persist between sessions. Redefine it: [--zz=…."
+      }
+     ]
+    },
+    "panel": {
+     "type": "GlyphAST",
+     "schema": 2,
+     "version": "3.6.9.07",
+     "source": {
+      "length": 11,
+      "checksum": "fbe5f180f12d2c00",
+      "encoding": "utf-8",
+      "newline": "lf",
+      "uri": null
+     },
+     "stores": {
+      "templates": "7356ea9b88319980",
+      "rules": "767e5432cdc6d400",
+      "expansions": "6862eb9f3b5c18fa"
+     },
+     "projection": "panel",
+     "segments": [
+      {
+       "type": "Segment",
+       "mood": [
+        {
+         "name": "eth",
+         "gloss": "enthusiasm",
+         "order": 0
+        }
+       ],
+       "breaks": 0,
+       "autoClosedCount": 0,
+       "body": [
+        {
+         "type": "Template",
+         "name": "zz",
+         "body": []
+        }
+       ]
+      }
+     ],
+     "diagnostics": [
+      {
+       "code": "UndefinedTemplate",
+       "severity": "note",
+       "label": "tpl undefined",
+       "message": "[--zz is not defined here. TPL does not persist between sessions. Redefine it: [--zz=…."
+      }
+     ]
+    },
+    "pt": {
+     "type": "GlyphAST",
+     "schema": 2,
+     "version": "3.6.9.07",
+     "source": {
+      "length": 11,
+      "checksum": "fbe5f180f12d2c00",
+      "encoding": "utf-8",
+      "newline": "lf",
+      "uri": null
+     },
+     "stores": {
+      "templates": "7356ea9b88319980",
+      "rules": "767e5432cdc6d400",
+      "expansions": "6862eb9f3b5c18fa"
+     },
+     "projection": "full",
+     "segments": [
+      {
+       "type": "Segment",
+       "mood": [
+        {
+         "name": "eth",
+         "gloss": "enthusiasm",
+         "order": 0
+        }
+       ],
+       "isReturn": false,
+       "continues": false,
+       "breaks": 0,
+       "autoClosedCount": 0,
+       "body": [
+        {
+         "type": "Template",
+         "name": "zz",
+         "isDefinition": false,
+         "expanded": false,
+         "at": {
+          "s": 0,
+          "e": 5
+         },
+         "body": []
+        }
+       ]
+      }
+     ],
+     "diagnostics": [
+      {
+       "code": "UndefinedTemplate",
+       "severity": "note",
+       "label": "tpl indefinido",
+       "message": "[--zz não definido aqui. TPL não persiste entre sessões. Redefina: [--zz=…."
+      }
+     ]
+    },
+    "embed": {
+     "type": "GlyphAST",
+     "schema": 2,
+     "version": "3.6.9.07",
+     "source": {
+      "length": 11,
+      "checksum": "fbe5f180f12d2c00",
+      "encoding": "utf-8",
+      "newline": "lf",
+      "uri": "file:///x.pgml",
+      "text": "[--zz/eth/]"
+     },
+     "stores": {
+      "templates": "7356ea9b88319980",
+      "rules": "767e5432cdc6d400",
+      "expansions": "6862eb9f3b5c18fa"
+     },
+     "projection": "full",
+     "segments": [
+      {
+       "type": "Segment",
+       "mood": [
+        {
+         "name": "eth",
+         "gloss": "enthusiasm",
+         "order": 0
+        }
+       ],
+       "isReturn": false,
+       "continues": false,
+       "breaks": 0,
+       "autoClosedCount": 0,
+       "body": [
+        {
+         "type": "Template",
+         "name": "zz",
+         "isDefinition": false,
+         "expanded": false,
+         "at": {
+          "s": 0,
+          "e": 5
+         },
+         "body": []
+        }
+       ]
+      }
+     ],
+     "diagnostics": [
+      {
+       "code": "UndefinedTemplate",
+       "severity": "note",
+       "label": "tpl undefined",
+       "message": "[--zz is not defined here. TPL does not persist between sessions. Redefine it: [--zz=…."
+      }
+     ]
+    }
+   },
+   "hgml": {
+    "hgml": "",
+    "keepText": ""
+   }
+  },
+  "[--reinforce'a''b'/eth/]": {
+   "parse": {
+    "tree": {
+     "nodes": [
+      {
+       "gloss": "There is a must-follow rule. Raise its precedence and state why it holds, so it survives a long context.",
+       "origin": "root",
+       "template": "reinforce",
+       "isDef": false,
+       "expanded": true,
+       "emotions": [
+        {
+         "name": "eth",
+         "gloss": "enthusiasm",
+         "order": 0
+        }
+       ],
+       "tok": {
+        "k": "tpl",
+        "s": 0,
+        "e": 12
+       },
+       "children": [
+        1,
+        4
+       ],
+       "parent": null
+      },
+      {
+       "id": 1,
+       "raw": "prio",
+       "tier": "instr",
+       "canonical": "PRIO",
+       "gloss": "Priority",
+       "alias": false,
+       "colon": null,
+       "autoClosed": false,
+       "editorial": false,
+       "origin": "root",
+       "chainElement": false,
+       "slotName": false,
+       "depth": 0,
+       "species": "atom",
+       "compositionDepth": 0,
+       "tok": {
+        "k": "open",
+        "s": 0,
+        "e": 5
+       },
+       "children": [
+        2
+       ],
+       "parent": 0
+      },
+      {
+       "id": 2,
+       "raw": "mand",
+       "tier": "instr",
+       "canonical": "MAND",
+       "gloss": "Mandatory",
+       "alias": false,
+       "colon": null,
+       "autoClosed": false,
+       "editorial": false,
+       "origin": "nest",
+       "chainElement": false,
+       "slotName": false,
+       "depth": 1,
+       "species": "atom",
+       "compositionDepth": 0,
+       "tok": {
+        "k": "open",
+        "s": 5,
+        "e": 10
+       },
+       "children": [
+        3
+       ],
+       "parent": 1
+      },
+      {
+       "literal": true,
+       "v": "a",
+       "form": "quote",
+       "boundSlot": "rule",
+       "children": [],
+       "parent": 2
+      },
+      {
+       "id": 5,
+       "raw": "rsn",
+       "tier": "instr",
+       "canonical": "RSN",
+       "gloss": "Reason",
+       "alias": false,
+       "colon": null,
+       "autoClosed": false,
+       "editorial": false,
+       "origin": "root",
+       "chainElement": false,
+       "slotName": false,
+       "depth": 0,
+       "species": "atom",
+       "compositionDepth": 0,
+       "tok": {
+        "k": "open",
+        "s": 53,
+        "e": 57
+       },
+       "children": [
+        5
+       ],
+       "parent": 0
+      },
+      {
+       "literal": true,
+       "v": "b",
+       "form": "quote",
+       "boundSlot": "why",
+       "children": [],
+       "parent": 4
+      }
+     ],
+     "segments": [
+      {
+       "children": [
+        0
+       ],
+       "mood": [
+        {
+         "name": "eth",
+         "gloss": "enthusiasm",
+         "order": 0
+        }
+       ],
+       "autoClosed": 0,
+       "breaks": 0,
+       "cause": "eof"
+      }
+     ]
+    },
+    "pt": [],
+    "en": []
+   },
+   "xml": {
+    "xml": "<glyph-package engine=\"3.6.9.07\">\n  <schema/>\n  <block once=\"true\">\n    <mood dominant=\"enthusiasm\"/>\n    <template name=\"reinforce\" expanded=\"true\" means=\"There is a must-follow rule. Raise its precedence and state why it holds, so it survives a long context.\">\n      <priority imperative=\"true\">\n        <mandatory>\n          <user-input slot=\"rule\">a</user-input>\n        </mandatory>\n      </priority>\n      <reason>\n        <user-input slot=\"why\">b</user-input>\n      </reason>\n    </template>\n  </block>\n</glyph-package>",
+    "describe": "<glyph-package engine=\"3.6.9.07\">\n  <schema/>\n  <block once=\"true\">\n    <mood dominant=\"enthusiasm\"/>\n    <template name=\"reinforce\" expanded=\"true\" means=\"There is a must-follow rule. Raise its precedence and state why it holds, so it survives a long context.\">\n      <priority imperative=\"true\" means=\"Element that takes precedence over others in the context.\">\n        <mandatory means=\"Required, not optional — an obligation on what is produced or done. A demand on what must already exist is REQ.\">\n          <user-input slot=\"rule\">a</user-input>\n        </mandatory>\n      </priority>\n      <reason means=\"The motive underlying a decision.\">\n        <user-input slot=\"why\">b</user-input>\n      </reason>\n    </template>\n  </block>\n</glyph-package>"
+   },
+   "ast": {
+    "full": {
+     "type": "GlyphAST",
+     "schema": 2,
+     "version": "3.6.9.07",
+     "source": {
+      "length": 24,
+      "checksum": "a150d7ab506c0400",
+      "encoding": "utf-8",
+      "newline": "lf",
+      "uri": null
+     },
+     "stores": {
+      "templates": "7356ea9b88319980",
+      "rules": "767e5432cdc6d400",
+      "expansions": "6862eb9f3b5c18fa"
+     },
+     "projection": "full",
+     "segments": [
+      {
+       "type": "Segment",
+       "mood": [
+        {
+         "name": "eth",
+         "gloss": "enthusiasm",
+         "order": 0
+        }
+       ],
+       "isReturn": false,
+       "continues": false,
+       "breaks": 0,
+       "autoClosedCount": 0,
+       "body": [
+        {
+         "type": "Template",
+         "name": "reinforce",
+         "isDefinition": false,
+         "expanded": true,
+         "at": {
+          "s": 0,
+          "e": 12
+         },
+         "body": [
+          {
+           "type": "Command",
+           "raw": "prio",
+           "canonical": "PRIO",
+           "tier": "instr",
+           "gloss": "Priority",
+           "element": "priority",
+           "isAlias": false,
+           "chainElement": false,
+           "origin": "root",
+           "slotName": false,
+           "editorial": false,
+           "name": null,
+           "depth": 0,
+           "autoClosed": false,
+           "suggestion": null,
+           "emotions": [],
+           "species": "atom",
+           "compositionDepth": 0,
+           "at": {
+            "s": 0,
+            "e": 5
+           },
+           "body": [
+            {
+             "type": "Command",
+             "raw": "mand",
+             "canonical": "MAND",
+             "tier": "instr",
+             "gloss": "Mandatory",
+             "element": "mandatory",
+             "isAlias": false,
+             "chainElement": false,
+             "origin": "nest",
+             "slotName": false,
+             "editorial": false,
+             "name": null,
+             "depth": 1,
+             "autoClosed": false,
+             "suggestion": null,
+             "emotions": [],
+             "species": "atom",
+             "compositionDepth": 0,
+             "at": {
+              "s": 5,
+              "e": 10
+             },
+             "body": [
+              {
+               "type": "Literal",
+               "value": "a",
+               "form": "quote",
+               "slot": "rule",
+               "role": null,
+               "at": null
+              }
+             ]
+            }
+           ]
+          },
+          {
+           "type": "Command",
+           "raw": "rsn",
+           "canonical": "RSN",
+           "tier": "instr",
+           "gloss": "Reason",
+           "element": "reason",
+           "isAlias": false,
+           "chainElement": false,
+           "origin": "root",
+           "slotName": false,
+           "editorial": false,
+           "name": null,
+           "depth": 0,
+           "autoClosed": false,
+           "suggestion": null,
+           "emotions": [],
+           "species": "atom",
+           "compositionDepth": 0,
+           "at": {
+            "s": 53,
+            "e": 57
+           },
+           "body": [
+            {
+             "type": "Literal",
+             "value": "b",
+             "form": "quote",
+             "slot": "why",
+             "role": null,
+             "at": null
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "diagnostics": []
+    },
+    "panel": {
+     "type": "GlyphAST",
+     "schema": 2,
+     "version": "3.6.9.07",
+     "source": {
+      "length": 24,
+      "checksum": "a150d7ab506c0400",
+      "encoding": "utf-8",
+      "newline": "lf",
+      "uri": null
+     },
+     "stores": {
+      "templates": "7356ea9b88319980",
+      "rules": "767e5432cdc6d400",
+      "expansions": "6862eb9f3b5c18fa"
+     },
+     "projection": "panel",
+     "segments": [
+      {
+       "type": "Segment",
+       "mood": [
+        {
+         "name": "eth",
+         "gloss": "enthusiasm",
+         "order": 0
+        }
+       ],
+       "breaks": 0,
+       "autoClosedCount": 0,
+       "body": [
+        {
+         "type": "Template",
+         "name": "reinforce",
+         "expanded": true,
+         "body": [
+          {
+           "type": "Command",
+           "canonical": "PRIO",
+           "tier": "instr",
+           "gloss": "Priority",
+           "element": "priority",
+           "depth": 0,
+           "species": "atom",
+           "body": [
+            {
+             "type": "Command",
+             "canonical": "MAND",
+             "tier": "instr",
+             "gloss": "Mandatory",
+             "element": "mandatory",
+             "depth": 1,
+             "species": "atom",
+             "body": [
+              {
+               "type": "Literal",
+               "value": "a",
+               "form": "quote",
+               "slot": "rule"
+              }
+             ]
+            }
+           ]
+          },
+          {
+           "type": "Command",
+           "canonical": "RSN",
+           "tier": "instr",
+           "gloss": "Reason",
+           "element": "reason",
+           "depth": 0,
+           "species": "atom",
+           "body": [
+            {
+             "type": "Literal",
+             "value": "b",
+             "form": "quote",
+             "slot": "why"
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "diagnostics": []
+    },
+    "pt": {
+     "type": "GlyphAST",
+     "schema": 2,
+     "version": "3.6.9.07",
+     "source": {
+      "length": 24,
+      "checksum": "a150d7ab506c0400",
+      "encoding": "utf-8",
+      "newline": "lf",
+      "uri": null
+     },
+     "stores": {
+      "templates": "7356ea9b88319980",
+      "rules": "767e5432cdc6d400",
+      "expansions": "6862eb9f3b5c18fa"
+     },
+     "projection": "full",
+     "segments": [
+      {
+       "type": "Segment",
+       "mood": [
+        {
+         "name": "eth",
+         "gloss": "enthusiasm",
+         "order": 0
+        }
+       ],
+       "isReturn": false,
+       "continues": false,
+       "breaks": 0,
+       "autoClosedCount": 0,
+       "body": [
+        {
+         "type": "Template",
+         "name": "reinforce",
+         "isDefinition": false,
+         "expanded": true,
+         "at": {
+          "s": 0,
+          "e": 12
+         },
+         "body": [
+          {
+           "type": "Command",
+           "raw": "prio",
+           "canonical": "PRIO",
+           "tier": "instr",
+           "gloss": "Priority",
+           "element": "priority",
+           "isAlias": false,
+           "chainElement": false,
+           "origin": "root",
+           "slotName": false,
+           "editorial": false,
+           "name": null,
+           "depth": 0,
+           "autoClosed": false,
+           "suggestion": null,
+           "emotions": [],
+           "species": "atom",
+           "compositionDepth": 0,
+           "at": {
+            "s": 0,
+            "e": 5
+           },
+           "body": [
+            {
+             "type": "Command",
+             "raw": "mand",
+             "canonical": "MAND",
+             "tier": "instr",
+             "gloss": "Mandatory",
+             "element": "mandatory",
+             "isAlias": false,
+             "chainElement": false,
+             "origin": "nest",
+             "slotName": false,
+             "editorial": false,
+             "name": null,
+             "depth": 1,
+             "autoClosed": false,
+             "suggestion": null,
+             "emotions": [],
+             "species": "atom",
+             "compositionDepth": 0,
+             "at": {
+              "s": 5,
+              "e": 10
+             },
+             "body": [
+              {
+               "type": "Literal",
+               "value": "a",
+               "form": "quote",
+               "slot": "rule",
+               "role": null,
+               "at": null
+              }
+             ]
+            }
+           ]
+          },
+          {
+           "type": "Command",
+           "raw": "rsn",
+           "canonical": "RSN",
+           "tier": "instr",
+           "gloss": "Reason",
+           "element": "reason",
+           "isAlias": false,
+           "chainElement": false,
+           "origin": "root",
+           "slotName": false,
+           "editorial": false,
+           "name": null,
+           "depth": 0,
+           "autoClosed": false,
+           "suggestion": null,
+           "emotions": [],
+           "species": "atom",
+           "compositionDepth": 0,
+           "at": {
+            "s": 53,
+            "e": 57
+           },
+           "body": [
+            {
+             "type": "Literal",
+             "value": "b",
+             "form": "quote",
+             "slot": "why",
+             "role": null,
+             "at": null
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "diagnostics": []
+    },
+    "embed": {
+     "type": "GlyphAST",
+     "schema": 2,
+     "version": "3.6.9.07",
+     "source": {
+      "length": 24,
+      "checksum": "a150d7ab506c0400",
+      "encoding": "utf-8",
+      "newline": "lf",
+      "uri": "file:///x.pgml",
+      "text": "[--reinforce'a''b'/eth/]"
+     },
+     "stores": {
+      "templates": "7356ea9b88319980",
+      "rules": "767e5432cdc6d400",
+      "expansions": "6862eb9f3b5c18fa"
+     },
+     "projection": "full",
+     "segments": [
+      {
+       "type": "Segment",
+       "mood": [
+        {
+         "name": "eth",
+         "gloss": "enthusiasm",
+         "order": 0
+        }
+       ],
+       "isReturn": false,
+       "continues": false,
+       "breaks": 0,
+       "autoClosedCount": 0,
+       "body": [
+        {
+         "type": "Template",
+         "name": "reinforce",
+         "isDefinition": false,
+         "expanded": true,
+         "at": {
+          "s": 0,
+          "e": 12
+         },
+         "body": [
+          {
+           "type": "Command",
+           "raw": "prio",
+           "canonical": "PRIO",
+           "tier": "instr",
+           "gloss": "Priority",
+           "element": "priority",
+           "isAlias": false,
+           "chainElement": false,
+           "origin": "root",
+           "slotName": false,
+           "editorial": false,
+           "name": null,
+           "depth": 0,
+           "autoClosed": false,
+           "suggestion": null,
+           "emotions": [],
+           "species": "atom",
+           "compositionDepth": 0,
+           "at": {
+            "s": 0,
+            "e": 5
+           },
+           "body": [
+            {
+             "type": "Command",
+             "raw": "mand",
+             "canonical": "MAND",
+             "tier": "instr",
+             "gloss": "Mandatory",
+             "element": "mandatory",
+             "isAlias": false,
+             "chainElement": false,
+             "origin": "nest",
+             "slotName": false,
+             "editorial": false,
+             "name": null,
+             "depth": 1,
+             "autoClosed": false,
+             "suggestion": null,
+             "emotions": [],
+             "species": "atom",
+             "compositionDepth": 0,
+             "at": {
+              "s": 5,
+              "e": 10
+             },
+             "body": [
+              {
+               "type": "Literal",
+               "value": "a",
+               "form": "quote",
+               "slot": "rule",
+               "role": null,
+               "at": null
+              }
+             ]
+            }
+           ]
+          },
+          {
+           "type": "Command",
+           "raw": "rsn",
+           "canonical": "RSN",
+           "tier": "instr",
+           "gloss": "Reason",
+           "element": "reason",
+           "isAlias": false,
+           "chainElement": false,
+           "origin": "root",
+           "slotName": false,
+           "editorial": false,
+           "name": null,
+           "depth": 0,
+           "autoClosed": false,
+           "suggestion": null,
+           "emotions": [],
+           "species": "atom",
+           "compositionDepth": 0,
+           "at": {
+            "s": 53,
+            "e": 57
+           },
+           "body": [
+            {
+             "type": "Literal",
+             "value": "b",
+             "form": "quote",
+             "slot": "why",
+             "role": null,
+             "at": null
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "diagnostics": []
+    }
+   },
+   "hgml": {
+    "hgml": "[prio\n  [mand\n    'a'\n  [/mand]\n[/prio]\n[rsn\n  'b'\n[/rsn]",
+    "keepText": "[prio\n  [mand\n    'a'\n  [/mand]\n[/prio]\n[rsn\n  'b'\n[/rsn]"
+   }
+  },
+  "[--t=[ctx'x']/eth/]": {
+   "parse": {
+    "tree": {
+     "nodes": [
+      {
+       "origin": "root",
+       "template": "t",
+       "isDef": true,
+       "emotions": [
+        {
+         "name": "eth",
+         "gloss": "enthusiasm",
+         "order": 0
+        }
+       ],
+       "tok": {
+        "k": "tpl",
+        "s": 0,
+        "e": 5
+       },
+       "children": [
+        1
+       ],
+       "parent": null
+      },
+      {
+       "id": 1,
+       "raw": "ctx",
+       "tier": "instr",
+       "canonical": "CTX",
+       "gloss": "Context",
+       "alias": false,
+       "colon": null,
+       "autoClosed": false,
+       "editorial": false,
+       "origin": "nest",
+       "chainElement": false,
+       "slotName": false,
+       "depth": 1,
+       "species": "atom",
+       "compositionDepth": 0,
+       "tok": {
+        "k": "open",
+        "s": 5,
+        "e": 9
+       },
+       "children": [
+        2
+       ],
+       "parent": 0
+      },
+      {
+       "literal": true,
+       "v": "x",
+       "form": "quote",
+       "role": "operand",
+       "tok": {
+        "k": "literal",
+        "s": 9,
+        "e": 12
+       },
+       "children": [],
+       "parent": null
+      }
+     ],
+     "segments": [
+      {
+       "children": [
+        0
+       ],
+       "mood": [
+        {
+         "name": "eth",
+         "gloss": "enthusiasm",
+         "order": 0
+        }
+       ],
+       "autoClosed": 0,
+       "breaks": 0,
+       "cause": "eof"
+      }
+     ]
+    },
+    "pt": [],
+    "en": []
+   },
+   "xml": {
+    "xml": "<glyph-package engine=\"3.6.9.07\">\n  <schema/>\n  <block once=\"true\">\n    <mood dominant=\"enthusiasm\"/>\n    <template name=\"t\" define=\"true\">\n      <context>\n        <user-input>x</user-input>\n      </context>\n    </template>\n  </block>\n</glyph-package>",
+    "describe": "<glyph-package engine=\"3.6.9.07\">\n  <schema/>\n  <block once=\"true\">\n    <mood dominant=\"enthusiasm\"/>\n    <template name=\"t\" define=\"true\">\n      <context means=\"Declared scope.\">\n        <user-input>x</user-input>\n      </context>\n    </template>\n  </block>\n</glyph-package>"
+   },
+   "ast": {
+    "full": {
+     "type": "GlyphAST",
+     "schema": 2,
+     "version": "3.6.9.07",
+     "source": {
+      "length": 19,
+      "checksum": "501485fca8f13a00",
+      "encoding": "utf-8",
+      "newline": "lf",
+      "uri": null
+     },
+     "stores": {
+      "templates": "7356ea9b88319980",
+      "rules": "767e5432cdc6d400",
+      "expansions": "6862eb9f3b5c18fa"
+     },
+     "projection": "full",
+     "segments": [
+      {
+       "type": "Segment",
+       "mood": [
+        {
+         "name": "eth",
+         "gloss": "enthusiasm",
+         "order": 0
+        }
+       ],
+       "isReturn": false,
+       "continues": false,
+       "breaks": 0,
+       "autoClosedCount": 0,
+       "body": [
+        {
+         "type": "Template",
+         "name": "t",
+         "isDefinition": true,
+         "expanded": false,
+         "at": {
+          "s": 0,
+          "e": 5
+         },
+         "body": [
+          {
+           "type": "Command",
+           "raw": "ctx",
+           "canonical": "CTX",
+           "tier": "instr",
+           "gloss": "Context",
+           "element": "context",
+           "isAlias": false,
+           "chainElement": false,
+           "origin": "nest",
+           "slotName": false,
+           "editorial": false,
+           "name": null,
+           "depth": 1,
+           "autoClosed": false,
+           "suggestion": null,
+           "emotions": [],
+           "species": "atom",
+           "compositionDepth": 0,
+           "at": {
+            "s": 5,
+            "e": 9
+           },
+           "body": [
+            {
+             "type": "Literal",
+             "value": "x",
+             "form": "quote",
+             "slot": null,
+             "role": "operand",
+             "at": {
+              "s": 9,
+              "e": 12
+             }
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "diagnostics": []
+    },
+    "panel": {
+     "type": "GlyphAST",
+     "schema": 2,
+     "version": "3.6.9.07",
+     "source": {
+      "length": 19,
+      "checksum": "501485fca8f13a00",
+      "encoding": "utf-8",
+      "newline": "lf",
+      "uri": null
+     },
+     "stores": {
+      "templates": "7356ea9b88319980",
+      "rules": "767e5432cdc6d400",
+      "expansions": "6862eb9f3b5c18fa"
+     },
+     "projection": "panel",
+     "segments": [
+      {
+       "type": "Segment",
+       "mood": [
+        {
+         "name": "eth",
+         "gloss": "enthusiasm",
+         "order": 0
+        }
+       ],
+       "breaks": 0,
+       "autoClosedCount": 0,
+       "body": [
+        {
+         "type": "Template",
+         "name": "t",
+         "isDefinition": true,
+         "body": [
+          {
+           "type": "Command",
+           "canonical": "CTX",
+           "tier": "instr",
+           "gloss": "Context",
+           "element": "context",
+           "depth": 1,
+           "species": "atom",
+           "body": [
+            {
+             "type": "Literal",
+             "value": "x",
+             "form": "quote",
+             "role": "operand"
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "diagnostics": []
+    },
+    "pt": {
+     "type": "GlyphAST",
+     "schema": 2,
+     "version": "3.6.9.07",
+     "source": {
+      "length": 19,
+      "checksum": "501485fca8f13a00",
+      "encoding": "utf-8",
+      "newline": "lf",
+      "uri": null
+     },
+     "stores": {
+      "templates": "7356ea9b88319980",
+      "rules": "767e5432cdc6d400",
+      "expansions": "6862eb9f3b5c18fa"
+     },
+     "projection": "full",
+     "segments": [
+      {
+       "type": "Segment",
+       "mood": [
+        {
+         "name": "eth",
+         "gloss": "enthusiasm",
+         "order": 0
+        }
+       ],
+       "isReturn": false,
+       "continues": false,
+       "breaks": 0,
+       "autoClosedCount": 0,
+       "body": [
+        {
+         "type": "Template",
+         "name": "t",
+         "isDefinition": true,
+         "expanded": false,
+         "at": {
+          "s": 0,
+          "e": 5
+         },
+         "body": [
+          {
+           "type": "Command",
+           "raw": "ctx",
+           "canonical": "CTX",
+           "tier": "instr",
+           "gloss": "Context",
+           "element": "context",
+           "isAlias": false,
+           "chainElement": false,
+           "origin": "nest",
+           "slotName": false,
+           "editorial": false,
+           "name": null,
+           "depth": 1,
+           "autoClosed": false,
+           "suggestion": null,
+           "emotions": [],
+           "species": "atom",
+           "compositionDepth": 0,
+           "at": {
+            "s": 5,
+            "e": 9
+           },
+           "body": [
+            {
+             "type": "Literal",
+             "value": "x",
+             "form": "quote",
+             "slot": null,
+             "role": "operand",
+             "at": {
+              "s": 9,
+              "e": 12
+             }
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "diagnostics": []
+    },
+    "embed": {
+     "type": "GlyphAST",
+     "schema": 2,
+     "version": "3.6.9.07",
+     "source": {
+      "length": 19,
+      "checksum": "501485fca8f13a00",
+      "encoding": "utf-8",
+      "newline": "lf",
+      "uri": "file:///x.pgml",
+      "text": "[--t=[ctx'x']/eth/]"
+     },
+     "stores": {
+      "templates": "7356ea9b88319980",
+      "rules": "767e5432cdc6d400",
+      "expansions": "6862eb9f3b5c18fa"
+     },
+     "projection": "full",
+     "segments": [
+      {
+       "type": "Segment",
+       "mood": [
+        {
+         "name": "eth",
+         "gloss": "enthusiasm",
+         "order": 0
+        }
+       ],
+       "isReturn": false,
+       "continues": false,
+       "breaks": 0,
+       "autoClosedCount": 0,
+       "body": [
+        {
+         "type": "Template",
+         "name": "t",
+         "isDefinition": true,
+         "expanded": false,
+         "at": {
+          "s": 0,
+          "e": 5
+         },
+         "body": [
+          {
+           "type": "Command",
+           "raw": "ctx",
+           "canonical": "CTX",
+           "tier": "instr",
+           "gloss": "Context",
+           "element": "context",
+           "isAlias": false,
+           "chainElement": false,
+           "origin": "nest",
+           "slotName": false,
+           "editorial": false,
+           "name": null,
+           "depth": 1,
+           "autoClosed": false,
+           "suggestion": null,
+           "emotions": [],
+           "species": "atom",
+           "compositionDepth": 0,
+           "at": {
+            "s": 5,
+            "e": 9
+           },
+           "body": [
+            {
+             "type": "Literal",
+             "value": "x",
+             "form": "quote",
+             "slot": null,
+             "role": "operand",
+             "at": {
+              "s": 9,
+              "e": 12
+             }
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "diagnostics": []
+    }
+   },
+   "hgml": {
+    "hgml": "[ctx\n  'x'\n[/ctx]",
+    "keepText": "[ctx\n  'x'\n[/ctx]"
+   }
+  }
+ }
+}
