@@ -2179,7 +2179,8 @@ function runSnapshotChecks() {
       "[ctx[--germinate'x']]", "[mand'x'][opt'x']", "[ctx'x'][ctx'y'];[ctx]", "[CTX'Upper']", "[cx'alias']",
       "[heavyreview]", "[ctx`x`'y'[sum]'z']", "[ctx]]", "[--t'a'", "[ctx[--t]]]", "[skeptic'x']", "[sceptic'x']",
       "[ref'nada']", "[ref'RFC 2119']", "[ref'a'][sum'a'[ctx]]", "[ref'a','b'[ctx]]",
-      "[fbk]", "[fbk'plan b']", "[fbk: x]", "[rev-fbk]", "[fbk[ctx]]", "[hyp]"
+      "[fbk]", "[fbk'plan b']", "[fbk: x]", "[rev-fbk]", "[fbk[ctx]]", "[hyp]",
+      "[pt'1.1']", "[if'a > b'[ctx'x']]", "[sum'ready'[ctx]][if'ready']", "[if'']", "[pt:intro'1.1'[ctx]]", "[if`it's \"x\"`]", "[if]"
     ];
     const NO_SESSION = ["constructor", "[constructor]", "rd", "[ctx] prose ist"];
     const NO_VALENCY = ["[gt'a']", "[ctx]", "[cat'a']"];
@@ -2750,6 +2751,25 @@ function runLiteralRoleChecks() {
   ok("RO-05", "the role travels in the AST envelope too",
      lit && lit.role === "result" ? null
        : "the envelope literal carries role=" + JSON.stringify(lit && lit.role));
+
+  /* the operand of a PT and of an IF travels as an attribute (decided
+     2026-09-27), and only when it carries nothing else */
+  const part = G.toXML("[pt'1.1']", opts), cond = G.toXML("[if'a > b'[ctx'x']]", opts);
+  ok("RO-06", "the number of a part is n, the condition of an if is cond, and neither repeats as a child",
+     !/<part n="1\.1"\/>/.test(part) ? "the part: " + JSON.stringify(part)
+       : !/<if cond="a &gt; b">/.test(cond) || /<user-input>a &gt; b<\/user-input>/.test(cond) ? "the if: " + JSON.stringify(cond)
+       : null);
+
+  const kept = ["[sum'ready'[ctx]][if'ready']", "[if'']"].filter(s => / cond="/.test(G.toXML(s, opts)));
+  ok("RO-07", "an operand that carries a reference, or no text, stays <user-input>",
+     kept.length ? "moved anyway: " + kept.join(", ") : null);
+
+  ok("RO-08", "an if with its condition asks for no condition",
+     !G.parse("[if'x']", opts).gaps.some(g => g.code === "UnfilledSlot") ? null : "[if'x'] asked for the condition");
+
+  const back = ["[pt'1.1']", "[if'a > b'[ctx'x']]"].map(s => [s, G.fromXML(G.toXML(s, opts), opts).src]).filter(([s, b]) => b !== s);
+  ok("RO-09", "fromXML reads n and cond back as the literal",
+     back.length ? back.map(([s, b]) => s + " came back as " + b).join("; ") : null);
 
   return D.length;
 }

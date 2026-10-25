@@ -14,7 +14,7 @@ use glyph_json::{number, Json};
 use glyph_util::tree::Thrown;
 use glyph_util::{esc, inherited, inherited_text, js_space, js_trim};
 use glyph_version::VERSION;
-use glyph_vocab::{derived, get, FORMER_ELEMENT, SESSION};
+use glyph_vocab::{derived, get, FORMER_ELEMENT, OPERAND_ATTR, SESSION};
 
 /// Where the port stops as the JS stops when V8's stack gives out: past this
 /// many levels of the document. V8's own limit is not a number — measured on
@@ -456,7 +456,9 @@ fn from_xml_node(el: &El, diag: &mut Vec<Diag>, depth: usize) -> Result<String, 
     }
     let lead = if el.attr("join") == Some("item") { "," } else { "" };
     let colon = el.attr("name").filter(|n| !n.is_empty()).map_or(String::new(), |n| format!(":{}", lit_safe_xml(n)));
-    Ok(format!("{lead}[{name}{colon}{}]", xml_kids(el, diag, depth)?))
+    /* the number of a part and the condition of an if come back as the literal they were */
+    let operand = get(OPERAND_ATTR, &name.to_uppercase()).and_then(|a| el.attr(a)).map_or(String::new(), as_literal);
+    Ok(format!("{lead}[{name}{colon}{operand}{}]", xml_kids(el, diag, depth)?))
 }
 
 /// `packageUnpass`: `<chain>` and `<holds>` given back as the operators

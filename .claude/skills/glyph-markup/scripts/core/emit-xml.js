@@ -13,7 +13,7 @@
  */
 
 import { xesc, pad, walk, valueChildren } from "./util.js";
-import { FRAMES, SLOTS, elName, GLOSS_REVERSE } from "./vocabulary.js";
+import { FRAMES, SLOTS, elName, GLOSS_REVERSE, OPERAND_ATTR } from "./vocabulary.js";
 import { speciesOf, depthOf, formulaOf, defOf, atomsOf, standsAlone } from "./stores.js";
 import { parse, collectBindings, bindingOf, unboundRefs, deepInference } from "./parser.js";
 import { VERSION } from "./version.js";
@@ -183,6 +183,22 @@ export function collect(list, acc, bad) {
   });
 }
 
+/* The operand of a PT or an IF travels as an attribute: `[pt'1.1'` is
+   <part n="1.1"> and `[if'x'` is <if cond="x"> (decided 2026-09-27). The
+   operand is the literal a binding takes, and it moves only when it carries
+   nothing else — no template slot, no reference, some text — so nothing it
+   carried is lost; otherwise it stays <user-input>. Answers the attribute's
+   name and the literal, or null. */
+export function operandAttr(nd, opts) {
+  var name = Object.prototype.hasOwnProperty.call(OPERAND_ATTR, nd.canonical) ? OPERAND_ATTR[nd.canonical] : null;
+  if (!name || nd.chainElement) return null;
+  var lit = (nd.children || []).filter(function (c) { return c.literal && c.form !== "raw" && c.role !== "result"; })[0];
+  if (!lit || lit.boundSlot) return null;
+  var v = String(lit.v == null ? "" : lit.v).trim();
+  if (!v || (opts && opts.__binds && !lit.isBinder && opts.__binds[v])) return null;
+  return { name:name, lit:lit };
+}
+
 /* Iterative with an explicit stack. The recursive version overflowed the
    JS call stack around 2000 levels, and in Glyph depth grows with the
    query's size (every `[` without a `]` nests). A frame with `tail` holds
@@ -246,7 +262,7 @@ export function emit(root, startDepth, L, opts) {
       continue;
     }
 
-    var open, closeName;
+    var open, closeName, moved = null;
     /* `chain` records the operator that attached a BARE element, and only a
        bare one. A bracketed child already announces its own scope, so marking
        it too would force fromXML() to decide whether chain="extend" meant
@@ -281,6 +297,8 @@ export function emit(root, startDepth, L, opts) {
       if (nd.colon) attrs.push('name="' + xesc(nd.colon) + '"');
       if (chainAttr) attrs.push(chainAttr);
       if (joinAttr) attrs.push(joinAttr);
+      moved = operandAttr(nd, opts);
+      if (moved) attrs.push(moved.name + '="' + xesc(moved.lit.v) + '"');
       /* the name this command's result answers to, from its own operand */
       /* IMPERATIVO -- um primitivo que RECEBEU operando.
 
@@ -342,7 +360,8 @@ export function emit(root, startDepth, L, opts) {
     var frame = slots ? null : FRAMES[nd.canonical];
     var needs = (frame && !nd.chainElement && kids.length === 0 && !nd.colon) ? frame[0].replace("*", "")
               : deepInference(nd, opts) ? "the subject" : null;
-    var allKids = nd.children || [];
+    /* the frame counts the operand where it was written; the element does not repeat it */
+    var allKids = (nd.children || []).filter(function (c) { return !moved || c !== moved.lit; });
 
     if (!allKids.length && !needs && !slotNeeds.length) { L.push(pad(d) + open + "/>"); continue; }
 

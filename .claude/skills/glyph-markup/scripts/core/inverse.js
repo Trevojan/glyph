@@ -15,7 +15,7 @@
  */
 
 import { esc } from "./util.js";
-import { SESSION, GLOSS_REVERSE, EMO_REVERSE, FORMER_ELEMENT } from "./vocabulary.js";
+import { SESSION, GLOSS_REVERSE, EMO_REVERSE, FORMER_ELEMENT, OPERAND_ATTR } from "./vocabulary.js";
 import { VERSION } from "./version.js";
 
 /* ======================================================
@@ -294,6 +294,10 @@ export function fromXmlNode(el, diag) {
      bare-link writer of `-` and `,`; this is the bracketed one. */
   var lead = el.attrs.join === "item" ? "," : "";
   var head = lead + "[" + name + (el.attrs.name ? ":" + litSafeXml(el.attrs.name) : "");
+  /* the number of a part and the condition of an if come back as the literal they were */
+  var canon = name.toUpperCase();
+  var oa = Object.prototype.hasOwnProperty.call(OPERAND_ATTR, canon) ? OPERAND_ATTR[canon] : null;
+  if (oa && el.attrs[oa] != null) head += asLiteral(el.attrs[oa]);
   return head + xmlKids(el, diag) + "]";
 }
 

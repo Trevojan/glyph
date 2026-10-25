@@ -46,7 +46,7 @@ fn tables() -> Vec<(&'static str, Json)> {
             ("items".into(), pairs(c.items))])).collect())),
         ("INSTR", strings(INSTR)), ("ALIAS", strings(ALIAS)), ("STRUCT", strings(STRUCT)),
         ("META", strings(META)), ("MODE", strings(MODE)), ("EMO", strings(EMO)), ("SESSION", strings(SESSION)),
-        ("FORMER_ELEMENT", strings(FORMER_ELEMENT)),
+        ("FORMER_ELEMENT", strings(FORMER_ELEMENT)), ("OPERAND_ATTR", strings(OPERAND_ATTR)),
         ("EDITORIAL_ONLY", numbers(EDITORIAL_ONLY)), ("NAMED_STRUCT", numbers(NAMED_STRUCT)),
         ("LOGIC_OPS", pairs(LOGIC_OPS)), ("PUNCT", pairs(PUNCT)), ("FRAMES", lists(FRAMES)), ("SLOTS", lists(SLOTS)),
         ("PTBR", strings(&d.ptbr)), ("CAT_OF", strings(&d.cat_of)),

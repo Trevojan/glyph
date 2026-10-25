@@ -214,6 +214,22 @@ bracketed ones.
 
 ---
 
+## 3c. Two operands as attributes — `<part n>` and `<if cond>`
+
+> **Added 2026-10-25**, by the Regent's answer of 2026-09-27 to the two
+> proposals the draft of 1.4.4 got right and left for a decision.
+
+`[pt'1.1'` emits `<part n="1.1">` and `[if'x'` emits `<if cond="x">`: the
+number of a part and the condition of an if are what the element *is about*, so
+they travel on it instead of arriving as a `<user-input>` a reader has to know
+to look at first. The operand is the literal a binding takes — the first that
+is neither raw nor a result — and it moves only when it carries nothing else:
+a literal with a template `slot` or a `ref` stays `<user-input>`, and so does
+an empty one, so nothing it carried is lost. A frame counts the operand where it
+was written, so an `<if>` with a condition asks for none. `fromXML()` reads the
+attribute back as the literal, in the same step. Which command takes which
+attribute is `OPERAND_ATTR` in `vocabulary.js`.
+
 ## 4. `<invoke>` — the command call
 
 > **Delivered decision (Q10).** `<invoke>` is the **command call**, and to the
