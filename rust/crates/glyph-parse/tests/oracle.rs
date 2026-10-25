@@ -65,7 +65,7 @@ fn context(run: &Json) -> Context {
 fn every_tree_and_diagnostic_equals_the_js() {
     let runs = module("parse").a("runs");
     assert!(runs.len() > 114, "parse.json holds {} runs — write it again: {}", runs.len(), oracle::WRITE_IT);
-    let (mut nodes, mut gaps, mut thrown) = (0, 0, 0);
+    let (mut nodes, mut gaps, mut thrown, mut named) = (0, 0, 0, 0);
     for run in runs {
         let ctx = context(run);
         let (id, src) = (run.s("id"), run.s("src"));
@@ -84,9 +84,20 @@ fn every_tree_and_diagnostic_equals_the_js() {
                 assert_eq!(dump_of(&p.tree, true), *run.get("tree").expect("tree"), "{id}: the tree");
                 nodes += run.get("tree").map_or(0, |t| t.a("nodes").len());
             }
-            assert_eq!(Json::Arr(p.gaps.iter().map(gap_json).collect()), *want, "{id} {lang}: the diagnostics");
+            /* a probe O4's third residual reaches takes the diagnostics the
+               decision gives it, and the JS's answer there must differ */
+            let want = match oracle::known::bare(src, lang) {
+                Some(decided) => {
+                    assert_ne!(decided, *want, "{id} {lang}: named as a known difference, and the JS already answers it");
+                    named += 1;
+                    decided
+                }
+                None => want.clone(),
+            };
+            assert_eq!(Json::Arr(p.gaps.iter().map(gap_json).collect()), want, "{id} {lang}: the diagnostics");
             gaps += p.gaps.len();
         }
     }
+    assert_eq!(named, 2 * oracle::known::BARE.len(), "a probe named for O4's third residual is not in parse.json");
     println!("{} runs, {nodes} nodes, {gaps} diagnostics in both languages, {thrown} throws", runs.len());
 }
