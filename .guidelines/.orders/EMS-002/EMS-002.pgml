@@ -176,6 +176,11 @@
     [val'the mood','a mood written in a return segment emits mood first in its block, ahead of user-expectative, and both ways back keep the return marker']
   ]
 
+  [section'ORD-0023-mood-template'
+    [tgt'a mood inside a template, the Rust answers and the JS throws until it leaves, answered on 2026-10-25, an ORD of the batch']
+    [val'the known difference','the four sources the oracle records the JS throwing are named with the document the Rust answers']
+  ]
+
   [section'limits'
     [nev'a selector that answers an empty slice in silence']
     [dont'open an ORD before the ORD it depends on closes']
@@ -210,5 +215,6 @@
     [--track[ph-item'ORD-0019, the first residual of O4, in the Rust only, of the batch of the version: the burn writes the line ;; between two blocks where a segment break writes the blank line; the JS keeps the blank line; the known difference is named once, known semicolons in the testkit, and the oracle tests of the burn, the round trips, the CLI, the engine and the protocol undo it and hold the rest byte for byte, the burn test asserting it is reached; no hash of the snapshot moved; seen failing before it counts; at 015d9c3, sha256 e76297b484c723e60e54641bf524ce11ef98a38ca0b7396ae13f03cf35ae13ed of the cases, the digest of ORD-0014, and 651548896f4be39e5ffa98b8e15f8436c2943f86923439fe73ce4e481f7db1ab of testkit/oracle.rs'][ph-scope'EMS-002']]
     [--track[ph-item'ORD-0020, the second residual of O4, in the Rust only, of the batch of the version: the lexer ends an apostrophe literal at its own quote or at the bracket, never at a line break, as the backtick and the grammar do; the JS keeps ending it at the line break; the known difference is named in the testkit, known QUOTES, each source it reaches with the tokens the decision gives it, one today, and the other 1697 tokenizer sources hold byte for byte; no hash of the snapshot moved; seen failing before it counts; at e05835a, sha256 e76297b484c723e60e54641bf524ce11ef98a38ca0b7396ae13f03cf35ae13ed of the cases, the digest of ORD-0014, and 09164b940758b6934b48d560b29541eda4774d1ed2ba5599fb0ce764bf0fce57 of testkit/oracle.rs'][ph-scope'EMS-002']]
     [--track[ph-item'ORD-0021, the third residual of O4, in the Rust only, of the batch of the version: a bare word in a parameter position, one still open or one a literal after it takes, raises TemplateParamNotLiteral with the word and the arguments as the author wrote them, quoted; the extra content after the parameters and a displaced command stay as they were, and the binding does not change; the JS keeps the silence and the [?; two probes in parse.json and ast.json, and the difference named in the testkit, known BARE, with the diagnostics the decision gives in both languages; no hash of the snapshot moved; two mutants seen failing; at e65081b, sha256 e76297b484c723e60e54641bf524ce11ef98a38ca0b7396ae13f03cf35ae13ed of the cases, the digest of ORD-0014, and 6befd7eae7eaeb17cec5a96523eb72e8706894f078a0c279f611698e10e6762e of testkit/oracle.rs'][ph-scope'EMS-002']]
+    [--track[ph-item'ORD-0022, a mood in a return segment, the first inclusion of 2026-10-25, of the batch of the version: mood is the first child of block in a return segment too, ahead of user-expectative, and both ways back write the mood header apart from r-; no hash of the snapshot moved; three probes in xml.json and F-24; two Rust mutants seen failing; at aab8260, sha256 e76297b484c723e60e54641bf524ce11ef98a38ca0b7396ae13f03cf35ae13ed of the cases, the digest of ORD-0014'][ph-scope'EMS-002']]
   ]
 ];

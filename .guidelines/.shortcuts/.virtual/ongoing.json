@@ -10,9 +10,9 @@
       "who": "DV",
       "since": "2026-10-25",
       "source": ".guidelines/.decisions/README.md#2026-10-25",
-      "next": "ORD-0022, o humor numa seção de retorno; depois os modos e as cadeias",
+      "next": "ORD-0023, o humor dentro de um template; depois os modos, as cadeias, o placeholder, os fills e o dois-pontos",
       "where": [
-        "order:EMS-002/ORD-0022",
+        "order:EMS-002/ORD-0023",
         "branch:claude/loving-cerf-m1fomz"
       ]
     },
