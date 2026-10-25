@@ -8,6 +8,8 @@ pacote que o `--bundle` escreve, e a contagem é desta série.
 
 ## A Ordem aberta
 
+- [`EMS-002/ORD-0016`](ORD-0016/ORD-0016.xml) — o alarme de inferência profunda, a terceira do lote; aberta em 2026-10-25
+
 ## Ordens fechadas
 
 | ORD | o que entregou | commit | digest |

@@ -138,6 +138,11 @@
     [val'the reference','a name-shaped literal under REF that no command of the document binds raises an ask and emits needs var beside the literal; a bound name keeps its ref, and prose stays prose']
   ]
 
+  [section'ORD-0016-deep'
+    [tgt'the deep-inference alarm, a composite of depth 5 or more with no operand asks, answered on 2026-09-27, the third ORD of the batch']
+    [val'the alarm','a composite of depth 5 or more, with no operand and no frame or slot that asks for one, raises an ask and emits needs; a chain link is not asked, as with every frame']
+  ]
+
   [section'limits'
     [nev'a selector that answers an empty slice in silence']
     [dont'open an ORD before the ORD it depends on closes']
