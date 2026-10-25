@@ -21,6 +21,9 @@ release . frontend . rules . minor
 dígito que se movia zerava tudo à direita, então mexer só na interface
 descartava o número que o motor tinha conquistado.
 
+**Um lote de Ordens que movem o emitido move o número uma vez**, quando o lote
+fecha, cada dígito pela maior mudança que ele guarda (decidido em 2026-10-25).
+
 ## O que cada release decidiu
 
 | versão | o que moveu o dígito maior |

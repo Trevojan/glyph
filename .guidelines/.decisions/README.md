@@ -13,6 +13,15 @@
 
 ---
 
+## 2026-10-25
+
+| decisão | razão |
+|---|---|
+| **A versão se move uma vez por lote** | respondido no questionário de 2026-10-25: *"Once per batch"*. As decididas que movem o emitido — as renomeações (O8, O9, O10), `[ref'nome']`, o alarme de inferência profunda, os dois diagnósticos do comando sem efeito, `<part>` e `<if>`, o blend `REV` + `DIST` no mesmo alvo e os resíduos de O4 — entram em ordem, e o número se move uma vez quando o lote fecha, cada dígito pela maior mudança que o lote guarda, pela tabela do [`.changelog`](../.changelog/README.md). A versão move todo hash do snapshot uma vez só, e os bytes do envelope que a [`EMS-002/ORD-0006`](../.orders/EMS-002/README.md) moveu entram nesse movimento |
+| **`;;` queima com marca própria, só no Rust (resíduo 1 de O4)** | respondido no mesmo questionário: *"Own mark"*. Entre dois blocos, o `.hgml` escreve a linha `;;` onde o `;` dá a linha em branco, e a queima carrega o que a árvore carrega. O JS guarda a linha em branco até sair, e o teste diferencial nomeia a diferença |
+| **Dentro de um literal, só a aspa que o abriu o fecha, também na quebra de linha, só no Rust (resíduo 2 de O4)** | respondido no mesmo questionário: *"Only the quote closes"*. As duas aspas têm a mesma gramática, como a regra do `;` de 2026-09-06; o custo aceito é o apóstrofo sem fechar correr além da linha, até a próxima `'` ou o próximo `]`. O JS guarda a quebra até sair, e o teste diferencial nomeia a diferença |
+| **A palavra nua em posição de parâmetro é recusada pelo nome, só no Rust (resíduo 3 de O4)** | respondido no mesmo questionário: *"Refuse, name the word"* — a opção (a) do §3 das [perguntas](../.plan/PERGUNTAS-ABERTAS.md). `[--germinate a,b]` dá `fix` `TemplateParamNotLiteral` com a palavra e a forma entre aspas, ``[--germinate`a`,`b`]``, e a mensagem nomeia a palavra escrita. O JS guarda o `<off>` até sair, e o teste diferencial nomeia a diferença |
+
 ## 2026-10-23
 
 | decisão | razão |
