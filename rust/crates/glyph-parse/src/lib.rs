@@ -25,7 +25,7 @@ use glyph_json::{number, Json};
 use glyph_templates::{check_template_constraints, expand_invocations, Parsed, SubParse};
 use glyph_util::tree::{strip_tags, Diag, Emotion, Gloss, Id, Node, Segment, Span, Suggestion, Thrown, Tree, LIMITS};
 use glyph_util::{esc, inherited};
-use glyph_vocab::{derived, former_element, get, ALIAS, EDITORIAL_ONLY, EMO, FRAMES, INSTR, META, NAMED_STRUCT, SESSION, SLOTS, STRUCT};
+use glyph_vocab::{derived, former_element, get, ALIAS, EDITORIAL_ONLY, EMO, FRAMES, INSTR, META, MODE, NAMED_STRUCT, SESSION, SLOTS, STRUCT};
 use std::sync::Arc;
 
 /// What the parser carries beyond the shared node: the Logic a `[logic]`
@@ -223,8 +223,10 @@ impl State<'_, '_> {
         self.pending = None;
     }
 
-    fn command(&mut self, tk: &Token) {
-        let v = tk.v.as_deref().unwrap_or("");
+    /// `named`: the command's name when the token is not one — a stray `[on]`
+    /// is the command ON written closed.
+    fn command(&mut self, tk: &Token, named: Option<&str>) {
+        let v = named.or(tk.v.as_deref()).unwrap_or("");
         let cl = classify(v, self.o.ctx, self.o.session);
         let parent = self.top();
         let in_ph = parent.is_some_and(|p| self.tree.nodes[p].canonical.as_deref() == Some("PH"));
@@ -248,7 +250,7 @@ impl State<'_, '_> {
             Some(self.pending.unwrap_or(if bare { "extend" } else if parent.is_some() { "nest" } else { "root" }).to_string())
         };
         let mut nd = Node {
-            id: Some(self.uid), raw: tk.v.clone(), tier: Some(cl.tier.into()), canonical: Some(cl.canonical.clone()), gloss,
+            id: Some(self.uid), raw: named.map(str::to_string).or_else(|| tk.v.clone()), tier: Some(cl.tier.into()), canonical: Some(cl.canonical.clone()), gloss,
             alias: Some(cl.alias == Some(true)), colon: Some(None), auto_closed: Some(false), tok: Self::span(tk),
             editorial: Some(has_num(EDITORIAL_ONLY, &cl.canonical)), origin: Some(origin), chain_element: Some(bare),
             slot_name: Some(slot_name), depth: Some(self.stack.len()), ..Default::default()
@@ -383,7 +385,7 @@ impl State<'_, '_> {
                 .en("loose word", format!("<code>{}</code> on its own. Logic: <code>[if</code> <code>[unls</code> <code>[logic]</code>.", esc(&v))));
         } else if v.chars().next().is_some_and(|c| c.is_ascii_alphabetic()) && v.chars().all(word) {
             let (uw, lw) = (v.to_uppercase(), v.to_lowercase());
-            let known = has_text(INSTR, &uw) || has_text(ALIAS, &uw) || has_text(STRUCT, &uw) || has_text(META, &uw)
+            let known = has_text(INSTR, &uw) || has_text(ALIAS, &uw) || has_text(STRUCT, &uw) || has_text(META, &uw) || has_text(MODE, &uw)
                 || (self.o.session && has_text(SESSION, &lw));
             if known {
                 self.g(Diag::new("ask", "comando solto",
@@ -404,7 +406,7 @@ impl State<'_, '_> {
     fn token(&mut self, i: usize) -> usize {
         let tk = &self.tokens[i];
         match tk.k {
-            "open" | "bareTag" => self.command(tk),
+            "open" | "bareTag" => self.command(tk, None),
             "rawfence" => {
                 let origin = self.pending.unwrap_or("nest").to_string();
                 let id = self.add(Node { raw_fence: Some(true), v: tk.body.clone(), tok: Self::span(tk), origin: Some(Some(origin)),
@@ -464,7 +466,8 @@ impl State<'_, '_> {
             "extend" => {
                 self.pending = Some("extend");
                 let next = self.tokens.get(i + 1).map(|t| t.k);
-                if !matches!(next, Some("open" | "bareTag" | "literal" | "text")) {
+                let stray_on = self.tokens.get(i + 1).is_some_and(|t| t.k == "mode" && t.stray == Some(true));
+                if !matches!(next, Some("open" | "bareTag" | "literal" | "text")) && !stray_on {
                     self.fix("pendurado", "<code>-</code> sem cadeia. Ex.: <code>[rw-cr</code>.".into(), "DanglingChain",
                              "dangling", "<code>-</code> with no chain. E.g. <code>[rw-cr</code>.".into());
                 }
@@ -501,6 +504,17 @@ impl State<'_, '_> {
                     let id = self.add(Node { mode: Some("off".into()), tok: Self::span(tk), ..Default::default() });
                     self.push_loose(id);
                     self.seg.pending_mode = Some(Some(id));
+                } else if tk.stray == Some(true) {
+                    /* `[on]` with no `[off]` open is the command ON written
+                       closed; the note names that nothing was off */
+                    self.command(tk, Some("on"));
+                    self.seg.pending_mode = Some(None);
+                    let d = Diag::new("note", "modo texto",
+                        "<code>[on]</code> sem <code>[off]</code> aberto antes: nada estava desligado. \
+                         Fica como o comando <code>&lt;mode-on/&gt;</code>.".into(), "UnmatchedOnMode")
+                        .en("text mode", "<code>[on]</code> with no <code>[off]</code> open before it: nothing was off. \
+                                          It stays as the command <code>&lt;mode-on/&gt;</code>.".into());
+                    self.g(Self::at(d, tk));
                 } else {
                     self.seg.pending_mode = Some(None);
                 }

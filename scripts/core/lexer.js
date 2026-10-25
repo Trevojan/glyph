@@ -31,14 +31,16 @@ export function tokenize(src) {
   }
   function addText(ch) { if (textStart < 0) textStart = i; textBuf += ch; }
 
-  while (i < n) {
+  /* `|| off`: an `[off]` that ends the source owes its `modeUnclosed` like
+     every other unclosed `[off]`, so the loop turns once more to say so. */
+  while (i < n || off) {
     if (off) {
       var up = src.toUpperCase(), idx = up.indexOf("[ON]", i);
       var end = idx === -1 ? n : idx;
       if (end > i) T.push({ k:"raw", v:src.slice(i, end), s:i, e:end });
       i = end;
       if (idx !== -1) { T.push({ k:"mode", v:"ON", s:i, e:i+4 }); i += 4; off = false; }
-      else T.push({ k:"modeUnclosed", v:"", s:n, e:n });
+      else { T.push({ k:"modeUnclosed", v:"", s:n, e:n }); off = false; }
       continue;
     }
 
@@ -101,6 +103,9 @@ export function tokenize(src) {
 
       var mOff = /^\[\s*off\s*\]/i.exec(rest);
       if (mOff) { T.push({ k:"mode", v:"OFF", s:i, e:i+mOff[0].length }); i += mOff[0].length; off = true; continue; }
+      /* Outside an `[off]` region there is nothing for `[on]` to close: it is
+         the command ON written closed, the spelling fromXML gives <mode-on/>.
+         `stray` is what tells the parser so. */
       var mOn = /^\[\s*on\s*\]/i.exec(rest);
       if (mOn) { T.push({ k:"mode", v:"ON", s:i, e:i+mOn[0].length, stray:true }); i += mOn[0].length; continue; }
 

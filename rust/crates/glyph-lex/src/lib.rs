@@ -169,7 +169,9 @@ pub fn tokenize(src: &str) -> Vec<Token> {
         }};
     }
 
-    while i < n {
+    /* `|| off`: an `[off]` that ends the source owes its `modeUnclosed` like
+       every other unclosed `[off]`, so the loop turns once more to say so */
+    while i < n || off {
         if off {
             /* the JS upper-cases the whole source and reads its index back into
                the original: a character that changes length moves the rest */
@@ -189,7 +191,10 @@ pub fn tokenize(src: &str) -> Vec<Token> {
                     i += 4;
                     off = false;
                 }
-                None => t.push(tok("modeUnclosed", String::new(), n, n)),
+                None => {
+                    t.push(tok("modeUnclosed", String::new(), n, n));
+                    off = false;
+                }
             }
             continue;
         }

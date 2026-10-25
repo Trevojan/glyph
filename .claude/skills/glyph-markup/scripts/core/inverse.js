@@ -233,7 +233,13 @@ export function fromXmlNode(el, diag) {
   var tag = el.tag;
   if (tag === "#text") return "";
   if (tag === "user-input") return asLiteral(xmlText(el));
-  if (tag === "off") return " " + litSafeXml(xmlText(el)) + " ";
+  /* prose comes back as prose; an <off> with nothing in it is an `[off]`
+     region with nothing in it, the one thing that writes it, and comes back
+     as the region */
+  if (tag === "off") {
+    var prose = litSafeXml(xmlText(el));
+    return prose ? " " + prose + " " : "[off][on]";
+  }
   if (tag === "mood" || tag === "break") return "";   /* handled per block */
   /* the verbatim fence returns verbatim: it is the one element whose
      content must NOT be re-read, because carrying it unread is the whole
@@ -298,8 +304,16 @@ export function fromXmlNode(el, diag) {
   var canon = name.toUpperCase();
   var oa = Object.prototype.hasOwnProperty.call(OPERAND_ATTR, canon) ? OPERAND_ATTR[canon] : null;
   if (oa && el.attrs[oa] != null) head += asLiteral(el.attrs[oa]);
-  return head + xmlKids(el, diag) + "]";
+  return lead + notSwitch(head.slice(lead.length) + xmlKids(el, diag) + "]");
 }
+
+/* `[off]` is the switch that opens a verbatim region, so the command OFF with
+   nothing inside cannot be written back as `[off]`: the lexer would read the
+   rest of the document as prose. It is written in the element's own name,
+   `[modeoff]`, which ELEMENT_INPUT reads as OFF — the spelling the vocabulary
+   keeps for an author who writes back the element they read. */
+var SWITCH_SPELLING = /^\[\s*off\s*\]$/i;
+function notSwitch(cmd) { return SWITCH_SPELLING.test(cmd) ? "[modeoff]" : cmd; }
 
 /* Shared by the resolved and unresolved branches. Returns "-" or "," for a
    chain link, or null. A chain element with children is malformed — a bare
@@ -432,7 +446,7 @@ export function fromAST(env, opts) {
         if (n.chainElement)
           return (n.origin === "item" ? "," : "-") + name;
         var lead = n.origin === "item" ? "," : "";
-        return lead + "[" + name + (n.name ? ":" + litSafeXml(n.name) : "") + kids(n.body) + "]";
+        return lead + notSwitch("[" + name + (n.name ? ":" + litSafeXml(n.name) : "") + kids(n.body) + "]");
       }
       default:
         diag.push({ sev:"note", code:"AstUnknownNode",
