@@ -314,6 +314,10 @@ pub fn tokenize(src: &str) -> Vec<Token> {
             continue;
         }
 
+        /* only the quote that opened a literal closes it, a line break as
+           well, as the backtick and the grammar have it (O4, decided
+           2026-10-25, in the Rust only: the JS ends an apostrophe at a line
+           break until it leaves) */
         if c == b'\'' as u16 {
             flush(&mut t, &mut text, &mut text_start);
             let (qs, mut j) = (i + 1, i + 1);
@@ -323,7 +327,7 @@ pub fn tokenize(src: &str) -> Vec<Token> {
                     closed = true;
                     break;
                 }
-                if u[j] == b']' as u16 || u[j] == b'\n' as u16 {
+                if u[j] == b']' as u16 {
                     break;
                 }
                 j += 1;
