@@ -148,6 +148,11 @@
     [val'the attributes','the operand literal of PT becomes n of part and that of IF becomes cond of if, when it carries nothing else; fromXML reads both back as the literal']
   ]
 
+  [section'ORD-0018-blend'
+    [tgt'the blend REV and DIST only on the same target, answered on 2026-09-27, an ORD of the batch']
+    [val'the target','the atoms of a blend fuse when they work on one subject, and different subjects burn as separate commands']
+  ]
+
   [section'limits'
     [nev'a selector that answers an empty slice in silence']
     [dont'open an ORD before the ORD it depends on closes']

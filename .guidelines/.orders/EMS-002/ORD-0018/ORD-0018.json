@@ -1,0 +1,386 @@
+{
+  "type": "GlyphAST",
+  "schema": 2,
+  "version": "3.6.9.07",
+  "source": {
+    "length": 1570,
+    "checksum": "b1077e9090462800",
+    "encoding": "utf-8",
+    "newline": "lf",
+    "uri": null
+  },
+  "stores": {
+    "templates": "7356ea9b88319980",
+    "rules": "767e5432cdc6d400",
+    "expansions": "6862eb9f3b5c18fa"
+  },
+  "projection": "full",
+  "segments": [
+    {
+      "type": "Segment",
+      "mood": [],
+      "isReturn": false,
+      "continues": false,
+      "breaks": 0,
+      "autoClosedCount": 0,
+      "body": [
+        {
+          "type": "Command",
+          "raw": "block",
+          "canonical": "BLOCK",
+          "tier": "struct",
+          "gloss": "Block",
+          "element": "block",
+          "isAlias": false,
+          "chainElement": false,
+          "origin": "root",
+          "slotName": false,
+          "editorial": false,
+          "name": null,
+          "depth": 0,
+          "autoClosed": false,
+          "suggestion": null,
+          "emotions": [],
+          "species": "atom",
+          "compositionDepth": 0,
+          "at": {
+            "s": 0,
+            "e": 6
+          },
+          "body": [
+            {
+              "type": "Literal",
+              "value": "ORD-0018-blend",
+              "form": "quote",
+              "slot": null,
+              "role": "operand",
+              "at": {
+                "s": 6,
+                "e": 22
+              }
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 25,
+                "e": 29
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the spec of EMS-002",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 29,
+                    "e": 50
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": ".guidelines/.orders/EMS-002/EMS-002.pgml",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 51,
+                    "e": 93
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "tgt",
+              "canonical": "TGT",
+              "tier": "instr",
+              "gloss": "Target",
+              "element": "target",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 97,
+                "e": 101
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the blend REV and DIST only on the same target, answered on 2026-09-27: sameTarget checks the target, and different targets burn as two commands; an ORD of the batch the version moves once for",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 101,
+                    "e": 295
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 299,
+                "e": 303
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the field intake of 2026-09 found it: scope sameTarget does not check the target, and the blend fires on co-occurrence alone, so REV of x beside DIST of y fuses into one heavyreview holding both; GLOSSARY section 7 already says REV and DIST on one target",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 303,
+                    "e": 559
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 563,
+                "e": 567
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "measured at 48d2e75 on the JS: no hash of the snapshot moves; the suite tests H-10 and H-10b fuse two different targets, the behaviour the decision reverses",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 567,
+                    "e": 725
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 729,
+                "e": 734
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the target of a burnt atom is its subject, GLOSSARY section 0.3, normative: the human operand is the subject of the whole formula, and what is nested inside an item is a standard it works against; so an atom the author wrote works on its own operands, and every item a composite formula produces works on the composite operands",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 734,
+                    "e": 1063
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 1067,
+                "e": 1072
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "subjects compare by burnSame, the equality the burn already has; the fused element keeps the shape it has today",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1072,
+                    "e": 1185
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 1189,
+                "e": 1194
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "H-10 and H-10b encode the reversed behaviour, so they move to one target, by the decision; a test that different targets stay apart is added",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1194,
+                    "e": 1336
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "val",
+              "canonical": "VAL",
+              "tier": "instr",
+              "gloss": "Validate",
+              "element": "validate",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "composite",
+              "compositionDepth": 5,
+              "at": {
+                "s": 1340,
+                "e": 1344
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the target",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1344,
+                    "e": 1356
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": "the atoms of a blend fuse when they work on one subject, through a composite as well, and different subjects burn as separate commands; each seen failing before it counts, and the Rust answers byte for byte",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1357,
+                    "e": 1565
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "diagnostics": []
+}
