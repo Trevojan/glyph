@@ -133,6 +133,11 @@
     [val'frame','the vocabulary category of the structure and template pieces is frame']
   ]
 
+  [section'ORD-0015-ref'
+    [tgt'the reference syntax, a name a reference writes and nothing binds asks for it outside the logic fence, answered on 2026-09-27, the second ORD of the batch']
+    [val'the reference','a name-shaped literal under REF that no command of the document binds raises an ask and emits needs var beside the literal; a bound name keeps its ref, and prose stays prose']
+  ]
+
   [section'limits'
     [nev'a selector that answers an empty slice in silence']
     [dont'open an ORD before the ORD it depends on closes']
