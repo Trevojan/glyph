@@ -14,7 +14,7 @@ use glyph_json::{number, Json};
 use glyph_util::tree::Thrown;
 use glyph_util::{esc, inherited, inherited_text, js_space, js_trim};
 use glyph_version::VERSION;
-use glyph_vocab::{derived, get, SESSION};
+use glyph_vocab::{derived, get, FORMER_ELEMENT, SESSION};
 
 /// Where the port stops as the JS stops when V8's stack gives out: past this
 /// many levels of the document. V8's own limit is not a number — measured on
@@ -435,6 +435,15 @@ fn from_xml_node(el: &El, diag: &mut Vec<Diag>, depth: usize) -> Result<String, 
     let name = match derived().gloss_reverse.iter().find(|(k, _)| k == tag) {
         Some((_, hit)) => Some(hit.canonical.to_lowercase()),
         None if inherited(tag) => return Err(Thrown("Cannot read properties of undefined (reading 'toLowerCase')".into())),
+        /* a retired element name is read, and named */
+        None if get(FORMER_ELEMENT, tag).is_some() => {
+            let now = get(FORMER_ELEMENT, tag).unwrap_or_default();
+            let canonical = derived().gloss_reverse.iter().find(|(k, _)| k == now).map(|(_, hit)| hit.canonical.to_lowercase());
+            diag.push(Diag { sev: "note", code: "XmlFormerElement",
+                msg: format!("<code>&lt;{}&gt;</code> is the former name of <code>&lt;{now}&gt;</code> — lido como <code>[{}</code>.",
+                             esc(tag), canonical.as_deref().unwrap_or("")) });
+            canonical
+        }
         None => get(SESSION, tag).filter(|g| !g.is_empty()).map(|_| tag.to_string()),
     };
     let Some(name) = name else {

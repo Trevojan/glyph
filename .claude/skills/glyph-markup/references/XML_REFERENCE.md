@@ -321,7 +321,7 @@ The bulk of the vocabulary. `*` in the aliases column is a bracket-form economy 
 | `[scru` | `<scrutinise>` | — |
 | `[seeal` | `<see-also>` | — |
 | `[simp` | `<simplify>` | — |
-| `[skep` | `<skeptic>` | — |
+| `[skep` | `<sceptic>` | — |
 | `[spec` | `<specify>` | — |
 | `[sub` | `<subtract>` | — |
 | `[sum` | `<summary>` | `[sm` |
@@ -521,6 +521,11 @@ editable and the reader is handed input this emitter never wrote.
   the text reaches the deliverable unchanged. A sequence that *looks* like an
   operator and is not one is covered by this rule and not by §11.3.
 - **Deep nesting.** It is flagged (`DeepNesting`) and still emitted.
+- **A retired element name.** `[skeptic` and `<skeptic>`, the name `[skep` had
+  before it became `<sceptic>`, read as `[skep`, each with a `note` naming the
+  current spelling: `FormerElementName` in the source, `XmlFormerElement` in
+  the XML. A retired construct is demoted to a recogniser, never deleted into
+  silence; the table is `FORMER_ELEMENT` in `vocabulary.js`.
 
 ### 11.5 No placeholder character reaches the deliverable
 
