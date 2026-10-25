@@ -6,11 +6,15 @@
     {
       "id": "EMS-002-INCLUSION",
       "title": "um comando conhecido nunca some: as 14 posições medidas",
-      "state": "backlog",
+      "state": "ongoing",
       "who": "DV",
       "since": "2026-10-25",
       "source": ".guidelines/.decisions/README.md#2026-10-25",
-      "next": "o mapa de cada posição para a regra corrente que a acolhe, num intake; depois uma ORD por regra"
+      "next": "ORD-0022, o humor numa seção de retorno; depois os modos e as cadeias",
+      "where": [
+        "order:EMS-002/ORD-0022",
+        "branch:claude/loving-cerf-m1fomz"
+      ]
     },
     {
       "id": "EMS-002-MOOD-TEMPLATE",

@@ -8,6 +8,8 @@ pacote que o `--bundle` escreve, e a contagem é desta série.
 
 ## A Ordem aberta
 
+- [`EMS-002/ORD-0022`](ORD-0022/ORD-0022.xml) — um humor numa seção de retorno chega ao XML, a primeira das inclusões; aberta em 2026-10-25
+
 ## Ordens fechadas
 
 | ORD | o que entregou | commit | digest |
