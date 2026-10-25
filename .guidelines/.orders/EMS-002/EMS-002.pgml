@@ -126,6 +126,13 @@
     [val'the bytes','no emitted byte moves, and the JS is not tuned']
   ]
 
+  [section'ORD-0014-renames'
+    [tgt'the renames that move the emitted output, O8, O9 and O10 of INTAKE-RUST-LADDER, answered on 2026-09-27, the first ORD of the batch the version moves once for']
+    [val'sceptic','SKEP emits sceptic, and the former spelling skeptic is still read, in the source and in the XML, and named']
+    [val'mould and template','the diagnostic says template, preset leaves the stores, the comment of an empty source says mould, and the key of the saved moulds migrates once without losing one']
+    [val'frame','the vocabulary category of the structure and template pieces is frame']
+  ]
+
   [section'limits'
     [nev'a selector that answers an empty slice in silence']
     [dont'open an ORD before the ORD it depends on closes']

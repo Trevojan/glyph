@@ -8,6 +8,8 @@ pacote que o `--bundle` escreve, e a contagem é desta série.
 
 ## A Ordem aberta
 
+- [`EMS-002/ORD-0014`](ORD-0014/ORD-0014.xml) — as renomeações que movem o emitido, O8, O9 e O10 do `INTAKE-RUST-LADDER`, a primeira do lote; aberta em 2026-10-25
+
 ## Ordens fechadas
 
 | ORD | o que entregou | commit | digest |
