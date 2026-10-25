@@ -143,6 +143,11 @@
     [val'the alarm','a composite of depth 5 or more, with no operand and no frame or slot that asks for one, raises an ask and emits needs; a chain link is not asked, as with every frame']
   ]
 
+  [section'ORD-0017-part-if'
+    [tgt'the two proposals of the XML draft, the number of a part and the condition of an if as attributes, answered on 2026-09-27, an ORD of the batch']
+    [val'the attributes','the operand literal of PT becomes n of part and that of IF becomes cond of if, when it carries nothing else; fromXML reads both back as the literal']
+  ]
+
   [section'limits'
     [nev'a selector that answers an empty slice in silence']
     [dont'open an ORD before the ORD it depends on closes']
