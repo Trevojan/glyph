@@ -308,8 +308,12 @@ pub fn to_hgml(src: &str, o: &BurnOpts) -> Result<String, Thrown> {
     let segments = burn(&p.tree, o, &mut st)?;
     let mut l: Vec<String> = Vec::new();
     for (i, sg) in segments.iter().enumerate() {
+        /* `;;` keeps its mark between two blocks, where `;` writes the blank
+           line, so the burn carries what the tree carries (O4, decided
+           2026-10-25, in the Rust only: the JS writes the blank line for both
+           until it leaves) */
         if i > 0 {
-            l.push(String::new());
+            l.push(if segments[i - 1].breaks > 0 { ";;".into() } else { String::new() });
         }
         hgml_lines(&sg.children, 0, &mut l);
     }

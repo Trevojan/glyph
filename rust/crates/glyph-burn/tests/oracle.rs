@@ -57,6 +57,7 @@ fn the_hgml_digest_of_every_case_equals_the_snapshot() {
         let ctx = repo.with(case.get("stores").unwrap_or(&Json::Null));
         let o = Opts::new(&ctx);
         let got = to_hgml(case.s("src"), &BurnOpts { parse: &o, keep_text: false }).unwrap_or_else(|e| panic!("{id}: {e:?}"));
+        let got = oracle::known::semicolons(&got);
         assert_eq!(got, case.s("hgml"), "{id}: the burn");
         assert_eq!(&sha256(got.as_bytes())[..16], snapshot_digest(id, "hgml"), "{id}: the hgml digest");
     }
@@ -67,7 +68,7 @@ fn the_hgml_digest_of_every_case_equals_the_snapshot() {
 fn every_burn_equals_the_js() {
     let runs = module("hgml").a("runs");
     assert!(runs.len() > 114, "hgml.json holds {} runs — write it again: {}", runs.len(), oracle::WRITE_IT);
-    let (mut n, mut thrown) = (0, 0);
+    let (mut n, mut thrown, mut undone) = (0, 0, 0);
     for run in runs {
         let (id, src) = (run.s("id"), run.s("src"));
         let ctx = context(run);
@@ -77,7 +78,12 @@ fn every_burn_equals_the_js() {
             let Some(want) = run.get(k) else { continue };
             let got = to_hgml(src, &BurnOpts { parse: &o, keep_text });
             match want {
-                Json::Str(w) => assert_eq!(got.unwrap_or_else(|e| panic!("{id} {k}: {e:?}")), *w, "{id} {k}: the burn"),
+                Json::Str(w) => {
+                    let got = got.unwrap_or_else(|e| panic!("{id} {k}: {e:?}"));
+                    let back = oracle::known::semicolons(&got);
+                    undone += usize::from(back != got);
+                    assert_eq!(back, *w, "{id} {k}: the burn");
+                }
                 w => {
                     assert_eq!(got.err(), Some(Thrown(w.s("thrown").to_string())), "{id} {k}: what toHGML throws");
                     thrown += 1;
@@ -86,5 +92,7 @@ fn every_burn_equals_the_js() {
             n += 1;
         }
     }
-    println!("{} runs, {n} burns, {thrown} throws", runs.len());
+    /* the known difference is reached, so the undo is not undoing nothing */
+    assert!(undone > 0, "no burn in hgml.json writes `;;` between two blocks");
+    println!("{} runs, {n} burns, {thrown} throws, {undone} with `;;` between blocks (O4)", runs.len());
 }

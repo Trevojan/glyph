@@ -430,3 +430,31 @@ pub fn snapshot_digest(id: &str, projection: &str) -> String {
     snap.get("cases").and_then(|c| c.get(id)).and_then(|c| c.get(projection)).and_then(Json::str)
         .unwrap_or_else(|| panic!("the snapshot has no {projection} digest for {id}")).to_string()
 }
+
+/// The differences the Rust keeps from the JS by decision: the JS keeps its
+/// answer until it leaves, the Rust answers right, and each difference is
+/// named here and undone before the bytes are compared, so everything else
+/// is still held byte for byte (O4, decided 2026-10-25).
+pub mod known {
+    use super::Json;
+
+    /// O4, residual 1: the burn writes `;;` between two blocks where the JS
+    /// writes the blank line. No other `.hgml` line is `;;` — a literal is
+    /// quoted and a comment opens with `#` — so the undo reaches nothing else.
+    pub fn semicolons(rust: &str) -> String {
+        rust.split('\n').map(|l| if l == ";;" { "" } else { l }).collect::<Vec<_>>().join("\n")
+    }
+
+    /// The same undo over every string of a JSON answer that carries a burn.
+    pub fn semicolons_json(rust: &str) -> String {
+        fn walk(v: Json) -> Json {
+            match v {
+                Json::Str(s) => Json::Str(semicolons(&s)),
+                Json::Arr(a) => Json::Arr(a.into_iter().map(walk).collect()),
+                Json::Obj(kv) => Json::Obj(kv.into_iter().map(|(k, v)| (k, walk(v))).collect()),
+                v => v,
+            }
+        }
+        glyph_json::parse(rust).map_or_else(|_| rust.to_string(), |v| glyph_json::stringify(&walk(v)))
+    }
+}

@@ -2850,8 +2850,8 @@
     },
     ".guidelines/SIGNATURES.md": {
       "nodes": [
-        ["n1363", "", 0, 5825, 1, 135, "3e4529b03c7cf400", "", ""],
-        ["n1364", "signatures-and-arities--normative-table-v1300", 0, 5825, 1, 135, "3e4529b03c7cf400", "ab8e499c48a96c00", "n1363"],
+        ["n1363", "", 0, 5998, 1, 137, "cbe6450a218a1600", "", ""],
+        ["n1364", "signatures-and-arities--normative-table-v1300", 0, 5998, 1, 137, "cbe6450a218a1600", "0b41e628d9fc3000", "n1363"],
         ["n1365", "arity-is-not-an-error--it-is-a-severity", 498, 1414, 12, 22, "de08f41042374600", "1fb7feacee149300", "n1364"],
         ["n1366", "1-strict-arity--2-positions-8", 1414, 1911, 34, 13, "bbc44c76698d4c40", "0591ef04a4dee700", "n1364"],
         ["n1367", "2-n-ary--take-a-list-6", 1911, 2162, 47, 8, "ab4109d8ca016200", "f5b06eaeb6fdf640", "n1364"],
@@ -2861,7 +2861,7 @@
         ["n1371", "where-species-and-arity-disagree", 3553, 3995, 86, 8, "097414c46852fc00", "e2a27888945c6d00", "n1370"],
         ["n1372", "5-mandatory-name-2", 3995, 4264, 94, 10, "65c05caebd568400", "b0258808ecd85500", "n1364"],
         ["n1373", "6-polarity-and-modality", 4264, 5064, 104, 17, "58662eaeacb1a400", "51afd8780a69dfa0", "n1364"],
-        ["n1374", "7-auto-closing", 5064, 5825, 121, 15, "710f944025f73640", "086232b096f1d000", "n1364"]
+        ["n1374", "7-auto-closing", 5064, 5998, 121, 17, "cb8516188149e480", "ecec9f10bde5b380", "n1364"]
       ]
     },
     ".guidelines/XML_REFERENCE.md": {
