@@ -84,7 +84,7 @@ export var CATS = [
   { id:"intensidade", label:"Intensidade", note:"grau de força e de ênfase", items:[
     ["HGH","alta"],["LOW","baixa"],["BOLD","ênfase forte"],["LIGHT","ênfase suave"]
   ]},
-  { id:"molde", label:"Molde", note:"peças de estrutura e template", items:[
+  { id:"frame", label:"Frame", note:"peças de estrutura e template", items:[
     ["TPL","template"],["PH","casa a preencher"],["VAR","variável"],["PARAM","parâmetro"],
     ["DEF","define"],["SECTION","seção"],["BLOCK","bloco"],["LOGIC","bloco de conta"],["SKL","skill"]
   ]},

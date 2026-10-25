@@ -2397,8 +2397,8 @@
     },
     ".guidelines/GLOSSARY.md": {
       "nodes": [
-        ["n1224", "", 0, 30233, 1, 474, "31b42d62d194f100", "", ""],
-        ["n1225", "glyphs-and-hieroglyphs--normative-glossary-v36907", 0, 30233, 1, 474, "31b42d62d194f100", "15af42e22e978000", "n1224"],
+        ["n1224", "", 0, 30503, 1, 475, "b35ceff88fe87400", "", ""],
+        ["n1225", "glyphs-and-hieroglyphs--normative-glossary-v36907", 0, 30503, 1, 475, "b35ceff88fe87400", "38b2b08070a5a200", "n1224"],
         ["n1226", "versioning--appfrontrulescontent", 791, 1170, 17, 13, "cb7751ea4bc99c80", "b2d94cbc891d9000", "n1225"],
         ["n1227", "0-legend--the-species", 1170, 1870, 30, 16, "2d44739296a2f000", "c12b5f2832c21b00", "n1225"],
         ["n1228", "01-formula-notation--normative", 1870, 3032, 46, 31, "60c7f37ec4caa400", "d62a8d18677b34e0", "n1225"],
@@ -2415,11 +2415,11 @@
         ["n1239", "the-hgml-emitter", 18843, 20481, 353, 34, "98efa7fe1c0ec400", "1d992a208a6332c0", "n1238"],
         ["n1240", "self-describing-output", 20481, 21131, 387, 15, "d60030665d962400", "534c3060187aac80", "n1238"],
         ["n1241", "what-remains", 21131, 21659, 402, 9, "c597c12eb7459900", "d96907f4b5e00200", "n1238"],
-        ["n1242", "8-project-vocabulary--the-terms-outside-the-language", 21659, 30233, 411, 64, "a54a0a301e7c3000", "864a3710eb9b71c0", "n1225"],
+        ["n1242", "8-project-vocabulary--the-terms-outside-the-language", 21659, 30503, 411, 65, "760658327ea2c740", "86f9fae80d584000", "n1225"],
         ["n1243", "who-decides", 22201, 23245, 422, 10, "351010d60dade340", "9a60363e6e946900", "n1242"],
         ["n1244", "how-work-is-ordered", 23245, 28005, 432, 22, "f2ad10e620e12e00", "8bc801dea223e700", "n1242"],
         ["n1245", "the-rust-app", 28005, 29397, 454, 12, "22c531807a7b0400", "becb052c31540680", "n1242"],
-        ["n1246", "the-names-the-regent-ratified", 29397, 30233, 466, 9, "f666217a2147ca00", "9cca76b846485400", "n1242"]
+        ["n1246", "the-names-the-regent-ratified", 29397, 30503, 466, 10, "297e63e0669d4c00", "77d9e4c8388a6200", "n1242"]
       ]
     },
     ".guidelines/HGML_CONVERGENCE.md": {

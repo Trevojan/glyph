@@ -1601,7 +1601,7 @@ import { zipStore } from "./glyph-zip.js";
     raciocinio: ["Reasoning", "how to get there"],
     rumo:       ["Course",    "where it is heading"],
     intensidade:["Intensity", "how strongly"],
-    molde:      ["Form",      "shape the answer must take"],
+    frame:      ["Frame",     "pieces of structure and template"],
     marca:      ["Mark",      "notes on the message itself"]
   };
   function catLabel(c) { var e = enOn() && CATS_EN[c.id]; return e ? e[0] : c.label; }
