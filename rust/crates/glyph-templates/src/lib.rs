@@ -335,7 +335,7 @@ pub fn expand_invocations<X: Clone + Default>(
                 .map_or("?".to_string(), |s| s.to_lowercase()));
             g(Diag::new("fix", "parâmetro não é literal",
                         format!("o {at}º parâmetro de <code>[--{tpl}</code> recebeu <code>[{what}</code>. \
-                                 Parâmetro de molde é sempre literal: <code>[--{tpl}{shown}]</code>."), "TemplateParamNotLiteral")
+                                 Parâmetro de template é sempre literal: <code>[--{tpl}{shown}]</code>."), "TemplateParamNotLiteral")
                 .en("parameter is not a literal",
                     format!("argument {at} of <code>[--{tpl}</code> got <code>[{what}</code>. \
                              A template parameter is always a literal: <code>[--{tpl}{shown}]</code>.")));

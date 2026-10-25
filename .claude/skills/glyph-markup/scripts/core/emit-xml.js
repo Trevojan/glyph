@@ -27,7 +27,7 @@ import { VERSION } from "./version.js";
    exactly the thing that gets copied into the chat. Past the ceiling the
    structure stays readable through the tags themselves. */
 export function buildXml(segments, opts) {
-  if (!segments.length) return "<!-- escolha um molde ou escreva do lado esquerdo -->";
+  if (!segments.length) return "<!-- escolha um mould ou escreva do lado esquerdo -->";
   /* one pass over the whole document, because the scope IS the whole
      document: a reference resolves to a binding written later as readily
      as to one written earlier */
