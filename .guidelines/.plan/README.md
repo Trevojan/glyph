@@ -125,7 +125,7 @@ semântico** — categoria, espécie, tabela de composição — não de limiar 
 |---|---|
 | `;;` | consertado nos dois motores em 2026-09-06 (`1342488`): `[nt'a'];;[nt'b']` vai e volta exato, o `<break/>` entre os blocos. Na queima do Rust, `;;` é a linha `;;` entre os blocos desde a `EMS-002/ORD-0019`; a do JS dá a mesma linha em branco para `;;` e `;` até sair, e os testes do oráculo nomeiam a diferença. |
 | `;` dentro de literal | consertado nos dois motores em 2026-09-06 (`f6d07ae`): dentro de um literal, só a aspa que o abriu o fecha. No lexer do Rust, só a aspa que abriu um literal o fecha, também na quebra de linha, desde a `EMS-002/ORD-0020`; o do JS encerra o apóstrofo na quebra de linha até sair, e o teste do oráculo nomeia a diferença. |
-| param de template nu | o deslize é recusado desde 2026-09-06 (`03aedad`): um parâmetro que não é literal antes de um literal é `fix` `TemplateParamNotLiteral`. **Resta:** a palavra nua sem literal depois (`[--germinate a,b]`) cai como `<off>` com `PlaceholderPending` ×2, e a mensagem chama a palavra nua de `[?`. Decidido em 2026-10-25, só no Rust: a opção (a) do [§3 das perguntas](PERGUNTAS-ABERTAS.md), `fix` `TemplateParamNotLiteral` que nomeia a palavra e mostra a forma entre aspas. |
+| param de template nu | o deslize é recusado desde 2026-09-06 (`03aedad`): um parâmetro que não é literal antes de um literal é `fix` `TemplateParamNotLiteral`. **Resta:** a palavra nua sem literal depois (`[--germinate a,b]`) cai como `<off>` com `PlaceholderPending` ×2, e a mensagem chama a palavra nua de `[?`, no JS até sair; no Rust, desde a `EMS-002/ORD-0021`, a palavra nua numa posição de parâmetro dá `fix` `TemplateParamNotLiteral` que a nomeia e mostra a forma entre aspas, a opção (a) do [§3 das perguntas](PERGUNTAS-ABERTAS.md), e os testes do oráculo nomeiam a diferença. |
 | o `toXML` do JS **cresce com o quadrado das linhas** | L-03, L-02 e L-01 levam 23 ms, 0,44 s e 6,2 s; 84% do L-02 é a passada estrutural (`packageSpan`, `packageIndent` e o seu `^ +`). O port em Rust lê cada linha uma vez e faz o L-01 em 0,13 s. Fixado por decisão (pergunta 13 do [retorno](../.orders/EMS-001/RETURN.md)): o JS não é consertado, e as fontes longas vão pelo Rust |
 
 ### 5. O Glyph em Rust — a série EMS-001
@@ -168,9 +168,6 @@ um lote, e a versão se move uma vez quando ele fecha (decidido em 2026-10-25):
   do vocabulário — este já é o `UnknownCommand`. Espera o Regente: quais posições
   deixam um comando conhecido sem efeito não está escrito em lugar nenhum, e a
   leitura que a sessão de 2026-09-27 propôs não ficou no repositório;
-- **o resíduo 3 do §3, só no Rust** (O4), com a resposta certa decidida em
-  2026-10-25: o Rust responde certo, e o teste diferencial nomeia a diferença,
-  como a `ORD-0019` e a `ORD-0020` fizeram com os dois primeiros;
 
 O que a spec revoga está assinado, e entre isso está a escada como
 ordem de trabalho: [`ladder.toml`](ladder.toml) fica como o registro da
