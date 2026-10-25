@@ -96,7 +96,7 @@ Session shortcuts are the exception — they serialise as the shortcut itself
 | `nearest` | `<unresolved>` | — | the closest known word, when one is close |
 | `force` | any element | — | `"editorial"` on `BYP OVR NEV ALW FRGT` |
 | `kind` `var` | `<rule>` | `[logic]` line | rule type and bound name |
-| `var` | `<needs>` | `[logic]` line | a name used and never defined |
+| `var` | `<needs>` | `[logic]` line, or `[ref'name']` | a name used and never defined in the fence; a name a reference writes and no command of the package binds, outside it |
 | `binds` | any command | an operand literal plus a bracketed nest | the name this command's result answers to |
 | `imperative` | any primitive | a primitive that received a bracketed command | it stands alone by the legend, and here it is commanding an operand |
 | `ref` | `<user-input>` | a literal whose text is a bound name | the binding it refers to, resolved across the whole package |
@@ -188,15 +188,16 @@ An **unbound** hole becomes `<needs slot="name">` carrying its question; a
 **bound** one becomes `<user-input slot="name">` carrying the answer. That one
 attribute is what lets `fromXML()` rebuild the call.
 
-`<needs>` is written in three shapes and only the first is source:
+`<needs>` is written in four shapes and only the first is source:
 
 | Shape | From | Read back as |
 |---|---|---|
 | `<needs slot="alpha">` | a real `[ph-name` hole | `[ph-name` |
 | `<needs>` (no slot) | `FRAMES` — the command wants an operand | nothing; regenerated |
 | `<needs slot="2">` (number) | `SLOTS` — an ordered position is empty | nothing; regenerated |
+| `<needs var="name">` | a `[logic]` name used and never defined, or a `[ref'name']` no command binds — beside the literal, which stays; the parse asks `UndefinedVariable` or `UnboundReference` | nothing; regenerated |
 
-The last two are the engine asking a question, not the human answering one.
+The last three are the engine asking a question, not the human answering one.
 Writing them back would turn a prompt into an answer, so `fromXML()` drops them
 and lets the next pass ask again.
 

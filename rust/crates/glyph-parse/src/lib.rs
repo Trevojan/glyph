@@ -550,6 +550,35 @@ pub fn binding_of<X: Clone>(tree: &mut Tree<X>, id: Id) -> Option<String> {
     Some(v)
 }
 
+/// `unboundRefs`: the names a REF's literals write and nothing binds — a
+/// reference is written `[ref'nome']`, and prose under REF is not a name
+/// (decided 2026-09-27).
+pub fn unbound_refs<X: Clone>(tree: &Tree<X>, id: Id, binds: &[String]) -> Vec<String> {
+    let nd = &tree.nodes[id];
+    if nd.canonical.as_deref() != Some("REF") {
+        return Vec::new();
+    }
+    nd.children.iter().map(|&c| &tree.nodes[c])
+        .filter(|c| c.is_literal() && c.form.as_deref() != Some("raw") && c.is_binder != Some(true))
+        .map(|c| js_trim(c.v.as_deref().unwrap_or("")))
+        /* `binds` is a plain object: a member of the prototype is bound */
+        .filter(|v| bind_name(v) && !binds.contains(v) && !inherited(v))
+        .collect()
+}
+
+/// `checkReferences`: an unbound name asks, as `UndefinedVariable` does
+/// inside the `[logic]` fence.
+pub fn check_references<X: Clone>(tree: &Tree<X>, binds: &[String], g: &mut dyn FnMut(Diag)) {
+    for id in tree.segments.iter().flat_map(|sg| tree.walk(&sg.children)).collect::<Vec<_>>() {
+        for v in unbound_refs(tree, id, binds) {
+            g(Diag::new("ask", "referência solta",
+                        format!("<code>{}</code> é referenciado e nunca ligado. Entrada externa, ou falta a ligação?", esc(&v)),
+                        "UnboundReference")
+                .en("unbound reference", format!("<code>{}</code> is referenced and never bound. External input, or a missing binding?", esc(&v))));
+        }
+    }
+}
+
 /// `collectBindings`: one name, one result, over the whole package.
 pub fn collect_bindings<X: Clone>(tree: &mut Tree<X>, g: &mut dyn FnMut(Diag)) -> Vec<String> {
     let mut order: Vec<String> = Vec::new();
@@ -720,7 +749,8 @@ pub fn parse(src: &str, o: &Opts) -> Result<Parse, Thrown> {
 
     check_rules(&tree, ctx, &mut g)?;
     check_template_constraints(&tree, ctx, &mut g)?;
-    collect_bindings(&mut tree, &mut g);
+    let bound = collect_bindings(&mut tree, &mut g);
+    check_references(&tree, &bound, &mut g);
 
     /* templates: a definition with no body, an invocation of nothing known */
     let mut defined: Vec<String> = Vec::new();

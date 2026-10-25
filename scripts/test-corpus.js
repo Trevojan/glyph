@@ -2177,7 +2177,8 @@ function runSnapshotChecks() {
       "[sum'toString'[ctx]]", "[sum'__proto__'[ctx]]", "[sum'two words'[ctx]]", "[sum[ctx]'late']", "[sum'x'-ctx]",
       "[xyzzy]", "[summ]", "[constructor]", "[__proto__'x']", "[pos[constructor]]", "[rw-cr-ctx]", "[a-b,c]",
       "[ctx[--germinate'x']]", "[mand'x'][opt'x']", "[ctx'x'][ctx'y'];[ctx]", "[CTX'Upper']", "[cx'alias']",
-      "[heavyreview]", "[ctx`x`'y'[sum]'z']", "[ctx]]", "[--t'a'", "[ctx[--t]]]", "[skeptic'x']", "[sceptic'x']"
+      "[heavyreview]", "[ctx`x`'y'[sum]'z']", "[ctx]]", "[--t'a'", "[ctx[--t]]]", "[skeptic'x']", "[sceptic'x']",
+      "[ref'nada']", "[ref'RFC 2119']", "[ref'a'][sum'a'[ctx]]", "[ref'a','b'[ctx]]"
     ];
     const NO_SESSION = ["constructor", "[constructor]", "rd", "[ctx] prose ist"];
     const NO_VALENCY = ["[gt'a']", "[ctx]", "[cat'a']"];
@@ -2808,6 +2809,28 @@ function runBindingChecks() {
      G.parse("[var`x`[get[ctx]]];[sum`x`[itr[ctx]]]", opts)
        .gaps.some(g => g.code === "DuplicateBinding" && g.sev === "fix") ? null
        : "a name bound twice raised nothing");
+
+  /* `[ref'nome']`, decided 2026-09-27: outside the [logic] fence, a name a
+     reference writes and nothing binds asks for it, as UndefinedVariable does
+     inside the fence; prose under REF is not a name */
+  const loose = G.parse("[ref'nada']", opts), looseXml = G.toXML("[ref'nada']", opts);
+  ok("BD-07", "a name a reference writes and nothing binds asks, with <needs var> beside the literal",
+     !loose.gaps.some(g => g.code === "UnboundReference" && g.sev === "ask") ? "an unbound reference raised nothing"
+       : !/<user-input>nada<\/user-input>\s*<needs var="nada">/.test(looseXml) ? "no <needs var> after the kept literal: " + JSON.stringify(looseXml)
+       : null);
+
+  const later = "[ref'a'][sum'a'[ctx]]";
+  ok("BD-08", "a reference resolves to a binding written later, and asks nothing",
+     !G.parse(later, opts).gaps.some(g => g.code === "UnboundReference") && /<user-input ref="a">a<\/user-input>/.test(G.toXML(later, opts)) ? null
+       : "a reference to a later binding was not resolved");
+
+  ok("BD-09", "prose under REF is not a name, and asks nothing",
+     !G.parse("[ref'RFC 2119']", opts).gaps.some(g => g.code === "UnboundReference") && G.toXML("[ref'RFC 2119']", opts).indexOf("<needs var") === -1 ? null
+       : "prose under REF was asked for as a name");
+
+  ok("BD-10", "the way back drops the <needs var> the reference raised",
+     G.fromXML(looseXml, opts).src === "[ref'nada']" ? null
+       : "came back as " + JSON.stringify(G.fromXML(looseXml, opts).src));
 
   return D.length;
 }

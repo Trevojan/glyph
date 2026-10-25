@@ -14,7 +14,7 @@
 //! pt-BR words of the empty document, of an unanswered hole and of a
 //! variable no line defines.
 
-use glyph_parse::{collect_bindings, binding_of, parse, Extra, Opts};
+use glyph_parse::{collect_bindings, binding_of, parse, unbound_refs, Extra, Opts};
 use glyph_stores::{atoms_of, def_of, depth_of, formula_of, species_of, stands_alone, Context};
 use glyph_json::Json;
 use glyph_json::number;
@@ -285,6 +285,9 @@ pub fn emit(tree: &mut Tree<Extra>, root: Id, start: usize, l: &mut Vec<String>,
         }
         let mut tail: Vec<String> = slot_needs.iter()
             .map(|(pos, want)| format!("{}<needs slot=\"{pos}\">{}</needs>", pad(d + 1), xesc(want))).collect();
+        /* a name a reference writes and nothing binds */
+        tail.extend(unbound_refs(tree, id, binds).iter()
+            .map(|v| format!("{}<needs var=\"{}\">referenciado e nunca ligado</needs>", pad(d + 1), xesc(v))));
         tail.push(format!("{}</{close}>", pad(d)));
         stack.push(Frame::Tail(tail));
         push_kids(&mut stack, &nd.children, d + 1);
