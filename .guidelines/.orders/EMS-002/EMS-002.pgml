@@ -171,6 +171,11 @@
     [val'the known difference','the oracle names each source it reaches with the diagnostics the decision gives it']
   ]
 
+  [section'ORD-0022-mood-return'
+    [tgt'a mood in a return segment reaches the XML, the first of the inclusions decided on 2026-10-25, an ORD of the batch']
+    [val'the mood','a mood written in a return segment emits mood first in its block, ahead of user-expectative, and both ways back keep the return marker']
+  ]
+
   [section'limits'
     [nev'a selector that answers an empty slice in silence']
     [dont'open an ORD before the ORD it depends on closes']
