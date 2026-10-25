@@ -159,6 +159,12 @@
     [val'the known difference','the oracle tests name the difference, undo it before comparing, and hold everything else byte for byte']
   ]
 
+  [section'ORD-0020-o4-quotes'
+    [tgt'the second residual of O4, in the Rust only: inside a literal only the quote that opened it closes it, a line break as well, answered on 2026-10-25, an ORD of the batch']
+    [val'the quote','an apostrophe literal runs past a line break to its own quote or to the bracket, as the backtick does and as the grammar says']
+    [val'the known difference','the oracle test names each source it reaches with the tokens the decision gives it']
+  ]
+
   [section'limits'
     [nev'a selector that answers an empty slice in silence']
     [dont'open an ORD before the ORD it depends on closes']
