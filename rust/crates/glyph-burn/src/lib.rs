@@ -11,7 +11,7 @@
 use glyph_parse::{parse, Extra, Opts};
 use glyph_rules::{compiled_of, Compiled};
 use glyph_stores::{entry_of, expansion_registry, Context};
-use glyph_json::Json;
+use glyph_json::{stringify, Json};
 use glyph_util::tree::{Id, Thrown, Tree, LIMITS};
 use glyph_util::{js_space, js_trim};
 
@@ -22,7 +22,8 @@ pub const BURN_LIMIT: usize = 24;
 /// keeps as the parse wrote it.
 #[derive(Debug, Clone, PartialEq)]
 pub enum Burnt {
-    Atom { canonical: String, children: Vec<Burnt>, unburned: bool, via: Option<String>, blended: bool },
+    /// `subject` is what the atom works on, as `subjectKey` writes it.
+    Atom { canonical: String, children: Vec<Burnt>, unburned: bool, via: Option<String>, blended: bool, subject: String },
     Literal(Option<String>),
     Text(Option<String>),
     Raw,
@@ -34,6 +35,12 @@ impl Burnt {
         match self {
             Burnt::Atom { canonical, .. } => Some(canonical),
             _ => None,
+        }
+    }
+    fn subject(&self) -> &str {
+        match self {
+            Burnt::Atom { subject, .. } => subject,
+            _ => "",
         }
     }
     fn children(&self) -> &[Burnt] {
@@ -92,6 +99,22 @@ pub struct BurnOpts<'a> {
     pub keep_text: bool,
 }
 
+/// `subjectKey`: the subject a burnt atom works on, as a key that holds
+/// `burnSame`'s equality. GLOSSARY §0.3: the human's operand is the subject of
+/// the whole formula, and what is nested inside an item is a standard it works
+/// against — so an atom the author wrote works on its own operands, and every
+/// item a composite's formula produces works on the composite's.
+pub fn subject_key(list: &[Burnt]) -> String {
+    fn key(n: &Burnt) -> String {
+        match n {
+            Burnt::Literal(v) => format!("'{}", v.as_ref().map_or_else(|| "undefined".to_string(), |s| stringify(&Json::Str(s.clone())))),
+            Burnt::Atom { canonical, children, .. } => format!("{canonical}({})", children.iter().map(key).collect::<Vec<_>>().join(",")),
+            _ => "·".into(),
+        }
+    }
+    list.iter().map(key).collect::<Vec<_>>().join(",")
+}
+
 /// `applyBlends`: co-occurrence over the atoms of one list becomes the
 /// richer element the store names.
 pub fn apply_blends(list: Vec<Burnt>, compiled: Option<&Compiled>, st: &mut Burning) -> Vec<Burnt> {
@@ -101,24 +124,36 @@ pub fn apply_blends(list: Vec<Burnt>, compiled: Option<&Compiled>, st: &mut Burn
     }
     let mut out = list;
     for (i, b) in comp.blends.iter().enumerate() {
-        let present = b.when.iter().all(|c| out.iter().any(|n| n.canonical() == Some(c.as_str())));
-        if !present {
-            continue;
-        }
-        let mut kids: Vec<Burnt> = Vec::new();
-        let mut kept: Vec<Burnt> = Vec::new();
-        for n in out {
-            if n.canonical().is_some_and(|c| b.when.iter().any(|w| w == c)) {
-                kids.extend(n.children().iter().cloned());
-            } else {
-                kept.push(n);
+        /* `scope: "sameTarget"` is checked (decided 2026-09-27): the atoms fuse
+           when they work on one subject, and different subjects burn as
+           separate commands */
+        let in_when = |n: &Burnt| n.canonical().is_some_and(|c| b.when.iter().any(|w| w == c));
+        let mut subjects: Vec<String> = Vec::new();
+        for n in out.iter().filter(|n| in_when(n)) {
+            if !subjects.iter().any(|s| s == n.subject()) {
+                subjects.push(n.subject().to_string());
             }
         }
-        if !st.blends.contains(&i) {
-            st.blends.push(i);
+        for s in subjects {
+            let present = b.when.iter().all(|c| out.iter().any(|n| n.canonical() == Some(c.as_str()) && n.subject() == s));
+            if !present {
+                continue;
+            }
+            let mut kids: Vec<Burnt> = Vec::new();
+            let mut kept: Vec<Burnt> = Vec::new();
+            for n in out {
+                if in_when(&n) && n.subject() == s {
+                    kids.extend(n.children().iter().cloned());
+                } else {
+                    kept.push(n);
+                }
+            }
+            if !st.blends.contains(&i) {
+                st.blends.push(i);
+            }
+            kept.push(Burnt::Atom { canonical: b.emit.clone(), children: kids, unburned: false, via: None, blended: true, subject: s });
+            out = kept;
         }
-        kept.push(Burnt::Atom { canonical: b.emit.clone(), children: kids, unburned: false, via: None, blended: true });
-        out = kept;
     }
     out
 }
@@ -127,9 +162,12 @@ fn body_of(tree: &Tree<Extra>) -> Vec<Id> {
     tree.segments.iter().flat_map(|s| s.children.iter().copied()).collect()
 }
 
-/// `burnList(list, opts, chain, depth)`.
+/// `burnList(list, opts, chain, depth, subject)`: `subject`, when given, is the
+/// subject every item of this list works on — the list is a composite's
+/// formula, and its items are the composite's.
+#[allow(clippy::too_many_arguments)]
 pub fn burn_list(tree: &Tree<Extra>, list: &[Id], o: &BurnOpts, compiled: Option<&Compiled>, chain: &[String], depth: usize,
-                 st: &mut Burning) -> Result<Vec<Burnt>, Thrown> {
+                 subject: Option<&str>, st: &mut Burning) -> Result<Vec<Burnt>, Thrown> {
     let mut out: Vec<Burnt> = Vec::new();
     /* announced rather than survived: a burn that stops silently is the
        defect this release exists to remove */
@@ -153,7 +191,7 @@ pub fn burn_list(tree: &Tree<Extra>, list: &[Id], o: &BurnOpts, compiled: Option
             continue;
         }
         if nd.mode.as_deref().is_some_and(|m| !m.is_empty()) || nd.is_template() {
-            out.extend(burn_list(tree, &nd.children, o, compiled, chain, depth + 1, st)?);
+            out.extend(burn_list(tree, &nd.children, o, compiled, chain, depth + 1, subject, st)?);
             continue;
         }
         if nd.raw_fence == Some(true) {
@@ -168,15 +206,16 @@ pub fn burn_list(tree: &Tree<Extra>, list: &[Id], o: &BurnOpts, compiled: Option
         let e = entry_of(&canonical, ctx);
         /* the arguments first: an operand is not part of the formula it is
            passed to, so it must not inherit that formula's chain */
-        let operands = burn_list(tree, &nd.children, o, compiled, chain, depth + 1, st)?;
+        let operands = burn_list(tree, &nd.children, o, compiled, chain, depth + 1, None, st)?;
+        let own = subject.map_or_else(|| subject_key(&operands), str::to_string);
         if e.is_none_or(|e| e.get("species").and_then(Json::str) == Some("atom")) {
-            out.push(Burnt::Atom { canonical, children: operands, unburned: false, via: None, blended: false });
+            out.push(Burnt::Atom { canonical, children: operands, unburned: false, via: None, blended: false, subject: own });
             continue;
         }
         let key = canonical.to_uppercase();
         if chain.contains(&key) || chain.len() >= BURN_LIMIT {
             let via = [chain, &[key.clone()]].concat().join(" → ");
-            out.push(Burnt::Atom { canonical: key, children: operands, unburned: true, via: Some(via), blended: false });
+            out.push(Burnt::Atom { canonical: key, children: operands, unburned: true, via: Some(via), blended: false, subject: own });
             continue;
         }
         /* a formula is a definition, not a request: it reads the composition
@@ -193,7 +232,7 @@ pub fn burn_list(tree: &Tree<Extra>, list: &[Id], o: &BurnOpts, compiled: Option
         let sub = parse(&formula, &Opts { ctx: &fctx, session: o.parse.session, valency: false, en: false, expanding: Vec::new(),
                                           registered: o.parse.registered })?;
         let next = [chain, &[key]].concat();
-        let burned = burn_list(&sub.tree, &body_of(&sub.tree), o, compiled, &next, 0, st)?;
+        let burned = burn_list(&sub.tree, &body_of(&sub.tree), o, compiled, &next, 0, Some(&own), st)?;
         out.extend(inject_subject(burned, operands));
     }
     Ok(apply_blends(out, compiled, st))
@@ -211,7 +250,7 @@ pub struct BurntSegment {
 pub fn burn(tree: &Tree<Extra>, o: &BurnOpts, st: &mut Burning) -> Result<Vec<BurntSegment>, Thrown> {
     let compiled = o.parse.ctx.rules.as_ref().map(compiled_of);
     tree.segments.iter().map(|sg| Ok(BurntSegment {
-        children: burn_list(tree, &sg.children, o, compiled.as_deref(), &[], 0, st)?, is_return: sg.is_return, breaks: sg.breaks,
+        children: burn_list(tree, &sg.children, o, compiled.as_deref(), &[], 0, None, st)?, is_return: sg.is_return, breaks: sg.breaks,
     })).collect()
 }
 

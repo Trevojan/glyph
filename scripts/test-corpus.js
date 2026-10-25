@@ -789,12 +789,15 @@ function runHgmlChecks() {
   /* the pattern layer — L6a. The .hgml had no consumer, and T26 says a format
      without one is a format whose consumer has not been built yet. This is it:
      co-occurrence in the BURNT form maps to one richer element, matched over
-     atoms so it is invariant to which surface synonym the author typed. */
-  const blendSrc = "[in[rev`o fluxo`][scru`a logica`]]";
+     atoms so it is invariant to which surface synonym the author typed. The
+     atoms fuse when they work on one subject (decided 2026-09-27), so the two
+     commands here are about one thing, and SCRU reaches DIST through its
+     formula. */
+  const blendSrc = "[in[rev`o fluxo`][scru`o fluxo`]]";
   const BLEND_OPTS = { expansions: require("../.guidelines/expansions.json"), rules: RULESTORE };
   const blended = G.toHGML(blendSrc, BLEND_OPTS);
   ok("H-10", "a blend folds co-occurring atoms into one element",
-     /\[heavyreview/.test(blended) && /'o fluxo'/.test(blended) && /'a logica'/.test(blended)
+     /\[heavyreview/.test(blended) && /'o fluxo'/.test(blended)
        ? null : "did not fire, or lost a literal: " + blended.slice(0, 120));
 
   /* the trap HGML_PLAN names: an invented element that cannot say what it means
@@ -810,11 +813,22 @@ function runHgmlChecks() {
      the vocabulary cannot place, is not a burn the engine can consume. */
   ok("H-10b", "a fired blend re-parses clean, as a known name",
      (function () {
-       const h = G.toHGML("[rev'x'],[dist'y']", BLEND_OPTS);
+       const h = G.toHGML("[rev'x'],[dist'x']", BLEND_OPTS);
        const g = (G.parse(h, { rules: RULESTORE }).gaps || []).filter(x => x.sev === "fix");
        const cl = G.classify("heavyreview", { rules: RULESTORE });
        return !g.length && cl.tier === "blend" ? null
             : "fix-level on re-parse: " + g.map(x => x.code).join(",") + " | tier " + cl.tier;
+     })());
+
+  /* `scope: "sameTarget"` checks the target (decided 2026-09-27): REV of one
+     thing beside DIST of another are two acts, and burn as two commands; the
+     field intake of 2026-09 found them fused */
+  ok("H-10c", "a blend fuses only atoms that work on one subject",
+     (function () {
+       const apart = G.toHGML("[rev'x'],[dist'y']", BLEND_OPTS);
+       const via = G.toHGML("[rev'x'],[scru'y']", BLEND_OPTS);
+       return !/heavyreview/.test(apart) && /^\[rev$/m.test(apart) && /^\[dist$/m.test(apart) && !/heavyreview/.test(via) ? null
+            : "different subjects fused: " + JSON.stringify(apart.slice(0, 160));
      })());
 
   ok("H-12", "a blend with no `means` is refused at compile time",

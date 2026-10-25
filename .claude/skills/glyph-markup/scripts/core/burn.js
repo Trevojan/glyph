@@ -87,6 +87,19 @@ export function injectSubject(body, operands) {
   return operands.concat(body);   // formula with no command head: prepend
 }
 
+/* The subject a burnt atom works on, as a key that holds burnSame's
+   equality. GLOSSARY §0.3: the human's operand is the subject of the whole
+   formula, and what is nested inside an item is a standard it works against.
+   So an atom the author wrote works on its own operands, and every item a
+   composite's formula produces works on the composite's. */
+export function subjectKey(list) {
+  return (list || []).map(function key(n) {
+    if (n.literal) return "'" + JSON.stringify(n.v);
+    if (n.canonical) return n.canonical + "(" + (n.children || []).map(key).join(",") + ")";
+    return "·";
+  }).join(",");
+}
+
 export var burnTruncated = false;
 export var burnBlends = [];        /* what fired, so the output can declare itself */
 
@@ -100,26 +113,37 @@ export function applyBlends(list, opts) {
   var out = list, i;
   for (i = 0; i < comp.blends.length; i++) {
     var b = comp.blends[i];
-    var present = b.when.every(function (c) {
-      return out.some(function (n) { return n.canonical === c; });
+    /* `scope: "sameTarget"` is checked (decided 2026-09-27): the atoms fuse
+       when they work on one subject, and different subjects burn as separate
+       commands */
+    var subjects = [];
+    out.forEach(function (n) {
+      if (b.when.indexOf(n.canonical) !== -1 && subjects.indexOf(n.subject) === -1) subjects.push(n.subject);
     });
-    if (!present) continue;
-    var kids = [];
-    var kept = out.filter(function (n) {
-      if (b.when.indexOf(n.canonical) !== -1) {
-        (n.children || []).forEach(function (k) { kids.push(k); });
-        return false;
-      }
-      return true;
+    subjects.forEach(function (s) {
+      var present = b.when.every(function (c) {
+        return out.some(function (n) { return n.canonical === c && n.subject === s; });
+      });
+      if (!present) return;
+      var kids = [];
+      var kept = out.filter(function (n) {
+        if (b.when.indexOf(n.canonical) !== -1 && n.subject === s) {
+          (n.children || []).forEach(function (k) { kids.push(k); });
+          return false;
+        }
+        return true;
+      });
+      if (burnBlends.indexOf(b) === -1) burnBlends.push(b);
+      kept.push({ canonical: b.emit, blended: true, children: kids, subject: s });
+      out = kept;
     });
-    if (burnBlends.indexOf(b) === -1) burnBlends.push(b);
-    kept.push({ canonical: b.emit, blended: true, children: kids });
-    out = kept;
   }
   return out;
 }
 
-export function burnList(list, opts, chain, depth) {
+/* `subject`, when given, is the subject every item of this list works on: the
+   list is a composite's formula, and its items are the composite's. */
+export function burnList(list, opts, chain, depth, subject) {
   var out = [];
   depth = depth || 0;
   /* the same ceiling the AST uses, so the three projections agree on what
@@ -131,12 +155,12 @@ export function burnList(list, opts, chain, depth) {
        does not: it is not vocabulary, and .hgml is hieroglyphs only. */
     if (nd.literal) { if (nd.form !== "raw") out.push(nd); return; }
     if (nd.text)    { if (opts && opts.keepText) out.push(nd); return; }
-    if (nd.mode)    { out = out.concat(burnList(nd.children, opts, chain, depth + 1)); return; }
+    if (nd.mode)    { out = out.concat(burnList(nd.children, opts, chain, depth + 1, subject)); return; }
     if (nd.rawFence){ out.push(nd); return; }
     if (nd.logic)   { out.push(nd); return; }
     /* A template invocation already expanded during parse(); what is left
        is the shell, so the burn walks straight through it. */
-    if (nd.template) { out = out.concat(burnList(nd.children, opts, chain, depth + 1)); return; }
+    if (nd.template) { out = out.concat(burnList(nd.children, opts, chain, depth + 1, subject)); return; }
     if (!nd.canonical) return;
 
     var e = entryOf(nd.canonical, opts);
@@ -153,9 +177,10 @@ export function burnList(list, opts, chain, depth) {
        and stopped with RMBR unreduced. Burning arguments first keeps the two
        relationships apart: containment extends the chain, argument does not. */
     var operands = burnList(nd.children || [], opts, chain, depth + 1);
+    var own = subject !== undefined ? subject : subjectKey(operands);
 
     if (!e || e.species === "atom") {
-      out.push({ canonical: nd.canonical, children: operands });
+      out.push({ canonical: nd.canonical, children: operands, subject: own });
       return;
     }
 
@@ -165,7 +190,7 @@ export function burnList(list, opts, chain, depth) {
          to generate a table with cycles. Emitting the node unburned beats
          looping, and the marker says the output is not fully reduced. */
       out.push({ canonical: key, children: operands, unburned: true,
-                 via: chain.concat(key).join(" → ") });
+                 via: chain.concat(key).join(" → "), subject: own });
       return;
     }
 
@@ -179,7 +204,7 @@ export function burnList(list, opts, chain, depth) {
     sub.segments.forEach(function (s) { body = body.concat(s.children); });
 
     /* Burn the formula body, then inject the already-atomic operands. */
-    var burnedBody = burnList(body, opts, chain.concat(key));
+    var burnedBody = burnList(body, opts, chain.concat(key), undefined, own);
     out = out.concat(injectSubject(burnedBody, operands));
   });
   return applyBlends(out, opts);
