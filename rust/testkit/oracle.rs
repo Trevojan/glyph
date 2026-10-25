@@ -445,6 +445,20 @@ pub mod known {
         rust.split('\n').map(|l| if l == ";;" { "" } else { l }).collect::<Vec<_>>().join("\n")
     }
 
+    /// O4, residual 2: inside a literal only the quote that opened it closes
+    /// it, a line break as well, so the apostrophe reads as the backtick does.
+    /// Each source of the oracle it reaches, with the tokens the decision
+    /// gives it: the JS's for the same source written with backticks, the form
+    /// and the closing named for the apostrophe.
+    pub const QUOTES: &[(&str, &str)] = &[
+        ("'a\nb'", r#"[{"k":"literal","v":"a\nb","s":0,"e":5,"form":"quote","closedBy":"quote"}]"#),
+    ];
+
+    /// The tokens residual 2 gives a named source.
+    pub fn quotes(src: &str) -> Option<Json> {
+        QUOTES.iter().find(|(s, _)| *s == src).map(|(_, t)| glyph_json::parse(t).expect("a named source's tokens"))
+    }
+
     /// The same undo over every string of a JSON answer that carries a burn.
     pub fn semicolons_json(rust: &str) -> String {
         fn walk(v: Json) -> Json {

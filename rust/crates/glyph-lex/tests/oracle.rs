@@ -58,17 +58,29 @@ fn the_tokens_equal_the_oracle_on_every_source() {
 fn the_tokens_equal_the_js_on_every_string_and_probe() {
     let sources = oracle::module("lexer").a("tokenize");
     assert!(!sources.is_empty(), "lexer.json: no sources");
+    let mut named = 0;
     for s in sources {
         let s = s.arr().unwrap();
         let src = s[0].str().unwrap();
         let got = Json::Arr(tokenize(src).iter().map(token_json).collect());
-        if got != s[1] {
-            let (g, w) = (json::stringify(&got), json::stringify(&s[1]));
+        /* a source O4's second residual reaches takes the tokens the decision
+           gives it, and the JS's answer there must differ from them */
+        let want = match oracle::known::quotes(src) {
+            Some(decided) => {
+                assert_ne!(decided, s[1], "{src:?}: named as a known difference, and the JS already answers it");
+                named += 1;
+                decided
+            }
+            None => s[1].clone(),
+        };
+        if got != want {
+            let (g, w) = (json::stringify(&got), json::stringify(&want));
             let at = g.bytes().zip(w.bytes()).take_while(|(a, b)| a == b).count();
             panic!("{:?}: differs at byte {at}\n  rust: {}\n  js:   {}", src.chars().take(60).collect::<String>(),
                    &g[at.saturating_sub(80)..(at + 80).min(g.len())], &w[at.saturating_sub(80)..(at + 80).min(w.len())]);
         }
     }
+    assert_eq!(named, oracle::known::QUOTES.len(), "a source named for O4's second residual is not in lexer.json");
 }
 
 fn class_json(c: &glyph_lex::Class) -> Json {
