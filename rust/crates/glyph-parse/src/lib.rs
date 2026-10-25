@@ -21,7 +21,7 @@ use glyph_lex::{classify, js_trim, suggest, tokenize, Token};
 use glyph_logic::{parse_logic, Logic};
 use glyph_rules::check_rules;
 use glyph_stores::{entry_of, expansion_registry, Context, Registered};
-use glyph_json::Json;
+use glyph_json::{number, Json};
 use glyph_templates::{check_template_constraints, expand_invocations, Parsed, SubParse};
 use glyph_util::tree::{strip_tags, Diag, Emotion, Gloss, Id, Node, Segment, Span, Suggestion, Thrown, Tree, LIMITS};
 use glyph_util::{esc, inherited};
@@ -550,6 +550,36 @@ pub fn binding_of<X: Clone>(tree: &mut Tree<X>, id: Id) -> Option<String> {
     Some(v)
 }
 
+/// `DEEP_INFERENCE`: the depth from which a composite with no operand asks.
+pub const DEEP_INFERENCE: f64 = 5.0;
+
+/// `deepInference(nd, opts)`: the deep-inference alarm (decided 2026-09-27).
+/// A composite whose formula runs `DEEP_INFERENCE` levels or more, holding no
+/// operand, where no frame and no ordered slot asks for one, answers its
+/// depth: the alarm asks for the subject, GLOSSARY §0.3's word for the operand
+/// of a formula. A chain link holds no operand of its own and is not asked.
+pub fn deep_inference<X: Clone>(tree: &Tree<X>, id: Id, ctx: &Context) -> Option<f64> {
+    let nd = &tree.nodes[id];
+    let canonical = nd.canonical.as_deref().filter(|c| !c.is_empty())?;
+    if nd.chain_element == Some(true) || nd.slot_name == Some(true) {
+        return None;
+    }
+    /* SLOTS and FRAMES are plain objects: a name the prototype holds is in both */
+    if get(SLOTS, canonical).is_some() || get(FRAMES, canonical).is_some() || inherited(canonical) {
+        return None;
+    }
+    let e = entry_of(canonical, ctx)?;
+    let depth = e.get("depth").and_then(Json::num)?;
+    if e.get("species").and_then(Json::str) != Some("composite") || depth < DEEP_INFERENCE {
+        return None;
+    }
+    let colon = nd.colon.as_ref().is_some_and(|c| c.as_deref().is_some_and(|c| !c.is_empty()));
+    if !tree.value_children(id).is_empty() || colon {
+        return None;
+    }
+    Some(depth)
+}
+
 /// `unboundRefs`: the names a REF's literals write and nothing binds — a
 /// reference is written `[ref'nome']`, and prose under REF is not a name
 /// (decided 2026-09-27).
@@ -720,7 +750,17 @@ pub fn parse(src: &str, o: &Opts) -> Result<Parse, Thrown> {
                 }
                 continue;
             }
-            let Some(frame) = get(FRAMES, &canonical) else { continue };
+            let Some(frame) = get(FRAMES, &canonical) else {
+                if let Some(deep) = deep_inference(&tree, id, ctx) {
+                    let pt = get(&derived().ptbr, &canonical).filter(|p| !p.is_empty()).map_or(String::new(), |p| format!(" ({p})"));
+                    let en = get(INSTR, &canonical).filter(|p| !p.is_empty()).map_or(String::new(), |p| format!(" ({p})"));
+                    let deep = number(deep);
+                    g(Diag::new("ask", "inferência profunda",
+                                format!("<code>[{c}</code>{pt} expande {deep} níveis: <strong>the subject</strong>?"), "DeepInference")
+                        .en("deep inference", format!("<code>[{c}</code>{en} expands {deep} levels: <strong>the subject</strong>?")));
+                }
+                continue;
+            };
             let want = frame.first().copied().unwrap_or("");
             if got == 0 {
                 let pt = get(&derived().ptbr, &canonical).filter(|p| !p.is_empty()).map_or(String::new(), |p| format!(" ({p})"));

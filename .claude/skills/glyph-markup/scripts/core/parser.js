@@ -456,7 +456,15 @@ export function parse(input, opts) {
         }
 
         var frame = FRAMES[nd2.canonical];
-        if (!frame) return;
+        if (!frame) {
+          var deep = deepInference(nd2, opts);
+          if (deep) G("ask", "inferência profunda",
+            "<code>[" + esc(String(nd2.canonical).toLowerCase()) + "</code>" +
+            (PTBR[nd2.canonical] ? " (" + PTBR[nd2.canonical] + ")" : "") +
+            " expande " + deep + " níveis: <strong>the subject</strong>?", "DeepInference",
+            "deep inference", "<code>[" + esc(String(nd2.canonical).toLowerCase()) + "</code>" + (INSTR[nd2.canonical] ? " (" + INSTR[nd2.canonical] + ")" : "") + " expands " + deep + " levels: <strong>the subject</strong>?");
+          return;
+        }
         var filled = valueChildren(nd2).length + (nd2.colon ? 1 : 0);
         var want = frame[0];
         if (filled === 0)
@@ -573,6 +581,23 @@ export function bindingOf(nd) {
   /* the literal DECLARES the name, so it is not also a reference to it */
   lit.isBinder = true;
   return v;
+}
+
+/* The deep-inference alarm (decided 2026-09-27): a composite whose formula
+   runs DEEP_INFERENCE levels or more and holds no operand leaves the model
+   that receives the Order to infer what it is about. Where a frame or an
+   ordered slot asks for the operand, it already asks; where none does, the
+   alarm asks for the subject, GLOSSARY §0.3's word for the operand of a
+   formula. A chain link holds no operand of its own and is not asked, as
+   with every frame. Answers the composite's depth, or null. */
+export var DEEP_INFERENCE = 5;
+export function deepInference(nd, opts) {
+  if (!nd || !nd.canonical || nd.chainElement || nd.slotName) return null;
+  if (SLOTS[nd.canonical] || FRAMES[nd.canonical]) return null;
+  var e = entryOf(nd.canonical, opts);
+  if (!e || e.species !== "composite" || !(e.depth >= DEEP_INFERENCE)) return null;
+  if (valueChildren(nd).length || nd.colon) return null;
+  return e.depth;
 }
 
 /* A reference to a name is written `[ref'nome']` (decided 2026-09-27). A

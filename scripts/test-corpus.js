@@ -2178,7 +2178,8 @@ function runSnapshotChecks() {
       "[xyzzy]", "[summ]", "[constructor]", "[__proto__'x']", "[pos[constructor]]", "[rw-cr-ctx]", "[a-b,c]",
       "[ctx[--germinate'x']]", "[mand'x'][opt'x']", "[ctx'x'][ctx'y'];[ctx]", "[CTX'Upper']", "[cx'alias']",
       "[heavyreview]", "[ctx`x`'y'[sum]'z']", "[ctx]]", "[--t'a'", "[ctx[--t]]]", "[skeptic'x']", "[sceptic'x']",
-      "[ref'nada']", "[ref'RFC 2119']", "[ref'a'][sum'a'[ctx]]", "[ref'a','b'[ctx]]"
+      "[ref'nada']", "[ref'RFC 2119']", "[ref'a'][sum'a'[ctx]]", "[ref'a','b'[ctx]]",
+      "[fbk]", "[fbk'plan b']", "[fbk: x]", "[rev-fbk]", "[fbk[ctx]]", "[hyp]"
     ];
     const NO_SESSION = ["constructor", "[constructor]", "rd", "[ctx] prose ist"];
     const NO_VALENCY = ["[gt'a']", "[ctx]", "[cat'a']"];
@@ -3024,6 +3025,31 @@ function runImperativeChecks() {
   const wrong = five.filter(c => !G.standsAlone(c, opts));
   ok("IM-05", "os cinco primitivos que o codigo ja nomeava continuam primitivos",
      wrong.length ? "deixaram de ser: " + wrong.join(", ") : null);
+
+  /* o alarme de inferencia profunda (decidido em 2026-09-27): um composto de
+     profundidade 5 ou mais sem operando pergunta pelo sujeito onde nada
+     pergunta; onde um frame pergunta, a pergunta e a dele */
+  const bare = G.parse("[fbk]", opts), bareXml = G.toXML("[fbk]", opts);
+  ok("DI-01", "um composto profundo sem operando, onde nada pergunta, pergunta pelo sujeito",
+     !bare.gaps.some(g => g.code === "DeepInference" && g.sev === "ask") ? "[fbk] nu nao perguntou"
+       : bareXml.indexOf("<needs>the subject</needs>") === -1 ? "sem <needs>: " + JSON.stringify(bareXml) : null);
+
+  const quiet = ["[fbk'plan b']", "[fbk: x]", "[rev-fbk]", "[fbk[ctx]]"]
+    .filter(s => G.parse(s, opts).gaps.some(g => g.code === "DeepInference") || G.toXML(s, opts).indexOf("the subject") !== -1);
+  ok("DI-02", "com operando, com dois-pontos, como elo de cadeia ou com um comando dentro, nao pergunta",
+     quiet.length ? "perguntou em " + quiet.join(", ") : null);
+
+  const hyp = G.parse("[hyp]", opts).gaps;
+  ok("DI-03", "onde um frame ja pergunta, a pergunta e a do frame, e o alarme nao repete",
+     hyp.some(g => g.code === "UnfilledSlot") && !hyp.some(g => g.code === "DeepInference") ? null
+       : "[hyp]: " + hyp.map(g => g.code).join(", "));
+
+  ok("DI-04", "o alarme corre com a valencia",
+     !G.parse("[fbk]", { ...opts, valency: false }).gaps.some(g => g.code === "DeepInference") ? null
+       : "perguntou com valency:false");
+
+  ok("DI-05", "a volta descarta o <needs> que o alarme escreveu",
+     G.fromXML(bareXml, opts).src === "[fbk]" ? null : "voltou como " + JSON.stringify(G.fromXML(bareXml, opts).src));
 
   return D.length;
 }
