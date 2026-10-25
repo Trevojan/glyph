@@ -153,6 +153,12 @@
     [val'the target','the atoms of a blend fuse when they work on one subject, and different subjects burn as separate commands']
   ]
 
+  [section'ORD-0019-o4-semicolons'
+    [tgt'the first residual of O4, in the Rust only: the line break between two blocks burns as its own line, answered on 2026-10-25, an ORD of the batch']
+    [val'the mark','the Rust writes the line ;; between two blocks where a segment break writes the blank line']
+    [val'the known difference','the oracle tests name the difference, undo it before comparing, and hold everything else byte for byte']
+  ]
+
   [section'limits'
     [nev'a selector that answers an empty slice in silence']
     [dont'open an ORD before the ORD it depends on closes']
