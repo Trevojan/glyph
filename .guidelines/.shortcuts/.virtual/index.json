@@ -804,7 +804,7 @@
     },
     ".guidelines/.orders/EMS-002/EMS-002.pgml": {
       "nodes": [
-        ["n523", "", 0, 20210, 1, 175, "24874b860f22d200", "", ""]
+        ["n523", "", 0, 20911, 1, 176, "fe612720be97e6c0", "", ""]
       ]
     },
     ".guidelines/.orders/EMS-002/ORD-0001/ORD-0001.hgml": {
@@ -1721,10 +1721,10 @@
     },
     ".guidelines/.orders/EMS-002/README.md": {
       "nodes": [
-        ["n598", "", 0, 9328, 1, 31, "d538c6184d1db600", "", ""],
-        ["n599", "ems-002--o-glyph-100-em-rust", 0, 9328, 1, 31, "d538c6184d1db600", "e4a31f409ed44400", "n598"],
-        ["n600", "a-ordem-aberta", 396, 541, 9, 4, "da2349a86c955c00", "c645689ea7f4ca80", "n599"],
-        ["n601", "ordens-fechadas", 541, 9328, 13, 19, "f31e4822c0fb7580", "e130016a1fca3c00", "n599"]
+        ["n598", "", 0, 9863, 1, 30, "88c302a8a0a2a600", "", ""],
+        ["n599", "ems-002--o-glyph-100-em-rust", 0, 9863, 1, 30, "88c302a8a0a2a600", "814c7feae8a67a00", "n598"],
+        ["n600", "a-ordem-aberta", 396, 415, 9, 2, "5941cf30e1126c00", "", "n599"],
+        ["n601", "ordens-fechadas", 415, 9863, 11, 20, "cf034f4ae768a400", "ce9e5798cf84ac00", "n599"]
       ]
     },
     ".guidelines/.orders/HANDOFF-2026-08-30.ast.json": {
@@ -2385,16 +2385,16 @@
     },
     ".guidelines/.plan/README.md": {
       "nodes": [
-        ["n1142", "", 0, 13897, 1, 206, "8f4e09e05c082200", "", ""],
-        ["n1143", "plano--o-que-vem-a-seguir", 0, 13897, 1, 206, "8f4e09e05c082200", "78fb7aaea97fce00", "n1142"],
-        ["n1144", "autorizado-pelo-regente-ainda-não-construído", 217, 11685, 7, 177, "4389c850926bf300", "e76b36c6346b7400", "n1143"],
+        ["n1142", "", 0, 13789, 1, 204, "c2df4b50e9b95700", "", ""],
+        ["n1143", "plano--o-que-vem-a-seguir", 0, 13789, 1, 204, "c2df4b50e9b95700", "943eda70fcc11b00", "n1142"],
+        ["n1144", "autorizado-pelo-regente-ainda-não-construído", 217, 11577, 7, 175, "146f760ef773efc0", "d24d32e4b60da800", "n1143"],
         ["n1870", "0-caminhos-virtuais--guidelinesshortcutsvirtual--construído-as-sete-camadas-pela-ems-002", 269, 5363, 9, 81, "da71f09e759c7600", "cb44836834464e80", "n1144"],
         ["n1146", "1-section-de-cabeçalho-irmã-do-schema--decidido-faltando-fazer", 5363, 6025, 90, 13, "29a759a8aecd1500", "f13677d632797d00", "n1144"],
         ["n1147", "2-gatilhos-de-re-ferência", 6025, 6930, 103, 19, "20d81a5623895800", "b5f416c6e3cdac00", "n1144"],
         ["n2207", "3-quatro-defeitos-medidos-o-que-foi-consertado-nos-dois-motores-e-o-que-o-rust-conserta", 6930, 8547, 122, 9, "4133c8ece1cd9000", "24e81e88f2e52400", "n1144"],
-        ["n1149", "5-o-glyph-em-rust--a-série-ems-001", 8547, 11685, 131, 53, "5866440a47f45c40", "e77d2458b15b1640", "n1144"],
-        ["n1150", "aberto-esperando-o-regente", 11685, 13215, 184, 11, "7d12d970664cbc00", "05888320d62c0600", "n1143"],
-        ["n1151", "adiado-por-decisão-não-por-esquecimento", 13215, 13897, 195, 12, "110118b8258d7d80", "009590141c1d2c00", "n1143"]
+        ["n1149", "5-o-glyph-em-rust--a-série-ems-001", 8547, 11577, 131, 51, "fb055faa347f4100", "4b7bd4cebf355200", "n1144"],
+        ["n1150", "aberto-esperando-o-regente", 11577, 13107, 182, 11, "7d12d970664cbc00", "05888320d62c0600", "n1143"],
+        ["n1151", "adiado-por-decisão-não-por-esquecimento", 13107, 13789, 193, 12, "110118b8258d7d80", "009590141c1d2c00", "n1143"]
       ]
     },
     ".guidelines/.plan/ladder.toml": {
@@ -2404,14 +2404,14 @@
     },
     ".guidelines/.shortcuts/README.md": {
       "nodes": [
-        ["n1153", "", 0, 7855, 1, 83, "cabb9db015f4ccc8", "", ""],
-        ["n1154", "atalhos--comece-por-aqui", 0, 7855, 1, 83, "cabb9db015f4ccc8", "53a79ca0862f3400", "n1153"],
-        ["n1155", "onde-estou", 442, 3000, 11, 11, "6941dbd85ccc2a00", "382b5de0bd898000", "n1154"],
-        ["n1156", "os-sete-eixos", 3000, 3686, 22, 12, "6357d5140827f600", "092e74a89f1df300", "n1154"],
-        ["n1157", "o-mapa-do-motor-em-cinco-linhas", 3686, 4613, 34, 12, "537763c2149d2400", "2caeb09a05c9d600", "n1154"],
-        ["n1158", "os-documentos-que-mais-se-consulta", 4613, 6518, 46, 18, "b14515f455f59aa0", "99bdc846d8830680", "n1154"],
-        ["n1159", "os-outros-documentos", 6518, 7516, 64, 14, "bcf7ae04a2ded000", "078ded0802e8e000", "n1154"],
-        ["n1160", "vocabulário-do-projeto", 7516, 7855, 78, 6, "d5b16db424152200", "0656413c7ac4f500", "n1154"]
+        ["n1153", "", 0, 7766, 1, 83, "eb44c1a02b7b5e00", "", ""],
+        ["n1154", "atalhos--comece-por-aqui", 0, 7766, 1, 83, "eb44c1a02b7b5e00", "d23f2918ab339e00", "n1153"],
+        ["n1155", "onde-estou", 442, 2911, 11, 11, "25e8b1705ffe6400", "fd1e0bc01c55f200", "n1154"],
+        ["n1156", "os-sete-eixos", 2911, 3597, 22, 12, "6357d5140827f600", "092e74a89f1df300", "n1154"],
+        ["n1157", "o-mapa-do-motor-em-cinco-linhas", 3597, 4524, 34, 12, "537763c2149d2400", "2caeb09a05c9d600", "n1154"],
+        ["n1158", "os-documentos-que-mais-se-consulta", 4524, 6429, 46, 18, "b14515f455f59aa0", "99bdc846d8830680", "n1154"],
+        ["n1159", "os-outros-documentos", 6429, 7427, 64, 14, "bcf7ae04a2ded000", "078ded0802e8e000", "n1154"],
+        ["n1160", "vocabulário-do-projeto", 7427, 7766, 78, 6, "d5b16db424152200", "0656413c7ac4f500", "n1154"]
       ]
     },
     ".guidelines/.sources/COMPILER_LESSONS.md": {
