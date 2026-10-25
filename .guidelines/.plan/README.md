@@ -165,7 +165,9 @@ um lote, e a versão se move uma vez quando ele fecha (decidido em 2026-10-25):
 
 - **dois diagnósticos para um comando sem efeito**: *não trabalha* (`note`), um
   comando conhecido sem efeito na posição em que está; *não sabe* (`fix`), fora
-  do vocabulário;
+  do vocabulário — este já é o `UnknownCommand`. Espera o Regente: quais posições
+  deixam um comando conhecido sem efeito não está escrito em lugar nenhum, e a
+  leitura que a sessão de 2026-09-27 propôs não ficou no repositório;
 - **as duas propostas do rascunho do XML**: `[pt'1.1'` → `<part n="1.1">` e
   `[if'cond'` → `<if cond="…">`, pelo `PACKAGE_TARGET.md`, com o `fromXML` no
   mesmo passo;
