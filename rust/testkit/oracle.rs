@@ -459,6 +459,38 @@ pub mod known {
         QUOTES.iter().find(|(s, _)| *s == src).map(|(_, t)| glyph_json::parse(t).expect("a named source's tokens"))
     }
 
+    /// O4, residual 3: a bare word where a template parameter goes is refused
+    /// by name, with the arguments as the author wrote them, quoted. Each probe
+    /// of the oracle it reaches, with the diagnostics the decision gives it in
+    /// both languages: the JS's, with a refusal naming each bare word in place
+    /// of the silence or of `[?`.
+    pub const BARE: &[(&str, &str)] = &[
+        ("[--germinate a,b]",
+         r#"{"pt":[{"sev":"fix","lab":"parâmetro não é literal","msg":"o 1º parâmetro de <code>[--germinate</code> recebeu <code>a</code>. Parâmetro de template é sempre literal: <code>[--germinate`a`,`b`]</code>.","code":"TemplateParamNotLiteral","at":null,"plain":"o 1º parâmetro de [--germinate recebeu a. Parâmetro de template é sempre literal: [--germinate`a`,`b`]."},{"sev":"fix","lab":"parâmetro não é literal","msg":"o 2º parâmetro de <code>[--germinate</code> recebeu <code>b</code>. Parâmetro de template é sempre literal: <code>[--germinate`a`,`b`]</code>.","code":"TemplateParamNotLiteral","at":null,"plain":"o 2º parâmetro de [--germinate recebeu b. Parâmetro de template é sempre literal: [--germinate`a`,`b`]."},{"sev":"ask","lab":"casa vazia","msg":"<code>alvo</code> over seeds (every aspect of a situation, being it good, bad or neutral)","code":"PlaceholderPending","at":null,"plain":"alvo over seeds (every aspect of a situation, being it good, bad or neutral)"},{"sev":"ask","lab":"casa vazia","msg":"<code>criterio</code> the external criterion to validate against","code":"PlaceholderPending","at":null,"plain":"criterio the external criterion to validate against"}],"en":[{"sev":"fix","lab":"parameter is not a literal","msg":"argument 1 of <code>[--germinate</code> got <code>a</code>. A template parameter is always a literal: <code>[--germinate`a`,`b`]</code>.","code":"TemplateParamNotLiteral","at":null,"plain":"argument 1 of [--germinate got a. A template parameter is always a literal: [--germinate`a`,`b`]."},{"sev":"fix","lab":"parameter is not a literal","msg":"argument 2 of <code>[--germinate</code> got <code>b</code>. A template parameter is always a literal: <code>[--germinate`a`,`b`]</code>.","code":"TemplateParamNotLiteral","at":null,"plain":"argument 2 of [--germinate got b. A template parameter is always a literal: [--germinate`a`,`b`]."},{"sev":"ask","lab":"empty field","msg":"<code>alvo</code> over seeds (every aspect of a situation, being it good, bad or neutral)","code":"PlaceholderPending","at":null,"plain":"alvo over seeds (every aspect of a situation, being it good, bad or neutral)"},{"sev":"ask","lab":"empty field","msg":"<code>criterio</code> the external criterion to validate against","code":"PlaceholderPending","at":null,"plain":"criterio the external criterion to validate against"}]}"#),
+        ("[--reinforce rule,`why`]",
+         r#"{"pt":[{"sev":"fix","lab":"parâmetro não é literal","msg":"o 1º parâmetro de <code>[--reinforce</code> recebeu <code>rule</code>. Parâmetro de template é sempre literal: <code>[--reinforce`rule`,`why`]</code>.","code":"TemplateParamNotLiteral","at":null,"plain":"o 1º parâmetro de [--reinforce recebeu rule. Parâmetro de template é sempre literal: [--reinforce`rule`,`why`]."},{"sev":"ask","lab":"casa vazia","msg":"<code>why</code> why it must hold, so it is not dropped later","code":"PlaceholderPending","at":null,"plain":"why why it must hold, so it is not dropped later"}],"en":[{"sev":"fix","lab":"parameter is not a literal","msg":"argument 1 of <code>[--reinforce</code> got <code>rule</code>. A template parameter is always a literal: <code>[--reinforce`rule`,`why`]</code>.","code":"TemplateParamNotLiteral","at":null,"plain":"argument 1 of [--reinforce got rule. A template parameter is always a literal: [--reinforce`rule`,`why`]."},{"sev":"ask","lab":"empty field","msg":"<code>why</code> why it must hold, so it is not dropped later","code":"PlaceholderPending","at":null,"plain":"why why it must hold, so it is not dropped later"}]}"#),
+    ];
+
+    /// The diagnostics residual 3 gives a named probe, in `lang`.
+    pub fn bare(src: &str, lang: &str) -> Option<Json> {
+        BARE.iter().find(|(s, _)| *s == src)
+            .map(|(_, d)| glyph_json::parse(d).expect("a named probe's diagnostics").get(lang).cloned().expect("both languages"))
+    }
+
+    /// The envelope residual 3 gives a named probe: the JS's, its diagnostics
+    /// the decided ones in the envelope's shape, `{code, severity, label,
+    /// message}`.
+    pub fn bare_envelope(src: &str, lang: &str, js: &Json) -> Option<Json> {
+        let decided = bare(src, lang)?;
+        let field = |g: &Json, k: &str| g.get(k).cloned().unwrap_or(Json::Null);
+        let diags = Json::Arr(decided.arr()?.iter().map(|g| Json::Obj(vec![
+            ("code".into(), field(g, "code")), ("severity".into(), field(g, "sev")),
+            ("label".into(), field(g, "lab")), ("message".into(), field(g, "plain")),
+        ])).collect());
+        let Json::Obj(kv) = js.clone() else { return None };
+        Some(Json::Obj(kv.into_iter().map(|(k, v)| if k == "diagnostics" { (k, diags.clone()) } else { (k, v) }).collect()))
+    }
+
     /// The same undo over every string of a JSON answer that carries a burn.
     pub fn semicolons_json(rust: &str) -> String {
         fn walk(v: Json) -> Json {

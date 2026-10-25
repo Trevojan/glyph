@@ -2194,7 +2194,8 @@ function runSnapshotChecks() {
       "[heavyreview]", "[ctx`x`'y'[sum]'z']", "[ctx]]", "[--t'a'", "[ctx[--t]]]", "[skeptic'x']", "[sceptic'x']",
       "[ref'nada']", "[ref'RFC 2119']", "[ref'a'][sum'a'[ctx]]", "[ref'a','b'[ctx]]",
       "[fbk]", "[fbk'plan b']", "[fbk: x]", "[rev-fbk]", "[fbk[ctx]]", "[hyp]",
-      "[pt'1.1']", "[if'a > b'[ctx'x']]", "[sum'ready'[ctx]][if'ready']", "[if'']", "[pt:intro'1.1'[ctx]]", "[if`it's \"x\"`]", "[if]"
+      "[pt'1.1']", "[if'a > b'[ctx'x']]", "[sum'ready'[ctx]][if'ready']", "[if'']", "[pt:intro'1.1'[ctx]]", "[if`it's \"x\"`]", "[if]",
+      "[--germinate a,b]", "[--reinforce rule,`why`]", "[--reinforce `r`,`w` and more]"
     ];
     const NO_SESSION = ["constructor", "[constructor]", "rd", "[ctx] prose ist"];
     const NO_VALENCY = ["[gt'a']", "[ctx]", "[cat'a']"];

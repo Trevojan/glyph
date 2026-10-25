@@ -19,7 +19,7 @@ use glyph_stores::Context;
 use glyph_json::Json;
 use glyph_json::number;
 use glyph_util::tree::{Diag, Id, Node, Thrown, Tree};
-use glyph_util::{esc, inherited, inherited_text};
+use glyph_util::{esc, inherited, inherited_text, js_trim};
 use std::sync::Arc;
 
 /// `String(v)`; `None` is `undefined`.
@@ -104,6 +104,9 @@ pub struct Fills {
     pub extra: Vec<Id>,
     /// A non-literal argument with a literal after it: it displaced one.
     pub slid: Vec<(Id, usize)>,
+    /// A bare word among the arguments, with its position as written —
+    /// literals and bare words counted in order.
+    pub bare: Vec<(Id, usize)>,
 }
 
 enum Got<'a> {
@@ -144,6 +147,7 @@ fn is_ph<X>(tree: &Tree<X>, id: Id) -> bool {
 pub fn collect_fills<X>(tree: &Tree<X>, inv: Id, repeat: Option<&Param>) -> Result<Fills, Thrown> {
     let mut f = Fills::default();
     let mut slid = Vec::new();
+    let mut written = 0;
     let repeat_key = repeat.filter(|r| r.truthy).map(|r| r.text.to_lowercase());
     for &c in &tree.nodes[inv].children {
         if is_ph(tree, c) {
@@ -175,7 +179,12 @@ pub fn collect_fills<X>(tree: &Tree<X>, inv: Id, repeat: Option<&Param>) -> Resu
         }
         if tree.nodes[c].is_literal() {
             f.positional.push(tree.nodes[c].v.clone());
+            written += 1;
             continue;
+        }
+        if tree.nodes[c].text == Some(true) && !js_trim(tree.nodes[c].v.as_deref().unwrap_or("")).is_empty() {
+            written += 1;
+            f.bare.push((c, written));
         }
         f.extra.push(c);
         slid.push((c, f.positional.len() + 1));
@@ -329,7 +338,33 @@ pub fn expand_invocations<X: Clone + Default>(
         let repeat = raw_params.iter().find(|p| repeats(p)).map(Param::of);
         let fills = collect_fills(tree, inv, repeat.as_ref())?;
         let shown = esc(&params.iter().map(|p| format!("`{}`", p.text)).collect::<Vec<_>>().join(","));
-        for &(node, at) in &fills.slid {
+        /* A bare word where a parameter goes is refused by name, with the
+           arguments as the author wrote them, quoted (O4, decided 2026-10-25,
+           in the Rust only: the JS lets a bare word with no literal after it
+           fall as prose in silence, and names a displaced one `[?`). Where a
+           parameter goes: a position still open, or one a literal after it
+           takes. */
+        let refused: Vec<(Id, usize)> = fills.bare.iter().copied()
+            .filter(|&(node, at)| at <= params.len() || fills.slid.iter().any(|&(s, _)| s == node)).collect();
+        let written: Vec<String> = tree.nodes[inv].children.iter().filter_map(|&c| {
+            let k = &tree.nodes[c];
+            if k.is_literal() {
+                Some(k.v.clone().unwrap_or_default())
+            } else {
+                refused.iter().any(|&(r, _)| r == c).then(|| js_trim(k.v.as_deref().unwrap_or("")))
+            }
+        }).collect();
+        let form = esc(&written.iter().map(|w| format!("`{w}`")).collect::<Vec<_>>().join(","));
+        for &(node, at) in &refused {
+            let word = esc(&js_trim(tree.nodes[node].v.as_deref().unwrap_or("")));
+            g(Diag::new("fix", "parâmetro não é literal",
+                        format!("o {at}º parâmetro de <code>[--{tpl}</code> recebeu <code>{word}</code>. \
+                                 Parâmetro de template é sempre literal: <code>[--{tpl}{form}]</code>."), "TemplateParamNotLiteral")
+                .en("parameter is not a literal",
+                    format!("argument {at} of <code>[--{tpl}</code> got <code>{word}</code>. \
+                             A template parameter is always a literal: <code>[--{tpl}{form}]</code>.")));
+        }
+        for &(node, at) in fills.slid.iter().filter(|&&(s, _)| !fills.bare.iter().any(|&(b, _)| b == s)) {
             let nd = &tree.nodes[node];
             let what = esc(&[&nd.canonical, &nd.template].into_iter().flatten().find(|s| !s.is_empty())
                 .map_or("?".to_string(), |s| s.to_lowercase()));

@@ -82,7 +82,7 @@ fn the_ast_digest_of_every_case_equals_the_snapshot() {
 fn every_envelope_equals_the_js() {
     let runs = module("ast").a("runs");
     assert!(runs.len() > 114, "ast.json holds {} runs — write it again: {}", runs.len(), oracle::WRITE_IT);
-    let (mut n, mut thrown) = (0, 0);
+    let (mut n, mut thrown, mut named) = (0, 0, 0);
     for run in runs {
         let (id, src) = (run.s("id"), run.s("src"));
         let ctx = context(run);
@@ -102,10 +102,23 @@ fn every_envelope_equals_the_js() {
                     assert_eq!(got.err(), Some(Thrown(t.str().expect("a message").to_string())), "{id} {k}: what toAST throws");
                     thrown += 1;
                 }
-                None => assert_eq!(got.unwrap_or_else(|e| panic!("{id} {k}: {e:?}")), *want, "{id} {k}: the envelope"),
+                None => {
+                    /* a probe O4's third residual reaches carries the diagnostics
+                       the decision gives it, and the JS's envelope must differ */
+                    let want = match oracle::known::bare_envelope(src, if en { "en" } else { "pt" }, want) {
+                        Some(decided) => {
+                            assert_ne!(decided, *want, "{id} {k}: named as a known difference, and the JS already answers it");
+                            named += 1;
+                            decided
+                        }
+                        None => want.clone(),
+                    };
+                    assert_eq!(got.unwrap_or_else(|e| panic!("{id} {k}: {e:?}")), want, "{id} {k}: the envelope");
+                }
             }
             n += 1;
         }
     }
-    println!("{} runs, {n} envelopes, {thrown} throws", runs.len());
+    assert!(named > 0, "no envelope in ast.json reaches O4's third residual");
+    println!("{} runs, {n} envelopes, {thrown} throws, {named} named for O4", runs.len());
 }
