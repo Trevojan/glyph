@@ -168,8 +168,6 @@ um lote, e a versão se move uma vez quando ele fecha (decidido em 2026-10-25):
   do vocabulário — este já é o `UnknownCommand`. Espera o Regente: quais posições
   deixam um comando conhecido sem efeito não está escrito em lugar nenhum, e a
   leitura que a sessão de 2026-09-27 propôs não ficou no repositório;
-- **o blend `REV` + `DIST` só no mesmo alvo**: o `sameTarget` passa a conferir o
-  alvo, e alvos diferentes queimam como dois comandos;
 - **os três resíduos do §3, só no Rust** (O4), com a resposta certa decidida em
   2026-10-25: o Rust responde certo, e o teste diferencial nomeia cada um como
   diferença conhecida;
