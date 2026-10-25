@@ -8,6 +8,8 @@ pacote que o `--bundle` escreve, e a contagem é desta série.
 
 ## A Ordem aberta
 
+- [`EMS-002/ORD-0021`](ORD-0021/ORD-0021.xml) — o terceiro resíduo de O4, só no Rust: a palavra nua em posição de parâmetro é recusada pelo nome; aberta em 2026-10-25
+
 ## Ordens fechadas
 
 | ORD | o que entregou | commit | digest |
