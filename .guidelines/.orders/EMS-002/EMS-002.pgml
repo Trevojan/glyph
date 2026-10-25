@@ -165,6 +165,12 @@
     [val'the known difference','the oracle test names each source it reaches with the tokens the decision gives it']
   ]
 
+  [section'ORD-0021-o4-bare'
+    [tgt'the third residual of O4, in the Rust only: a bare word where a template parameter goes is refused by name, answered on 2026-10-25, the last free ORD of the batch']
+    [val'the refusal','a bare word in a parameter position raises TemplateParamNotLiteral naming the word, with the arguments as the author wrote them, quoted']
+    [val'the known difference','the oracle names each source it reaches with the diagnostics the decision gives it']
+  ]
+
   [section'limits'
     [nev'a selector that answers an empty slice in silence']
     [dont'open an ORD before the ORD it depends on closes']
