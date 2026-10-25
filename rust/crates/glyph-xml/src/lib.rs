@@ -14,7 +14,7 @@
 //! pt-BR words of the empty document, of an unanswered hole and of a
 //! variable no line defines.
 
-use glyph_parse::{collect_bindings, binding_of, parse, unbound_refs, Extra, Opts};
+use glyph_parse::{collect_bindings, binding_of, deep_inference, parse, unbound_refs, Extra, Opts};
 use glyph_stores::{atoms_of, def_of, depth_of, formula_of, species_of, stands_alone, Context};
 use glyph_json::Json;
 use glyph_json::number;
@@ -273,7 +273,8 @@ pub fn emit(tree: &mut Tree<Extra>, root: Id, start: usize, l: &mut Vec<String>,
         }
         let frame = if slots.is_some() { None } else { get(FRAMES, &canonical) };
         let needs = frame.filter(|_| !bare && kids.is_empty() && !colon)
-            .map(|f| f.first().copied().unwrap_or("").replacen('*', "", 1));
+            .map(|f| f.first().copied().unwrap_or("").replacen('*', "", 1))
+            .or_else(|| deep_inference(tree, id, ctx).map(|_| "the subject".to_string()));
 
         if nd.children.is_empty() && needs.is_none() && slot_needs.is_empty() {
             l.push(format!("{}{open}/>", pad(d)));

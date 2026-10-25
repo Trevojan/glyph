@@ -15,7 +15,7 @@
 import { xesc, pad, walk, valueChildren } from "./util.js";
 import { FRAMES, SLOTS, elName, GLOSS_REVERSE } from "./vocabulary.js";
 import { speciesOf, depthOf, formulaOf, defOf, atomsOf, standsAlone } from "./stores.js";
-import { parse, collectBindings, bindingOf, unboundRefs } from "./parser.js";
+import { parse, collectBindings, bindingOf, unboundRefs, deepInference } from "./parser.js";
 import { VERSION } from "./version.js";
 
 /* ======================================================
@@ -340,7 +340,8 @@ export function emit(root, startDepth, L, opts) {
     }
 
     var frame = slots ? null : FRAMES[nd.canonical];
-    var needs = (frame && !nd.chainElement && kids.length === 0 && !nd.colon) ? frame[0].replace("*", "") : null;
+    var needs = (frame && !nd.chainElement && kids.length === 0 && !nd.colon) ? frame[0].replace("*", "")
+              : deepInference(nd, opts) ? "the subject" : null;
     var allKids = nd.children || [];
 
     if (!allKids.length && !needs && !slotNeeds.length) { L.push(pad(d) + open + "/>"); continue; }

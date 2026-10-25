@@ -193,7 +193,7 @@ attribute is what lets `fromXML()` rebuild the call.
 | Shape | From | Read back as |
 |---|---|---|
 | `<needs slot="alpha">` | a real `[ph-name` hole | `[ph-name` |
-| `<needs>` (no slot) | `FRAMES` — the command wants an operand | nothing; regenerated |
+| `<needs>` (no slot) | `FRAMES` — the command wants an operand; or the deep-inference alarm — a composite of depth 5 or more with no operand, where no frame or slot asks, asks for *the subject* (`DeepInference`) | nothing; regenerated |
 | `<needs slot="2">` (number) | `SLOTS` — an ordered position is empty | nothing; regenerated |
 | `<needs var="name">` | a `[logic]` name used and never defined, or a `[ref'name']` no command binds — beside the literal, which stays; the parse asks `UndefinedVariable` or `UnboundReference` | nothing; regenerated |
 
