@@ -163,12 +163,6 @@ Decidido em 2026-09-27, ainda não construído — cada item uma ORD quando o
 Regente chamar, o JS primeiro onde o oráculo muda. Os que movem o emitido formam
 um lote, e a versão se move uma vez quando ele fecha (decidido em 2026-10-25):
 
-- **uma ORD de renomeações** (O8, O9, O10): o `SKEP` do `vocabulary.js` passa a
-  *Sceptic*, como o glossário já diz, e `<skeptic>` e `[skeptic` continuam lidos;
-  o diagnóstico *"Parâmetro de molde"* diz template; o *preset* sai do
-  `templates.json` e do `rules.json`; o comentário do XML de fonte vazia diz
-  mould; a chave `glyph.moldes.user.v1` migra uma vez, sem perder mould
-  nenhum; e a categoria `molde` do vocabulário vira `frame`;
 - **a sintaxe de referência `[ref'nome']`**: um nome ligado que não resolve, fora
   da cerca `[logic]`, dispara `<needs var>`;
 - **o alarme de inferência profunda**: composto de profundidade 5 ou mais sem
