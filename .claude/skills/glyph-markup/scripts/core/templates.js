@@ -183,7 +183,7 @@ export function expandInvocations(segments, opts, G, parseFn) {
       var shown = params.map(function (nm) { return "`" + nm + "`"; }).join(",");
       G("fix", "parâmetro não é literal",
         "o " + x.at + "º parâmetro de <code>[--" + esc(inv.template) +
-        "</code> recebeu <code>[" + esc(what) + "</code>. Parâmetro de molde é sempre literal: " +
+        "</code> recebeu <code>[" + esc(what) + "</code>. Parâmetro de template é sempre literal: " +
         "<code>[--" + esc(inv.template) + esc(shown) + "]</code>.",
         "TemplateParamNotLiteral",
         "parameter is not a literal",

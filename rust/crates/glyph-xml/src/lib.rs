@@ -458,7 +458,7 @@ pub fn package_pass(l: Vec<String>, ctx: &Context) -> Vec<String> {
 /// `buildXml(segments, opts)`.
 pub fn build_xml(tree: &mut Tree<Extra>, ctx: &Context, describe: bool) -> String {
     if tree.segments.is_empty() {
-        return "<!-- escolha um molde ou escreva do lado esquerdo -->".into();
+        return "<!-- escolha um mould ou escreva do lado esquerdo -->".into();
     }
     /* the scope is the whole document: a reference resolves to a binding
        written later as readily as to one written earlier */

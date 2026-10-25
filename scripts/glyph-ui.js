@@ -942,7 +942,7 @@ import { zipStore } from "./glyph-zip.js";
   var LS = {
     collapse:  "glyph.ui.collapse.v1",
     templates: "glyph.templates.user.v1",
-    moulds:    "glyph.moldes.user.v1",
+    moulds:    "glyph.moulds.user.v1",
     lang:      "glyph.ui.lang.v1",
     tab:       "glyph.ui.tab.v1",
     target:    "glyph.ui.target.v1"
@@ -955,6 +955,21 @@ import { zipStore } from "./glyph-zip.js";
     try { localStorage.setItem(key, JSON.stringify(val)); return true; }
     catch (e) { return false; }
   }
+
+  /* Os moulds guardados moravam em `glyph.moldes.user.v1` até os nomes serem
+     ratificados. A chave migra uma vez, antes da primeira leitura: os da
+     velha entram na nova pelo id, o que já está na nova ganha, e a velha só
+     sai depois que a escrita na nova deu certo — nenhum mould se perde (O8). */
+  (function migrateMoulds() {
+    var OLD = "glyph.moldes.user.v1", was = lsGet(OLD, null);
+    if (!Array.isArray(was)) return;
+    var now = lsGet(LS.moulds, []), have = {};
+    if (!Array.isArray(now)) return;
+    now.forEach(function (m) { if (m) have[m.id] = 1; });
+    was.forEach(function (m) { if (m && !have[m.id]) { have[m.id] = 1; now.push(m); } });
+    if (!lsSet(LS.moulds, now)) return;
+    try { localStorage.removeItem(OLD); } catch (e) { /* a velha fica; nada se perde */ }
+  })();
 
   /* O parâmetro sai do corpo, não de uma lista escrita à mão ao lado dele.
      Quem escreve [ph-alvo já disse o nome; repetir isso num cabeçalho é a
