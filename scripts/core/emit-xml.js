@@ -35,10 +35,19 @@ export function buildXml(segments, opts) {
   opts = o2;
   var L = ["<glyph-package engine=\"" + VERSION + "\">", pad(1) + "<schema/>"];
   segments.forEach(function (sg) {
+    L.push(pad(1) + "<block" + blockAttrs(sg) + ">");
+    /* A mood colours the whole segment, a return segment as well, so it is
+       the block's first child on both branches (XML_REFERENCE §6), ahead of
+       <user-expectative> here. */
+    if (sg.mood.length) {
+      var a = ['dominant="' + xesc(sg.mood[0].gloss) + '"'];
+      if (sg.mood.length > 1)
+        a.push('also="' + xesc(sg.mood.slice(1).map(function (m) { return m.gloss; }).join(",")) + '"');
+      L.push(pad(2) + "<mood " + a.join(" ") + "/>");
+    }
     if (sg.isReturn) {
       var exp = [], bad = [];
       collect(sg.children, exp, bad);
-      L.push(pad(1) + "<block" + blockAttrs(sg) + ">");
       var head = '<user-expectative expects="' + xesc(exp.join(",")) + '"';
       /* `expects` is only the flattened summary. Through v1.0.9 it was ALL the
          return block emitted, so literals and nesting were discarded:
@@ -52,18 +61,7 @@ export function buildXml(segments, opts) {
         sg.children.forEach(function (nd) { emit(nd, 3, L, opts); });
         L.push(pad(2) + "</user-expectative>");
       }
-      L.push(pad(1) + "</block>");
-      if (sg.breaks) L.push(pad(1) + "<break/>");
-      return;
-    }
-    L.push(pad(1) + "<block" + blockAttrs(sg) + ">");
-    if (sg.mood.length) {
-      var a = ['dominant="' + xesc(sg.mood[0].gloss) + '"'];
-      if (sg.mood.length > 1)
-        a.push('also="' + xesc(sg.mood.slice(1).map(function (m) { return m.gloss; }).join(",")) + '"');
-      L.push(pad(2) + "<mood " + a.join(" ") + "/>");
-    }
-    sg.children.forEach(function (nd) { emit(nd, 2, L, opts); });
+    } else sg.children.forEach(function (nd) { emit(nd, 2, L, opts); });
     L.push(pad(1) + "</block>");
     if (sg.breaks) L.push(pad(1) + "<break/>");
   });

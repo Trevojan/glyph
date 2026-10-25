@@ -503,6 +503,15 @@ pub fn build_xml(tree: &mut Tree<Extra>, ctx: &Context, describe: bool) -> Strin
     for s in 0..tree.segments.len() {
         let sg = tree.segments[s].clone();
         l.push(format!("{}<block{}>", pad(1), block_attrs(sg.continues)));
+        /* a mood colours the whole segment, a return segment as well: the
+           block's first child on both branches (XML_REFERENCE §6) */
+        if let Some(first) = sg.mood.first() {
+            let mut a = vec![format!("dominant=\"{}\"", xesc(&gloss_text(&first.gloss)))];
+            if sg.mood.len() > 1 {
+                a.push(format!("also=\"{}\"", xesc(&sg.mood[1..].iter().map(|m| gloss_text(&m.gloss)).collect::<Vec<_>>().join(","))));
+            }
+            l.push(format!("{}<mood {}/>", pad(2), a.join(" ")));
+        }
         if sg.is_return {
             let (mut exp, mut bad) = (Vec::new(), Vec::new());
             collect(tree, &sg.children, &mut exp, &mut bad);
@@ -517,13 +526,6 @@ pub fn build_xml(tree: &mut Tree<Extra>, ctx: &Context, describe: bool) -> Strin
                 l.push(format!("{}</user-expectative>", pad(2)));
             }
         } else {
-            if let Some(first) = sg.mood.first() {
-                let mut a = vec![format!("dominant=\"{}\"", xesc(&gloss_text(&first.gloss)))];
-                if sg.mood.len() > 1 {
-                    a.push(format!("also=\"{}\"", xesc(&sg.mood[1..].iter().map(|m| gloss_text(&m.gloss)).collect::<Vec<_>>().join(","))));
-                }
-                l.push(format!("{}<mood {}/>", pad(2), a.join(" ")));
-            }
             for &c in &sg.children {
                 emit(tree, c, 2, &mut l, ctx, describe, &binds);
             }

@@ -445,7 +445,9 @@ export function fromAST(env, opts) {
     if (seg.mood && seg.mood.length)
       pre += "/" + seg.mood.map(function (m) { return m.name; }).join("/") + "/";
     if (seg.continues) pre += "[=";
-    if (seg.isReturn) pre += "r-";
+    /* a letter right after the mood header is read as one more mood code, so
+       `r-` stands apart from the closing `/` */
+    if (seg.isReturn) pre += (/\/$/.test(pre) ? " " : "") + "r-";
     parts.push(pre + kids(seg.body) + (seg.breaks ? ";;" : ""));
   });
   /* `;;` already closed its segment, so it must not be followed by `;` */
@@ -471,8 +473,10 @@ export function fromXmlBlock(el, diag) {
   }
   var exp = xmlChild(el, "user-expectative");
   /* `expects` is only the flattened summary of what the body already says,
-     so the body is what gets rebuilt — the attribute regenerates from it. */
-  if (exp) return pre + "r-" + xmlKids(exp, diag);
+     so the body is what gets rebuilt — the attribute regenerates from it.
+     `r-` stands apart from the mood header: a letter right after its closing
+     `/` is read as one more mood code. */
+  if (exp) return pre + (pre ? " " : "") + "r-" + xmlKids(exp, diag);
   var body = "";
   (el.children || []).forEach(function (c) {
     if (c.tag === "mood" || c.tag === "#text") return;

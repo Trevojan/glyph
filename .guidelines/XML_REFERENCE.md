@@ -217,7 +217,10 @@ and lets the next pass ask again.
 ```
 
 `<mood>` is a **child of `<block>`**, first among its children: a mood colours
-the whole segment, not one command. The attributes carry the English gloss, not
+the whole segment, not one command. A return segment is a segment, so its
+`<mood>` stands first as well, ahead of `<user-expectative>`; on the way back the
+mood header and `r-` are written apart, `/eth/ r-…`, because a letter right
+after the closing `/` reads as one more mood code. The attributes carry the English gloss, not
 the code — the code is bracket-form shorthand, and what reaches the deliverable
 is the word. Mood colours tone only; it never alters permissions.
 

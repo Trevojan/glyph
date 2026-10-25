@@ -527,8 +527,11 @@ fn from_xml_block(el: &El, diag: &mut Vec<Diag>, depth: usize) -> Result<String,
             pre += &format!("/{}/", keys.join("/"));
         }
     }
+    /* `r-` stands apart from the mood header: a letter right after its
+       closing `/` is read as one more mood code */
     if let Some(exp) = xml_child(el, "user-expectative") {
-        return Ok(format!("{pre}r-{}", xml_kids(exp, diag, depth + 1)?));
+        let gap = if pre.is_empty() { "" } else { " " };
+        return Ok(format!("{pre}{gap}r-{}", xml_kids(exp, diag, depth + 1)?));
     }
     let mut body = String::new();
     for c in el.children.iter().filter(|c| c.tag != "mood" && c.tag != "#text") {
@@ -713,7 +716,12 @@ pub fn from_ast(env: &Json) -> Back {
         if truthy(seg.get("continues")) {
             pre += "[=";
         }
+        /* a letter right after the mood header is read as one more mood
+           code, so `r-` stands apart from the closing `/` */
         if truthy(seg.get("isReturn")) {
+            if pre.ends_with('/') {
+                pre.push(' ');
+            }
             pre += "r-";
         }
         parts.push(format!("{pre}{}{}", kids(seg.get("body"), &mut diag, &lit), if truthy(seg.get("breaks")) { ";;" } else { "" }));

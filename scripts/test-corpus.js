@@ -1038,6 +1038,20 @@ function runFromXmlChecks() {
      emo.stable && /\/eth\//.test(emo.back.src) && emo.back.src.indexOf("\\") === -1
        ? null : "the abandoned spelling came back: " + JSON.stringify(emo.back.src));
 
+  /* A mood colours its whole segment, a return segment as well (XML_REFERENCE
+     §6): wherever `/eth/` is written in it, it is the block's first child,
+     ahead of <user-expectative>, and both ways back write it again, with `r-`
+     apart from the mood header so the `r` is not read as one more mood code. */
+  const moodBack = ["r- [ctx'x']/eth/", "/eth/ r- [ctx'x']", "[ctx'x'] /eth/ r-", "[ctx'x'/eth/] r-", "r- /eth/",
+                    "/eth/prd/hop/ R: [ctx'x']"].map(src => {
+    const t = trip(src), viaAst = G.fromAST(G.toAST(src, opts), opts);
+    const first = /<block once="true">\s*<mood dominant="enthusiasm"( also="pride,hope")?\/>\s*<user-expectative /.test(t.x1);
+    return first && t.stable && /^\/eth\/(prd\/hop\/)? r-/.test(t.back.src) &&
+           G.toXML(viaAst.src, opts) === t.x1 ? null : src + " → " + t.x1.replace(/\s+/g, " ") + " ← " + JSON.stringify(t.back.src);
+  }).filter(Boolean);
+  ok("F-24", "a mood in a return segment reaches <mood>, and comes back",
+     moodBack.length ? moodBack.join("; ") : null);
+
   return F.length;
 }
 const rF = runFromXmlChecks();
@@ -2307,14 +2321,16 @@ function runSnapshotChecks() {
     }, null, 1) + "\n");
     /* and the emitter's own branches: a literal named after a member of the
        prototype, a mood the prototype answers, return blocks, a chain against
-       a conjunction, an imperative, bindings and their references */
+       a conjunction, an imperative, bindings and their references, and a
+       mood in a return block */
     const XML_PROBES = ["[ctx'toString']", "[ctx'__proto__'][sum'constructor']", "[ctx'x']/constructor/", "/eth/cnf/clm/[ctx]",
       "r- [tgt'x'][zzz]", "R: [ctx[sum]]", "r-", "r- [ph-x`q`]", "[a-b,c]", "[a-b-c]", "[in-rwk,ctx]", "[simp'X'],[core]",
       "[simp'X'][core]", "[simp'X'],[core],[ctx'y']", "[a],[b[c],[d]]", "[bold[ctx]]", "[bold'x']", "[sum`organized`[ctx]][ref'organized']",
       "[sum`organized`[ctx]] organized", "[crit'x']", "[logic q]a -> b\n! c -> d = e\nz = y + 1[/logic]", "[ctx: a, b]",
       "[ph-x`q`][ph-y]", "[--germinate]", "[--germinate[ph-alvo'A']]", "[dfn'a']", "[in-zzz]", "[a],[zzz]", "[ctx`x` 'y']",
       "[ctx[raw] <b> & [/raw]]", "[off]a <b> \"c\"[on]", "[gt'a'[ctx]]", "[ctx-cat'a']", "[ctx;;[sum]", "[ctx]] [sum]",
-      "[ctx'a'];[=[sum'b']", ...["[a[x]],[b[y]]", "[a[a]],[b]", "[a[a[x]]],[b]"].map(t => "[ctx".repeat(13) + t)];
+      "[ctx'a'];[=[sum'b']", ...["[a[x]],[b[y]]", "[a[a]],[b]", "[a[a[x]]],[b]"].map(t => "[ctx".repeat(13) + t),
+      "r- [ctx'x']/eth/", "/eth/prd/hop/ R: [ctx[sum]]", "r- /eth/"];
     XML_PROBES.forEach((src, k) => runXml("xml-" + (k + 1), src, SNAP_OPTS));
     fs.writeFileSync(path.join(mods, "xml.json"), JSON.stringify({ engine: G.VERSION, runs: xmlRuns }, null, 1) + "\n");
     /* and the envelope's own: line endings, a tree cut in the panel, the
@@ -3545,7 +3561,7 @@ console.log(" Constraints  " + rK + "/" + CONSTRAINTS.length);
 console.log(" Guard        " + rG + "/" + POSITIVE_WITH_RULES.length);
 console.log(" Composition  " + rX + "/17");
 console.log(" .hgml burn   " + rH + "/15");
-console.log(" fromXML      " + rF + "/23");
+console.log(" fromXML      " + rF + "/24");
 console.log(" reference    " + rD + "/11");
 console.log(" round trip   " + rRT + "/7");
 console.log(" ast schema   " + rSC + "/3");
