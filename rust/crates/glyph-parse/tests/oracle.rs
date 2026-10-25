@@ -65,7 +65,7 @@ fn context(run: &Json) -> Context {
 fn every_tree_and_diagnostic_equals_the_js() {
     let runs = module("parse").a("runs");
     assert!(runs.len() > 114, "parse.json holds {} runs — write it again: {}", runs.len(), oracle::WRITE_IT);
-    let (mut nodes, mut gaps, mut thrown, mut named) = (0, 0, 0, 0);
+    let (mut nodes, mut gaps, mut thrown, mut named, mut moods) = (0, 0, 0, 0, 0);
     for run in runs {
         let ctx = context(run);
         let (id, src) = (run.s("id"), run.s("src"));
@@ -75,6 +75,18 @@ fn every_tree_and_diagnostic_equals_the_js() {
             let want = run.get(lang).unwrap_or_else(|| panic!("{id}: no {lang}"));
             let got = parse(src, &Opts { ctx: &ctx, session, valency, en, expanding: Vec::new(), registered: glyph_stores::Registered::none() });
             if let Some(t) = want.get("thrown") {
+                /* a mood whose innermost open command is a template: the JS
+                   throws, and the Rust answers the document (2026-10-25) */
+                if let Some(decided) = oracle::known::template_mood(src, "parse", lang) {
+                    assert_eq!(t.str(), Some(oracle::known::template_mood_js()), "{id} {lang}: the JS throws something else");
+                    let p = got.unwrap_or_else(|e| panic!("{id} {lang}: the port throws a named source: {e:?}"));
+                    if !en {
+                        assert_eq!(dump_of(&p.tree, true), oracle::known::template_mood(src, "parse", "tree").expect("tree"), "{id}: the tree");
+                    }
+                    assert_eq!(Json::Arr(p.gaps.iter().map(gap_json).collect()), decided, "{id} {lang}: the diagnostics");
+                    moods += 1;
+                    continue;
+                }
                 assert_eq!(got.err(), Some(Thrown(t.str().expect("a message").to_string())), "{id} {lang}: what parse throws");
                 thrown += 1;
                 continue;
@@ -99,5 +111,6 @@ fn every_tree_and_diagnostic_equals_the_js() {
         }
     }
     assert_eq!(named, 2 * oracle::known::BARE.len(), "a probe named for O4's third residual is not in parse.json");
+    assert_eq!(moods, 2 * oracle::known::template_mood_sources(), "a source named for the template mood is not in parse.json");
     println!("{} runs, {nodes} nodes, {gaps} diagnostics in both languages, {thrown} throws", runs.len());
 }

@@ -2209,7 +2209,8 @@ function runSnapshotChecks() {
       "[ref'nada']", "[ref'RFC 2119']", "[ref'a'][sum'a'[ctx]]", "[ref'a','b'[ctx]]",
       "[fbk]", "[fbk'plan b']", "[fbk: x]", "[rev-fbk]", "[fbk[ctx]]", "[hyp]",
       "[pt'1.1']", "[if'a > b'[ctx'x']]", "[sum'ready'[ctx]][if'ready']", "[if'']", "[pt:intro'1.1'[ctx]]", "[if`it's \"x\"`]", "[if]",
-      "[--germinate a,b]", "[--reinforce rule,`why`]", "[--reinforce `r`,`w` and more]"
+      "[--germinate a,b]", "[--reinforce rule,`why`]", "[--reinforce `r`,`w` and more]",
+      "[--t=/eth/]", "[--zz/eth/]", "[--reinforce'a''b'/eth/]", "[--t=[ctx'x']/eth/]"
     ];
     const NO_SESSION = ["constructor", "[constructor]", "rd", "[ctx] prose ist"];
     const NO_VALENCY = ["[gt'a']", "[ctx]", "[cat'a']"];

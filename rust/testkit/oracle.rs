@@ -436,7 +436,9 @@ pub fn snapshot_digest(id: &str, projection: &str) -> String {
 /// named here and undone before the bytes are compared, so everything else
 /// is still held byte for byte (O4, decided 2026-10-25).
 pub mod known {
-    use super::Json;
+    use super::{Json, Must};
+    use std::fs;
+    use std::sync::OnceLock;
 
     /// O4, residual 1: the burn writes `;;` between two blocks where the JS
     /// writes the blank line. No other `.hgml` line is `;;` — a literal is
@@ -489,6 +491,52 @@ pub mod known {
         ])).collect());
         let Json::Obj(kv) = js.clone() else { return None };
         Some(Json::Obj(kv.into_iter().map(|(k, v)| if k == "diagnostics" { (k, diags.clone()) } else { (k, v) }).collect()))
+    }
+
+    /// A mood whose innermost open command is a template (decided
+    /// 2026-10-25, the Rust only): the JS throws, and the Rust answers the
+    /// document. The bytes each named source takes, by oracle module (`parse`,
+    /// `xml`, `ast`, `hgml`) and answer, from `testkit/known/template-moods.json`,
+    /// read with the oracle's own engine and repository stores in place of the
+    /// ones written there, so neither the version nor a store moving stales them.
+    pub fn template_mood(src: &str, module: &str, key: &str) -> Option<Json> {
+        template_moods().get("sources")?.get(src)?.get(module)?.get(key).cloned()
+    }
+
+    /// What the JS throws on every named source.
+    pub fn template_mood_js() -> &'static str {
+        template_moods().s("js")
+    }
+
+    /// How many sources are named.
+    pub fn template_mood_sources() -> usize {
+        template_moods().get("sources").and_then(Json::obj).map_or(0, |s| s.len())
+    }
+
+    fn template_moods() -> &'static Json {
+        static DATA: OnceLock<Json> = OnceLock::new();
+        DATA.get_or_init(|| {
+            let file = super::repo().join("rust").join("testkit").join("known").join("template-moods.json");
+            let text = fs::read_to_string(&file).unwrap_or_else(|e| panic!("{}: {e}", file.display()));
+            let written = glyph_json::parse(&text).unwrap_or_else(|e| panic!("{}: {e}", file.display()));
+            let engine = super::module("ast").s("engine");
+            let data = glyph_json::parse(&text.replace(written.s("engine"), engine)).expect("the engine replaced");
+            /* the repository's stores, as any plain run of the envelope carries them */
+            let plain = super::module("ast").a("runs").iter()
+                .find(|r| r.get("full").and_then(|f| f.get("stores")).is_some()
+                    && !["probeTemplates", "templates", "withRules", "expansions"].iter().any(|k| r.get(k).is_some()))
+                .and_then(|r| r.get("full").and_then(|f| f.get("stores")).cloned())
+                .expect("ast.json holds a run with the repository's stores");
+            fn stores(v: Json, with: &Json) -> Json {
+                match v {
+                    Json::Obj(kv) => Json::Obj(kv.into_iter()
+                        .map(|(k, v)| if k == "stores" { (k, with.clone()) } else { (k, stores(v, with)) }).collect()),
+                    Json::Arr(a) => Json::Arr(a.into_iter().map(|v| stores(v, with)).collect()),
+                    v => v,
+                }
+            }
+            stores(data, &plain)
+        })
     }
 
     /// The same undo over every string of a JSON answer that carries a burn.
