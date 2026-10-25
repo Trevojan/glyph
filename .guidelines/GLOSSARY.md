@@ -471,4 +471,5 @@ Portuguese interface, spelt en-EU (lock T13) — see
 | **mould** | the app's forms: phases Alvo · Partida · Percurso, slots `{id, tag, q}` (`scripts/glyph-moulds.js`) | a template | as **template** |
 | **sample** | a ready-made example source in the app (`SAMPLES`) | a preset — the word is retired; a conformance example | as **template** |
 | **snippet** | an editor completion of a whole shape | a template | as **template** |
+| **frame** | the vocabulary category of the structure and template pieces — `TPL`, `PH`, `VAR`, `PARAM`, `DEF`, `SECTION`, `BLOCK`, `LOGIC`, `SKL` — labelled *Frame* in both languages | a mould; a template | [`.decisions/`](.decisions/README.md), 2026-09-27 (O9) |
 | **virtual path** | `[file][delimiter][selector]`, resolving to one exact slice with offsets, over a structural identity that survives a move | a text search | [`.plan`](.plan/README.md) §0 |
