@@ -266,7 +266,16 @@ pub fn bind_holes<X: Clone + Default>(tree: &mut Tree<X>, nodes: &[Id], fills: &
             if let Some(nm) = nm {
                 if let Some(v) = value_for(fills, &order, &nm).filter(|v| !v.is_empty()) {
                     let lit = bound(tree, v, nm);
-                    stack.last_mut().expect("the frame being read").out.push(lit);
+                    /* a hole that held more keeps it when it is filled: the
+                       answer takes the question's place, what it held stays */
+                    let kids = tree.nodes[nd].children.clone();
+                    let q = kids.iter().copied().find(|&c| tree.nodes[c].is_literal());
+                    let held: Vec<Id> = kids.into_iter().filter(|&c| tree.nodes[c].slot_name != Some(true) && Some(c) != q).collect();
+                    if held.is_empty() {
+                        stack.last_mut().expect("the frame being read").out.push(lit);
+                    } else {
+                        stack.push(Frame { list: held, at: 0, out: vec![lit], owner: Some(nd) });
+                    }
                     continue;
                 }
             }

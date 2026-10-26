@@ -225,7 +225,9 @@ impl State<'_, '_> {
 
     /// `named`: the command's name when the token is not one — a stray `[on]`
     /// is the command ON written closed.
-    fn command(&mut self, tk: &Token, named: Option<&str>) {
+    fn command(&mut self, i: usize, named: Option<&str>) {
+        let tokens = self.tokens;
+        let tk = &tokens[i];
         let v = named.or(tk.v.as_deref()).unwrap_or("");
         let cl = classify(v, self.o.ctx, self.o.session);
         let parent = self.top();
@@ -235,8 +237,14 @@ impl State<'_, '_> {
             self.fix("sem nome", "<code>[</code> sem nome. Um <code>[</code> = um comando.".into(), "EmptyCommandName",
                      "no name", "<code>[</code> with no name. One <code>[</code> is one command.".into());
         }
-        /* `[ph-alvo`: the bare tag is the hole's name, not a chain link */
-        let slot_name = in_ph && bare;
+        /* `[ph-alvo`: the `-` straight after `[ph` binds the hole's one name;
+           any other bare tag in the hole is a chain link (ORD-0026, ORD-0025) */
+        let slot_name = in_ph && bare && parent.is_some_and(|p| {
+            let ph = &self.tree.nodes[p];
+            let (Some(t), Some(b), Some(o)) = (ph.tok.as_ref(), i.checked_sub(1).map(|j| &tokens[j]),
+                                               i.checked_sub(2).map(|j| &tokens[j])) else { return false };
+            ph.children.is_empty() && b.k == "extend" && b.s == t.e && o.k == t.k && o.s == t.s && o.e == t.e
+        });
         let gloss = match cl.gloss {
             glyph_lex::Gloss::Text(t) => Some(Gloss::Text(t)),
             glyph_lex::Gloss::Prototype => Some(Gloss::Prototype),
@@ -406,7 +414,7 @@ impl State<'_, '_> {
     fn token(&mut self, i: usize) -> usize {
         let tk = &self.tokens[i];
         match tk.k {
-            "open" | "bareTag" => self.command(tk, None),
+            "open" | "bareTag" => self.command(i, None),
             "rawfence" => {
                 let origin = self.pending.unwrap_or("nest").to_string();
                 let id = self.add(Node { raw_fence: Some(true), v: tk.body.clone(), tok: Self::span(tk), origin: Some(Some(origin)),
@@ -507,7 +515,7 @@ impl State<'_, '_> {
                 } else if tk.stray == Some(true) {
                     /* `[on]` with no `[off]` open is the command ON written
                        closed; the note names that nothing was off */
-                    self.command(tk, Some("on"));
+                    self.command(i, Some("on"));
                     self.seg.pending_mode = Some(None);
                     let d = Diag::new("note", "modo texto",
                         "<code>[on]</code> sem <code>[off]</code> aberto antes: nada estava desligado. \
@@ -679,7 +687,12 @@ pub fn parse(src: &str, o: &Opts) -> Result<Parse, Thrown> {
         let kids = &tree.nodes[id].children;
         let name = kids.iter().find(|&&c| tree.nodes[c].slot_name == Some(true))
             .map(|&c| format!("<code>{}</code> ", esc(tree.nodes[c].raw.as_deref().unwrap_or(""))));
-        let q = kids.iter().find(|&&c| tree.nodes[c].is_literal()).map(|&c| esc(tree.nodes[c].v.as_deref().unwrap_or("")));
+        let q_id = kids.iter().copied().find(|&c| tree.nodes[c].is_literal());
+        /* a hole a template call filled kept what it held, and asks nothing */
+        if q_id.is_some_and(|c| tree.nodes[c].bound_slot.as_deref().is_some_and(|s| !s.is_empty())) {
+            continue;
+        }
+        let q = q_id.map(|c| esc(tree.nodes[c].v.as_deref().unwrap_or("")));
         let name = name.unwrap_or_default();
         g(Diag::new("ask", "casa vazia", format!("{name}{}", q.clone().unwrap_or_else(|| "sem resposta".into())), "PlaceholderPending")
             .en("empty field", format!("{name}{}", q.unwrap_or_else(|| "no answer".into()))));

@@ -210,6 +210,7 @@ export function emit(root, startDepth, L, opts) {
   while (stack.length) {
     var f = stack.pop();
     if (f.tail) { for (var t = 0; t < f.tail.length; t++) L.push(f.tail[t]); continue; }
+    if (f.line) { L.push(pad(f.d) + f.line); continue; }
 
     var nd = f.nd, d = f.d;
 
@@ -257,13 +258,8 @@ export function emit(root, startDepth, L, opts) {
     }
 
     // empty template slot: the question travels in place of the answer
-    if (nd.canonical === "PH") {
-      var nameNode = (nd.children || []).filter(function (c) { return c.slotName; })[0];
-      var qNode = (nd.children || []).filter(function (c) { return c.literal; })[0];
-      L.push(pad(d) + "<needs" + (nameNode ? ' slot="' + xesc(nameNode.raw) + '"' : "") + ">" +
-        xesc(qNode ? qNode.v : "sem resposta") + "</needs>");
-      continue;
-    }
+    var hole = nd.canonical === "PH" ? holeOf(nd) : null;
+    if (hole && hole.bare) { L.push(pad(d) + hole.needs); continue; }
 
     var open, closeName, moved = null;
     /* `chain` records the operator that attached a BARE element, and only a
@@ -273,7 +269,7 @@ export function emit(root, startDepth, L, opts) {
        normalises to `[` instead, and the attribute means exactly one thing:
        this element was written bare, by this operator. */
     var chainAttr = (nd.chainElement && (nd.origin === "extend" || nd.origin === "item"))
-      ? 'chain="' + nd.origin + '"' : null;
+      ? 'chain="' + (f.runHead ? "extend" : nd.origin) + '"' : null;
 
     /* `join` is to `,` between BRACKETED siblings what `chain` is to `-` and
        `,` between bare links. It existed nowhere, and the consequence was
@@ -365,6 +361,10 @@ export function emit(root, startDepth, L, opts) {
               : deepInference(nd, opts) ? "the subject" : null;
     /* the frame counts the operand where it was written; the element does not repeat it */
     var allKids = (nd.children || []).filter(function (c) { return !moved || c !== moved.lit; });
+    /* a hole that holds more than its name and its question is a <placeholder>:
+       its <needs> stands where the question was written, and what it holds
+       follows in the order it was written */
+    if (hole) allKids = hole.kids;
 
     if (!allKids.length && !needs && !slotNeeds.length) { L.push(pad(d) + open + "/>"); continue; }
 
@@ -381,8 +381,44 @@ export function emit(root, startDepth, L, opts) {
     });
     tail.push(pad(d) + "</" + closeName + ">");
     stack.push({ tail:tail });
-    pushKids(allKids, d + 1);
+    if (hole) {
+      for (var hk = allKids.length - 1; hk >= 0; hk--) {
+        var hkid = allKids[hk];
+        stack.push(hkid === HOLE_NEEDS ? { line:hole.needs, d:d + 1 }
+                 : { nd:hkid, d:d + 1, runHead:hole.runHead === hkid });
+      }
+    } else pushKids(allKids, d + 1);
   }
+}
+
+/* The hole's own line: `<needs slot>` carrying the question, the shape it has
+   always had (PACKAGE_TARGET G3). A PH that holds nothing but its name and its
+   question is that line alone. One that holds more — a nested command, a chain
+   link, another literal, prose — is a <placeholder> (XML_REFERENCE §7: `[ph`
+   is `<placeholder>`), so nothing it holds is dropped: the <needs> stands where
+   the question was written (with no question, after the name and the links
+   written straight after it), and the rest follows in source order. A hole a
+   template call filled holds its answer, a literal carrying `slot`, in place
+   of the <needs>. */
+export var HOLE_NEEDS = { holeNeeds: true };
+export function holeOf(nd) {
+  var kids = nd.children || [];
+  var nameNode = kids.filter(function (c) { return c.slotName; })[0];
+  var qNode = kids.filter(function (c) { return c.literal; })[0];
+  var needs = "<needs" + (nameNode ? ' slot="' + xesc(nameNode.raw) + '"' : "") + ">" +
+              xesc(qNode ? qNode.v : "sem resposta") + "</needs>";
+  var filled = !!(qNode && qNode.boundSlot);
+  var held = kids.filter(function (c) { return c !== nameNode && c !== qNode; });
+  if (!held.length && !filled) return { bare:true, needs:needs };
+  /* the links written straight after the name (`[ph-a-crit`) are the run the
+     name opened; the first heads the <chain>, whichever operator wrote it */
+  var run = [];
+  for (var r = kids.indexOf(nameNode) + 1; nameNode && r < kids.length && kids[r].chainElement; r++) run.push(kids[r]);
+  var out = kids.filter(function (c) { return c !== nameNode; })
+                .map(function (c) { return c === qNode && !filled ? HOLE_NEEDS : c; });
+  /* with no question, the <needs> stands where the name and its run end */
+  if (!qNode) out.splice(run.length, 0, HOLE_NEEDS);
+  return { bare:false, needs:needs, kids:out, runHead:run[0] || null };
 }
 
 export function emitLogic(lg, d, L) {

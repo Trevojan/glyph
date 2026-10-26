@@ -466,10 +466,31 @@ fn from_xml_node(el: &El, diag: &mut Vec<Diag>, depth: usize) -> Result<String, 
         return Ok(format!("{op}{name}"));
     }
     let lead = if el.attr("join") == Some("item") { "," } else { "" };
+    if name == "ph" {
+        return Ok(format!("{lead}{}", from_xml_placeholder(el, diag, depth)?));
+    }
     let colon = el.attr("name").filter(|n| !n.is_empty()).map_or(String::new(), |n| format!(":{}", lit_safe_xml(n)));
     /* the number of a part and the condition of an if come back as the literal they were */
     let operand = get(OPERAND_ATTR, &name.to_uppercase()).and_then(|a| el.attr(a)).map_or(String::new(), as_literal);
     Ok(format!("{lead}{}", not_switch(format!("[{name}{colon}{operand}{}]", xml_kids(el, diag, depth)?))))
+}
+
+/// `fromXmlPlaceholder`: the `<needs>` inside a `<placeholder>` is the hole —
+/// an alpha `slot` is the name, its text the question, put back as a literal
+/// where it stood; with no name, a link written first stands after a space.
+fn from_xml_placeholder(el: &El, diag: &mut Vec<Diag>, depth: usize) -> Result<String, Thrown> {
+    let at = el.children.iter().position(|c| c.tag == "needs");
+    let slot = at.and_then(|i| el.children[i].attr("slot")).filter(|s| alpha_first(s));
+    let colon = el.attr("name").filter(|n| !n.is_empty()).map_or(String::new(), |n| format!(":{}", lit_safe_xml(n)));
+    let mut body = el.clone();
+    if let Some(i) = at {
+        let text = xml_text(&el.children[i]);
+        body.children[i] = El { tag: "user-input".into(), attrs: Vec::new(), v: None,
+            children: vec![El { tag: "#text".into(), attrs: Vec::new(), children: Vec::new(), v: Some(text) }] };
+    }
+    let rest = xml_kids(&body, diag, depth)?;
+    let gap = if slot.is_none() && colon.is_empty() && rest.starts_with(['-', ',']) { " " } else { "" };
+    Ok(format!("[ph{}{colon}{gap}{rest}]", slot.map_or(String::new(), |s| format!("-{s}"))))
 }
 
 /// `notSwitch`: the command OFF with nothing inside is written `[modeoff]`,
@@ -716,7 +737,13 @@ pub fn from_ast(env: &Json) -> Back {
                     return format!("{}{name}", if item { "," } else { "-" });
                 }
                 let colon = if truthy(n.get("name")) { format!(":{}", lit_safe_xml(&text_of(n.get("name")))) } else { String::new() };
-                format!("{}{}", if item { "," } else { "" }, not_switch(format!("[{name}{colon}{}]", kids(n.get("body"), diag, lit))))
+                /* the `-` straight after `[ph` binds the name: a hole whose
+                   first child is a link writes it after a space */
+                let first = n.get("body").and_then(Json::arr).and_then(|b| b.first());
+                let gap = if text_of(n.get("canonical")) == "PH" && !truthy(n.get("name"))
+                    && first.is_some_and(|f| f.get("type").and_then(Json::str) == Some("Command")
+                        && truthy(f.get("chainElement")) && !truthy(f.get("slotName"))) { " " } else { "" };
+                format!("{}{}", if item { "," } else { "" }, not_switch(format!("[{name}{colon}{gap}{}]", kids(n.get("body"), diag, lit))))
             }
             _ => {
                 diag.push(Diag { sev: "note", code: "AstUnknownNode",
