@@ -1,0 +1,50 @@
+[block
+  'ORD-0025-chains'
+  [ctx
+    'the spec of EMS-002'
+    '.guidelines/.orders/EMS-002/EMS-002.pgml'
+  [/ctx]
+  [tgt
+    'a known command after an operand, a space or a closing bracket is a chain link, by the inclusion the Regent decided on 2026-10-25; an ORD of the batch the version moves once for'
+  [/tgt]
+  [ctx
+    'measured at b827782: a dash makes a chain link only right after a command name with nothing buffered; after an operand, after a space or after a closing bracket the dash and the name fall into prose, and the command never reaches the tree; the grammar already reads a chain item as a name or a literal, so a dash after a literal continues the chain, and the lexer broke its own grammar'
+  [/ctx]
+  [ctx
+    'the rules that include it: the chained_command production of glyph-grammar.ebnf; GLOSSARY section 0.1, a chain is the commands applied to the same operand; GLOSSARY section 0.3 normative, in a sequence the subject of the second is the result of the first; and both inverses already write a link after a closed command, so the way back already expected it'
+  [/ctx]
+  [cnst
+    'a dash becomes the extend operator when the text before it is empty or a space, the token before it is an open, a bare tag, a literal or a closing bracket, and a name the vocabulary knows touches it; the lexer stays independent of options; prose such as an arrow, a spaced minus or a hyphenated word stays prose'
+  [/cnst]
+  [cnst
+    'after a closing bracket the link goes to the scope that bracket returns to, the enclosing command or the block, read as GLOSSARY section 0.3 sequence; the way back fences an off element whose prose starts with a dash and a known name, so the reader never invents a link the document did not carry'
+  [/cnst]
+  [cnst
+    'no declared source reaches it, so no hash of the snapshot moves; the LK bucket, a D-07 probe and the parse probes hold it, and the Rust is ported byte for byte'
+  [/cnst]
+  [cmp
+    'the links'
+    'the three positions keep the command as a chain link in the tree, the XML, the burn and both ways back, prose stays prose, and fenced prose comes back as prose; each seen failing before it counts, and the Rust answers byte for byte'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+[/block]
