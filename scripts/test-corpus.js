@@ -1128,6 +1128,16 @@ function runFromXmlChecks() {
   ok("F-24", "a mood in a return segment reaches <mood>, and comes back",
      moodBack.length ? moodBack.join("; ") : null);
 
+  /* the way back writes the space a name needs: prose right after a command's
+     name, or after a mood header, would otherwise merge with it — `[ctx foo]`
+     came back as `[ctxfoo]`, a known command turned unknown (EMS-002, the
+     inclusion of 2026-10-25) */
+  const glued = ["[ctx foo]", "[ctx rd]", "[ctx foo bar]", "[ctx foo[sum]]", "[ctx-crit foo]", "/eth/ prose [ctx]", "[in[ctx] note]"]
+    .map(s => [s, G.fromAST(G.toAST(s, opts), opts).src])
+    .filter(([s, b]) => G.toXML(b, opts) !== G.toXML(s, opts));
+  ok("F-25", "fromAST keeps the space a name needs from the prose after it",
+     glued.length ? glued.map(([s, b]) => s + " came back as " + b).join("; ") : null);
+
   return F.length;
 }
 const rF = runFromXmlChecks();
@@ -3832,7 +3842,7 @@ console.log(" Guard        " + rG + "/" + POSITIVE_WITH_RULES.length);
 console.log(" Placeholder  " + rPH + "/" + (PLACEHOLDER.length + 1));
 console.log(" Composition  " + rX + "/17");
 console.log(" .hgml burn   " + rH + "/15");
-console.log(" fromXML      " + rF + "/24");
+console.log(" fromXML      " + rF + "/25");
 console.log(" reference    " + rD + "/11");
 console.log(" round trip   " + rRT + "/7");
 console.log(" ast schema   " + rSC + "/3");

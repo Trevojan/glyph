@@ -315,6 +315,16 @@ export function fromXmlNode(el, diag) {
   return lead + notSwitch(head.slice(lead.length) + xmlKids(el, diag) + "]");
 }
 
+/* Two pieces written side by side read as one when a name ends the first and
+   a name starts the second: `[ctx` and the prose `foo` come back as `[ctxfoo]`,
+   an unknown command, and a mood header `/eth/` before the prose `foo` reads
+   `foo` as one more mood code. A space between them is what the source had:
+   whitespace between tokens is no node, so it costs nothing on the way in. */
+var NAME_END = /[A-Za-z0-9_.]$/, NAME_START = /^[A-Za-z0-9_.]/;
+function apart(a, b) {
+  return (NAME_END.test(a) || /\/$/.test(a)) && NAME_START.test(b) ? a + " " + b : a + b;
+}
+
 /* `[off]` is the switch that opens a verbatim region, so the command OFF with
    nothing inside cannot be written back as `[off]`: the lexer would read the
    rest of the document as prose. It is written in the element's own name,
@@ -410,7 +420,7 @@ export function fromAST(env, opts) {
 
   function kids(list) {
     var out = "";
-    (list || []).forEach(function (n) { out += node(n); });
+    (list || []).forEach(function (n) { out = apart(out, node(n)); });
     return out;
   }
 
@@ -484,7 +494,7 @@ export function fromAST(env, opts) {
         var first = (n.body || [])[0];
         var gap = (String(n.canonical) === "PH" && !n.name && first && first.type === "Command" &&
                    first.chainElement && !first.slotName) ? " " : "";
-        return lead + notSwitch("[" + name + (n.name ? ":" + litSafeXml(n.name) : "") + gap + kids(n.body) + "]");
+        return lead + notSwitch(apart("[" + name + (n.name ? ":" + litSafeXml(n.name) : "") + gap, kids(n.body)) + "]");
       }
       default:
         diag.push({ sev:"note", code:"AstUnknownNode",
@@ -502,7 +512,7 @@ export function fromAST(env, opts) {
     /* a letter right after the mood header is read as one more mood code, so
        `r-` stands apart from the closing `/` */
     if (seg.isReturn) pre += (/\/$/.test(pre) ? " " : "") + "r-";
-    parts.push(pre + kids(seg.body) + (seg.breaks ? ";;" : ""));
+    parts.push(apart(pre, kids(seg.body)) + (seg.breaks ? ";;" : ""));
   });
   /* `;;` already closed its segment, so it must not be followed by `;` */
   var src = parts.reduce(function (acc, cur, i) {
