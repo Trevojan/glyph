@@ -1,0 +1,39 @@
+<glyph-package engine="3.6.9.07">
+  <schema/>
+  <block once="true">
+    <block binds="ORD-0026-placeholder">
+      <user-input>ORD-0026-placeholder</user-input>
+      <context>
+        <user-input>the spec of EMS-002</user-input>
+        <user-input>.guidelines/.orders/EMS-002/EMS-002.pgml</user-input>
+      </context>
+      <context>
+        <user-input>the map of the inclusion</user-input>
+        <user-input>.guidelines/.orders/INTAKE-INCLUSION.md</user-input>
+      </context>
+      <target>
+        <user-input>a command held by a placeholder reaches the XML, by the inclusion the Regent decided on 2026-10-25, answered with the placeholder wrapper; an ORD of the batch the version moves once for</user-input>
+      </target>
+      <context>
+        <user-input>measured at b827782: a command nested in a placeholder, its question or its name before it, stays in the AST and leaves the XML, because the placeholder branch writes the needs line and emits none of its children; a second bare tag under a placeholder becomes a second hole name, and only the first reaches the XML</user-input>
+      </context>
+      <context>
+        <user-input>the rules that include it: GLOSSARY section 0.3 normative, what is nested inside an item is the standard or aspect that item works against; XML_REFERENCE names placeholder the element of PH; PACKAGE_TARGET G3, needs keeps its shape; the dash after a placeholder binds the name, singular, and after it the dash is the chain operator again</user-input>
+      </context>
+      <constraint>
+        <user-input>a placeholder holding only its name and its question keeps the bare needs line; one holding more becomes the placeholder element, the needs where the question was written, then the rest in source order; a filled template hole keeps what it held</user-input>
+      </constraint>
+      <constraint>
+        <user-input>only the first bare tag names the hole, later ones are chain links; the way back reads a needs inside a placeholder as source</user-input>
+      </constraint>
+      <constraint>
+        <user-input>no declared source reaches it, so no hash of the snapshot moves unless a new code needs its declared source; the Rust is ported byte for byte, held by new parse probes</user-input>
+      </constraint>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the placeholder</user-input>
+        <user-input>a command held by a placeholder reaches the XML in the placeholder element, a second bare tag is a chain link, and both ways back rebuild the source; each seen failing before it counts, and the Rust answers byte for byte</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>
