@@ -390,6 +390,59 @@ const ORACLE_COVERAGE = [
   { id:"OC-13", src:"[crit'x'][on] the rest is read", code:"UnmatchedOnMode" }
 ];
 
+/* ------------------------------------------------------------------ *
+ * PH — a command held by a placeholder reaches the XML (EMS-002 ORD-0026)
+ *
+ * A hole that holds nothing but its name and its question is the bare <needs>
+ * line it always was. One that holds more — a nested command, a chain link,
+ * another literal, prose — is the <placeholder> XML_REFERENCE §7 already
+ * names, its <needs> unchanged inside (PACKAGE_TARGET G3), standing where the
+ * question was written. The `-` straight after `[ph` binds the one name; any
+ * other bare tag in the hole is a chain link. A filled template hole keeps
+ * what it held. Each case was seen failing on cda8d0b before it counted, and
+ * both ways back must give the same document again.
+ *
+ * Not declared in the snapshot: no new code needs a declared source (M01),
+ * so the Rust is held by the parse probes instead.
+ * ------------------------------------------------------------------ */
+const HELD_TPL = { templates: {
+  held: { gloss: "A hole that holds an example.", params: [{ name: "target" }],
+          body: "[crit[ph-target`what to fix`[ex'the login handler']]]" } } };
+const PLACEHOLDER = [
+  { id:"PH-01", name:"a hole with a question holds a nested command", src:"[ph'q'[crit'x']]",
+    code:"PlaceholderPending", xml:["<placeholder", "<needs>q</needs>", "<criticise>", "<user-input>x</user-input>"] },
+  { id:"PH-02", name:"a named hole holds a nested command", src:"[ph-a[crit'x']]",
+    code:"PlaceholderPending", xml:["<placeholder", '<needs slot="a">sem resposta</needs>', "<criticise>"] },
+  { id:"PH-03", name:"after the hole's name, `-` is a chain link", src:"[ph-a-crit]",
+    code:"PlaceholderPending", xml:["<placeholder>", "<chain>", "<criticise/>", '<needs slot="a">sem resposta</needs>'] },
+  { id:"PH-04", name:"a link after the question is a link, not the hole's name", src:"[ph'q'-crit]",
+    code:"PlaceholderPending", xml:["<placeholder>", "<needs>q</needs>", "<criticise/>"], xmlAbsent:['slot="crit"'] },
+  { id:"PH-05", name:"a link after a space is a link, not the hole's name", src:"[ph -crit]",
+    code:"PlaceholderPending", xml:["<placeholder>", "<needs>sem resposta</needs>", "<criticise/>"], xmlAbsent:["slot="] },
+  { id:"PH-06", name:"a link after a nested command is a link", src:"[ph[crit'x']-rev]",
+    code:"PlaceholderPending", xml:["<criticise>", "<review/>"], xmlAbsent:['slot="rev"'] },
+  { id:"PH-07", name:"a `,` after the name heads the chain the name opened", src:"[ph-a,crit]",
+    code:"PlaceholderPending", xml:["<chain>", "<criticise/>"], xmlAbsent:['chain="item"'] },
+  { id:"PH-08", name:"an unknown word after the name is not a second name", src:"[ph-a-zzz]",
+    code:"UnknownCommand", noFix:false, requireFix:true, xml:['<unresolved tag="zzz"/>', '<needs slot="a">sem resposta</needs>'] },
+  { id:"PH-09", name:"a second literal stays in the hole", src:"[ph'q''r']",
+    code:"PlaceholderPending", xml:["<placeholder>", "<needs>q</needs>", "<user-input>r</user-input>"] },
+  { id:"PH-10", name:"prose stays in the hole", src:"[ph'q' prose]",
+    code:"PlaceholderPending", xml:["<placeholder>", "<off>prose</off>"] },
+  { id:"PH-11", name:"the command the frame asks about is in the document", src:"[ph[ctx]]",
+    code:"UnfilledSlot", xml:["<placeholder", "<context>", "<needs>what it refers to</needs>"] },
+  { id:"PH-12", name:"the question binds, and the document says so", src:"[ph'q'[crit'x']][ctx'q']",
+    code:"PlaceholderPending", xml:['<placeholder binds="q">', '<user-input ref="q">q</user-input>'] },
+  { id:"PH-13", name:"a filled hole keeps what it held, and asks nothing", src:"[--held'the parser']", opts:HELD_TPL,
+    codeAbsent:"PlaceholderPending", xml:["<placeholder>", '<user-input slot="target">the parser</user-input>', "<example>"] },
+  { id:"PH-14", name:"an empty hole of a template keeps what it held", src:"[--held]", opts:HELD_TPL,
+    code:"PlaceholderPending", xml:["<placeholder>", '<needs slot="target">what to fix</needs>', "<example>"] },
+  { id:"PH-15", name:"a hole of name and question alone is still <needs> alone", src:"[ph-a`q`]",
+    code:"PlaceholderPending", xml:['<needs slot="a">q</needs>'], xmlAbsent:["<placeholder"] },
+  { id:"PH-16", name:"a hole of a name alone is still <needs> alone", src:"[ph-a]",
+    code:"PlaceholderPending", xml:['<needs slot="a">sem resposta</needs>'], xmlAbsent:["<placeholder"] }
+];
+
 const RULE_CASES = [
   { id:"C-01", name:"pair: mand + opt siblings", src:"[mand'x'][opt'x']", opts:WITH_RULES,
     code:"Rule:mand-opt", requireFix:true },
@@ -578,6 +631,26 @@ const rT = runGroup("Templates — invocation expands the definition", TEMPLATES
 const rC = runGroup("Semantic rules — pair, order, precondition", RULE_CASES, { noFix:false });
 const rK = runGroup("Template constraints — the shape a template promises", CONSTRAINTS, { noFix:false });
 const rG = runGroup("Guard — rules must not break normal usage", POSITIVE_WITH_RULES, { noFix:true });
+
+/* The placeholder bucket: each case's document, then both ways back. fromXML
+   reads a <needs> inside a <placeholder> as source, so the XML must come back
+   the same; fromAST must give the same document too. */
+function runPlaceholder() {
+  const n = runGroup("Placeholder — a command held by a hole reaches the XML", PLACEHOLDER, { noFix:true });
+  let trips = 0;
+  PLACEHOLDER.forEach(tc => {
+    const o = tc.opts || {};
+    const xml = G.toXML(tc.src, o);
+    const viaXml = G.toXML(G.fromXML(xml, o).src, o), viaAst = G.toXML(G.fromAST(G.toAST(tc.src, o), o).src, o);
+    if (viaXml === xml && viaAst === xml) { trips++; return; }
+    console.log("  ✗ " + tc.id + ".trip: " + (viaXml !== xml ? "fromXML" : "fromAST") + " gives another document");
+    failures.push(tc.id + ".trip");
+  });
+  console.log("  " + (trips === PLACEHOLDER.length ? "✓" : "✗") + " PH-trip: " + trips + "/" + PLACEHOLDER.length +
+              " come back as the same document by both ways");
+  return n + (trips === PLACEHOLDER.length ? 1 : 0);
+}
+const rPH = runPlaceholder();
 
 /* ------------------------------------------------------------------ *
  * X — composition table (v1.1.0.0)
@@ -1353,7 +1426,8 @@ function runAstInvariant() {
   const PINNED = {
     "[in-[rwk]]": "`-[` normalises to `[` by design (OPERATOR_TARGET §3.2): marking a bracketed child too would force fromXML to decide whether chain=\"extend\" meant `-rwk` or `-[rwk]`",
     "[off]p[on]": "the mode toggle is lost: <off> reconstructs as prose, so ModeOff becomes Text. NOT a documented non-survivor — found by this check",
-    "[logic]let a = 1[/logic]": "fromXmlLogic writes a newline after the opening tag, so every rule's `line` shifts by one. Found by this check"
+    "[logic]let a = 1[/logic]": "fromXmlLogic writes a newline after the opening tag, so every rule's `line` shifts by one. Found by this check",
+    "[ph-a,crit]": "the `,` after a hole's name continues the run the name opened, and the name is not a chain member in the XML, so the <chain> it heads reads back as `-`: `origin` goes from `item` to `extend` (EMS-002 ORD-0026, decided 2026-10-25); fromAST is exact"
   };
 
   const CASES = [].concat(POSITIVE, INCOMPLETE, INVALID, REGRESSION, TEMPLATES, RULE_CASES)
@@ -2088,7 +2162,12 @@ function runSnapshotChecks() {
       Constructor: { gloss: "Found by its own name only.", params: [], body: "[nt'ctor']" },
       bare: { gloss: "Constrained with no rules store.", params: [], body: "[itr[elab]]", constraints: [{ id: "no-sum", forbid: "sum" }] },
       wraprep: { gloss: "A body whose own expansion throws.", params: [], body: "[ctx'w'][--rep]" },
-      clash: { gloss: "A body that breaks a rule.", params: [], body: "[mand'x'][opt'x']" }
+      clash: { gloss: "A body that breaks a rule.", params: [], body: "[mand'x'][opt'x']" },
+      /* holes that hold more than their name and question (ORD-0026) */
+      held: { gloss: "A hole that holds an example.", params: [{ name: "target" }],
+              body: "[crit[ph-target`what to fix`[ex'the login handler']]]" },
+      heldlink: { gloss: "A hole with a link after its name.", params: [{ name: "target" }],
+                  body: "[crit[ph-target-rev`what`]]" }
     };
     const probeTemplates = { ...TPL.templates, ...PROBE_TEMPLATES };
     const TEMPLATE_PROBES = [
@@ -2101,7 +2180,8 @@ function runSnapshotChecks() {
       "[ctx'c'][brst'x']", "[pos[ngt]]", "[pos'a'][ngt'b']", "[--pair[ph-first[ctx]]'b']",
       "[--strs'a''b']", "[--strs[ph-beta'B']'a']", "[--ctor'a''b']", "[--ctor[ph-constructor'C']'a']", "[--rep]",
       "[--rep[ph-constructor'x']]", "[--Constructor]", "[--constructor]", "[constructor]", "[mand'x'][opt'x'];[ctx[__proto__]]",
-      "[pos[constructor]]", "[opt[opt[mand'x']]]", "[--wraprep]", "[--clash]"
+      "[pos[constructor]]", "[opt[opt[mand'x']]]", "[--wraprep]", "[--clash]",
+      "[--held]", "[--held'the parser']", "[--held[ph-target'the parser']]", "[--heldlink]", "[--heldlink'x']"
     ];
     /* without a rules store: checkRules stays out, and the constraints read their
        own names — `[constructor` is one of them, through Object.prototype */
@@ -2230,7 +2310,12 @@ function runSnapshotChecks() {
       "[off;[ctx'a']", "[ctx'a'],[off", "[on'x']", "[off'x']", "[ctx-on]",
       "[ctx'x'-crit]", "[ctx -crit]", "[ctx]-crit", "[in[ctx]-crit]", "[ctx-'x'-crit]", "[ctx]-crit,rev", "[ctx/ctx]-crit",
       "[ctx'x'-crit/eth/]", "[ins`a`]->[ins`b`]", "a -crit", "[ctx] - crit", "[ins'well-known']", "well-known", "[ctx]-constructor",
-      "[ctx]-rd", "[ph'q'-crit]", "[sum'x'-ctx]", "[ctx]-zzz"
+      "[ctx]-rd", "[ph'q'-crit]", "[sum'x'-ctx]", "[ctx]-zzz",
+      "[ph'q'[crit'x']]", "[ph-a[crit'x']]", "[ph-a-crit]", "[ph -crit]", "[ph[crit'x']-rev]", "[ph-a,crit]",
+      "[ph-a-zzz]", "[ph'q''r']", "[ph'q' prose]", "[ph'q'[crit'x']][ctx'q']", "[ph-a`q`]", "[ph-a]",
+      "[ph[crit'x']'q']", "[ph-a-crit'q']", "[ph-a'q'-crit]", "[ph -crit'q']", "[ph -crit,rev]", "[ph- a[crit]]",
+      "[ph-a-crit,rev[sum'x']'q']", "[ph[off]x[on]]", "[ph[logic]a = 1[/logic]]", "[ph[raw]x[/raw]]",
+      "r- [ph'q'[crit'x']]", "[ctx[ph-a[crit'x']]]", "[ph'q'[ph-b[crit'x']]]"
     ];
     const NO_SESSION = ["constructor", "[constructor]", "rd", "[ctx] prose ist"];
     const NO_VALENCY = ["[gt'a']", "[ctx]", "[cat'a']"];
@@ -3744,6 +3829,7 @@ console.log(" Templates    " + rT + "/" + TEMPLATES.length);
 console.log(" Rules        " + rC + "/" + RULE_CASES.length);
 console.log(" Constraints  " + rK + "/" + CONSTRAINTS.length);
 console.log(" Guard        " + rG + "/" + POSITIVE_WITH_RULES.length);
+console.log(" Placeholder  " + rPH + "/" + (PLACEHOLDER.length + 1));
 console.log(" Composition  " + rX + "/17");
 console.log(" .hgml burn   " + rH + "/15");
 console.log(" fromXML      " + rF + "/24");

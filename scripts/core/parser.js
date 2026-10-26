@@ -90,8 +90,19 @@ export function parse(input, opts) {
          tag becomes the placeholder's name and is consumed by the PH branch
          rather than emitted as an element. Its origin would read "extend",
          which is an artefact of the shared lexer path — so it is suppressed
-         and no chain attribute can reach a <needs slot="…">. */
-      var isSlotName = inPH && tk.k === "bareTag";
+         and no chain attribute can reach a <needs slot="…">.
+
+         The binder is the `-` written straight after `[ph`, and it takes ONE
+         link. A hole has one name; after it, and anywhere else in the hole —
+         after the question, a space or a `]`, where a known name is a chain
+         link (EMS-002 ORD-0025) — `-` and `,` are the chain operators they are
+         everywhere (GLOSSARY §0.1, `[A-B]`: applied to the same operand). So
+         `[ph-a-crit]` is the hole `a` with `crit` chained on the value it
+         awaits: a link the <placeholder> carries, never a second name the
+         <needs> drops. */
+      var binder = tokens[i - 1];
+      var isSlotName = inPH && tk.k === "bareTag" && !parentNode.children.length &&
+        !!binder && binder.k === "extend" && tokens[i - 2] === parentNode.tok && binder.s === parentNode.tok.e;
       var nd = {
         id:++uid, raw:cmdName, tier:cl.tier, canonical:cl.canonical, gloss:cl.gloss,
         alias:!!cl.alias, children:[], emotions:[], colon:null, autoClosed:false, tok:tk,
@@ -406,6 +417,8 @@ export function parse(input, opts) {
       if (nd2.canonical !== "PH") return;
       var nameNode = (nd2.children || []).filter(function (c) { return c.slotName; })[0];
       var q = (nd2.children || []).filter(function (c) { return c.literal; })[0];
+      /* a hole a template call filled kept what it held, and asks nothing */
+      if (q && q.boundSlot) return;
       G("ask", "casa vazia",
         (nameNode ? "<code>" + esc(nameNode.raw) + "</code> " : "") +
         (q ? esc(q.v) : "sem resposta"), "PlaceholderPending",

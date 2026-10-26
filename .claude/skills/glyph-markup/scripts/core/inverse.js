@@ -306,6 +306,7 @@ export function fromXmlNode(el, diag) {
      the position the <holds> run recorded it in. `chainOpOf` above is the
      bare-link writer of `-` and `,`; this is the bracketed one. */
   var lead = el.attrs.join === "item" ? "," : "";
+  if (name === "ph") return lead + fromXmlPlaceholder(el, diag);
   var head = lead + "[" + name + (el.attrs.name ? ":" + litSafeXml(el.attrs.name) : "");
   /* the number of a part and the condition of an if come back as the literal they were */
   var canon = name.toUpperCase();
@@ -321,6 +322,30 @@ export function fromXmlNode(el, diag) {
    keeps for an author who writes back the element they read. */
 var SWITCH_SPELLING = /^\[\s*off\s*\]$/i;
 function notSwitch(cmd) { return SWITCH_SPELLING.test(cmd) ? "[modeoff]" : cmd; }
+
+/* A <placeholder> is a hole that held more than its name and its question.
+   Its <needs> is the hole: an alpha `slot` is the name the `-` straight after
+   `[ph` binds, and its text is the question, put back as a literal where the
+   <needs> stood. Here, and only here, a <needs> with no slot is source: the
+   position says it is the hole's own and not the engine asking, as `once`
+   tells the segment's <block> from the command's. A filled hole holds its
+   answer as a <user-input slot>, which the template's reader rebuilds the
+   call from. */
+export function fromXmlPlaceholder(el, diag) {
+  var kids = el.children || [];
+  var hole = kids.filter(function (c) { return c.tag === "needs"; })[0];
+  var slot = hole && hole.attrs.slot;
+  var named = !!(slot && /^[A-Za-z]/.test(slot));
+  var head = "[ph" + (named ? "-" + slot : "") + (el.attrs.name ? ":" + litSafeXml(el.attrs.name) : "");
+  var body = { tag:el.tag, attrs:el.attrs, children: kids.map(function (c) {
+    if (c !== hole) return c;
+    return { tag:"user-input", attrs:{}, children:[{ tag:"#text", v:xmlText(hole), attrs:{}, children:[] }] };
+  }) };
+  var rest = xmlKids(body, diag);
+  /* with no name, a link written first stands after a space: the `-` straight
+     after `[ph` would bind it as the hole's name */
+  return head + (!named && !el.attrs.name && /^[-,]/.test(rest) ? " " : "") + rest + "]";
+}
 
 /* Shared by the resolved and unresolved branches. Returns "-" or "," for a
    chain link, or null. A chain element with children is malformed — a bare
@@ -453,7 +478,13 @@ export function fromAST(env, opts) {
         if (n.chainElement)
           return (n.origin === "item" ? "," : "-") + name;
         var lead = n.origin === "item" ? "," : "";
-        return lead + notSwitch("[" + name + (n.name ? ":" + litSafeXml(n.name) : "") + kids(n.body) + "]");
+        /* the `-` straight after `[ph` binds the hole's name, so a hole whose
+           first child is a chain link writes it after a space, where `-` is
+           the chain operator again (EMS-002 ORD-0025) */
+        var first = (n.body || [])[0];
+        var gap = (String(n.canonical) === "PH" && !n.name && first && first.type === "Command" &&
+                   first.chainElement && !first.slotName) ? " " : "";
+        return lead + notSwitch("[" + name + (n.name ? ":" + litSafeXml(n.name) : "") + gap + kids(n.body) + "]");
       }
       default:
         diag.push({ sev:"note", code:"AstUnknownNode",

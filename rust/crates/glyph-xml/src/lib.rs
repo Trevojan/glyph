@@ -120,7 +120,47 @@ pub fn emit_logic(extra: &Extra, d: usize, l: &mut Vec<String>) {
 
 enum Frame {
     Node(Id, usize),
+    /// a bare link that heads the run a hole's name opened: `chain="extend"`
+    /// whichever operator wrote it
+    Head(Id, usize),
     Tail(Vec<String>),
+    /// the hole's own `<needs>` line, inside a `<placeholder>`
+    Line(String, usize),
+}
+
+/// `holeOf`: the hole's `<needs>` line, unchanged in shape (PACKAGE_TARGET G3),
+/// and — when the PH holds more than its name and its question — the order its
+/// `<placeholder>` writes: `None` is the `<needs>`, where the question was
+/// written (with no question, after the name and the links straight after it).
+struct Hole {
+    needs: String,
+    kids: Option<Vec<Option<Id>>>,
+    run_head: Option<Id>,
+}
+
+fn hole_of(tree: &Tree<Extra>, id: Id) -> Hole {
+    let kids = &tree.nodes[id].children;
+    let name = kids.iter().copied().find(|&c| tree.nodes[c].slot_name == Some(true));
+    let q = kids.iter().copied().find(|&c| tree.nodes[c].is_literal());
+    let slot = name.map_or(String::new(), |c| format!(" slot=\"{}\"", xesc(tree.nodes[c].raw.as_deref().unwrap_or(""))));
+    let text = q.map_or("sem resposta".to_string(), |c| tree.nodes[c].v.clone().unwrap_or_default());
+    let needs = format!("<needs{slot}>{}</needs>", xesc(&text));
+    let filled = q.is_some_and(|c| tree.nodes[c].bound_slot.as_deref().is_some_and(|s| !s.is_empty()));
+    let held = kids.iter().any(|&c| Some(c) != name && Some(c) != q);
+    if !held && !filled {
+        return Hole { needs, kids: None, run_head: None };
+    }
+    let mut run: Vec<Id> = Vec::new();
+    if let Some(n) = name {
+        let at = kids.iter().position(|&c| c == n).unwrap_or(0);
+        run.extend(kids[at + 1..].iter().copied().take_while(|&c| tree.nodes[c].chain_element == Some(true)));
+    }
+    let mut out: Vec<Option<Id>> = kids.iter().copied().filter(|&c| Some(c) != name)
+        .map(|c| if Some(c) == q && !filled { None } else { Some(c) }).collect();
+    if q.is_none() {
+        out.insert(run.len(), None);
+    }
+    Hole { needs, kids: Some(out), run_head: run.first().copied() }
 }
 
 /// `emit`: one node and everything under it, iteratively — a tail frame holds
@@ -154,12 +194,17 @@ fn operand_attr(tree: &Tree<Extra>, id: Id, binds: &[String]) -> Option<(&'stati
 pub fn emit(tree: &mut Tree<Extra>, root: Id, start: usize, l: &mut Vec<String>, ctx: &Context, describe: bool, binds: &[String]) {
     let mut stack = vec![Frame::Node(root, start)];
     while let Some(f) = stack.pop() {
-        let (id, d) = match f {
+        let (id, d, head) = match f {
             Frame::Tail(t) => {
                 l.extend(t);
                 continue;
             }
-            Frame::Node(id, d) => (id, d),
+            Frame::Line(s, d) => {
+                l.push(format!("{}{s}", pad(d)));
+                continue;
+            }
+            Frame::Node(id, d) => (id, d, false),
+            Frame::Head(id, d) => (id, d, true),
         };
         let push_kids = |stack: &mut Vec<Frame>, kids: &[Id], d: usize| stack.extend(kids.iter().rev().map(|&k| Frame::Node(k, d)));
         let nd = tree.nodes[id].clone();
@@ -224,12 +269,11 @@ pub fn emit(tree: &mut Tree<Extra>, root: Id, start: usize, l: &mut Vec<String>,
             continue;
         }
         /* an empty template slot: the question travels in place of the answer */
-        if nd.canonical.as_deref() == Some("PH") {
-            let name = nd.children.iter().find(|&&c| tree.nodes[c].slot_name == Some(true))
-                .map_or(String::new(), |&c| format!(" slot=\"{}\"", xesc(tree.nodes[c].raw.as_deref().unwrap_or(""))));
-            let q = nd.children.iter().find(|&&c| tree.nodes[c].is_literal())
-                .map_or("sem resposta".to_string(), |&c| tree.nodes[c].v.clone().unwrap_or_default());
-            l.push(format!("{}<needs{name}>{}</needs>", pad(d), xesc(&q)));
+        /* a hole that holds nothing but its name and its question is its
+           <needs> line alone; one that holds more is a <placeholder> */
+        let hole = (nd.canonical.as_deref() == Some("PH")).then(|| hole_of(tree, id));
+        if let Some(Hole { needs, kids: None, .. }) = &hole {
+            l.push(format!("{}{needs}", pad(d)));
             continue;
         }
 
@@ -238,7 +282,7 @@ pub fn emit(tree: &mut Tree<Extra>, root: Id, start: usize, l: &mut Vec<String>,
         /* `chain` marks a bare link by the operator that attached it; `join`
            is the same for `,` between bracketed siblings */
         let chain = match origin.as_deref() {
-            Some(o @ ("extend" | "item")) if bare => Some(format!("chain=\"{o}\"")),
+            Some(o @ ("extend" | "item")) if bare => Some(format!("chain=\"{}\"", if head { "extend" } else { o })),
             _ => None,
         };
         let join = (!bare && origin.as_deref() == Some("item")).then(|| "join=\"item\"".to_string());
@@ -314,7 +358,8 @@ pub fn emit(tree: &mut Tree<Extra>, root: Id, start: usize, l: &mut Vec<String>,
 
         /* the frame counts the operand where it was written; the element does not repeat it */
         let all: Vec<Id> = nd.children.iter().copied().filter(|&c| moved.is_none_or(|(_, lit)| c != lit)).collect();
-        if all.is_empty() && needs.is_none() && slot_needs.is_empty() {
+        let empty = hole.as_ref().and_then(|h| h.kids.as_ref()).map_or(all.is_empty(), |k| k.is_empty());
+        if empty && needs.is_none() && slot_needs.is_empty() {
             l.push(format!("{}{open}/>", pad(d)));
             continue;
         }
@@ -329,7 +374,18 @@ pub fn emit(tree: &mut Tree<Extra>, root: Id, start: usize, l: &mut Vec<String>,
             .map(|v| format!("{}<needs var=\"{}\">referenciado e nunca ligado</needs>", pad(d + 1), xesc(v))));
         tail.push(format!("{}</{close}>", pad(d)));
         stack.push(Frame::Tail(tail));
-        push_kids(&mut stack, &all, d + 1);
+        match hole {
+            Some(Hole { needs: line, kids: Some(kids), run_head }) => {
+                for k in kids.iter().rev() {
+                    stack.push(match *k {
+                        None => Frame::Line(line.clone(), d + 1),
+                        Some(c) if Some(c) == run_head => Frame::Head(c, d + 1),
+                        Some(c) => Frame::Node(c, d + 1),
+                    });
+                }
+            }
+            _ => push_kids(&mut stack, &all, d + 1),
+        }
     }
 }
 

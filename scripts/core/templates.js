@@ -112,7 +112,19 @@ export function bindHoles(nodes, fills, params, repeatName) {
         }
         var v2 = nm ? valueFor(nm) : null;
         if (v2 !== null && v2 !== undefined && String(v2).length) {
-          out.push({ literal:true, v:String(v2), form:"quote", boundSlot:nm });
+          var bound = { literal:true, v:String(v2), form:"quote", boundSlot:nm };
+          /* A hole that holds more than its name and its question keeps it
+             when it is filled: the answer takes the question's place and what
+             the hole held stays beside it, inside the hole — the same
+             <placeholder> the unfilled hole is, never dropped by the fill. */
+          var q = (nd.children || []).filter(function (c) { return c.literal; })[0];
+          var held = (nd.children || []).filter(function (c) { return !c.slotName && c !== q; });
+          if (held.length) {
+            nd.children = [bound].concat(rebuild(held));
+            out.push(nd);
+            return;
+          }
+          out.push(bound);
           return;
         }
       }

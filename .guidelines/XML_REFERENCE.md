@@ -196,6 +196,15 @@ An **unbound** hole becomes `<needs slot="name">` carrying its question; a
 **bound** one becomes `<user-input slot="name">` carrying the answer. That one
 attribute is what lets `fromXML()` rebuild the call.
 
+A hole that holds more than its name and its question — a nested command, a
+chain link, another literal, prose — is a `<placeholder>`: its `<needs>` stands
+where the question was written (with no question, after the name and the links
+written straight after it), and what it holds follows in source order. Only the
+bare tag written straight after `[ph-` is the hole's name; any other bare tag in
+the hole is a chain link. Inside a `<placeholder>`, and only there, a `<needs>`
+with no slot is source too: it is the hole's own. A hole a template call filled
+keeps what it held, its answer a `<user-input slot>` in place of the `<needs>`.
+
 `<needs>` is written in four shapes and only the first is source:
 
 | Shape | From | Read back as |
