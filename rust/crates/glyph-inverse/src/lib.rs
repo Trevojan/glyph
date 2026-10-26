@@ -493,6 +493,15 @@ fn from_xml_placeholder(el: &El, diag: &mut Vec<Diag>, depth: usize) -> Result<S
     Ok(format!("[ph{}{colon}{gap}{rest}]", slot.map_or(String::new(), |s| format!("-{s}"))))
 }
 
+/// `apart`: two pieces written side by side read as one when a name ends the
+/// first and a name starts the second, or the first ends a mood header —
+/// `[ctx` and the prose `foo` came back as `[ctxfoo]`. A space between them is
+/// what the source had, and whitespace between tokens is no node.
+fn apart(a: String, b: &str) -> String {
+    let name = |c: char| c.is_ascii_alphanumeric() || c == '_' || c == '.';
+    if (a.ends_with(name) || a.ends_with('/')) && b.starts_with(name) { format!("{a} {b}") } else { a + b }
+}
+
 /// `notSwitch`: the command OFF with nothing inside is written `[modeoff]`,
 /// the element's own name read back as input, never `[off]`, the switch that
 /// opens a verbatim region.
@@ -674,7 +683,11 @@ pub fn from_ast(env: &Json) -> Back {
         if form.and_then(Json::str) == Some("tick") && !t.contains('`') { format!("`{t}`") } else { as_literal(&t) }
     };
     fn kids(list: Option<&Json>, diag: &mut Vec<Diag>, lit: &dyn Fn(Option<&Json>, Option<&Json>) -> String) -> String {
-        list.and_then(Json::arr).unwrap_or(&[]).iter().map(|n| node(n, diag, lit)).collect()
+        let mut out = String::new();
+        for n in list.and_then(Json::arr).unwrap_or(&[]) {
+            out = apart(out, &node(n, diag, lit));
+        }
+        out
     }
     fn node(n: &Json, diag: &mut Vec<Diag>, lit: &dyn Fn(Option<&Json>, Option<&Json>) -> String) -> String {
         /* an array is an object to the JS, and reaches the vocabulary check */
@@ -743,7 +756,7 @@ pub fn from_ast(env: &Json) -> Back {
                 let gap = if text_of(n.get("canonical")) == "PH" && !truthy(n.get("name"))
                     && first.is_some_and(|f| f.get("type").and_then(Json::str) == Some("Command")
                         && truthy(f.get("chainElement")) && !truthy(f.get("slotName"))) { " " } else { "" };
-                format!("{}{}", if item { "," } else { "" }, not_switch(format!("[{name}{colon}{gap}{}]", kids(n.get("body"), diag, lit))))
+                format!("{}{}", if item { "," } else { "" }, not_switch(format!("{}]", apart(format!("[{name}{colon}{gap}"), &kids(n.get("body"), diag, lit)))))
             }
             _ => {
                 diag.push(Diag { sev: "note", code: "AstUnknownNode",
@@ -770,7 +783,7 @@ pub fn from_ast(env: &Json) -> Back {
             }
             pre += "r-";
         }
-        parts.push(format!("{pre}{}{}", kids(seg.get("body"), &mut diag, &lit), if truthy(seg.get("breaks")) { ";;" } else { "" }));
+        parts.push(format!("{}{}", apart(pre, &kids(seg.get("body"), &mut diag, &lit)), if truthy(seg.get("breaks")) { ";;" } else { "" }));
     }
     /* `;;` already closed its segment, so it is not followed by `;` */
     let mut src = String::new();
