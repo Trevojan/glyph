@@ -125,6 +125,7 @@ attribute is `OPERAND_ATTR` in `vocabulary.js`.
 | `[=` | `continues="previous"` on the next block |
 | `-` extend | opens a chain: `[in-rwk` puts `<chain><rework/></chain>` inside `<instruction>` |
 | `,` after an extend | continues that chain — the next member of the same `<chain>` |
+| `-` after the operand, a space or a `]` | a link where a name the vocabulary knows touches the `-`: `[ctx'x'-crit` and `[ctx -crit` put `<chain><criticise/></chain>` inside `<context>`, after what precedes it; `[ctx]-crit` puts it in the scope the `]` returns to, the enclosing command or the block |
 | `,` between bracketed siblings | opens a `<holds>`: `[a],[b]` puts both inside one `<holds>` |
 | `[off]` … `[on]` | `<off>` — read as prose, token parsing suspended; a region with nothing in it, `[off][on]` or an `[off]` that ends the source, is `<off></off>`, read back as `[off][on]` |
 | `[on]` with no `[off]` open | `<mode-on/>` — the command ON written closed, with the note `UnmatchedOnMode`; the command OFF with nothing inside is written back `[modeoff]`, never as the switch |
@@ -530,7 +531,9 @@ editable and the reader is handed input this emitter never wrote.
   `<off>`, verbatim — `[ins`a`]->[ins`b`]` emits `<off>-&gt;</off>` between the
   two. It is not malformed, so there is no refusal: the author wrote text and
   the text reaches the deliverable unchanged. A sequence that *looks* like an
-  operator and is not one is covered by this rule and not by §11.3.
+  operator and is not one is covered by this rule and not by §11.3: `-` is a
+  link only where a name the vocabulary knows touches it, so `->`, `[a -b]`
+  and `x - y` are prose.
 - **Deep nesting.** It is flagged (`DeepNesting`) and still emitted.
 - **A retired element name.** `[skeptic` and `<skeptic>`, the name `[skep` had
   before it became `<sceptic>`, read as `[skep`, each with a `note` naming the

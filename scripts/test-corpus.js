@@ -1147,6 +1147,12 @@ function runReferenceChecks() {
     { id: "4-06", src: "[in-rwk]",
       /* rederived for glyph-package (E2, late): a run of one is still a run */
       expect: x => /<instruction>\s*<chain>\s*<rework\/>\s*<\/chain>\s*<\/instruction>/.test(x) },
+    /* the link after the operand, a space or a `]` (2026-10-25: a known
+       command never vanishes) */
+    { id: "4-16", src: "[ctx'x'-crit]",
+      expect: x => /<context>\s*<user-input>x<\/user-input>\s*<chain>\s*<criticise\/>\s*<\/chain>\s*<\/context>/.test(x) &&
+                   G.toXML("[ctx -crit]", WITH_BOTH) === G.toXML("[ctx-crit]", WITH_BOTH) &&
+                   /<\/context>\s*<chain>\s*<criticise\/>\s*<\/chain>\s*<\/block>/.test(G.toXML("[ctx]-crit", WITH_BOTH)) },
     { id: "4-07", src: "[in-rwk,ctx]",
       /* rederived for glyph-package (E2): the run is wrapped and the attribute
          does not survive it, position carrying the operator - PACKAGE_TARGET.md
@@ -1947,7 +1953,9 @@ function runSnapshotChecks() {
       "a;b;;c", ";;;", "[in-rwk,fmt ,  sum]", "[a, b]", "[a,b-c, d]", "[in- rwk]", "[a -b]", "[a-b-c]",
       "r- x", " R: x", "r: x", "r-x", "R-", "[in r- ]", "  r  - x", "R :x", "a:b=c",
       " [nt x]　", "\t[ctx]\r\n", "﻿[ctx]", "[nt'😀']x😀", "[nt`😀`] 😀;",
-      "ação [ctx'fichação'] ç", "[nt'a b'] x y"
+      "ação [ctx'fichação'] ç", "[nt'a b'] x y",
+      "[ctx'x'-crit]", "[ctx -crit]", "[ctx]-crit", "[ctx/ctx]-crit", "a -crit", "[ctx] - crit", "[ctx]-constructor", "[ctx'x' -Crit]",
+      "x'-crit", "[ctx]-crit]", "[raw]x[/raw]-crit", "[on]-crit", "/eth/-crit"
     ];
     const lexSources = [...new Set([...PROBES, ...S.filter(x => x.length <= 4096)])];
     const lexed = lexSources.map(x => [x, G.tokenize(x)]);
@@ -2219,7 +2227,10 @@ function runSnapshotChecks() {
       "[--t=/eth/]", "[--zz/eth/]", "[--reinforce'a''b'/eth/]", "[--t=[ctx'x']/eth/]",
       "[on]", "[on]x", "[ctx[on]]", "[ctx'x'][on]", "[on];", "r- [on]", "[off]a[on][on]b", "[off]a[on]b", "[on", "[modeon]",
       "[ctx-[on]]", "[off]", "[ctx'x'][off]", "[ctx[off]", "[off][on]", "[off] ", "off", "on", "[ctx off]", "[ctx,off]",
-      "[off;[ctx'a']", "[ctx'a'],[off", "[on'x']", "[off'x']", "[ctx-on]"
+      "[off;[ctx'a']", "[ctx'a'],[off", "[on'x']", "[off'x']", "[ctx-on]",
+      "[ctx'x'-crit]", "[ctx -crit]", "[ctx]-crit", "[in[ctx]-crit]", "[ctx-'x'-crit]", "[ctx]-crit,rev", "[ctx/ctx]-crit",
+      "[ctx'x'-crit/eth/]", "[ins`a`]->[ins`b`]", "a -crit", "[ctx] - crit", "[ins'well-known']", "well-known", "[ctx]-constructor",
+      "[ctx]-rd", "[ph'q'-crit]", "[sum'x'-ctx]", "[ctx]-zzz"
     ];
     const NO_SESSION = ["constructor", "[constructor]", "rd", "[ctx] prose ist"];
     const NO_VALENCY = ["[gt'a']", "[ctx]", "[cat'a']"];
@@ -3186,6 +3197,102 @@ const rMO = runModeWordChecks();
 
 
 /* ------------------------------------------------------------------ *
+ * elo de cadeia -- o `-` depois do operando, de um espaco ou de um `]`
+ *
+ * `[ctx'x'-crit]`, `[ctx -crit]` e `[ctx]-crit` faziam de `crit`, um nome
+ * que o vocabulario conhece, um <off> sem diagnostico nenhum: o lexer so
+ * lia `-` como elo colado ao nome de um comando. Um comando conhecido nunca
+ * some (decidido em 2026-10-25), e a regra que o acolhe e a cadeia que a
+ * gramatica ja escreve -- `{ "-" , chain_item }` continua depois de um item
+ * literal (glyph-grammar.ebnf), espaco entre tokens nao e no, e depois de um
+ * `]` o que vem pertence ao escopo para o qual o `]` devolve. So um nome
+ * conhecido colado ao `-` vira elo; a prosa fica prosa.
+ * ------------------------------------------------------------------ */
+function runChainLinkChecks() {
+  console.log("\n--- elo de cadeia ---");
+  const D = [];
+  const ok = (id, name, why) => {
+    if (why) { console.log("  ✗ " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  ✓ " + id + ": " + name); D.push(id); }
+  };
+  const opts = { templates: TPL.templates, rules: RULESTORE,
+                 expansions: require("../.guidelines/expansions.json") };
+  const X = src => G.toXML(src, opts);
+  const links = src => G.tokenize(src).filter(t => t.k === "extend").length;
+  const quiet = src => G.parse(src, opts).gaps.length === 0;
+
+  /* depois do operando: o literal e o operando dos dois, como em [crit-ctx'x'] */
+  const c2 = X("[ctx'x'-crit]");
+  const c2n = G.parse("[ctx'x'-crit]", opts).segments[0].children[0].children
+    .filter(c => c.canonical === "CRIT")[0];
+  ok("LK-01", "depois do operando, o `-` abre a cadeia no comando que o segura",
+     !/<context>\s*<user-input>x<\/user-input>\s*<chain>\s*<criticise\/>\s*<\/chain>\s*<\/context>/.test(c2)
+       ? "emitiu " + JSON.stringify(c2)
+       : !c2n || c2n.origin !== "extend" || !c2n.chainElement ? "o no de CRIT nao e um elo"
+       : !quiet("[ctx'x'-crit]") ? "levantou diagnostico"
+       : X("[ctx-'x'-crit]") !== c2 ? "a forma da gramatica, [ctx-'x'-crit], emite outros bytes"
+       : X("[sum'x'-ctx]").indexOf("<chain>\n        <context/>") === -1 ? "[sum'x'-ctx] ainda perde o ctx" : null);
+
+  /* depois de um espaco: espaco entre tokens nao e no */
+  const spaced = [["[ctx -crit]", "[ctx-crit]"], ["[ctx'x' -crit]", "[ctx'x'-crit]"],
+                  ["[in-rwk -fmt]", "[in-rwk-fmt]"], ["[in-rwk, fmt -sum]", "[in-rwk,fmt-sum]"]]
+    .filter(p => X(p[0]) !== X(p[1]));
+  ok("LK-02", "um espaco antes do `-` nao muda o elo",
+     spaced.length ? spaced.map(p => p[0] + " != " + p[1]).join(" | ") : null);
+
+  /* depois de um `]`: o escopo para o qual o `]` devolve -- o comando de fora, ou o bloco */
+  const x2 = X("[ctx]-crit"), nested = X("[in[ctx]-crit]");
+  ok("LK-03", "depois de um `]`, o elo pertence ao escopo que o `]` devolve",
+     !/<\/context>\n    <chain>\n      <criticise\/>\n    <\/chain>\n  <\/block>/.test(x2) ? "no bloco: " + JSON.stringify(x2)
+       : !/<instruction>\s*<context>[\s\S]*<\/context>\s*<chain>\s*<criticise\/>\s*<\/chain>\s*<\/instruction>/.test(nested)
+         ? "dentro de [in: " + JSON.stringify(nested)
+       : X("[ctx'x'[/ctx]-crit") !== X("[ctx'x']-crit") ? "[/ctx] e ] devolvem escopos diferentes" : null);
+
+  /* a prosa fica prosa: so um nome conhecido COLADO ao `-` e elo. As posicoes
+     em que um nome conhecido ainda some sem ser elo -- depois de prosa, de
+     `;`, de `,`, no comeco, com espaco depois do `-` -- nao sao fixadas aqui:
+     cada uma percorre as regras pela sua propria Ordem */
+  const prose = ["[a -b]", "[ins`a`]->[ins`b`]", "x - y", "well-known", "[ins'well-known']",
+                 "[ctx]-critx", "[ctx]-constructor", "[ctx]-zzz"]
+    .filter(src => links(src) !== 0);
+  ok("LK-04", "a prosa com hifen nao vira elo",
+     prose.length ? "virou elo: " + prose.join(", ") : null);
+
+  /* os 144 nomes das tabelas, e so eles: a sessao o parser aplica, nao o lexer */
+  const names = [].concat(Object.keys(VOCAB.MODE), Object.keys(VOCAB.STRUCT), Object.keys(VOCAB.META),
+                          Object.keys(VOCAB.ALIAS), Object.keys(VOCAB.INSTR), Object.keys(VOCAB.SESSION));
+  const uniq = [...new Set(names.map(n => n.toLowerCase()))];
+  const missed = uniq.filter(n => links("[ctx]-" + n) !== 1 || links("[ctx'x'-" + n + "]") !== 1 || links("[ctx -" + n + "]") !== 1);
+  const offSession = G.parse("[ctx]-rd", { ...opts, session: false }).gaps.map(g => g.code);
+  ok("LK-05", "cada um dos 144 nomes e elo nas tres posicoes",
+     uniq.length !== 144 ? "as tabelas tem " + uniq.length + " nomes"
+       : missed.length ? "nao viraram elo: " + missed.join(", ")
+       : offSession.indexOf("UnknownCommand") === -1 ? "sem sessao, [ctx]-rd nao disse que rd nao existe: " + offSession.join(",") : null);
+
+  /* a volta: a arvore e o documento devolvem a mesma fonte que relida da os mesmos bytes */
+  const trips = ["[ctx'x'-crit]", "[ctx -crit]", "[ctx]-crit", "[in[ctx]-crit]", "[ctx'x']-crit,ex",
+                 "[ctx'x'-crit,ex'y']", "[sum'x'-ctx]", "[ctx]-rd"]
+    .filter(src => {
+      const x = X(src);
+      return X(G.fromXML(x, opts).src) !== x || X(G.fromAST(G.toAST(src, opts), opts).src) !== x;
+    });
+  ok("LK-06", "fromXML e fromAST devolvem o elo como elo",
+     trips.length ? "a volta mudou: " + trips.join(", ") : null);
+
+  /* a volta nao inventa: um <off> que comeca por `-` e um nome conhecido volta cercado */
+  const old = '<glyph-package engine="' + G.VERSION + '">\n  <schema/>\n  <block once="true">\n    <context>\n' +
+              '      <user-input>x</user-input>\n      <off>-crit</off>\n    </context>\n  </block>\n</glyph-package>';
+  const back = G.fromXML(old, opts).src;
+  ok("LK-07", "um <off> que comeca por um nome conhecido volta como prosa",
+     X(back) !== old ? "voltou como " + JSON.stringify(back) + " e emitiu outro documento"
+       : X(G.fromXML(X("[ctx][off]-crit[on]"), opts).src) !== X("[ctx][off]-crit[on]") ? "[off]-crit[on] voltou como elo" : null);
+
+  return D.length;
+}
+const rLK = runChainLinkChecks();
+
+
+/* ------------------------------------------------------------------ *
  * o bundle da Ordem -- ORD-0001, numerado como um ADR
  *
  * Ate aqui `baixar` entregava UMA aba por clique, com o nome `glyph.ext`.
@@ -3658,6 +3765,7 @@ console.log(" aspas        " + String(rQT).padStart(4) + "/3");
 console.log(" param template" + String(rTP).padStart(4) + "/4");
 console.log(" imperativo   " + String(rIM).padStart(4) + "/10");
 console.log(" mode words   " + String(rMO).padStart(4) + "/10");
+console.log(" elo de cadeia" + String(rLK).padStart(4) + "/7");
 console.log(" bundle ORD   " + String(rZP).padStart(4) + "/16");
 console.log(" global store " + rGS + "/3");
 console.log(" context      " + rCX + "/3");

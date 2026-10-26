@@ -11,7 +11,7 @@
 
 use glyph_stores::Context;
 use glyph_json::Json;
-use glyph_vocab::{derived, get, ALIAS, EMO, INSTR, META, MODE, SESSION, STRUCT};
+use glyph_vocab::{derived, get, known_word, ALIAS, EMO, INSTR, META, MODE, SESSION, STRUCT};
 
 /// One token. The fields a kind does not carry stay `None`; `to_json` in the
 /// tests writes the rest in the order the JS object has them.
@@ -49,6 +49,15 @@ fn alnum(c: u16) -> bool {
 /// `NAME_CH`: `[A-Za-z0-9_.]`.
 pub fn name_ch(c: u16) -> bool {
     alnum(c) || c == b'_' as u16 || c == b'.' as u16
+}
+/// `knownWordAt`: whether the run of NAME_CH at `at` starts with a letter and
+/// is a name the static tables know.
+fn known_word_at(u: &[u16], at: usize) -> bool {
+    if !u.get(at).is_some_and(|&c| alpha(c)) {
+        return false;
+    }
+    let end = (at..u.len()).find(|&j| !name_ch(u[j])).unwrap_or(u.len());
+    known_word(&String::from_utf16_lossy(&u[at..end]))
 }
 fn is(c: Option<&u16>, ch: u8) -> bool {
     c == Some(&(ch as u16))
@@ -415,6 +424,19 @@ pub fn tokenize(src: &str) -> Vec<Token> {
 
         if c == b'-' as u16 {
             if text.is_empty() && t.last().is_some_and(|p| p.k == "open" || p.k == "bareTag") {
+                t.push(tok("extend", "-".into(), i, i + 1));
+                i += 1;
+                expect_bare = true;
+                continue;
+            }
+            /* the chain link written after the operand, a space or the `]` that
+               closed a command: only a name the vocabulary knows touching the
+               `-` is a link, so prose with a hyphen stays prose (2026-10-25) */
+            if text.iter().all(|&ch| js_space(ch))
+                && t.last().is_some_and(|p| matches!(p.k, "open" | "bareTag" | "literal" | "close" | "closeTag"))
+                && known_word_at(&u, i + 1)
+            {
+                flush(&mut t, &mut text, &mut text_start);
                 t.push(tok("extend", "-".into(), i, i + 1));
                 i += 1;
                 expect_bare = true;

@@ -32,6 +32,15 @@ pub fn former_element(name: &str) -> Option<&'static str> {
     FORMER_ELEMENT.iter().find(|(old, _)| squash(old) == key).map(|&(_, now)| now)
 }
 
+/// `knownWord(w)`: a word the static tables know — MODE, STRUCT, META, ALIAS,
+/// INSTR and SESSION, own properties only. The lexer reads a `-` written after
+/// an operand, a space or a `]` as a chain link only before such a word, and
+/// the inverse fences an `<off>` that starts with one.
+pub fn known_word(w: &str) -> bool {
+    let (up, low) = (w.to_uppercase(), w.to_lowercase());
+    [MODE, STRUCT, META, ALIAS, INSTR].iter().any(|t| get(t, &up).is_some()) || get(SESSION, &low).is_some()
+}
+
 /// `table[key]`, as a JS object answers it.
 pub fn get<V: Copy>(table: &[(&'static str, V)], key: &str) -> Option<V> {
     table.iter().find(|(k, _)| *k == key).map(|(_, v)| *v)
