@@ -13,6 +13,16 @@
 
 ---
 
+## 2026-10-26
+
+| decisão | razão |
+|---|---|
+| **Uma cerca `[logic]` se nomeia pelo primeiro literal: `[logic'calc']…[/logic]`** | respondido no questionário de 2026-10-26: *"[logic'calc'] opens it"*. Com o dois-pontos aposentado, o `[logic` com um literal logo depois, fechado por `[/logic]`, é a cerca nomeada, `<logic name="calc">` — a mesma regra do bloco e da seção |
+| **O dois-pontos se aposenta como reconhecedor em `ask`, e o texto fica** | respondido no mesmo questionário: *"Recogniser, ask only"*, depois de o Regente dizer em 2026-10-25 que o `:` não deve existir (*"`:` is typed by SHIFT + ; … the name attribute should be the first parameter typed as literal. this also limits names to exist only within certain [cmd], which is valid and intentional"*). `[x: texto]` pergunta em `ask` e nomeia a forma `[x'texto'`, e o texto segue no documento como operando, então nada some; o `name` existe só no `block`, na `section` e na cerca `[logic]`, pelo primeiro literal. O `AmbiguousSlotOrder` se aposenta com o dois-pontos |
+| **As outras posições em que um comando conhecido some entram pela mesma regra do elo** | respondido no mesmo questionário: *"Yes, same rule"*. Depois de prosa, de `;` ou `,`, de um humor, de `[/raw]`, no começo do documento, com espaço depois do traço e em `--crit`: onde um nome conhecido toca um `-` que abre uma palavra, ele é elo de cadeia do escopo em que está, a regra da `EMS-002/ORD-0025`; `->`, `x - y` e `well-known` seguem prosa |
+| **Um `[on]` solto é o comando ON com uma `note`** | respondido no mesmo questionário: confirmado. A `EMS-002/ORD-0024` o construiu assim |
+| **Três leituras construídas esperam a leitura do Regente** | no mesmo questionário, o Regente não confirmou: o `[ctx]-crit` no nível do bloco ligado como sequência ao bloco, o nome do buraco só na bareTag logo depois de `[ph-`, e a leitura escopada de `[off'x']`. Seguem como foram construídas, e cada uma volta a ele com a alternativa escrita |
+
 ## 2026-10-25
 
 | decisão | razão |
