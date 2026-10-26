@@ -196,6 +196,11 @@
     [val'the placeholder','a placeholder holding more than its name and question emits placeholder with the needs where the question was written, then the rest, and a second bare tag is a chain link']
   ]
 
+  [section'ORD-0027-ast-space'
+    [tgt'the way back writes the space a name needs from the prose after it, an inclusion of 2026-10-25, an ORD of the batch']
+    [val'the space','fromAST writes a space between a command name or a mood header and the prose after it, so a known command never turns unknown on the way back']
+  ]
+
   [section'limits'
     [nev'a selector that answers an empty slice in silence']
     [dont'open an ORD before the ORD it depends on closes']
@@ -234,5 +239,6 @@
     [--track[ph-item'ORD-0023, a mood inside a template, in the Rust only, of the batch of the version: the JS throws, the Rust already answered the document, the mood colouring the segment first in its block, and no engine changed; the four sources entered the probes, and the parse, XML, envelope and burn oracle tests take the bytes of rust/testkit/known/template-moods.json, read with the oracle engine and stores; no hash of the snapshot moved; seen failing before it counts; at 9e1a22b, sha256 e76297b484c723e60e54641bf524ce11ef98a38ca0b7396ae13f03cf35ae13ed of the cases, the digest of ORD-0014'][ph-scope'EMS-002']]
     [--track[ph-item'ORD-0024, the mode words never vanish, an inclusion of 2026-10-25, of the batch of the version: a closed on with no off open is the command ON with the note UnmatchedOnMode; an off at the end raises UnclosedOffMode, and an empty region is an empty off element; bare off and on raise LooseCommandWord; the empty OFF comes back as modeoff; OC-13 took the snapshot to 116 sources with no hash moved; 29 parse probes, the MO bucket and probe 4-15; eight MO checks and OC-13 seen failing on the earlier tree, and three Rust mutants; at c112ddd, sha256 d4ddb7335b4729f8de45288d5ff177d5bdca391ade2a796e7d03da7218235688 of the cases'][ph-scope'EMS-002']]
     [--track[ph-item'ORD-0025, a known name after an operand, a space or a closing bracket is a chain link, an inclusion of 2026-10-25, of the batch of the version: a dash a known name touches becomes extend, and after a closing bracket the link goes to the scope that bracket returns to; prose with a hyphen stays prose, and the way back fences an off element that starts with a known name; the grammar gains chain_link; no hash of the snapshot moved; 13 lexer probes, 21 parse probes, the LK bucket and probe 4-16; four mutants seen failing; at cda8d0b, sha256 d4ddb7335b4729f8de45288d5ff177d5bdca391ade2a796e7d03da7218235688 of the cases'][ph-scope'EMS-002']]
+    [--track[ph-item'ORD-0026, a command held by a placeholder reaches the XML, an inclusion of 2026-10-25, of the batch of the version: a hole holding more than its name and question becomes placeholder, its needs where the question was written and the rest in source order; only the bare tag written straight after the placeholder dash names the hole, the others are links; a filled hole keeps what it held; no hash of the snapshot moved; the Placeholder bucket, 25 parse probes and five template probes; PH-01 to PH-14 and four Rust mutants seen failing; at fc4c4a2, sha256 d4ddb7335b4729f8de45288d5ff177d5bdca391ade2a796e7d03da7218235688 of the cases'][ph-scope'EMS-002']]
   ]
 ];

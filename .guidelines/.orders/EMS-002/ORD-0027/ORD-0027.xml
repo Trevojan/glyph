@@ -1,0 +1,33 @@
+<glyph-package engine="3.6.9.07">
+  <schema/>
+  <block once="true">
+    <block binds="ORD-0027-ast-space">
+      <user-input>ORD-0027-ast-space</user-input>
+      <context>
+        <user-input>the spec of EMS-002</user-input>
+        <user-input>.guidelines/.orders/EMS-002/EMS-002.pgml</user-input>
+      </context>
+      <context>
+        <user-input>the map of the inclusion</user-input>
+        <user-input>.guidelines/.orders/INTAKE-INCLUSION.md</user-input>
+      </context>
+      <target>
+        <user-input>the way back through fromAST writes the space a name needs from the prose after it, so a known command never turns unknown on the way back, by the inclusion the Regent decided on 2026-10-25; an ORD of the batch the version moves once for</user-input>
+      </target>
+      <context>
+        <user-input>measured at d739544, section 3 of the intake: fromAST writes a text child glued to the name of the command that holds it, so a context command holding the prose foo comes back as the unknown command ctxfoo; and a mood header before prose reads the first word of the prose as one more mood code</user-input>
+      </context>
+      <constraint>
+        <user-input>two pieces written side by side read as one when a name ends the first and a name starts the second, or the first ends a mood header; a space between them is what the source had, and whitespace between tokens is no node, so it costs nothing on the way in</user-input>
+      </constraint>
+      <constraint>
+        <user-input>no oracle entry exercises it, so the suite gains a test whose fromAST calls the oracle records, and the Rust is ported byte for byte</user-input>
+      </constraint>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the space</user-input>
+        <user-input>the sources the test names come back to the same XML through fromAST; seen failing before it counts, and the Rust answers byte for byte</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>
