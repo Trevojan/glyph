@@ -55,16 +55,22 @@ Measured while tracing the fourteen, not built by these Orders:
   projection; a command inside a fill at a call site of a probe template
   (`[--pair[ph-first[ctx]]'b']`) vanishes.
 
-## 4. What waits on the Regent
+## 4. What the Regent answered, and what still waits
 
-- **The name of a `[logic]` fence once the colon is retired.** `[logic:calc]`
-  names the fence today, and `[logic'calc']` is the command `LOGIC`, not the
-  fence.
+Answered on 2026-10-26, in [`.decisions/`](../.decisions/README.md): a
+`[logic]` fence is named by its first literal, `[logic'calc']…[/logic]`; the
+colon retires as a recogniser at `ask` severity, its text kept as the operand;
+the further positions of §3 where a known command drops enter by the rule of
+`ORD-0025`; and a stray `[on]` keeps its `note`.
+
+Built, and not confirmed — each goes back to the Regent with its alternative:
+
 - **`[ctx]-crit` at the top level** attaches the link to the block, read as
   GLOSSARY §0.3 sequence; the alternative is to attach it to the command just
   closed, so that `[ctx]-crit` equals `[ctx-crit]`.
-- **The severity of `UnmatchedOnMode`**: `note`, as built; `fix` would refuse
-  the use the inclusion gives the command.
+- **The hole's name** is only the bare tag written straight after `[ph-`; the
+  alternative is the first bare tag anywhere in the hole, so that
+  `[ph'q'-crit]` is the hole `crit`.
 - **The scoped reading of `[off'x']` and `[on'x']`**: the operand read with
-  interpretation off or on — no engine change, a reading of SIGNATURES §6 to
-  ratify.
+  interpretation off or on — no engine change, a reading of SIGNATURES §6; the
+  alternative is a recogniser that names the switch.
