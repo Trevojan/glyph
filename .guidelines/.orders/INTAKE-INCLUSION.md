@@ -31,19 +31,18 @@ the tree.
 | `[off]` as the last characters | no trace | `UnclosedOffMode`, raised for every other unclosed `[off]` | [`ORD-0024`](EMS-002/README.md) |
 | the bare words `off`, `on` | prose, while the other 142 names ask | `LooseCommandWord`, whose list left out `MODE` | [`ORD-0024`](EMS-002/README.md) |
 | `[ctx'x'-crit]`, `[ctx -crit]`, `[ctx]-crit` | `-crit` in `<off>`, no node | the grammar's `chained_command`, a chain item may be a literal; GLOSSARY §0.1 and §0.3 | [`ORD-0025`](EMS-002/README.md) |
-| `[ph'q'[crit'x']]`, `[ph-a[crit'x']]` | in the AST, dropped from the XML | GLOSSARY §0.3, what is nested is the standard the item works against; `<needs>` keeps its shape (PACKAGE_TARGET G3); the Regent: the `<placeholder>` wrapper | `ORD-0026` |
-| `[ph-a-crit]` | a second hole name, the first kept | the `-` after `[ph` binds *the* name, singular; after it, `-` is the chain operator again | `ORD-0026` |
+| `[ph'q'[crit'x']]`, `[ph-a[crit'x']]` | in the AST, dropped from the XML | GLOSSARY §0.3, what is nested is the standard the item works against; `<needs>` keeps its shape (PACKAGE_TARGET G3); the Regent: the `<placeholder>` wrapper | [`ORD-0026`](EMS-002/README.md) |
+| `[ph-a-crit]` | a second hole name, the first kept | the `-` written straight after `[ph` binds *the* name, singular; anywhere else in the hole, `-` is the chain operator again, as ORD-0025 made it after the question, a space or a `]` | [`ORD-0026`](EMS-002/README.md) |
 | a command inside a named template fill — `[--reinforce[ph-rule'a'[crit'x']]…]` | lost in the AST too | GLOSSARY §0.3; `slot` rebuilds the call (XML_REFERENCE §3); the Regent: `slot` on any element | to come |
 | a named fill that names no parameter — `[ph-zzz'v'[crit'x']]` | the whole fill absent | the fill model: what is not a fill lands as extra content; *não sabe* is `fix` | to come |
 | a template defined in the source and called in it — `[--t=[crit'x']][--t]` | not expanded, `UndefinedTemplate` suppressed | a template is defined with `[--name=` and invoked with `[--name` (GLOSSARY); the Regent: the source definition overrides the store | to come |
+| prose after a command's name on the way back — `[ctx foo]` | `fromAST` wrote `[ctxfoo]`, an unknown command | whitespace between tokens is no node, so the space the source had costs nothing on the way in | `ORD-0027` |
 | the colon value — `[ctx: crit]`, `[ctx: a, crit]` | only a `name` | the Regent: the colon is retired — `:` costs a shift; the name is the first parameter typed as a literal, and only the commands that take a name have one | to come |
 
 ## 3. What the traversal found beside the positions
 
 Measured while tracing the fourteen, not built by these Orders:
 
-- `fromAST` writes a text child glued to the command name: `[ctx foo]` comes
-  back as `[ctxfoo]`, and a known command turns unknown on the way back.
 - A lone `r-` leaves no trace, the empty-document comment.
 - `[ on ]` with spaces does not close an `[off]` region, while the opener and
   the stray reader both take whitespace.

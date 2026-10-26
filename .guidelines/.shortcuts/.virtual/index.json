@@ -1,7 +1,7 @@
 {
   "note": "written by glyph-vpath build, EMS-002; never edited by hand",
   "depth": 2,
-  "next": 2698,
+  "next": 2735,
   "files": {
     ".guidelines/.changelog/README.md": {
       "nodes": [
@@ -804,7 +804,7 @@
     },
     ".guidelines/.orders/EMS-002/EMS-002.pgml": {
       "nodes": [
-        ["n523", "", 0, 30919, 1, 238, "3449f17652f6b800", "", ""]
+        ["n523", "", 0, 31924, 1, 244, "a08b74aca3da0bc0", "", ""]
       ]
     },
     ".guidelines/.orders/EMS-002/ORD-0001/ORD-0001.hgml": {
@@ -2289,12 +2289,69 @@
         ["n2691", "/glyph-package/block", 48, 2734, 3, 36, "1bf7f3786670b200", "", "n2689"]
       ]
     },
+    ".guidelines/.orders/EMS-002/ORD-0027/ORD-0027.hgml": {
+      "nodes": [
+        ["n2698", "", 0, 1667, 1, 48, "c49d4cd4a232cf00", "", ""]
+      ]
+    },
+    ".guidelines/.orders/EMS-002/ORD-0027/ORD-0027.json": {
+      "nodes": [
+        ["n2699", "", 0, 11051, 1, 360, "edb5c59746efbe00", "", ""],
+        ["n2700", "/type", 12, 22, 2, 1, "6cfcf51e0b22b400", "", "n2699"],
+        ["n2701", "/schema", 36, 37, 3, 1, "370cabd49014b848", "", "n2699"],
+        ["n2702", "/version", 52, 62, 4, 1, "329156f83f19d000", "", "n2699"],
+        ["n2703", "/source", 76, 199, 5, 7, "35e36eb87afdd600", "", "n2699"],
+        ["n2704", "/source/length", 92, 96, 6, 1, "f6b50d706e80e300", "", "n2703"],
+        ["n2705", "/source/checksum", 114, 132, 7, 1, "ada7208acf60b000", "", "n2703"],
+        ["n2706", "/source/encoding", 150, 157, 8, 1, "51d8d6a8889ada00", "", "n2703"],
+        ["n2707", "/source/newline", 174, 178, 9, 1, "cec09c50a37ddc00", "", "n2703"],
+        ["n2708", "/source/uri", 191, 195, 10, 1, "e4ee48ec82cd2c00", "", "n2703"],
+        ["n2709", "/stores", 213, 325, 12, 5, "9c3ff4afb910d400", "", "n2699"],
+        ["n2710", "/stores/templates", 232, 250, 13, 1, "e0163048f45d2940", "", "n2709"],
+        ["n2711", "/stores/rules", 265, 283, 14, 1, "406bc86654620000", "", "n2709"],
+        ["n2712", "/stores/expansions", 303, 321, 15, 1, "ba46f060dabe6300", "", "n2709"],
+        ["n2713", "/projection", 343, 349, 17, 1, "8e0b2f6630c6ec00", "", "n2699"],
+        ["n2714", "/segments", 365, 11028, 18, 341, "0a7a6350917c9600", "", "n2699"],
+        ["n2715", "/segments/0", 371, 11024, 19, 339, "57841d57f6937e80", "", "n2714"],
+        ["n2716", "/diagnostics", 11047, 11049, 359, 1, "721635809ba5e8c0", "", "n2699"]
+      ]
+    },
+    ".guidelines/.orders/EMS-002/ORD-0027/ORD-0027.manifest.json": {
+      "nodes": [
+        ["n2717", "", 0, 287, 1, 16, "b180e24171ee5600", "", ""],
+        ["n2718", "/order", 13, 23, 2, 1, "2b6033ad7152ae00", "", "n2717"],
+        ["n2719", "/engine", 37, 47, 3, 1, "329156f83f19d000", "", "n2717"],
+        ["n2720", "/emitted", 62, 88, 4, 1, "d2aaf520472f4e80", "", "n2717"],
+        ["n2721", "/files", 101, 188, 5, 6, "0e4183c039fa8ee0", "", "n2717"],
+        ["n2722", "/files/0", 107, 122, 6, 1, "318e4f98f116ff00", "", "n2721"],
+        ["n2723", "/files/1", 128, 142, 7, 1, "0440d3f637ba9e40", "", "n2721"],
+        ["n2724", "/files/2", 148, 163, 8, 1, "636df1d42aafb100", "", "n2721"],
+        ["n2725", "/files/3", 169, 184, 9, 1, "b33111b013f01200", "", "n2721"],
+        ["n2726", "/source", 202, 231, 11, 1, "1611f9c80e4a5000", "", "n2717"],
+        ["n2727", "/diagnostics", 250, 284, 12, 4, "83b9246074dcc400", "", "n2717"],
+        ["n2728", "/diagnostics/fix", 263, 264, 13, 1, "350ca8b09bec4d20", "", "n2727"],
+        ["n2729", "/diagnostics/total", 279, 280, 14, 1, "350ca8b09bec4d20", "", "n2727"]
+      ]
+    },
+    ".guidelines/.orders/EMS-002/ORD-0027/ORD-0027.pgml": {
+      "nodes": [
+        ["n2730", "", 0, 1293, 1, 9, "face410039717a00", "", ""]
+      ]
+    },
+    ".guidelines/.orders/EMS-002/ORD-0027/ORD-0027.xml": {
+      "nodes": [
+        ["n2731", "", 0, 2060, 1, 33, "4e13c9a612b5ab00", "", ""],
+        ["n2732", "/glyph-package", 0, 2060, 1, 33, "4e13c9a612b5ab00", "", "n2731"],
+        ["n2733", "/glyph-package/schema", 36, 45, 2, 1, "9047f1df86dca200", "", "n2732"],
+        ["n2734", "/glyph-package/block", 48, 2043, 3, 30, "1b03782814656400", "", "n2732"]
+      ]
+    },
     ".guidelines/.orders/EMS-002/README.md": {
       "nodes": [
-        ["n598", "", 0, 16053, 1, 41, "441d7a1a60428c00", "", ""],
-        ["n599", "ems-002--o-glyph-100-em-rust", 0, 16053, 1, 41, "441d7a1a60428c00", "c4e303da31f51a00", "n598"],
-        ["n600", "a-ordem-aberta", 396, 570, 9, 4, "17809dd8cec43e00", "70a3e8a02f29b600", "n599"],
-        ["n601", "ordens-fechadas", 570, 16053, 13, 29, "0406ab4afbf6c600", "7bdc26aafb451400", "n599"]
+        ["n598", "", 0, 16711, 1, 42, "120c6680a10eba00", "", ""],
+        ["n599", "ems-002--o-glyph-100-em-rust", 0, 16711, 1, 42, "120c6680a10eba00", "ea3ce710b8807c00", "n598"],
+        ["n600", "a-ordem-aberta", 396, 561, 9, 4, "019b15301d910e80", "a8d930a045b75a00", "n599"],
+        ["n601", "ordens-fechadas", 561, 16711, 13, 30, "e908998242981800", "102916427c086900", "n599"]
       ]
     },
     ".guidelines/.orders/HANDOFF-2026-08-30.ast.json": {
@@ -2443,12 +2500,12 @@
     },
     ".guidelines/.orders/INTAKE-INCLUSION.md": {
       "nodes": [
-        ["n2692", "", 0, 5643, 1, 71, "eb814fc82bc20800", "", ""],
-        ["n2693", "inclusion--a-known-command-never-vanishes", 0, 5643, 1, 71, "eb814fc82bc20800", "4a57d910fcb99600", "n2692"],
+        ["n2692", "", 0, 5850, 1, 70, "3dc418141f1b8800", "", ""],
+        ["n2693", "inclusion--a-known-command-never-vanishes", 0, 5850, 1, 70, "3dc418141f1b8800", "af3f92449aef4400", "n2692"],
         ["n2694", "1-the-measurement", 691, 1262, 13, 11, "75cc655c801e9e00", "37cf16ee93725a00", "n2693"],
-        ["n2695", "2-the-positions-the-rule-each-falls-under-and-the-order", 1262, 3972, 24, 17, "8fda51aeceebb800", "79401a1676994b00", "n2693"],
-        ["n2696", "3-what-the-traversal-found-beside-the-positions", 3972, 4953, 41, 18, "111529f0a96b2c00", "6fed370e0ddb0600", "n2693"],
-        ["n2697", "4-what-waits-on-the-regent", 4953, 5643, 59, 13, "0bc968e034d09800", "73eb1db44a5d1a00", "n2693"]
+        ["n2695", "2-the-positions-the-rule-each-falls-under-and-the-order", 1262, 4329, 24, 18, "8d109aa8a5d02e00", "839229582fc3a800", "n2693"],
+        ["n2696", "3-what-the-traversal-found-beside-the-positions", 4329, 5160, 42, 16, "a721a32e647fa400", "2da8bf7e6ddb2380", "n2693"],
+        ["n2697", "4-what-waits-on-the-regent", 5160, 5850, 58, 13, "0bc968e034d09800", "73eb1db44a5d1a00", "n2693"]
       ]
     },
     ".guidelines/.orders/INTAKE-ORDER-COHERENCE.md": {
@@ -2984,14 +3041,14 @@
     },
     ".guidelines/.shortcuts/README.md": {
       "nodes": [
-        ["n1153", "", 0, 8073, 1, 83, "1b3953e8631e1c00", "", ""],
-        ["n1154", "atalhos--comece-por-aqui", 0, 8073, 1, 83, "1b3953e8631e1c00", "dbd7588c96039100", "n1153"],
-        ["n1155", "onde-estou", 442, 3218, 11, 11, "b7d22340de38b400", "46295b26746b2800", "n1154"],
-        ["n1156", "os-sete-eixos", 3218, 3904, 22, 12, "6357d5140827f600", "092e74a89f1df300", "n1154"],
-        ["n1157", "o-mapa-do-motor-em-cinco-linhas", 3904, 4831, 34, 12, "537763c2149d2400", "2caeb09a05c9d600", "n1154"],
-        ["n1158", "os-documentos-que-mais-se-consulta", 4831, 6736, 46, 18, "b14515f455f59aa0", "99bdc846d8830680", "n1154"],
-        ["n1159", "os-outros-documentos", 6736, 7734, 64, 14, "bcf7ae04a2ded000", "078ded0802e8e000", "n1154"],
-        ["n1160", "vocabulário-do-projeto", 7734, 8073, 78, 6, "d5b16db424152200", "0656413c7ac4f500", "n1154"]
+        ["n1153", "", 0, 8143, 1, 83, "5ed4b8d42d476a10", "", ""],
+        ["n1154", "atalhos--comece-por-aqui", 0, 8143, 1, 83, "5ed4b8d42d476a10", "7699464c1bd0b300", "n1153"],
+        ["n1155", "onde-estou", 442, 3288, 11, 11, "25a87390c6504800", "c3410748652acc80", "n1154"],
+        ["n1156", "os-sete-eixos", 3288, 3974, 22, 12, "6357d5140827f600", "092e74a89f1df300", "n1154"],
+        ["n1157", "o-mapa-do-motor-em-cinco-linhas", 3974, 4901, 34, 12, "537763c2149d2400", "2caeb09a05c9d600", "n1154"],
+        ["n1158", "os-documentos-que-mais-se-consulta", 4901, 6806, 46, 18, "b14515f455f59aa0", "99bdc846d8830680", "n1154"],
+        ["n1159", "os-outros-documentos", 6806, 7804, 64, 14, "bcf7ae04a2ded000", "078ded0802e8e000", "n1154"],
+        ["n1160", "vocabulário-do-projeto", 7804, 8143, 78, 6, "d5b16db424152200", "0656413c7ac4f500", "n1154"]
       ]
     },
     ".guidelines/.sources/COMPILER_LESSONS.md": {
