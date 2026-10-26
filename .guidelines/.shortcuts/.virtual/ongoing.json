@@ -10,9 +10,9 @@
       "who": "DV",
       "since": "2026-10-25",
       "source": ".guidelines/.decisions/README.md#2026-10-25",
-      "next": "ORD-0024, as palavras de modo; depois as cadeias, o placeholder, os fills, os templates da fonte e o dois-pontos",
+      "next": "ORD-0025, os elos de cadeia; depois o placeholder, os fills, os templates da fonte e o dois-pontos",
       "where": [
-        "order:EMS-002/ORD-0024",
+        "order:EMS-002/ORD-0025",
         "branch:claude/loving-cerf-m1fomz"
       ]
     },
