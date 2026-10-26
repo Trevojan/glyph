@@ -10,9 +10,9 @@
       "who": "DV",
       "since": "2026-10-25",
       "source": ".guidelines/.decisions/README.md#2026-10-25",
-      "next": "ORD-0027, o espaço na volta pelo fromAST; depois os fills e os templates da fonte, e o dois-pontos",
+      "next": "ORD-0028, os fills e os templates da fonte; depois o dois-pontos",
       "where": [
-        "order:EMS-002/ORD-0027",
+        "order:EMS-002/ORD-0028",
         "branch:claude/loving-cerf-m1fomz"
       ]
     },
