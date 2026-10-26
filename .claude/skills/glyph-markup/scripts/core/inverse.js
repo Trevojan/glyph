@@ -15,7 +15,7 @@
  */
 
 import { esc } from "./util.js";
-import { SESSION, GLOSS_REVERSE, EMO_REVERSE, FORMER_ELEMENT, OPERAND_ATTR } from "./vocabulary.js";
+import { SESSION, GLOSS_REVERSE, EMO_REVERSE, FORMER_ELEMENT, OPERAND_ATTR, knownWord } from "./vocabulary.js";
 import { VERSION } from "./version.js";
 
 /* ======================================================
@@ -238,7 +238,14 @@ export function fromXmlNode(el, diag) {
      as the region */
   if (tag === "off") {
     var prose = litSafeXml(xmlText(el));
-    return prose ? " " + prose + " " : "[off][on]";
+    if (!prose) return "[off][on]";
+    /* Prose that starts with `-` and a word the vocabulary knows would come
+       back as a chain link after a `]`, a literal or a command name — the
+       reader inventing an element the document never carried. It returns
+       fenced, and `[off]` gives the same <off> back. */
+    var lead = /^-([A-Za-z][A-Za-z0-9_.]*)/.exec(prose);
+    if (lead && knownWord(lead[1])) return " [off]" + prose + "[on] ";
+    return " " + prose + " ";
   }
   if (tag === "mood" || tag === "break") return "";   /* handled per block */
   /* the verbatim fence returns verbatim: it is the one element whose

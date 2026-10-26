@@ -17,6 +17,7 @@ emo_code         = letter , { letter } ;
 element_sequence = element , { element } ;
 element          = command 
                  | chained_command 
+                 | chain_link 
                  | template_expr 
                  | logic_block 
                  | modifier_cmd 
@@ -37,6 +38,14 @@ inline_content   = element_sequence ;
 (* --- Chained Extension Operator "-" (C-01: the "/" divider was removed) --- *)
 chained_command  = "[" , cmd_name , "-" , chain_item , { "-" , chain_item } , [ "]" ] ;
 chain_item       = cmd_name | literal ;
+
+(* A link after an operand literal, after whitespace or after a closed
+   command: "-" touching a name the vocabulary knows. It belongs to the command
+   that holds it — `[ctx'x'-crit]`, `[ctx -crit]` — or, after a "]", to the
+   scope that "]" returns to: the enclosing command, or the segment. A "-" no
+   known name touches is free_text: `a -b`, `x - y`, `->`. *)
+chain_link       = "-" , known_name , { "," , cmd_name } ;
+known_name       = ? a cmd_name in MODE, STRUCT, META, ALIAS, INSTR or SESSION ? ;
 
 (* --- Templates (resolutions C-04 & C-09) --- *)
 template_expr    = template_def | template_invoke ;

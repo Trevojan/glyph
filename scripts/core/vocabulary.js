@@ -374,5 +374,17 @@ export function formerElement(name) {
   return old ? FORMER_ELEMENT[old] : null;
 }
 
+/* A word the static tables know: the six probes classify() makes before the
+   element names, MODE STRUCT META ALIAS INSTR and SESSION, own properties
+   only — 144 names, and `constructor` is not one of them. The lexer reads a
+   `-` written after an operand, a space or a `]` as a chain link only before
+   such a word, and the inverse fences an <off> that starts with one, so the
+   way back never reads as a link what was prose. */
+export function knownWord(w) {
+  var s = String(w == null ? "" : w), U = s.toUpperCase(), L = s.toLowerCase();
+  var own = function (t, k) { return Object.prototype.hasOwnProperty.call(t, k); };
+  return own(MODE, U) || own(STRUCT, U) || own(META, U) || own(ALIAS, U) || own(INSTR, U) || own(SESSION, L);
+}
+
 export var EMO_REVERSE = {};
 Object.keys(EMO).forEach(function (k) { EMO_REVERSE[String(EMO[k]).toLowerCase()] = k; });

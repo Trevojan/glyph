@@ -14,7 +14,7 @@ use glyph_json::{number, Json};
 use glyph_util::tree::Thrown;
 use glyph_util::{esc, inherited, inherited_text, js_space, js_trim};
 use glyph_version::VERSION;
-use glyph_vocab::{derived, get, FORMER_ELEMENT, OPERAND_ATTR, SESSION};
+use glyph_vocab::{derived, get, known_word, FORMER_ELEMENT, OPERAND_ATTR, SESSION};
 
 /// Where the port stops as the JS stops when V8's stack gives out: past this
 /// many levels of the document. V8's own limit is not a number — measured on
@@ -412,7 +412,14 @@ fn from_xml_node(el: &El, diag: &mut Vec<Diag>, depth: usize) -> Result<String, 
         /* an <off> with nothing in it is an `[off]` region with nothing in it */
         "off" => {
             let prose = lit_safe_xml(&xml_text(el));
-            return Ok(if prose.is_empty() { "[off][on]".into() } else { format!(" {prose} ") });
+            if prose.is_empty() {
+                return Ok("[off][on]".into());
+            }
+            /* prose that starts with `-` and a known word would come back as a
+               chain link: it returns fenced */
+            let word: String = prose.strip_prefix('-').filter(|w| w.starts_with(|c: char| c.is_ascii_alphabetic()))
+                .map(|w| w.chars().take_while(|&c| c.is_ascii_alphanumeric() || c == '_' || c == '.').collect()).unwrap_or_default();
+            return Ok(if !word.is_empty() && known_word(&word) { format!(" [off]{prose}[on] ") } else { format!(" {prose} ") });
         }
         "raw" => return Ok(format!("[raw]{}[/raw]", xml_text(el))),
         "logic" => return Ok(from_xml_logic(el)),

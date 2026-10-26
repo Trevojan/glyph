@@ -10,7 +10,7 @@
  * and the rules store; reaches into nothing that parses.
  */
 
-import { INSTR, ALIAS, STRUCT, META, MODE, EMO, SESSION, GLOSS_REVERSE, ELEMENT_INPUT } from "./vocabulary.js";
+import { INSTR, ALIAS, STRUCT, META, MODE, EMO, SESSION, GLOSS_REVERSE, ELEMENT_INPUT, knownWord } from "./vocabulary.js";
 import { rulesOf } from "./stores.js";
 
 /* ======================================================
@@ -18,6 +18,20 @@ import { rulesOf } from "./stores.js";
    ====================================================== */
 
 export var NAME_CH = /[A-Za-z0-9_.]/;
+
+/* What a `-` written after an operand, a space or a closed command may follow.
+   `open` and `bareTag` are here for the space between them and the `-`; with
+   nothing between, the branch above them already makes the link. */
+var LINK_AFTER = { open:1, bareTag:1, literal:1, close:1, closeTag:1 };
+
+/* Whether the run of NAME_CH at `at` is a name the bare-tag reader would take
+   (it starts with a letter) and the static tables know (vocabulary.js). */
+function knownWordAt(src, at) {
+  if (!/[A-Za-z]/.test(src[at] || "")) return false;
+  var j = at;
+  while (j < src.length && NAME_CH.test(src[j])) j++;
+  return knownWord(src.slice(at, j));
+}
 
 export function tokenize(src) {
   var T = [], i = 0, n = src.length;
@@ -222,6 +236,20 @@ export function tokenize(src) {
     if (c === "-") {
       var prev = T[T.length-1];
       if (!textBuf.length && prev && (prev.k === "open" || prev.k === "bareTag")) {
+        T.push({ k:"extend", v:"-", s:i, e:i+1 }); i++; expectBare = true; continue;
+      }
+      /* The chain link written after the operand, after a space, or after the
+         `]` that closed a command: `[ctx'x'-crit]`, `[ctx -crit]`, `[ctx]-crit`.
+         Each of them made `crit`, a word the vocabulary knows, into <off> with
+         no diagnostic. A known command never vanishes (decided 2026-10-25), and
+         the rule that takes it in is the chain the grammar already writes:
+         `{ "-" , chain_item }` continues after a literal item, and whitespace
+         between tokens is no node. Only a KNOWN name touching the `-` is a
+         link here — the 144 names of the static tables, never the session
+         switch, which the parser applies — so `a -b`, `x - y`, `->` and
+         `well-known` stay the prose they are. */
+      if (!textBuf.trim().length && prev && LINK_AFTER[prev.k] && knownWordAt(src, i + 1)) {
+        flushText();
         T.push({ k:"extend", v:"-", s:i, e:i+1 }); i++; expectBare = true; continue;
       }
       addText(c); i++; continue;
