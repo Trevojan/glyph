@@ -820,7 +820,7 @@
     },
     ".guidelines/.orders/EMS-002/EMS-002.pgml": {
       "nodes": [
-        ["n523", "", 0, 35645, 1, 268, "beff0e187b4d7d00", "", ""]
+        ["n523", "", 0, 36242, 1, 269, "b5cf5336d3a69200", "", ""]
       ]
     },
     ".guidelines/.orders/EMS-002/ORD-0001/ORD-0001.hgml": {
@@ -2592,10 +2592,10 @@
     },
     ".guidelines/.orders/EMS-002/README.md": {
       "nodes": [
-        ["n598", "", 0, 19010, 1, 46, "dcd79460bff1de00", "", ""],
-        ["n599", "ems-002--o-glyph-100-em-rust", 0, 19010, 1, 46, "dcd79460bff1de00", "a1bb0be887706000", "n598"],
-        ["n600", "a-ordem-aberta", 396, 571, 9, 4, "776b2e3e657a0e00", "6e670d46bcbfb500", "n599"],
-        ["n601", "ordens-fechadas", 571, 19010, 13, 34, "9f6686a0a160d800", "c004030a41ea8e00", "n599"]
+        ["n598", "", 0, 19512, 1, 45, "87ad50b20109f400", "", ""],
+        ["n599", "ems-002--o-glyph-100-em-rust", 0, 19512, 1, 45, "87ad50b20109f400", "04cbc30062de1f00", "n598"],
+        ["n600", "a-ordem-aberta", 396, 415, 9, 2, "5941cf30e1126c00", "", "n599"],
+        ["n601", "ordens-fechadas", 415, 19512, 11, 35, "1b700c9ecd099000", "8743c76009ef3600", "n599"]
       ]
     },
     ".guidelines/.orders/HANDOFF-2026-08-30.ast.json": {
@@ -3300,14 +3300,14 @@
     },
     ".guidelines/.shortcuts/README.md": {
       "nodes": [
-        ["n1153", "", 0, 7976, 1, 83, "a3426ba494c0b600", "", ""],
-        ["n1154", "atalhos--comece-por-aqui", 0, 7976, 1, 83, "a3426ba494c0b600", "17d083f06da71000", "n1153"],
-        ["n1155", "onde-estou", 442, 3121, 11, 11, "2d24ec40e0fe0400", "ad2c40682024a0a0", "n1154"],
-        ["n1156", "os-sete-eixos", 3121, 3807, 22, 12, "6357d5140827f600", "092e74a89f1df300", "n1154"],
-        ["n1157", "o-mapa-do-motor-em-cinco-linhas", 3807, 4734, 34, 12, "537763c2149d2400", "2caeb09a05c9d600", "n1154"],
-        ["n1158", "os-documentos-que-mais-se-consulta", 4734, 6639, 46, 18, "b14515f455f59aa0", "99bdc846d8830680", "n1154"],
-        ["n1159", "os-outros-documentos", 6639, 7637, 64, 14, "bcf7ae04a2ded000", "078ded0802e8e000", "n1154"],
-        ["n1160", "vocabulário-do-projeto", 7637, 7976, 78, 6, "d5b16db424152200", "0656413c7ac4f500", "n1154"]
+        ["n1153", "", 0, 7829, 1, 83, "33f73350bc7d9980", "", ""],
+        ["n1154", "atalhos--comece-por-aqui", 0, 7829, 1, 83, "33f73350bc7d9980", "d1dfdd38388c2b00", "n1153"],
+        ["n1155", "onde-estou", 442, 2974, 11, 11, "7c19efc673aa4200", "084062cef3986600", "n1154"],
+        ["n1156", "os-sete-eixos", 2974, 3660, 22, 12, "6357d5140827f600", "092e74a89f1df300", "n1154"],
+        ["n1157", "o-mapa-do-motor-em-cinco-linhas", 3660, 4587, 34, 12, "537763c2149d2400", "2caeb09a05c9d600", "n1154"],
+        ["n1158", "os-documentos-que-mais-se-consulta", 4587, 6492, 46, 18, "b14515f455f59aa0", "99bdc846d8830680", "n1154"],
+        ["n1159", "os-outros-documentos", 6492, 7490, 64, 14, "bcf7ae04a2ded000", "078ded0802e8e000", "n1154"],
+        ["n1160", "vocabulário-do-projeto", 7490, 7829, 78, 6, "d5b16db424152200", "0656413c7ac4f500", "n1154"]
       ]
     },
     ".guidelines/.shortcuts/regency.json": {
