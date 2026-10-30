@@ -47,7 +47,7 @@ being the single grammar.
 ## 2. The root
 
 ```xml
-<glyph-package engine="3.6.9.07">
+<glyph-package engine="4.7.10.08">
   <block once="true"> … </block>
 </glyph-package>
 ```
@@ -328,7 +328,7 @@ constraint. Recorded so the divergence is deliberate rather than silent.
 ## 5. `<schema>`
 
 ```xml
-<glyph-package engine="3.6.9.07">
+<glyph-package engine="4.7.10.08">
   <schema/>
   …
 </glyph-package>
