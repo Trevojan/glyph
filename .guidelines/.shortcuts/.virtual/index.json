@@ -1,7 +1,7 @@
 {
   "note": "written by glyph-vpath build, EMS-002; never edited by hand",
   "depth": 2,
-  "next": 2797,
+  "next": 2834,
   "files": {
     ".guidelines/.changelog/README.md": {
       "nodes": [
@@ -820,7 +820,7 @@
     },
     ".guidelines/.orders/EMS-002/EMS-002.pgml": {
       "nodes": [
-        ["n523", "", 0, 32842, 1, 250, "9e11e17800fe4d80", "", ""]
+        ["n523", "", 0, 33790, 1, 256, "47c376deef87b600", "", ""]
       ]
     },
     ".guidelines/.orders/EMS-002/ORD-0001/ORD-0001.hgml": {
@@ -2419,12 +2419,69 @@
         ["n2771", "/glyph-package/block", 48, 3129, 3, 39, "c122c018564d4600", "", "n2769"]
       ]
     },
+    ".guidelines/.orders/EMS-002/ORD-0029/ORD-0029.hgml": {
+      "nodes": [
+        ["n2797", "", 0, 1916, 1, 51, "3240b0c8445f3c00", "", ""]
+      ]
+    },
+    ".guidelines/.orders/EMS-002/ORD-0029/ORD-0029.json": {
+      "nodes": [
+        ["n2798", "", 0, 12345, 1, 397, "2697cf3f62d7aea8", "", ""],
+        ["n2799", "/type", 12, 22, 2, 1, "6cfcf51e0b22b400", "", "n2798"],
+        ["n2800", "/schema", 36, 37, 3, 1, "370cabd49014b848", "", "n2798"],
+        ["n2801", "/version", 52, 62, 4, 1, "329156f83f19d000", "", "n2798"],
+        ["n2802", "/source", 76, 199, 5, 7, "7563d7a8d3640d00", "", "n2798"],
+        ["n2803", "/source/length", 92, 96, 6, 1, "cfeb1386ddb3cd00", "", "n2802"],
+        ["n2804", "/source/checksum", 114, 132, 7, 1, "dac735582ee34800", "", "n2802"],
+        ["n2805", "/source/encoding", 150, 157, 8, 1, "51d8d6a8889ada00", "", "n2802"],
+        ["n2806", "/source/newline", 174, 178, 9, 1, "cec09c50a37ddc00", "", "n2802"],
+        ["n2807", "/source/uri", 191, 195, 10, 1, "e4ee48ec82cd2c00", "", "n2802"],
+        ["n2808", "/stores", 213, 325, 12, 5, "9c3ff4afb910d400", "", "n2798"],
+        ["n2809", "/stores/templates", 232, 250, 13, 1, "e0163048f45d2940", "", "n2808"],
+        ["n2810", "/stores/rules", 265, 283, 14, 1, "406bc86654620000", "", "n2808"],
+        ["n2811", "/stores/expansions", 303, 321, 15, 1, "ba46f060dabe6300", "", "n2808"],
+        ["n2812", "/projection", 343, 349, 17, 1, "8e0b2f6630c6ec00", "", "n2798"],
+        ["n2813", "/segments", 365, 12322, 18, 378, "20dcf16062a15800", "", "n2798"],
+        ["n2814", "/segments/0", 371, 12318, 19, 376, "796e31b713d37c4c", "", "n2813"],
+        ["n2815", "/diagnostics", 12341, 12343, 396, 1, "721635809ba5e8c0", "", "n2798"]
+      ]
+    },
+    ".guidelines/.orders/EMS-002/ORD-0029/ORD-0029.manifest.json": {
+      "nodes": [
+        ["n2816", "", 0, 287, 1, 16, "81806ca00e5e0e00", "", ""],
+        ["n2817", "/order", 13, 23, 2, 1, "133d7ba332ca6000", "", "n2816"],
+        ["n2818", "/engine", 37, 47, 3, 1, "329156f83f19d000", "", "n2816"],
+        ["n2819", "/emitted", 62, 88, 4, 1, "f280077458bef800", "", "n2816"],
+        ["n2820", "/files", 101, 188, 5, 6, "a9212eab42ede700", "", "n2816"],
+        ["n2821", "/files/0", 107, 122, 6, 1, "d0c2dc92556a9300", "", "n2820"],
+        ["n2822", "/files/1", 128, 142, 7, 1, "dfecc2d0207e8c00", "", "n2820"],
+        ["n2823", "/files/2", 148, 163, 8, 1, "6619b0407913ea00", "", "n2820"],
+        ["n2824", "/files/3", 169, 184, 9, 1, "97668878403cb000", "", "n2820"],
+        ["n2825", "/source", 202, 231, 11, 1, "2e3be6383e0f9e00", "", "n2816"],
+        ["n2826", "/diagnostics", 250, 284, 12, 4, "83b9246074dcc400", "", "n2816"],
+        ["n2827", "/diagnostics/fix", 263, 264, 13, 1, "350ca8b09bec4d20", "", "n2826"],
+        ["n2828", "/diagnostics/total", 279, 280, 14, 1, "350ca8b09bec4d20", "", "n2826"]
+      ]
+    },
+    ".guidelines/.orders/EMS-002/ORD-0029/ORD-0029.pgml": {
+      "nodes": [
+        ["n2829", "", 0, 1528, 1, 10, "ff0252ee6960c280", "", ""]
+      ]
+    },
+    ".guidelines/.orders/EMS-002/ORD-0029/ORD-0029.xml": {
+      "nodes": [
+        ["n2830", "", 0, 2353, 1, 36, "b81460626d165d00", "", ""],
+        ["n2831", "/glyph-package", 0, 2353, 1, 36, "b81460626d165d00", "", "n2830"],
+        ["n2832", "/glyph-package/schema", 36, 45, 2, 1, "9047f1df86dca200", "", "n2831"],
+        ["n2833", "/glyph-package/block", 48, 2336, 3, 33, "1fe8ba7aa99c9600", "", "n2831"]
+      ]
+    },
     ".guidelines/.orders/EMS-002/README.md": {
       "nodes": [
-        ["n598", "", 0, 17235, 1, 43, "3be8b3f2a78fe700", "", ""],
-        ["n599", "ems-002--o-glyph-100-em-rust", 0, 17235, 1, 43, "3be8b3f2a78fe700", "fc9840b83dc8ce80", "n598"],
-        ["n600", "a-ordem-aberta", 396, 615, 9, 4, "aacf70b459626800", "935e2cfe394d8480", "n599"],
-        ["n601", "ordens-fechadas", 615, 17235, 13, 31, "ad268cda8b11fb00", "d1402a329d9ea600", "n599"]
+        ["n598", "", 0, 17859, 1, 44, "8b0dbb88d9d0c000", "", ""],
+        ["n599", "ems-002--o-glyph-100-em-rust", 0, 17859, 1, 44, "8b0dbb88d9d0c000", "d3002ea80636d800", "n598"],
+        ["n600", "a-ordem-aberta", 396, 589, 9, 4, "e44365581cd95800", "8b5ccbd855960700", "n599"],
+        ["n601", "ordens-fechadas", 589, 17859, 13, 32, "ce50489827f8ae00", "fbed293288d95000", "n599"]
       ]
     },
     ".guidelines/.orders/HANDOFF-2026-08-30.ast.json": {
@@ -2573,12 +2630,12 @@
     },
     ".guidelines/.orders/INTAKE-INCLUSION.md": {
       "nodes": [
-        ["n2692", "", 0, 6251, 1, 76, "d5e86e4c4662b800", "", ""],
-        ["n2693", "inclusion--a-known-command-never-vanishes", 0, 6251, 1, 76, "d5e86e4c4662b800", "eff6dd7c0a254000", "n2692"],
+        ["n2692", "", 0, 6323, 1, 76, "f8f0d9b8eb8d0980", "", ""],
+        ["n2693", "inclusion--a-known-command-never-vanishes", 0, 6323, 1, 76, "f8f0d9b8eb8d0980", "d90a939646a1ab00", "n2692"],
         ["n2694", "1-the-measurement", 691, 1262, 13, 11, "75cc655c801e9e00", "37cf16ee93725a00", "n2693"],
-        ["n2695", "2-the-positions-the-rule-each-falls-under-and-the-order", 1262, 4329, 24, 18, "8d109aa8a5d02e00", "839229582fc3a800", "n2693"],
-        ["n2696", "3-what-the-traversal-found-beside-the-positions", 4329, 5160, 42, 16, "a721a32e647fa400", "2da8bf7e6ddb2380", "n2693"],
-        ["n2773", "4-what-the-regent-answered-and-what-still-waits", 5160, 6251, 58, 19, "7874d13c37e40000", "06eec1d84bfd1b80", "n2693"]
+        ["n2695", "2-the-positions-the-rule-each-falls-under-and-the-order", 1262, 4401, 24, 18, "6e940af4bf3a9600", "3530febe77815000", "n2693"],
+        ["n2696", "3-what-the-traversal-found-beside-the-positions", 4401, 5232, 42, 16, "a721a32e647fa400", "2da8bf7e6ddb2380", "n2693"],
+        ["n2773", "4-what-the-regent-answered-and-what-still-waits", 5232, 6323, 58, 19, "7874d13c37e40000", "06eec1d84bfd1b80", "n2693"]
       ]
     },
     ".guidelines/.orders/INTAKE-ORDER-COHERENCE.md": {
@@ -3129,14 +3186,14 @@
     },
     ".guidelines/.shortcuts/README.md": {
       "nodes": [
-        ["n1153", "", 0, 8147, 1, 83, "53987496cde67200", "", ""],
-        ["n1154", "atalhos--comece-por-aqui", 0, 8147, 1, 83, "53987496cde67200", "35bab5f86ec49c00", "n1153"],
-        ["n1155", "onde-estou", 442, 3292, 11, 11, "5452a7ce365851a0", "d7b0a2ee8a40a300", "n1154"],
-        ["n1156", "os-sete-eixos", 3292, 3978, 22, 12, "6357d5140827f600", "092e74a89f1df300", "n1154"],
-        ["n1157", "o-mapa-do-motor-em-cinco-linhas", 3978, 4905, 34, 12, "537763c2149d2400", "2caeb09a05c9d600", "n1154"],
-        ["n1158", "os-documentos-que-mais-se-consulta", 4905, 6810, 46, 18, "b14515f455f59aa0", "99bdc846d8830680", "n1154"],
-        ["n1159", "os-outros-documentos", 6810, 7808, 64, 14, "bcf7ae04a2ded000", "078ded0802e8e000", "n1154"],
-        ["n1160", "vocabulário-do-projeto", 7808, 8147, 78, 6, "d5b16db424152200", "0656413c7ac4f500", "n1154"]
+        ["n1153", "", 0, 8091, 1, 83, "168b190603210500", "", ""],
+        ["n1154", "atalhos--comece-por-aqui", 0, 8091, 1, 83, "168b190603210500", "1f040a8439620200", "n1153"],
+        ["n1155", "onde-estou", 442, 3236, 11, 11, "d791ca748f0eac00", "506271a08cdf9c00", "n1154"],
+        ["n1156", "os-sete-eixos", 3236, 3922, 22, 12, "6357d5140827f600", "092e74a89f1df300", "n1154"],
+        ["n1157", "o-mapa-do-motor-em-cinco-linhas", 3922, 4849, 34, 12, "537763c2149d2400", "2caeb09a05c9d600", "n1154"],
+        ["n1158", "os-documentos-que-mais-se-consulta", 4849, 6754, 46, 18, "b14515f455f59aa0", "99bdc846d8830680", "n1154"],
+        ["n1159", "os-outros-documentos", 6754, 7752, 64, 14, "bcf7ae04a2ded000", "078ded0802e8e000", "n1154"],
+        ["n1160", "vocabulário-do-projeto", 7752, 8091, 78, 6, "d5b16db424152200", "0656413c7ac4f500", "n1154"]
       ]
     },
     ".guidelines/.shortcuts/regency.json": {
