@@ -2118,7 +2118,14 @@ function runSnapshotChecks() {
       " [nt x]　", "\t[ctx]\r\n", "﻿[ctx]", "[nt'😀']x😀", "[nt`😀`] 😀;",
       "ação [ctx'fichação'] ç", "[nt'a b'] x y",
       "[ctx'x'-crit]", "[ctx -crit]", "[ctx]-crit", "[ctx/ctx]-crit", "a -crit", "[ctx] - crit", "[ctx]-constructor", "[ctx'x' -Crit]",
-      "x'-crit", "[ctx]-crit]", "[raw]x[/raw]-crit", "[on]-crit", "/eth/-crit"
+      "x'-crit", "[ctx]-crit]", "[raw]x[/raw]-crit", "[on]-crit", "/eth/-crit",
+      "-crit", "--crit", "[ctx]--crit", "[ctx --crit]", "[in--rwk]", "a--crit", "a ---crit", "--zzz",
+      "[ctx foo -crit]", "a\n-crit", "[ctx];-crit", "[ctx'x';-crit]", "[ctx],-crit", "[ctx'x',-crit]",
+      "[in-rwk,-fmt]", "a, -crit", "[ctx'x'/eth/-crit]", "[ctx'x' - crit]", "[ctx - crit]", "[in-rwk - fmt]",
+      "[ctx] -\tcrit", "[ctx]\n- crit", "x - crit", "- crit", "[ctx] -- crit", "[ctx] -\ncrit", "[ctx]; - crit",
+      "[logic]a = 1[/logic]-crit", "[=-crit", "[ctx;;-crit", "[ctx:'x'-crit]", "[ctx: foo -crit]", "[ctx:-crit]",
+      "[dfn x=-crit]", "r -crit", "r --crit", "[--t= -crit]", "\\eth\\-crit", "(-crit)", "x/-crit", "[ctx]-crit.",
+      "[ctx] -crit,rev", "-crit'x'", "[ph:foo -crit]", "-ins'x',ctx"
     ];
     const lexSources = [...new Set([...PROBES, ...S.filter(x => x.length <= 4096)])];
     const lexed = lexSources.map(x => [x, G.tokenize(x)]);
@@ -2400,6 +2407,13 @@ function runSnapshotChecks() {
       "[ctx'x'-crit]", "[ctx -crit]", "[ctx]-crit", "[in[ctx]-crit]", "[ctx-'x'-crit]", "[ctx]-crit,rev", "[ctx/ctx]-crit",
       "[ctx'x'-crit/eth/]", "[ins`a`]->[ins`b`]", "a -crit", "[ctx] - crit", "[ins'well-known']", "well-known", "[ctx]-constructor",
       "[ctx]-rd", "[ph'q'-crit]", "[sum'x'-ctx]", "[ctx]-zzz",
+      "-crit", "--crit", "[ctx]--crit", "[ctx --crit]", "[in--rwk]", "a--crit", "a ---crit", "--zzz",
+      "[ctx foo -crit]", "a\n-crit", "[ctx];-crit", "[ctx'x';-crit]", "[ctx],-crit", "[ctx'x',-crit]",
+      "[in-rwk,-fmt]", "a, -crit", "[ctx'x'/eth/-crit]", "[ctx'x' - crit]", "[ctx - crit]", "[in-rwk - fmt]",
+      "[ctx] -\tcrit", "[ctx]\n- crit", "x - crit", "- crit", "[ctx] -- crit", "[ctx] -\ncrit", "[ctx]; - crit",
+      "[logic]a = 1[/logic]-crit", "[=-crit", "[ctx;;-crit", "[ctx:'x'-crit]", "[ctx: foo -crit]", "[ctx:-crit]",
+      "[dfn x=-crit]", "r -crit", "r --crit", "[--t= -crit]", "\\eth\\-crit", "(-crit)", "x/-crit", "[ctx]-crit.",
+      "[ctx] -crit,rev", "-crit'x'", "[ph:foo -crit]", "-ins'x',ctx",
       "[ph'q'[crit'x']]", "[ph-a[crit'x']]", "[ph-a-crit]", "[ph -crit]", "[ph[crit'x']-rev]", "[ph-a,crit]",
       "[ph-a-zzz]", "[ph'q''r']", "[ph'q' prose]", "[ph'q'[crit'x']][ctx'q']", "[ph-a`q`]", "[ph-a]",
       "[ph[crit'x']'q']", "[ph-a-crit'q']", "[ph-a'q'-crit]", "[ph -crit'q']", "[ph -crit,rev]", "[ph- a[crit]]",
@@ -2415,7 +2429,9 @@ function runSnapshotChecks() {
       "[--reinforce[ph-rule[crit'x'],[sum'y']]'b']", "[--reinforce[ph-rule'a' plain words]'b']",
       "[--t][--t=[mand[ph-x`q`]]][--t'v']", "[--t=[--t]][--t]", "[--t=[sum'a'[ctx]]][ref'a']",
       "[--loop'x''p''u'[ph-zzz'v'[instof'w']]]", "[--reinforce[ph-rule'a'[ph-q`nested`]]'b']",
-      "[--t=[mand[ph-x[crit'h']]]][--t[ph-x[sum'c']]]"
+      "[--t=[mand[ph-x[crit'h']]]][--t[ph-x[sum'c']]]",
+      /* a fill that carries prose and then a chain link (EMS-002 ORD-0025) */
+      "[--reinforce[ph-rule'a' w -crit]'b']", "[--reinforce'a''b'[ph-zzz'v' w -crit,rev]]"
     ]);
     const NO_SESSION = ["constructor", "[constructor]", "rd", "[ctx] prose ist"];
     const NO_VALENCY = ["[gt'a']", "[ctx]", "[cat'a']"];
@@ -3382,16 +3398,18 @@ const rMO = runModeWordChecks();
 
 
 /* ------------------------------------------------------------------ *
- * elo de cadeia -- o `-` depois do operando, de um espaco ou de um `]`
+ * elo de cadeia -- o `-` que abre uma palavra, colado a um nome conhecido
  *
- * `[ctx'x'-crit]`, `[ctx -crit]` e `[ctx]-crit` faziam de `crit`, um nome
- * que o vocabulario conhece, um <off> sem diagnostico nenhum: o lexer so
- * lia `-` como elo colado ao nome de um comando. Um comando conhecido nunca
- * some (decidido em 2026-10-25), e a regra que o acolhe e a cadeia que a
- * gramatica ja escreve -- `{ "-" , chain_item }` continua depois de um item
- * literal (glyph-grammar.ebnf), espaco entre tokens nao e no, e depois de um
- * `]` o que vem pertence ao escopo para o qual o `]` devolve. So um nome
- * conhecido colado ao `-` vira elo; a prosa fica prosa.
+ * `[ctx'x'-crit]`, `[ctx -crit]`, `[ctx]-crit`, `a -crit`, `;-crit`,
+ * `/eth/-crit`, `[/raw]-crit`, `-crit` e `--crit` faziam de `crit`, um nome
+ * que o vocabulario conhece, um <off> sem diagnostico nenhum. Um comando
+ * conhecido nunca some (decidido em 2026-10-25 e 2026-10-26), e a regra que o
+ * acolhe e a cadeia que a gramatica ja escreve -- `{ "-" , chain_item }`
+ * (glyph-grammar.ebnf), espaco entre tokens nao e no, e o elo pertence ao
+ * escopo em que esta: o comando aberto, ou o bloco. O `-` abre uma palavra
+ * quando antes dele so ha o comeco, uma ficha ou espaco; com espaco DEPOIS
+ * dele, so depois de um comando, do operando ou de um `]` na mesma linha.
+ * So um nome conhecido vira elo; a prosa fica prosa.
  * ------------------------------------------------------------------ */
 function runChainLinkChecks() {
   console.log("\n--- elo de cadeia ---");
@@ -3433,10 +3451,8 @@ function runChainLinkChecks() {
          ? "dentro de [in: " + JSON.stringify(nested)
        : X("[ctx'x'[/ctx]-crit") !== X("[ctx'x']-crit") ? "[/ctx] e ] devolvem escopos diferentes" : null);
 
-  /* a prosa fica prosa: so um nome conhecido COLADO ao `-` e elo. As posicoes
-     em que um nome conhecido ainda some sem ser elo -- depois de prosa, de
-     `;`, de `,`, no comeco, com espaco depois do `-` -- nao sao fixadas aqui:
-     cada uma percorre as regras pela sua propria Ordem */
+  /* a prosa fica prosa: so um nome conhecido COLADO a um `-` que abre uma
+     palavra e elo */
   const prose = ["[a -b]", "[ins`a`]->[ins`b`]", "x - y", "well-known", "[ins'well-known']",
                  "[ctx]-critx", "[ctx]-constructor", "[ctx]-zzz"]
     .filter(src => links(src) !== 0);
@@ -3471,6 +3487,87 @@ function runChainLinkChecks() {
   ok("LK-07", "um <off> que comeca por um nome conhecido volta como prosa",
      X(back) !== old ? "voltou como " + JSON.stringify(back) + " e emitiu outro documento"
        : X(G.fromXML(X("[ctx][off]-crit[on]"), opts).src) !== X("[ctx][off]-crit[on]") ? "[off]-crit[on] voltou como elo" : null);
+
+  /* depois de prosa: o `-` que abre uma palavra e elo do escopo em que esta,
+     o comando aberto ou o bloco; o que nao abre palavra segue prosa */
+  const ap = X("a -crit"), cf = X("[ctx foo -crit]");
+  const glued = ["a-crit", "(-crit)", "x/-crit", "[ctx]-crit.", "[ctx'x'-critx]"].filter(src => links(src) !== 0);
+  ok("LK-08", "depois de prosa, o `-` que abre uma palavra e elo do escopo em que esta",
+     !/<block once="true">\s*<off>a<\/off>\s*<chain>\s*<criticise\/>\s*<\/chain>\s*<\/block>/.test(ap) ? "no bloco: " + JSON.stringify(ap)
+       : !/<context>\s*<off>foo<\/off>\s*<chain>\s*<criticise\/>\s*<\/chain>\s*<\/context>/.test(cf) ? "dentro de [ctx: " + JSON.stringify(cf)
+       : !quiet("a -crit") || !quiet("[ctx foo -crit]") ? "levantou diagnostico"
+       : X("a\n-crit") !== ap ? "uma quebra de linha antes do `-` muda o elo"
+       : glued.length ? "virou elo sem abrir palavra: " + glued.join(", ") : null);
+
+  /* depois de qualquer ficha: `;` abre o bloco seguinte, `,` e um humor ficam
+     no escopo, um cercado fechado devolve o escopo, e o comeco e o bloco */
+  const atBlock = ["[ctx];-crit", "-crit", "/eth/-crit", "[raw]x[/raw]-crit", "[off]x[on]-crit",
+                   "[logic]a = 1[/logic]-crit", "[=-crit", "[ctx];;-crit", "a, -crit"]
+    .filter(src => !/<chain>\s*<criticise\/>\s*<\/chain>\s*<\/block>\s*<\/glyph-package>/.test(X(src)));
+  const inScope = [["[ctx'x',-crit]", "[ctx'x'-crit]"], ["[in-rwk,-fmt]", "[in-rwk-fmt]"],
+                   ["[ctx'x'/eth/-crit]", "/eth/[ctx'x'-crit]"], ["[dfn x=-crit]", "[dfn x= -crit]"]]
+    .filter(p => X(p[0]) !== X(p[1]) || X(p[0]).indexOf("<chain>") === -1);
+  const everyName = [].concat(Object.keys(VOCAB.MODE), Object.keys(VOCAB.STRUCT), Object.keys(VOCAB.META),
+                              Object.keys(VOCAB.ALIAS), Object.keys(VOCAB.INSTR), Object.keys(VOCAB.SESSION))
+    .map(nm => nm.toLowerCase())
+    .filter(nm => ["-", "a -", ";-", "a,-", "/eth/-", "[raw]x[/raw]-", "--"].some(p => links(p + nm) !== 1));
+  ok("LK-09", "depois de `;`, de `,`, de um humor, de um cercado e no comeco, o elo e do escopo em que esta",
+     atBlock.length ? "o elo nao ficou no bloco: " + atBlock.join(", ")
+       : inScope.length ? "o elo nao ficou no escopo: " + inScope.map(p => p[0]).join(", ")
+       : everyName.length ? "nao viraram elo: " + [...new Set(everyName)].join(", ") : null);
+
+  /* com espaco depois do `-`: so onde o `-` ja esta no lugar de um elo -- um
+     comando, o operando ou o `]` antes dele, na mesma linha; depois de prosa,
+     no comeco ou depois de uma quebra de linha, `- nome` e travessao e item de lista */
+  const spacedLinks = [["[ctx] - crit", "[ctx]-crit"], ["[ctx'x' - crit]", "[ctx'x'-crit]"],
+                       ["[ctx - crit]", "[ctx-crit]"], ["[in-rwk - fmt]", "[in-rwk-fmt]"], ["[ctx] -\tcrit", "[ctx]-crit"]]
+    .filter(p => X(p[0]) !== X(p[1]));
+  const spacedProse = ["x - crit", "- crit", "[ctx]\n- crit", "[ctx] -- crit", "[ctx] -\ncrit", "[ctx]; - crit", "x - y"]
+    .filter(src => links(src) !== 0);
+  ok("LK-10", "com espaco depois do `-`, o elo so onde o `-` ja esta no lugar de um",
+     spacedLinks.length ? "nao e o elo: " + spacedLinks.map(p => p[0]).join(", ")
+       : spacedProse.length ? "a prosa virou elo: " + spacedProse.join(", ") : null);
+
+  /* uma corrida de tracos que abre palavra e um elo so; `[--` segue o template */
+  const runs = [["--crit", "-crit"], ["[ctx]--crit", "[ctx]-crit"], ["[ctx --crit]", "[ctx -crit]"],
+                ["[in--rwk]", "[in-rwk]"], ["a ---crit", "a -crit"]].filter(p => X(p[0]) !== X(p[1]));
+  ok("LK-11", "`--crit` e um elo, e uma corrida de tracos e um so",
+     runs.length ? "outro documento: " + runs.map(p => p[0]).join(", ")
+       : G.tokenize("[--crit]")[0].k !== "tpl" ? "[--crit] deixou de ser template"
+       : ["a--crit", "--zzz", "[ctx]--critx"].some(src => links(src) !== 0) ? "a prosa virou elo" : null);
+
+  /* o nome depois do dois-pontos termina num elo: o elo e do comando, nunca do nome */
+  const named = ["[ctx:'x'-crit]", "[ctx: 'x' -crit]", "[ctx: foo -crit]"]
+    .filter(src => !/<context name="(x|foo)">\s*<chain>\s*<criticise\/>\s*<\/chain>\s*<\/context>/.test(X(src)));
+  ok("LK-12", "o nome depois do dois-pontos termina num elo",
+     named.length ? "o nome levou o elo: " + named.map(s => s + " -> " + JSON.stringify(X(s))).join(" | ")
+       : X("[ctx:-crit]") !== X("[ctx-crit]") ? "[ctx:-crit] nao e [ctx-crit]" : null);
+
+  /* a volta: cada posicao nova volta como elo, pelo documento e pela arvore */
+  const newTrips = ["a -crit", "[ctx foo -crit]", "[ctx];-crit", "[ctx'x',-crit]", "a, -crit", "/eth/-crit",
+                    "[ctx'x'/eth/-crit]", "[raw]x[/raw]-crit", "-crit", "--crit", "[ctx] - crit", "[ctx'x' - crit]",
+                    "[in--rwk]", "[ctx:'x'-crit]", "[ctx: foo -crit]", "[off]x[on]-crit", "[=-crit",
+                    "[--reinforce[ph-rule'a' w -crit]'b']"]
+    .filter(src => {
+      const x = X(src);
+      return !/<(criticise|rework)[\s\/]/.test(x) ||
+             X(G.fromXML(x, opts).src) !== x || X(G.fromAST(G.toAST(src, opts), opts).src) !== x;
+    });
+  ok("LK-13", "fromXML e fromAST devolvem cada posicao nova como elo",
+     newTrips.length ? "a volta mudou ou nao ha elo: " + newTrips.join(", ") : null);
+
+  /* a volta nao inventa: prosa com um `-` que abre palavra antes de um nome
+     conhecido -- um <off> de outro motor, ou `- nome` depois de uma quebra de
+     linha -- volta cercada, e o mesmo documento */
+  const block = body => '<glyph-package engine="' + G.VERSION + '">\n  <schema/>\n  <block once="true">\n' + body +
+                        '\n  </block>\n</glyph-package>';
+  const olds = [block("    <off>a -crit</off>"), block("    <off>--crit</off>"),
+                block("    <context>\n      <user-input>x</user-input>\n    </context>\n    <off>- crit</off>")];
+  const invented = olds.filter(o => { const b = G.fromXML(o, opts).src; return b.indexOf("[off]") === -1 || X(b) !== o; });
+  const bullet = G.fromAST(G.toAST("[ctx'x']\n- crit", opts), opts).src;
+  ok("LK-14", "prosa com `-` que abre palavra antes de um nome conhecido volta cercada",
+     invented.length ? "voltou como elo ou sem cerca: " + invented.map(o => JSON.stringify(G.fromXML(o, opts).src)).join(" | ")
+       : bullet.indexOf("[off]") === -1 || X(bullet) !== X("[ctx'x']\n- crit") ? "fromAST: " + JSON.stringify(bullet) : null);
 
   return D.length;
 }
@@ -3952,7 +4049,7 @@ console.log(" aspas        " + String(rQT).padStart(4) + "/3");
 console.log(" param template" + String(rTP).padStart(4) + "/4");
 console.log(" imperativo   " + String(rIM).padStart(4) + "/10");
 console.log(" mode words   " + String(rMO).padStart(4) + "/10");
-console.log(" elo de cadeia" + String(rLK).padStart(4) + "/7");
+console.log(" elo de cadeia" + String(rLK).padStart(4) + "/14");
 console.log(" bundle ORD   " + String(rZP).padStart(4) + "/16");
 console.log(" global store " + rGS + "/3");
 console.log(" context      " + rCX + "/3");

@@ -39,12 +39,18 @@ inline_content   = element_sequence ;
 chained_command  = "[" , cmd_name , "-" , chain_item , { "-" , chain_item } , [ "]" ] ;
 chain_item       = cmd_name | literal ;
 
-(* A link after an operand literal, after whitespace or after a closed
-   command: "-" touching a name the vocabulary knows. It belongs to the command
-   that holds it — `[ctx'x'-crit]`, `[ctx -crit]` — or, after a "]", to the
-   scope that "]" returns to: the enclosing command, or the segment. A "-" no
-   known name touches is free_text: `a -b`, `x - y`, `->`. *)
-chain_link       = "-" , known_name , { "," , cmd_name } ;
+(* A link wherever a "-" that starts a word touches a name the vocabulary
+   knows. The "-" starts a word when nothing stands before it but the start of
+   the document, a token or whitespace: an operand, a "]", a ";", a ",", a
+   mood, a closed fence, prose and a space. The link belongs to the scope it
+   is in — the command that holds it, `[ctx'x'-crit]`, `[ctx foo -crit]`, or,
+   where no command is open, the segment: `[ctx]-crit`, `a -crit`, `;-crit`,
+   `-crit`. A run of "-" is one link, `--crit`. With a space after the "-"
+   the name does not touch it, and it is a link only after a command name, an
+   operand or a "]" on the same line: `[ctx] - crit`. A "-" that starts no
+   word, or that no known name touches, is free_text: `well-known`, `a-crit`,
+   `x - y`, `x - crit`, `->`, `[a -b]`. *)
+chain_link       = "-" , { "-" } , known_name , { "," , cmd_name } ;
 known_name       = ? a cmd_name in MODE, STRUCT, META, ALIAS, INSTR or SESSION ? ;
 
 (* --- Templates (resolutions C-04 & C-09) --- *)

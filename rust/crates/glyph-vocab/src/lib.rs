@@ -33,9 +33,9 @@ pub fn former_element(name: &str) -> Option<&'static str> {
 }
 
 /// `knownWord(w)`: a word the static tables know — MODE, STRUCT, META, ALIAS,
-/// INSTR and SESSION, own properties only. The lexer reads a `-` written after
-/// an operand, a space or a `]` as a chain link only before such a word, and
-/// the inverse fences an `<off>` that starts with one.
+/// INSTR and SESSION, own properties only. The lexer reads a `-` that starts a
+/// word as a chain link only before such a word, and the inverse fences prose
+/// that holds one.
 pub fn known_word(w: &str) -> bool {
     let (up, low) = (w.to_uppercase(), w.to_lowercase());
     [MODE, STRUCT, META, ALIAS, INSTR].iter().any(|t| get(t, &up).is_some()) || get(SESSION, &low).is_some()

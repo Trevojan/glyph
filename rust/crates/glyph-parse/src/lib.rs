@@ -312,7 +312,8 @@ impl State<'_, '_> {
                 }
                 "literal" | "text" => parts.push(js_trim(&js_str(&nx.v))),
                 "equals" => parts.push("=".into()),
-                "extend" => parts.push("-".into()),
+                /* an `extend` is a chain link (EMS-002 ORD-0025): it ends the
+                   name, and the link belongs to the command, never to its name */
                 _ => break,
             }
             j += 1;

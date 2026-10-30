@@ -94,8 +94,8 @@ export function parse(input, opts) {
 
          The binder is the `-` written straight after `[ph`, and it takes ONE
          link. A hole has one name; after it, and anywhere else in the hole —
-         after the question, a space or a `]`, where a known name is a chain
-         link (EMS-002 ORD-0025) — `-` and `,` are the chain operators they are
+         wherever a `-` that starts a word touches a known name, which is a
+         chain link (EMS-002 ORD-0025) — `-` and `,` are the chain operators they are
          everywhere (GLOSSARY §0.1, `[A-B]`: applied to the same operand). So
          `[ph-a-crit]` is the hole `a` with `crit` chained on the value it
          awaits: a link the <placeholder> carries, never a second name the
@@ -207,7 +207,8 @@ export function parse(input, opts) {
           if (nx.k === "comma") { sawComma = true; parts.push(","); j5++; continue; }
           if (nx.k === "literal" || nx.k === "text") { parts.push(String(nx.v).trim()); j5++; continue; }
           if (nx.k === "equals") { parts.push("="); j5++; continue; }
-          if (nx.k === "extend") { parts.push("-"); j5++; continue; }
+          /* an `extend` is a chain link (EMS-002 ORD-0025): it ends the
+             name, and the link belongs to the command, never to its name */
           break;
         }
         t2.colon = parts.join(" ").replace(/\s+,/g, ",").trim();

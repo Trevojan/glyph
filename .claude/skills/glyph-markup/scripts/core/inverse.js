@@ -211,11 +211,12 @@ export function fromXmlLogic(el, diag) {
    twice, and its second run is the copy the next expansion writes again.
    `slotOf` answers a node's slot, `{ hole }` for an unbound hole, `undefined`
    for a node that is not one (whitespace), or nothing; `kidsOf` answers what
-   to look inside; `write` answers a node's source. */
+   to look inside; `write` answers a node's source, given the node written
+   before it in the same fill. */
 export function slotFills(list, write, slotOf, kidsOf) {
   var order = [], parts = Object.create(null);
   (function scan(xs) {
-    var run = null, skip = false;
+    var run = null, skip = false, prev = null;
     (xs || []).forEach(function (c) {
       var s = slotOf(c);
       if (s === undefined) return;
@@ -223,12 +224,13 @@ export function slotFills(list, write, slotOf, kidsOf) {
       var name = hole || (typeof s === "string" ? s : null);
       if (!name || !/^[A-Za-z]/.test(name)) { run = null; scan(kidsOf(c)); return; }
       if (run !== name) {
-        run = name;
+        run = name; prev = null;
         skip = name in parts;
         if (!skip) { parts[name] = []; order.push(name); }
       }
       if (skip || hole) return;
-      parts[name].push(write(c));
+      parts[name].push(write(c, prev));
+      prev = c;
     });
   })(list);
   return order.filter(function (n) { return parts[n].length; })
@@ -256,6 +258,18 @@ export function fromXmlTemplate(el, diag) {
   return head + xmlKids(el, diag) + "]";
 }
 
+/* Whether prose, written back after a command or its `]`, would read as a
+   chain link: a run of `-` that opens the prose or follows whitespace in it
+   and touches a known word, or a `-` and a space that open it before one —
+   the two shapes the lexer takes as a link. Prose the source made never holds
+   the first; an <off> written by an older engine, or by hand, can. */
+function linkInProse(s) {
+  var t = String(s == null ? "" : s), re = /(^|\s)-+([A-Za-z][A-Za-z0-9_.]*)/g, m;
+  while ((m = re.exec(t))) if (knownWord(m[2])) return true;
+  var sp = /^-[ \t]+([A-Za-z][A-Za-z0-9_.]*)/.exec(t);
+  return !!sp && knownWord(sp[1]);
+}
+
 export function fromXmlNode(el, diag) {
   var tag = el.tag;
   if (tag === "#text") return "";
@@ -266,12 +280,11 @@ export function fromXmlNode(el, diag) {
   if (tag === "off") {
     var prose = litSafeXml(xmlText(el));
     if (!prose) return "[off][on]";
-    /* Prose that starts with `-` and a word the vocabulary knows would come
-       back as a chain link after a `]`, a literal or a command name — the
-       reader inventing an element the document never carried. It returns
-       fenced, and `[off]` gives the same <off> back. */
-    var lead = /^-([A-Za-z][A-Za-z0-9_.]*)/.exec(prose);
-    if (lead && knownWord(lead[1])) return " [off]" + prose + "[on] ";
+    /* Prose with a `-` that starts a word before a word the vocabulary knows
+       would come back as a chain link — the reader inventing an element the
+       document never carried. It returns fenced, and `[off]` gives the same
+       <off> back. */
+    if (linkInProse(prose)) return " [off]" + prose + "[on] ";
     return " " + prose + " ";
   }
   if (tag === "mood" || tag === "break") return "";   /* handled per block */
@@ -339,7 +352,11 @@ export function fromXmlNode(el, diag) {
   var canon = name.toUpperCase();
   var oa = Object.prototype.hasOwnProperty.call(OPERAND_ATTR, canon) ? OPERAND_ATTR[canon] : null;
   if (oa && el.attrs[oa] != null) head += asLiteral(el.attrs[oa]);
-  return lead + notSwitch(head.slice(lead.length) + xmlKids(el, diag) + "]");
+  /* a link glued to the name would be read as part of it: `[ctx:x-crit` is
+     the name `x-crit`, `[ctx:x -crit` is the name `x` and a link */
+  var body = xmlKids(el, diag);
+  if (el.attrs.name && /^-/.test(body)) body = " " + body;
+  return lead + notSwitch(head.slice(lead.length) + body + "]");
 }
 
 /* Two pieces written side by side read as one when a name ends the first and
@@ -445,9 +462,17 @@ export function fromAST(env, opts) {
     return asLiteral(t);
   }
 
+  /* a link written after prose keeps the space that makes its `-` start a
+     word: `a-crit` is one hyphenated word, `a -crit` is a link */
+  function afterProse(prev, n) {
+    var s = node(n);
+    return prev && prev.type === "Text" && n && n.type === "Command" && n.chainElement &&
+           !n.slotName && n.origin !== "item" ? " " + s : s;
+  }
+
   function kids(list) {
-    var out = "";
-    (list || []).forEach(function (n) { out = apart(out, node(n)); });
+    var out = "", prev = null;
+    (list || []).forEach(function (n) { out = apart(out, afterProse(prev, n)); prev = n; });
     return out;
   }
 
@@ -459,7 +484,12 @@ export function fromAST(env, opts) {
       case "Raw":     return n.form === "raw" ? String(n.value == null ? "" : n.value)
                                               : lit(n.value, n.form);
       case "Literal": return lit(n.value, n.form);
-      case "Text":    return String(n.value == null ? "" : n.value);
+      /* prose that would read back as a chain link returns fenced, as
+         fromXML returns it: the same <off>, and no invented link */
+      case "Text": {
+        var tv = String(n.value == null ? "" : n.value);
+        return linkInProse(tv) ? "[off]" + tv + "[on]" : tv;
+      }
       case "ModeOff": return "[off]" + kids(n.body) + "[on]";
       case "Template": {
         /* An expanded invocation holds the template's BODY, not the call.
@@ -471,7 +501,7 @@ export function fromAST(env, opts) {
           /* a BOUND value is the call, and so is what its fill carried; an
              unbound hole is the template's own prompt, and writing that back
              turns a question into an answer — the same rule <needs> follows */
-          var fills = slotFills(n.body, function (c) { return node(c); }, function (c) {
+          var fills = slotFills(n.body, function (c, prev) { return afterProse(prev, c); }, function (c) {
             if (!c || (c.type === "Command" && c.slotName)) return null;
             /* a hole that holds nothing but its name and its question is the
                hole; one that holds more (a <placeholder>) is looked inside,
@@ -521,7 +551,7 @@ export function fromAST(env, opts) {
            first child is a chain link writes it after a space, where `-` is
            the chain operator again (EMS-002 ORD-0025) */
         var first = (n.body || [])[0];
-        var gap = (String(n.canonical) === "PH" && !n.name && first && first.type === "Command" &&
+        var gap = ((String(n.canonical) === "PH" || n.name) && first && first.type === "Command" &&
                    first.chainElement && !first.slotName) ? " " : "";
         return lead + notSwitch(apart("[" + name + (n.name ? ":" + litSafeXml(n.name) : "") + gap, kids(n.body)) + "]");
       }

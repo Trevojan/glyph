@@ -423,24 +423,41 @@ pub fn tokenize(src: &str) -> Vec<Token> {
         }
 
         if c == b'-' as u16 {
+            /* the chain link wherever a name the vocabulary knows touches a `-`
+               that starts a word: nothing before it but the start of the
+               source, a token or whitespace. A run of `-` is one link, so
+               `--crit` is `-crit`; only a KNOWN name is a link, so `a -b`,
+               `x - y`, `->` and `well-known` stay prose (2026-10-25, 2026-10-26) */
+            let dk = (i..n).find(|&j| u[j] != b'-' as u16).unwrap_or(n);
+            if (text.is_empty() || text.last().is_some_and(|&ch| js_space(ch))) && known_word_at(&u, dk) {
+                flush(&mut t, &mut text, &mut text_start);
+                t.push(tok("extend", slice(&u, i, dk), i, dk));
+                i = dk;
+                expect_bare = true;
+                continue;
+            }
             if text.is_empty() && t.last().is_some_and(|p| p.k == "open" || p.k == "bareTag") {
                 t.push(tok("extend", "-".into(), i, i + 1));
                 i += 1;
                 expect_bare = true;
                 continue;
             }
-            /* the chain link written after the operand, a space or the `]` that
-               closed a command: only a name the vocabulary knows touching the
-               `-` is a link, so prose with a hyphen stays prose (2026-10-25) */
-            if text.iter().all(|&ch| js_space(ch))
+            /* with a space after the `-` the name does not touch it: a link only
+               where the `-` already stands in a link's place, a command, its
+               operand or its `]` before it on the same line, `[ctx] - crit` */
+            if dk == i + 1
+                && text.iter().all(|&ch| js_space(ch))
+                && !text.contains(&(b'\n' as u16))
                 && t.last().is_some_and(|p| matches!(p.k, "open" | "bareTag" | "literal" | "close" | "closeTag"))
-                && known_word_at(&u, i + 1)
             {
-                flush(&mut t, &mut text, &mut text_start);
-                t.push(tok("extend", "-".into(), i, i + 1));
-                i += 1;
-                expect_bare = true;
-                continue;
+                let sk = (dk..n).find(|&j| u[j] != b' ' as u16 && u[j] != b'\t' as u16).unwrap_or(n);
+                if sk > dk && known_word_at(&u, sk) {
+                    flush(&mut t, &mut text, &mut text_start);
+                    t.push(tok("extend", "-".into(), i, i + 1));
+                    i += 1;
+                    expect_bare = true;
+                    continue;
+                }
             }
             add!(&[c]);
             i += 1;
