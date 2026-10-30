@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "regency": "3.0",
+  "updated": "2026-10-30",
+  "files": {
+    ".orders/README.md": "1da712532c2e",
+    ".shortcuts/.virtual/README.md": "a280cf3ce4aa"
+  },
+  "history": [
+    {
+      "from": null,
+      "to": "3.0",
+      "on": "2026-10-30",
+      "plan": "UPD-74c1741d",
+      "ops": 9
+    }
+  ]
+}
