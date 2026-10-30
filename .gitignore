@@ -19,3 +19,4 @@ rust/target/
 .guidelines/.shortcuts/.virtual/*
 !.guidelines/.shortcuts/.virtual/index.json
 !.guidelines/.shortcuts/.virtual/ongoing.json
+!.guidelines/.shortcuts/.virtual/README.md
