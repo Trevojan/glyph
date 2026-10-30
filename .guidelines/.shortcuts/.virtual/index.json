@@ -3498,28 +3498,28 @@
         ["scripts/glyph-parser.js", "4842c472ce266dc0"]
       ],
       "nodes": [
-        ["n1375", "", 0, 26022, 1, 596, "132e7c16c71c6a80", "", ""],
-        ["n1376", "glyph--xml--serialisation-reference", 45, 26022, 5, 592, "9fe2fae22d06f400", "0de44428e3fba800", "n1375"],
+        ["n1375", "", 0, 26433, 1, 597, "735e77f6615b8200", "", ""],
+        ["n1376", "glyph--xml--serialisation-reference", 45, 26433, 5, 593, "49104a1ef02af380", "39da165038cad600", "n1375"],
         ["n1377", "1-document-shape", 1018, 2853, 26, 41, "4ebf48f6ab390000", "a952473065f05d00", "n1376"],
         ["n1378", "2-naming-rule", 2853, 3358, 67, 14, "80c450902748c800", "43105a68b1960a00", "n1376"],
         ["n1379", "3-attributes", 3358, 6035, 81, 36, "6ffad50e9d871e00", "bcfd488c8287f080", "n1376"],
-        ["n1380", "4-operators-delimiters-modes", 6035, 9021, 117, 58, "3af74ec803c7f200", "e521dc401f7db200", "n1376"],
-        ["n1381", "5-templates-and-placeholders", 9021, 13211, 175, 82, "50786c283e51a980", "68a31c1ea6354000", "n1376"],
-        ["n1382", "6-mood", 13211, 14227, 257, 22, "8a69cda4dee12a00", "55078d1477a39220", "n1376"],
-        ["n1383", "7-vocabulary", 14227, 18916, 279, 160, "54545a128416bd80", "dc2af8e6c51b7e00", "n1376"],
-        ["n1384", "instructions-105", 14309, 17898, 283, 112, "441ff980b5b3f200", "9a3d2720bd7ba400", "n1383"],
-        ["n1385", "structural-9", 17898, 18301, 395, 16, "f3b8b8e4ef19d480", "3cdd2aa6b4c3bc00", "n1383"],
-        ["n1386", "meta-7", 18301, 18637, 411, 14, "6098214c0a279600", "25221868e4850b00", "n1383"],
-        ["n1387", "session-shortcuts-5", 18637, 18916, 425, 14, "3f30ff141e8c6800", "e60e61dfb1846e00", "n1383"],
-        ["n1388", "8-coined-elements", 18916, 19351, 439, 14, "0588f87025f5da80", "37eee9382952c000", "n1376"],
-        ["n1389", "9-where-the-draft-reference-diverged", 19351, 19791, 453, 12, "498bf1d06ccfd100", "5598f7383e05e200", "n1376"],
-        ["n1390", "10-round-trip", 19791, 21264, 465, 51, "0b10738e238bf600", "3c04926c3b44c200", "n1376"],
-        ["n1391", "11-failure--what-a-malformed-construct-produces", 21264, 26022, 516, 81, "69ca73cee8480c00", "bccf4df6b554f380", "n1376"],
-        ["n1392", "111-missing-is-not-malformed", 21704, 22398, 524, 15, "34c324481c006400", "a6feff56d1906400", "n1391"],
-        ["n1393", "112-every-refusal-carries-a-position", 22398, 23019, 539, 12, "830e5f44688e8e00", "5af939e6646f6800", "n1391"],
-        ["n1394", "113-the-refusals", 23019, 24119, 551, 14, "e64befe858bb4900", "2af05a8884c2a900", "n1391"],
-        ["n1395", "114-what-is-deliberately-not-refused", 24119, 25486, 565, 22, "8a1faa0c336b1900", "9dd2667002244900", "n1391"],
-        ["n1396", "115-no-placeholder-character-reaches-the-deliverable", 25486, 26022, 587, 10, "21272b9a654d5900", "e28146c8b1253800", "n1391"]
+        ["n1380", "4-operators-delimiters-modes", 6035, 9311, 117, 58, "324c2aa0f4d3a680", "dbce440e46ede200", "n1376"],
+        ["n1381", "5-templates-and-placeholders", 9311, 13501, 175, 82, "50786c283e51a980", "68a31c1ea6354000", "n1376"],
+        ["n1382", "6-mood", 13501, 14517, 257, 22, "8a69cda4dee12a00", "55078d1477a39220", "n1376"],
+        ["n1383", "7-vocabulary", 14517, 19206, 279, 160, "54545a128416bd80", "dc2af8e6c51b7e00", "n1376"],
+        ["n1384", "instructions-105", 14599, 18188, 283, 112, "441ff980b5b3f200", "9a3d2720bd7ba400", "n1383"],
+        ["n1385", "structural-9", 18188, 18591, 395, 16, "f3b8b8e4ef19d480", "3cdd2aa6b4c3bc00", "n1383"],
+        ["n1386", "meta-7", 18591, 18927, 411, 14, "6098214c0a279600", "25221868e4850b00", "n1383"],
+        ["n1387", "session-shortcuts-5", 18927, 19206, 425, 14, "3f30ff141e8c6800", "e60e61dfb1846e00", "n1383"],
+        ["n1388", "8-coined-elements", 19206, 19641, 439, 14, "0588f87025f5da80", "37eee9382952c000", "n1376"],
+        ["n1389", "9-where-the-draft-reference-diverged", 19641, 20081, 453, 12, "498bf1d06ccfd100", "5598f7383e05e200", "n1376"],
+        ["n1390", "10-round-trip", 20081, 21554, 465, 51, "0b10738e238bf600", "3c04926c3b44c200", "n1376"],
+        ["n1391", "11-failure--what-a-malformed-construct-produces", 21554, 26433, 516, 82, "c7520650db865840", "e34faaa80206ca00", "n1376"],
+        ["n1392", "111-missing-is-not-malformed", 21994, 22688, 524, 15, "34c324481c006400", "a6feff56d1906400", "n1391"],
+        ["n1393", "112-every-refusal-carries-a-position", 22688, 23309, 539, 12, "830e5f44688e8e00", "5af939e6646f6800", "n1391"],
+        ["n1394", "113-the-refusals", 23309, 24409, 551, 14, "e64befe858bb4900", "2af05a8884c2a900", "n1391"],
+        ["n1395", "114-what-is-deliberately-not-refused", 24409, 25897, 565, 23, "8da2fec4f8373000", "fa4879102328c200", "n1391"],
+        ["n1396", "115-no-placeholder-character-reaches-the-deliverable", 25897, 26433, 588, 10, "21272b9a654d5900", "e28146c8b1253800", "n1391"]
       ]
     },
     ".guidelines/ast-schema.json": {
@@ -3839,7 +3839,7 @@
     },
     ".guidelines/glyph-grammar.ebnf": {
       "nodes": [
-        ["n1692", "", 0, 4784, 1, 100, "1aaa62e93edbca00", "", ""]
+        ["n1692", "", 0, 5234, 1, 106, "394104d0dc85e000", "", ""]
       ]
     },
     ".guidelines/rules.json": {

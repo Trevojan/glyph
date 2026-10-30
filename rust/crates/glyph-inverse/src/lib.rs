@@ -317,6 +317,25 @@ fn alpha_first(s: &str) -> bool {
     s.chars().next().is_some_and(|c| c.is_ascii_alphabetic())
 }
 
+/// `linkInProse`: whether prose, written back after a command or its `]`,
+/// would read as a chain link — a run of `-` that opens the prose or follows
+/// whitespace in it and touches a known word, or a `-` and spaces or tabs that
+/// open it before one: the two shapes the lexer takes as a link.
+fn link_in_prose(s: &str) -> bool {
+    let c: Vec<char> = s.chars().collect();
+    let known_at = |at: usize| {
+        c.get(at).is_some_and(|x| x.is_ascii_alphabetic())
+            && known_word(&c[at..].iter().take_while(|&&x| x.is_ascii_alphanumeric() || x == '_' || x == '.').collect::<String>())
+    };
+    let run = (0..c.len()).any(|p| {
+        c[p] == '-' && (p == 0 || js_space(c[p - 1])) && known_at((p..c.len()).find(|&j| c[j] != '-').unwrap_or(c.len()))
+    });
+    run || (c.first() == Some(&'-') && {
+        let k = (1..c.len()).find(|&j| c[j] != ' ' && c[j] != '\t').unwrap_or(c.len());
+        k > 1 && known_at(k)
+    })
+}
+
 fn xml_kids(el: &El, diag: &mut Vec<Diag>, depth: usize) -> Result<String, Thrown> {
     if depth > STACK_DEPTH {
         return Err(overflow());
@@ -445,11 +464,9 @@ fn from_xml_node(el: &El, diag: &mut Vec<Diag>, depth: usize) -> Result<String, 
             if prose.is_empty() {
                 return Ok("[off][on]".into());
             }
-            /* prose that starts with `-` and a known word would come back as a
-               chain link: it returns fenced */
-            let word: String = prose.strip_prefix('-').filter(|w| w.starts_with(|c: char| c.is_ascii_alphabetic()))
-                .map(|w| w.chars().take_while(|&c| c.is_ascii_alphanumeric() || c == '_' || c == '.').collect()).unwrap_or_default();
-            return Ok(if !word.is_empty() && known_word(&word) { format!(" [off]{prose}[on] ") } else { format!(" {prose} ") });
+            /* prose with a `-` that starts a word before a known word would
+               come back as a chain link: it returns fenced */
+            return Ok(if link_in_prose(&prose) { format!(" [off]{prose}[on] ") } else { format!(" {prose} ") });
         }
         "raw" => return Ok(format!("[raw]{}[/raw]", xml_text(el))),
         "logic" => return Ok(from_xml_logic(el)),
@@ -502,7 +519,13 @@ fn from_xml_node(el: &El, diag: &mut Vec<Diag>, depth: usize) -> Result<String, 
     let colon = el.attr("name").filter(|n| !n.is_empty()).map_or(String::new(), |n| format!(":{}", lit_safe_xml(n)));
     /* the number of a part and the condition of an if come back as the literal they were */
     let operand = get(OPERAND_ATTR, &name.to_uppercase()).and_then(|a| el.attr(a)).map_or(String::new(), as_literal);
-    Ok(format!("{lead}{}", not_switch(format!("[{name}{colon}{operand}{}]", xml_kids(el, diag, depth)?))))
+    /* a link glued to the name would be read as part of it: `[ctx:x-crit` is
+       the name `x-crit`, `[ctx:x -crit` is the name `x` and a link */
+    let mut body = xml_kids(el, diag, depth)?;
+    if el.attr("name").is_some_and(|n| !n.is_empty()) && body.starts_with('-') {
+        body.insert(0, ' ');
+    }
+    Ok(format!("{lead}{}", not_switch(format!("[{name}{colon}{operand}{body}]"))))
 }
 
 /// `fromXmlPlaceholder`: the `<needs>` inside a `<placeholder>` is the hole —
@@ -712,10 +735,24 @@ pub fn from_ast(env: &Json) -> Back {
         let t = text_of(v);
         if form.and_then(Json::str) == Some("tick") && !t.contains('`') { format!("`{t}`") } else { as_literal(&t) }
     };
+    /* a link written after prose keeps the space that makes its `-` start a
+       word: `a-crit` is one hyphenated word, `a -crit` is a link */
+    fn after_prose(prev: Option<&Json>, n: &Json, diag: &mut Vec<Diag>, lit: &dyn Fn(Option<&Json>, Option<&Json>) -> String) -> String {
+        let s = node(n, diag, lit);
+        if prev.and_then(|p| p.get("type")).and_then(Json::str) == Some("Text")
+            && n.get("type").and_then(Json::str) == Some("Command") && truthy(n.get("chainElement"))
+            && !truthy(n.get("slotName")) && n.get("origin").and_then(Json::str) != Some("item")
+        {
+            format!(" {s}")
+        } else {
+            s
+        }
+    }
     fn kids(list: Option<&Json>, diag: &mut Vec<Diag>, lit: &dyn Fn(Option<&Json>, Option<&Json>) -> String) -> String {
-        let mut out = String::new();
+        let (mut out, mut prev) = (String::new(), None);
         for n in list.and_then(Json::arr).unwrap_or(&[]) {
-            out = apart(out, &node(n, diag, lit));
+            out = apart(out, &after_prose(prev, n, diag, lit));
+            prev = Some(n);
         }
         out
     }
@@ -730,7 +767,12 @@ pub fn from_ast(env: &Json) -> Back {
                 if n.get("form").and_then(Json::str) == Some("raw") { text_of(n.get("value")) } else { lit(n.get("value"), n.get("form")) }
             }
             Some("Literal") => lit(n.get("value"), n.get("form")),
-            Some("Text") => text_of(n.get("value")),
+            /* prose that would read back as a chain link returns fenced, as
+               fromXML returns it: the same <off>, and no invented link */
+            Some("Text") => {
+                let tv = text_of(n.get("value"));
+                if link_in_prose(&tv) { format!("[off]{tv}[on]") } else { tv }
+            }
             Some("ModeOff") => format!("[off]{}[on]", kids(n.get("body"), diag, lit)),
             Some("Template") => {
                 let name = text_of(n.get("name"));
@@ -768,7 +810,7 @@ pub fn from_ast(env: &Json) -> Back {
                     }
                     fn scan(list: Option<&Json>, order: &mut Vec<String>, parts: &mut Vec<(String, String)>, diag: &mut Vec<Diag>,
                             lit: &dyn Fn(Option<&Json>, Option<&Json>) -> String) {
-                        let (mut run, mut skip): (Option<String>, bool) = (None, false);
+                        let (mut run, mut skip, mut prev): (Option<String>, bool, Option<&Json>) = (None, false, None);
                         for c in list.and_then(Json::arr).unwrap_or(&[]) {
                             let Some((name, hole)) = slot_of(c).filter(|(s, _)| alpha_first(s)) else {
                                 run = None;
@@ -779,6 +821,7 @@ pub fn from_ast(env: &Json) -> Back {
                             };
                             if run.as_deref() != Some(name.as_str()) {
                                 run = Some(name.clone());
+                                prev = None;
                                 skip = order.contains(&name);
                                 if !skip {
                                     order.push(name.clone());
@@ -787,8 +830,9 @@ pub fn from_ast(env: &Json) -> Back {
                             if skip || hole {
                                 continue;
                             }
-                            let src = node(c, diag, lit);
+                            let src = after_prose(prev, c, diag, lit);
                             parts.push((name, src));
+                            prev = Some(c);
                         }
                     }
                     let (mut order, mut parts) = (Vec::new(), Vec::new());
@@ -823,7 +867,7 @@ pub fn from_ast(env: &Json) -> Back {
                 /* the `-` straight after `[ph` binds the name: a hole whose
                    first child is a link writes it after a space */
                 let first = n.get("body").and_then(Json::arr).and_then(|b| b.first());
-                let gap = if text_of(n.get("canonical")) == "PH" && !truthy(n.get("name"))
+                let gap = if (text_of(n.get("canonical")) == "PH" || truthy(n.get("name")))
                     && first.is_some_and(|f| f.get("type").and_then(Json::str) == Some("Command")
                         && truthy(f.get("chainElement")) && !truthy(f.get("slotName"))) { " " } else { "" };
                 format!("{}{}", if item { "," } else { "" }, not_switch(format!("{}]", apart(format!("[{name}{colon}{gap}"), &kids(n.get("body"), diag, lit)))))

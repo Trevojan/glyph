@@ -19,9 +19,11 @@ import { rulesOf } from "./stores.js";
 
 export var NAME_CH = /[A-Za-z0-9_.]/;
 
-/* What a `-` written after an operand, a space or a closed command may follow.
-   `open` and `bareTag` are here for the space between them and the `-`; with
-   nothing between, the branch above them already makes the link. */
+/* What a `-` with a space AFTER it may follow, on the same line: the command
+   that holds the link, its operand, or the `]` that closed one — `[ctx - crit]`,
+   `[ctx'x' - crit]`, `[ctx] - crit`. After prose, at the start of the source
+   or past a line break, `- name` is the dash of prose and the bullet of a
+   list, and stays prose. */
 var LINK_AFTER = { open:1, bareTag:1, literal:1, close:1, closeTag:1 };
 
 /* Whether the run of NAME_CH at `at` is a name the bare-tag reader would take
@@ -235,22 +237,39 @@ export function tokenize(src) {
 
     if (c === "-") {
       var prev = T[T.length-1];
+      /* The chain link, wherever a name the vocabulary knows touches a `-` that
+         starts a word: one with nothing before it but the start of the source,
+         a token, or whitespace — `[ctx'x'-crit]`, `[ctx -crit]`, `[ctx]-crit`,
+         `a -crit`, `[ctx foo -crit]`, `;-crit`, `,-crit`, `/eth/-crit`,
+         `[/raw]-crit`, `-crit` opening the document. Each of them made `crit`
+         into <off> with no diagnostic, and a known command never vanishes
+         (decided 2026-10-25 and 2026-10-26). The rule that takes it in is the
+         chain the grammar already writes, `{ "-" , chain_item }`, and it
+         belongs to the scope it is in: the command open on the stack, or the
+         block. A run of dashes is one link, so `--crit` is `-crit`. Only a
+         KNOWN name is a link — the 144 names of the static tables, never the
+         session switch, which the parser applies — so `a -b`, `x - y`, `->`
+         and `well-known`, whose `-` starts no word, stay the prose they are. */
+      var dk = i;
+      while (dk < n && src[dk] === "-") dk++;
+      if ((!textBuf.length || /\s$/.test(textBuf)) && knownWordAt(src, dk)) {
+        flushText();
+        T.push({ k:"extend", v:src.slice(i, dk), s:i, e:dk }); i = dk; expectBare = true; continue;
+      }
       if (!textBuf.length && prev && (prev.k === "open" || prev.k === "bareTag")) {
         T.push({ k:"extend", v:"-", s:i, e:i+1 }); i++; expectBare = true; continue;
       }
-      /* The chain link written after the operand, after a space, or after the
-         `]` that closed a command: `[ctx'x'-crit]`, `[ctx -crit]`, `[ctx]-crit`.
-         Each of them made `crit`, a word the vocabulary knows, into <off> with
-         no diagnostic. A known command never vanishes (decided 2026-10-25), and
-         the rule that takes it in is the chain the grammar already writes:
-         `{ "-" , chain_item }` continues after a literal item, and whitespace
-         between tokens is no node. Only a KNOWN name touching the `-` is a
-         link here — the 144 names of the static tables, never the session
-         switch, which the parser applies — so `a -b`, `x - y`, `->` and
-         `well-known` stay the prose they are. */
-      if (!textBuf.trim().length && prev && LINK_AFTER[prev.k] && knownWordAt(src, i + 1)) {
-        flushText();
-        T.push({ k:"extend", v:"-", s:i, e:i+1 }); i++; expectBare = true; continue;
+      /* With a space after the `-`, the name does not touch it: it is a link
+         only where the `-` already stands in a link's place, a command, its
+         operand or its `]` before it on the same line — `[ctx] - crit` — as
+         `[in- rwk]` has always read the space after the `-`. */
+      if (dk === i + 1 && !textBuf.trim().length && !/\n/.test(textBuf) && prev && LINK_AFTER[prev.k]) {
+        var sk = dk;
+        while (sk < n && (src[sk] === " " || src[sk] === "\t")) sk++;
+        if (sk > dk && knownWordAt(src, sk)) {
+          flushText();
+          T.push({ k:"extend", v:"-", s:i, e:i+1 }); i++; expectBare = true; continue;
+        }
       }
       addText(c); i++; continue;
     }
