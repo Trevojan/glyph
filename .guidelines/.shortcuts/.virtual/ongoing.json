@@ -1,16 +1,16 @@
 {
   "_about": "Registro do trabalho dos agentes: o primeiro relance ao voltar a este repositorio. Aponta, nunca copia.",
   "schema": 1,
-  "updated": "2026-10-25",
+  "updated": "2026-10-30",
   "items": [
     {
       "id": "EMS-002-INCLUSION",
       "title": "um comando conhecido nunca some: as 14 posições medidas",
-      "state": "ongoing",
+      "state": "review",
       "who": "DV",
       "since": "2026-10-25",
       "source": ".guidelines/.decisions/README.md#2026-10-25",
-      "next": "ORD-0031, o dois-pontos; depois a versão do lote",
+      "next": "as ORDs 0022 a 0031 construídas; três leituras esperam o Regente (INTAKE-INCLUSION.md §4)",
       "where": [
         "order:EMS-002/ORD-0031",
         "branch:claude/loving-cerf-m1fomz"
@@ -19,10 +19,14 @@
     {
       "id": "EMS-002-MOOD-TEMPLATE",
       "title": "um humor dentro de um template, só no Rust",
-      "state": "backlog",
+      "state": "review",
       "who": "DV",
       "since": "2026-10-25",
-      "source": ".guidelines/.decisions/README.md#2026-10-25"
+      "source": ".guidelines/.decisions/README.md#2026-10-25",
+      "where": [
+        "order:EMS-002/ORD-0023"
+      ],
+      "next": "construída na ORD-0023"
     },
     {
       "id": "VERSION-BATCH",
