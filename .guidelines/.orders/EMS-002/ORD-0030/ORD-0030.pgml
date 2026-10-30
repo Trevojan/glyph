@@ -1,0 +1,9 @@
+[block'ORD-0030-way-back'
+  [ctx'the spec of EMS-002','.guidelines/.orders/EMS-002/EMS-002.pgml']
+  [ctx'the map of the inclusion','.guidelines/.orders/INTAKE-INCLUSION.md']
+  [tgt'the way back invents nothing and glues nothing: two defects found while building the inclusion, fixed in both engines; an ORD of the batch the version moves once for']
+  [ctx'found at fc4c4a2 and 1fd7e07: the emitter writes the text sem resposta in the needs line of a hole with no question, and fromXML reads that text back as a question the author never wrote, for a bare hole and inside a placeholder, against the no-fabrication rule of PACKAGE_TARGET section 8; and fromAST writes the prose a template fill with no value carries glued to the hole name, so a rule hole carrying plain comes back as the unknown hole ruleplain']
+  [cnst'the needs line keeps its shape, PACKAGE_TARGET G3, so the reader treats the text sem resposta as no question: the source comes back without it and emits the same document, the one case the XML cannot tell apart']
+  [cnst'the space between the hole name and the prose is the apart rule of ORD-0027 applied where the fill is written']
+  [val'the way back','a hole with no question comes back with none through fromXML, and a fill carrying prose comes back with the prose apart through fromAST; each seen failing before it counts, and the Rust answers byte for byte']
+];
