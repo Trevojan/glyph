@@ -164,7 +164,11 @@ pub fn ast_shallow(tree: &Tree<Extra>, id: Id) -> Json {
         ("origin", Some(nd.origin.clone().flatten().filter(|o| !o.is_empty()).map_or(Json::Null, |o| s(&o)))),
         ("slotName", Some(Json::Bool(nd.slot_name == Some(true)))),
         ("editorial", Some(Json::Bool(nd.editorial == Some(true)))),
-        ("name", Some(nd.colon.clone().flatten().filter(|c| !c.is_empty()).map_or(Json::Null, |c| s(&c)))),
+        /* null from this engine: the name of a block or a section is its first
+           literal, a child like any other, and only the XML carries it as an
+           attribute (OPERAND_ATTR). fromAST reads a name an envelope holds as
+           an operand literal. */
+        ("name", Some(Json::Null)),
         ("depth", nd.depth.map(|d| Json::Num(d as f64))),
         ("autoClosed", Some(Json::Bool(nd.auto_closed == Some(true)))),
         ("suggestion", Some(match &nd.suggestion {

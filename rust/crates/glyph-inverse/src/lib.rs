@@ -378,7 +378,8 @@ pub fn clone_with_chain(attrs: &[(String, String)], v: &str) -> Vec<(String, Str
 fn from_xml_logic(el: &El) -> String {
     let lines: Vec<String> = el.children.iter().filter(|c| c.tag == "rule")
         .filter_map(|c| xml_child(c, "source").map(xml_text)).collect();
-    let nm = el.attr("name").filter(|n| !n.is_empty()).map_or(String::new(), |n| format!(":{}", lit_safe_xml(n)));
+    /* the fence is named by its first literal, and `[/logic]` closes it */
+    let nm = el.attr("name").filter(|n| !n.is_empty()).map_or(String::new(), as_literal);
     format!("[logic{nm}]\n{}\n[/logic]", lines.join("\n"))
 }
 
@@ -470,7 +471,8 @@ fn from_xml_node(el: &El, diag: &mut Vec<Diag>, depth: usize) -> Result<String, 
         }
         "raw" => return Ok(format!("[raw]{}[/raw]", xml_text(el))),
         "logic" => return Ok(from_xml_logic(el)),
-        "template" => return from_xml_template(el, diag, depth),
+        /* a <template> with a name is a call or a definition; with none, the command TPL */
+        "template" if el.attr("name").is_some_and(|n| !n.is_empty()) => return from_xml_template(el, diag, depth),
         "unresolved" => {
             let t = lit_safe_xml(el.attr("tag").unwrap_or(""));
             if let Some(op) = chain_op_of(el, diag) {
@@ -517,16 +519,16 @@ fn from_xml_node(el: &El, diag: &mut Vec<Diag>, depth: usize) -> Result<String, 
     if name == "ph" {
         return Ok(format!("{lead}{}", from_xml_placeholder(el, diag, depth)?));
     }
-    let colon = el.attr("name").filter(|n| !n.is_empty()).map_or(String::new(), |n| format!(":{}", lit_safe_xml(n)));
-    /* the number of a part and the condition of an if come back as the literal they were */
-    let operand = get(OPERAND_ATTR, &name.to_uppercase()).and_then(|a| el.attr(a)).map_or(String::new(), as_literal);
-    /* a link glued to the name would be read as part of it: `[ctx:x-crit` is
-       the name `x-crit`, `[ctx:x -crit` is the name `x` and a link */
-    let mut body = xml_kids(el, diag, depth)?;
-    if el.attr("name").is_some_and(|n| !n.is_empty()) && body.starts_with('-') {
-        body.insert(0, ' ');
-    }
-    Ok(format!("{lead}{}", not_switch(format!("[{name}{colon}{operand}{body}]"))))
+    /* the number of a part, the condition of an if and the name of a block or
+       a section come back as the literal they were; a `name` on any other
+       element, which an older document or a hand carries, is an operand
+       literal all the same, written where the name stood */
+    let oa = get(OPERAND_ATTR, &name.to_uppercase());
+    let named = if oa == Some("name") { String::new() }
+                else { el.attr("name").filter(|n| !n.is_empty()).map_or(String::new(), as_literal) };
+    let operand = oa.and_then(|a| el.attr(a)).map_or(String::new(), as_literal);
+    /* a literal ends at its quote, so a link written after it is the link it is */
+    Ok(format!("{lead}{}", not_switch(format!("[{name}{named}{operand}{}]", xml_kids(el, diag, depth)?))))
 }
 
 /// What the emitter writes in the `<needs>` of a hole with no question: the
@@ -540,7 +542,7 @@ const NO_ANSWER: &str = "sem resposta";
 fn from_xml_placeholder(el: &El, diag: &mut Vec<Diag>, depth: usize) -> Result<String, Thrown> {
     let at = el.children.iter().position(|c| c.tag == "needs");
     let slot = at.and_then(|i| el.children[i].attr("slot")).filter(|s| alpha_first(s));
-    let colon = el.attr("name").filter(|n| !n.is_empty()).map_or(String::new(), |n| format!(":{}", lit_safe_xml(n)));
+    let named = el.attr("name").filter(|n| !n.is_empty()).map_or(String::new(), as_literal);
     let mut body = el.clone();
     if let Some(i) = at {
         let text = xml_text(&el.children[i]);
@@ -552,8 +554,8 @@ fn from_xml_placeholder(el: &El, diag: &mut Vec<Diag>, depth: usize) -> Result<S
         }
     }
     let rest = xml_kids(&body, diag, depth)?;
-    let gap = if slot.is_none() && colon.is_empty() && rest.starts_with(['-', ',']) { " " } else { "" };
-    Ok(format!("[ph{}{colon}{gap}{rest}]", slot.map_or(String::new(), |s| format!("-{s}"))))
+    let gap = if slot.is_none() && named.is_empty() && rest.starts_with(['-', ',']) { " " } else { "" };
+    Ok(format!("[ph{}{named}{gap}{rest}]", slot.map_or(String::new(), |s| format!("-{s}"))))
 }
 
 /// `apart`: two pieces written side by side read as one when a name ends the
@@ -854,7 +856,7 @@ pub fn from_ast(env: &Json) -> Back {
             Some("Verbatim") => format!("[raw]{}[/raw]", text_of(n.get("value"))),
             Some("Logic") => {
                 let lines: Vec<String> = n.get("rules").and_then(Json::arr).unwrap_or(&[]).iter().map(|r| text_of(r.get("source"))).collect();
-                let name = if truthy(n.get("name")) { format!(":{}", text_of(n.get("name"))) } else { String::new() };
+                let name = if truthy(n.get("name")) { as_literal(&text_of(n.get("name"))) } else { String::new() };
                 format!("[logic{name}]\n{}\n[/logic]", lines.join("\n"))
             }
             Some("Truncated") => {
@@ -873,14 +875,15 @@ pub fn from_ast(env: &Json) -> Back {
                 if truthy(n.get("chainElement")) {
                     return format!("{}{name}", if item { "," } else { "-" });
                 }
-                let colon = if truthy(n.get("name")) { format!(":{}", lit_safe_xml(&text_of(n.get("name")))) } else { String::new() };
+                /* a `name` an envelope carries is an operand literal, where it stood */
+                let named = if truthy(n.get("name")) { as_literal(&text_of(n.get("name"))) } else { String::new() };
                 /* the `-` straight after `[ph` binds the name: a hole whose
                    first child is a link writes it after a space */
                 let first = n.get("body").and_then(Json::arr).and_then(|b| b.first());
-                let gap = if (text_of(n.get("canonical")) == "PH" || truthy(n.get("name")))
+                let gap = if text_of(n.get("canonical")) == "PH" && !truthy(n.get("name"))
                     && first.is_some_and(|f| f.get("type").and_then(Json::str) == Some("Command")
                         && truthy(f.get("chainElement")) && !truthy(f.get("slotName"))) { " " } else { "" };
-                format!("{}{}", if item { "," } else { "" }, not_switch(format!("{}]", apart(format!("[{name}{colon}{gap}"), &kids(n.get("body"), diag, lit)))))
+                format!("{}{}", if item { "," } else { "" }, not_switch(format!("{}]", apart(format!("[{name}{named}{gap}"), &kids(n.get("body"), diag, lit)))))
             }
             _ => {
                 diag.push(Diag { sev: "note", code: "AstUnknownNode",

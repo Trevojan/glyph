@@ -85,16 +85,27 @@ export function tokenize(src) {
       var mChain = /^\[=/.exec(rest);
       if (mChain) { T.push({ k:"chain", v:"[=", s:i, e:i+2 }); i += 2; continue; }
 
-      var mLog = /^\[\s*logic\s*(?:[:\-\s]\s*([^\]]*?))?\s*\]/i.exec(rest);
+      /* The fence is named by its first literal, `[logic'calc']…[/logic]`
+         (decided 2026-10-26), the rule a block and a section follow. Only a
+         `[/logic]` makes that head a fence: `[logic'x']` with none is the
+         command LOGIC holding its operand. `[logic-calc]` and `[logic calc]`
+         name it too, and open it closed or not. `[logic:calc]` is the retired
+         colon form: it still opens the fence it names, and `colon` holds where
+         the `:` stands, for the parser to ask. */
+      var mLog = /^\[\s*logic\s*(?:'([^'\]\n]*)'|`([^`\]]*)`|([:\-\s])\s*([^\]]*?))?\s*\]/i.exec(rest);
       if (mLog) {
-        var lname = (mLog[1] || "").trim();
+        var lname = (mLog[1] != null ? mLog[1] : mLog[2] != null ? mLog[2] : mLog[4] || "").trim();
         var bodyStart = i + mLog[0].length;
         var mClose = /\[\s*\/\s*logic\s*\]/i.exec(src.slice(bodyStart));
-        var bodyEnd = mClose ? bodyStart + mClose.index : n;
-        T.push({ k:"logic", v:lname, body:src.slice(bodyStart, bodyEnd), s:i,
-                 e: mClose ? bodyEnd + mClose[0].length : n, closed:!!mClose });
-        i = mClose ? bodyEnd + mClose[0].length : n;
-        continue;
+        if (mClose || (mLog[1] == null && mLog[2] == null)) {
+          var bodyEnd = mClose ? bodyStart + mClose.index : n;
+          var lt = { k:"logic", v:lname, body:src.slice(bodyStart, bodyEnd), s:i,
+                     e: mClose ? bodyEnd + mClose[0].length : n, closed:!!mClose };
+          if (mLog[3] === ":") lt.colon = i + mLog[0].indexOf(":");
+          T.push(lt);
+          i = mClose ? bodyEnd + mClose[0].length : n;
+          continue;
+        }
       }
 
       /* The verbatim fence. `[logic]` proved the shape: fence a region and
@@ -232,6 +243,8 @@ export function tokenize(src) {
         T.push({ k:"return", v:"R:", s:textStart, e:i+1 });
         textBuf = ""; textStart = -1; i++; continue;
       }
+      /* the retired colon form, kept as a token so the parser can ask for it
+         and keep what follows as the operand */
       flushText(); T.push({ k:"colon", v:":", s:i, e:i+1 }); i++; continue;
     }
 

@@ -10,7 +10,7 @@
 //!
 //! Every field is optional where the JS object may lack it: a literal has no
 //! `canonical`, a command has no `v`. `Some(None)` is a field the JS holds as
-//! `null` (a command's `colon` before a colon arrives, a slot name's `origin`).
+//! `null` (a slot name's `origin`).
 //!
 //! `walk`, `valueChildren` and `stripTags` are util.js's.
 
@@ -58,7 +58,6 @@ pub struct Node<X> {
     pub canonical: Option<String>,
     pub gloss: Option<Gloss>,
     pub alias: Option<bool>,
-    pub colon: Option<Option<String>>,
     pub auto_closed: Option<bool>,
     pub editorial: Option<bool>,
     pub origin: Option<Option<String>>,

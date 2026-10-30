@@ -425,7 +425,8 @@ const CONSTRAINTS = [
  * which the snapshot honours (O5, EMS-002 ORD-0011).
  * ------------------------------------------------------------------ */
 const ORACLE_COVERAGE = [
-  { id:"OC-01", src:"[crit: a,b,c]", code:"AmbiguousSlotOrder" },
+  /* the colon, retired (2026-10-26): a recogniser at `ask`, the text kept */
+  { id:"OC-01", src:"[crit: a,b,c]", code:"RetiredColon" },
   { id:"OC-02", src:"[logic]\nx = 1\ny = x < 5\n[/logic]", code:"CapFloorNotice" },
   { id:"OC-03", src:"[logic]\na = 1\na = 2\n[/logic]", code:"DuplicateBinding" },
   { id:"OC-04", src:"[logic]\na = 1\n!\n[/logic]", code:"EmptyLogicLine" },
@@ -1085,13 +1086,18 @@ function runFromXmlChecks() {
      unk.stable && /zzzz/.test(unk.back.src) ? null
        : "unresolved lost: " + JSON.stringify(unk.back.src));
 
-  /* PINNED, documented loss. [tpl:name'…'] and [--name…] emit the same
-     <template name="…"> and nothing separates them, so the invocation is
-     the reading. If this ever changes, the docs change with it. */
+  /* The pin, inverted (2026-10-26). [tpl:name'…'] and [--name…] emitted the
+     same <template name="…">, and the invocation was the reading. With the
+     colon retired, `name` is the call's alone: the command TPL writes a
+     <template> with no name, and it comes back as [tpl with its literals —
+     the colon form's included — never as a [-- invocation. */
   const tplColon = trip("[crit[tpl:somename'body text']]");
-  ok("F-09", "[tpl: comes back as a [-- invocation — pinned, not a bug",
-     /\[--somename/.test(tplColon.back.src) ? null
-       : "expected a [--somename invocation, got " + JSON.stringify(tplColon.back.src));
+  const tplLit = trip("[crit[tpl'somename''body text']]");
+  ok("F-09", "<template> with no name comes back as [tpl, never as a [-- invocation",
+     /\[--/.test(tplColon.back.src) || /\[--/.test(tplLit.back.src)
+       ? "came back as an invocation: " + JSON.stringify(tplColon.back.src)
+       : !tplLit.stable || tplLit.back.src !== "[crit[tpl'somename''body text']]" ? "[tpl'…' moved: " + JSON.stringify(tplLit.back.src)
+       : tplColon.x1 !== tplLit.x1 ? "the colon form emits another document than its literals" : null);
 
   /* A standing guard: editing the vocabulary must not introduce two
      different commands that kebab to one element name. */
@@ -1426,6 +1432,18 @@ function runReferenceChecks() {
               : "the skill shows a document the engine does not emit");
   }
 
+  /* The same exposure in §10: its worked round trip named the block with the
+     colon and carried a formula the table no longer held, and no probe read
+     it. The source and the document it shows are held to the engine. */
+  const s10 = (md.split(/\n## 10\. /)[1] || "").split(/\n## 11\. /)[0];
+  const s10src = (s10.match(/```\n([^\n]+)\n```/) || [])[1];
+  const s10xml = (s10.match(/```xml\n([\s\S]*?)\n```/) || [])[1];
+  const s10real = s10src && G.toXML(s10src, { templates: TPL.templates, rules: RULESTORE,
+    expansions: require("../.guidelines/expansions.json") }).trim();
+  ok("D-12", "the §10 round trip shows what the engine emits",
+     !s10src || !s10xml ? "no source and xml pair found in §10"
+       : s10xml.trim() !== s10real ? "§10 shows a document the engine does not emit for " + JSON.stringify(s10src)
+       : /\[[A-Za-z]+:/.test(s10src) ? "§10 writes the colon" : null);
 
   return D.length;
 }
@@ -2136,7 +2154,9 @@ function runSnapshotChecks() {
       "[ctx] -\tcrit", "[ctx]\n- crit", "x - crit", "- crit", "[ctx] -- crit", "[ctx] -\ncrit", "[ctx]; - crit",
       "[logic]a = 1[/logic]-crit", "[=-crit", "[ctx;;-crit", "[ctx:'x'-crit]", "[ctx: foo -crit]", "[ctx:-crit]",
       "[dfn x=-crit]", "r -crit", "r --crit", "[--t= -crit]", "\\eth\\-crit", "(-crit)", "x/-crit", "[ctx]-crit.",
-      "[ctx] -crit,rev", "-crit'x'", "[ph:foo -crit]", "-ins'x',ctx"
+      "[ctx] -crit,rev", "-crit'x'", "[ph:foo -crit]", "-ins'x',ctx",
+      "[logic'calc']x[/logic]", "[logic`calc`]x[/logic]", "[logic 'calc' ]x[/logic]", "[logic'x']", "[logic'x'y]z[/logic]",
+      "[logic'a]b'][/logic]", "[logic:'x']a[/logic]", "[logic`it's`]a[/logic]", "[logic'']a[/logic]", "[ctx: a: b]"
     ];
     const lexSources = [...new Set([...PROBES, ...S.filter(x => x.length <= 4096)])];
     const lexed = lexSources.map(x => [x, G.tokenize(x)]);
@@ -2199,7 +2219,7 @@ function runSnapshotChecks() {
        prototype answers for `constructor` — is written as what it is, since
        JSON would drop it */
     const valueOf = v => typeof v === "function" ? { function: v.name } : v;
-    const FIELDS = ["id", "raw", "tier", "canonical", "gloss", "alias", "colon", "autoClosed", "editorial", "origin",
+    const FIELDS = ["id", "raw", "tier", "canonical", "gloss", "alias", "autoClosed", "editorial", "origin",
        "chainElement", "slotName", "depth", "literal", "v", "form", "role", "text", "rawFence", "template",
        "isDef", "mode", "isDefinition", "expanded", "boundSlot", "fromSource"];
     /* `full` adds what only the whole parse sets — the species pass, the
@@ -2429,7 +2449,12 @@ function runSnapshotChecks() {
       "[ph-a-zzz]", "[ph'q''r']", "[ph'q' prose]", "[ph'q'[crit'x']][ctx'q']", "[ph-a`q`]", "[ph-a]",
       "[ph[crit'x']'q']", "[ph-a-crit'q']", "[ph-a'q'-crit]", "[ph -crit'q']", "[ph -crit,rev]", "[ph- a[crit]]",
       "[ph-a-crit,rev[sum'x']'q']", "[ph[off]x[on]]", "[ph[logic]a = 1[/logic]]", "[ph[raw]x[/raw]]",
-      "r- [ph'q'[crit'x']]", "[ctx[ph-a[crit'x']]]", "[ph'q'[ph-b[crit'x']]]"
+      "r- [ph'q'[crit'x']]", "[ctx[ph-a[crit'x']]]", "[ph'q'[ph-b[crit'x']]]",
+      "[crit'a','b','c']", "[ctx: a: b]", "[ph-a: q]", "[rw-cr: x]", "[ctx'x': y]", "[ctx[sum]: y]", "[--germinate: crit]",
+      "[ctx: 'a'-crit]", "[ctx: a=b]", "[ctx: a ,, b]", "[ctx: a\nb]", "[val: a]", "[block:review[ctx'x']]", "note: hello",
+      "[block'review'[ctx'x']][ref'review']", "[section'intro'[ctx]]", "[sum'review'[ctx'x']][block'review']", "[block'']",
+      "[block[ctx'x']'late']", "[tpl:somename'body text']", "[tpl'x']", "[logic'calc']a = 1[/logic]", "[logic`calc`]a = 1[/logic]",
+      "[logic:calc]a = 1[/logic]", "[logic:]a = 1[/logic]", "[logic: it's]a = 1[/logic]", "[logic'x']", "[logic 'x']", "[logic'x'] y"
     ].concat(INCLUSION.map(c => c.src), [
       /* the inclusion's edges: a repeat fill that carries, a carried run with
          `,`, a carried prose word, a call before its source definition, a
@@ -2611,7 +2636,10 @@ function runSnapshotChecks() {
      PKG('<instruction chain="extend"/><user-input>x</user-input><context chain="item"/>'),
      PKG('<context><instruction chain="extend"/><user-input>x</user-input><example chain="item"/></context>'),
      PKG('<context chain="item"/>'),
-     PKG("<" + Object.keys(VOCAB.SESSION)[0] + "/>"), PKG('<user-expectative expects="context"><context/></user-expectative>')
+     PKG("<" + Object.keys(VOCAB.SESSION)[0] + "/>"), PKG('<user-expectative expects="context"><context/></user-expectative>'),
+     PKG('<block name="review" binds="review"><context/></block><section name=""/><part name="intro" n="1.1"/>'),
+     PKG('<template><user-input>x</user-input></template><placeholder name="q"><needs slot="a">w</needs><criticise chain="extend"/></placeholder>'),
+     PKG('<logic name="it&apos;s"><rule kind="let"><source>a = 1</source></rule></logic>')
     ].forEach(x => { try { G.fromXML(x); } catch (e) { /* recorded where it throws */ } });
     const ENV = segs => ({ type: "GlyphAST", schema: 2, projection: "full", segments: segs });
     [ENV([{ mood: [{ name: "eth" }, {}], continues: true, isReturn: true, breaks: 1, body: [
@@ -3547,11 +3575,13 @@ function runChainLinkChecks() {
        : G.tokenize("[--crit]")[0].k !== "tpl" ? "[--crit] deixou de ser template"
        : ["a--crit", "--zzz", "[ctx]--critx"].some(src => links(src) !== 0) ? "a prosa virou elo" : null);
 
-  /* o nome depois do dois-pontos termina num elo: o elo e do comando, nunca do nome */
-  const named = ["[ctx:'x'-crit]", "[ctx: 'x' -crit]", "[ctx: foo -crit]"]
-    .filter(src => !/<context name="(x|foo)">\s*<chain>\s*<criticise\/>\s*<\/chain>\s*<\/context>/.test(X(src)));
-  ok("LK-12", "o nome depois do dois-pontos termina num elo",
-     named.length ? "o nome levou o elo: " + named.map(s => s + " -> " + JSON.stringify(X(s))).join(" | ")
+  /* o texto depois do dois-pontos termina num elo: o elo e do comando, nunca
+     do texto, que fica no documento como o operando que a forma [x'texto' escreve */
+  const named = [["[ctx:'x'-crit]", "[ctx'x'-crit]"], ["[ctx: 'x' -crit]", "[ctx'x'-crit]"], ["[ctx: foo -crit]", "[ctx'foo'-crit]"]]
+    .filter(([src, lit]) => X(src) !== X(lit) ||
+      !/<context>\s*<user-input>(x|foo)<\/user-input>\s*<chain>\s*<criticise\/>\s*<\/chain>\s*<\/context>/.test(X(src)));
+  ok("LK-12", "o texto depois do dois-pontos termina num elo",
+     named.length ? "o texto levou o elo: " + named.map(p => p[0] + " -> " + JSON.stringify(X(p[0]))).join(" | ")
        : X("[ctx:-crit]") !== X("[ctx-crit]") ? "[ctx:-crit] nao e [ctx-crit]" : null);
 
   /* a volta: cada posicao nova volta como elo, pelo documento e pela arvore */
@@ -3583,6 +3613,135 @@ function runChainLinkChecks() {
   return D.length;
 }
 const rLK = runChainLinkChecks();
+
+/* ------------------------------------------------------------------ *
+ * dois-pontos -- a forma `[x: texto]` aposentada (2026-10-25 e 2026-10-26)
+ *
+ * `:` custa um shift, e o nome e o primeiro parametro digitado como
+ * literal, so nos comandos que tem nome. O Regente: "Recogniser, ask only".
+ * `[x: texto]` pergunta em `ask` uma vez por dois-pontos, nomeando a forma
+ * `[x'texto'`, e o texto segue no documento como operando: cada item entre
+ * virgulas e um literal, na ordem escrita, e a forma que a pergunta nomeia
+ * emite os mesmos bytes. O `name` existe so no `block`, na `section` e na
+ * cerca `[logic]`, pelo primeiro literal; `[logic'calc']…[/logic]` e a cerca
+ * nomeada. O AmbiguousSlotOrder se aposenta com o dois-pontos: a ordem e a
+ * escrita. A volta nunca escreve dois-pontos. Cada caso foi visto falhando
+ * na copia de base antes de contar.
+ * ------------------------------------------------------------------ */
+function runColonChecks() {
+  console.log("\n--- dois-pontos ---");
+  const D = [];
+  const ok = (id, name, why) => {
+    if (why) { console.log("  ✗ " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  ✓ " + id + ": " + name); D.push(id); }
+  };
+  const opts = { templates: TPL.templates, rules: RULESTORE,
+                 expansions: require("../.guidelines/expansions.json") };
+  const X = src => G.toXML(src, opts);
+  const codes = (src, o) => G.parse(src, o || opts).gaps.map(g => g.code);
+  /* a forma com dois-pontos e a forma que a pergunta nomeia */
+  const PAIRS = [["[crit: a,b,c]", "[crit'a','b','c']"], ["[ctx: a = b - c]", "[ctx'a = b - c']"],
+                 ["[ctx: 'q' `r`]", "[ctx'q'`r`]"], ["[pt:intro'1.1'[ctx]]", "[pt'intro''1.1'[ctx]]"],
+                 ["[--germinate: crit]", "[--germinate'crit']"], ["[ctx: 'a'-crit]", "[ctx'a'-crit]"],
+                 ["[ph-a: q]", "[ph-a'q']"], ["[rw-cr: x]", "[rw-cr'x']"], ["[block: a, b]", "[block'a','b']"],
+                 ["[val: a]", "[val'a']"], ["[fbk: x]", "[fbk'x']"], ["[ctx: a: b]", "[ctx'a''b']"],
+                 ["[ctx:]", "[ctx]"], ["[block:review[req[crit[tgt'the launchpad prompt']]]]", "[block'review'[req[crit[tgt'the launchpad prompt']]]]"],
+                 ["[logic:calc]a = 1[/logic]", "[logic'calc']a = 1[/logic]"]];
+
+  /* uma pergunta por dois-pontos, em ask, no dois-pontos, nomeando a forma que o substitui */
+  const one = G.parse("[crit: a,b,c]", opts).gaps.filter(g => g.code === "RetiredColon");
+  const en = G.parse("[crit: a,b,c]", { ...opts, lang: "en" }).gaps.filter(g => g.code === "RetiredColon");
+  const per = PAIRS.filter(([c]) => codes(c).filter(k => k === "RetiredColon").length !== (c.match(/:/g) || []).length);
+  ok("CO-01", "o dois-pontos pergunta em ask, uma vez por dois-pontos, e nomeia a forma [x'texto'",
+     one.length !== 1 ? "[crit: a,b,c] perguntou " + one.length + " vezes"
+       : one[0].sev !== "ask" ? "severidade " + one[0].sev
+       : !one[0].at || one[0].at.s !== 5 || one[0].at.e !== 6 ? "a posicao nao e a do dois-pontos: " + JSON.stringify(one[0].at)
+       : one[0].plain.indexOf("[crit'a','b','c'") === -1 ? "nao nomeia [crit'a','b','c': " + one[0].plain
+       : !en.length || en[0].plain.indexOf("[crit'a','b','c'") === -1 || en[0].msg === one[0].msg ? "sem a mensagem em ingles"
+       : per.length ? "perguntas fora de uma por dois-pontos: " + per.map(p => p[0]).join(", ") : null);
+
+  /* o texto fica: a forma com dois-pontos emite os bytes da forma que a pergunta nomeia */
+  const moved = PAIRS.filter(([c, l]) => X(c) !== X(l));
+  ok("CO-02", "o texto do dois-pontos fica no documento como operando, item por item, na ordem escrita",
+     moved.length ? "outro documento: " + moved.map(p => p[0]).join(", ") : null);
+
+  /* nada pergunta duas vezes: a valencia conta os literais como conta qualquer literal */
+  const twice = PAIRS.filter(([c, l]) => {
+    const a = codes(c).filter(k => k !== "RetiredColon").sort().join(), b = codes(l).sort().join();
+    return a !== b;
+  });
+  ok("CO-03", "fora a pergunta do dois-pontos, as perguntas sao as da forma com literais",
+     twice.length ? "perguntou outra coisa: " + twice.map(p => p[0] + " " + codes(p[0]).join(",")).join(" | ") : null);
+
+  /* o no nao carrega o dois-pontos, e AmbiguousSlotOrder nao existe mais para disparar */
+  const carried = [], askedOrder = [], named = [];
+  PAIRS.forEach(([c]) => {
+    const r = G.parse(c, opts);
+    r.segments.forEach(sg => G.walk(sg.children, nd => { if (Object.prototype.hasOwnProperty.call(nd, "colon")) carried.push(c); }));
+    if (r.gaps.some(g => g.code === "AmbiguousSlotOrder")) askedOrder.push(c);
+    G.toAST(c, opts).segments.forEach(function walkAst(n) {
+      (n.body || []).forEach(walkAst);
+      if (n.type === "Command" && n.name !== null) named.push(c);
+    });
+  });
+  ok("CO-04", "nenhum no carrega `colon`, o AST nao escreve `name` num comando, e AmbiguousSlotOrder nao dispara",
+     carried.length ? "carrega colon: " + carried.join(", ")
+       : askedOrder.length ? "AmbiguousSlotOrder: " + askedOrder.join(", ")
+       : named.length ? "Command.name escrito: " + named.join(", ") : null);
+
+  /* o name e o primeiro literal do block e da section, e so deles */
+  const blk = X("[block'review'[ctx'x']][ref'review']");
+  const sec = X("[section'intro'[ctx'x']]");
+  const others = ["[ctx'review'[ctx'x']]", "[crit'review']", "[pt'1.1'[ctx'x']]", "[if'ready'[ctx'x']]", "[tpl'x']",
+                  "[sum'review'[ctx'x']][block'review']", "[block'']", "[block[ctx'x']'late']"]
+    .map(X).join("\n");
+  const nameOn = [...new Set((blk + sec + others).match(/<[a-z-]+ [^>]*\bname="/g) || [])].map(t => t.slice(1, t.indexOf(" ")));
+  ok("CO-05", "o name sai do primeiro literal do block e da section, e de nenhum outro elemento",
+     !/<block name="review" binds="review">\n\s*<context>/.test(blk) ? "block: " + JSON.stringify(blk)
+       : !/<user-input ref="review">review<\/user-input>/.test(blk) || codes("[block'review'[ctx'x']][ref'review']").includes("UnboundReference")
+         ? "a referencia ao block nao resolve"
+       : !/<section name="intro" binds="intro">\n\s*<context>/.test(sec) ? "section: " + JSON.stringify(sec)
+       : nameOn.some(t => t !== "block" && t !== "section") ? "name em " + nameOn.join(", ")
+       : !/<block>\n\s*<user-input ref="review">review<\/user-input>/.test(X("[sum'review'[ctx'x']][block'review']"))
+         ? "um literal que e referencia virou name"
+       : !/<block>\n\s*<user-input><\/user-input>/.test(X("[block'']")) ? "um literal vazio virou name" : null);
+
+  /* a cerca [logic] se nomeia pelo primeiro literal; sem [/logic] o literal e operando do comando */
+  const fence = X("[logic'calc']a = 1[/logic]");
+  const unclosed = X("[logic'x']"), tick = X("[logic`calc`]a = 1[/logic]");
+  ok("CO-06", "[logic'calc']…[/logic] e a cerca nomeada; [logic'x'] sem [/logic] segue o comando",
+     !/<logic name="calc">\n\s*<rule kind="let" var="a">/.test(fence) ? "cerca: " + JSON.stringify(fence)
+       : codes("[logic'calc']a = 1[/logic]").length ? "a cerca perguntou: " + codes("[logic'calc']a = 1[/logic]").join(",")
+       : tick !== fence ? "a crase nomeia outra cerca"
+       : X("[logic:calc]a = 1[/logic]") !== fence ? "[logic:calc] nao e a mesma cerca"
+       : !/<logic>\n\s*<user-input>x<\/user-input>\n\s*<\/logic>/.test(unclosed) || codes("[logic'x']").length ? "[logic'x']: " + JSON.stringify(unclosed)
+       : !codes("[logic]").includes("UnclosedLogic") || X("[logic-dano]\nhp = 1\n[/logic]").indexOf('<logic name="dano">') === -1
+         ? "[logic] e [logic-nome] mudaram" : null);
+
+  /* a volta nunca escreve dois-pontos, e devolve os mesmos bytes */
+  const colonIn = s => /\[(?:--)?[A-Za-z][A-Za-z0-9_.-]*\s*:/.test(s.replace(/'[^'\n]*'|`[^`]*`/g, "''"));
+  const back = PAIRS.map(p => p[0]).concat(["[block'review'[ctx'x']]", "[section'my part'[ctx]]", "[logic q]a -> b[/logic]"])
+    .filter(src => {
+      const x = X(src), bx = G.fromXML(x, opts).src, ba = G.fromAST(G.toAST(src, opts), opts).src;
+      return colonIn(bx) || colonIn(ba) || X(bx) !== x || X(ba) !== x;
+    });
+  const PKG = b => '<glyph-package engine="' + G.VERSION + '">\n  <schema/>\n  <block once="true">\n' + b + '\n  </block>\n</glyph-package>';
+  const legacy = [[PKG('<context name="a, b"/>'), "[ctx'a, b']"], [PKG('<block name="review"><context/></block>'), "[block'review'[ctx]]"],
+                  [PKG('<logic name="q"><rule kind="let"><source>a = 1</source></rule></logic>'), "[logic'q']\na = 1\n[/logic]"],
+                  [PKG('<part name="intro" n="1.1"/>'), "[pt'intro''1.1']"], [PKG('<template><user-input>x</user-input></template>'), "[tpl'x']"]]
+    .filter(([x, want]) => G.fromXML(x, opts).src !== want);
+  const env = { type: "GlyphAST", schema: 2, projection: "full", segments: [{ body: [
+    { type: "Command", raw: "ctx", canonical: "CTX", name: "a, b", body: [] },
+    { type: "Logic", name: "q", rules: [{ source: "a = 1" }] }] }] };
+  const envBack = G.fromAST(env, opts).src;
+  ok("CO-07", "fromXML e fromAST nunca escrevem dois-pontos: o name volta como literal",
+     back.length ? "a volta mudou ou escreveu dois-pontos: " + back.join(", ")
+       : legacy.length ? "XML antigo: " + legacy.map(l => JSON.stringify(G.fromXML(l[0], opts).src) + " != " + l[1]).join(" | ")
+       : envBack !== "[ctx'a, b'][logic'q']\na = 1\n[/logic]" ? "envelope com name: " + JSON.stringify(envBack) : null);
+
+  return D.length;
+}
+const rCO = runColonChecks();
 
 
 /* ------------------------------------------------------------------ *
@@ -4042,7 +4201,7 @@ console.log(" Placeholder  " + rPH + "/" + (PLACEHOLDER.length + 1));
 console.log(" Composition  " + rX + "/17");
 console.log(" .hgml burn   " + rH + "/15");
 console.log(" fromXML      " + rF + "/26");
-console.log(" reference    " + rD + "/11");
+console.log(" reference    " + rD + "/12");
 console.log(" round trip   " + rRT + "/7");
 console.log(" ast schema   " + rSC + "/3");
 console.log(" glyph-package" + String(rPK).padStart(4) + "/6");
@@ -4061,6 +4220,7 @@ console.log(" param template" + String(rTP).padStart(4) + "/4");
 console.log(" imperativo   " + String(rIM).padStart(4) + "/10");
 console.log(" mode words   " + String(rMO).padStart(4) + "/10");
 console.log(" elo de cadeia" + String(rLK).padStart(4) + "/14");
+console.log(" dois-pontos  " + String(rCO).padStart(4) + "/7");
 console.log(" bundle ORD   " + String(rZP).padStart(4) + "/16");
 console.log(" global store " + rGS + "/3");
 console.log(" context      " + rCX + "/3");

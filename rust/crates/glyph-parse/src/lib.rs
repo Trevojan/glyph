@@ -111,35 +111,6 @@ fn js_str(v: &Option<String>) -> String {
     v.clone().unwrap_or_else(|| "undefined".into())
 }
 
-/// `.replace(/\s+,/g, ",")`
-fn tighten_commas(s: &str) -> String {
-    let c: Vec<char> = s.chars().collect();
-    let mut out = String::new();
-    let mut i = 0;
-    while i < c.len() {
-        if js_space(c[i]) {
-            let mut j = i;
-            while j < c.len() && js_space(c[j]) {
-                j += 1;
-            }
-            if j < c.len() && c[j] == ',' {
-                out.push(',');
-                i = j + 1;
-                continue;
-            }
-            out.extend(&c[i..j]);
-            i = j;
-            continue;
-        }
-        out.push(c[i]);
-        i += 1;
-    }
-    out
-}
-fn js_space(c: char) -> bool {
-    u16::try_from(c as u32).is_ok_and(glyph_lex::js_space)
-}
-
 /// `/^[A-Za-z_][A-Za-z0-9_.-]*$/`: a binding is a name, not prose.
 fn bind_name(v: &str) -> bool {
     let mut c = v.chars();
@@ -262,7 +233,7 @@ impl State<'_, '_> {
         };
         let mut nd = Node {
             id: Some(self.uid), raw: named.map(str::to_string).or_else(|| tk.v.clone()), tier: Some(cl.tier.into()), canonical: Some(cl.canonical.clone()), gloss,
-            alias: Some(cl.alias == Some(true)), colon: Some(None), auto_closed: Some(false), tok: Self::span(tk),
+            alias: Some(cl.alias == Some(true)), auto_closed: Some(false), tok: Self::span(tk),
             editorial: Some(has_num(EDITORIAL_ONLY, &cl.canonical)), origin: Some(origin), chain_element: Some(bare),
             slot_name: Some(slot_name), depth: Some(self.stack.len()), ..Default::default()
         };
@@ -299,33 +270,106 @@ impl State<'_, '_> {
         self.pending = None;
     }
 
-    fn colon(&mut self, i: usize) -> usize {
-        let Some(t2) = self.top() else { return i };
-        let (mut parts, mut j, mut saw_comma) = (Vec::new(), i + 1, false);
-        while j < self.tokens.len() {
-            let nx = &self.tokens[j];
-            match nx.k {
-                "close" | "semi" | "open" | "linebreak" | "logic" => break,
-                "comma" => {
-                    saw_comma = true;
-                    parts.push(",".to_string());
+    /// `colonHead`: what was written between `[` and the colon — the
+    /// command's name, and the chain written straight after it (`[rw-cr:`,
+    /// `[ph-a:`). Anything else in between stands as `…`, so the message never
+    /// shows a head that was not written.
+    fn colon_head(&self, id: Id, at: usize) -> String {
+        let nd = &self.tree.nodes[id];
+        let mut h = match nd.template.as_deref() {
+            Some(t) if !t.is_empty() => format!("--{t}"),
+            _ => js_str(&nd.raw),
+        };
+        let Some(k) = nd.tok.as_ref().and_then(|t| self.tokens.iter().position(|x| x.k == t.k && x.s == t.s && x.e == t.e))
+        else { return h };
+        for tm in &self.tokens[k + 1..at.max(k + 1)] {
+            match tm.k {
+                "extend" => h.push('-'),
+                "comma" => h.push(','),
+                "bareTag" => h.push_str(&js_str(&tm.v)),
+                _ => {
+                    h.push('…');
+                    return h;
                 }
-                "literal" | "text" => parts.push(js_trim(&js_str(&nx.v))),
-                "equals" => parts.push("=".into()),
-                /* an `extend` is a chain link (EMS-002 ORD-0025): it ends the
-                   name, and the link belongs to the command, never to its name */
+            }
+        }
+        h
+    }
+
+    /// `retiredColon`: the retired colon, named once per colon with the form
+    /// that replaces it — the command as written, and each item as a literal.
+    fn retired_colon(&mut self, head: &str, items: &[(String, &str, bool)], at: (usize, usize)) {
+        let now: String = items.iter().enumerate().map(|(k, (v, form, comma))| {
+            let q = if *form == "tick" { format!("`{v}`") } else { format!("'{v}'") };
+            format!("{}{q}", if k > 0 && *comma { "," } else { "" })
+        }).collect();
+        let (h, now) = (esc(head), esc(&format!("[{head}{now}")));
+        let d = Diag::new("ask", "dois-pontos",
+            format!("<code>[{h}:</code> é a forma aposentada do dois-pontos, e o texto fica no documento. Escreva <code>{now}</code>."),
+            "RetiredColon")
+            .en("colon", format!("<code>[{h}:</code> is the retired colon form, and the text stays in the document. Write <code>{now}</code>."));
+        self.g(Diag { at: Some(at), ..d });
+    }
+
+    /// The colon form retired (decided 2026-10-25 and 2026-10-26): a
+    /// recogniser at `ask`, once per colon, and what it held stays in the
+    /// document as the command's operand — each item between commas a literal,
+    /// in the order written, and a literal written in it that literal. `=` and
+    /// a `-` inside an item are its text. The run ends where the colon's always
+    /// did, and at a `-` that is a chain link (EMS-002 ORD-0025), which goes on
+    /// as the link it is. With no command open the colon is prose punctuation.
+    fn colon(&mut self, i: usize) -> usize {
+        struct Cur {
+            v: String,
+            s: usize,
+            e: usize,
+            comma: bool,
+        }
+        /* a quote ends at a line break, so an item that holds one is a tick */
+        fn flush(cur: &mut Option<Cur>, items: &mut Vec<(Token, bool)>) {
+            if let Some(c) = cur.take() {
+                let iv = js_trim(&c.v);
+                if !iv.is_empty() {
+                    let form = if iv.contains('\n') { "tick" } else { "quote" };
+                    items.push((Token { k: "literal", v: Some(iv), s: c.s, e: c.e, form: Some(form), closed_by: Some(form),
+                                        ..Token::default() }, c.comma));
+                }
+            }
+        }
+        let Some(t2) = self.top() else { return i };
+        let tokens = self.tokens;
+        let (mut items, mut cur, mut j, mut comma): (Vec<(Token, bool)>, Option<Cur>, usize, bool) = (Vec::new(), None, i + 1, false);
+        while j < tokens.len() {
+            let nx = &tokens[j];
+            match nx.k {
+                "text" | "equals" => {
+                    let c = cur.get_or_insert_with(|| Cur { v: String::new(), s: nx.s, e: nx.e, comma: std::mem::take(&mut comma) });
+                    /* whitespace between two tokens is a gap the lexer left out */
+                    if nx.s > c.e {
+                        c.v.push_str(&" ".repeat(nx.s - c.e));
+                    }
+                    c.v.push_str(&if nx.k == "equals" { "=".to_string() } else { js_str(&nx.v) });
+                    c.e = nx.e;
+                }
+                "comma" => {
+                    flush(&mut cur, &mut items);
+                    comma = true;
+                }
+                "literal" => {
+                    flush(&mut cur, &mut items);
+                    items.push((nx.clone(), std::mem::take(&mut comma)));
+                }
                 _ => break,
             }
             j += 1;
         }
-        let colon = js_trim(&tighten_commas(&parts.join(" ")));
-        let nd = &mut self.tree.nodes[t2];
-        nd.colon = Some(Some(colon));
-        let canonical = nd.canonical.clone().unwrap_or_else(|| "undefined".into());
-        let raw = esc(nd.raw.as_deref().unwrap_or(""));
-        if saw_comma && !has_text(STRUCT, &canonical) {
-            self.g(Diag::new("ask", "ordem incerta", format!("<code>[{raw}: a,b,c]</code> ordem não inferível. Aninhe."), "AmbiguousSlotOrder")
-                .en("order unclear", format!("<code>[{raw}: a,b,c]</code> order cannot be inferred. Nest them.")));
+        flush(&mut cur, &mut items);
+        let head = self.colon_head(t2, i);
+        let named: Vec<(String, &str, bool)> = items.iter()
+            .map(|(t, c)| (js_str(&t.v), t.form.unwrap_or("quote"), *c)).collect();
+        self.retired_colon(&head, &named, (tokens[i].s, tokens[i].e));
+        for (t, _) in &items {
+            self.literal(t);
         }
         j - 1
     }
@@ -437,6 +481,13 @@ impl State<'_, '_> {
                 let id = self.add(Node { logic: Some(lg.name.clone()), tok: Self::span(tk), origin: Some(Some(origin)),
                                          extra: Some(lg), ..Default::default() });
                 self.attach(id);
+                /* `[logic:calc]` opens the fence it names, and asks for `[logic'calc']` */
+                if let Some(c) = tk.colon {
+                    let name = js_str(&tk.v);
+                    let form = if name.contains('\'') { "tick" } else { "quote" };
+                    let items = if name.is_empty() { Vec::new() } else { vec![(name, form, false)] };
+                    self.retired_colon("logic", &items, (c, c + 1));
+                }
                 self.diags.extend(gaps);
                 if tk.closed != Some(true) {
                     self.fix("não fechou", "<code>[logic]</code> sem <code>[/logic]</code>.".into(), "UnclosedLogic",
@@ -599,8 +650,7 @@ pub fn deep_inference<X: Clone>(tree: &Tree<X>, id: Id, ctx: &Context) -> Option
     if e.get("species").and_then(Json::str) != Some("composite") || depth < DEEP_INFERENCE {
         return None;
     }
-    let colon = nd.colon.as_ref().is_some_and(|c| c.as_deref().is_some_and(|c| !c.is_empty()));
-    if !tree.value_children(id).is_empty() || colon {
+    if !tree.value_children(id).is_empty() {
         return None;
     }
     Some(depth)
@@ -785,7 +835,7 @@ pub fn parse(src: &str, o: &Opts) -> Result<Parse, Thrown> {
                 continue;
             }
             let c = esc(&canonical.to_lowercase());
-            let got = tree.value_children(id).len() + usize::from(nd.colon.as_ref().is_some_and(|c| c.as_deref().is_some_and(|c| !c.is_empty())));
+            let got = tree.value_children(id).len();
             /* strict positional arity comes before the frame */
             if let Some(slots) = slots_of(&canonical) {
                 let (len, named): (Option<usize>, &[&str]) = match slots {
