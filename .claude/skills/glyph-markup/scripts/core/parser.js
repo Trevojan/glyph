@@ -654,10 +654,25 @@ export function checkReferences(segments, binds, G) {
   });
 }
 
-export function collectBindings(segments, G) {
-  var binds = {}, order = [];
+/* A definition `[--name=…]` declares a body; the body occurs where a call
+   expands it, and that is where its result is named. Read inside the
+   definition too, one call would name every result twice. */
+export function insideDefinitions(segments) {
+  var inside = new Set();
   (segments || []).forEach(function (sg) {
     walk(sg.children, function (nd) {
+      if (nd.template && nd.isDef) walk(nd.children, function (k) { inside.add(k); });
+    });
+  });
+  return inside;
+}
+
+export function collectBindings(segments, G) {
+  var binds = {}, order = [];
+  var declared = insideDefinitions(segments);
+  (segments || []).forEach(function (sg) {
+    walk(sg.children, function (nd) {
+      if (declared.has(nd)) return;
       var name = bindingOf(nd);
       if (!name) return;
       if (binds[name]) {

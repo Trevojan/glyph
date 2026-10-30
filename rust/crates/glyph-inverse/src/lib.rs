@@ -363,26 +363,56 @@ fn from_xml_logic(el: &El) -> String {
     format!("[logic{nm}]\n{}\n[/logic]", lines.join("\n"))
 }
 
+/// `slotFills`, once the scan is done: each slot as a named fill, in the
+/// order its first run met it, when it wrote anything.
+fn slot_fills(order: &[String], parts: &[(String, String)]) -> String {
+    order.iter().filter_map(|n| {
+        let mine: Vec<&str> = parts.iter().filter(|(k, _)| k == n).map(|(_, s)| s.as_str()).collect();
+        (!mine.is_empty()).then(|| format!("[ph-{n}{}]", mine.concat()))
+    }).collect()
+}
+
 fn from_xml_template(el: &El, diag: &mut Vec<Diag>, depth: usize) -> Result<String, Thrown> {
     let head = format!("[--{}{}", el.attr("name").unwrap_or(""), if el.truthy("define") { "=" } else { "" });
     if el.truthy("expanded") {
-        /* the bound values are the call; the expansion is regenerated */
-        fn scan(list: &[El], fills: &mut String, depth: usize) -> Result<(), Thrown> {
+        /* the call is what carries a slot — the bound value, and what its fill
+           held past it — and a fill is a run of siblings with one slot: the
+           value, or the hole's own <needs>, then what the fill carried. A slot
+           already rebuilt is a hole the body names twice. The expansion is
+           regenerated. */
+        fn scan(list: &[El], order: &mut Vec<String>, parts: &mut Vec<(String, String)>, diag: &mut Vec<Diag>,
+                depth: usize) -> Result<(), Thrown> {
             if depth > STACK_DEPTH {
                 return Err(overflow());
             }
+            let (mut run, mut skip): (Option<&str>, bool) = (None, false);
             for c in list {
-                if c.tag == "user-input" && c.attr("slot").is_some_and(alpha_first) {
-                    *fills += &format!("[ph-{}{}]", c.attr("slot").unwrap_or(""), as_literal(&xml_text(c)));
+                if c.tag == "#text" {
                     continue;
                 }
-                scan(&c.children, fills, depth + 1)?;
+                let Some(name) = c.attr("slot").filter(|s| alpha_first(s)) else {
+                    run = None;
+                    scan(&c.children, order, parts, diag, depth + 1)?;
+                    continue;
+                };
+                if run != Some(name) {
+                    run = Some(name);
+                    skip = order.iter().any(|n| n == name);
+                    if !skip {
+                        order.push(name.to_string());
+                    }
+                }
+                if skip || c.tag == "needs" {
+                    continue;
+                }
+                let src = if c.tag == "user-input" { as_literal(&xml_text(c)) } else { from_xml_node(c, diag, depth + 1)? };
+                parts.push((name.to_string(), src));
             }
             Ok(())
         }
-        let mut fills = String::new();
-        scan(&el.children, &mut fills, depth)?;
-        return Ok(format!("{head}{fills}]"));
+        let (mut order, mut parts) = (Vec::new(), Vec::new());
+        scan(&el.children, &mut order, &mut parts, diag, depth)?;
+        return Ok(format!("{head}{}]", slot_fills(&order, &parts)));
     }
     Ok(format!("{head}{}]", xml_kids(el, diag, depth)?))
 }
@@ -705,25 +735,65 @@ pub fn from_ast(env: &Json) -> Back {
             Some("Template") => {
                 let name = text_of(n.get("name"));
                 if truthy(n.get("expanded")) {
-                    fn scan(list: Option<&Json>, fills: &mut String, lit: &dyn Fn(Option<&Json>, Option<&Json>) -> String) {
-                        for c in list.and_then(Json::arr).unwrap_or(&[]) {
-                            let ty = c.get("type").and_then(Json::str);
-                            if ty == Some("Command") && truthy(c.get("slotName")) {
-                                continue;
-                            }
-                            if matches!(ty, Some("Literal" | "Raw")) && truthy(c.get("slot"))
-                                && alpha_first(&text_of(c.get("slot"))) {
-                                *fills += &format!("[ph-{}{}]", text_of(c.get("slot")), lit(c.get("value"), c.get("form")));
-                                continue;
-                            }
-                            if truthy(c.get("body")) {
-                                scan(c.get("body"), fills, lit);
-                            }
+                    /* a bound value is the call, and so is what its fill
+                       carried; an unbound hole is the template's own prompt,
+                       and writing that back turns a question into an answer —
+                       the same rule <needs> follows. The slot of a node: a
+                       hole's name, when it holds nothing but its name and its
+                       question; a <placeholder> is looked inside, where what
+                       the fill carried follows its question */
+                    fn slot_of(c: &Json) -> Option<(String, bool)> {
+                        let ty = c.get("type").and_then(Json::str);
+                        if ty == Some("Command") && truthy(c.get("slotName")) {
+                            return None;
+                        }
+                        if ty == Some("Command") && c.get("canonical").and_then(Json::str) == Some("PH") && !truthy(c.get("slot")) {
+                            let hk = c.get("body").and_then(Json::arr).unwrap_or(&[]);
+                            let b = hk.iter().position(|k| truthy(k.get("slotName")));
+                            let q = hk.iter().position(|k| matches!(k.get("type").and_then(Json::str), Some("Literal" | "Raw")));
+                            let bare = (0..hk.len()).all(|i| Some(i) == b || Some(i) == q);
+                            let b = b.filter(|_| bare)?;
+                            let (raw, canonical) = (hk[b].get("raw"), hk[b].get("canonical"));
+                            let name = if truthy(raw) { text_of(raw) } else if truthy(canonical) { text_of(canonical) } else { String::new() };
+                            return Some((name, true));
+                        }
+                        match c.get("slot") {
+                            Some(Json::Str(s)) if !s.is_empty() => Some((s.clone(), false)),
+                            Some(Json::Obj(_)) => match c.get("slot").and_then(|s| s.get("hole")) {
+                                Some(Json::Str(h)) if !h.is_empty() => Some((h.clone(), true)),
+                                _ => None,
+                            },
+                            _ => None,
                         }
                     }
-                    let mut fills = String::new();
-                    scan(n.get("body"), &mut fills, lit);
-                    return format!("[--{name}{fills}]");
+                    fn scan(list: Option<&Json>, order: &mut Vec<String>, parts: &mut Vec<(String, String)>, diag: &mut Vec<Diag>,
+                            lit: &dyn Fn(Option<&Json>, Option<&Json>) -> String) {
+                        let (mut run, mut skip): (Option<String>, bool) = (None, false);
+                        for c in list.and_then(Json::arr).unwrap_or(&[]) {
+                            let Some((name, hole)) = slot_of(c).filter(|(s, _)| alpha_first(s)) else {
+                                run = None;
+                                if matches!(c, Json::Obj(_)) {
+                                    scan(c.get("body"), order, parts, diag, lit);
+                                }
+                                continue;
+                            };
+                            if run.as_deref() != Some(name.as_str()) {
+                                run = Some(name.clone());
+                                skip = order.contains(&name);
+                                if !skip {
+                                    order.push(name.clone());
+                                }
+                            }
+                            if skip || hole {
+                                continue;
+                            }
+                            let src = node(c, diag, lit);
+                            parts.push((name, src));
+                        }
+                    }
+                    let (mut order, mut parts) = (Vec::new(), Vec::new());
+                    scan(n.get("body"), &mut order, &mut parts, diag, lit);
+                    return format!("[--{name}{}]", slot_fills(&order, &parts));
                 }
                 format!("[--{name}{}{}]", if truthy(n.get("isDefinition")) { "=" } else { "" }, kids(n.get("body"), diag, lit))
             }

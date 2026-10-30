@@ -187,9 +187,10 @@ fn mood_json(e: &Emotion) -> Json {
     Json::Obj(kv)
 }
 
-const FIELDS: [&str; 29] = ["id", "raw", "tier", "canonical", "gloss", "alias", "colon", "autoClosed", "editorial",
+const FIELDS: [&str; 30] = ["id", "raw", "tier", "canonical", "gloss", "alias", "colon", "autoClosed", "editorial",
     "origin", "chainElement", "slotName", "depth", "literal", "v", "form", "role", "text", "rawFence", "template",
-    "isDef", "mode", "isDefinition", "expanded", "boundSlot", "species", "compositionDepth", "isBinder", "suggestion"];
+    "isDef", "mode", "isDefinition", "expanded", "boundSlot", "fromSource", "species", "compositionDepth", "isBinder",
+    "suggestion"];
 
 fn index(v: &Json) -> usize {
     v.num().filter(|n| *n >= 0.0).unwrap_or_else(|| panic!("not an index: {v:?}")) as usize
@@ -232,6 +233,7 @@ pub fn tree_of(dump: &Json) -> Tree<()> {
                 "isDefinition" => nd.is_definition = Some(flag(v)),
                 "expanded" => nd.expanded = Some(flag(v)),
                 "boundSlot" => nd.bound_slot = Some(text(v)),
+                "fromSource" => nd.from_source = Some(flag(v)),
                 "species" => nd.species = Some(text(v)),
                 "compositionDepth" => nd.composition_depth = Some(v.num()),
                 "isBinder" => nd.is_binder = Some(flag(v)),
@@ -314,6 +316,7 @@ pub fn dump_of<X: Clone>(tree: &Tree<X>, full: bool) -> Json {
                 "isDefinition" => nd.is_definition.map(Json::Bool),
                 "expanded" => nd.expanded.map(Json::Bool),
                 "boundSlot" => nd.bound_slot.as_deref().map(s),
+                "fromSource" => nd.from_source.map(Json::Bool),
                 "species" => nd.species.as_deref().map(s),
                 "compositionDepth" => nd.composition_depth.map(|d| d.map_or(Json::Null, Json::Num)),
                 "isBinder" => nd.is_binder.map(Json::Bool),

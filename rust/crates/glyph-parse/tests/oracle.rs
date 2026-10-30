@@ -73,7 +73,7 @@ fn every_tree_and_diagnostic_equals_the_js() {
         let valency = run.get("valency") != Some(&Json::Bool(false));
         for (lang, en) in [("pt", false), ("en", true)] {
             let want = run.get(lang).unwrap_or_else(|| panic!("{id}: no {lang}"));
-            let got = parse(src, &Opts { ctx: &ctx, session, valency, en, expanding: Vec::new(), registered: glyph_stores::Registered::none() });
+            let got = parse(src, &Opts { ctx: &ctx, session, valency, en, expanding: Vec::new(), registered: glyph_stores::Registered::none(), inherited: &[] });
             if let Some(t) = want.get("thrown") {
                 /* a mood whose innermost open command is a template: the JS
                    throws, and the Rust answers the document (2026-10-25) */

@@ -294,14 +294,22 @@ where the information is non-obvious.
 
 `depth` is `compositionDepth` verbatim — `PROB` is 1, `LRN` and `ASSM` are 2.
 
-### 4.4 `<template>` is unchanged
+### 4.4 `<template>` is the macro, and `slot` follows what the call wrote
 
 An earlier draft of this section read `<invoke>` as the *template* call and
 proposed retiring `expanded="true"`. That was wrong and is withdrawn.
-`<template>`, `define`, `expanded`, `means` and every slot rule of
-`XML_REFERENCE.md` §5 stay exactly as they are. A template is a macro over
-source; a command is a function in the vocabulary. They are different things and
-the format keeps them apart.
+`<template>`, `define`, `expanded` and `means` are what `XML_REFERENCE.md` §5
+writes. A template is a macro over source; a command is a function in the
+vocabulary. They are different things and the format keeps them apart.
+
+`slot` names the parameter a node of the call was written for, on whatever
+element the node becomes: the bound value on `<user-input>`, the unbound hole on
+`<needs>`, and what a named fill holds past its value on its own element —
+`<criticise slot="rule">` for the `[crit` written inside `[ph-rule'a'…]`. A fill
+that names no hole keeps its own name as its `slot` (decided 2026-10-25: a known
+command never vanishes). It is the one attribute `fromXML()` rebuilds the call
+from, so G3 holds unchanged: the encoding of an empty slot is `<needs slot>`,
+and nothing here changes it.
 
 ### 4.5 Divergence from `OPERATOR_TARGET.md`
 
