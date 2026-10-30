@@ -8,7 +8,7 @@ pacote que o `--bundle` escreve, e a contagem é desta série.
 
 ## A Ordem aberta
 
-- [`EMS-002/ORD-0030`](ORD-0030/ORD-0030.xml) — a volta não inventa nem cola: a pergunta `sem resposta` e a prosa de um fill; aberta em 2026-10-25
+- [`EMS-002/ORD-0031`](ORD-0031/ORD-0031.xml) — o dois-pontos se aposenta como reconhecedor em `ask`, e o texto fica como operando; aberta em 2026-10-25
 
 ## Ordens fechadas
 
@@ -43,3 +43,4 @@ pacote que o `--bundle` escreve, e a contagem é desta série.
 | [`ORD-0027`](ORD-0027/ORD-0027.xml) | a volta pelo `fromAST` escreve o espaço que um nome pede, da travessia da inclusão, do lote da versão: entre um nome ou um cabeçalho de humor e a prosa depois dele, e `[ctx foo]` deixa de voltar como `[ctxfoo]`. Nenhum hash do snapshot se moveu; o F-25. O F-25 e um mutante do Rust vistos falhando | `8c57f9a` | `d4ddb7335b4729f8de45288d5ff177d5bdca391ade2a796e7d03da7218235688` (os casos) e `89be21a9…` do `inverse.json` |
 | [`ORD-0028`](ORD-0028/ORD-0028.xml) | o que uma chamada de template carrega nunca some, uma inclusão de 2026-10-25, do lote da versão: o comando de um fill viaja com o valor levando o `slot`, o fill desconhecido cai depois do corpo com `TemplateUnknownParam`, o template da fonte expande as chamadas dela e sobrepõe a store, e a segunda definição é `TemplateDefinedTwice`. A OC-14 e a OC-15 levaram o snapshot a 118 fontes sem hash movido; o balde INCLUSION, o RT-08 e o RT-09. Quatro mutantes do Rust vistos falhando | `1fd7e07` | `ef735188f084ca48ef9016e86980d379f70a427e4034837b104c4537c62bd89f` (os casos) e `d5d28ba6…` do `xml.json` |
 | [`ORD-0029`](ORD-0029/ORD-0029.xml) | as outras posições do elo, pela resposta de 2026-10-26, do lote da versão: um `-` que abre uma palavra e toca um nome conhecido é elo do escopo em que está — depois de prosa, de `;` ou `,`, de um humor, de `[/raw]`, no começo, com espaço depois do traço e numa corrida de traços —, e prosa segue prosa. Uma varredura não achou prosa do repositório que mudasse. Nenhum hash do snapshot se moveu; LK-08 a LK-14 e 45 sondas. Os LK novos e quatro mutantes do Rust vistos falhando | `175c79a` | `ef735188f084ca48ef9016e86980d379f70a427e4034837b104c4537c62bd89f` (os casos) e `80c264e6…` do `lexer.json` |
+| [`ORD-0030`](ORD-0030/ORD-0030.xml) | a volta que não inventa nem cola, dois defeitos achados ao construir a inclusão, do lote da versão: o `fromXML` deixa de ler o `sem resposta` de um buraco sem pergunta como pergunta, e o `slotFills` deixa de colar a prosa de um fill ao nome do buraco. Nenhum hash do snapshot se moveu; o F-26. O F-26 e dois mutantes do Rust vistos falhando | `f2af253` | `ef735188f084ca48ef9016e86980d379f70a427e4034837b104c4537c62bd89f` (os casos) e `6fc8e81c…` do `inverse.json` |
