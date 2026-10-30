@@ -180,7 +180,9 @@ export function collect(list, acc, bad) {
 }
 
 /* The operand of a PT or an IF travels as an attribute: `[pt'1.1'` is
-   <part n="1.1"> and `[if'x'` is <if cond="x"> (decided 2026-09-27). The
+   <part n="1.1"> and `[if'x'` is <if cond="x"> (decided 2026-09-27), and the
+   first literal of a BLOCK or a SECTION is its name, `[block'review'` is
+   <block name="review"> (decided 2026-10-26). The
    operand is the literal a binding takes, and it moves only when it carries
    nothing else — no template slot, no reference, some text — so nothing it
    carried is lost; otherwise it stays <user-input>. Answers the attribute's
@@ -302,7 +304,6 @@ export function emit(root, startDepth, L, opts) {
       var el = elName(nd.canonical, nd.tier, nd.gloss);
       var attrs = [];
       if (nd.editorial) attrs.push('force="editorial"');
-      if (nd.colon) attrs.push('name="' + xesc(nd.colon) + '"');
       if (chainAttr) attrs.push(chainAttr);
       if (joinAttr) attrs.push(joinAttr);
       if (nd.boundSlot) attrs.push(slotAttr(nd).slice(1));
@@ -362,12 +363,11 @@ export function emit(root, startDepth, L, opts) {
     var slots = nd.chainElement ? null : SLOTS[nd.canonical];
     var slotNeeds = [];
     if (slots) {
-      var got = kids.length + (nd.colon ? 1 : 0);
-      for (var k = got; k < slots.length; k++) slotNeeds.push({ pos:k + 1, want:slots[k] });
+      for (var k = kids.length; k < slots.length; k++) slotNeeds.push({ pos:k + 1, want:slots[k] });
     }
 
     var frame = slots ? null : FRAMES[nd.canonical];
-    var needs = (frame && !nd.chainElement && kids.length === 0 && !nd.colon) ? frame[0].replace("*", "")
+    var needs = (frame && !nd.chainElement && kids.length === 0) ? frame[0].replace("*", "")
               : deepInference(nd, opts) ? "the subject" : null;
     /* the frame counts the operand where it was written; the element does not repeat it */
     var allKids = (nd.children || []).filter(function (c) { return !moved || c !== moved.lit; });

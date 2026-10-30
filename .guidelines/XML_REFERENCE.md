@@ -84,8 +84,8 @@ Session shortcuts are the exception — they serialise as the shortcut itself
 |---|---|---|---|
 | `once` | `<block>` | — | the segment wrapper; always `"true"` |
 | `continues` | `<block>` | `[=` | segment continues the previous one |
-| `name` | any element | `[x:name` | colon-named identifier |
-| `name` | `<template>` `<logic>` | `[--name` / `[logic:name` | the template or logic block's name |
+| `name` | `<block>` `<section>` | `[block'name'` | the name: the first literal, when it carries no slot, no reference and some text; otherwise it stays `<user-input>` |
+| `name` | `<template>` `<logic>` | `[--name` / `[logic'name']` … `[/logic]` | the template's name; the logic fence's, its first literal |
 | `define` | `<template>` | `[--name=` | declares rather than invokes |
 | `expanded` | `<template>` | — | the body was written out, from the store or from a definition in the source |
 | `means` | `<template>` | template `gloss` | what the template is for |
@@ -106,11 +106,15 @@ Session shortcuts are the exception — they serialise as the shortcut itself
 | `cond` | `<if>` | `[if'x'` | the condition, under the same rule |
 | `means` `made-of` | any element | — | only under `toXML(src,{describe:true})` |
 
-An attribute carries no instruction content but two operands the Regent named
-on 2026-09-27: the number of a `<part>` (`n`) and the condition of an `<if>`
-(`cond`). All other content goes in element text or in children, and `fromXML()`
-reads `n` and `cond` back as the literal they were. Which command takes which
-attribute is `OPERAND_ATTR` in `vocabulary.js`.
+An attribute carries no instruction content but three operands the Regent
+named: the number of a `<part>` (`n`) and the condition of an `<if>` (`cond`) on
+2026-09-27, and the name of a `<block>` or a `<section>` (`name`) on 2026-10-26.
+All other content goes in element text or in children, and `fromXML()` reads
+`n`, `cond` and `name` back as the literal they were. Which command takes which
+attribute is `OPERAND_ATTR` in `vocabulary.js`; a name exists on those two, on
+the `[logic]` fence and on a template, and on no other element. A `name` that
+an older or a hand-written document puts on any other element comes back as an
+operand literal.
 
 ---
 
@@ -465,17 +469,17 @@ the deliverable and need `fromXML()` updated in step, so both are open in
 ## 10. Round-trip
 
 ```
-[block:review[req[crit[tgt'the launchpad prompt']]]];[rwk[val'usefulness']];[sum]
+[block'review'[req[crit[tgt'the launchpad prompt']]]];[rwk[val'usefulness']];[sum]
 ```
 
 ```xml
 <glyph-package engine="3.6.9.07">
   <schema/>
   <block once="true">
-    <block name="review">
+    <block name="review" binds="review">
       <requirement>
         <criticise>
-          <invoke reads="[CMP[CTX],[SPEC-CORE],[EVAL[ERROR]]]" species="composite" depth="2"/>
+          <invoke reads="[CMP[CTX]],[SPEC-CORE],[EVAL[ERROR]]" species="composite" depth="2"/>
           <target>
             <user-input>the launchpad prompt</user-input>
           </target>
@@ -502,9 +506,9 @@ the deliverable and need `fromXML()` updated in step, so both are open in
 ```
 
 Three segments, because `;` closes one. `<validate>` takes two operands and
-got one, so position 2 comes back as a numbered `<needs>` (§5). The inner `<block name="review">` is the
-`STRUCT` command; the outer three are segment wrappers — `once` and position
-tell them apart. `<summary>` picked up a `<needs>` because `SUM` wants an
+got one, so position 2 comes back as a numbered `<needs>` (§5). The inner `<block name="review" binds="review">` is the
+`STRUCT` command, named by its first literal, which also names its result; the
+outer three are segment wrappers — `once` and position tell them apart. `<summary>` picked up a `<needs>` because `SUM` wants an
 operand and none was given: the empty field does not block, it asks.
 
 ```bash
@@ -579,6 +583,11 @@ editable and the reader is handed input this emitter never wrote.
   word, so `->`, `[a -b]`, `well-known`, `a-crit`, `x - y` and `x - crit` are
   prose, and a `- name` that opens a line is a list item, not a link.
 - **Deep nesting.** It is flagged (`DeepNesting`) and still emitted.
+- **The colon form.** `[x: text]` asks `RetiredColon`, at `ask`, once per
+  colon, naming the form that replaces it, `[x'text'`. The text stays in the
+  document as the command's operand: each item between commas is a literal, in
+  the order written, so `[crit: a,b,c]` emits what `[crit'a','b','c']` emits.
+  `[logic:calc]` asks the same and still opens the fence it names.
 - **A retired element name.** `[skeptic` and `<skeptic>`, the name `[skep` had
   before it became `<sceptic>`, read as `[skep`, each with a `note` naming the
   current spelling: `FormerElementName` in the source, `XmlFormerElement` in

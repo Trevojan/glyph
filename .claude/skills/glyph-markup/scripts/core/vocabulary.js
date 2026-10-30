@@ -222,7 +222,7 @@ export var PUNCT = [
   ["[--nome","chama template"],
   ["[--nome=","define template"],
   ["[=","este bloco continua do anterior"],
-  ["[logic-nome]","abre bloco de conta"]
+  ["[logic'nome']","abre bloco de conta"]
 ];
 
 /* valency: what each command needs to receive to be determinate.
@@ -363,10 +363,11 @@ Object.keys(FORMER_ELEMENT).forEach(function (old) {
 });
 
 /* OPERAND_ATTR — the commands whose operand travels as an attribute of the
-   element instead of a <user-input> (decided 2026-09-27): the number of a
-   part and the condition of an if. */
+   element instead of a <user-input>: the number of a part and the condition
+   of an if (decided 2026-09-27), and the name of a section and of a block,
+   their first literal (decided 2026-10-26). No other command carries a name. */
 export var OPERAND_ATTR = {
-  PT:"n", IF:"cond"
+  PT:"n", IF:"cond", SECTION:"name", BLOCK:"name"
 };
 
 /* the element a retired spelling names now, or null */

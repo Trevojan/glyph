@@ -22,6 +22,7 @@ pub fn token_json(t: &Token) -> Json {
     put("s", Some(Json::Num(t.s as f64)));
     put("e", Some(Json::Num(t.e as f64)));
     put("closed", t.closed.map(Json::Bool));
+    put("colon", t.colon.map(|c| Json::Num(c as f64)));
     put("stray", t.stray.map(Json::Bool));
     put("form", t.form.map(|f| Json::Str(f.into())));
     put("closedBy", t.closed_by.map(|f| Json::Str(f.into())));

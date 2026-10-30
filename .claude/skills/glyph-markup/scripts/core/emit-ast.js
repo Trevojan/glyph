@@ -122,7 +122,11 @@ export function astShallow(nd) {
     origin: nd.origin || null,
     slotName: !!nd.slotName,
     editorial: !!nd.editorial,
-    name: nd.colon || null,
+    /* null from this engine: the name of a block or a section is its first
+       literal, a child like any other, and only the XML carries it as an
+       attribute (OPERAND_ATTR). fromAST reads a name an envelope holds as an
+       operand literal. */
+    name: null,
     depth: nd.depth,
     autoClosed: !!nd.autoClosed,
     suggestion: nd.suggestion ? nd.suggestion.name : null,

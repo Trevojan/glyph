@@ -30,6 +30,8 @@ pub struct Token {
     pub order: Option<usize>,
     pub unterminated: Option<bool>,
     pub delim: Option<&'static str>,
+    /// `[logic:calc]`: where the retired colon stands, for the parser to ask.
+    pub colon: Option<usize>,
 }
 
 fn tok(k: &'static str, v: String, s: usize, e: usize) -> Token {
@@ -108,24 +110,49 @@ fn fence_close(u: &[u16], from: usize, word: &str) -> Option<(usize, usize)> {
     })
 }
 
-/// `/^\[\s*logic\s*(?:[:\-\s]\s*([^\]]*?))?\s*\]/i` at `i`: the end of the
-/// match and the name. The match ends at the first `]`; what lies between
-/// `logic` and it must be whitespace, or a separator — `:`, `-`, or the last
-/// whitespace before a word — then the name.
-fn logic_open(u: &[u16], i: usize) -> Option<(usize, String)> {
+/// What `logic_open` read: where the head ends, the name, whether the name was
+/// written as a literal, and where a retired `:` separator stands.
+struct LogicHead {
+    end: usize,
+    name: String,
+    literal: bool,
+    colon: Option<usize>,
+}
+
+/// `/^\[\s*logic\s*(?:'([^'\]\n]*)'|`([^`\]]*)`|([:\-\s])\s*([^\]]*?))?\s*\]/i`
+/// at `i`. The fence is named by its first literal, `[logic'calc']` (decided
+/// 2026-10-26): `'…'` holds no `'`, `]` or line break, `` `…` `` no `` ` `` or
+/// `]`, and only whitespace may stand between it and the `]`. Otherwise the
+/// match ends at the first `]`, and what lies between `logic` and it must be
+/// whitespace, or a separator — `:`, `-`, or the last whitespace before a
+/// word — then the name. `:` is the retired colon form, and where it stands
+/// is kept for the parser to ask.
+fn logic_open(u: &[u16], i: usize) -> Option<LogicHead> {
     let after = word_ci(u, ws(u, i + 1), "logic")?;
+    let p = ws(u, after);
+    if let Some(q) = u.get(p).copied().filter(|&c| c == b'\'' as u16 || c == b'`' as u16) {
+        let stop = |c: u16| c == q || c == b']' as u16 || (q == b'\'' as u16 && c == b'\n' as u16);
+        if let Some(end) = (p + 1..u.len()).find(|&k| stop(u[k])).filter(|&k| u[k] == q) {
+            let close = ws(u, end + 1);
+            if is(u.get(close), b']') {
+                return Some(LogicHead { end: close + 1, name: js_trim(&slice(u, p + 1, end)), literal: true, colon: None });
+            }
+        }
+    }
     let close = (after..u.len()).find(|&k| u[k] == b']' as u16)?;
-    let lead = ws(u, after).min(close);
-    let name = if lead == close {
-        String::new()
-    } else if u[lead] == b':' as u16 || u[lead] == b'-' as u16 {
-        slice(u, lead + 1, close)
+    let lead = p.min(close);
+    let (name, colon) = if lead == close {
+        (String::new(), None)
+    } else if u[lead] == b':' as u16 {
+        (slice(u, lead + 1, close), Some(lead))
+    } else if u[lead] == b'-' as u16 {
+        (slice(u, lead + 1, close), None)
     } else if lead > after {
-        slice(u, lead, close)
+        (slice(u, lead, close), None)
     } else {
         return None;
     };
-    Some((close + 1, js_trim(&name)))
+    Some(LogicHead { end: close + 1, name: js_trim(&name), literal: false, colon })
 }
 
 /// JS `trim()`.
@@ -252,14 +279,18 @@ pub fn tokenize(src: &str) -> Vec<Token> {
                 i += 2;
                 continue;
             }
-            if let Some((body_start, name)) = logic_open(&u, i) {
-                let close = fence_close(&u, body_start, "logic");
-                let body_end = close.map_or(n, |(k, _)| k);
-                let e = close.map_or(n, |(_, end)| end);
-                t.push(Token { k: "logic", v: Some(name), body: Some(slice(&u, body_start, body_end)), s: i, e,
-                               closed: Some(close.is_some()), ..Token::default() });
-                i = e;
-                continue;
+            /* a literal-named head is a fence only when a `[/logic]` follows:
+               `[logic'x']` with none is the command LOGIC holding its operand */
+            if let Some(h) = logic_open(&u, i) {
+                let close = fence_close(&u, h.end, "logic");
+                if close.is_some() || !h.literal {
+                    let body_end = close.map_or(n, |(k, _)| k);
+                    let e = close.map_or(n, |(_, end)| end);
+                    t.push(Token { k: "logic", v: Some(h.name), body: Some(slice(&u, h.end, body_end)), s: i, e,
+                                   closed: Some(close.is_some()), colon: h.colon, ..Token::default() });
+                    i = e;
+                    continue;
+                }
             }
             if let Some(body_start) = fence_open(&u, i, "raw") {
                 let close = fence_close(&u, body_start, "raw");

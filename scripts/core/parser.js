@@ -52,6 +52,80 @@ export function parse(input, opts) {
     if (tk && typeof tk.s === "number") g.at = { s:tk.s, e:tk.e };
     gaps.push(g);
   }
+  /* A literal lands in the open command, or in the segment. Shared by the
+     literal token and by the items of a retired colon, so both are one thing. */
+  function takeLiteral(tk) {
+    var t3 = top();
+    var lit = { literal:true, v:tk.v, form:tk.form, tok:tk };
+    /* The literal's ROLE, decided by position and nothing else.
+
+       `[alw`X`[get[ctx]]]` and `[alw[get[ctx]]`X`]` emitted the same
+       <user-input> and differed only by sibling order, so a consumer had
+       to INFER "before the nest = operand, after = result" from position.
+       That is the inference the Regent ruled out: a variable must arrive
+       substituted, not deduced.
+
+       The rule is the Regent's own reading: a literal written before any
+       nested command is what the command operates ON; one written after a
+       nest has closed names what came BACK. `operand` is the default and
+       is not written; `result` is.
+
+       It is derived from position, so the inverse rebuilds it for free
+       and it costs the round trip nothing.
+
+       A CHAIN LINK does not count: GLOSSARY §0.1 says `[A-B]` is A and B
+       applied to the SAME operand, so the literal after `[rtnl-go`x`]` is
+       what both links operate on, not something `go` handed back. Only a
+       BRACKETED nest closes and yields. */
+    if (t3) lit.role = (t3.children || []).some(function (c) {
+      return !!c.canonical && !c.chainElement;
+    }) ? "result" : "operand";
+    if (t3) t3.children.push(lit); else seg.children.push(lit);
+    /* The message used to read "Feche com ``` antes." — advice the author has
+       already followed, because the closing backtick IS there, just after
+       the `]`. Naming the fix instead of the cause made a one-line lexer
+       rule impossible to read out of the diagnostic: the culprit is the
+       character itself, and there is no escape for it under either quote. */
+    if (tk.closedBy === "bracket" || tk.closedBy === "semi")
+      G("fix", "texto cortado",
+        "<code>" + (tk.closedBy === "bracket" ? "]" : ";") +
+        "</code> encerra o literal aqui, e não há escape para ele. Reescreva o texto sem esse caractere.",
+        "TruncatedLiteral",
+      "text cut", "<code>" + (tk.closedBy === "bracket" ? "]" : ";") +
+        "</code> ends the literal here, and there is no escape for it. Rewrite the text without that character.");
+    if (tk.closedBy === "eof") G("fix", "texto aberto", "<code>`</code> sem fechar.", "UnterminatedLiteral",
+      "text left open", "<code>`</code> never closed.");
+    if (tk.form === "quote" && tk.closedBy === "unterminated")
+      G("fix", "texto aberto", "<code>'</code> sem fechar.", "UnterminatedLiteral",
+      "text left open", "<code>'</code> never closed.");
+  }
+
+  /* What was written between `[` and the colon: the command's name, and the
+     chain written straight after it (`[rw-cr:`, `[ph-a:`). Anything else in
+     between stands as `…`, so the message never shows a head that was not
+     written. */
+  function colonHead(nd, at) {
+    var h = nd.template ? "--" + nd.template : nd.raw;
+    for (var m = tokens.indexOf(nd.tok) + 1; m > 0 && m < at; m++) {
+      var tm = tokens[m];
+      if (tm.k === "extend") h += "-";
+      else if (tm.k === "comma") h += ",";
+      else if (tm.k === "bareTag") h += tm.v;
+      else return h + "…";
+    }
+    return h;
+  }
+  /* The retired colon, named once per colon with the form that replaces it:
+     the command as written, and each item as a literal. */
+  function retiredColon(head, items, at) {
+    var q = function (it) { return it.form === "tick" ? "`" + it.v + "`" : "'" + it.v + "'"; };
+    var now = "[" + head + items.map(function (it, k) { return (k && it.comma ? "," : "") + q(it); }).join("");
+    G("ask", "dois-pontos",
+      "<code>[" + esc(head) + ":</code> é a forma aposentada do dois-pontos, e o texto fica no documento. " +
+      "Escreva <code>" + esc(now) + "</code>.", "RetiredColon",
+      "colon", "<code>[" + esc(head) + ":</code> is the retired colon form, and the text stays in the document. " +
+      "Write <code>" + esc(now) + "</code>.", at);
+  }
   function closeSeg(cause) {
     var names = [];
     while (stack.length) {
@@ -105,7 +179,7 @@ export function parse(input, opts) {
         !!binder && binder.k === "extend" && tokens[i - 2] === parentNode.tok && binder.s === parentNode.tok.e;
       var nd = {
         id:++uid, raw:cmdName, tier:cl.tier, canonical:cl.canonical, gloss:cl.gloss,
-        alias:!!cl.alias, children:[], emotions:[], colon:null, autoClosed:false, tok:tk,
+        alias:!!cl.alias, children:[], emotions:[], autoClosed:false, tok:tk,
         editorial:!!EDITORIAL_ONLY[cl.canonical],
         /* which operator produced the edge to this node's parent */
         origin: isSlotName ? null
@@ -166,6 +240,9 @@ export function parse(input, opts) {
       case "logic": {
         var lg = parseLogic(tk.v, tk.body);
         attach({ logic:lg, children:[], tok:tk, origin: pendingOrigin || "nest" });
+        if (typeof tk.colon === "number")
+          retiredColon("logic", tk.v ? [{ v:tk.v, form:/'/.test(tk.v) ? "tick" : "quote", comma:false }] : [],
+                       { s:tk.colon, e:tk.colon + 1 });
         lg.gaps.forEach(function (g) { gaps.push(g); });
         if (!tk.closed) G("fix", "não fechou", "<code>[logic]</code> sem <code>[/logic]</code>.", "UnclosedLogic",
           "not closed", "<code>[logic]</code> without <code>[/logic]</code>.");
@@ -198,75 +275,47 @@ export function parse(input, opts) {
       }
 
       case "colon": {
+        /* The colon form retired (decided 2026-10-25 and 2026-10-26): `:`
+           costs a shift, and a name is the first literal of the commands that
+           take one. It is read as a recogniser, at `ask`, once per colon, and
+           what it held stays in the document as the command's operand: each
+           item between commas is a literal, in the order written, and a
+           literal written in it is that literal. `=` and a `-` inside an item
+           are its text. The run ends where the colon's always did, and at a
+           `-` that is a chain link (EMS-002 ORD-0025), which goes on as the
+           link it is: the link belongs to the command, never to its operand.
+           With no command open the colon is prose punctuation, as it was. */
         var t2 = top();
         if (!t2) break;
-        var parts = [], j5 = i + 1, sawComma = false;
+        var items = [], cur = null, j5 = i + 1, comma = false;
+        var flush = function () {
+          /* a quote ends at a line break, so an item that holds one is a tick */
+          var iv = cur ? cur.v.trim() : "", fm = /\n/.test(iv) ? "tick" : "quote";
+          if (iv) items.push({ v:iv, form:fm, comma:cur.comma,
+                               tok:{ k:"literal", v:iv, s:cur.s, e:cur.e, form:fm, closedBy:fm } });
+          cur = null;
+        };
         while (j5 < tokens.length) {
           var nx = tokens[j5];
-          if (nx.k === "close" || nx.k === "semi" || nx.k === "open" || nx.k === "linebreak" || nx.k === "logic") break;
-          if (nx.k === "comma") { sawComma = true; parts.push(","); j5++; continue; }
-          if (nx.k === "literal" || nx.k === "text") { parts.push(String(nx.v).trim()); j5++; continue; }
-          if (nx.k === "equals") { parts.push("="); j5++; continue; }
-          /* an `extend` is a chain link (EMS-002 ORD-0025): it ends the
-             name, and the link belongs to the command, never to its name */
+          if (nx.k === "text" || nx.k === "equals") {
+            if (!cur) { cur = { v:"", s:nx.s, e:nx.e, comma:comma }; comma = false; }
+            /* whitespace between two tokens is a gap the lexer left out */
+            else if (nx.s > cur.e) cur.v += new Array(nx.s - cur.e + 1).join(" ");
+            cur.v += nx.k === "equals" ? "=" : String(nx.v); cur.e = nx.e; j5++; continue;
+          }
+          if (nx.k === "comma") { flush(); comma = true; j5++; continue; }
+          if (nx.k === "literal") { flush(); items.push({ v:nx.v, form:nx.form, comma:comma, tok:nx }); comma = false; j5++; continue; }
           break;
         }
-        t2.colon = parts.join(" ").replace(/\s+,/g, ",").trim();
-        if (sawComma && !STRUCT[t2.canonical])
-          G("ask", "ordem incerta",
-            "<code>[" + esc(t2.raw) + ": a,b,c]</code> ordem não inferível. Aninhe.", "AmbiguousSlotOrder",
-          "order unclear", "<code>[" + esc(t2.raw) + ": a,b,c]</code> order cannot be inferred. Nest them.");
+        flush();
+        retiredColon(colonHead(t2, i), items, tk);
+        items.forEach(function (it) { takeLiteral(it.tok); });
+        if (items.length) pendingOrigin = null;
         i = j5 - 1;
         break;
       }
 
-      case "literal": {
-        var t3 = top();
-        var lit = { literal:true, v:tk.v, form:tk.form, tok:tk };
-        /* The literal's ROLE, decided by position and nothing else.
-
-           `[alw`X`[get[ctx]]]` and `[alw[get[ctx]]`X`]` emitted the same
-           <user-input> and differed only by sibling order, so a consumer had
-           to INFER "before the nest = operand, after = result" from position.
-           That is the inference the Regent ruled out: a variable must arrive
-           substituted, not deduced.
-
-           The rule is the Regent's own reading: a literal written before any
-           nested command is what the command operates ON; one written after a
-           nest has closed names what came BACK. `operand` is the default and
-           is not written; `result` is.
-
-           It is derived from position, so the inverse rebuilds it for free
-           and it costs the round trip nothing.
-
-           A CHAIN LINK does not count: GLOSSARY §0.1 says `[A-B]` is A and B
-           applied to the SAME operand, so the literal after `[rtnl-go`x`]` is
-           what both links operate on, not something `go` handed back. Only a
-           BRACKETED nest closes and yields. */
-        if (t3) lit.role = (t3.children || []).some(function (c) {
-          return !!c.canonical && !c.chainElement;
-        }) ? "result" : "operand";
-        if (t3) t3.children.push(lit); else seg.children.push(lit);
-        /* The message used to read "Feche com ``` antes." — advice the author has
-           already followed, because the closing backtick IS there, just after
-           the `]`. Naming the fix instead of the cause made a one-line lexer
-           rule impossible to read out of the diagnostic: the culprit is the
-           character itself, and there is no escape for it under either quote. */
-        if (tk.closedBy === "bracket" || tk.closedBy === "semi")
-          G("fix", "texto cortado",
-            "<code>" + (tk.closedBy === "bracket" ? "]" : ";") +
-            "</code> encerra o literal aqui, e não há escape para ele. Reescreva o texto sem esse caractere.",
-            "TruncatedLiteral",
-          "text cut", "<code>" + (tk.closedBy === "bracket" ? "]" : ";") +
-            "</code> ends the literal here, and there is no escape for it. Rewrite the text without that character.");
-        if (tk.closedBy === "eof") G("fix", "texto aberto", "<code>`</code> sem fechar.", "UnterminatedLiteral",
-          "text left open", "<code>`</code> never closed.");
-        if (tk.form === "quote" && tk.closedBy === "unterminated")
-          G("fix", "texto aberto", "<code>'</code> sem fechar.", "UnterminatedLiteral",
-          "text left open", "<code>'</code> never closed.");
-        pendingOrigin = null;
-        break;
-      }
+      case "literal": takeLiteral(tk); pendingOrigin = null; break;
 
       case "emotion": {
         var key = tk.v.toLowerCase();
@@ -474,7 +523,7 @@ export function parse(input, opts) {
         /* strict positional arity takes precedence over FRAMES valency */
         var slots = SLOTS[nd2.canonical];
         if (slots) {
-          var got = valueChildren(nd2).length + (nd2.colon ? 1 : 0);
+          var got = valueChildren(nd2).length;
           for (var k = got; k < slots.length; k++)
             G("ask", "falta operando",
               "<code>[" + esc(String(nd2.canonical).toLowerCase()) + "</code> exige " +
@@ -493,7 +542,7 @@ export function parse(input, opts) {
             "deep inference", "<code>[" + esc(String(nd2.canonical).toLowerCase()) + "</code>" + (INSTR[nd2.canonical] ? " (" + INSTR[nd2.canonical] + ")" : "") + " expands " + deep + " levels: <strong>the subject</strong>?");
           return;
         }
-        var filled = valueChildren(nd2).length + (nd2.colon ? 1 : 0);
+        var filled = valueChildren(nd2).length;
         var want = frame[0];
         if (filled === 0)
           G("ask", "sem alvo",
@@ -624,7 +673,7 @@ export function deepInference(nd, opts) {
   if (SLOTS[nd.canonical] || FRAMES[nd.canonical]) return null;
   var e = entryOf(nd.canonical, opts);
   if (!e || e.species !== "composite" || !(e.depth >= DEEP_INFERENCE)) return null;
-  if (valueChildren(nd).length || nd.colon) return null;
+  if (valueChildren(nd).length) return null;
   return e.depth;
 }
 

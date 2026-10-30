@@ -176,8 +176,10 @@ fn hole_of(tree: &Tree<Extra>, id: Id) -> Hole {
 /// the lines that close a node, pushed before its children so they come after.
 /// `operandAttr`: the operand of a PT or an IF travels as an attribute —
 /// `[pt'1.1'` is `<part n="1.1">`, `[if'x'` is `<if cond="x">` (decided
-/// 2026-09-27) — when it carries nothing else: no template slot, no
-/// reference, some text. The attribute's name and the literal.
+/// 2026-09-27) — and the first literal of a BLOCK or a SECTION is its name,
+/// `[block'review'` is `<block name="review">` (decided 2026-10-26), when it
+/// carries nothing else: no template slot, no reference, some text. The
+/// attribute's name and the literal.
 fn operand_attr(tree: &Tree<Extra>, id: Id, binds: &[String]) -> Option<(&'static str, Id)> {
     let nd = &tree.nodes[id];
     let name = get(OPERAND_ATTR, nd.canonical.as_deref()?)?;
@@ -315,9 +317,6 @@ pub fn emit(tree: &mut Tree<Extra>, root: Id, start: usize, l: &mut Vec<String>,
             if nd.editorial == Some(true) {
                 attrs.push("force=\"editorial\"".into());
             }
-            if let Some(Some(c)) = nd.colon.as_ref().filter(|c| c.as_deref().is_some_and(|c| !c.is_empty())) {
-                attrs.push(format!("name=\"{}\"", xesc(c)));
-            }
             attrs.extend(chain.clone());
             attrs.extend(join.clone());
             if let Some(s) = slot_attr(&nd).strip_prefix(' ') {
@@ -357,18 +356,16 @@ pub fn emit(tree: &mut Tree<Extra>, root: Id, start: usize, l: &mut Vec<String>,
         };
 
         let kids = tree.value_children(id);
-        let colon = nd.colon.as_ref().is_some_and(|c| c.as_deref().is_some_and(|c| !c.is_empty()));
         /* ordered slots: each empty position travels as <needs slot="n"> */
         let slots = if bare { None } else { slots_of(&canonical) };
         let mut slot_needs: Vec<(usize, String)> = Vec::new();
         if let Some((len, named)) = slots {
-            let got = kids.len() + usize::from(colon);
-            for k in got..len.unwrap_or(0) {
+            for k in kids.len()..len.unwrap_or(0) {
                 slot_needs.push((k + 1, named.get(k).copied().unwrap_or("").to_string()));
             }
         }
         let frame = if slots.is_some() { None } else { get(FRAMES, &canonical) };
-        let needs = frame.filter(|_| !bare && kids.is_empty() && !colon)
+        let needs = frame.filter(|_| !bare && kids.is_empty())
             .map(|f| f.first().copied().unwrap_or("").replacen('*', "", 1))
             .or_else(|| deep_inference(tree, id, ctx).map(|_| "the subject".to_string()));
 

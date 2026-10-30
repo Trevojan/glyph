@@ -102,11 +102,10 @@ node scripts/glyph-cli.js "$(node scripts/glyph-cli.js "[crit'teste']" --xml)" -
 ```
 
 It never throws: bad XML comes back as diagnostics, the way `parse()` answers
-bad Glyph with gaps. Three things do not survive the trip and are pinned by
-tests so none gets "fixed" silently — `[tpl:name]` always returns as the
-`[--name` invocation, content appended past a template's declared params is
-dropped, and text holding `'`, a backtick or `[` is substituted rather than
-preserved. `<needs>` written by `FRAMES`/`SLOTS` deliberately returns as
+bad Glyph with gaps. Two things do not survive the trip and are pinned by
+tests so none gets "fixed" silently — content appended past a template's
+declared params is dropped, and text holding `'`, a backtick or `[` is
+substituted rather than preserved. `<needs>` written by `FRAMES`/`SLOTS` deliberately returns as
 *nothing* and is regenerated: it is the engine's question, not the human's answer.
 
 That list used to name `\` and `]` as well, and both were wrong. Measured, one

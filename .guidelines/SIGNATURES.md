@@ -101,6 +101,10 @@ information, it is broken structure.
 [section'validation',[crit],[ask]]
 ```
 
+The name is the `name` of `<section>` and `<block>` (`XML_REFERENCE.md` §3),
+and the same first literal names a `[logic]` fence: `[logic'calc']…[/logic]`
+is `<logic name="calc">`. No other command takes a name.
+
 ## 6. Polarity and modality
 
 `[pos]` `[ngt]` `[mand]` `[opt]` act as prefixes modifying what follows. Zero

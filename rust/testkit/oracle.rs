@@ -187,7 +187,7 @@ fn mood_json(e: &Emotion) -> Json {
     Json::Obj(kv)
 }
 
-const FIELDS: [&str; 30] = ["id", "raw", "tier", "canonical", "gloss", "alias", "colon", "autoClosed", "editorial",
+const FIELDS: [&str; 29] = ["id", "raw", "tier", "canonical", "gloss", "alias", "autoClosed", "editorial",
     "origin", "chainElement", "slotName", "depth", "literal", "v", "form", "role", "text", "rawFence", "template",
     "isDef", "mode", "isDefinition", "expanded", "boundSlot", "fromSource", "species", "compositionDepth", "isBinder",
     "suggestion"];
@@ -214,7 +214,6 @@ pub fn tree_of(dump: &Json) -> Tree<()> {
                 "canonical" => nd.canonical = Some(text(v)),
                 "gloss" => nd.gloss = Some(gloss_of(v)),
                 "alias" => nd.alias = Some(flag(v)),
-                "colon" => nd.colon = Some(maybe(v)),
                 "autoClosed" => nd.auto_closed = Some(flag(v)),
                 "editorial" => nd.editorial = Some(flag(v)),
                 "origin" => nd.origin = Some(maybe(v)),
@@ -297,7 +296,6 @@ pub fn dump_of<X: Clone>(tree: &Tree<X>, full: bool) -> Json {
                 "canonical" => nd.canonical.as_deref().map(s),
                 "gloss" => nd.gloss.as_ref().map(gloss_json),
                 "alias" => nd.alias.map(Json::Bool),
-                "colon" => nd.colon.as_ref().map(|c| c.as_deref().map_or(Json::Null, s)),
                 "autoClosed" => nd.auto_closed.map(Json::Bool),
                 "editorial" => nd.editorial.map(Json::Bool),
                 "origin" => nd.origin.as_ref().map(|o| o.as_deref().map_or(Json::Null, s)),

@@ -31,7 +31,7 @@ command          = "[" , cmd_name , [ cmd_body ] , "]" ;
 cmd_name         = letter , { letter | digit | "_" | "." } ;
 cmd_body         = slot_list | inline_content ;
 
-slot_list        = ( ":" , slot_value | slot_value ) , { "," , slot_value } ;
+slot_list        = slot_value , { "," , slot_value } ;
 slot_value       = literal | element | cmd_name ;
 inline_content   = element_sequence ;
 
@@ -76,7 +76,10 @@ define_cmd       = "[dfn" , slot_list , "]" ;
 default_cmd      = "[def]" ;
 
 (* --- Logic Blocks & Expressions --- *)
-logic_block      = "[logic" , [ "-" , logic_name ] , "]" , logic_body , "[/logic]" ;
+(* The fence is named by its first literal, as a block and a section are;
+   only the closing "[/logic]" makes `[logic'x']` a fence, and with none it
+   is the command LOGIC holding its operand. *)
+logic_block      = "[logic" , [ literal | "-" , logic_name ] , "]" , logic_body , "[/logic]" ;
 logic_name       = identifier ;
 logic_body       = { logic_line } ;
 logic_line       = logic_let | logic_rule | logic_expr ;
