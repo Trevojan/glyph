@@ -1,0 +1,10 @@
+[block'ORD-0029-links'
+  [ctx'the spec of EMS-002','.guidelines/.orders/EMS-002/EMS-002.pgml']
+  [ctx'the map of the inclusion','.guidelines/.orders/INTAKE-INCLUSION.md']
+  [tgt'the further positions where a known command still vanished, answered on 2026-10-26 with the same rule as ORD-0025; an ORD of the batch the version moves once for']
+  [ctx'measured at 0634b44: after prose, after a segment break or a comma, after a mood, after a closed raw fence, at the start of the document, with a space after the dash, and as a run of dashes, a known name touching a dash fell into prose and never reached the tree']
+  [cnst'a dash starts a word when only the start of the document, a token or whitespace stands before it; touching a known name it is a chain link of the command open around it, or of the block; with a space after it, only after a command name, an operand or a closing bracket on the same line; a run of dashes counts as one link']
+  [cnst'prose stays prose: a spaced minus between words, an arrow, a hyphenated word, a Markdown list item at the start of a line; the way back fences any prose that would read as a link; a sweep over every source, oracle string and document showed which strings change']
+  [cnst'no hash of the snapshot moves; new lexer and parse probes hold the Rust, ported byte for byte']
+  [val'the links','each position keeps the command as a chain link in every projection and both ways back, and prose stays prose; each seen failing before it counts, and the Rust answers byte for byte']
+];
