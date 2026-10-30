@@ -3277,16 +3277,16 @@
     },
     ".guidelines/.plan/README.md": {
       "nodes": [
-        ["n1142", "", 0, 14190, 1, 201, "a342cd1052c34000", "", ""],
-        ["n1143", "plano--o-que-vem-a-seguir", 0, 14190, 1, 201, "a342cd1052c34000", "64f0be2c18ca8b00", "n1142"],
-        ["n1144", "autorizado-pelo-regente-ainda-não-construído", 217, 11978, 7, 172, "5b2cd1121c939c00", "6aaa02e4f2976280", "n1143"],
+        ["n1142", "", 0, 13819, 1, 195, "53dad829a6543600", "", ""],
+        ["n1143", "plano--o-que-vem-a-seguir", 0, 13819, 1, 195, "53dad829a6543600", "50c003a8fe885700", "n1142"],
+        ["n1144", "autorizado-pelo-regente-ainda-não-construído", 217, 11607, 7, 166, "cc469e3a72a86c00", "e184cbec78847400", "n1143"],
         ["n1870", "0-caminhos-virtuais--guidelinesshortcutsvirtual--construído-as-sete-camadas-pela-ems-002", 269, 5363, 9, 81, "da71f09e759c7600", "cb44836834464e80", "n1144"],
         ["n1146", "1-section-de-cabeçalho-irmã-do-schema--decidido-faltando-fazer", 5363, 6025, 90, 13, "29a759a8aecd1500", "f13677d632797d00", "n1144"],
         ["n1147", "2-gatilhos-de-re-ferência", 6025, 6930, 103, 19, "20d81a5623895800", "b5f416c6e3cdac00", "n1144"],
         ["n2579", "3-cinco-defeitos-medidos-o-que-foi-consertado-nos-dois-motores-e-o-que-o-rust-conserta", 6930, 9129, 122, 10, "be899c38e29b3000", "26df2198549efa00", "n1144"],
-        ["n1149", "5-o-glyph-em-rust--a-série-ems-001", 9129, 11978, 132, 47, "f06340800a8dca00", "02132828bee38a00", "n1144"],
-        ["n1150", "aberto-esperando-o-regente", 11978, 13508, 179, 11, "7d12d970664cbc00", "05888320d62c0600", "n1143"],
-        ["n1151", "adiado-por-decisão-não-por-esquecimento", 13508, 14190, 190, 12, "110118b8258d7d80", "009590141c1d2c00", "n1143"]
+        ["n1149", "5-o-glyph-em-rust--a-série-ems-001", 9129, 11607, 132, 41, "f467160698a19300", "f949fe0412f49400", "n1144"],
+        ["n1150", "aberto-esperando-o-regente", 11607, 13137, 173, 11, "7d12d970664cbc00", "05888320d62c0600", "n1143"],
+        ["n1151", "adiado-por-decisão-não-por-esquecimento", 13137, 13819, 184, 12, "110118b8258d7d80", "009590141c1d2c00", "n1143"]
       ]
     },
     ".guidelines/.plan/README.md.template": {
