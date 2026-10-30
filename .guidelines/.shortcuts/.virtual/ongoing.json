@@ -10,9 +10,9 @@
       "who": "DV",
       "since": "2026-10-25",
       "source": ".guidelines/.decisions/README.md#2026-10-25",
-      "next": "ORD-0029, as outras posições do elo; depois a pergunta inventada e o dois-pontos",
+      "next": "ORD-0030, a volta que não inventa nem cola; depois o dois-pontos",
       "where": [
-        "order:EMS-002/ORD-0029",
+        "order:EMS-002/ORD-0030",
         "branch:claude/loving-cerf-m1fomz"
       ]
     },
