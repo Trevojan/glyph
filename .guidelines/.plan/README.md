@@ -160,17 +160,11 @@ EMS que o usuário conduz está em
 [`INTAKE-PIN-TRAFFIC.md`](../.orders/INTAKE-PIN-TRAFFIC.md), com o que ainda
 espera o Regente no §5 dele.
 
-Decidido em 2026-09-27, ainda não construído — cada item uma ORD quando o
-Regente chamar, o JS primeiro onde o oráculo muda. Os que movem o emitido formam
-um lote, e a versão se move uma vez quando ele fecha (decidido em 2026-10-25):
-
-- **um comando conhecido nunca some** (2026-10-25): das 14 posições medidas em
-  que um comando conhecido some sem diagnóstico, cada uma percorre as regras
-  correntes e entra pela que a acolhe; o mapa, posição por posição, com a ORD
-  de cada uma, está no [`INTAKE-INCLUSION.md`](../.orders/INTAKE-INCLUSION.md).
-  Restam o placeholder, os fills e os templates da fonte, e a aposentadoria do
-  dois-pontos, que espera o nome da cerca `[logic]`. O *não sabe* segue `fix`,
-  o `UnknownCommand`;
+O lote das decididas em 2026-09-27 e 2026-10-25 que movem o emitido está
+construído, da `EMS-002/ORD-0014` à `ORD-0031`, e a versão se moveu uma vez
+quando ele fechou, para 4.7.10.08 (2026-10-30). O mapa da inclusão, posição por
+posição, está no [`INTAKE-INCLUSION.md`](../.orders/INTAKE-INCLUSION.md); três
+leituras construídas esperam o Regente, no §4 dele.
 
 O que a spec revoga está assinado, e entre isso está a escada como
 ordem de trabalho: [`ladder.toml`](ladder.toml) fica como o registro da
