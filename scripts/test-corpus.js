@@ -1196,6 +1196,17 @@ function runFromXmlChecks() {
   ok("F-25", "fromAST keeps the space a name needs from the prose after it",
      glued.length ? glued.map(([s, b]) => s + " came back as " + b).join("; ") : null);
 
+  /* the way back invents nothing and glues nothing (EMS-002 ORD-0030): a hole
+     with no question came back with "sem resposta" as its question, and a fill
+     carrying prose came back with the prose glued to the hole's name */
+  const TOPTS = { templates: TPL.templates, expansions: opts.expansions };
+  const invented = ["[ph-x]", "[ph-x[crit'h']]", "[in[ph-alvo]]"]
+    .map(s => [s, G.fromXML(G.toXML(s, opts), opts).src]).filter(([, b]) => /sem resposta/.test(b));
+  const fill = "[--reinforce[ph-rule plain]'b']", fillBack = G.fromAST(G.toAST(fill, TOPTS), TOPTS).src;
+  ok("F-26", "the way back invents no question and glues no prose to a hole's name",
+     invented.length ? invented.map(([s, b]) => s + " came back as " + b).join("; ")
+       : G.toXML(fillBack, TOPTS) !== G.toXML(fill, TOPTS) ? fill + " came back as " + fillBack : null);
+
   return F.length;
 }
 const rF = runFromXmlChecks();
@@ -4030,7 +4041,7 @@ console.log(" Guard        " + rG + "/" + POSITIVE_WITH_RULES.length);
 console.log(" Placeholder  " + rPH + "/" + (PLACEHOLDER.length + 1));
 console.log(" Composition  " + rX + "/17");
 console.log(" .hgml burn   " + rH + "/15");
-console.log(" fromXML      " + rF + "/25");
+console.log(" fromXML      " + rF + "/26");
 console.log(" reference    " + rD + "/11");
 console.log(" round trip   " + rRT + "/7");
 console.log(" ast schema   " + rSC + "/3");

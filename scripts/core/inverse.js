@@ -232,7 +232,7 @@ export function slotFills(list, write, slotOf, kidsOf) {
     });
   })(list);
   return order.filter(function (n) { return parts[n].length; })
-    .map(function (n) { return "[ph-" + n + parts[n].join("") + "]"; }).join("");
+    .map(function (n) { return apart("[ph-" + n, parts[n].join("")) + "]"; }).join("");
 }
 
 export function fromXmlTemplate(el, diag) {
@@ -306,7 +306,7 @@ export function fromXmlNode(el, diag) {
        turn a prompt into an answer. */
     var slot = el.attrs.slot;
     if (slot && /^[A-Za-z]/.test(slot))
-      return "[ph-" + slot + "`" + litSafeXml(xmlText(el)) + "`]";
+      return "[ph-" + slot + (xmlText(el) === NO_ANSWER ? "" : "`" + litSafeXml(xmlText(el)) + "`") + "]";
     return "";
   }
 
@@ -367,6 +367,12 @@ function apart(a, b) {
   return (NAME_END.test(a) || /\/$/.test(a)) && NAME_START.test(b) ? a + " " + b : a + b;
 }
 
+/* What the emitter writes in the <needs> of a hole with no question (holeOf in
+   emit-xml.js). It is the engine asking, never an answer: read back as a
+   question it would put words in the author's mouth (PACKAGE_TARGET §8), so
+   the hole comes back with none, and emits the same <needs> again. */
+var NO_ANSWER = "sem resposta";
+
 /* `[off]` is the switch that opens a verbatim region, so the command OFF with
    nothing inside cannot be written back as `[off]`: the lexer would read the
    rest of the document as prose. It is written in the element's own name,
@@ -389,7 +395,9 @@ export function fromXmlPlaceholder(el, diag) {
   var slot = hole && hole.attrs.slot;
   var named = !!(slot && /^[A-Za-z]/.test(slot));
   var head = "[ph" + (named ? "-" + slot : "") + (el.attrs.name ? ":" + litSafeXml(el.attrs.name) : "");
-  var body = { tag:el.tag, attrs:el.attrs, children: kids.map(function (c) {
+  var body = { tag:el.tag, attrs:el.attrs, children: kids.filter(function (c) {
+    return c !== hole || xmlText(hole) !== NO_ANSWER;
+  }).map(function (c) {
     if (c !== hole) return c;
     return { tag:"user-input", attrs:{}, children:[{ tag:"#text", v:xmlText(hole), attrs:{}, children:[] }] };
   }) };

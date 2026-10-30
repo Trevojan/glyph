@@ -387,7 +387,7 @@ fn from_xml_logic(el: &El) -> String {
 fn slot_fills(order: &[String], parts: &[(String, String)]) -> String {
     order.iter().filter_map(|n| {
         let mine: Vec<&str> = parts.iter().filter(|(k, _)| k == n).map(|(_, s)| s.as_str()).collect();
-        (!mine.is_empty()).then(|| format!("[ph-{n}{}]", mine.concat()))
+        (!mine.is_empty()).then(|| format!("{}]", apart(format!("[ph-{n}"), &mine.concat())))
     }).collect()
 }
 
@@ -482,6 +482,7 @@ fn from_xml_node(el: &El, diag: &mut Vec<Diag>, depth: usize) -> Result<String, 
            again from the vocabulary are not source */
         "needs" => {
             return Ok(match el.attr("slot").filter(|s| alpha_first(s)) {
+                Some(slot) if xml_text(el) == NO_ANSWER => format!("[ph-{slot}]"),
                 Some(slot) => format!("[ph-{slot}`{}`]", lit_safe_xml(&xml_text(el))),
                 None => String::new(),
             });
@@ -528,6 +529,11 @@ fn from_xml_node(el: &El, diag: &mut Vec<Diag>, depth: usize) -> Result<String, 
     Ok(format!("{lead}{}", not_switch(format!("[{name}{colon}{operand}{body}]"))))
 }
 
+/// What the emitter writes in the `<needs>` of a hole with no question: the
+/// engine asking, never an answer, so the way back writes no question for it
+/// (PACKAGE_TARGET §8).
+const NO_ANSWER: &str = "sem resposta";
+
 /// `fromXmlPlaceholder`: the `<needs>` inside a `<placeholder>` is the hole —
 /// an alpha `slot` is the name, its text the question, put back as a literal
 /// where it stood; with no name, a link written first stands after a space.
@@ -538,8 +544,12 @@ fn from_xml_placeholder(el: &El, diag: &mut Vec<Diag>, depth: usize) -> Result<S
     let mut body = el.clone();
     if let Some(i) = at {
         let text = xml_text(&el.children[i]);
-        body.children[i] = El { tag: "user-input".into(), attrs: Vec::new(), v: None,
-            children: vec![El { tag: "#text".into(), attrs: Vec::new(), children: Vec::new(), v: Some(text) }] };
+        if text == NO_ANSWER {
+            body.children.remove(i);
+        } else {
+            body.children[i] = El { tag: "user-input".into(), attrs: Vec::new(), v: None,
+                children: vec![El { tag: "#text".into(), attrs: Vec::new(), children: Vec::new(), v: Some(text) }] };
+        }
     }
     let rest = xml_kids(&body, diag, depth)?;
     let gap = if slot.is_none() && colon.is_empty() && rest.starts_with(['-', ',']) { " " } else { "" };
