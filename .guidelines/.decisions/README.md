@@ -13,6 +13,13 @@
 
 ---
 
+## 2026-10-30
+
+| decisão | razão |
+|---|---|
+| **O motor passa a 4.7.10.08 — os quatro dígitos sobem um cada; o snapshot, o oráculo e a conformidade se movem pelo `engine=`** | a regra de 2026-10-25, *"Once per batch"*, executada quando o lote fechou na `EMS-002/ORD-0031`: cada dígito pela maior mudança do lote, pela tabela do [`.changelog`](../.changelog/README.md). Os 118 hashes de `xml`, de `ast` e de `hgml` que o número carrega, os cinco exemplos e os cinco goldens de `conformance/` se movem pelo número; o [`CHANGELOG.md`](../../CHANGELOG.md) diz por que cada dígito subiu |
+| **O regency 3.0 entra no projeto** | pedido pelo Regente ao chamar o extreme-go-horse: *"Apply the update first"*. O plano `UPD-74c1741d` carimbou `.shortcuts/regency.json`, criou dois READMEs e pôs seis modelos `.template` ao lado dos READMEs que o projeto editou, sem reescrever texto do projeto |
+
 ## 2026-10-26
 
 | decisão | razão |

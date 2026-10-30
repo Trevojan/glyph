@@ -31,11 +31,15 @@
     {
       "id": "VERSION-BATCH",
       "title": "a versão se move uma vez quando o lote das que movem o emitido fecha",
-      "state": "backlog",
+      "state": "review",
       "who": "DV",
       "since": "2026-10-25",
       "source": ".guidelines/.decisions/README.md#2026-10-25",
-      "next": "depois da inclusão e do humor no template; cada dígito pela maior mudança do lote, pela tabela do .changelog"
+      "next": "4.7.10.08, o lote fechado",
+      "where": [
+        "branch:claude/loving-cerf-m1fomz",
+        "CHANGELOG.md"
+      ]
     },
     {
       "id": "EMS-001-ORD-0013",
