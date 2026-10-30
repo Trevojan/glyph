@@ -216,6 +216,11 @@
     [val'the way back','fromXML writes no question a hole never had, and fromAST keeps prose a fill carries apart from the hole name']
   ]
 
+  [section'ORD-0031-colon'
+    [tgt'the colon retires as a recogniser at ask, its text kept as the operand, answered on 2026-10-25 and 2026-10-26, the last ORD of the batch']
+    [val'the colon','a colon raises RetiredColon at ask and its text becomes operand literals; name exists only on block, section and the logic fence, from their first literal; the way back writes no colon']
+  ]
+
   [section'limits'
     [nev'a selector that answers an empty slice in silence']
     [dont'open an ORD before the ORD it depends on closes']
@@ -258,5 +263,6 @@
     [--track[ph-item'ORD-0027, the way back through fromAST writes the space a name needs, from the traversal of the inclusion, of the batch of the version: between a name or a mood header and the prose after it, so a context command holding prose stops coming back as an unknown command; no hash of the snapshot moved; F-25; F-25 and a Rust mutant seen failing; at 8c57f9a, sha256 d4ddb7335b4729f8de45288d5ff177d5bdca391ade2a796e7d03da7218235688 of the cases'][ph-scope'EMS-002']]
     [--track[ph-item'ORD-0028, what a template call carries never vanishes, an inclusion of 2026-10-25, of the batch of the version: the command of a fill travels with its value carrying the slot, an unknown fill lands after the body with TemplateUnknownParam, a source definition expands its calls and overrides the store, and a second definition is TemplateDefinedTwice; OC-14 and OC-15 took the snapshot to 118 sources with no hash moved; the INCLUSION bucket, RT-08 and RT-09; four Rust mutants seen failing; at 1fd7e07, sha256 ef735188f084ca48ef9016e86980d379f70a427e4034837b104c4537c62bd89f of the cases'][ph-scope'EMS-002']]
     [--track[ph-item'ORD-0029, the further positions of the chain link, by the answer of 2026-10-26, of the batch of the version: a dash that starts a word and touches a known name is a link of the scope it is in, after prose, a segment break or a comma, a mood, a closed raw fence, at the start, with a space after the dash and as a run of dashes, and prose stays prose; a sweep found no prose of the repository that changed; no hash of the snapshot moved; LK-08 to LK-14 and 45 probes; the new LK checks and four Rust mutants seen failing; at 175c79a, sha256 ef735188f084ca48ef9016e86980d379f70a427e4034837b104c4537c62bd89f of the cases'][ph-scope'EMS-002']]
+    [--track[ph-item'ORD-0030, the way back invents nothing and glues nothing, two defects found while building the inclusion, of the batch of the version: fromXML stops reading the sem resposta of a hole with no question as a question, and slotFills stops gluing the prose a fill carries to the hole name; no hash of the snapshot moved; F-26; F-26 and two Rust mutants seen failing; at f2af253, sha256 ef735188f084ca48ef9016e86980d379f70a427e4034837b104c4537c62bd89f of the cases'][ph-scope'EMS-002']]
   ]
 ];
