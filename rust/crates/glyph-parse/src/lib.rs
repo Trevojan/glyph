@@ -22,7 +22,7 @@ use glyph_logic::{parse_logic, Logic};
 use glyph_rules::check_rules;
 use glyph_stores::{entry_of, expansion_registry, Context, Registered};
 use glyph_json::{number, Json};
-use glyph_templates::{check_template_constraints, expand_invocations, Parsed, SubParse};
+use glyph_templates::{check_template_constraints, expand_invocations, Inherited, Parsed, SubParse};
 use glyph_util::tree::{strip_tags, Diag, Emotion, Gloss, Id, Node, Segment, Span, Suggestion, Thrown, Tree, LIMITS};
 use glyph_util::{esc, inherited};
 use glyph_vocab::{derived, former_element, get, ALIAS, EDITORIAL_ONLY, EMO, FRAMES, INSTR, META, MODE, NAMED_STRUCT, SESSION, SLOTS, STRUCT};
@@ -45,11 +45,14 @@ pub struct Opts<'a> {
     pub expanding: Vec<String>,
     /// What the caller registered, which a template's body is parsed with.
     pub registered: &'a Registered,
+    /// The definitions the source that called this body wrote: what the JS
+    /// hands a body in `templates`, over the store.
+    pub inherited: &'a [Inherited<Extra>],
 }
 
 impl<'a> Opts<'a> {
     pub fn new(ctx: &'a Context) -> Opts<'a> {
-        Opts { ctx, session: true, valency: true, en: false, expanding: Vec::new(), registered: Registered::none() }
+        Opts { ctx, session: true, valency: true, en: false, expanding: Vec::new(), registered: Registered::none(), inherited: &[] }
     }
 }
 
@@ -631,11 +634,31 @@ pub fn check_references<X: Clone>(tree: &Tree<X>, binds: &[String], g: &mut dyn 
     }
 }
 
-/// `collectBindings`: one name, one result, over the whole package.
+/// `insideDefinitions`: what a definition `[--name=…]` holds. The body
+/// occurs where a call expands it, and that is where its result is named.
+pub fn inside_definitions<X: Clone>(tree: &Tree<X>) -> Vec<bool> {
+    let mut inside = vec![false; tree.nodes.len()];
+    for id in tree.segments.iter().flat_map(|sg| tree.walk(&sg.children)) {
+        let nd = &tree.nodes[id];
+        if nd.is_template() && nd.is_def == Some(true) {
+            for k in tree.walk(&nd.children) {
+                inside[k] = true;
+            }
+        }
+    }
+    inside
+}
+
+/// `collectBindings`: one name, one result, over the whole package. Read
+/// inside a definition too, one call would name every result twice.
 pub fn collect_bindings<X: Clone>(tree: &mut Tree<X>, g: &mut dyn FnMut(Diag)) -> Vec<String> {
     let mut order: Vec<String> = Vec::new();
+    let declared = inside_definitions(tree);
     let ids: Vec<Id> = tree.segments.iter().flat_map(|sg| tree.walk(&sg.children)).collect();
     for id in ids {
+        if declared[id] {
+            continue;
+        }
         let Some(name) = binding_of(tree, id) else { continue };
         /* `binds` is a plain object: a member of the prototype is there already */
         if order.contains(&name) || inherited(&name) {
@@ -665,14 +688,14 @@ pub fn parse(src: &str, o: &Opts) -> Result<Parse, Thrown> {
     let mut g = |d: Diag| diags.push(d);
 
     /* expansion first: every later pass must see the body, not the bare call */
-    expand_invocations(&mut tree, ctx, o.session, &o.expanding, &mut g, &mut |body, sub: SubParse| {
+    expand_invocations(&mut tree, ctx, o.session, &o.expanding, o.inherited, &mut g, &mut |body, sub: SubParse<Extra>| {
         /* the JS hands parse the registry alone, and the rules and the
            composition table fall to what the caller registered: the same
            stores, shared */
         let reg = o.registered;
         let sub_ctx = Context::shared(Some(Arc::clone(sub.templates)), reg.rules.clone(), reg.expansions.clone());
         let r = parse(body, &Opts { ctx: &sub_ctx, session: sub.session, valency: sub.valency, en: false, expanding: sub.expanding,
-                                    registered: reg })?;
+                                    registered: reg, inherited: &sub.inherited })?;
         Ok(Parsed { tree: r.tree, gaps: r.gaps.into_iter().map(|p| Diag { at: p.at, code_first: p.code_first, ..Diag::new(&p.sev, &p.lab, p.msg, &p.code) }).collect() })
     })?;
 
@@ -836,7 +859,8 @@ pub fn parse(src: &str, o: &Opts) -> Result<Parse, Thrown> {
             invoked.push(name);
         }
     }
-    let known = |k: &str| match ctx.templates.get(k) {
+    /* the registry of a body holds what the calling source defined */
+    let known = |k: &str| o.inherited.iter().any(|d| d.key == k) || match ctx.templates.get(k) {
         Some(v) => v.truthy(),
         None => inherited(k),
     };

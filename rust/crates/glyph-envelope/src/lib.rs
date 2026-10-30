@@ -11,7 +11,7 @@
 use glyph_parse::{parse, Extra, Gap, Opts};
 use glyph_stores::Context;
 use glyph_json::{stringify, Json};
-use glyph_util::tree::{Emotion, Gloss, Id, Segment, Thrown, Tree, LIMITS};
+use glyph_util::tree::{Emotion, Gloss, Id, Node, Segment, Thrown, Tree, LIMITS};
 use glyph_version::VERSION;
 use glyph_vocab::el_name;
 
@@ -94,6 +94,16 @@ fn obj(kv: Vec<(&str, Option<Json>)>) -> Json {
     Json::Obj(kv.into_iter().filter_map(|(k, v)| v.map(|v| (k.to_string(), v))).collect())
 }
 
+/// `withSlot`: `slot` on a node other than a literal is the template
+/// parameter a named fill carried it in for, past its value — present only
+/// there, so every other node of every envelope keeps its shape.
+fn with_slot(mut o: Json, nd: &Node<Extra>) -> Json {
+    if let (Json::Obj(kv), Some(slot)) = (&mut o, nd.bound_slot.as_deref().filter(|x| !x.is_empty())) {
+        kv.push(("slot".into(), s(slot)));
+    }
+    o
+}
+
 /// `astShallow`: the node without its body.
 pub fn ast_shallow(tree: &Tree<Extra>, id: Id) -> Json {
     let nd = &tree.nodes[id];
@@ -104,18 +114,18 @@ pub fn ast_shallow(tree: &Tree<Extra>, id: Id) -> Json {
                         ("slot", or_null(&nd.bound_slot)), ("role", or_null(&nd.role))]);
     }
     if nd.text == Some(true) {
-        return obj(vec![("type", Some(s("Text"))), ("value", opt_str(&nd.v))]);
+        return with_slot(obj(vec![("type", Some(s("Text"))), ("value", opt_str(&nd.v))]), nd);
     }
     if nd.mode.as_deref().is_some_and(|m| !m.is_empty()) {
         return obj(vec![("type", Some(s("ModeOff")))]);
     }
     if nd.raw_fence == Some(true) {
-        return obj(vec![("type", Some(s("Verbatim"))), ("value", Some(s(nd.v.as_deref().unwrap_or(""))))]);
+        return with_slot(obj(vec![("type", Some(s("Verbatim"))), ("value", Some(s(nd.v.as_deref().unwrap_or(""))))]), nd);
     }
     if nd.logic.is_some() {
         let lg = nd.extra.as_ref().expect("a logic node carries its Logic");
         let strs = |v: &[String]| Json::Arr(v.iter().map(|x| s(x)).collect());
-        return obj(vec![
+        return with_slot(obj(vec![
             ("type", Some(s("Logic"))),
             ("name", Some(if lg.name.is_empty() { Json::Null } else { s(&lg.name) })),
             ("rules", Some(Json::Arr(lg.rules.iter().map(|r| obj(vec![
@@ -123,12 +133,12 @@ pub fn ast_shallow(tree: &Tree<Extra>, id: Id) -> Json {
                 ("source", Some(s(&r.source))), ("expr", Some(s(&r.expr))), ("then", or_null(&r.then)),
                 ("reads", Some(s(&r.reads))), ("uses", Some(strs(&r.uses)))])).collect()))),
             ("missing", Some(strs(&lg.missing))),
-        ]);
+        ]), nd);
     }
     if nd.is_template() {
-        return obj(vec![("type", Some(s("Template"))), ("name", opt_str(&nd.template)),
-                        ("isDefinition", Some(Json::Bool(nd.is_def == Some(true)))),
-                        ("expanded", Some(Json::Bool(nd.expanded == Some(true))))]);
+        return with_slot(obj(vec![("type", Some(s("Template"))), ("name", opt_str(&nd.template)),
+                                  ("isDefinition", Some(Json::Bool(nd.is_def == Some(true)))),
+                                  ("expanded", Some(Json::Bool(nd.expanded == Some(true))))]), nd);
     }
     let tier = nd.tier.clone().unwrap_or_default();
     let canonical = nd.canonical.clone().unwrap_or_default();
@@ -142,7 +152,7 @@ pub fn ast_shallow(tree: &Tree<Extra>, id: Id) -> Json {
         _ => None,
     };
     let element = if tier == "unknown" || tier == "empty" { Json::Null } else { s(&el_name(&canonical, &tier, text_gloss)) };
-    obj(vec![
+    with_slot(obj(vec![
         ("type", Some(s("Command"))),
         ("raw", opt_str(&nd.raw)),
         ("canonical", opt_str(&nd.canonical)),
@@ -167,7 +177,7 @@ pub fn ast_shallow(tree: &Tree<Extra>, id: Id) -> Json {
             None | Some(None) => Json::Null,
             Some(Some(d)) => Json::Num(d),
         })),
-    ])
+    ]), nd)
 }
 
 /// `astHasBody`: a command, a template or a mode carries `body`.

@@ -82,6 +82,9 @@
         "body",
         "at"
       ],
+      "optional": [
+        "slot"
+      ],
       "origin": [
         "root",
         "nest",
@@ -134,6 +137,9 @@
         "value",
         "at"
       ],
+      "optional": [
+        "slot"
+      ],
       "note": "The body of a `[raw]…[/raw]` fence (or of an unclosed one, which the parser refuses with UnclosedRaw), kept verbatim: Glyph quoted inside Glyph, never parsed."
     },
     "Text": {
@@ -141,6 +147,9 @@
         "type",
         "value",
         "at"
+      ],
+      "optional": [
+        "slot"
       ]
     },
     "ModeOff": {
@@ -159,6 +168,9 @@
         "body",
         "at"
       ],
+      "optional": [
+        "slot"
+      ],
       "note": "`expanded` distinguishes an invocation that carries its expansion from a definition body. Without it a reconstruction writes the expansion where the author typed the call."
     },
     "Logic": {
@@ -168,6 +180,9 @@
         "rules",
         "missing",
         "at"
+      ],
+      "optional": [
+        "slot"
       ]
     },
     "Truncated": {

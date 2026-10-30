@@ -18,7 +18,7 @@ use glyph_parse::{collect_bindings, binding_of, deep_inference, parse, unbound_r
 use glyph_stores::{atoms_of, def_of, depth_of, formula_of, species_of, stands_alone, Context};
 use glyph_json::Json;
 use glyph_json::number;
-use glyph_util::tree::{Gloss, Id, Thrown, Tree, LIMITS};
+use glyph_util::tree::{Gloss, Id, Node, Thrown, Tree, LIMITS};
 use glyph_util::{inherited, inherited_text, js_space, js_trim, xesc};
 use glyph_version::VERSION;
 use glyph_vocab::{derived, el_name, get, FRAMES, OPERAND_ATTR, SLOTS};
@@ -91,11 +91,20 @@ pub fn collect(tree: &Tree<Extra>, list: &[Id], acc: &mut Vec<String>, bad: &mut
     }
 }
 
-/// `emitLogic`, for the Logic a `[logic]` node carries.
-pub fn emit_logic(extra: &Extra, d: usize, l: &mut Vec<String>) {
+/// `slotAttr`: the parameter a template call wrote this node for, on
+/// whatever element the node becomes. A bound value is `<user-input slot>`,
+/// and what a named fill carried past its value is marked the same way, so
+/// the call can be rebuilt from the expansion.
+pub fn slot_attr<X>(nd: &Node<X>) -> String {
+    nd.bound_slot.as_deref().filter(|s| !s.is_empty()).map_or(String::new(), |s| format!(" slot=\"{}\"", xesc(s)))
+}
+
+/// `emitLogic`, for the Logic a `[logic]` node carries; `slot` is the
+/// node's `slotAttr`.
+pub fn emit_logic(extra: &Extra, d: usize, l: &mut Vec<String>, slot: &str) {
     let lg = extra.as_ref().expect("a logic node carries its Logic");
     let name = if lg.name.is_empty() { String::new() } else { format!(" name=\"{}\"", xesc(&lg.name)) };
-    l.push(format!("{}<logic{name}>", pad(d)));
+    l.push(format!("{}<logic{name}{slot}>", pad(d)));
     for r in &lg.rules {
         let mut at = vec![format!("kind=\"{}\"", r.kind)];
         if let Some(n) = r.name.as_deref().filter(|n| !n.is_empty()) {
@@ -212,10 +221,10 @@ pub fn emit(tree: &mut Tree<Extra>, root: Id, start: usize, l: &mut Vec<String>,
         if nd.is_literal() {
             let v = nd.v.clone().unwrap_or_default();
             if nd.form.as_deref() == Some("raw") {
-                l.push(format!("{}<off>{}</off>", pad(d), xesc(&js_trim(&v))));
+                l.push(format!("{}<off{}>{}</off>", pad(d), slot_attr(&nd), xesc(&js_trim(&v))));
                 continue;
             }
-            let slot = nd.bound_slot.as_deref().filter(|s| !s.is_empty()).map_or(String::new(), |s| format!(" slot=\"{}\"", xesc(s)));
+            let slot = slot_attr(&nd);
             let role = if nd.role.as_deref() == Some("result") { " role=\"result\"" } else { "" };
             /* a literal whose text is a bound name refers to it; `binds` is a
                plain object, so the prototype's names are bound too */
@@ -230,7 +239,7 @@ pub fn emit(tree: &mut Tree<Extra>, root: Id, start: usize, l: &mut Vec<String>,
             continue;
         }
         if nd.text == Some(true) {
-            l.push(format!("{}<off>{}</off>", pad(d), xesc(nd.v.as_deref().unwrap_or(""))));
+            l.push(format!("{}<off{}>{}</off>", pad(d), slot_attr(&nd), xesc(nd.v.as_deref().unwrap_or(""))));
             continue;
         }
         /* one `[off]` region, one <off> (XML_REFERENCE §4): a region with no
@@ -244,11 +253,11 @@ pub fn emit(tree: &mut Tree<Extra>, root: Id, start: usize, l: &mut Vec<String>,
             continue;
         }
         if nd.raw_fence == Some(true) {
-            l.push(format!("{}<raw>{}</raw>", pad(d), xesc(nd.v.as_deref().unwrap_or(""))));
+            l.push(format!("{}<raw{}>{}</raw>", pad(d), slot_attr(&nd), xesc(nd.v.as_deref().unwrap_or(""))));
             continue;
         }
         if nd.logic.is_some() {
-            emit_logic(&nd.extra, d, l);
+            emit_logic(&nd.extra, d, l, &slot_attr(&nd));
             continue;
         }
         if nd.is_template() {
@@ -257,8 +266,9 @@ pub fn emit(tree: &mut Tree<Extra>, root: Id, start: usize, l: &mut Vec<String>,
                 (Some(g), true) if !matches!(g, Gloss::Text(t) if t.is_empty()) => format!(" means=\"{}\"", xesc(&gloss_text(g))),
                 _ => String::new(),
             };
-            let ta = format!(" name=\"{}\"{}{}{means}", xesc(nd.template.as_deref().unwrap_or("")),
-                             if nd.is_def == Some(true) { " define=\"true\"" } else { "" }, if expanded { " expanded=\"true\"" } else { "" });
+            let ta = format!(" name=\"{}\"{}{}{means}{}", xesc(nd.template.as_deref().unwrap_or("")),
+                             if nd.is_def == Some(true) { " define=\"true\"" } else { "" }, if expanded { " expanded=\"true\"" } else { "" },
+                             slot_attr(&nd));
             if nd.children.is_empty() {
                 l.push(format!("{}<template{ta}/>", pad(d)));
                 continue;
@@ -295,6 +305,9 @@ pub fn emit(tree: &mut Tree<Extra>, root: Id, start: usize, l: &mut Vec<String>,
             }
             at.extend(chain.clone());
             at.extend(join.clone());
+            if let Some(s) = slot_attr(&nd).strip_prefix(' ') {
+                at.push(s.to_string());
+            }
             (format!("<unresolved {}", at.join(" ")), "unresolved".to_string())
         } else {
             let el = el_name(&canonical, &tier, gloss_arg(&nd.gloss));
@@ -307,6 +320,9 @@ pub fn emit(tree: &mut Tree<Extra>, root: Id, start: usize, l: &mut Vec<String>,
             }
             attrs.extend(chain.clone());
             attrs.extend(join.clone());
+            if let Some(s) = slot_attr(&nd).strip_prefix(' ') {
+                attrs.push(s.to_string());
+            }
             if let Some((a, lit)) = moved {
                 attrs.push(format!("{a}=\"{}\"", xesc(tree.nodes[lit].v.as_deref().unwrap_or(""))));
             }

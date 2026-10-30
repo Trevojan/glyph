@@ -202,26 +202,53 @@ export function fromXmlLogic(el, diag) {
   return "[logic" + nm + "]\n" + lines.join("\n") + "\n[/logic]";
 }
 
+/* The fills of an expanded call, from the nodes that carry a slot. A fill is
+   a run of siblings that carry the same slot: the bound value, then what its
+   fill carried, or the hole's own <needs> followed by what the fill carried
+   when it gave no value. A slot already rebuilt is a hole the body names
+   twice, and its second run is the copy the next expansion writes again.
+   `slotOf` answers a node's slot, `{ hole }` for an unbound hole, `undefined`
+   for a node that is not one (whitespace), or nothing; `kidsOf` answers what
+   to look inside; `write` answers a node's source. */
+export function slotFills(list, write, slotOf, kidsOf) {
+  var order = [], parts = Object.create(null);
+  (function scan(xs) {
+    var run = null, skip = false;
+    (xs || []).forEach(function (c) {
+      var s = slotOf(c);
+      if (s === undefined) return;
+      var hole = s && typeof s === "object" ? s.hole : null;
+      var name = hole || (typeof s === "string" ? s : null);
+      if (!name || !/^[A-Za-z]/.test(name)) { run = null; scan(kidsOf(c)); return; }
+      if (run !== name) {
+        run = name;
+        skip = name in parts;
+        if (!skip) { parts[name] = []; order.push(name); }
+      }
+      if (skip || hole) return;
+      parts[name].push(write(c));
+    });
+  })(list);
+  return order.filter(function (n) { return parts[n].length; })
+    .map(function (n) { return "[ph-" + n + parts[n].join("") + "]"; }).join("");
+}
+
 export function fromXmlTemplate(el, diag) {
   var nm = el.attrs.name || "";
   var head = "[--" + nm + (el.attrs.define ? "=" : "");
   if (el.attrs.expanded) {
-    /* An expanded invocation holds the template's body, not the call. The
-       bound values are the ones carrying a slot, and rebuilding them as
-       named [ph-x'v'] fills is exactly what collectFills reads back — so
-       the call survives even though the expansion it produced is discarded
-       and regenerated. What the caller appended beyond the declared params
-       has no slot and cannot be recovered; see the section note. */
-    var fills = "";
-    (function scan(list) {
-      (list || []).forEach(function (c) {
-        if (c.tag === "user-input" && c.attrs && c.attrs.slot && /^[A-Za-z]/.test(c.attrs.slot)) {
-          fills += "[ph-" + c.attrs.slot + asLiteral(xmlText(c)) + "]";
-          return;
-        }
-        scan(c.children);
-      });
-    })(el.children);
+    /* An expanded invocation holds the template's body, not the call. What
+       the call wrote for a parameter carries its slot — the bound value and
+       whatever the named fill held past it — and rebuilding each as a named
+       [ph-x'v'…] fill is exactly what collectFills reads back, so the call
+       survives even though the expansion it produced is discarded and
+       regenerated. What the caller appended beyond the declared params
+       carries no slot and cannot be recovered; see the section note. */
+    var fills = slotFills(el.children, function (c) {
+      return c.tag === "user-input" ? asLiteral(xmlText(c)) : fromXmlNode(c, diag);
+    }, function (c) {
+      return c.tag === "#text" ? undefined : (c.tag === "needs" ? { hole:c.attrs.slot } : (c.attrs.slot || null));
+    }, function (c) { return c.children; });
     return head + fills + "]";
   }
   return head + xmlKids(el, diag) + "]";
@@ -439,21 +466,23 @@ export function fromAST(env, opts) {
            bound values are the ones carrying a slot; everything else is
            regenerated from the store on the next pass. */
         if (n.expanded) {
-          var fills = "";
-          (function scan(list) {
-            (list || []).forEach(function (c) {
-              if (c && c.type === "Command" && c.slotName) return;   /* the binder itself */
-              /* a BOUND value is the call; an unbound one is the template's
-                 own prompt, and writing that back turns a question into an
-                 answer — the same rule <needs> follows */
-              if (c && (c.type === "Literal" || c.type === "Raw") && c.slot &&
-                  /^[A-Za-z]/.test(c.slot)) {
-                fills += "[ph-" + c.slot + lit(c.value, c.form) + "]";
-                return;
-              }
-              if (c && c.body) scan(c.body);
-            });
-          })(n.body);
+          /* a BOUND value is the call, and so is what its fill carried; an
+             unbound hole is the template's own prompt, and writing that back
+             turns a question into an answer — the same rule <needs> follows */
+          var fills = slotFills(n.body, function (c) { return node(c); }, function (c) {
+            if (!c || (c.type === "Command" && c.slotName)) return null;
+            /* a hole that holds nothing but its name and its question is the
+               hole; one that holds more (a <placeholder>) is looked inside,
+               where what the fill carried follows its question */
+            if (c.type === "Command" && c.canonical === "PH" && !c.slot) {
+              var hk = c.body || [];
+              var b = hk.filter(function (k) { return k && k.slotName; })[0];
+              var hq = hk.filter(function (k) { return k && (k.type === "Literal" || k.type === "Raw"); })[0];
+              var bare = hk.every(function (k) { return k === b || k === hq; });
+              return b && bare ? { hole:String(b.raw || b.canonical || "") } : null;
+            }
+            return c.slot || null;
+          }, function (c) { return c && c.body; });
           return "[--" + String(n.name || "") + fills + "]";
         }
         return "[--" + String(n.name || "") + (n.isDefinition ? "=" : "") + kids(n.body) + "]";

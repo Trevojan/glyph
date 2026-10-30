@@ -330,6 +330,58 @@ const TEMPLATES = [
          "<user-input slot=\"criterion\">crit</user-input>"] }
 ];
 
+/* Template inclusion: a known command never vanishes (decided 2026-10-25,
+   with the Regent's answers on fills and on source definitions). What a call
+   writes reaches the expansion — what a named fill holds past its value
+   travels with it into the hole's place under the hole's slot, a fill no hole
+   names lands after the body under its own name, a literal past every
+   parameter lands after the body — and a definition written in the source
+   expands where it is called, over the store. A bucket of its own, held by
+   the round trip (RT-08, RT-09) and by the parse probes, not by the snapshot:
+   ORACLE_COVERAGE carries one declared source per new code. */
+const INCLUSION = [
+  { id:"TI-01", name:"a named fill carries its command into the hole's place",
+    src:"[--reinforce[ph-rule'a'[crit'x']][ph-why'b']]", opts:WITH_TPL, noFix:true,
+    xml:[/<mandatory[^>]*>\s*<user-input slot="rule">a<\/user-input>\s*<criticise slot="rule">/] },
+  { id:"TI-02", name:"a fill with no value keeps the hole asking, and its command after it",
+    src:"[--reinforce[ph-rule[crit'x']]'b']", opts:WITH_TPL, noFix:true,
+    xml:[/<needs slot="rule">[^<]*<\/needs>\s*<criticise slot="rule">/, '<user-input slot="why">b</user-input>'] },
+  { id:"TI-03", name:"a fill no hole names lands after the body, under its own name",
+    src:"[--reinforce'a''b'[ph-zzz'v'[crit'x']]]", opts:WITH_TPL, code:"TemplateUnknownParam",
+    xml:[/<\/reason>\s*<user-input slot="zzz">v<\/user-input>\s*<criticise slot="zzz">/] },
+  { id:"TI-04", name:"a hole filled twice binds the first value, and keeps the second",
+    src:"[--reinforce[ph-rule'a'][ph-rule'z'[crit'x']]'b']", opts:WITH_TPL, noFix:true,
+    xml:[/<user-input slot="rule">a<\/user-input>\s*<user-input slot="rule">z<\/user-input>\s*<criticise slot="rule">/] },
+  { id:"TI-05", name:"a literal past every parameter lands after the body",
+    src:"[--reinforce'a''b''c']", opts:WITH_TPL, noFix:true,
+    xml:[/<\/reason>\s*<user-input>c<\/user-input>/] },
+  { id:"TI-06", name:"a definition written in the source expands where it is called",
+    src:"[--t=[crit'x']][--t]", opts:WITH_TPL, noFix:true, codeAbsent:"UndefinedTemplate",
+    xml:[/<template name="t" expanded="true">\s*<criticise>/] },
+  { id:"TI-07", name:"its holes bind by position, in the order the body names them",
+    src:"[--t=[mand[ph-x`q`],[ph-y`r`]]][--t'a''b']", opts:WITH_TPL, noFix:true,
+    xml:['<user-input slot="x">a</user-input>', '<user-input slot="y">b</user-input>'] },
+  { id:"TI-08", name:"a definition written twice is refused, and the first holds",
+    src:"[--t=[crit'x']][--t=[sum'y']][--t]", opts:WITH_TPL, code:"TemplateDefinedTwice",
+    xml:[/<template name="t" expanded="true">\s*<criticise>/] },
+  { id:"TI-09", name:"the source definition is the one its call reads, over the store",
+    src:"[--reinforce=[crit[ph-q`what`]]][--reinforce'x']", opts:WITH_TPL, noFix:true,
+    xml:[/<template name="reinforce" expanded="true">\s*<criticise>/, '<user-input slot="q">x</user-input>'],
+    xmlAbsent:["<priority"] },
+  { id:"TI-10", name:"a definition declares: its body names a result only where it is called",
+    src:"[--t=[sum'a'[ctx]]][--t]", opts:WITH_TPL, noFix:true, codeAbsent:"DuplicateBinding" },
+  { id:"TI-11", name:"the shape a template promises holds for what a fill carried",
+    src:"[--loop[ph-target'x'[gen'y']]'p''u']", opts:WITH_BOTH, code:"TemplateConstraint:no-coarsen" },
+  /* a hole that holds more is a <placeholder> (EMS-002 ORD-0026), and what the
+     fill carried stays inside it: [answer, …carried, …held] */
+  { id:"TI-12", name:"in a <placeholder>, the answer, then what the fill carried, then what the hole held",
+    src:"[--t=[mand[ph-x`q`[crit'h']]]][--t[ph-x'a'[sum'c']]]", opts:WITH_TPL, noFix:true,
+    xml:[/<placeholder[^>]*>\s*<user-input slot="x">a<\/user-input>\s*<summary slot="x">\s*<user-input>c<\/user-input>\s*<\/summary>\s*<criticise>/] },
+  { id:"TI-13", name:"in an unfilled <placeholder>, the question, then what the fill carried, then what the hole held",
+    src:"[--t=[mand[ph-x`q`[crit'h']]]][--t[ph-x[sum'c']]]", opts:WITH_TPL, noFix:true,
+    xml:[/<placeholder[^>]*>\s*<needs slot="x">q<\/needs>\s*<summary slot="x">\s*<user-input>c<\/user-input>\s*<\/summary>\s*<criticise>/] }
+];
+
 /* Template constraints: the rules above are local (command vs command).
    These check the SHAPE a template promised, only inside its own expansion —
    the gap that let a loop be handed commands dissolving the loop itself. */
@@ -387,7 +439,11 @@ const ORACLE_COVERAGE = [
   { id:"OC-12", src:"[raw] never closed", code:"UnclosedRaw" },
   /* the inclusion of 2026-10-25 (EMS-002 ORD-0024): a stray [on] is the
      command ON, and says nothing was off */
-  { id:"OC-13", src:"[crit'x'][on] the rest is read", code:"UnmatchedOnMode" }
+  { id:"OC-13", src:"[crit'x'][on] the rest is read", code:"UnmatchedOnMode" },
+  /* the inclusion of 2026-10-25, on fills and source definitions: a fill no
+     hole names, and a template defined twice in one package */
+  { id:"OC-14", src:"[--reinforce'a''b'[ph-zzz'v']]", code:"TemplateUnknownParam" },
+  { id:"OC-15", src:"[--t=[ctx'x']][--t=[ctx'y']][--t]", code:"TemplateDefinedTwice" }
 ];
 
 /* ------------------------------------------------------------------ *
@@ -577,8 +633,9 @@ function check(tc, rules) {
   if (tc.segments !== undefined && res.segments.length !== tc.segments)
     why.push("segments " + res.segments.length + " != " + tc.segments);
 
+  /* a fragment, or a pattern where what matters is that one element follows another */
   (tc.xml || []).forEach(frag => {
-    if (xml.indexOf(frag) === -1) why.push("XML does not contain: " + frag);
+    if (frag instanceof RegExp ? !frag.test(xml) : xml.indexOf(frag) === -1) why.push("XML does not contain: " + frag);
   });
   (tc.xmlAbsent || []).forEach(frag => {
     if (xml.indexOf(frag) !== -1) why.push("XML contains what it should not: " + frag);
@@ -628,6 +685,7 @@ const rN = runGroup("Invalid — require a `fix` diagnostic", INVALID, { require
 const rR = runGroup("v1.8 regressions closed in v1.0.9", REGRESSION, { noFix:false });
 const rL = runGroup("Long blocks — the engine must not break", LONG, { noFix:false });
 const rT = runGroup("Templates — invocation expands the definition", TEMPLATES, { noFix:false });
+const rTI = runGroup("Template inclusion — what a call writes reaches the expansion", INCLUSION, { noFix:false });
 const rC = runGroup("Semantic rules — pair, order, precondition", RULE_CASES, { noFix:false });
 const rK = runGroup("Template constraints — the shape a template promises", CONSTRAINTS, { noFix:false });
 const rG = runGroup("Guard — rules must not break normal usage", POSITIVE_WITH_RULES, { noFix:true });
@@ -1541,6 +1599,27 @@ function runAstInvariant() {
      (thin.src === "" && (thin.diag || []).some(d => d.code === "ThinnedAST" && d.sev === "fix"))
        ? null : "it tried: " + JSON.stringify(thin.src));
 
+  /* What a call writes into a fill carries the fill's slot, a fill no hole
+     names carries its own, and a source definition is source: all of it comes
+     back from both inverses. The literal past every parameter carries no slot,
+     which is the template-overflow loss README pins (RT-09). A `,` between
+     bracketed siblings is the cause RT-01 pins, and only the XML path has it. */
+  const overflow = INCLUSION.filter(c => c.id === "TI-05").map(c => c.src);
+  const inclusionBroke = [];
+  INCLUSION.filter(c => overflow.indexOf(c.src) === -1).forEach(c => {
+    const viaAst = G.fromAST(G.toAST(c.src, opts), opts).src;
+    if (meaning(c.src) !== meaning(viaAst)) inclusionBroke.push(c.id + " via AST: " + viaAst);
+    const viaXml = G.fromXML(G.toXML(c.src, opts), opts).src;
+    if (!commaBetweenBrackets(c.src) && meaning(c.src) !== meaning(viaXml)) inclusionBroke.push(c.id + " via XML: " + viaXml);
+  });
+  ok("RT-08", "what a call writes into a fill, and a source definition, survive both inverses",
+     inclusionBroke.length ? inclusionBroke.slice(0, 4).join(" | ") : null);
+  const overflowHealed = overflow.filter(src =>
+    meaning(src) === meaning(G.fromXML(G.toXML(src, opts), opts).src) ||
+    meaning(src) === meaning(G.fromAST(G.toAST(src, opts), opts).src));
+  ok("RT-09", "the literal past every parameter is still the pinned overflow loss",
+     overflowHealed.length ? "it comes back now — invert this pin and the README line: " + overflowHealed.join(" | ") : null);
+
   return D.length;
 }
 const rRT = runAstInvariant();
@@ -1572,7 +1651,7 @@ function runSchemaChecks() {
   const opts = { templates: TPL.templates, rules: RULESTORE,
                  expansions: require("../.guidelines/expansions.json") };
   const CORPUS = [].concat(POSITIVE, INCOMPLETE, INVALID, REGRESSION, LONG,
-                           TEMPLATES, CONSTRAINTS, RULE_CASES, ORACLE_COVERAGE);
+                           TEMPLATES, CONSTRAINTS, RULE_CASES, ORACLE_COVERAGE, INCLUSION);
 
   const bad = [], truncated = [], acceptedAnyway = [];
   CORPUS.forEach(c => {
@@ -2104,7 +2183,7 @@ function runSnapshotChecks() {
     const valueOf = v => typeof v === "function" ? { function: v.name } : v;
     const FIELDS = ["id", "raw", "tier", "canonical", "gloss", "alias", "colon", "autoClosed", "editorial", "origin",
        "chainElement", "slotName", "depth", "literal", "v", "form", "role", "text", "rawFence", "template",
-       "isDef", "mode", "isDefinition", "expanded", "boundSlot"];
+       "isDef", "mode", "isDefinition", "expanded", "boundSlot", "fromSource"];
     /* `full` adds what only the whole parse sets — the species pass, the
        bindings, the suggestion — and the segments' own fields; every key a
        node or a segment holds must be one the dump knows */
@@ -2197,7 +2276,7 @@ function runSnapshotChecks() {
        own names — `[constructor` is one of them, through Object.prototype */
     const BARE_PROBES = ["[--bare[constructor]]", "[--bare[sum'x']]", "[--bare[constructor[sum'x']]]", "[--fenced'q'[constructor]]"];
     const treeRuns = [];
-    const MODULE_CODE = /^(TemplateCycle|TemplateParamNotLiteral|TemplateConstraint:|Rule:)/;
+    const MODULE_CODE = /^(TemplateCycle|TemplateParamNotLiteral|TemplateUnknownParam|TemplateDefinedTwice|TemplateConstraint:|Rule:)/;
     const RANK = { fix: 0, ask: 1, note: 2 };
     const catcher = caught => (sev, lab, msg, code, enLab, enMsg) => caught.push({ sev: sev, lab: lab, msg: msg,
       code: code || "Note", enLab: enLab || null, enMsg: enMsg || null });
@@ -2326,7 +2405,18 @@ function runSnapshotChecks() {
       "[ph[crit'x']'q']", "[ph-a-crit'q']", "[ph-a'q'-crit]", "[ph -crit'q']", "[ph -crit,rev]", "[ph- a[crit]]",
       "[ph-a-crit,rev[sum'x']'q']", "[ph[off]x[on]]", "[ph[logic]a = 1[/logic]]", "[ph[raw]x[/raw]]",
       "r- [ph'q'[crit'x']]", "[ctx[ph-a[crit'x']]]", "[ph'q'[ph-b[crit'x']]]"
-    ];
+    ].concat(INCLUSION.map(c => c.src), [
+      /* the inclusion's edges: a repeat fill that carries, a carried run with
+         `,`, a carried prose word, a call before its source definition, a
+         definition calling itself, a binding in a definition never called, a
+         fill no hole names carrying a constrained command, a hole nested in a
+         fill, and a definition whose hole holds more with no question */
+      "[--best-of'c','A','B'[ph-more'C'[crit'x']][ph-more'D'][ph-criterion'k']]",
+      "[--reinforce[ph-rule[crit'x'],[sum'y']]'b']", "[--reinforce[ph-rule'a' plain words]'b']",
+      "[--t][--t=[mand[ph-x`q`]]][--t'v']", "[--t=[--t]][--t]", "[--t=[sum'a'[ctx]]][ref'a']",
+      "[--loop'x''p''u'[ph-zzz'v'[instof'w']]]", "[--reinforce[ph-rule'a'[ph-q`nested`]]'b']",
+      "[--t=[mand[ph-x[crit'h']]]][--t[ph-x[sum'c']]]"
+    ]);
     const NO_SESSION = ["constructor", "[constructor]", "rd", "[ctx] prose ist"];
     const NO_VALENCY = ["[gt'a']", "[ctx]", "[cat'a']"];
     const parseRuns = [], xmlRuns = [];
@@ -3697,7 +3787,7 @@ function runContextGuard() {
   const loose = { templates: TPL.templates, rules: RULESTORE, expansions: require("../.guidelines/expansions.json") };
   const ctx = G.createContext(loose);
   const CORPUS = [].concat(POSITIVE, INCOMPLETE, INVALID, REGRESSION, LONG,
-                           TEMPLATES, CONSTRAINTS, RULE_CASES, ORACLE_COVERAGE);
+                           TEMPLATES, CONSTRAINTS, RULE_CASES, ORACLE_COVERAGE, INCLUSION);
   const three = (src, o) => {
     const a = G.toAST(src, o); delete a.version;
     return G.toXML(src, o) + "\n" + JSON.stringify(a) + "\n" + G.toHGML(src, o);
@@ -3836,6 +3926,7 @@ console.log(" Invalid      " + rN + "/" + INVALID.length);
 console.log(" Regressions  " + rR + "/" + REGRESSION.length);
 console.log(" Long blocks  " + rL + "/" + LONG.length);
 console.log(" Templates    " + rT + "/" + TEMPLATES.length);
+console.log(" Inclusion    " + rTI + "/" + INCLUSION.length);
 console.log(" Rules        " + rC + "/" + RULE_CASES.length);
 console.log(" Constraints  " + rK + "/" + CONSTRAINTS.length);
 console.log(" Guard        " + rG + "/" + POSITIVE_WITH_RULES.length);

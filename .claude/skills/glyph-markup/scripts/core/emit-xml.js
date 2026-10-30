@@ -197,6 +197,14 @@ export function operandAttr(nd, opts) {
   return { name:name, lit:lit };
 }
 
+/* The parameter a template call wrote this node for, on whatever element
+   the node becomes: a bound value is `<user-input slot>` and has always
+   been, and what a named fill carried past its value is marked the same
+   way, so the call can be rebuilt from the expansion. */
+export function slotAttr(nd) {
+  return nd && nd.boundSlot ? ' slot="' + xesc(nd.boundSlot) + '"' : "";
+}
+
 /* Iterative with an explicit stack. The recursive version overflowed the
    JS call stack around 2000 levels, and in Glyph depth grows with the
    query's size (every `[` without a `]` nests). A frame with `tail` holds
@@ -217,9 +225,9 @@ export function emit(root, startDepth, L, opts) {
     var nd = f.nd, d = f.d;
 
     if (nd.literal) {
-      if (nd.form === "raw") { L.push(pad(d) + "<off>" + xesc(nd.v.trim()) + "</off>"); continue; }
+      if (nd.form === "raw") { L.push(pad(d) + "<off" + slotAttr(nd) + ">" + xesc(nd.v.trim()) + "</off>"); continue; }
       // value bound to a template slot: the slot's name travels along with it
-      var slotAt = nd.boundSlot ? ' slot="' + xesc(nd.boundSlot) + '"' : "";
+      var slotAt = slotAttr(nd);
       var roleAt = nd.role === "result" ? ' role="result"' : "";
       /* A literal whose text IS a bound name is a reference to it. This is a
          table lookup, not an inference: the name exists because some command
@@ -234,7 +242,7 @@ export function emit(root, startDepth, L, opts) {
       L.push(pad(d) + "<user-input" + slotAt + roleAt + refAt + ">" + xesc(nd.v) + "</user-input>");
       continue;
     }
-    if (nd.text) { L.push(pad(d) + "<off>" + xesc(nd.v) + "</off>"); continue; }
+    if (nd.text) { L.push(pad(d) + "<off" + slotAttr(nd) + ">" + xesc(nd.v) + "</off>"); continue; }
     /* one `[off]` region, one <off> (XML_REFERENCE §4): its prose is the raw
        child, and a region with none — `[off][on]`, or `[off]` ending the
        source — is the element with nothing in it, as `[off] [on]` already is */
@@ -244,13 +252,13 @@ export function emit(root, startDepth, L, opts) {
       continue;
     }
     /* verbatim: the body is text, and the element carries no children */
-    if (nd.rawFence) { L.push(pad(d) + "<raw>" + xesc(nd.v || "") + "</raw>"); continue; }
-    if (nd.logic) { emitLogic(nd.logic, d, L); continue; }
+    if (nd.rawFence) { L.push(pad(d) + "<raw" + slotAttr(nd) + ">" + xesc(nd.v || "") + "</raw>"); continue; }
+    if (nd.logic) { emitLogic(nd.logic, d, L, slotAttr(nd)); continue; }
 
     if (nd.template) {
       var ta = ' name="' + xesc(nd.template) + '"' + (nd.isDef ? ' define="true"' : "") +
                (nd.expanded ? ' expanded="true"' : "") +
-               (nd.expanded && nd.gloss ? ' means="' + xesc(nd.gloss) + '"' : "");
+               (nd.expanded && nd.gloss ? ' means="' + xesc(nd.gloss) + '"' : "") + slotAttr(nd);
       var tkids = nd.children || [];
       if (!tkids.length) { L.push(pad(d) + "<template" + ta + "/>"); continue; }
       L.push(pad(d) + "<template" + ta + ">");
@@ -289,6 +297,7 @@ export function emit(root, startDepth, L, opts) {
       if (nd.suggestion) at.push('nearest="' + xesc(nd.suggestion.name.toLowerCase()) + '"');
       if (chainAttr) at.push(chainAttr);   /* so [in-zzz reads back as a chain link */
       if (joinAttr) at.push(joinAttr);     /* and [a],[zzz] as a conjunction member */
+      if (nd.boundSlot) at.push(slotAttr(nd).slice(1));
       open = "<unresolved " + at.join(" ");
       closeName = "unresolved";
     } else {
@@ -298,6 +307,7 @@ export function emit(root, startDepth, L, opts) {
       if (nd.colon) attrs.push('name="' + xesc(nd.colon) + '"');
       if (chainAttr) attrs.push(chainAttr);
       if (joinAttr) attrs.push(joinAttr);
+      if (nd.boundSlot) attrs.push(slotAttr(nd).slice(1));
       moved = operandAttr(nd, opts);
       if (moved) attrs.push(moved.name + '="' + xesc(moved.lit.v) + '"');
       /* the name this command's result answers to, from its own operand */
@@ -423,8 +433,8 @@ export function holeOf(nd) {
   return { bare:false, needs:needs, kids:out, runHead:run[0] || null };
 }
 
-export function emitLogic(lg, d, L) {
-  L.push(pad(d) + "<logic" + (lg.name ? ' name="' + xesc(lg.name) + '"' : "") + ">");
+export function emitLogic(lg, d, L, slotAt) {
+  L.push(pad(d) + "<logic" + (lg.name ? ' name="' + xesc(lg.name) + '"' : "") + (slotAt || "") + ">");
   lg.rules.forEach(function (r) {
     var at = ['kind="' + r.kind + '"'];
     if (r.name) at.push('var="' + xesc(r.name) + '"');

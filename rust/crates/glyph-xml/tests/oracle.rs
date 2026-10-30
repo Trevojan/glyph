@@ -69,7 +69,8 @@ fn every_xml_run_equals_the_js() {
         let ctx = context(run);
         let o = glyph_parse::Opts {
             ctx: &ctx, session: run.get("session") != Some(&Json::Bool(false)),
-            valency: run.get("valency") != Some(&Json::Bool(false)), en: false, expanding: Vec::new(), registered: glyph_stores::Registered::none()
+            valency: run.get("valency") != Some(&Json::Bool(false)), en: false, expanding: Vec::new(), registered: glyph_stores::Registered::none(),
+            inherited: &[]
         };
         for (k, describe) in [("xml", false), ("describe", true)] {
             let got = to_xml(src, &o, describe);

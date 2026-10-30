@@ -76,18 +76,18 @@ struct Count {
 /// that body as the JS recorded them. What it raises, what it throws, and the
 /// tree after equal the JS's; the tree goes up as the body's parse, with what
 /// the level raised.
-fn level(p: &Json, ctx: &Context, expanding: &[String], id: &str, n: &mut Count)
+fn level(p: &Json, ctx: &Context, expanding: &[String], inherited: &[Inherited<()>], id: &str, n: &mut Count)
          -> (glyph_util::tree::Tree<()>, Result<(), Thrown>, Vec<Diag>) {
     let mut tree = tree_of(p.get("before").expect("before"));
     let mut asked = p.a("parses").iter();
     let mut raised = Vec::new();
-    let result = expand_invocations(&mut tree, ctx, true, expanding, &mut |d| raised.push(d), &mut |body, sub| {
+    let result = expand_invocations(&mut tree, ctx, true, expanding, inherited, &mut |d| raised.push(d), &mut |body, sub| {
         let q = asked.next().unwrap_or_else(|| panic!("{id}: a parse the JS did not ask for: {body:?}"));
         assert_eq!(body, q.s("body"), "{id}: the body handed to parse");
         let chain: Vec<&str> = q.a("expanding").iter().map(|x| x.str().expect("a name")).collect();
         assert_eq!(sub.expanding, chain, "{id}: the templates being expanded");
         assert!(!sub.valency && sub.session, "{id}: what parse is told");
-        let (tree, r, _) = level(q, &Context::shared(Some(Arc::clone(sub.templates)), None, None), &sub.expanding, id, n);
+        let (tree, r, _) = level(q, &Context::shared(Some(Arc::clone(sub.templates)), None, None), &sub.expanding, &sub.inherited, id, n);
         r?;
         Ok(Parsed { tree, gaps: q.a("gaps").iter().map(diag_of).collect() })
     });
@@ -111,7 +111,7 @@ fn every_expansion_and_constraint_equals_the_js() {
     for run in runs {
         let id = run.s("id");
         let ctx = context(trees, run);
-        let (tree, _, _) = level(run, &ctx, &[], id, &mut n);
+        let (tree, _, _) = level(run, &ctx, &[], &[], id, &mut n);
 
         let Some(want) = run.get("constraints") else { continue };
         let mut got = Vec::new();
@@ -144,7 +144,8 @@ fn every_dump_reads_back_to_itself() {
 /// error, which the expander raises again under the invocation.
 fn from_these_passes(d: &Json) -> bool {
     let code = d.s("code");
-    ["TemplateCycle", "TemplateParamNotLiteral", "TemplateConstraint:", "Rule:"].iter().any(|p| code.starts_with(p))
+    ["TemplateCycle", "TemplateParamNotLiteral", "TemplateUnknownParam", "TemplateDefinedTwice", "TemplateConstraint:", "Rule:"]
+        .iter().any(|p| code.starts_with(p))
         || d.s("plain").starts_with("no corpo de [--")
 }
 
@@ -156,7 +157,7 @@ fn the_diagnostics_of_every_t_c_and_k_case_equal_the_oracle() {
         let id = case.s("id");
         let run = trees.a("runs").iter().find(|r| r.s("id") == id).unwrap_or_else(|| panic!("{id} has no run in trees.json"));
         let ctx = context(trees, run);
-        let (tree, r, mut raised) = level(run, &ctx, &[], id, &mut Count::default());
+        let (tree, r, mut raised) = level(run, &ctx, &[], &[], id, &mut Count::default());
         r.unwrap_or_else(|e| panic!("{id}: {e:?}"));
         check_rules(&tree, &ctx, &mut |d| raised.push(d)).unwrap_or_else(|e| panic!("{id}: {e:?}"));
         check_template_constraints(&tree, &ctx, &mut |d| raised.push(d)).unwrap_or_else(|e| panic!("{id}: {e:?}"));

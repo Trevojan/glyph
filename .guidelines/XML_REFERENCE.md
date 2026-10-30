@@ -87,9 +87,9 @@ Session shortcuts are the exception — they serialise as the shortcut itself
 | `name` | any element | `[x:name` | colon-named identifier |
 | `name` | `<template>` `<logic>` | `[--name` / `[logic:name` | the template or logic block's name |
 | `define` | `<template>` | `[--name=` | declares rather than invokes |
-| `expanded` | `<template>` | — | the body was written out from the store |
+| `expanded` | `<template>` | — | the body was written out, from the store or from a definition in the source |
 | `means` | `<template>` | template `gloss` | what the template is for |
-| `slot` | `<user-input>` `<needs>` | `[ph-name` | which parameter this fills |
+| `slot` | `<user-input>` `<needs>`, and any element a named fill carried | `[ph-name` | which parameter this fills, or which one the call wrote it for |
 | `dominant` | `<mood>` | first `/emo/` | the leading mood |
 | `also` | `<mood>` | further `/emo/` | the rest, comma-separated |
 | `expects` | `<user-expectative>` | `r-` | flattened summary of the return body |
@@ -204,6 +204,40 @@ bare tag written straight after `[ph-` is the hole's name; any other bare tag in
 the hole is a chain link. Inside a `<placeholder>`, and only there, a `<needs>`
 with no slot is source too: it is the hole's own. A hole a template call filled
 keeps what it held, its answer a `<user-input slot>` in place of the `<needs>`.
+
+A named fill is the whole bracket. Its first literal is the value; what it holds
+past the value — a command, a further literal, prose — follows the value into
+the hole's place, each on its own element carrying the hole's `slot`, because
+what is nested in an item belongs to that item (`GLOSSARY.md` §0.3). A fill with
+no value leaves the hole asking, and what it carried follows the `<needs>`:
+
+```xml
+<!-- invocation: [--codefix[ph-target'the login handler'[crit'its error path']] -->
+<template name="codefix" expanded="true" means="…">
+  <requirement>…<user-input slot="target">the login handler</user-input>
+    <criticise slot="target">…<user-input>its error path</user-input></criticise>…</requirement>
+</template>
+```
+
+When the hole is a `<placeholder>`, what the fill carried stays inside it,
+after the answer (or the `<needs>`) and before what the hole held:
+`[answer, …carried, …held]`.
+
+A second fill for the same hole is more of the first, and the first value
+binds. A fill that names no hole lands after the body under its own name as
+`slot`, and the parse refuses it with `TemplateUnknownParam`; a literal written
+past every parameter lands after the body with no `slot`. `fromXML()` rebuilds
+each fill from the run of siblings that carry its `slot`. What lands after the
+body with no `slot` is the template overflow the README pins: it does not come
+back.
+
+A definition written in the source, `[--name=…]`, is a template of the whole
+package: a call before it or after it expands it, as a call to the store does,
+and over a store template of the same name. Its parameters are its holes, in
+the order the body names them, and its expansion carries no `means`. A second
+definition of the same name is refused with `TemplateDefinedTwice`, and the
+first holds. A definition declares: a result its body names is named where a
+call expands it.
 
 `<needs>` is written in four shapes and only the first is source:
 
