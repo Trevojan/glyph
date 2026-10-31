@@ -63,14 +63,8 @@ colon retires as a recogniser at `ask` severity, its text kept as the operand;
 the further positions of §3 where a known command drops enter by the rule of
 `ORD-0025`; and a stray `[on]` keeps its `note`.
 
-Built, and not confirmed — each goes back to the Regent with its alternative:
-
-- **`[ctx]-crit` at the top level** attaches the link to the block, read as
-  GLOSSARY §0.3 sequence; the alternative is to attach it to the command just
-  closed, so that `[ctx]-crit` equals `[ctx-crit]`.
-- **The hole's name** is only the bare tag written straight after `[ph-`; the
-  alternative is the first bare tag anywhere in the hole, so that
-  `[ph'q'-crit]` is the hole `crit`.
-- **The scoped reading of `[off'x']` and `[on'x']`**: the operand read with
-  interpretation off or on — no engine change, a reading of SIGNATURES §6; the
-  alternative is a recogniser that names the switch.
+Confirmed on 2026-10-31, as built: a link at the top level — `[ctx]-crit`,
+and every block-level position — is a sibling in sequence, its subject the
+result of what precedes it (GLOSSARY §0.3); only the bare tag written straight
+after `[ph-` names a hole; and a mode word with an operand scopes it, as
+SIGNATURES §6 states. Nothing of the inclusion waits on the Regent.

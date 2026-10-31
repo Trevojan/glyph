@@ -13,6 +13,12 @@
 
 ---
 
+## 2026-10-31
+
+| decisão | razão |
+|---|---|
+| **As três leituras construídas da inclusão ficam como estão** | respondido no questionário de 2026-10-31: *"Keep: sibling in sequence"*, *"Keep: only after [ph-"* e *"Keep, reading as scoped"*. Um elo no nível do bloco é irmão em sequência, o sujeito dele o resultado do que vem antes (GLOSSARY §0.3); só a bareTag escrita logo depois de `[ph-` nomeia o buraco; uma palavra de modo com operando o escopa, e a SIGNATURES §6 diz isso |
+
 ## 2026-10-30
 
 | decisão | razão |

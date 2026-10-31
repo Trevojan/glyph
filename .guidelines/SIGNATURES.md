@@ -113,6 +113,10 @@ negates all three.
 
 - `[pos[A]]` is equivalent to `[A]`; `[ngt[A]]` is the logical negation of `[A]`.
 - `[mand[A]]` makes `A` mandatory; `[opt[A]]` makes it optional.
+- The mode words scope what they hold the same way: `[off'x']` reads its
+  operand with interpretation off, `[on'x']` with it on. `<mode-off>` and
+  `<mode-on>` carry the operand; the switch is the bare `[off]` … `[on]`
+  pair, which makes a region verbatim (ratified 2026-10-31).
 
 Careful with the neighbouring pair, which is **not** polarity: `[dont]` negates
 **doing something** (the action), `[deny]` rejects **what leads to a result**
