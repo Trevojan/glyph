@@ -1,0 +1,39 @@
+<glyph-package engine="3.6.9.07">
+  <schema/>
+  <block once="true">
+    <block binds="ORD-0008-registered">
+      <user-input>ORD-0008-registered</user-input>
+      <context>
+        <user-input>the spec of EMS-002</user-input>
+        <user-input>.guidelines/.orders/EMS-002/EMS-002.pgml</user-input>
+      </context>
+      <target>
+        <user-input>a template body reads what the caller registered, question 6 of the EMS-001 return, answered c</user-input>
+      </target>
+      <context>
+        <user-input>the JS expander parses a body with the call templates alone, so its rules and its composition table fall to what useRules and useExpansions registered: the CLI registers the repository stores, the page registers its own, the protocol process registers nothing, and the Rust hands a body none; a body that breaks a rule raises it once with nothing registered and twice with the rules registered</user-input>
+      </context>
+      <constraint>
+        <user-input>the JS first: the protocol process registers the stores it answers with when it runs as the engine, and never when it is imported, so the suite keeps registering nothing until its last bucket</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the formula parse of the burn also falls to what is registered in the JS, and its diagnostics are dropped and no formula calls a template, so nothing it emits can differ; it is left as it is, and said so</user-input>
+      </constraint>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the registry</user-input>
+        <user-input>the Rust keeps what the caller registered beside the context, and a template body reads it, as the JS body reads useRules and useExpansions</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the callers</user-input>
+        <user-input>the CLI and the engine behind the app register the repository stores in both engines, the JS protocol first, so a body that breaks a rule reads the same in the CLI and in the app by both engines</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the oracle</user-input>
+        <user-input>the export records template bodies with nothing registered and with the repository registered, the Rust answers both byte for byte, and the oracle of the cases does not move</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>

@@ -61,6 +61,17 @@
         ".guidelines/.constraints/README.md"
       ],
       "next": "plano UPD-74c1741d aplicado; os seis .template ficam ao lado dos READMEs editados, como o regency os guarda; só o .constraints trazia o que faltava (O mais simples suficiente), fundido"
+    },
+    {
+      "id": "PACK-GLYPH",
+      "title": "o Glyph adotado como pack de projeto do regency",
+      "state": "review",
+      "who": "DV",
+      "since": "2026-10-31",
+      "where": [
+        ".guidelines/.packs/glyph/pack.json"
+      ],
+      "next": "12 comandos, todos propostas; o Regente escolhe activate, ratify ou run"
     }
   ]
 }

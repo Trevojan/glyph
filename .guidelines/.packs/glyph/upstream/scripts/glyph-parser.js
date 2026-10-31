@@ -1,0 +1,87 @@
+/**
+ * glyph-parser.js — the public face of the core.
+ *
+ * Single core of the chain  human → glyph → xml → machine. The engine lives
+ * in scripts/core/, twelve ESM modules cut along the dependency graph
+ * seam-graph.js measured (.guidelines/.orders/INTAKE-PARSER-SPLIT.md); this
+ * file imports what each of them exports to the outside and assembles the
+ * one object every consumer has always reached for:
+ *
+ *   glyph-cli.js, glyph-diff.js, glyph-trace.js, build-templates.js,
+ *   build-skill.js            import G from "./glyph-parser.js"
+ *   glyph-engine-alias.html   <script type="module" src="scripts/glyph-parser.js">
+ *   glyph-ui.js               globalThis.GlyphCore
+ *
+ * The dependency direction inside core/ is strict and acyclic:
+ *
+ *   util ← vocabulary ← stores ← lexer ← logic ← {templates, rules}
+ *        ← parser ← emit-xml ← {emit-ast, burn};  inverse reads util,
+ *   vocabulary and version only. parse() hands itself to the template
+ *   expander as an argument rather than being imported by it, the way it
+ *   already hands out G for diagnostics — so no module imports one that
+ *   imports it back.
+ *
+ * Through v1.8 there were two divergent parsers: this module and the one
+ * embedded in glyph-engine-alias.html. v1.0.9 unified them; v1.1.0.0 aligned
+ * the vocabulary to GLOSSARY.md, the normative reference from then on; and
+ * until 3.5.8.06 the core stayed ONE file, because the UMD wrapper that served
+ * both Node and a bare <script src> could not be split without a bundler —
+ * D1 in HGML_PLAN, open since v1.1. ESM removed the reason: the same `import`
+ * works in Node and in the browser, and the directory travels with this file
+ * wherever build-skill.js copies it.
+ *
+ * VERSION SCHEME — release.frontend.rules.minor (core/version.js). No digit
+ * resets any other; the changelog moves the number and says why.
+ */
+import { esc, xesc, lev, walk } from "./core/util.js";
+import { CATS, INSTR, PTBR, CAT_OF, EDITORIAL_ONLY, ALIAS, ALIAS_OF, STRUCT, META, MODE, EMO,
+         SESSION, LOGIC_OPS, PUNCT, FRAMES, NAMED_STRUCT, elName, GLOSS_REVERSE, GLOSS_COLLISIONS }
+  from "./core/vocabulary.js";
+import { VERSION } from "./core/version.js";
+import { useTemplates, templateRegistry, useExpansions, expansionRegistry,
+         speciesOf, depthOf, formulaOf, defOf, atomsOf, standsAlone, useRules,
+         createContext } from "./core/stores.js";
+import { tokenize, classify, suggest } from "./core/lexer.js";
+import { expandExpr, freeVars, parseLogic } from "./core/logic.js";
+import { parse } from "./core/parser.js";
+import { buildXml, toXML } from "./core/emit-xml.js";
+import { serializeAST, toAST } from "./core/emit-ast.js";
+import { burn, toHGML } from "./core/burn.js";
+import { fromXML, fromAST } from "./core/inverse.js";
+
+const GlyphCore = {
+  VERSION: VERSION,
+  CATS: CATS, INSTR: INSTR, ALIAS: ALIAS, ALIAS_OF: ALIAS_OF, STRUCT: STRUCT,
+  META: META, MODE: MODE, EMO: EMO, SESSION: SESSION, FRAMES: FRAMES,
+  EDITORIAL_ONLY: EDITORIAL_ONLY, PTBR: PTBR, CAT_OF: CAT_OF,
+  LOGIC_OPS: LOGIC_OPS, PUNCT: PUNCT, NAMED_STRUCT: NAMED_STRUCT,
+  tokenize: tokenize, classify: classify, suggest: suggest, lev: lev, elName: elName,
+  expandExpr: expandExpr, freeVars: freeVars, parseLogic: parseLogic,
+  parse: parse, walk: walk,
+  useTemplates: useTemplates, templateRegistry: templateRegistry,
+  useRules: useRules,
+  createContext: createContext,
+  useExpansions: useExpansions, expansionRegistry: expansionRegistry,
+  speciesOf: speciesOf, depthOf: depthOf, formulaOf: formulaOf, atomsOf: atomsOf,
+  standsAlone: standsAlone,
+  defOf: defOf,
+  buildXml: buildXml, toXML: toXML, toAST: toAST, serializeAST: serializeAST,
+  burn: burn, toHGML: toHGML,
+  fromXML: fromXML, fromAST: fromAST, elementCanonicalMap: GLOSS_REVERSE, glossCollisions: GLOSS_COLLISIONS,
+  esc: esc, xesc: xesc
+};
+
+export default GlyphCore;
+/* the browser reads it as a global, and check-globals.js knows this shape */
+globalThis.GlyphCore = GlyphCore;
+
+/* Run directly, this file used to be the command line. The CLI moved to
+   glyph-cli.js — it was the only part of the core that touched the filesystem.
+   Delegating to it from here would import a module that imports this one, so
+   the pointer is a message rather than a cycle. */
+if (typeof process !== "undefined" && process.argv && process.argv[1] &&
+    import.meta.url === "file://" + process.argv[1].replace(/\\/g, "/").replace(/^([A-Za-z]:)/, "/$1")) {
+  console.error("the command line moved to glyph-cli.js:\n  node scripts/glyph-cli.js " +
+                (process.argv.slice(2).map(a => JSON.stringify(a)).join(" ") || '"<source>" --xml'));
+  process.exit(2);
+}

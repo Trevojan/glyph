@@ -1,0 +1,119 @@
+{
+  "schema": 1,
+  "id": "glyph",
+  "title": "glyph-markup",
+  "summary": "O motor Glyph como comandos de barra: /glyph-markup:<modo> compila Glyph inline; /glyph-markup:repo-config:guidelines:<eixo>:… viaja até um eixo de .guidelines/ e deixa o motor perguntar; /glyph-markup:engine-config:… faz o mesmo neste repositório.",
+  "version": "0.1.0",
+  "origin": {
+    "kind": "adopted",
+    "from": "plugin",
+    "name": "glyph-markup",
+    "source": "local folder glyph",
+    "repository": null,
+    "ref": null,
+    "sha": null,
+    "license": null,
+    "adopted": "2026-10-31",
+    "tree": "7763658d83b9"
+  },
+  "root": "upstream",
+  "when": {
+    "files": [
+      "*.pgml",
+      "*.hgml"
+    ]
+  },
+  "requires": [
+    {
+      "tool": "node",
+      "why": "upstream/.claude/skills/glyph-markup/scripts/glyph-parser.js"
+    }
+  ],
+  "items": [
+    {
+      "key": "command:ast",
+      "kind": "command",
+      "name": "ast",
+      "path": "upstream/commands/ast.md",
+      "summary": "Glyph → AST (JSON), a fonte de verdade da qual o XML e o .hgml são projeções"
+    },
+    {
+      "key": "command:diag",
+      "kind": "command",
+      "name": "diag",
+      "path": "upstream/commands/diag.md",
+      "summary": "Só os diagnósticos — fix recusa, ask pergunta, note observa. Casa vazia não é erro"
+    },
+    {
+      "key": "command:engine-config:guidelines:changelog:config",
+      "kind": "command",
+      "name": "engine-config:guidelines:changelog:config",
+      "path": "upstream/commands/engine-config/guidelines/changelog/config.md",
+      "summary": "Viaja até .changelog/ do próprio repositório do Glyph e deixa o motor perguntar o que muda ali"
+    },
+    {
+      "key": "command:expand",
+      "kind": "command",
+      "name": "expand",
+      "path": "upstream/commands/expand.md",
+      "summary": "De que um comando é feito — espécie, nível, fórmula e hieróglifos. Recebe um NOME (CRIT), não fonte"
+    },
+    {
+      "key": "command:hgml",
+      "kind": "command",
+      "name": "hgml",
+      "path": "upstream/commands/hgml.md",
+      "summary": "Glyph → .hgml, a queima — cada composto trocado pela sua fórmula até sobrar só hieróglifo"
+    },
+    {
+      "key": "command:repo-config:guidelines:changelog:config",
+      "kind": "command",
+      "name": "repo-config:guidelines:changelog:config",
+      "path": "upstream/commands/repo-config/guidelines/changelog/config.md",
+      "summary": "Viaja até .changelog/ das guidelines deste repositório e deixa o motor perguntar o que muda ali"
+    },
+    {
+      "key": "command:repo-config:guidelines:orders:ast",
+      "kind": "command",
+      "name": "repo-config:guidelines:orders:ast",
+      "path": "upstream/commands/repo-config/guidelines/orders/ast.md",
+      "summary": "O AST (JSON) de uma ORD-#### existente — a fonte de verdade, lida do .pgml dela"
+    },
+    {
+      "key": "command:repo-config:guidelines:orders:bundle",
+      "kind": "command",
+      "name": "repo-config:guidelines:orders:bundle",
+      "path": "upstream/commands/repo-config/guidelines/orders/bundle.md",
+      "summary": "Emite a próxima ORD-#### a partir do Glyph dado — numa série EMS-###/, ou chapada em .orders/ — mede primeiro, escreve só depois do Regente"
+    },
+    {
+      "key": "command:repo-config:guidelines:orders:diag",
+      "kind": "command",
+      "name": "repo-config:guidelines:orders:diag",
+      "path": "upstream/commands/repo-config/guidelines/orders/diag.md",
+      "summary": "Diagnósticos de uma ORD-#### existente — fix recusa, ask pergunta, note observa"
+    },
+    {
+      "key": "command:repo-config:guidelines:orders:hgml",
+      "kind": "command",
+      "name": "repo-config:guidelines:orders:hgml",
+      "path": "upstream/commands/repo-config/guidelines/orders/hgml.md",
+      "summary": "A queima (.hgml) de uma ORD-#### existente, lida do .pgml dela"
+    },
+    {
+      "key": "command:repo-config:guidelines:orders:xml",
+      "kind": "command",
+      "name": "repo-config:guidelines:orders:xml",
+      "path": "upstream/commands/repo-config/guidelines/orders/xml.md",
+      "summary": "O glyph-package (XML) de uma ORD-#### existente, lido do .pgml dela"
+    },
+    {
+      "key": "command:xml",
+      "kind": "command",
+      "name": "xml",
+      "path": "upstream/commands/xml.md",
+      "summary": "Glyph → glyph-package (XML). A fonte vai como argumento; a resposta do motor volta intacta"
+    }
+  ],
+  "unsupported": []
+}

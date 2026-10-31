@@ -1,0 +1,50 @@
+[block
+  'ORD-0018-blend'
+  [ctx
+    'the spec of EMS-002'
+    '.guidelines/.orders/EMS-002/EMS-002.pgml'
+  [/ctx]
+  [tgt
+    'the blend REV and DIST only on the same target, answered on 2026-09-27: sameTarget checks the target, and different targets burn as two commands; an ORD of the batch the version moves once for'
+  [/tgt]
+  [ctx
+    'the field intake of 2026-09 found it: scope sameTarget does not check the target, and the blend fires on co-occurrence alone, so REV of x beside DIST of y fuses into one heavyreview holding both; GLOSSARY section 7 already says REV and DIST on one target'
+  [/ctx]
+  [ctx
+    'measured at 48d2e75 on the JS: no hash of the snapshot moves; the suite tests H-10 and H-10b fuse two different targets, the behaviour the decision reverses'
+  [/ctx]
+  [cnst
+    'the target of a burnt atom is its subject, GLOSSARY section 0.3, normative: the human operand is the subject of the whole formula, and what is nested inside an item is a standard it works against; so an atom the author wrote works on its own operands, and every item a composite formula produces works on the composite operands'
+  [/cnst]
+  [cnst
+    'subjects compare by burnSame, the equality the burn already has; the fused element keeps the shape it has today'
+  [/cnst]
+  [cnst
+    'H-10 and H-10b encode the reversed behaviour, so they move to one target, by the decision; a test that different targets stay apart is added'
+  [/cnst]
+  [cmp
+    'the target'
+    'the atoms of a blend fuse when they work on one subject, through a composite as well, and different subjects burn as separate commands; each seen failing before it counts, and the Rust answers byte for byte'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+[/block]

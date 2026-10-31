@@ -1,0 +1,41 @@
+{
+  "germinate": {
+    "gloss": "Walks every aspect of a situation as seeds and grows the path to the goal as a tree: roots the problem, trunk the ordered effort, branches the resources it leans on, limits what is out of reach, locks what no step may bend, fruit the state that ends the work. Closes on an assumption that can be knocked down in one line.",
+    "params": [
+      {
+        "name": "alvo",
+        "ask": "the situation, subject or problem to germinate — every aspect of it, good, bad or neutral"
+      },
+      {
+        "name": "criterio",
+        "ask": "the external criterion the result is validated against"
+      },
+      {
+        "name": "esforco",
+        "ask": "the trunk: the ordered effort, what takes time and demands action, step by step"
+      },
+      {
+        "name": "limite",
+        "ask": "what is out of reach, and the guarantees the result must not break"
+      },
+      {
+        "name": "trava",
+        "ask": "what no step may bend, whatever else changes"
+      },
+      {
+        "name": "fruto",
+        "ask": "the goal: the state that makes the effort finished"
+      },
+      {
+        "name": "suposicao",
+        "ask": "what is being taken as given and was not verified"
+      },
+      {
+        "name": "ramo",
+        "ask": "a resource the path leans on — place, idea, person, method; repeat once per resource",
+        "repeat": true
+      }
+    ],
+    "body": "[skl`tree logic structure`[itr[ph-alvo`the situation to germinate, walked as seeds`]]][section`roots`[prob[ph-alvo`the situation to germinate, walked as seeds`]]][section`trunk`[ins[ph-esforco`the ordered effort, step by step`]]][section`branches`[ref[ph-ramo`a resource the path leans on`]]][section`limits`[restr[ph-limite`what is out of reach, and what must not break`]]][section`locks`[cnst[ph-trava`what no step may bend`]][nev`no self-attested gate, and no acceptance criterion rewritten so the work passes`]][section`fruit`[tgt[ph-fruto`the state that makes the effort finished`]][rdy`each fruit stated as an observable condition, not as an intention`]][section`assumptions`[assm[ph-suposicao`what is taken as given and was not verified`]][qst`knock this down in one line and the tree becomes a new version`]][val`the grown tree`,[ph-criterio`the external criterion`]]"
+  }
+}

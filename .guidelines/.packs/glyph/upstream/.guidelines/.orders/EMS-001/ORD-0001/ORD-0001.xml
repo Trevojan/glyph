@@ -1,0 +1,20 @@
+<glyph-package engine="3.5.8.06">
+  <schema/>
+  <block once="true">
+    <block binds="ORD-0001-oracle">
+      <user-input>ORD-0001-oracle</user-input>
+      <context>
+        <user-input>the spec of EMS-001</user-input>
+        <user-input>.guidelines/.orders/EMS-001/EMS-001.pgml</user-input>
+      </context>
+      <target>
+        <user-input>the oracle every ORD is held to, frozen at one commit</user-input>
+      </target>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the frozen oracle</user-input>
+        <user-input>node scripts/test-corpus.js --export-oracle writes 114 files, and the commit carries the tag conformance-v0</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>

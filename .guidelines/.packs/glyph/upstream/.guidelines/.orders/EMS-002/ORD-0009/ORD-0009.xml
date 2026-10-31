@@ -1,0 +1,37 @@
+<glyph-package engine="3.6.9.07">
+  <schema/>
+  <block once="true">
+    <block binds="ORD-0009-zip">
+      <user-input>ORD-0009-zip</user-input>
+      <context>
+        <user-input>the spec of EMS-002</user-input>
+        <user-input>.guidelines/.orders/EMS-002/EMS-002.pgml</user-input>
+      </context>
+      <target>
+        <user-input>the zip of a series ORD only behind a flag, question 1 of the EMS-001 return, answered c</user-input>
+      </target>
+      <context>
+        <user-input>in a series --bundle writes the folder ORD-####/ alone, and outside one it writes the zip; there is no way to ask a series for the zip</user-input>
+      </context>
+      <constraint>
+        <user-input>the zip of a series ORD is the zip a flat bundle writes, named ORD-####.zip beside the folder, so the count of the series, which counts folders, does not move</user-input>
+      </constraint>
+      <constraint>
+        <user-input>outside a series --zip asks for what --bundle already writes, and changes nothing</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the README documents the flags of the CLI and declares their block as its source: the flag lands in both together</user-input>
+      </constraint>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the flag</user-input>
+        <user-input>in a series, --bundle writes the folder and, with --zip, the zip beside it, in both engines, the JS first</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the oracle</user-input>
+        <user-input>the export runs the flag in a series and outside one, and the Rust answers the same bytes and the same files</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>

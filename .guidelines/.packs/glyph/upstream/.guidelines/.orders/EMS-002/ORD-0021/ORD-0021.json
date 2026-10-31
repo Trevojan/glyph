@@ -1,0 +1,434 @@
+{
+  "type": "GlyphAST",
+  "schema": 2,
+  "version": "3.6.9.07",
+  "source": {
+    "length": 2140,
+    "checksum": "10d767e97e776400",
+    "encoding": "utf-8",
+    "newline": "lf",
+    "uri": null
+  },
+  "stores": {
+    "templates": "7356ea9b88319980",
+    "rules": "767e5432cdc6d400",
+    "expansions": "6862eb9f3b5c18fa"
+  },
+  "projection": "full",
+  "segments": [
+    {
+      "type": "Segment",
+      "mood": [],
+      "isReturn": false,
+      "continues": false,
+      "breaks": 0,
+      "autoClosedCount": 0,
+      "body": [
+        {
+          "type": "Command",
+          "raw": "block",
+          "canonical": "BLOCK",
+          "tier": "struct",
+          "gloss": "Block",
+          "element": "block",
+          "isAlias": false,
+          "chainElement": false,
+          "origin": "root",
+          "slotName": false,
+          "editorial": false,
+          "name": null,
+          "depth": 0,
+          "autoClosed": false,
+          "suggestion": null,
+          "emotions": [],
+          "species": "atom",
+          "compositionDepth": 0,
+          "at": {
+            "s": 0,
+            "e": 6
+          },
+          "body": [
+            {
+              "type": "Literal",
+              "value": "ORD-0021-o4-bare",
+              "form": "quote",
+              "slot": null,
+              "role": "operand",
+              "at": {
+                "s": 6,
+                "e": 24
+              }
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 27,
+                "e": 31
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the spec of EMS-002",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 31,
+                    "e": 52
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": ".guidelines/.orders/EMS-002/EMS-002.pgml",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 53,
+                    "e": 95
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "tgt",
+              "canonical": "TGT",
+              "tier": "instr",
+              "gloss": "Target",
+              "element": "target",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 99,
+                "e": 103
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the third of the three residuals of O4, in the Rust only, answered on 2026-10-25: a bare word where a template parameter goes is refused by name, a fix TemplateParamNotLiteral with the word and the quoted form, option a of section 3 of the open questions; the last free ORD of the batch the version moves once for",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 103,
+                    "e": 418
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 422,
+                "e": 426
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the JS refuses a non-literal argument that a literal after it displaces, and names a bare word there as [?; a bare word with no literal after it falls as prose in silence, and the holes it was written for ask again; content written after every parameter is filled is extra, a known loss the README states",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 426,
+                    "e": 732
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 736,
+                "e": 740
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "measured at 9bb681d: no declared source and no oracle entry that expands a template reaches it; the fourteen strings that look like one are diagnostic texts that only the lexer and the logic fence read; so the ORD adds two probes, a template called with two bare words and one called with a bare word before a literal",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 740,
+                    "e": 1059
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 1063,
+                "e": 1068
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "a parameter position is a position still open as the arguments are written, literals and bare words counted in order, or one a literal after it takes; a word written after every position is filled stays extra, and a displaced command keeps its message",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1068,
+                    "e": 1321
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 1325,
+                "e": 1330
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the binding does not change: a literal binds where it did, the bare words stay prose, and the holes they were written for still ask",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1330,
+                    "e": 1463
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 1467,
+                "e": 1472
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the known difference is named in the testkit, beside the first two, as each probe it reaches with the diagnostics the decision gives it: those of the JS, a refusal naming each bare word in place of the silence or of [?",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1472,
+                    "e": 1692
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "val",
+              "canonical": "VAL",
+              "tier": "instr",
+              "gloss": "Validate",
+              "element": "validate",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "composite",
+              "compositionDepth": 5,
+              "at": {
+                "s": 1696,
+                "e": 1700
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the refusal",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1700,
+                    "e": 1713
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": "in the Rust, a bare word in a parameter position raises TemplateParamNotLiteral naming the word at its position as written, with the arguments as the author wrote them, quoted; a direct test holds the shapes, seen failing before it counts",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1714,
+                    "e": 1954
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "val",
+              "canonical": "VAL",
+              "tier": "instr",
+              "gloss": "Validate",
+              "element": "validate",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "composite",
+              "compositionDepth": 5,
+              "at": {
+                "s": 1958,
+                "e": 1962
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the known difference",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1962,
+                    "e": 1984
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": "the parse oracle test takes the named diagnostics for each named probe, asserts the JS answer differs there, and holds every other run byte for byte",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1985,
+                    "e": 2135
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "diagnostics": []
+}

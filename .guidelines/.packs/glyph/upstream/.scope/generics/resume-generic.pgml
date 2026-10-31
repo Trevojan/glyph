@@ -1,0 +1,54 @@
+[block'resume'
+  [ctx'a project left mid-work, reopened','~/Docs/.guidelines/.shortcuts/','read before anything else']
+  [skl'call-team'[ins'hear this resume, then classify the next order from what the shortcuts say — never from the whole repository']]
+
+  [section'entry'
+    [nt'the one file read first, and the only one read whole']
+    [ref'~/Docs/.guidelines/.shortcuts/README.md']
+    [lim'only the previous step, the current one and the next are deciphered — everything else is reached by shortcut']
+    [dont're-derive the project by reading the repository from the top']
+  ]
+
+  [section'layout'
+    [nt'the leading dot marks a low-level path, read by the harness and not by whoever opens the repository']
+    [whr'.sources/'[dfn'sources','external references actually used, and what each one decided']]
+    [whr'.decisions/'[dfn'decisions','decisions taken, who took them, and the reason']]
+    [whr'.plan/'[dfn'plan','what comes next, and what was deferred']]
+    [whr'.orders/'[dfn'orders','the contracts that dispatch work — immutable and numbered']]
+    [whr'.constraints/'[dfn'constraints','what the project forbids itself']]
+    [whr'.changelog/'[dfn'changelog','what changed, and how the version number moves']]
+    [go'decide, then schedule, then commission, then record'[nt'the four middle axes are a cycle and are read in this order']]
+    [ext'.history/ sits beside the axes and is not one: the attic, where a superseded document leaves the reading path without leaving the repository']
+  ]
+
+  [section'missing-layout'
+    [nt'what to do when the layout is not there yet']
+    [cond'an expected path does not exist'
+      [ask'name every missing path and request permission to create it'[hmn]]
+      [onlyif'the Regente allows'[go'create exactly the paths named, and nothing beyond them']]
+    ]
+    [dont'route a fact elsewhere because its path is missing']
+    [warn'a path created without being named is a decision nobody took']
+  ]
+
+  [section'state'
+    [nt'the four the entry file answers — filled, never inferred']
+    [ph-versao'the version the project sits at']
+    [ph-suite'the command that checks it, and whether it is green']
+    [ph-marco'the last thing that finished — the last completed D1']
+    [ph-proximo'what comes next, or the pointer into .plan/']
+  ]
+
+  [section'invariants'
+    [cnst'this index points and never copies: a fact in two places means one of them is wrong and nobody knows which']
+    [cnst'the project map is five lines — what does not fit is a document, not a shortcut, and goes to the axis it belongs to']
+    [cnst'the left column of the lookup table is the question the reader has, not the title of the document']
+    [nev'public-domain vocabulary enters the glossary: only terms coined in this project']
+  ]
+
+  [section'continue'
+    [get[whr'the last completed D1, from .plan/ or from the entry file']]
+    [go'resume from there']
+    [dont'restart from the top of the tree when the checkpoint exists']
+  ]
+];

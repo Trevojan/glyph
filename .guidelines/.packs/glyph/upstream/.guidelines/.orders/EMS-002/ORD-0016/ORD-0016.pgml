@@ -1,0 +1,9 @@
+[block'ORD-0016-deep'
+  [ctx'the spec of EMS-002','.guidelines/.orders/EMS-002/EMS-002.pgml']
+  [tgt'the deep-inference alarm, answered on 2026-09-27: a composite of depth 5 or more with no operand asks, an ask that becomes an empty slot, needs; the third ORD of the batch the version moves once for']
+  [ctx'measured at 7309460: four composites run 5 levels or more, VAL, SCRU and HYP with a frame or ordered slots that already ask for the operand, and FBK, depth 5, with neither, so a bare fbk says nothing; of the 115 declared sources only L-04 holds a deep composite with no operand, and a frame already asks there, so no hash of the snapshot moves']
+  [cnst'the alarm asks only where nothing asks already: a frame or an ordered slot keeps its own question']
+  [cnst'the operand of a formula is its subject, GLOSSARY section 0.3, normative; so the needs the alarm writes asks for the subject']
+  [cnst'a chain link holds no operand of its own and is not asked, as with every frame; the alarm runs with valency, and the XML writes its needs as it writes a frame']
+  [val'the alarm','a composite of depth 5 or more, with no operand and no frame or slot that asks, raises an ask, DeepInference, and emits needs the subject; with an operand, as a chain link, or under a frame it says nothing new; each seen failing before it counts, and the Rust answers byte for byte']
+];

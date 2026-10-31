@@ -1,0 +1,238 @@
+{
+  "type": "GlyphAST",
+  "schema": 2,
+  "version": "3.5.8.06",
+  "source": {
+    "length": 373,
+    "checksum": "993c50e23af98e00",
+    "encoding": "utf-8",
+    "newline": "lf",
+    "uri": null
+  },
+  "stores": {
+    "templates": "d127beace2f86000",
+    "rules": "9778b68073854800",
+    "expansions": "2549caa003b0a400"
+  },
+  "projection": "full",
+  "segments": [
+    {
+      "type": "Segment",
+      "mood": [],
+      "isReturn": false,
+      "continues": false,
+      "breaks": 0,
+      "autoClosedCount": 0,
+      "body": [
+        {
+          "type": "Command",
+          "raw": "block",
+          "canonical": "BLOCK",
+          "tier": "struct",
+          "gloss": "Block",
+          "element": "block",
+          "isAlias": false,
+          "chainElement": false,
+          "origin": "root",
+          "slotName": false,
+          "editorial": false,
+          "name": null,
+          "depth": 0,
+          "autoClosed": false,
+          "suggestion": null,
+          "emotions": [],
+          "species": "atom",
+          "compositionDepth": 0,
+          "at": {
+            "s": 0,
+            "e": 6
+          },
+          "body": [
+            {
+              "type": "Literal",
+              "value": "ORD-0009-projections",
+              "form": "quote",
+              "slot": null,
+              "role": "operand",
+              "at": {
+                "s": 6,
+                "e": 28
+              }
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 31,
+                "e": 35
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the spec of EMS-001",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 35,
+                    "e": 56
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": ".guidelines/.orders/EMS-001/EMS-001.pgml",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 57,
+                    "e": 99
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "onlyif",
+              "canonical": "ONLYIF",
+              "tier": "instr",
+              "gloss": "Only If",
+              "element": "only-if",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 103,
+                "e": 110
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "ORD-0008 closed",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 110,
+                    "e": 127
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "tgt",
+              "canonical": "TGT",
+              "tier": "instr",
+              "gloss": "Target",
+              "element": "target",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 131,
+                "e": 135
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "glyph-envelope, glyph-burn and glyph-inverse: the AST envelope, the burn, fromXML and fromAST",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 135,
+                    "e": 230
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "val",
+              "canonical": "VAL",
+              "tier": "instr",
+              "gloss": "Validate",
+              "element": "validate",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "composite",
+              "compositionDepth": 5,
+              "at": {
+                "s": 234,
+                "e": 238
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the three projections and the inverse",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 238,
+                    "e": 277
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": "the ast and hgml digests equal the oracle, and every round trip the JS suite runs closes",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 278,
+                    "e": 368
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "diagnostics": []
+}

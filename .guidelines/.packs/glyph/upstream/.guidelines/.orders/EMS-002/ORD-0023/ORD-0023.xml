@@ -1,0 +1,32 @@
+<glyph-package engine="3.6.9.07">
+  <schema/>
+  <block once="true">
+    <block binds="ORD-0023-mood-template">
+      <user-input>ORD-0023-mood-template</user-input>
+      <context>
+        <user-input>the spec of EMS-002</user-input>
+        <user-input>.guidelines/.orders/EMS-002/EMS-002.pgml</user-input>
+      </context>
+      <target>
+        <user-input>a mood whose innermost open command is a template, answered on 2026-10-25, fix in the Rust only: the Rust answers with the document, the JS keeps its throw until it leaves, and the oracle tests name the difference, as the residuals of O4; an ORD of the batch the version moves once for</user-input>
+      </target>
+      <context>
+        <user-input>measured at 0c8b55e: in the JS, parse, toXML, toAST and toHGML throw a TypeError at parser.js:263 for four sources, a template definition holding only a mood, a call of an unknown template holding a mood, a call of reinforce with its two literals and a mood, and a definition holding a context command and a mood, because the template node has no emotions list; the Rust builds every node with its emotions list and already answers the document, so the two engines disagree and nothing records it</user-input>
+      </context>
+      <context>
+        <user-input>the reading the rules settle: the mood attaches to the innermost open node, OPERATOR_TARGET section 3.1, and colours the segment, XML_REFERENCE section 6; so the XML carries mood first in the block, the envelope carries it in segment.mood, the Template keys stay those ast-schema.json declares, and the burn writes no mood</user-input>
+      </context>
+      <constraint>
+        <user-input>no engine changes: the four sources enter the parse probes, so the oracle records the JS throwing in parse, xml, ast and hgml, and the testkit names each with the bytes the Rust answers, kept as literals; a named source the JS stops throwing on fails</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the gate is seen failing by mutation, since the Rust already answers right: a Rust that does not push a mood onto a template falls</user-input>
+      </constraint>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the known difference</user-input>
+        <user-input>the parse, XML, envelope and burn oracle tests take the named bytes for each named source, assert the JS throws there, and hold every other run byte for byte; a direct test holds the documents</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>

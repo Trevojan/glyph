@@ -32,7 +32,7 @@ use std::path::Path;
 
 pub const PATH: &str = ".guidelines/.shortcuts/.virtual/index.json";
 pub const DEPTH: usize = 2;
-const SKIP: [&str; 2] = [".guidelines/.history", ".guidelines/.shortcuts/.virtual"];
+const SKIP: [&str; 3] = [".guidelines/.history", ".guidelines/.packs", ".guidelines/.shortcuts/.virtual"];
 const ROOT_FILES: [&str; 2] = ["README.md", "CLAUDE.md"];
 
 #[derive(Debug, Clone, PartialEq, Default)]

@@ -1,0 +1,6 @@
+[block'ORD-0007-parser'
+  [ctx'the spec of EMS-001','.guidelines/.orders/EMS-001/EMS-001.pgml']
+  [onlyif'ORD-0004 closed','ORD-0005 closed','ORD-0006 closed']
+  [tgt'glyph-parse: the tree the projections read']
+  [val'glyph-parse','the AST envelope equals the oracle digest on all 114 sources']
+];
