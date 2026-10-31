@@ -12,24 +12,14 @@
         ["n5", "a-regra-que-se-aprende-relendo", 2661, 3086, 42, 8, "72770d6e934c5800", "9f07df1222a76600", "n2"]
       ]
     },
-    ".guidelines/.changelog/README.md.template": {
-      "nodes": [
-        ["n2774", "", 0, 1102, 1, 33, "efdf1b0e0d56e000", "", ""]
-      ]
-    },
     ".guidelines/.constraints/README.md": {
       "nodes": [
-        ["n6", "", 0, 4825, 1, 50, "4b443548b058a000", "", ""],
-        ["n7", "restrições--o-que-o-projeto-se-proíbe", 0, 4825, 1, 50, "4b443548b058a000", "6208c4d26e67d800", "n6"],
+        ["n6", "", 0, 5160, 1, 51, "d2da107abdb98280", "", ""],
+        ["n7", "restrições--o-que-o-projeto-se-proíbe", 0, 5160, 1, 51, "d2da107abdb98280", "b9fbf4da51472c00", "n6"],
         ["n8", "do-artefato", 231, 1695, 7, 10, "0ada4070dcbb3700", "ec90cac86dac0e00", "n7"],
-        ["n9", "do-método", 1695, 2612, 17, 12, "47d0eca8542a7300", "c0747b8007e38900", "n7"],
-        ["n10", "da-escrita", 2612, 4147, 29, 13, "4831f6b482f9ea00", "9ebf132856d94380", "n7"],
-        ["n11", "do-processo", 4147, 4825, 42, 9, "3d1c8c28bfd25800", "1593d05075f03a00", "n7"]
-      ]
-    },
-    ".guidelines/.constraints/README.md.template": {
-      "nodes": [
-        ["n2775", "", 0, 2886, 1, 44, "60fd3d6c217ac600", "", ""]
+        ["n9", "do-método", 1695, 2947, 17, 13, "bdb25ed04a408f80", "1deaf7c47c9d7e00", "n7"],
+        ["n10", "da-escrita", 2947, 4482, 30, 13, "4831f6b482f9ea00", "9ebf132856d94380", "n7"],
+        ["n11", "do-processo", 4482, 5160, 43, 9, "3d1c8c28bfd25800", "1593d05075f03a00", "n7"]
       ]
     },
     ".guidelines/.decisions/README.md": {
@@ -50,11 +40,6 @@
         ["n21", "2026-09-05", 41190, 42669, 166, 13, "67e05df081ec8a00", "197e689607dbfd00", "n13"],
         ["n22", "anteriores-ainda-em-vigor", 42669, 43684, 179, 11, "126b256ee8e23600", "da6d5270b387c000", "n13"],
         ["n23", "decisões-que-um-agente-tomou-e-o-regente-ainda-não-ratificou", 43684, 43766, 190, 3, "ef0d5e44c5d00b00", "c4eedd1ae8634900", "n13"]
-      ]
-    },
-    ".guidelines/.decisions/README.md.template": {
-      "nodes": [
-        ["n2776", "", 0, 1169, 1, 43, "e9f6ffa45d990400", "", ""]
       ]
     },
     ".guidelines/.orders/BRIEFING-2026-09-24.md": {
@@ -3290,11 +3275,6 @@
         ["n1151", "adiado-por-decisão-não-por-esquecimento", 13137, 13819, 184, 12, "110118b8258d7d80", "009590141c1d2c00", "n1143"]
       ]
     },
-    ".guidelines/.plan/README.md.template": {
-      "nodes": [
-        ["n2783", "", 0, 1099, 1, 31, "afaeee541ab9e600", "", ""]
-      ]
-    },
     ".guidelines/.plan/ladder.toml": {
       "nodes": [
         ["n1152", "", 0, 23127, 1, 627, "cd220026999a6180", "", ""]
@@ -3349,11 +3329,6 @@
         ["n1176", "erros-reais-medidos", 2349, 2684, 26, 4, "74244be65c0e2600", "9802a0ea25f9b500", "n1174"],
         ["n1177", "sugestão-did-you-mean--armadilhas-já-pagas", 2684, 3504, 30, 8, "33de117ced6b3800", "b3070348582fda00", "n1174"],
         ["n1178", "a-fonte-primária-e-ela-é-interna", 3504, 3825, 38, 6, "5f6a41325d30a300", "70774afa3f0e9b80", "n1172"]
-      ]
-    },
-    ".guidelines/.sources/README.md.template": {
-      "nodes": [
-        ["n2793", "", 0, 1075, 1, 29, "d693aab40ebc7600", "", ""]
       ]
     },
     ".guidelines/.sources/VIRTUAL_PATHS.md": {
