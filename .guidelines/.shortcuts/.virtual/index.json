@@ -1,7 +1,7 @@
 {
   "note": "written by glyph-vpath build, EMS-002; never edited by hand",
   "depth": 2,
-  "next": 2910,
+  "next": 2916,
   "files": {
     ".guidelines/.changelog/README.md": {
       "nodes": [
@@ -12,6 +12,11 @@
         ["n5", "a-regra-que-se-aprende-relendo", 2661, 3086, 42, 8, "72770d6e934c5800", "9f07df1222a76600", "n2"]
       ]
     },
+    ".guidelines/.changelog/README.md.template": {
+      "nodes": [
+        ["n2910", "", 0, 1102, 1, 33, "efdf1b0e0d56e000", "", ""]
+      ]
+    },
     ".guidelines/.constraints/README.md": {
       "nodes": [
         ["n6", "", 0, 5160, 1, 51, "d2da107abdb98280", "", ""],
@@ -20,6 +25,11 @@
         ["n9", "do-método", 1695, 2947, 17, 13, "bdb25ed04a408f80", "1deaf7c47c9d7e00", "n7"],
         ["n10", "da-escrita", 2947, 4482, 30, 13, "4831f6b482f9ea00", "9ebf132856d94380", "n7"],
         ["n11", "do-processo", 4482, 5160, 43, 9, "3d1c8c28bfd25800", "1593d05075f03a00", "n7"]
+      ]
+    },
+    ".guidelines/.constraints/README.md.template": {
+      "nodes": [
+        ["n2911", "", 0, 2886, 1, 44, "60fd3d6c217ac600", "", ""]
       ]
     },
     ".guidelines/.decisions/README.md": {
@@ -40,6 +50,11 @@
         ["n21", "2026-09-05", 41190, 42669, 166, 13, "67e05df081ec8a00", "197e689607dbfd00", "n13"],
         ["n22", "anteriores-ainda-em-vigor", 42669, 43684, 179, 11, "126b256ee8e23600", "da6d5270b387c000", "n13"],
         ["n23", "decisões-que-um-agente-tomou-e-o-regente-ainda-não-ratificou", 43684, 43766, 190, 3, "ef0d5e44c5d00b00", "c4eedd1ae8634900", "n13"]
+      ]
+    },
+    ".guidelines/.decisions/README.md.template": {
+      "nodes": [
+        ["n2912", "", 0, 1169, 1, 43, "e9f6ffa45d990400", "", ""]
       ]
     },
     ".guidelines/.orders/BRIEFING-2026-09-24.md": {
@@ -3275,6 +3290,11 @@
         ["n1151", "adiado-por-decisão-não-por-esquecimento", 13137, 13819, 184, 12, "110118b8258d7d80", "009590141c1d2c00", "n1143"]
       ]
     },
+    ".guidelines/.plan/README.md.template": {
+      "nodes": [
+        ["n2913", "", 0, 1099, 1, 31, "afaeee541ab9e600", "", ""]
+      ]
+    },
     ".guidelines/.plan/ladder.toml": {
       "nodes": [
         ["n1152", "", 0, 23127, 1, 627, "cd220026999a6180", "", ""]
@@ -3294,15 +3314,16 @@
     },
     ".guidelines/.shortcuts/regency.json": {
       "nodes": [
-        ["n2784", "", 0, 318, 1, 18, "cc54578654539200", "", ""],
+        ["n2784", "", 0, 442, 1, 25, "dbd28f5e2f097c00", "", ""],
         ["n2785", "/schema", 14, 15, 2, 1, "340ca71c160082b8", "", "n2784"],
         ["n2786", "/regency", 30, 35, 3, 1, "ef6023301ede7a00", "", "n2784"],
-        ["n2787", "/updated", 50, 62, 4, 1, "35cee5b087a6e800", "", "n2784"],
+        ["n2787", "/updated", 50, 62, 4, 1, "13cc7190f27d8d40", "", "n2784"],
         ["n2788", "/files", 75, 173, 5, 4, "0e94a11f31827c00", "", "n2784"],
         ["n2789", "/files/.orders~1README.md", 102, 116, 6, 1, "6a6a1a675b163400", "", "n2788"],
         ["n2790", "/files/.shortcuts~1.virtual~1README.md", 155, 169, 7, 1, "c26b6bec0a938600", "", "n2788"],
-        ["n2791", "/history", 188, 315, 9, 9, "8462c140cd311500", "", "n2784"],
-        ["n2792", "/history/0", 194, 311, 10, 7, "1b4d27d051809500", "", "n2791"]
+        ["n2791", "/history", 188, 439, 9, 16, "4390a9c074c20400", "", "n2784"],
+        ["n2792", "/history/0", 194, 311, 10, 7, "1b4d27d051809500", "", "n2791"],
+        ["n2914", "/history/1", 317, 435, 17, 7, "1974955f2cdf0d00", "", "n2791"]
       ]
     },
     ".guidelines/.sources/COMPILER_LESSONS.md": {
@@ -3329,6 +3350,11 @@
         ["n1176", "erros-reais-medidos", 2349, 2684, 26, 4, "74244be65c0e2600", "9802a0ea25f9b500", "n1174"],
         ["n1177", "sugestão-did-you-mean--armadilhas-já-pagas", 2684, 3504, 30, 8, "33de117ced6b3800", "b3070348582fda00", "n1174"],
         ["n1178", "a-fonte-primária-e-ela-é-interna", 3504, 3825, 38, 6, "5f6a41325d30a300", "70774afa3f0e9b80", "n1172"]
+      ]
+    },
+    ".guidelines/.sources/README.md.template": {
+      "nodes": [
+        ["n2915", "", 0, 1075, 1, 29, "d693aab40ebc7600", "", ""]
       ]
     },
     ".guidelines/.sources/VIRTUAL_PATHS.md": {
