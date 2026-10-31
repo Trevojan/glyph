@@ -1,0 +1,269 @@
+[block'glyph-rust-whole'
+  [ctx'Glyph 100% in Rust, the engine, the core of the app and the skill, with the JS leaving piece by piece; this is the spec of EMS-002, the second series of orders Glyph emits, and it commissions the series and implements nothing','the repository root','engine 3.6.9.07, EMS-001 closed from ORD-0001 to ORD-0012 and waiting at the gate of ORD-0013']
+  [skl'glyph-markup'[ins'hear this spec, ground before building, and stop at the gate of the Regent']]
+
+  [section'species'
+    [dfn'virtual path','file, delimiter and selector: the extension decides how the selector reads, and the path resolves to one exact slice with offsets']
+    [dfn'index','.guidelines/.shortcuts/.virtual/index.json, the durable state the engine writes and a resolver without judgement reads']
+    [dfn'sources','the list a document declares in its frontmatter: the slices it is written from, each a virtual path']
+    [nt'the ORD count resets in each series: EMS-002 counts from ORD-0001']
+    [nt'the vocabulary of the project lives in .guidelines/GLOSSARY.md section 8']
+  ]
+
+  [section'direction'
+    [intn'Glyph 100% in Rust: the JS leaves piece by piece, each piece when the Rust passes the oracle on it']
+    [cnst'until a piece leaves, the JS is the reference, and it changes only where the oracle must change']
+    [cnst'a capability with no JS counterpart is built in Rust only']
+    [cnst'every crate passes the graded filter of .constraints: note enters vendored, ask enters with an ADR the Regent signs, fix is refused']
+    [nt'EMS-001 closes as written, at ORD-0014, and this series does not reopen it']
+  ]
+
+  [section'queue'
+    [cnst'an ORD enters the queue when the Regent calls it, and its number is its place in the queue']
+    [nt'the candidates are the items decided and not built in .guidelines/.plan/README.md section 5']
+    [nt'the EMS.json of this series enters with the ORD that builds the EMS configuration; until then its rules live in this spec']
+  ]
+
+  [section'exceptions'
+    [exc]
+  ]
+
+  [section'ORD-0001-virtual-paths'
+    [tgt'glyph-vpath: the virtual paths of .plan section 0, layers 1, 4, 5 and 6, keyed by the slug']
+    [nt'measured before the code, INTAKE-VIRTUAL-PATH sections 18 and 19: a stale source is fix, the fingerprint is per node, sources starts from the seeds of M3, and the slug keys this ORD']
+    [nt'the NodeID, order maintenance and the recovery index, layers 2, 3 and 7, are ORDs of their own']
+    [val'the trees','the extension decides the selector: .md by heading slug, .json by JSON Pointer, .xml by element path, code and text by @block and @endblock; an empty selector is the whole file; zero nodes or many is an error, never an empty slice']
+    [val'the index','every file of .guidelines, the attic and the index aside, with README.md and CLAUDE.md, in the index; each node with its byte range, its line range and its fingerprint, and every entry resolves to content that is not empty']
+    [val'the resolver','many paths read each file once, the answer carries the offsets, the slice arrives under its own virtual path, and a fingerprint that no longer matches is refused']
+    [val'sources','a document declares its sources in its frontmatter, the index answers which documents a file feeds by inversion, and the seeds of INTAKE-VIRTUAL-PATH section 19 enter']
+    [val'the gate','npm run check refuses an index that drifted, a file left out, a source that does not resolve and a stale source, each seen failing before it counts']
+  ]
+
+  [section'ORD-0002-node-id'
+    [onlyif'ORD-0001 closed']
+    [tgt'glyph-vpath: the NodeID, layer 2 of .plan section 0, identity carried by structure alone']
+    [nt'measured before the code, INTAKE-VIRTUAL-PATH sections 20 and 21: structure recovers 113 of 124 breaks whose content lived on; a heading renamed over a changed body is layer 7']
+    [val'the identity','every node carries a NodeID that passes from one build to the next by the same path, the same text, the same body or the same file renamed, and a NodeID resolves to its node in constant time']
+    [val'the aliases','the old path of a node that moved resolves to the node it became, with a warning naming the new path, and never blocks']
+    [val'the gate','npm run check refuses a source declared by an old path and an index whose identities, parents or aliases do not hold, each seen failing before it counts']
+  ]
+
+  [section'ORD-0003-recovery'
+    [onlyif'ORD-0002 closed']
+    [tgt'glyph-vpath: the recovery index, layer 7 of .plan section 0, by the content']
+    [nt'measured before the code, INTAKE-VIRTUAL-PATH sections 22 and 23: by the path, precision 35.7 percent and recall 41.7 percent; layer 7 recovers by the content']
+    [val'the recovery','a heading renamed while its body changes is found again by its old path and its old NodeID, and a deletion is not']
+    [val'the index miss','every answer through a recovery warns with its score, never blocks, and is written to the log of misses']
+    [val'the gate','npm run check refuses a source declared by a recovered path and an index whose recoveries do not hold, each seen failing before it counts']
+  ]
+
+  [section'ORD-0004-order'
+    [onlyif'ORD-0003 closed']
+    [tgt'glyph-vpath: order maintenance, layer 3 of .plan section 0, as order queries over the positions the index holds']
+    [nt'measured before the code, INTAKE-VIRTUAL-PATH sections 24 and 25: an edit shifts 42.0 percent of the rows it rewrites, under the 50 percent declared; the positions stay absolute']
+    [val'before','for any two references, before answers which comes first, or that one holds the other, in constant time']
+    [val'above and between','above answers what precedes a node in its file, nearest first, and between the nodes from one reference to another in order, each by a search in logarithmic time']
+    [val'the order','the order agrees with the files and offsets of the index on every pair, and answers right after a node is inserted, moved or removed']
+  ]
+
+  [section'ORD-0005-astral'
+    [tgt'a declared source with characters outside the BMP, question 2 of the EMS-001 return, answered a']
+    [val'the source','a declared source whose literals and prose carry characters outside the BMP enters the corpus, and the snapshot moves by decision, no earlier hash moved']
+    [val'the oracle','the Rust answers the new case byte for byte, and every module the export writes']
+    [val'the survivor','lev counting characters instead of UTF-16 units, the mutant no case of the oracle killed, dies']
+  ]
+
+  [section'ORD-0006-rules-cache'
+    [tgt'the compiled rules leave the rules store, question 3 of the EMS-001 return, answered a']
+    [val'the JS first','the JS keeps its compiled rules off the store object, and the envelope hashes the rules store alone']
+    [val'the snapshot','the ast hashes move by decision, and no xml or hgml hash moves']
+    [val'the Rust follows','glyph_rules::with_cache leaves, the Rust answers the moved oracle byte for byte, and the pin that held the cache in the digest is inverted']
+  ]
+
+  [section'ORD-0007-json'
+    [tgt'JSON in a crate of its own under every other, question 4 of the EMS-001 return, answered b']
+    [val'the crate','glyph-json holds what glyph_util::json held and replaces the Value of glyph-stores, one JSON type for the workspace']
+    [val'the graph','crate-graph.js names glyph-json with its oracle, as the floor every crate may reach and that reaches none, seen failing before it counts']
+    [val'the oracle','every crate answers the oracle as before, byte for byte']
+  ]
+
+  [section'ORD-0008-registered'
+    [tgt'a template body reads what the caller registered, question 6 of the EMS-001 return, answered c']
+    [val'the registry','the Rust keeps what the caller registered beside the context, and a template body reads it, as the JS body reads useRules and useExpansions']
+    [val'the callers','the CLI and the engine behind the app register the repository stores in both engines, the JS protocol first, so a body that breaks a rule reads the same in the CLI and in the app by both engines']
+    [val'the oracle','the export records template bodies with nothing registered and with the repository registered, the Rust answers both byte for byte, and the oracle of the cases does not move']
+  ]
+
+  [section'ORD-0009-zip'
+    [tgt'the zip of a series ORD only behind a flag, question 1 of the EMS-001 return, answered c']
+    [val'the flag','in a series, --bundle writes the folder and, with --zip, the zip beside it, in both engines, the JS first']
+    [val'the oracle','the export runs the flag in a series and outside one, and the Rust answers the same bytes and the same files']
+  ]
+
+  [section'ORD-0010-classify'
+    [tgt'classify answered by the page from the tables it loads, question 10 of the EMS-001 return, answered c']
+    [val'the requests','behind engine=relay, every call but classify is one request, and classify is answered by the page; L-01 stops making 8 000 trips']
+    [val'the panels','the declared sources give the same bytes in every panel through the relay and through the JS']
+    [val'the swap','the suite holds the calls the transport swaps to the eleven, seen failing before it counts']
+  ]
+
+  [section'ORD-0011-case-stores'
+    [tgt'the snapshot honours the stores of each case, O5 of INTAKE-RUST-LADDER, answered on 2026-09-27']
+    [val'the snapshot','each declared case is projected with its own stores laid over the repository ones, the T hashes move by decision, and no other hash moves']
+    [val'the oracle','TemplateCycle enters the oracle, the case files and the runs say which stores a case brings, and the Rust answers them byte for byte']
+  ]
+
+  [section'ORD-0012-crate-weight'
+    [tgt'the ruler of the crates at the gate, O7 of INTAKE-RUST-LADDER, answered on 2026-09-27']
+    [val'the ruler','check:rust measures the tree of every external crate as INTAKE-RUST-LADDER section 9 measures it, and grades it note, ask or fix as .constraints says']
+    [val'the grades','note enters, ask enters only with an ADR the Regent signed, fix is refused; each seen failing before it counts']
+  ]
+
+  [section'ORD-0013-once'
+    [tgt'the Rust stops redoing on every call what the JS does once, question 12 of the EMS-001 return, answered b on 2026-09-27']
+    [val'the digest','ck in integer arithmetic answers the bytes the JS writes']
+    [val'the stores','a store is shared and never copied, and the rules compile once a store']
+    [val'the bytes','no emitted byte moves, and the JS is not tuned']
+  ]
+
+  [section'ORD-0014-renames'
+    [tgt'the renames that move the emitted output, O8, O9 and O10 of INTAKE-RUST-LADDER, answered on 2026-09-27, the first ORD of the batch the version moves once for']
+    [val'sceptic','SKEP emits sceptic, and the former spelling skeptic is still read, in the source and in the XML, and named']
+    [val'mould and template','the diagnostic says template, preset leaves the stores, the comment of an empty source says mould, and the key of the saved moulds migrates once without losing one']
+    [val'frame','the vocabulary category of the structure and template pieces is frame']
+  ]
+
+  [section'ORD-0015-ref'
+    [tgt'the reference syntax, a name a reference writes and nothing binds asks for it outside the logic fence, answered on 2026-09-27, the second ORD of the batch']
+    [val'the reference','a name-shaped literal under REF that no command of the document binds raises an ask and emits needs var beside the literal; a bound name keeps its ref, and prose stays prose']
+  ]
+
+  [section'ORD-0016-deep'
+    [tgt'the deep-inference alarm, a composite of depth 5 or more with no operand asks, answered on 2026-09-27, the third ORD of the batch']
+    [val'the alarm','a composite of depth 5 or more, with no operand and no frame or slot that asks for one, raises an ask and emits needs; a chain link is not asked, as with every frame']
+  ]
+
+  [section'ORD-0017-part-if'
+    [tgt'the two proposals of the XML draft, the number of a part and the condition of an if as attributes, answered on 2026-09-27, an ORD of the batch']
+    [val'the attributes','the operand literal of PT becomes n of part and that of IF becomes cond of if, when it carries nothing else; fromXML reads both back as the literal']
+  ]
+
+  [section'ORD-0018-blend'
+    [tgt'the blend REV and DIST only on the same target, answered on 2026-09-27, an ORD of the batch']
+    [val'the target','the atoms of a blend fuse when they work on one subject, and different subjects burn as separate commands']
+  ]
+
+  [section'ORD-0019-o4-semicolons'
+    [tgt'the first residual of O4, in the Rust only: the line break between two blocks burns as its own line, answered on 2026-10-25, an ORD of the batch']
+    [val'the mark','the Rust writes the line ;; between two blocks where a segment break writes the blank line']
+    [val'the known difference','the oracle tests name the difference, undo it before comparing, and hold everything else byte for byte']
+  ]
+
+  [section'ORD-0020-o4-quotes'
+    [tgt'the second residual of O4, in the Rust only: inside a literal only the quote that opened it closes it, a line break as well, answered on 2026-10-25, an ORD of the batch']
+    [val'the quote','an apostrophe literal runs past a line break to its own quote or to the bracket, as the backtick does and as the grammar says']
+    [val'the known difference','the oracle test names each source it reaches with the tokens the decision gives it']
+  ]
+
+  [section'ORD-0021-o4-bare'
+    [tgt'the third residual of O4, in the Rust only: a bare word where a template parameter goes is refused by name, answered on 2026-10-25, the last free ORD of the batch']
+    [val'the refusal','a bare word in a parameter position raises TemplateParamNotLiteral naming the word, with the arguments as the author wrote them, quoted']
+    [val'the known difference','the oracle names each source it reaches with the diagnostics the decision gives it']
+  ]
+
+  [section'ORD-0022-mood-return'
+    [tgt'a mood in a return segment reaches the XML, the first of the inclusions decided on 2026-10-25, an ORD of the batch']
+    [val'the mood','a mood written in a return segment emits mood first in its block, ahead of user-expectative, and both ways back keep the return marker']
+  ]
+
+  [section'ORD-0023-mood-template'
+    [tgt'a mood inside a template, the Rust answers and the JS throws until it leaves, answered on 2026-10-25, an ORD of the batch']
+    [val'the known difference','the four sources the oracle records the JS throwing are named with the document the Rust answers']
+  ]
+
+  [section'ORD-0024-modes'
+    [tgt'the mode words never vanish, a stray on, an off at the end, and the bare words, answered on 2026-10-25, an ORD of the batch']
+    [val'the modes','a stray on is the command on with a note, an off at the end raises UnclosedOffMode, and the bare words join the loose-word check']
+  ]
+
+  [section'ORD-0025-chains'
+    [tgt'a known command after an operand, a space or a closing bracket is a chain link, answered on 2026-10-25, an ORD of the batch']
+    [val'the links','a dash touching a known name after an operand, a space or a closing bracket makes a chain link, and prose stays prose']
+  ]
+
+  [section'ORD-0026-placeholder'
+    [tgt'a command held by a placeholder reaches the XML, answered on 2026-10-25 with the placeholder wrapper, an ORD of the batch']
+    [val'the placeholder','a placeholder holding more than its name and question emits placeholder with the needs where the question was written, then the rest, and a second bare tag is a chain link']
+  ]
+
+  [section'ORD-0027-ast-space'
+    [tgt'the way back writes the space a name needs from the prose after it, an inclusion of 2026-10-25, an ORD of the batch']
+    [val'the space','fromAST writes a space between a command name or a mood header and the prose after it, so a known command never turns unknown on the way back']
+  ]
+
+  [section'ORD-0028-template-fills'
+    [tgt'what a template call carries never vanishes, the commands inside a fill, a fill naming no parameter, and a template defined in the source, answered on 2026-10-25, an ORD of the batch']
+    [val'the fills','a command inside a named fill travels with its value carrying the slot, an unknown fill lands after the body with TemplateUnknownParam, and a source definition expands its calls']
+  ]
+
+  [section'ORD-0029-links'
+    [tgt'the further positions where a known name touching a dash starts a chain link, answered on 2026-10-26 with the same rule, an ORD of the batch']
+    [val'the links','a known name touching a dash that starts a word is a chain link of the scope it is in, and prose stays prose']
+  ]
+
+  [section'ORD-0030-way-back'
+    [tgt'the way back invents nothing and glues nothing, two defects of the inclusion found while building it, an ORD of the batch']
+    [val'the way back','fromXML writes no question a hole never had, and fromAST keeps prose a fill carries apart from the hole name']
+  ]
+
+  [section'ORD-0031-colon'
+    [tgt'the colon retires as a recogniser at ask, its text kept as the operand, answered on 2026-10-25 and 2026-10-26, the last ORD of the batch']
+    [val'the colon','a colon raises RetiredColon at ask and its text becomes operand literals; name exists only on block, section and the logic fence, from their first literal; the way back writes no colon']
+  ]
+
+  [section'limits'
+    [nev'a selector that answers an empty slice in silence']
+    [dont'open an ORD before the ORD it depends on closes']
+    [cnst'prose declares the state, never the correction']
+    [cnst'no worktrees']
+  ]
+
+  [section'conclude'
+    [ins'update the where-am-I table of .shortcuts at each ORD that closes']
+    [--track
+      [ph-item'each ORD of the series, the commit that closed it and the digest it matched']
+      [ph-scope'EMS-002']
+    ]
+    [--track[ph-item'ORD-0001, glyph-vpath: the trees by extension, the index of 134 files in 1 750 nodes with bytes, lines and fingerprint, the resolver, sources seeded and the gate in npm run check, each breach seen failing, at b8bcbe3 and 6f8a1c2; sha256 fc5b4f241ff9b345cdb7d9ef994e9c51211683a0a4543b186dca31160b2f9c69 of the index at 6f8a1c2'][ph-scope'EMS-002']]
+    [--track[ph-item'ORD-0002, the NodeID: identity carried by structure alone, five rules in order, the parent of each node in the index, old paths as aliases that answer with a warning, node and up, and the gate that refuses a source by an old path and an identity that does not hold; the migration gave n1 to n1789 to the index of ORD-0001; at 1abdc2a, sha256 4b327f203896c592cb9508b317a5cf56aea5120ff2792e4840d30e3fe6433213 of the index at 1abdc2a'][ph-scope'EMS-002']]
+    [--track[ph-item'ORD-0003, the recovery index by the content: a section the NodeID does not reach comes back as the successor with the largest line-set Jaccard, at least 0.5 and unique, without identity; the old text from the cache or from git, checked by its fingerprint; an answer through a recovery warns with its score and goes to the log of misses; the gate refuses a source by a recovered path and a recovery that does not hold; at 2440e38, sha256 7ea852e9661be01d5f736f202de4290460d4462796b63cd1c52a8b5089334215 of the index at 2440e38'][ph-scope'EMS-002']]
+    [--track[ph-item'ORD-0004, order maintenance as order queries over the positions of the index: the order sorted once on load, before in constant time, above and between by search; nothing new stored, and stable positions by Dietz–Sleator refused by M7; at 94a4d09, sha256 dfecdf9d4fc96da84fe6c67c8fccdbaabb95ec0dec4cd89213492e4a0e766b03 of the index at 94a4d09, against which the order was proved on every one of 1.7 million pairs'][ph-scope'EMS-002']]
+    [--track[ph-item'ORD-0005, the declared source outside the BMP: P-35, the snapshot from 114 to 115 sources by decision, no earlier hash moved; the Rust answers the new case byte for byte, and lev counting characters, the mutant the oracle of 114 cases left alive, dies; at 2f8dd85, sha256 5fd8784b5189bee185663f843c225b37d2948502fb0d4dcaaf67a60ab443c9e0 of the 115 case files and b97a1d0ef781f8779704f6262613208084182b70eb34bfb09dfec6b756f3b3d5 of util.json'][ph-scope'EMS-002']]
+    [--track[ph-item'ORD-0006, the compiled rules off the store: the JS keeps them in a WeakMap keyed by the store, the envelope hashes the store alone, the 115 ast hashes moved by decision and no xml or hgml hash; with_cache leaves the Rust, and the pin that held the cache in the digest inverted; at 37be708, sha256 86600fec025a1db860876091c6ba2df68c80ecdad1129f588cd06af9e5cfec83 of the cases, a1b8cee2754a0b5bd5a3799f9ed2447dbb38c085c95097b9f9abcd9239a940c1 of ast.json and 2c41220c1dd911afa6271839da73154c5bc6417bf627ffd48b0bd664d30ef119 of stores.json'][ph-scope'EMS-002']]
+    [--track[ph-item'ORD-0007, JSON in a crate of its own: glyph-json holds what glyph_util::json held and replaces the Value of glyph-stores, one JSON type for the workspace; crate-graph.js names it as the floor, with the platform as its oracle, seen failing before it counts; no projection moved; at ab37357, sha256 86600fec025a1db860876091c6ba2df68c80ecdad1129f588cd06af9e5cfec83 of the cases, the digest of ORD-0006'][ph-scope'EMS-002']]
+    [--track[ph-item'ORD-0008, a template body reads what the caller registered: the Registered of the Rust beside the context, the repository one in the CLI and in glyph-engine; the JS protocol registers when it runs as the engine; registry.json holds 63 probes in both states, and a body that breaks a rule reads the same in the CLI and in the app by both engines; the oracle of the cases did not move; at 64f995a, sha256 4a245e6c231a0f9003fafe0dfe510cdd96297a6ec5085b3c20a0f5ec34914494 of registry.json and 86600fec025a1db860876091c6ba2df68c80ecdad1129f588cd06af9e5cfec83 of the cases'][ph-scope'EMS-002']]
+    [--track[ph-item'ORD-0009, the zip of a series ORD only behind a flag: --zip in both engines, the JS first, the ORD-####.zip beside the folder without moving the count; the README and the bundle command of the plugin document it, and the export runs it in a series and outside one; at f038b9c, sha256 487a2691f110814bc6ea9024ab16ade6157633d22f818a0a5383514d14ee3cd8 of cli.json, 731 runs, written on Linux'][ph-scope'EMS-002']]
+    [--track[ph-item'ORD-0010, classify answered by the page from the tables it loads: behind engine=relay one request a call but classify; RL-16 holds the swap set; measured in Chromium through serve-dev.js, the 115 sources typed, from 11 163 requests to 575, L-01 from 8 005 a keystroke to 5, no panel different, by the JS engine and by the Rust; at 936e91d, sha256 5c3228dcd2f1609ff08325bf6c27bd8fcb1979902001d18e6d5304f9ab8a4c95 of glyph-transport.js'][ph-scope'EMS-002']]
+    [--track[ph-item'ORD-0011, the snapshot honours the stores of each case: the case stores laid over the repository ones in the snapshot, the case files and the runs; T-07, T-08 and T-09 moved by decision and no other; TemplateCycle in the oracle; Context::with in the Rust; at e900c7a, sha256 7dcf5a1121360749d482c02bc9a8d23806f47626315c4cf0cce876432140a318 of the cases'][ph-scope'EMS-002']]
+    [--track[ph-item'ORD-0012, the ruler of the crates at the gate: scripts/crate-weight.js in check:rust measures the tree of every external crate as section 9 measures it and grades note, ask and fix; ask enters only with an ADR signed in .decisions; seen failing on recorded trees, one for each grade; the workspace holds no external crate today; at 18b4392, sha256 82812a7cf6624f95ec7327870cd1e0a4c443f4773779076ebd78100845c3c79e of crate-weight.js'][ph-scope'EMS-002']]
+    [--track[ph-item'ORD-0013, the Rust stops redoing on every call what the JS does once: ck in integer arithmetic around its product, which stays a double; the stores behind an Arc, shared by a template body and by the formula of a composite; the rules compiled once a store in compiled_of, keyed by the store, the port of compiledOf; the Parse without a copy of the rules store; four mutants seen failing; on the bench, release, the empty parse from 19.5 to 0.53 µs and the empty toAST from 8 034 to 285; no emitted byte moved; at bf89f46, sha256 7dcf5a1121360749d482c02bc9a8d23806f47626315c4cf0cce876432140a318 of the cases, the digest of ORD-0011'][ph-scope'EMS-002']]
+    [--track[ph-item'ORD-0014, the renames that move the emitted output, the first of the batch of the version: SKEP emits sceptic, and the former spelling skeptic is read in the source and in the XML with a note, through FORMER_ELEMENT; template and mould where molde said template, in the diagnostic, the two stores and the comment of an empty source; the key of the saved moulds migrates once without losing one; the category frame; the snapshot moved by decision, the xml of L-04 and the 115 ast; six mutants seen failing, and two instruments in Chromium, the migration and the category; at 4d07028, sha256 e76297b484c723e60e54641bf524ce11ef98a38ca0b7396ae13f03cf35ae13ed of the cases'][ph-scope'EMS-002']]
+    [--track[ph-item'ORD-0015, the reference syntax, the second of the batch of the version: a name-shaped literal under REF that no command of the package binds raises an ask, UnboundReference, and writes needs var beside the literal, which stays; a binding written later resolves; prose under REF asks nothing; the way back drops the needs; no hash of the snapshot moved; four probes in the oracle and BD-07 to BD-10; three mutants seen failing; at d0c8328, sha256 e76297b484c723e60e54641bf524ce11ef98a38ca0b7396ae13f03cf35ae13ed of the cases, the digest of ORD-0014, and 13e2509753ffd34980932536c417ef0e6fe4d7ebb5cd24b14bde31cd48049f63 of parse.json'][ph-scope'EMS-002']]
+    [--track[ph-item'ORD-0016, the deep-inference alarm, the third of the batch of the version: a composite of depth 5 or more with no operand, where no frame and no ordered slot asks, raises an ask, DeepInference, and writes needs the subject, by GLOSSARY section 0.3; where a frame asks, the question is its own; a chain link is not asked; today only FBK falls in it; no hash of the snapshot moved; six probes in the oracle and DI-01 to DI-05; three mutants seen failing; at 29400d2, sha256 e76297b484c723e60e54641bf524ce11ef98a38ca0b7396ae13f03cf35ae13ed of the cases, the digest of ORD-0014, and 8ad19cc250ec245118fa26f89b7e7001943da04df2ac489e8395657a81228725 of parse.json'][ph-scope'EMS-002']]
+    [--track[ph-item'ORD-0017, the two proposals of the XML draft, of the batch of the version: the number of a PT emits part n and the condition of an IF emits if cond; the operand moves only when it carries no slot, no reference and some text; a frame counts the operand where it was written; fromXML reads both back; OPERAND_ATTR in the vocabulary; XML_REFERENCE and PACKAGE_TARGET section 3c state them; no hash of the snapshot and no golden moved; seven probes in the oracle and RO-06 to RO-09; four mutants seen failing; at 6c60e02, sha256 e76297b484c723e60e54641bf524ce11ef98a38ca0b7396ae13f03cf35ae13ed of the cases, the digest of ORD-0014, and d359d2e2b5d3934dfccf294680a533389e7c02a4acee851987238dd15918802c of xml.json'][ph-scope'EMS-002']]
+    [--track[ph-item'ORD-0018, the blend REV and DIST only on the same target, of the batch of the version: each burnt atom carries the subject it works on, by GLOSSARY section 0.3, its own operands or those of the composite whose formula produced it, and the blend fuses by subject; REV of x beside DIST of y burns as two commands and REV of x beside SCRU of x stays one heavyreview; no hash of the snapshot moved; H-10 and H-10b moved to one target and H-10c entered; four mutants seen failing; at b7860e3, sha256 e76297b484c723e60e54641bf524ce11ef98a38ca0b7396ae13f03cf35ae13ed of the cases, the digest of ORD-0014, and 75f23eaa33350a25ded39bc516652f3151385f7651b6dd15bca2e711a3cb3c1a of inverse.json'][ph-scope'EMS-002']]
+    [--track[ph-item'ORD-0019, the first residual of O4, in the Rust only, of the batch of the version: the burn writes the line ;; between two blocks where a segment break writes the blank line; the JS keeps the blank line; the known difference is named once, known semicolons in the testkit, and the oracle tests of the burn, the round trips, the CLI, the engine and the protocol undo it and hold the rest byte for byte, the burn test asserting it is reached; no hash of the snapshot moved; seen failing before it counts; at 015d9c3, sha256 e76297b484c723e60e54641bf524ce11ef98a38ca0b7396ae13f03cf35ae13ed of the cases, the digest of ORD-0014, and 651548896f4be39e5ffa98b8e15f8436c2943f86923439fe73ce4e481f7db1ab of testkit/oracle.rs'][ph-scope'EMS-002']]
+    [--track[ph-item'ORD-0020, the second residual of O4, in the Rust only, of the batch of the version: the lexer ends an apostrophe literal at its own quote or at the bracket, never at a line break, as the backtick and the grammar do; the JS keeps ending it at the line break; the known difference is named in the testkit, known QUOTES, each source it reaches with the tokens the decision gives it, one today, and the other 1697 tokenizer sources hold byte for byte; no hash of the snapshot moved; seen failing before it counts; at e05835a, sha256 e76297b484c723e60e54641bf524ce11ef98a38ca0b7396ae13f03cf35ae13ed of the cases, the digest of ORD-0014, and 09164b940758b6934b48d560b29541eda4774d1ed2ba5599fb0ce764bf0fce57 of testkit/oracle.rs'][ph-scope'EMS-002']]
+    [--track[ph-item'ORD-0021, the third residual of O4, in the Rust only, of the batch of the version: a bare word in a parameter position, one still open or one a literal after it takes, raises TemplateParamNotLiteral with the word and the arguments as the author wrote them, quoted; the extra content after the parameters and a displaced command stay as they were, and the binding does not change; the JS keeps the silence and the [?; two probes in parse.json and ast.json, and the difference named in the testkit, known BARE, with the diagnostics the decision gives in both languages; no hash of the snapshot moved; two mutants seen failing; at e65081b, sha256 e76297b484c723e60e54641bf524ce11ef98a38ca0b7396ae13f03cf35ae13ed of the cases, the digest of ORD-0014, and 6befd7eae7eaeb17cec5a96523eb72e8706894f078a0c279f611698e10e6762e of testkit/oracle.rs'][ph-scope'EMS-002']]
+    [--track[ph-item'ORD-0022, a mood in a return segment, the first inclusion of 2026-10-25, of the batch of the version: mood is the first child of block in a return segment too, ahead of user-expectative, and both ways back write the mood header apart from r-; no hash of the snapshot moved; three probes in xml.json and F-24; two Rust mutants seen failing; at aab8260, sha256 e76297b484c723e60e54641bf524ce11ef98a38ca0b7396ae13f03cf35ae13ed of the cases, the digest of ORD-0014'][ph-scope'EMS-002']]
+    [--track[ph-item'ORD-0023, a mood inside a template, in the Rust only, of the batch of the version: the JS throws, the Rust already answered the document, the mood colouring the segment first in its block, and no engine changed; the four sources entered the probes, and the parse, XML, envelope and burn oracle tests take the bytes of rust/testkit/known/template-moods.json, read with the oracle engine and stores; no hash of the snapshot moved; seen failing before it counts; at 9e1a22b, sha256 e76297b484c723e60e54641bf524ce11ef98a38ca0b7396ae13f03cf35ae13ed of the cases, the digest of ORD-0014'][ph-scope'EMS-002']]
+    [--track[ph-item'ORD-0024, the mode words never vanish, an inclusion of 2026-10-25, of the batch of the version: a closed on with no off open is the command ON with the note UnmatchedOnMode; an off at the end raises UnclosedOffMode, and an empty region is an empty off element; bare off and on raise LooseCommandWord; the empty OFF comes back as modeoff; OC-13 took the snapshot to 116 sources with no hash moved; 29 parse probes, the MO bucket and probe 4-15; eight MO checks and OC-13 seen failing on the earlier tree, and three Rust mutants; at c112ddd, sha256 d4ddb7335b4729f8de45288d5ff177d5bdca391ade2a796e7d03da7218235688 of the cases'][ph-scope'EMS-002']]
+    [--track[ph-item'ORD-0025, a known name after an operand, a space or a closing bracket is a chain link, an inclusion of 2026-10-25, of the batch of the version: a dash a known name touches becomes extend, and after a closing bracket the link goes to the scope that bracket returns to; prose with a hyphen stays prose, and the way back fences an off element that starts with a known name; the grammar gains chain_link; no hash of the snapshot moved; 13 lexer probes, 21 parse probes, the LK bucket and probe 4-16; four mutants seen failing; at cda8d0b, sha256 d4ddb7335b4729f8de45288d5ff177d5bdca391ade2a796e7d03da7218235688 of the cases'][ph-scope'EMS-002']]
+    [--track[ph-item'ORD-0026, a command held by a placeholder reaches the XML, an inclusion of 2026-10-25, of the batch of the version: a hole holding more than its name and question becomes placeholder, its needs where the question was written and the rest in source order; only the bare tag written straight after the placeholder dash names the hole, the others are links; a filled hole keeps what it held; no hash of the snapshot moved; the Placeholder bucket, 25 parse probes and five template probes; PH-01 to PH-14 and four Rust mutants seen failing; at fc4c4a2, sha256 d4ddb7335b4729f8de45288d5ff177d5bdca391ade2a796e7d03da7218235688 of the cases'][ph-scope'EMS-002']]
+    [--track[ph-item'ORD-0027, the way back through fromAST writes the space a name needs, from the traversal of the inclusion, of the batch of the version: between a name or a mood header and the prose after it, so a context command holding prose stops coming back as an unknown command; no hash of the snapshot moved; F-25; F-25 and a Rust mutant seen failing; at 8c57f9a, sha256 d4ddb7335b4729f8de45288d5ff177d5bdca391ade2a796e7d03da7218235688 of the cases'][ph-scope'EMS-002']]
+    [--track[ph-item'ORD-0028, what a template call carries never vanishes, an inclusion of 2026-10-25, of the batch of the version: the command of a fill travels with its value carrying the slot, an unknown fill lands after the body with TemplateUnknownParam, a source definition expands its calls and overrides the store, and a second definition is TemplateDefinedTwice; OC-14 and OC-15 took the snapshot to 118 sources with no hash moved; the INCLUSION bucket, RT-08 and RT-09; four Rust mutants seen failing; at 1fd7e07, sha256 ef735188f084ca48ef9016e86980d379f70a427e4034837b104c4537c62bd89f of the cases'][ph-scope'EMS-002']]
+    [--track[ph-item'ORD-0029, the further positions of the chain link, by the answer of 2026-10-26, of the batch of the version: a dash that starts a word and touches a known name is a link of the scope it is in, after prose, a segment break or a comma, a mood, a closed raw fence, at the start, with a space after the dash and as a run of dashes, and prose stays prose; a sweep found no prose of the repository that changed; no hash of the snapshot moved; LK-08 to LK-14 and 45 probes; the new LK checks and four Rust mutants seen failing; at 175c79a, sha256 ef735188f084ca48ef9016e86980d379f70a427e4034837b104c4537c62bd89f of the cases'][ph-scope'EMS-002']]
+    [--track[ph-item'ORD-0030, the way back invents nothing and glues nothing, two defects found while building the inclusion, of the batch of the version: fromXML stops reading the sem resposta of a hole with no question as a question, and slotFills stops gluing the prose a fill carries to the hole name; no hash of the snapshot moved; F-26; F-26 and two Rust mutants seen failing; at f2af253, sha256 ef735188f084ca48ef9016e86980d379f70a427e4034837b104c4537c62bd89f of the cases'][ph-scope'EMS-002']]
+    [--track[ph-item'ORD-0031, the colon retires, by the answers of 2026-10-25 and 2026-10-26, the last of the batch of the version: a colon asks RetiredColon and its text becomes operands; the name only on block, section and the logic fence, from the first literal; the literal-named logic fence; the way back writes no colon; AmbiguousSlotOrder left; the snapshot moved by decision, the xml of P-07 and P-15, and OC-01; the CO checks, D-12 and four Rust mutants seen failing; at aeebc49, sha256 b6593e07bd20359ab5db7e1495aa1d5d053c48908d94f379f42e048e6af133c4 of the cases'][ph-scope'EMS-002']]
+  ]
+];

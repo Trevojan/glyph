@@ -1,0 +1,40 @@
+<glyph-package engine="3.6.9.07">
+  <schema/>
+  <block once="true">
+    <block binds="ORD-0019-o4-semicolons">
+      <user-input>ORD-0019-o4-semicolons</user-input>
+      <context>
+        <user-input>the spec of EMS-002</user-input>
+        <user-input>.guidelines/.orders/EMS-002/EMS-002.pgml</user-input>
+      </context>
+      <target>
+        <user-input>the first of the three residuals of O4, in the Rust only, answered on 2026-10-25: in the burn, a line break between two blocks keeps its own mark, the line ;; where a segment break writes the blank line, so the hgml carries what the tree carries; an ORD of the batch the version moves once for</user-input>
+      </target>
+      <context>
+        <user-input>O4, decided on 2026-09-27: the old defects are fixed in the Rust only, the JS keeps its answer until it leaves, and the differential test names each as a known difference; the oracle the Rust is held to is what the JS answers</user-input>
+      </context>
+      <context>
+        <user-input>measured at f5580cc: of the 115 declared sources only R-03 holds a line break between two blocks; in the oracle modules three burns of hgml.json reach one, and the burn reaches the tests of the CLI, the engine, the protocol and the round trips as well</user-input>
+      </context>
+      <constraint>
+        <user-input>the known difference is named once, in the testkit, as the undo that maps the line ;; back to the blank line; no other hgml line is ;; since a literal is quoted and a comment opens with a hash, so the undo reaches nothing else</user-input>
+      </constraint>
+      <constraint>
+        <user-input>every comparison of a burn undoes that one difference and then holds the bytes; the burn test asserts the difference is reached, so the undo never undoes nothing</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the JS is not changed: the snapshot is the JS answer, and no hash of it moves</user-input>
+      </constraint>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the mark</user-input>
+        <user-input>the Rust writes the line ;; between two blocks where a segment break writes the blank line, one line for each break; a direct test holds the lines the decision names, seen failing before it counts</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the known difference</user-input>
+        <user-input>the oracle tests of the burn, the round trips, the CLI, the engine and the protocol name the difference, undo it before comparing, and hold everything else byte for byte</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>

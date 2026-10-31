@@ -1,0 +1,69 @@
+[block'linkedin-post'
+  [ctx'a post carrying one observation the author already had','any social feed written in a second language','filled by the Regente before drafting']
+  [skl'glyph-markup'[ins'hear this order, draft the post, then audit and reflect before concluding it']]
+
+  [section'species'
+    [dfn'observation','something the author noticed and can state in one sentence — the whole payload of the post']
+    [dfn'framework','a method other people are expected to adopt — what an observation turns into when the writer inflates it']
+    [dfn'import','a claim the writer added that the author never made, arriving as a paragraph that reads well and holds nothing the author said']
+    [dfn'cold read','reading the draft as someone meeting the subject for the first time, with no access to the conversation that produced it']
+    [dfn'load-bearing phrase','a phrase the whole point rests on, doing that work with no example beside it']
+    [nt'the author writes to be read once, not to be followed']
+    [dont'promote an observation to a framework because a framework is easier to structure']
+  ]
+
+  [section'write'
+    [intn'the reader leaves holding one word or one distinction, and nothing to adopt']
+    [ph-observation'the observation, in one sentence, as the author stated it and not as it could be generalised']
+    [ph-annoyance'the concrete annoyance that produced it — what went wrong, how often, at whose cost']
+    [ph-tone'the register the opening sets, stated as what the author would actually say out loud']
+    [req'every claim in the draft traces to something the author said']
+    [fmt'running prose, no headers, no numbered framework, no call to action']
+    [lim'the draft may be dense, and density is not the same as structure']
+    [cnst'the post stays unpitchable: no problem-solution shape, no scaling claim, no before and after']
+    [nev'a paragraph enters the draft to fill a shape the author did not ask for']
+  ]
+
+  [section'audit'
+    [--scientific-review
+      [ph-target'the draft, read cold — start to finish, once, with no prior context assumed']
+      [ph-standard'a reader who works in this field, meets the subject here for the first time, and gets it without asking a question']
+    ]
+    [find'every load-bearing phrase standing without an example beside it']
+    [warn'a load-bearing phrase makes the reader supply the example from personal experience, and a newer reader has none to supply']
+    [scru'the closing lines, for a defence against a reading nobody offered']
+    [vrfy'terminology is consistent across the draft — the same thing named the same way, capitalised the same way, every time']
+    [avd'idiom carried over from the first language of the author, and words that only exist in that language']
+    [prob'a shape an investor can lift: a bottleneck being fixed, a thing that scales, a state before and a state after']
+    [nt'the audit reports; it does not rewrite']
+  ]
+
+  [section'reflect'
+    [--loop
+      [ph-target'each paragraph, against what the author actually stated']
+      [ph-pass'one more import named and cut, going finer than the pass before — a whole thesis first, then a clause, then a single adjective doing the same work']
+      [ph-until'every paragraph traces to the author, and no paragraph needs a claim the author did not make in order to hold together']
+    ]
+    [dist'what the author stated','what the writer added and then read back as if it had been stated']
+    [warn'if a paragraph collapses once an unstated claim is removed, that claim was imported and the paragraph was built on it']
+    [--reinforce
+      [ph-rule'a correction from the author is authoritative and settles it — reread the chain before defending the sentence']
+      [ph-why'the writer is the one who lost the thread, and defending the sentence spends the turn that should have fixed it']
+    ]
+    [cnst'an import is cut, never softened into a hedge that keeps it in the draft']
+    [--track
+      [ph-item'each import found, and which paragraph carried it']
+      [ph-scope'this post, and the next one the author writes on the same subject']
+    ]
+    [lrn'the imports found here — they arrive the same way next time, as the paragraph that reads best']
+  ]
+
+  [section'conclude'
+    [get[whr'the last version the author corrected, never the last version the writer preferred']]
+    [fin'on the open question, with the observation stated once and nothing after it']
+    [dont'close with a call to action, a summary of what was just said, or a defence that no system is being sold']
+    [warn'a pre-emptive defence tells the reader there was something to suspect']
+    [conf'the draft against the author, before it is called finished'[hmn]]
+    [rdy'the post ships as prose the author can paste, and not as a document']
+  ]
+];

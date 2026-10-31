@@ -1,0 +1,49 @@
+<glyph-package engine="3.6.9.07">
+  <schema/>
+  <block once="true">
+    <block binds="ORD-0001-virtual-paths">
+      <user-input>ORD-0001-virtual-paths</user-input>
+      <context>
+        <user-input>the spec of EMS-002</user-input>
+        <user-input>.guidelines/.orders/EMS-002/EMS-002.pgml</user-input>
+      </context>
+      <target>
+        <user-input>glyph-vpath: the virtual paths of .plan section 0, layers 1, 4, 5 and 6, keyed by the slug</user-input>
+      </target>
+      <constraint>
+        <user-input>JSON and XML enter the index to depth 2, the root at depth 0; a deeper selector resolves by reading the file, under the fingerprint the index holds for it</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the line range is the first line and the count, as a windowed read takes them</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the RETURN.md of a series is a log, and stays out of sources, as CHANGELOG.md does</user-input>
+      </constraint>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the trees</user-input>
+        <user-input>the extension decides the selector: .md by heading slug, .json by JSON Pointer, .xml by element path, code and text by @block and @endblock; an empty selector is the whole file; zero nodes or many is an error, never an empty slice</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the index</user-input>
+        <user-input>every file of .guidelines, the attic and the index aside, with README.md and CLAUDE.md, in the index; each node with its byte range, its line range and its fingerprint, and every entry resolves to content that is not empty</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the resolver</user-input>
+        <user-input>many paths read each file once, the answer carries the offsets, the slice arrives under its own virtual path, and a fingerprint that no longer matches is refused</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>sources</user-input>
+        <user-input>a document declares its sources in its frontmatter, the index answers which documents a file feeds by inversion, and the seeds of INTAKE-VIRTUAL-PATH section 19 enter</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the gate</user-input>
+        <user-input>npm run check refuses an index that drifted, a file left out, a source that does not resolve and a stale source, each seen failing before it counts</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>

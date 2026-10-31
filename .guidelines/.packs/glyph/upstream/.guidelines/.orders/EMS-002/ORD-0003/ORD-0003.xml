@@ -1,0 +1,51 @@
+<glyph-package engine="3.6.9.07">
+  <schema/>
+  <block once="true">
+    <block binds="ORD-0003-recovery">
+      <user-input>ORD-0003-recovery</user-input>
+      <context>
+        <user-input>the spec of EMS-002</user-input>
+        <user-input>.guidelines/.orders/EMS-002/EMS-002.pgml</user-input>
+      </context>
+      <only-if>
+        <user-input>ORD-0002 closed</user-input>
+      </only-if>
+      <target>
+        <user-input>glyph-vpath: the recovery index, layer 7 of .plan section 0, by the content</user-input>
+      </target>
+      <constraint>
+        <user-input>recovery runs at build time, only for a Markdown section that no rule of the NodeID reached; its successor is the new section whose body has the largest line-set Jaccard with the old one, at least 0.5 and unique</user-input>
+      </constraint>
+      <constraint>
+        <user-input>recovery is not identity: the successor keeps its own NodeID, and the old path and the old NodeID point at it as recovered, with the score</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the old text comes from the cache of the last build, then from git at HEAD, each taken only when its fingerprint equals the one the index holds; with neither, the section goes unrecovered and the build says so</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the cache and the log of misses live beside the index and out of git, as the session files of the regency plugin do</user-input>
+      </constraint>
+      <note>
+        <user-input>the cache answers what git cannot: a second build before a commit, and a checkout whose line endings differ from the commit</user-input>
+      </note>
+      <never force="editorial">
+        <user-input>recovery by the path: precision 35.7 percent, INTAKE-VIRTUAL-PATH section 23</user-input>
+      </never>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the recovery</user-input>
+        <user-input>a heading renamed while its body changes is found again by its old path and by its old NodeID; a deletion is not, and two successors that tie are not</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the index miss</user-input>
+        <user-input>every answer through a recovery warns with its score, never blocks, and is written to the log of misses; misses reads the log</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the gate</user-input>
+        <user-input>npm run check refuses a source declared by a recovered path, naming the successor, and an index whose recoveries point at nothing or at a live path, each seen failing before it counts</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>

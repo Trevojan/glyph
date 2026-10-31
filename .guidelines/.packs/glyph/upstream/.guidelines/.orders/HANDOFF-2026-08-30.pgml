@@ -1,0 +1,56 @@
+[section'state'
+  [nt'where the engine is']
+  [core'Glyph is at 2.4.5.01 on branch claude/reload-skills-f5b866. Five gates decide it: npm run check runs test-corpus, dag, check-globals, build-templates --check and build-skill --check, and all five exit zero']
+  [ctx'the suite is 31 positive, 6 incomplete, 16 invalid, 5 regressions, 8 long, 12 templates, 15 rules, 9 constraints, 31 guard, 17 composition, 12 hgml, 23 fromXML, 10 reference, 6 round trip, 3 ast schema, 5 examples, 4 snapshot, 3 global store']
+  [rdy'the standing gate is one command: npm run check']];
+
+[section'root cause'
+  [prob'every blocker found in this work is one shape: a decision taken in one place and never carried to the others']
+  [ex'resolution C-01 removed the slash divider and reached only the grammar, while the reference documented it and the engine implemented it at six sites']
+  [ex'resolution I-19 replaced the backslash emotion delimiter and also stopped at the grammar']
+  [ex'the v1.7 changelist said active skill packages stay at v1.6 until reinstalled, and the reinstall never happened']
+  [ex'the repository skill already carried both resolutions correctly, so two destinations were right and three were wrong']
+  [lrn'a decision is not made until it reaches every destination, and the only way to know it did is a command that fails when it did not']];
+
+[section'closed'
+  [nt'what this release finished']
+  [ins'the operator reaches the XML: origin was computed since always and dropped by two consumers, so extend and comma serialised identically and the inverse fabricated a needs element that the author had never been asked for']
+  [ins'chainElement was answering two independent questions and now answers one, which is why a hyphen before a bracket stopped cancelling the needs a bracketed command asks for']
+  [ins'two removals landed seven versions late, and both are demoted to recognisers rather than deleted, because deleting either one re-created the silence it was removed for']
+  [ins'no placeholder character reaches the deliverable: the mood attribute that printed a question mark is gone']
+  [ins'the AST is the source of truth: two named projections, full and panel, with full carrying origin, positions, the source descriptor, the store fingerprints and its own schema number']
+  [ins'fromAST exists, and writing it proved two fields missing from a projection called full']
+  [ins'the round trip invariant moved to the AST, and it caught three losses the XML invariant could not see']
+  [ins'the four US spellings in the deliverable became criticise, categorise, generalise and scrutinise']
+  [ins'the hgml has a consumer: a blend rule folds co-occurring atoms into one element and declares what it means in its own output']
+  [ins'the module system is ESM, package.json exists with no dependencies, and the CLI left the core']];
+
+[section'measured'
+  [nt'numbers, not estimates']
+  [ref'blast radius of the operator change: one vector, measured by parsing all 98 corpus sources rather than estimated']
+  [ref'the schema mutation set catches fourteen of fourteen']
+  [ref'compare and promote is 85 percent describable mechanically and about 1 percent promotable: the composition table decides generality on 2 of 191 divergence sites']
+  [ref'the seam graph says no seam of the core is a leaf, so the remaining split is twelve operations and not one']];
+
+[section'open'
+  [nt'the four that need the Regent, and none of them blocks the others']
+  [qst'the glyph-package format has no specification, so E1 and E3 cannot start: writing one is designing the product rather than executing the plan']
+  [qst'the packaging shape, L4: what the end user actually receives, and what the screen shows']
+  [qst'ratifying PROMOTION_BOUNDARY.md, which an agent may not do for a norm it wrote']
+  [qst'the tracing format: the substrate exists in glyph-trace.js, and the question is what to stack on it']
+  [assm'two versions of one Glyph source, before and after a revision, would change the promotion measurement: no such pair exists in the repository']];
+
+[section'next'
+  [nt'the order the work has, if nothing changes']
+  [ins'the remaining split, in the order the seam graph gives: vocabulary, then logic, then lexer, then the four emitters, then the parser']
+  [ins'the descriptive comparison report, which is useful without deciding anything']
+  [ins'the glyph-package specification, once the Regent decides its shape']
+  [lim'nothing here needs a decision to continue except the four above, and each of those blocks only itself']];
+
+[section'method'
+  [nt'how this was worked, because it is the part that transfers']
+  [cnst'the gate is written before the thing it gates, and every gate is observed failing before it counts']
+  [cnst'a known loss is pinned with its reason, and a pin that outlives its reason fails the suite']
+  [cnst'a retired construct is demoted to a recogniser that refuses it by name, never deleted into silence']
+  [cnst'writing the consumer is what proves the producer complete: fromAST found two missing fields, glyph-trace found a third']
+  [cnst'measure before building: the promotion measurement changed what gets built, and the seam graph stopped a split that had no map']];

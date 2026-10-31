@@ -1,0 +1,42 @@
+<glyph-package engine="3.6.9.07">
+  <schema/>
+  <block once="true">
+    <block binds="ORD-0031-colon">
+      <user-input>ORD-0031-colon</user-input>
+      <context>
+        <user-input>the spec of EMS-002</user-input>
+        <user-input>.guidelines/.orders/EMS-002/EMS-002.pgml</user-input>
+      </context>
+      <context>
+        <user-input>the map of the inclusion</user-input>
+        <user-input>.guidelines/.orders/INTAKE-INCLUSION.md</user-input>
+      </context>
+      <target>
+        <user-input>the colon form retires, as the Regent decided on 2026-10-25 and 2026-10-26: a recogniser at ask, the text kept as the operand, the name only on the commands that take one, from their first literal; the last ORD of the batch the version moves once for</user-input>
+      </target>
+      <context>
+        <user-input>the Regent, 2026-10-25: the colon is typed with a shift, so it is not good to exist; the name attribute should be the first parameter typed as a literal, which limits names to certain commands, valid and intentional; templates exist to reduce typing</user-input>
+      </context>
+      <context>
+        <user-input>measured at 0634b44: a colon stores its text as the name of any element and counts it as the operand; a comma list raises AmbiguousSlotOrder; a logic fence is named by its colon; the way back writes a name back as a colon; one declared source, OC-01, writes a colon, and P-07 and P-15 name a section and a block with a literal</user-input>
+      </context>
+      <constraint>
+        <user-input>a colon raises RetiredColon at ask once, naming the replacement written with literals, and its text becomes operand literals, one per comma item, in source order, so the colon form emits the same document as the form the message names; AmbiguousSlotOrder retires with it, and OC-01 becomes the declared source of the new code</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the name exists only on block, section and the logic fence, from the first literal, under the rule of OPERAND_ATTR; binds stays beside it, so a reference to a named block still resolves</user-input>
+      </constraint>
+      <constraint>
+        <user-input>a logic opener with a literal after it, closed by its end tag, is the named fence; the colon opener still opens it and asks; the way back writes no colon: a name comes back as the first literal</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the snapshot moves by decision: P-07 and P-15 in xml, OC-01 in xml, ast and hgml, written in .decisions; the Rust is ported byte for byte</user-input>
+      </constraint>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the colon</user-input>
+        <user-input>every colon form asks once and emits the bytes of its literal form, the name sits only on block, section and the logic fence, and both ways back write no colon; each seen failing before it counts, and the Rust answers byte for byte</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>

@@ -1,0 +1,23 @@
+<glyph-package engine="3.5.8.06">
+  <schema/>
+  <block once="true">
+    <block binds="ORD-0004-lexer">
+      <user-input>ORD-0004-lexer</user-input>
+      <context>
+        <user-input>the spec of EMS-001</user-input>
+        <user-input>.guidelines/.orders/EMS-001/EMS-001.pgml</user-input>
+      </context>
+      <only-if>
+        <user-input>ORD-0003 closed</user-input>
+      </only-if>
+      <target>
+        <user-input>glyph-lex: tokenize, classify, suggest</user-input>
+      </target>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>glyph-lex</user-input>
+        <user-input>the tokens equal the oracle on all 114 sources, spans counted in UTF-16 as the JS counts them</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>

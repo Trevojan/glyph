@@ -1,0 +1,23 @@
+<glyph-package engine="3.5.8.06">
+  <schema/>
+  <block once="true">
+    <block binds="ORD-0009-projections">
+      <user-input>ORD-0009-projections</user-input>
+      <context>
+        <user-input>the spec of EMS-001</user-input>
+        <user-input>.guidelines/.orders/EMS-001/EMS-001.pgml</user-input>
+      </context>
+      <only-if>
+        <user-input>ORD-0008 closed</user-input>
+      </only-if>
+      <target>
+        <user-input>glyph-envelope, glyph-burn and glyph-inverse: the AST envelope, the burn, fromXML and fromAST</user-input>
+      </target>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the three projections and the inverse</user-input>
+        <user-input>the ast and hgml digests equal the oracle, and every round trip the JS suite runs closes</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>

@@ -1,0 +1,33 @@
+<glyph-package engine="3.6.9.07">
+  <schema/>
+  <block once="true">
+    <block binds="ORD-0030-way-back">
+      <user-input>ORD-0030-way-back</user-input>
+      <context>
+        <user-input>the spec of EMS-002</user-input>
+        <user-input>.guidelines/.orders/EMS-002/EMS-002.pgml</user-input>
+      </context>
+      <context>
+        <user-input>the map of the inclusion</user-input>
+        <user-input>.guidelines/.orders/INTAKE-INCLUSION.md</user-input>
+      </context>
+      <target>
+        <user-input>the way back invents nothing and glues nothing: two defects found while building the inclusion, fixed in both engines; an ORD of the batch the version moves once for</user-input>
+      </target>
+      <context>
+        <user-input>found at fc4c4a2 and 1fd7e07: the emitter writes the text sem resposta in the needs line of a hole with no question, and fromXML reads that text back as a question the author never wrote, for a bare hole and inside a placeholder, against the no-fabrication rule of PACKAGE_TARGET section 8; and fromAST writes the prose a template fill with no value carries glued to the hole name, so a rule hole carrying plain comes back as the unknown hole ruleplain</user-input>
+      </context>
+      <constraint>
+        <user-input>the needs line keeps its shape, PACKAGE_TARGET G3, so the reader treats the text sem resposta as no question: the source comes back without it and emits the same document, the one case the XML cannot tell apart</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the space between the hole name and the prose is the apart rule of ORD-0027 applied where the fill is written</user-input>
+      </constraint>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the way back</user-input>
+        <user-input>a hole with no question comes back with none through fromXML, and a fill carrying prose comes back with the prose apart through fromAST; each seen failing before it counts, and the Rust answers byte for byte</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>

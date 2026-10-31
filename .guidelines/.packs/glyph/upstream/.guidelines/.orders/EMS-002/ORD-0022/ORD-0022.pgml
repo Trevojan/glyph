@@ -1,0 +1,9 @@
+[block'ORD-0022-mood-return'
+  [ctx'the spec of EMS-002','.guidelines/.orders/EMS-002/EMS-002.pgml']
+  [tgt'a mood written in a return segment reaches the XML, the first of the inclusions the Regent decided on 2026-10-25, a known construct that never vanishes; an ORD of the batch the version moves once for']
+  [ctx'measured at 0c8b55e: the five sources keep the mood in segment.mood with isReturn and no diagnostic, and the XML has no mood, because the return branch of buildXml never reads it; both inverses write the mood header glued to r-, which the lexer reads as an unterminated mood code, so the return marker is lost on the way back, already today through fromAST']
+  [ctx'the rule that includes it: XML_REFERENCE section 6, mood is a child of block, first among its children, a mood colours the whole segment; a return segment is a segment, the grammar writes segment as an emotion header and an element sequence, and buildXml wraps it in the same block']
+  [cnst'the mood goes first in the block, ahead of user-expectative, as PACKAGE_TARGET refusal 11 MoodMisplaced places it; it does not enter user-expectative, and expects does not change']
+  [cnst'no declared source writes a mood in a return segment, so no hash of the snapshot moves; three XML probes and one suite test hold it, and the Rust is ported byte for byte']
+  [val'the mood','a mood in a return segment emits mood first in its block; fromXML and fromAST write a space between the mood header and r-, and the six test sources come back to the same XML; seen failing before it counts, and the Rust answers byte for byte']
+];

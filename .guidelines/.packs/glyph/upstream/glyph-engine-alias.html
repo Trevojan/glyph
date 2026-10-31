@@ -1,0 +1,179 @@
+<title>Glyph — mould e motor</title>
+
+<link rel="icon" type="image/x-icon" href=".scope/asset/favicon.ico">
+
+<link rel="stylesheet" href="glyph-engine.css">
+
+<div class="page">
+
+  <header class="top">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+      <h1><span class="p">[</span>glyph<span class="p">]</span><span class="arrow">→</span>xml / ast</h1>
+      <div class="chips" id="langPicker">
+        <button class="chip" type="button" data-lang="pt_BR" aria-pressed="true">PT-BR</button>
+        <button class="chip" type="button" data-lang="en">EN-EU</button>
+      </div>
+    </div>
+    <p class="rule" id="headerRule" data-i18n-html="rule">Mould pergunta, você responde o que souber. <strong>Casa vazia não bloqueia</strong>: vira <code>&lt;needs&gt;</code> no XML — mande incompleto, preencha com a resposta. Sem <kbd>shift</kbd>: humor <code>/frs/</code> · literal <code>'texto'</code> · teto e piso <code>pc[] pb[]</code> · retorno <code>r-</code>.</p>
+  </header>
+
+  <div class="grid">
+
+    <div class="col">
+      <details class="card" data-lsid="mould" open>
+        <summary class="hd">
+          <span id="mouldName">mould</span>
+          <div class="chips" id="mouldPick"></div>
+        </summary>
+        <div class="bd" id="mouldBody"></div>
+      </details>
+
+      <details class="card" data-lsid="src" open>
+        <summary class="hd">
+          <span data-i18n="srcTitle">fonte glyph</span>
+          <div class="chips" id="samples"></div>
+        </summary>
+        <div class="bd">
+          <label for="src" style="position:absolute;left:-9999px">Comandos Glyph</label>
+          <textarea id="src" class="src" spellcheck="false" data-i18n-ph="srcPh" placeholder="[rw[cr'api/pedidos.py'"></textarea>
+          <div class="lit" id="litOut"></div>
+        </div>
+      </details>
+
+      <details class="card" data-lsid="tpl-lib">
+        <summary class="hd">
+          <span><span data-i18n="tplTitle">templates</span> <span id="tplCount"></span></span>
+          <div class="chips">
+            <button class="btn mini" id="tplNew" type="button" data-i18n="newOne">novo</button>
+            <button class="btn mini" id="tplImport" type="button" data-i18n="importMd">importar .md</button>
+          </div>
+        </summary>
+        <div class="bd">
+          <p class="none" data-i18n-html="tplHelp">Templates com buracos <code>[ph-nome</code>. Os parâmetros saem do próprio corpo — não se declara nada duas vezes.</p>
+          <input type="file" id="tplFile" accept=".md,.markdown,text/markdown" style="display:none">
+          <div class="lib" id="tplList"></div>
+          <div class="editor" id="tplEditor" hidden>
+            <div class="gaps" id="tplDiag"></div>
+            <label class="fld"><span data-i18n="fName">nome</span><input type="text" id="tplName" spellcheck="false" data-i18n-ph="tplNamePh" placeholder="meu-template"></label>
+            <label class="fld"><span data-i18n="fGloss">o que faz</span><textarea id="tplGloss" rows="2" spellcheck="false"></textarea></label>
+            <label class="fld"><span data-i18n="fBody">corpo (glyph)</span><textarea id="tplBody" rows="6" spellcheck="false" placeholder="[ctx[ph-situacao`a situação`]][prop`uma saída`]"></textarea></label>
+            <div class="none" id="tplParams"></div>
+            <div class="stepbar">
+              <button class="btn mini" id="tplSave" type="button" data-i18n="save">salvar</button>
+              <button class="btn mini" id="tplExport" type="button" data-i18n="exportMd">exportar .md</button>
+              <button class="btn mini" id="tplCancel" type="button" data-i18n="close">fechar</button>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="card" data-lsid="mould-lib">
+        <summary class="hd">
+          <span><span data-i18n="mldTitle">meus moulds</span> <span id="mldCount"></span></span>
+          <div class="chips">
+            <button class="btn mini" id="mldNew" type="button" data-i18n="newOne">novo</button>
+            <button class="btn mini" id="mldImport" type="button" data-i18n="importMd">importar .md</button>
+          </div>
+        </summary>
+        <div class="bd">
+          <p class="none" data-i18n-html="mldHelp">Cada fase é um <code>## Rótulo</code> seguido das casas, uma por linha, na forma <code>[tag[ph-id`a pergunta`]]</code>.</p>
+          <input type="file" id="mldFile" accept=".md,.markdown,text/markdown" style="display:none">
+          <div class="lib" id="mldList"></div>
+          <div class="editor" id="mldEditor" hidden>
+            <div class="gaps" id="mldDiag"></div>
+            <label class="fld"><span data-i18n="fTitle">título</span><input type="text" id="mldTitle" spellcheck="false" data-i18n-ph="mldTitlePh" placeholder="Revisão de contrato"></label>
+            <label class="fld"><span data-i18n="fHint">dica</span><textarea id="mldHint" rows="2" spellcheck="false"></textarea></label>
+            <label class="fld"><span data-i18n="fPhases">fases e casas</span><textarea id="mldBody" rows="8" spellcheck="false" placeholder="## Alvo&#10;[tgt[ph-saida`resultado esperado`]]&#10;## Partida&#10;[core[ph-entrada`estado inicial`]]"></textarea></label>
+            <div class="none" id="mldParams"></div>
+            <div class="stepbar">
+              <button class="btn mini" id="mldSave" type="button" data-i18n="save">salvar</button>
+              <button class="btn mini" id="mldExport" type="button" data-i18n="exportMd">exportar .md</button>
+              <button class="btn mini" id="mldCancel" type="button" data-i18n="close">fechar</button>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="card" data-lsid="cmds">
+        <summary class="hd"><span data-i18n="cmdsTitle">comandos por categoria</span><span id="cmdCount"></span></summary>
+        <div class="bd">
+          <label for="find" style="position:absolute;left:-9999px">Buscar comando</label>
+          <input id="find" class="find" type="text" spellcheck="false" data-i18n-ph="findPh" placeholder="buscar por sentido: revisar, condição, arredonda…">
+          <div class="catrow" id="catRow"></div>
+          <div class="tbl" id="cmdTbl"></div>
+        </div>
+      </details>
+    </div>
+
+    <div class="col">
+      <details class="card" data-lsid="target" open>
+        <summary class="hd">
+          <span data-i18n="targetTitle">destino</span>
+          <span class="none" id="targetPath"></span>
+        </summary>
+        <div class="bd">
+          <div class="targetrow">
+            <label class="fld"><span data-i18n="fHarness">harness</span>
+              <select id="tgHarness"></select></label>
+            <label class="fld"><span data-i18n="fModel">modelo</span>
+              <select id="tgModel"></select></label>
+            <label class="fld"><span data-i18n="fRole">papel</span>
+              <select id="tgRole"></select></label>
+          </div>
+          <div class="prev" id="targetPreview"></div>
+        </div>
+      </details>
+
+      <details class="card" data-lsid="out" open>
+        <summary class="hd">
+          <div class="tabs" role="tablist" id="outTabs">
+            <button class="tab" type="button" role="tab" data-tab="pgml" aria-selected="false">.pgml</button>
+            <button class="tab" type="button" role="tab" data-tab="xml"  aria-selected="true">.xml</button>
+            <button class="tab" type="button" role="tab" data-tab="ast"  aria-selected="false">.json</button>
+            <button class="tab" type="button" role="tab" data-tab="hgml" aria-selected="false">.hgml</button>
+          </div>
+          <div class="chips">
+            <button class="btn" id="xmlEdit" type="button" data-i18n="xmlEdit">editar</button>
+            <button class="btn" id="outCopy" type="button" data-i18n="copy">copiar</button>
+            <button class="btn" id="outDl" type="button" data-i18n="download">baixar</button>
+            <input class="ordno" id="ordNo" type="text" inputmode="numeric" size="4"
+                   title="numero da Ordem" aria-label="numero da Ordem">
+            <button class="btn" id="ordEmit" type="button" data-i18n="emitOrder">emitir ORD</button>
+          </div>
+        </summary>
+        <div class="bd flush">
+          <div class="tabpanel" data-panel="pgml" hidden><pre class="xml" id="pgmlOut"></pre></div>
+          <div class="tabpanel" data-panel="xml">
+            <pre class="xml" id="xmlOut"></pre>
+            <div class="gaps" id="xmlDiag"></div>
+          </div>
+          <div class="tabpanel" data-panel="ast" hidden><pre class="xml" id="astOut" style="color:var(--h-lit)"></pre></div>
+          <div class="tabpanel" data-panel="hgml" hidden><pre class="xml" id="hgmlOut"></pre></div>
+        </div>
+      </details>
+
+      <details class="card" data-lsid="gaps" open>
+        <summary class="hd"><span data-i18n="gapsTitle">o que falta dizer</span><span id="gapCount"></span></summary>
+        <div class="bd flush"><div class="gaps" id="gapOut"></div></div>
+      </details>
+    </div>
+  </div>
+
+  <footer class="ft">
+    <span data-i18n="footer">o xml não faz nada sozinho — ele é o recado pra mim</span>
+    <span id="stat"></span>
+  </footer>
+</div>
+
+<!-- The data stores stay classic: they are global-assigning IIFEs and classic
+     scripts run during parsing, so their globals exist before any module does.
+     The core and the interface are modules — the core because ESM is what
+     removed the need for a bundler when it was split (HGML_PLAN D1), and the
+     interface because modules are deferred: a classic glyph-ui.js would run
+     BEFORE the module core and find no GlyphCore at all. Modules execute in
+     document order, so the two below stay ordered. -->
+<script src="scripts/glyph-data.js"></script>
+<script src="scripts/glyph-moulds.js"></script>
+<script type="module" src="scripts/glyph-parser.js"></script>
+<script type="module" src="scripts/glyph-transport.js"></script>
+<script type="module" src="scripts/glyph-ui.js"></script>

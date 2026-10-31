@@ -1,0 +1,45 @@
+[block'handoff'
+  [ctx'a stretch of work closed and handed to whoever opens the next one','any project on the D-hierarchy','emitted when a dispatch ends']
+  [skl'call-team'[ins'read this as the opening context of the next order, never as an order itself']]
+
+  [section'state'
+    [nt'where the work is, not where it should be']
+    [core[ph-estado'the version or checkpoint the work sits at, and the branch or location it sits on']]
+    [rdy[ph-porta'the standing gate: the one command that decides whether this state is true, and what it exits with']]
+    [get[whr'the last completed D1, from which the next agent resumes']]
+  ]
+
+  [section'root-cause'
+    [nt'the one shape behind the blockers, when there is one']
+    [prob[ph-causa'the shape every blocker in this stretch shared']]
+    [ex[ph-caso'one concrete occurrence, named — repeat the line once per case']]
+    [lrn[ph-licao'what the shape teaches, stated so it survives outside this stretch']]
+  ]
+
+  [section'closed'
+    [nt'what finished here — each item observable by someone who did not do the work']
+    [fin[ph-fechado'a D1 or D2 that closed, stated as the behaviour that changed and not as the file that moved']]
+  ]
+
+  [section'measured'
+    [nt'numbers, not estimates — a figure with no method is an estimate wearing a number']
+    [eq[ph-medida'what was measured'],[ph-valor'the figure, and how it was obtained']]
+  ]
+
+  [section'open'
+    [nt'what needs the Regente, and whether each blocks the others'[hmn]]
+    [qst[ph-aberto'a decision only the Regente may take, and what it blocks — repeat once per question']]
+    [assm[ph-suposicao'what is taken as given here and was never verified']]
+  ]
+
+  [section'next'
+    [nt'the order the work has if nothing changes']
+    [ins[ph-proximo'the next D2 or D1 in dependency order — the name and why it comes now, no further detail']]
+    [lim[ph-livre'what continues without waiting on any of the open questions']]
+  ]
+
+  [section'method'
+    [nt'how this was worked — the part that transfers']
+    [cnst[ph-metodo'a rule that held, stated so it binds the next agent and not only this one']]
+  ]
+];

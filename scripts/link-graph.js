@@ -8,7 +8,8 @@
  * The index points and never copies, so a document nobody links to is a
  * document nobody finds, and a link that resolves to nothing is a pointer into
  * the dark. This reads every Markdown document of `.guidelines/` (the attic,
- * `.history/`, aside, and `.shortcuts/.virtual/`, where glyph-vpath keeps its
+ * `.history/`, aside, `.packs/`, where regency keeps the packs it adopted as
+ * verbatim copies, and `.shortcuts/.virtual/`, where glyph-vpath keeps its
  * index and the cache of the text it indexed), `README.md` and `CLAUDE.md`,
  * and refuses:
  *
@@ -36,7 +37,7 @@ const docs = [];
 (function walk(dir) {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
     const p = path.join(dir, e.name);
-    if (e.isDirectory()) { if (e.name !== ".history" && rel(p) !== ".guidelines/.shortcuts/.virtual") walk(p); }
+    if (e.isDirectory()) { if (e.name !== ".history" && rel(p) !== ".guidelines/.shortcuts/.virtual" && rel(p) !== ".guidelines/.packs") walk(p); }
     else if (e.name.endsWith(".md")) docs.push(rel(p));
   }
 })(path.join(ROOT, ".guidelines"));

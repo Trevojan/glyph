@@ -1,0 +1,44 @@
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User
+    participant DSL as DSL Compiler
+    participant Manifest as manifest.json
+    participant Parser as Harness Path Parser
+    participant Disk as File System (.guidelines)
+    participant Claude as Claude Code Harness
+
+    User->>DSL: Trigger compilation / order generation
+    DSL->>Manifest: Emit Virtual Paths (Path + Delimiter + Selector)
+    
+    Claude->>Manifest: Read Active Context Manifest
+    Manifest-->>Claude: Return list of Virtual Paths
+    
+    loop For Each Virtual Path
+        Claude->>Parser: Pass Virtual Path String
+        Parser->>Disk: Load target file
+        Disk-->>Parser: Return raw document content
+        
+        alt Markdown Target (.md#heading)
+            Parser->>Parser: Extract content under heading anchor
+        else JSON Target (.json$.pointer)
+            Parser->>Parser: Query JSON pointer key-value node
+        else XML Target (.xml//xpath)
+            Parser->>Parser: Evaluate XPath selector expression
+        else Text/Code Target (.ts#@block:tag)
+            Parser->>Parser: Slice lines between block tag comments
+        end
+        
+        Parser-->>Claude: Inject resolved precise context slice
+    end
+
+    Claude->>Disk: Execute task without using grep (modify_targets only)
+
+```
+
+### Component Roles
+
+* **Producer (DSL Compiler):** Analyzes constraints and updates `manifest.json` with deterministic Virtual Path strings.
+* **Routing Interface (`manifest.json`):** Acts as the single source of truth for required context, keeping the AI away from unneeded workspace directories.
+* **Resolver (Harness Path Parser):** A lightweight script or instruction layer inside Claude Code that strips raw documents down to matching anchors.
+* **Consumer (Claude Code Harness):** Receives fully parsed slices directly in memory, executing target modifications without executing exploratory shell commands.

@@ -1,0 +1,28 @@
+[block'order'
+  [ctx'an order opened over an existing D-hierarchy','any project','filled by the Regente before dispatch']
+  [skl'call-team'[ins'hear this order, classify it, and emit the dispatch manifest']]
+
+  [section'hierarchy'
+    [dfn'D3','feature — the major concept; fragments into D2 and is never worked directly']
+    [dfn'D2','concept — the cluster of D1 that fills one D3; owns its file and acts as checkpoint']
+    [dfn'D1','task — atomic, the unit of work and the unit of resume']
+    [ref[ph-plano'where the D3/D2/D1 breakdown already lives — this order reads it, never re-derives it']]
+    [dont'fragment again what a previous command already fragmented']
+  ]
+
+  [--germinate
+    [ph-alvo'the D3 this order opens, stated as the problem it closes rather than as the thing to build']
+    [ph-esforco'the D2 concepts that fill this D3, in dependency order — one line each, no D1 detail here']
+    [ph-ramo'a D1 already written, named by id and file — repeat once per task this order consumes']
+    [ph-limite'the D2 and D3 this order does not touch, and the guarantees the result must not break']
+    [ph-trava'what no D1 may bend, whatever else moves in the tree']
+    [ph-fruto'the state that closes this D3 — observable by someone who did not do the work']
+    [ph-suposicao'what is taken as given about the existing breakdown and was not checked against the repo']
+    [ph-criterio'the criterion the finished D3 is validated against']
+  ]
+
+  [section'resume'
+    [get[whr'the last completed D1']]
+    [go'continue from there, never from the top of the tree']
+  ]
+];

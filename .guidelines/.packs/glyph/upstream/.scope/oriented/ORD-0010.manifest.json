@@ -1,0 +1,16 @@
+{
+  "order": "ORD-0010",
+  "engine": "3.4.7.05",
+  "emitted": "2026-09-08T20:11:16.523Z",
+  "files": [
+    "ORD-0010.pgml",
+    "ORD-0010.xml",
+    "ORD-0010.json",
+    "ORD-0010.hgml"
+  ],
+  "source": "/home/claude/work/src/linkedin-post.pgml",
+  "diagnostics": {
+    "fix": 0,
+    "total": 4
+  }
+}

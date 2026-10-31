@@ -1,0 +1,11 @@
+[block'ORD-0021-o4-bare'
+  [ctx'the spec of EMS-002','.guidelines/.orders/EMS-002/EMS-002.pgml']
+  [tgt'the third of the three residuals of O4, in the Rust only, answered on 2026-10-25: a bare word where a template parameter goes is refused by name, a fix TemplateParamNotLiteral with the word and the quoted form, option a of section 3 of the open questions; the last free ORD of the batch the version moves once for']
+  [ctx'the JS refuses a non-literal argument that a literal after it displaces, and names a bare word there as [?; a bare word with no literal after it falls as prose in silence, and the holes it was written for ask again; content written after every parameter is filled is extra, a known loss the README states']
+  [ctx'measured at 9bb681d: no declared source and no oracle entry that expands a template reaches it; the fourteen strings that look like one are diagnostic texts that only the lexer and the logic fence read; so the ORD adds two probes, a template called with two bare words and one called with a bare word before a literal']
+  [cnst'a parameter position is a position still open as the arguments are written, literals and bare words counted in order, or one a literal after it takes; a word written after every position is filled stays extra, and a displaced command keeps its message']
+  [cnst'the binding does not change: a literal binds where it did, the bare words stay prose, and the holes they were written for still ask']
+  [cnst'the known difference is named in the testkit, beside the first two, as each probe it reaches with the diagnostics the decision gives it: those of the JS, a refusal naming each bare word in place of the silence or of [?']
+  [val'the refusal','in the Rust, a bare word in a parameter position raises TemplateParamNotLiteral naming the word at its position as written, with the arguments as the author wrote them, quoted; a direct test holds the shapes, seen failing before it counts']
+  [val'the known difference','the parse oracle test takes the named diagnostics for each named probe, asserts the JS answer differs there, and holds every other run byte for byte']
+];

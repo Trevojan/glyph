@@ -1,0 +1,106 @@
+[block
+  'ORD-0003-recovery'
+  [ctx
+    'the spec of EMS-002'
+    '.guidelines/.orders/EMS-002/EMS-002.pgml'
+  [/ctx]
+  [onlyif
+    'ORD-0002 closed'
+  [/onlyif]
+  [tgt
+    'glyph-vpath: the recovery index, layer 7 of .plan section 0, by the content'
+  [/tgt]
+  [cnst
+    'recovery runs at build time, only for a Markdown section that no rule of the NodeID reached; its successor is the new section whose body has the largest line-set Jaccard with the old one, at least 0.5 and unique'
+  [/cnst]
+  [cnst
+    'recovery is not identity: the successor keeps its own NodeID, and the old path and the old NodeID point at it as recovered, with the score'
+  [/cnst]
+  [cnst
+    'the old text comes from the cache of the last build, then from git at HEAD, each taken only when its fingerprint equals the one the index holds; with neither, the section goes unrecovered and the build says so'
+  [/cnst]
+  [cnst
+    'the cache and the log of misses live beside the index and out of git, as the session files of the regency plugin do'
+  [/cnst]
+  [nt
+    'the cache answers what git cannot: a second build before a commit, and a checkout whose line endings differ from the commit'
+  [/nt]
+  [nev
+    'recovery by the path: precision 35.7 percent, INTAKE-VIRTUAL-PATH section 23'
+  [/nev]
+  [cmp
+    'the recovery'
+    'a heading renamed while its body changes is found again by its old path and by its old NodeID; a deletion is not, and two successors that tie are not'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+  [cmp
+    'the index miss'
+    'every answer through a recovery warns with its score, never blocks, and is written to the log of misses; misses reads the log'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+  [cmp
+    'the gate'
+    'npm run check refuses a source declared by a recovered path, naming the successor, and an index whose recoveries point at nothing or at a live path, each seen failing before it counts'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+[/block]

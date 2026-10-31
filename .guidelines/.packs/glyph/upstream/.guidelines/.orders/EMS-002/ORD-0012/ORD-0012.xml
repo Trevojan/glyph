@@ -1,0 +1,37 @@
+<glyph-package engine="3.6.9.07">
+  <schema/>
+  <block once="true">
+    <block binds="ORD-0012-crate-weight">
+      <user-input>ORD-0012-crate-weight</user-input>
+      <context>
+        <user-input>the spec of EMS-002</user-input>
+        <user-input>.guidelines/.orders/EMS-002/EMS-002.pgml</user-input>
+      </context>
+      <target>
+        <user-input>the ruler of the crates at the gate, O7 of INTAKE-RUST-LADDER, answered on 2026-09-27</user-input>
+      </target>
+      <context>
+        <user-input>the norm is in .constraints: note, depth up to 4 and up to 12 crates, enters vendored; ask, depth 5 to 6 or 13 to 40 crates, enters only with an ADR the Regent signs; fix, depth 7 or more or more than 40 crates, is refused; crate-graph.js refuses an external crate that is not vendored, and nothing measures how deep one goes</user-input>
+      </context>
+      <constraint>
+        <user-input>a tree is measured as INTAKE-RUST-LADDER section 9 measures it: cargo tree with normal and build edges, depth 1 the crate itself, crates the distinct packages</user-input>
+      </constraint>
+      <constraint>
+        <user-input>an ADR the Regent signed is a row of .decisions whose decision names the crate between backticks and says ADR; the gate reads it and never writes one</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the workspace holds no external crate today, so the ruler grades recorded trees to be seen failing, one for each grade</user-input>
+      </constraint>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the ruler</user-input>
+        <user-input>check:rust measures the tree of every external crate as INTAKE-RUST-LADDER section 9 measures it, and grades it note, ask or fix as .constraints says</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the grades</user-input>
+        <user-input>note enters, ask enters only with an ADR the Regent signed, fix is refused; each seen failing before it counts</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>

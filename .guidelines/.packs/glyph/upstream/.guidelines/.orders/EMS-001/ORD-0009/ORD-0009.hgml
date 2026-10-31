@@ -1,0 +1,38 @@
+[block
+  'ORD-0009-projections'
+  [ctx
+    'the spec of EMS-001'
+    '.guidelines/.orders/EMS-001/EMS-001.pgml'
+  [/ctx]
+  [onlyif
+    'ORD-0008 closed'
+  [/onlyif]
+  [tgt
+    'glyph-envelope, glyph-burn and glyph-inverse: the AST envelope, the burn, fromXML and fromAST'
+  [/tgt]
+  [cmp
+    'the three projections and the inverse'
+    'the ast and hgml digests equal the oracle, and every round trip the JS suite runs closes'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+[/block]

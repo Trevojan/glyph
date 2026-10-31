@@ -1,0 +1,89 @@
+{
+  "schema": 1,
+  "note": "Template library, source of truth. Node, the CLI and the test suite read this file directly. The browser opens over file:// and cannot fetch .json, so run `node build-templates.js` to regenerate glyph-data.js after editing. The [ph-name] holes in a body are the parameters: a call binds them by name ([ph-name'value']) or by position (bare literals, in declaration order). An unbound hole becomes <needs> and does not block. The same [ph-name] may appear more than once in a body; every occurrence receives the same value. A param may instead be marked \"repeat\": true (at most one per template) for a variadic hole: it is excluded from positional order (a fixed param declared after it would collide with however many repeats were supplied) and binds only through the call repeating [ph-name'v1'][ph-name'v2']..., each occurrence becoming one more sibling node where the hole sat. Zero repeats drops the hole from the output instead of leaving a <needs> — it is optional plurality on top of whatever fixed params already satisfy the template's minimum, not a required slot. See best-of's `more` param. A template may also carry `constraints`: each one names, in `forbid`, a class (\"@name\", resolved through glyph-rules.json's classes) or a bare command that must not appear inside that template's own expansion. It is checked only within that expansion, and an explicit [ovr]/[byp] around the offender exempts it — a template de-limits the shape it promised, it does not wall the writer in. Keep constraint severity at `ask`: leaving a preset's shape is not broken syntax, so it must not be `fix`. See loop's `no-coarsen` / `no-exit`.",
+  "templates": {
+    "germinate": {
+      "gloss": "Walks every aspect of a situation as seeds and lays the path to the goal as a tree: roots=problem, trunk=effort, branches=resources, leaves=actions, fruit=goal.",
+      "params": [
+        { "name": "alvo", "ask": "what to germinate — the situation, subject or problem" },
+        { "name": "criterio", "ask": "what to validate the result against" }
+      ],
+      "body": "[itr[ph-alvo`over seeds (every aspect of a situation, being it good, bad or neutral)`][val[lrn[impr`basic thinking`[skl`tree logic structure`[tgt`roots=problem,trunk=effort (anything that takes time and demands action),branches=resources(place, idea, person, method, any kind of),leaves = actions(effective denoted actions to be made to achieve the goal along the branch),fruit = the goal.`]]]][ph-criterio`the external criterion to validate against`]]"
+    },
+
+    "scientific-review": {
+      "gloss": "Apply scientific rigour: criticise the target, rework it with what the critique found, and validate the result against an external standard.",
+      "params": [
+        { "name": "target", "ask": "what to put under scientific review" },
+        { "name": "standard", "ask": "the external standard to hold it to — method, evidence, reproducibility" }
+      ],
+      "body": "[crit[ph-target`what to put under scientific review`]][rwk`the target itself, corrected by what the critique found`][val`the reworked result`,[ph-standard`the external standard: method, evidence, reproducibility`]]"
+    },
+
+    "reinforce": {
+      "gloss": "There is a must-follow rule. Raise its precedence and state why it holds, so it survives a long context.",
+      "params": [
+        { "name": "rule", "ask": "the rule that must be followed" },
+        { "name": "why", "ask": "why it must hold" }
+      ],
+      "body": "[prio[mand[ph-rule`the rule that must be followed`]]][rsn[ph-why`why it must hold, so it is not dropped later`]]"
+    },
+
+    "insight": {
+      "gloss": "Frame the situation and its limits first, then brainstorm one realistic way out — not a list of options.",
+      "params": [
+        { "name": "situation", "ask": "the situation to get out of" },
+        { "name": "limits", "ask": "what the idea must respect" }
+      ],
+      "body": "[ctx[ph-situation`the situation to get out of`]][cnst[ph-limits`what the idea must respect`]][brst`one realistic way out, restricted by the constraints above — not a list of options`][real]"
+    },
+
+    "fertilize": {
+      "gloss": "Add base context to a situation, surface the implicit details as seeds, rebuild the problem from them, and propose new resources. Companion to germinate.",
+      "params": [
+        { "name": "situation", "ask": "the situation to fertilize" },
+        { "name": "known", "ask": "what is already established and must not be re-derived" }
+      ],
+      "body": "[ctx[ph-situation`the situation to fertilize`]][base[ph-known`what is already established and must not be re-derived`]][elab`seeds — the details the situation left implicit`][drvf`rebuild the roots (the problem) from those seeds`][prop`new resources to feed the branches — at least two, of different kinds: place, idea, person or method`]"
+    },
+
+    "best-of": {
+      "gloss": "Compare candidates that share one context, score them against a stated condition, name the winner and return the points that justify it.",
+      "params": [
+        { "name": "context", "ask": "the context all candidates share" },
+        { "name": "a", "ask": "first candidate" },
+        { "name": "b", "ask": "second candidate" },
+        { "name": "more", "ask": "an extra candidate beyond the first two — repeat the ph-more call once per extra candidate", "repeat": true },
+        { "name": "criterion", "ask": "the condition that decides the winner" }
+      ],
+      "body": "[ctx[ph-context`the context all candidates share`]][cmp[ph-a`first candidate`],[ph-b`second candidate`],[ph-more`an extra candidate, repeated once per extra`]][val`each candidate against the stated condition`,[ph-criterion`the condition that decides the winner`]][cncl`the winner`][rtnl`the points that justify the result`]"
+    },
+
+    "loop": {
+      "gloss": "Iterate on one target until a stated stop condition holds, deepening the detail on every pass instead of restating it. Each pass is checked for realism against the stop condition before the next one opens.",
+      "params": [
+        { "name": "target", "ask": "what to iterate on" },
+        { "name": "pass", "ask": "what each pass must produce that the previous one did not" },
+        { "name": "until", "ask": "the stop condition — what makes another pass unnecessary" }
+      ],
+      "body": "[itr[ph-target`what to iterate on`]][ins[ph-pass`what each pass must add that the previous one did not — go one level finer, do not restate`]][cond[ph-until`the stop condition: what makes another pass unnecessary`]][real`each pass against the stop condition, before opening the next one`]",
+      "constraints": [
+        { "id": "no-coarsen", "forbid": "@coarsen", "severity": "ask", "label": "regride o detalhe",
+          "why": "o laço existe para aprofundar a cada passagem, e generalizar ou resumir desfaz o detalhe que a passagem anterior ganhou",
+          "suggest": "elabore dentro da passagem; resuma ou generalise depois que [cond] fechar o laço, não no meio dele" },
+        { "id": "no-exit", "forbid": "@exit", "severity": "ask", "label": "abandona o laço",
+          "why": "trocar o alvo, cair no plano B ou esquecer o que veio antes dissolve a iteração que o template abriu, em vez de completá-la",
+          "suggest": "se a condição de parada é que está errada, corrija [cond]; trocar o alvo no meio começa um laço novo, não termina este" }
+      ]
+    },
+
+    "track": {
+      "gloss": "Explain where a detail came from across a long context: where it entered, what changed it, where it stands now. For the small things a human lets slip.",
+      "params": [
+        { "name": "item", "ask": "the detail whose origin to explain" },
+        { "name": "scope", "ask": "the stretch of conversation to trace through" }
+      ],
+      "body": "[ctx[ph-scope`the stretch of conversation to trace through`]][drvf[ph-item`the detail whose origin to explain`]][elab`the chain: where it entered, what changed it, where it stands now`]"
+    }
+  }
+}

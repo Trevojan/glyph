@@ -1,0 +1,10 @@
+[block'ORD-0006-rules-cache'
+  [ctx'the spec of EMS-002','.guidelines/.orders/EMS-002/EMS-002.pgml']
+  [tgt'the compiled rules leave the rules store, question 3 of the EMS-001 return, answered a']
+  [ctx'rules.js and burn.js hang the compiled rules on the store object as __compiled, enumerable, so the envelope stores.rules is the digest of the store and the engine cache together, and the Rust reproduces it with glyph_rules::with_cache']
+  [cnst'the JS first: the compiled rules are kept beside the store, keyed by it, and the store object is never written']
+  [cnst'the snapshot moves by decision, the answer a of question 3, and the decision is written; an xml or hgml hash that moves is a regression, not the decision']
+  [val'the JS first','the JS keeps its compiled rules off the store object, and the envelope hashes the rules store alone']
+  [val'the snapshot','the ast hashes move by decision, and no xml or hgml hash moves']
+  [val'the Rust follows','glyph_rules::with_cache leaves, the Rust answers the moved oracle byte for byte, and the pin that held the cache in the digest is inverted, not deleted']
+];

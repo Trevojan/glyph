@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "glyph",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["scripts/serve-dev.js", "--no-open"],
+      "port": 8731
+    }
+  ]
+}

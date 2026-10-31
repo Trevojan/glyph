@@ -1,0 +1,6 @@
+[block'ORD-0005-logic'
+  [ctx'the spec of EMS-001','.guidelines/.orders/EMS-001/EMS-001.pgml']
+  [onlyif'ORD-0002 closed']
+  [tgt'glyph-logic: the logic block']
+  [val'glyph-logic','every Logic node equals the oracle']
+];

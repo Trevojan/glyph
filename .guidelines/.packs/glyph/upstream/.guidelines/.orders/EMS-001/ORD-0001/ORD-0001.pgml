@@ -1,0 +1,5 @@
+[block'ORD-0001-oracle'
+  [ctx'the spec of EMS-001','.guidelines/.orders/EMS-001/EMS-001.pgml']
+  [tgt'the oracle every ORD is held to, frozen at one commit']
+  [val'the frozen oracle','node scripts/test-corpus.js --export-oracle writes 114 files, and the commit carries the tag conformance-v0']
+];
