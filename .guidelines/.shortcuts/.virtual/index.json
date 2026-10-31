@@ -1,7 +1,7 @@
 {
   "note": "written by glyph-vpath build, EMS-002; never edited by hand",
   "depth": 2,
-  "next": 2909,
+  "next": 2910,
   "files": {
     ".guidelines/.changelog/README.md": {
       "nodes": [
@@ -34,21 +34,22 @@
     },
     ".guidelines/.decisions/README.md": {
       "nodes": [
-        ["n12", "", 0, 43270, 1, 186, "a9e4ca3057370600", "", ""],
-        ["n13", "decisões--quem-decidiu-e-por-quê", 0, 43270, 1, 186, "a9e4ca3057370600", "8616c3a6ae42de00", "n12"],
+        ["n12", "", 0, 43766, 1, 192, "2abe0cec50f95b00", "", ""],
+        ["n13", "decisões--quem-decidiu-e-por-quê", 0, 43766, 1, 192, "2abe0cec50f95b00", "d3e4578687a35800", "n12"],
         ["n14", "formato", 310, 382, 9, 7, "b5f95da43600fc00", "1b119b961fb48400", "n13"],
-        ["n2908", "2026-10-30", 382, 1282, 16, 7, "1141fb0097934300", "983d550ebb7a5100", "n13"],
-        ["n2772", "2026-10-26", 1282, 4168, 23, 12, "a43f9038cc5e5e00", "97775fe4e6151800", "n13"],
-        ["n2206", "2026-10-25", 4168, 9379, 35, 15, "6378b4be825f7c00", "f3e0beb016678e00", "n13"],
-        ["n15", "2026-10-23", 9379, 11673, 50, 11, "313cabeeaca21800", "bf88c356618a6400", "n13"],
-        ["n16", "2026-09-27", 11673, 27275, 61, 40, "7011bef07428a350", "ff1299301d0ae200", "n13"],
-        ["n17", "2026-09-26", 27275, 28918, 101, 9, "752c7c50e2663900", "60284c2c68cce000", "n13"],
-        ["n18", "2026-09-25", 28918, 30115, 110, 8, "d890ff866d173200", "802caa2034924400", "n13"],
-        ["n19", "2026-09-24", 30115, 38497, 118, 29, "3277c0c0c74b8c00", "1093cee041691a00", "n13"],
-        ["n20", "2026-09-06", 38497, 40694, 147, 13, "e4bcd520bd70e600", "16aad970e40f7c00", "n13"],
-        ["n21", "2026-09-05", 40694, 42173, 160, 13, "67e05df081ec8a00", "197e689607dbfd00", "n13"],
-        ["n22", "anteriores-ainda-em-vigor", 42173, 43188, 173, 11, "126b256ee8e23600", "da6d5270b387c000", "n13"],
-        ["n23", "decisões-que-um-agente-tomou-e-o-regente-ainda-não-ratificou", 43188, 43270, 184, 3, "ef0d5e44c5d00b00", "c4eedd1ae8634900", "n13"]
+        ["n2909", "2026-10-31", 382, 878, 16, 6, "c9fb0428e47bf600", "a67ec15ede9e2600", "n13"],
+        ["n2908", "2026-10-30", 878, 1778, 22, 7, "1141fb0097934300", "983d550ebb7a5100", "n13"],
+        ["n2772", "2026-10-26", 1778, 4664, 29, 12, "a43f9038cc5e5e00", "97775fe4e6151800", "n13"],
+        ["n2206", "2026-10-25", 4664, 9875, 41, 15, "6378b4be825f7c00", "f3e0beb016678e00", "n13"],
+        ["n15", "2026-10-23", 9875, 12169, 56, 11, "313cabeeaca21800", "bf88c356618a6400", "n13"],
+        ["n16", "2026-09-27", 12169, 27771, 67, 40, "7011bef07428a350", "ff1299301d0ae200", "n13"],
+        ["n17", "2026-09-26", 27771, 29414, 107, 9, "752c7c50e2663900", "60284c2c68cce000", "n13"],
+        ["n18", "2026-09-25", 29414, 30611, 116, 8, "d890ff866d173200", "802caa2034924400", "n13"],
+        ["n19", "2026-09-24", 30611, 38993, 124, 29, "3277c0c0c74b8c00", "1093cee041691a00", "n13"],
+        ["n20", "2026-09-06", 38993, 41190, 153, 13, "e4bcd520bd70e600", "16aad970e40f7c00", "n13"],
+        ["n21", "2026-09-05", 41190, 42669, 166, 13, "67e05df081ec8a00", "197e689607dbfd00", "n13"],
+        ["n22", "anteriores-ainda-em-vigor", 42669, 43684, 179, 11, "126b256ee8e23600", "da6d5270b387c000", "n13"],
+        ["n23", "decisões-que-um-agente-tomou-e-o-regente-ainda-não-ratificou", 43684, 43766, 190, 3, "ef0d5e44c5d00b00", "c4eedd1ae8634900", "n13"]
       ]
     },
     ".guidelines/.decisions/README.md.template": {
@@ -2745,12 +2746,12 @@
     },
     ".guidelines/.orders/INTAKE-INCLUSION.md": {
       "nodes": [
-        ["n2692", "", 0, 6323, 1, 76, "f8f0d9b8eb8d0980", "", ""],
-        ["n2693", "inclusion--a-known-command-never-vanishes", 0, 6323, 1, 76, "f8f0d9b8eb8d0980", "d90a939646a1ab00", "n2692"],
+        ["n2692", "", 0, 6019, 1, 70, "26bce4300ee23b00", "", ""],
+        ["n2693", "inclusion--a-known-command-never-vanishes", 0, 6019, 1, 70, "26bce4300ee23b00", "50f8b888234fc500", "n2692"],
         ["n2694", "1-the-measurement", 691, 1262, 13, 11, "75cc655c801e9e00", "37cf16ee93725a00", "n2693"],
         ["n2695", "2-the-positions-the-rule-each-falls-under-and-the-order", 1262, 4401, 24, 18, "6e940af4bf3a9600", "3530febe77815000", "n2693"],
         ["n2696", "3-what-the-traversal-found-beside-the-positions", 4401, 5232, 42, 16, "a721a32e647fa400", "2da8bf7e6ddb2380", "n2693"],
-        ["n2773", "4-what-the-regent-answered-and-what-still-waits", 5232, 6323, 58, 19, "7874d13c37e40000", "06eec1d84bfd1b80", "n2693"]
+        ["n2773", "4-what-the-regent-answered-and-what-still-waits", 5232, 6019, 58, 13, "645124dc44a9e000", "833bf24046ed85c0", "n2693"]
       ]
     },
     ".guidelines/.orders/INTAKE-ORDER-COHERENCE.md": {
@@ -3301,14 +3302,14 @@
     },
     ".guidelines/.shortcuts/README.md": {
       "nodes": [
-        ["n1153", "", 0, 7792, 1, 83, "137a814cc5550400", "", ""],
-        ["n1154", "atalhos--comece-por-aqui", 0, 7792, 1, 83, "137a814cc5550400", "eb5f6580f0029600", "n1153"],
-        ["n1155", "onde-estou", 442, 2937, 11, 11, "483e3fd8389d3200", "aedc1da67f33b600", "n1154"],
-        ["n1156", "os-sete-eixos", 2937, 3623, 22, 12, "6357d5140827f600", "092e74a89f1df300", "n1154"],
-        ["n1157", "o-mapa-do-motor-em-cinco-linhas", 3623, 4550, 34, 12, "537763c2149d2400", "2caeb09a05c9d600", "n1154"],
-        ["n1158", "os-documentos-que-mais-se-consulta", 4550, 6455, 46, 18, "b14515f455f59aa0", "99bdc846d8830680", "n1154"],
-        ["n1159", "os-outros-documentos", 6455, 7453, 64, 14, "bcf7ae04a2ded000", "078ded0802e8e000", "n1154"],
-        ["n1160", "vocabulário-do-projeto", 7453, 7792, 78, 6, "d5b16db424152200", "0656413c7ac4f500", "n1154"]
+        ["n1153", "", 0, 7748, 1, 83, "72f82f886a722000", "", ""],
+        ["n1154", "atalhos--comece-por-aqui", 0, 7748, 1, 83, "72f82f886a722000", "d0014da0a263ce00", "n1153"],
+        ["n1155", "onde-estou", 442, 2893, 11, 11, "7e28baf05f56ba00", "502aa3686e281600", "n1154"],
+        ["n1156", "os-sete-eixos", 2893, 3579, 22, 12, "6357d5140827f600", "092e74a89f1df300", "n1154"],
+        ["n1157", "o-mapa-do-motor-em-cinco-linhas", 3579, 4506, 34, 12, "537763c2149d2400", "2caeb09a05c9d600", "n1154"],
+        ["n1158", "os-documentos-que-mais-se-consulta", 4506, 6411, 46, 18, "b14515f455f59aa0", "99bdc846d8830680", "n1154"],
+        ["n1159", "os-outros-documentos", 6411, 7409, 64, 14, "bcf7ae04a2ded000", "078ded0802e8e000", "n1154"],
+        ["n1160", "vocabulário-do-projeto", 7409, 7748, 78, 6, "d5b16db424152200", "0656413c7ac4f500", "n1154"]
       ]
     },
     ".guidelines/.shortcuts/regency.json": {
@@ -3594,8 +3595,8 @@
     },
     ".guidelines/SIGNATURES.md": {
       "nodes": [
-        ["n1363", "", 0, 6213, 1, 141, "f764e026d8372000", "", ""],
-        ["n1364", "signatures-and-arities--normative-table-v1300", 0, 6213, 1, 141, "f764e026d8372000", "09dac7f087b3eb00", "n1363"],
+        ["n1363", "", 0, 6496, 1, 145, "324c3f006d4f4c00", "", ""],
+        ["n1364", "signatures-and-arities--normative-table-v1300", 0, 6496, 1, 145, "324c3f006d4f4c00", "59661ea0da88ca00", "n1363"],
         ["n1365", "arity-is-not-an-error--it-is-a-severity", 498, 1414, 12, 22, "de08f41042374600", "1fb7feacee149300", "n1364"],
         ["n1366", "1-strict-arity--2-positions-8", 1414, 1911, 34, 13, "bbc44c76698d4c40", "0591ef04a4dee700", "n1364"],
         ["n1367", "2-n-ary--take-a-list-6", 1911, 2162, 47, 8, "ab4109d8ca016200", "f5b06eaeb6fdf640", "n1364"],
@@ -3604,8 +3605,8 @@
         ["n1370", "4-zero-arity-44", 2914, 3995, 72, 22, "be7aee48e78eae00", "3d136998a7b2f200", "n1364"],
         ["n1371", "where-species-and-arity-disagree", 3553, 3995, 86, 8, "097414c46852fc00", "e2a27888945c6d00", "n1370"],
         ["n1372", "5-mandatory-name-2", 3995, 4479, 94, 14, "3cf38d50024a8980", "c3a76c32fae46e00", "n1364"],
-        ["n1373", "6-polarity-and-modality", 4479, 5279, 108, 17, "58662eaeacb1a400", "51afd8780a69dfa0", "n1364"],
-        ["n1374", "7-auto-closing", 5279, 6213, 125, 17, "cb8516188149e480", "ecec9f10bde5b380", "n1364"]
+        ["n1373", "6-polarity-and-modality", 4479, 5562, 108, 21, "e50154f8a1b5e000", "a8e27b1a2c017c00", "n1364"],
+        ["n1374", "7-auto-closing", 5562, 6496, 129, 17, "cb8516188149e480", "ecec9f10bde5b380", "n1364"]
       ]
     },
     ".guidelines/XML_REFERENCE.md": {
