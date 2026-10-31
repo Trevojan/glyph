@@ -60,7 +60,7 @@
         ".guidelines/.shortcuts/regency.json",
         ".guidelines/.constraints/README.md"
       ],
-      "next": "plano UPD-74c1741d aplicado; dos seis .template, só o .constraints trazia o que faltava (O mais simples suficiente), fundido; os seis saíram"
+      "next": "plano UPD-74c1741d aplicado; os seis .template ficam ao lado dos READMEs editados, como o regency os guarda; só o .constraints trazia o que faltava (O mais simples suficiente), fundido"
     }
   ]
 }
