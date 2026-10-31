@@ -1,7 +1,7 @@
 {
   "_about": "Registro do trabalho dos agentes: o primeiro relance ao voltar a este repositorio. Aponta, nunca copia.",
   "schema": 1,
-  "updated": "2026-10-30",
+  "updated": "2026-10-31",
   "items": [
     {
       "id": "EMS-002-INCLUSION",
@@ -49,6 +49,18 @@
       "since": "2026-09-27",
       "blocked_by": "o Regente e uma máquina Windows limpa; sob a ADR B leva node ou um segundo protocolo",
       "source": ".guidelines/.plan/README.md#5-o-glyph-em-rust--a-série-ems-001"
+    },
+    {
+      "id": "REGENCY-UPDATE-3.0",
+      "title": "regency update unstamped -> 3.0",
+      "state": "review",
+      "who": "DV",
+      "since": "2026-10-30",
+      "where": [
+        ".guidelines/.shortcuts/regency.json",
+        ".guidelines/.constraints/README.md"
+      ],
+      "next": "plano UPD-74c1741d aplicado; dos seis .template, só o .constraints trazia o que faltava (O mais simples suficiente), fundido; os seis saíram"
     }
   ]
 }
