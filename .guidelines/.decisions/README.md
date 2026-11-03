@@ -13,6 +13,12 @@
 
 ---
 
+## 2026-11-03
+
+| decisão | razão |
+|---|---|
+| **O regency 3.1 rege as `.guidelines/`: o stamp mora em [`.shortcuts/regency.json`](../.shortcuts/regency.json), e o ledger dos agentes em `.shortcuts/.virtual/ongoing.json`, na pasta onde o [`.plan`](../.plan/README.md) §0 constrói os caminhos virtuais** | respondido em duas perguntas de 2026-11-03: *"Apply"*, para o plano `UPD-cfc53a8f` — seis `README.md.template` ao lado dos README que o projeto editou, para mesclar à mão; o `.orders/README.md`, template do regency ainda sem preencher, com numeração plana contra as séries de 2026-09-25; e o stamp —; e *"Create it now"*, para o ledger |
+
 ## 2026-09-27
 
 | decisão | razão |

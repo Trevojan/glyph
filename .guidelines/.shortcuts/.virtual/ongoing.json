@@ -1,0 +1,28 @@
+{
+  "_about": "The agents' work: the first peek on returning to this repository. It points, never copies. Model: regency library/virtualpath.md section 3.",
+  "schema": 1,
+  "updated": "2026-11-03",
+  "items": [
+    {
+      "id": "UPD-cfc53a8f",
+      "title": "regency update unstamped -> 3.1",
+      "state": "review",
+      "who": "AA",
+      "since": "2026-11-03",
+      "where": [
+        "branch:ccr-25b46078-6uxsw5",
+        ".guidelines/.shortcuts/regency.json",
+        ".guidelines/.orders/README.md",
+        ".guidelines/.changelog/README.md.template",
+        ".guidelines/.constraints/README.md.template",
+        ".guidelines/.decisions/README.md.template",
+        ".guidelines/.history/README.md.template",
+        ".guidelines/.plan/README.md.template",
+        ".guidelines/.sources/README.md.template",
+        ".guidelines/.decisions/README.md",
+        ".guidelines/.shortcuts/README.md"
+      ],
+      "next": "/regency:update applies UPD-31af6caf (.shortcuts/.virtual/README.md), approved 2026-11-03 and refused then for a dirty tree; merge the six README.md.template files by hand; fill .orders/README.md, regency's unfilled template, whose flat ORD numbering contradicts the EMS series decision of 2026-09-25"
+    }
+  ]
+}

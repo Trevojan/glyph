@@ -28,7 +28,7 @@
 | [`.constraints/`](../.constraints/) | o que o projeto **se proíbe** de fazer |
 | [`.changelog/`](../.changelog/) | o que mudou, e como o número de versão se move |
 | [`.orders/`](../.orders/) | as Ordens — o contrato do que foi entregue, exatamente uma aberta por vez, em séries `EMS-###/ORD-####/` — e os intakes que as alimentam |
-| `.shortcuts/` | este arquivo |
+| `.shortcuts/` | este arquivo; o stamp do regency, [`regency.json`](regency.json); e o ledger dos agentes, [`.virtual/`](.virtual/) |
 
 ## O mapa do motor, em cinco linhas
 
