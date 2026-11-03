@@ -8,8 +8,11 @@
 
 ## Formato
 
-| data | decisão | quem | razão |
-|---|---|---|---|
+Uma seção por data, a mais nova no topo. A razão, quando existe nas palavras
+do Regente, vai **citada** — a frase original decide melhor que uma paráfrase.
+
+| decisão | razão |
+|---|---|
 
 ---
 

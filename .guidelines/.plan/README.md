@@ -6,6 +6,10 @@
 
 ## Autorizado pelo Regente, ainda não construído
 
+> Decidido em [`.decisions/`](../.decisions/), com a construção pendente. Cada
+> item diz **o que já existe** e **o que falta** — sem isso, quem retoma refaz
+> o levantamento.
+
 ### 0. Caminhos virtuais — `.guidelines/.shortcuts/.virtual/` — **decidido, primeiro da fila**
 
 > *"quero que seja feito um sistema que implemente `.guidelines/.shortcuts/.virtual/`
@@ -189,6 +193,9 @@ auditoria, e `node scripts/ladder.js --check` segue no `npm run check`.
 
 ## Aberto, esperando o Regente
 
+> Perguntas que um agente **não** responde sozinho. Cada linha diz o que
+> bloqueia enquanto a resposta não vem.
+
 As perguntas escritas com opções medidas estão em
 [`PERGUNTAS-ABERTAS.md`](PERGUNTAS-ABERTAS.md), todas respondidas.
 
@@ -197,8 +204,12 @@ As perguntas escritas com opções medidas estão em
 | **estudo de setembro** | oito intakes em [`.orders/`](../.orders/): [`INTAKE-VIRTUAL-PATH`](../.orders/INTAKE-VIRTUAL-PATH.md) (mini-repo, medido: o custo de round-trip é o tamanho de `glyph-parser.js`), [`INTAKE-ORDER-COHERENCE`](../.orders/INTAKE-ORDER-COHERENCE.md) (`relates[]`, B antes de A), [`INTAKE-BURN-INVARIANCE`](../.orders/INTAKE-BURN-INVARIANCE.md) (fechado), [`INTAKE-FORMAL-ANALYSIS`](../.orders/INTAKE-FORMAL-ANALYSIS.md), [`INTAKE-PARSER-SPLIT`](../.orders/INTAKE-PARSER-SPLIT.md) (o corte, feito: treze módulos), [`INTAKE-RUST`](../.orders/INTAKE-RUST.md) (steelman e defeater; o Regente decidiu migrar), [`INTAKE-RUST-LADDER`](../.orders/INTAKE-RUST-LADDER.md) (a escada auditada; §8 guarda o que espera, O4, O5 e O7 a O10), [`INTAKE-FIELD-2026-09`](../.orders/INTAKE-FIELD-2026-09.md) (o kit de cliente; `H-09` fechou por ele). |
 | **EMS-001** | a execução assíncrona que a seção `queue` da spec propõe: medida, economiza no máximo 4 de 14 turnos e esbarra em três restrições; a série fecha como está escrita, e com o tráfego da [`EMS.json`](../.orders/INTAKE-PIN-TRAFFIC.md) a pergunta passa à EMS-002. As perguntas do [retorno](../.orders/EMS-001/RETURN.md) têm todas resposta |
 | **Q14** | o Regente autora o sexto exemplo de conformidade. Base verificada em [`conformance/README.md`](../../conformance/README.md) |
+| **o mais simples suficiente** | entra em [`.constraints/`](../.constraints/README.md), *Do método*? O regency 3.1 a traz como método fixo, de projeto a projeto: *"antes de construir, parar no primeiro degrau que resolve, e escrever numa linha qual degrau mais simples foi recusado e por quê; o desnecessário de custo médio se pula, e validação numa fronteira de confiança, erro que perde dado, segurança e acessibilidade nunca contam como desnecessários"*. Mudar uma restrição é decisão do Regente; não bloqueia nada |
 
 ## Adiado por decisão, não por esquecimento
+
+> A diferença importa: adiado tem razão e data, esquecido não tem nenhum dos
+> dois. Sem esta seção, quem retoma trata os dois como a mesma coisa.
 
 - **Efeitos** — [`.orders/INTAKE-EFFECTS.md`](../.orders/INTAKE-EFFECTS.md). A
   metade barata (`<effect>` declarativo) espera; a cara (objetos de contexto) é
