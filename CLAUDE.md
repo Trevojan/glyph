@@ -35,7 +35,8 @@ npm run check:rust
 ```
 
 O primeiro roda os dois `--check` de geração, `check-globals`, o DAG, os grafos
-de costura, de crates e de links, a escada e a suíte; o segundo escreve o oráculo no
+de costura, de crates e de links, a escada, a suíte e o teste da extensão VS Code
+([`vscode-extension/`](vscode-extension/README.md)); o segundo escreve o oráculo no
 commit sob teste e roda `cargo test` em `rust/`. **Um passo por commit, verde em
 cada um.**
 

@@ -1,0 +1,56 @@
+{
+  "name": "glyph-language-support",
+  "displayName": "Glyph Language Support",
+  "description": "Syntax highlighting, parser diagnostics, and formatting for Glyph PGML and HGML files.",
+  "version": "0.1.0",
+  "publisher": "glyph-local",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "main": "./extension.cjs",
+  "activationEvents": [
+    "onLanguage:pgml",
+    "onLanguage:hgml"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "pgml",
+        "aliases": [
+          "Glyph PGML",
+          "PGML"
+        ],
+        "extensions": [
+          ".pgml"
+        ],
+        "configuration": "./language-configuration.json"
+      },
+      {
+        "id": "hgml",
+        "aliases": [
+          "Glyph HGML",
+          "HGML"
+        ],
+        "extensions": [
+          ".hgml"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "pgml",
+        "scopeName": "source.glyph",
+        "path": "./syntaxes/glyph.tmLanguage.json"
+      },
+      {
+        "language": "hgml",
+        "scopeName": "source.glyph",
+        "path": "./syntaxes/glyph.tmLanguage.json"
+      }
+    ]
+  }
+}
