@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "next": 3759,
+  "next": 3775,
   "files": {
     ".guidelines/.changelog/README.md": { "format": "md", "nodes": [
       {"id":"n1","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":2571,"label":65536,"key":"42f1714aabb7"},
@@ -9,6 +9,9 @@
       {"id":"n4","sel":"o-que-cada-release-decidiu","kind":"heading","parent":"n2","prev":"n3","next":"n5","depth":2,"start":842,"end":2155,"label":262144,"key":"c5966c74584a"},
       {"id":"n5","sel":"a-regra-que-se-aprende-relendo","kind":"heading","parent":"n2","prev":"n4","next":null,"depth":2,"start":2155,"end":2571,"label":327680,"key":"2ba9c5bf671c"}
     ] },
+    ".guidelines/.changelog/README.md.template": { "format": "text", "nodes": [
+      {"id":"n2wf","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":1068,"label":65536,"key":"fabec2d20764"}
+    ] },
     ".guidelines/.constraints/README.md": { "format": "md", "nodes": [
       {"id":"n6","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":4982,"label":65536,"key":"91776e606362"},
       {"id":"n7","sel":"restrições--o-que-o-projeto-se-proíbe","kind":"heading","parent":"n6","prev":null,"next":null,"depth":1,"start":0,"end":4982,"label":131072,"key":"91776e606362"},
@@ -16,6 +19,9 @@
       {"id":"n9","sel":"do-método","kind":"heading","parent":"n7","prev":"n8","next":"na","depth":2,"start":1576,"end":2843,"label":262144,"key":"a2669fd8aefb"},
       {"id":"na","sel":"da-escrita","kind":"heading","parent":"n7","prev":"n9","next":"nb","depth":2,"start":2843,"end":4325,"label":327680,"key":"a2e144174b6d"},
       {"id":"nb","sel":"do-processo","kind":"heading","parent":"n7","prev":"na","next":null,"depth":2,"start":4325,"end":4982,"label":393216,"key":"fb7589765319"}
+    ] },
+    ".guidelines/.constraints/README.md.template": { "format": "text", "nodes": [
+      {"id":"n2wg","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":2872,"label":65536,"key":"238961406f33"}
     ] },
     ".guidelines/.decisions/README.md": { "format": "md", "nodes": [
       {"id":"nc","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":54567,"label":65536,"key":"bdda28329b24"},
@@ -33,6 +39,9 @@
       {"id":"nm","sel":"2026-09-05","kind":"heading","parent":"nd","prev":"nl","next":"nn","depth":2,"start":52073,"end":53507,"label":720896,"key":"e1467a49c34e"},
       {"id":"nn","sel":"anteriores-ainda-em-vigor","kind":"heading","parent":"nd","prev":"nm","next":"no","depth":2,"start":53507,"end":54487,"label":786432,"key":"ccba3a01d6a3"},
       {"id":"no","sel":"decisões-que-um-agente-tomou-e-o-regente-ainda-não-ratificou","kind":"heading","parent":"nd","prev":"nn","next":null,"depth":2,"start":54487,"end":54567,"label":851968,"key":"9b3c64a292eb"}
+    ] },
+    ".guidelines/.decisions/README.md.template": { "format": "text", "nodes": [
+      {"id":"n2wh","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":1123,"label":65536,"key":"9ec1430da6a0"}
     ] },
     ".guidelines/.history/GLOSSARY_CLOSED.md": { "format": "md", "nodes": [
       {"id":"np","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":5648,"label":65536,"key":"230aaee3e79a"},
@@ -74,6 +83,9 @@
       {"id":"n1j","sel":"o-que-vem-para-cá","kind":"heading","parent":"n1i","prev":null,"next":"n1k","depth":2,"start":295,"end":474,"label":196608,"key":"e6d32a3f44a9"},
       {"id":"n1k","sel":"o-registro","kind":"heading","parent":"n1i","prev":"n1j","next":"n1l","depth":2,"start":474,"end":1664,"label":262144,"key":"20a775b1377f"},
       {"id":"n1l","sel":"a-lente-para-ler-o-que-está-aqui","kind":"heading","parent":"n1i","prev":"n1k","next":null,"depth":2,"start":1664,"end":1913,"label":327680,"key":"732837645a82"}
+    ] },
+    ".guidelines/.history/README.md.template": { "format": "text", "nodes": [
+      {"id":"n2wi","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":1296,"label":65536,"key":"2f2b8e80e627"}
     ] },
     ".guidelines/.history/XML_REFERENCE_DRAFT.md": { "format": "md", "nodes": [
       {"id":"n1m","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":1784,"label":65536,"key":"6f5ecaa5aeff"},
@@ -2759,6 +2771,14 @@
       {"id":"n1s8","sel":"/glyph/block[8]/section/question","kind":"element","parent":"n1rs","prev":"n1s6","next":null,"depth":4,"start":17326,"end":17455,"label":11599872,"key":"57ee18c03b3c"},
       {"id":"n1s9","sel":"/glyph/block[8]/section/question/user-input","kind":"element","parent":"n1s8","prev":null,"next":null,"depth":5,"start":17345,"end":17437,"label":11665408,"key":"4ab8fe0700aa"}
     ] },
+    ".guidelines/.orders/README.md": { "format": "md", "nodes": [
+      {"id":"n2wj","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":1630,"label":65536,"key":"7cf45d92e32d"},
+      {"id":"n2wk","sel":"orders--the-contract-that-dispatches-the-work","kind":"heading","parent":"n2wj","prev":null,"next":null,"depth":1,"start":0,"end":1630,"label":131072,"key":"7cf45d92e32d"},
+      {"id":"n2wl","sel":"numbering","kind":"heading","parent":"n2wk","prev":null,"next":"n2wm","depth":2,"start":480,"end":716,"label":196608,"key":"b2c95b512e96"},
+      {"id":"n2wm","sel":"the-open-order","kind":"heading","parent":"n2wk","prev":"n2wl","next":"n2wn","depth":2,"start":716,"end":957,"label":262144,"key":"f5a75302dd26"},
+      {"id":"n2wn","sel":"closed-orders","kind":"heading","parent":"n2wk","prev":"n2wm","next":"n2wo","depth":2,"start":957,"end":1324,"label":327680,"key":"bb178bfc844f"},
+      {"id":"n2wo","sel":"intake--what-arrived-while-an-order-was-open","kind":"heading","parent":"n2wk","prev":"n2wn","next":null,"depth":2,"start":1324,"end":1630,"label":393216,"key":"f0a5ced89694"}
+    ] },
     ".guidelines/.orders/parked/restructure-glyph-repo/ORD-0011.hgml": { "format": "text", "nodes": [
       {"id":"n1sa","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":6156,"label":65536,"key":"47ed26e044da"}
     ] },
@@ -3323,18 +3343,27 @@
       {"id":"n27i","sel":"adiado-por-decisão-não-por-esquecimento","kind":"heading","parent":"n274","prev":"n27b","next":"n27j","depth":2,"start":19216,"end":22040,"label":1048576,"key":"f18699ac18fd"},
       {"id":"n27j","sel":"reaberto-por-decisão","kind":"heading","parent":"n274","prev":"n27i","next":null,"depth":2,"start":22040,"end":22577,"label":1114112,"key":"7081a4ce0f2a"}
     ] },
+    ".guidelines/.plan/README.md.template": { "format": "text", "nodes": [
+      {"id":"n2wp","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":1061,"label":65536,"key":"35c5987f7927"}
+    ] },
     ".guidelines/.plan/ladder.toml": { "format": "text", "nodes": [
       {"id":"n27k","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":22070,"label":65536,"key":"e2676accd6e0"}
     ] },
     ".guidelines/.shortcuts/README.md": { "format": "md", "nodes": [
-      {"id":"n27l","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":6867,"label":65536,"key":"918c510221f6"},
-      {"id":"n27m","sel":"atalhos--comece-por-aqui","kind":"heading","parent":"n27l","prev":null,"next":null,"depth":1,"start":0,"end":6867,"label":131072,"key":"918c510221f6"},
+      {"id":"n27l","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":6970,"label":65536,"key":"334c0f69a179"},
+      {"id":"n27m","sel":"atalhos--comece-por-aqui","kind":"heading","parent":"n27l","prev":null,"next":null,"depth":1,"start":0,"end":6970,"label":131072,"key":"334c0f69a179"},
       {"id":"n27n","sel":"onde-estou","kind":"heading","parent":"n27m","prev":null,"next":"n27o","depth":2,"start":428,"end":1968,"label":196608,"key":"1af548a01536"},
-      {"id":"n27o","sel":"os-sete-eixos","kind":"heading","parent":"n27m","prev":"n27n","next":"n27p","depth":2,"start":1968,"end":3024,"label":262144,"key":"d4be430c352f"},
-      {"id":"n27p","sel":"o-mapa-do-motor-em-cinco-linhas","kind":"heading","parent":"n27m","prev":"n27o","next":"n27q","depth":2,"start":3024,"end":3913,"label":327680,"key":"4eff65de1ecf"},
-      {"id":"n27q","sel":"os-documentos-que-mais-se-consulta","kind":"heading","parent":"n27m","prev":"n27p","next":"n27r","depth":2,"start":3913,"end":5413,"label":393216,"key":"14358ec5f2c4"},
-      {"id":"n27r","sel":"os-outros-documentos","kind":"heading","parent":"n27m","prev":"n27q","next":"n27s","depth":2,"start":5413,"end":6531,"label":458752,"key":"2f315f895659"},
-      {"id":"n27s","sel":"vocabulário-do-projeto","kind":"heading","parent":"n27m","prev":"n27r","next":null,"depth":2,"start":6531,"end":6867,"label":524288,"key":"0f20052b10b5"}
+      {"id":"n27o","sel":"os-sete-eixos","kind":"heading","parent":"n27m","prev":"n27n","next":"n27p","depth":2,"start":1968,"end":3127,"label":262144,"key":"77d62c25a771"},
+      {"id":"n27p","sel":"o-mapa-do-motor-em-cinco-linhas","kind":"heading","parent":"n27m","prev":"n27o","next":"n27q","depth":2,"start":3127,"end":4016,"label":327680,"key":"4eff65de1ecf"},
+      {"id":"n27q","sel":"os-documentos-que-mais-se-consulta","kind":"heading","parent":"n27m","prev":"n27p","next":"n27r","depth":2,"start":4016,"end":5516,"label":393216,"key":"14358ec5f2c4"},
+      {"id":"n27r","sel":"os-outros-documentos","kind":"heading","parent":"n27m","prev":"n27q","next":"n27s","depth":2,"start":5516,"end":6634,"label":458752,"key":"2f315f895659"},
+      {"id":"n27s","sel":"vocabulário-do-projeto","kind":"heading","parent":"n27m","prev":"n27r","next":null,"depth":2,"start":6634,"end":6970,"label":524288,"key":"0f20052b10b5"}
+    ] },
+    ".guidelines/.shortcuts/regency.json": { "format": "json", "nodes": [
+      {"id":"n2wq","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":317,"label":65536,"key":"6eb65bbbc3ab"},
+      {"id":"n2wr","sel":"/files","kind":"object","parent":"n2wq","prev":null,"next":"n2ws","depth":1,"start":75,"end":173,"label":131072,"key":"a2d9aab44f76"},
+      {"id":"n2ws","sel":"/history","kind":"array","parent":"n2wq","prev":"n2wr","next":null,"depth":1,"start":188,"end":315,"label":196608,"key":"526911576920"},
+      {"id":"n2wt","sel":"/history/0","kind":"object","parent":"n2ws","prev":null,"next":null,"depth":2,"start":194,"end":311,"label":262144,"key":"41c353f1b29d"}
     ] },
     ".guidelines/.sources/COMPILER_LESSONS.md": { "format": "md", "nodes": [
       {"id":"n27t","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":7317,"label":65536,"key":"06c92f189a21"},
@@ -3357,6 +3386,9 @@
       {"id":"n288","sel":"erros-reais-medidos","kind":"heading","parent":"n286","prev":"n287","next":"n289","depth":3,"start":2280,"end":2604,"label":393216,"key":"436a0ab4b3a4"},
       {"id":"n289","sel":"sugestão-did-you-mean--armadilhas-já-pagas","kind":"heading","parent":"n286","prev":"n288","next":null,"depth":3,"start":2604,"end":3392,"label":458752,"key":"22e361b86ade"},
       {"id":"n28a","sel":"a-fonte-primária-e-ela-é-interna","kind":"heading","parent":"n284","prev":"n286","next":null,"depth":2,"start":3392,"end":3706,"label":524288,"key":"dd3445e92342"}
+    ] },
+    ".guidelines/.sources/README.md.template": { "format": "text", "nodes": [
+      {"id":"n2wu","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":1037,"label":65536,"key":"6a965c0772b4"}
     ] },
     ".guidelines/.sources/VIRTUAL_PATHS.md": { "format": "md", "nodes": [
       {"id":"n28b","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":2165,"label":65536,"key":"8450db535064"},
