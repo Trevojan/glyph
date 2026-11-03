@@ -1,7 +1,7 @@
 {
   "_about": "Registro do trabalho dos agentes: o primeiro relance ao voltar a este repositório. Aponta, nunca copia. O modelo é o do toolkit Regency, library/virtualpath.md §3; o detalhe de cada item mora no source.",
   "schema": 1,
-  "updated": "2026-10-21",
+  "updated": "2026-11-02",
   "items": [
     {
       "id": "REGENCY-NORM",
@@ -112,6 +112,20 @@
       "state": "backlog",
       "next": "o braço de comparação do §8 e o terceiro braço do transporte MCP; a decisão por B foi tomada sem elas e elas seguem devidas",
       "source": ".orders/INTAKE-VIRTUAL-PATH.md §16.1"
+    },
+    {
+      "id": "VSCODE-EXT",
+      "title": "a extensão VS Code para .pgml e .hgml, escrita pelo Regente com o Copilot e absorvida como feature oficial",
+      "state": "review",
+      "source": ".orders/INTAKE-VSCODE-AUTHORING.md",
+      "who": "DV",
+      "since": "2026-11-02",
+      "where": [
+        "branch:rust-port",
+        "vscode-extension/",
+        ".scope/generics/production.pgml"
+      ],
+      "next": "o layout foi ratificado em 2026-11-02; o Regente vê a extensão no Extension Development Host e põe em .scope/generics/ a production.pgml da versão corrente que a sessão escreveu"
     }
   ]
 }

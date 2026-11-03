@@ -13,6 +13,19 @@
 
 ---
 
+## 2026-11-02
+
+Palavras do Regente trazidas à sessão em 2026-11-02, em resposta às três
+perguntas que ela fez depois de absorver a extensão VS Code, e o pedido de
+2026-10-27 que a originou.
+
+| decisão | razão |
+|---|---|
+| **A extensão VS Code é feature oficial, em [`vscode-extension/`](../../vscode-extension/README.md), com a autoria do Regente preservada** | 2026-10-27: *"i produced vs code extension today at a forked repository co-authored by me and Copilot. instead of creating a pull request, i decided to take it directly here to ask you to absorb it and push as an oficial feature. it's better like this, so my own contribution stay always present."* Os commits saem com o Regente como autor e o Copilot como coautor |
+| **O layout do formatador é o que as Orders do repositório já seguem** — [`INTAKE-VSCODE-AUTHORING.md`](../.orders/INTAKE-VSCODE-AUTHORING.md) §3 | *"ratifico."* As regras foram lidas das 43 fontes `.pgml` e `.hgml`, e formatar deixa as Orders da `EMS-001` e suas queimas como estão |
+| **O projeto se ajusta ao regency 3.0** pelo plano `UPD-74c1741d` | *"aok."* |
+| **O [`production.pgml`](../../.scope/generics/production.pgml) se reescreve como exemplo da versão corrente** | *"pode atualizar o production.pgml se puder alimentar o conceito e orientar o futuro do Glyph através de um exemplo concreto da última versão."* `.scope/` é matéria-prima do Regente, só leitura para agentes: a sessão escreve a versão e o Regente a põe lá |
+
 ## 2026-10-21
 
 Palavras do Regente trazidas à sessão em 2026-10-21, em resposta às quatro

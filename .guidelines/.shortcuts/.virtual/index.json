@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "next": 3748,
+  "next": 3759,
   "files": {
     ".guidelines/.changelog/README.md": { "format": "md", "nodes": [
       {"id":"n1","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":2571,"label":65536,"key":"42f1714aabb7"},
@@ -18,20 +18,21 @@
       {"id":"nb","sel":"do-processo","kind":"heading","parent":"n7","prev":"na","next":null,"depth":2,"start":4325,"end":4982,"label":393216,"key":"fb7589765319"}
     ] },
     ".guidelines/.decisions/README.md": { "format": "md", "nodes": [
-      {"id":"nc","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":53099,"label":65536,"key":"f1d51dae7d11"},
-      {"id":"nd","sel":"decisões--quem-decidiu-e-por-quê","kind":"heading","parent":"nc","prev":null,"next":null,"depth":1,"start":0,"end":53099,"label":131072,"key":"f1d51dae7d11"},
-      {"id":"ne","sel":"formato","kind":"heading","parent":"nd","prev":null,"next":"n2tc","depth":2,"start":297,"end":367,"label":196608,"key":"b599567a9576"},
-      {"id":"n2tc","sel":"2026-10-21","kind":"heading","parent":"nd","prev":"ne","next":"nf","depth":2,"start":367,"end":1701,"label":229376,"key":"4ca789ceee3b"},
-      {"id":"nf","sel":"2026-10-16","kind":"heading","parent":"nd","prev":"n2tc","next":"ng","depth":2,"start":1701,"end":5126,"label":262144,"key":"8db02f647e68"},
-      {"id":"ng","sel":"2026-10-15","kind":"heading","parent":"nd","prev":"nf","next":"nh","depth":2,"start":5126,"end":22249,"label":327680,"key":"8b21c3dbc46f"},
-      {"id":"nh","sel":"2026-09-27","kind":"heading","parent":"nd","prev":"ng","next":"ni","depth":2,"start":22249,"end":37517,"label":393216,"key":"5b4bdf8d1a07"},
-      {"id":"ni","sel":"2026-09-26","kind":"heading","parent":"nd","prev":"nh","next":"nj","depth":2,"start":37517,"end":39125,"label":458752,"key":"274bac671a7c"},
-      {"id":"nj","sel":"2026-09-25","kind":"heading","parent":"nd","prev":"ni","next":"nk","depth":2,"start":39125,"end":40299,"label":524288,"key":"e143fab2884f"},
-      {"id":"nk","sel":"2026-09-24","kind":"heading","parent":"nd","prev":"nj","next":"nl","depth":2,"start":40299,"end":48485,"label":589824,"key":"272f698ecae6"},
-      {"id":"nl","sel":"2026-09-06","kind":"heading","parent":"nd","prev":"nk","next":"nm","depth":2,"start":48485,"end":50605,"label":655360,"key":"20ecd2250710"},
-      {"id":"nm","sel":"2026-09-05","kind":"heading","parent":"nd","prev":"nl","next":"nn","depth":2,"start":50605,"end":52039,"label":720896,"key":"e1467a49c34e"},
-      {"id":"nn","sel":"anteriores-ainda-em-vigor","kind":"heading","parent":"nd","prev":"nm","next":"no","depth":2,"start":52039,"end":53019,"label":786432,"key":"ccba3a01d6a3"},
-      {"id":"no","sel":"decisões-que-um-agente-tomou-e-o-regente-ainda-não-ratificou","kind":"heading","parent":"nd","prev":"nn","next":null,"depth":2,"start":53019,"end":53099,"label":851968,"key":"9b3c64a292eb"}
+      {"id":"nc","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":54567,"label":65536,"key":"bdda28329b24"},
+      {"id":"nd","sel":"decisões--quem-decidiu-e-por-quê","kind":"heading","parent":"nc","prev":null,"next":null,"depth":1,"start":0,"end":54567,"label":131072,"key":"bdda28329b24"},
+      {"id":"ne","sel":"formato","kind":"heading","parent":"nd","prev":null,"next":"n2wd","depth":2,"start":297,"end":367,"label":196608,"key":"b599567a9576"},
+      {"id":"n2wd","sel":"2026-11-02","kind":"heading","parent":"nd","prev":"ne","next":"n2tc","depth":2,"start":367,"end":1835,"label":212992,"key":"99a020b6e9ee"},
+      {"id":"n2tc","sel":"2026-10-21","kind":"heading","parent":"nd","prev":"n2wd","next":"nf","depth":2,"start":1835,"end":3169,"label":229376,"key":"4ca789ceee3b"},
+      {"id":"nf","sel":"2026-10-16","kind":"heading","parent":"nd","prev":"n2tc","next":"ng","depth":2,"start":3169,"end":6594,"label":262144,"key":"8db02f647e68"},
+      {"id":"ng","sel":"2026-10-15","kind":"heading","parent":"nd","prev":"nf","next":"nh","depth":2,"start":6594,"end":23717,"label":327680,"key":"8b21c3dbc46f"},
+      {"id":"nh","sel":"2026-09-27","kind":"heading","parent":"nd","prev":"ng","next":"ni","depth":2,"start":23717,"end":38985,"label":393216,"key":"5b4bdf8d1a07"},
+      {"id":"ni","sel":"2026-09-26","kind":"heading","parent":"nd","prev":"nh","next":"nj","depth":2,"start":38985,"end":40593,"label":458752,"key":"274bac671a7c"},
+      {"id":"nj","sel":"2026-09-25","kind":"heading","parent":"nd","prev":"ni","next":"nk","depth":2,"start":40593,"end":41767,"label":524288,"key":"e143fab2884f"},
+      {"id":"nk","sel":"2026-09-24","kind":"heading","parent":"nd","prev":"nj","next":"nl","depth":2,"start":41767,"end":49953,"label":589824,"key":"272f698ecae6"},
+      {"id":"nl","sel":"2026-09-06","kind":"heading","parent":"nd","prev":"nk","next":"nm","depth":2,"start":49953,"end":52073,"label":655360,"key":"20ecd2250710"},
+      {"id":"nm","sel":"2026-09-05","kind":"heading","parent":"nd","prev":"nl","next":"nn","depth":2,"start":52073,"end":53507,"label":720896,"key":"e1467a49c34e"},
+      {"id":"nn","sel":"anteriores-ainda-em-vigor","kind":"heading","parent":"nd","prev":"nm","next":"no","depth":2,"start":53507,"end":54487,"label":786432,"key":"ccba3a01d6a3"},
+      {"id":"no","sel":"decisões-que-um-agente-tomou-e-o-regente-ainda-não-ratificou","kind":"heading","parent":"nd","prev":"nn","next":null,"depth":2,"start":54487,"end":54567,"label":851968,"key":"9b3c64a292eb"}
     ] },
     ".guidelines/.history/GLOSSARY_CLOSED.md": { "format": "md", "nodes": [
       {"id":"np","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":5648,"label":65536,"key":"230aaee3e79a"},
@@ -2379,6 +2380,17 @@
       {"id":"n1i8","sel":"17-housekeeping-outside-the-study","kind":"heading","parent":"n1hd","prev":"n1i6","next":"n1i9","depth":2,"start":31590,"end":31936,"label":2162688,"key":"e2557d5f7e49"},
       {"id":"n1i9","sel":"18-re-measured-2026-10-16--the-history-since-7-says-stop","kind":"heading","parent":"n1hd","prev":"n1i8","next":null,"depth":2,"start":31936,"end":34923,"label":2228224,"key":"4eade44b5d87"}
     ] },
+    ".guidelines/.orders/INTAKE-VSCODE-AUTHORING.md": { "format": "md", "nodes": [
+      {"id":"n2w4","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":4510,"label":65536,"key":"f61467eacfdd"},
+      {"id":"n2w5","sel":"vs-code-authoring-support-for-glyph","kind":"heading","parent":"n2w4","prev":null,"next":null,"depth":1,"start":0,"end":4510,"label":131072,"key":"f61467eacfdd"},
+      {"id":"n2w6","sel":"1-the-goal","kind":"heading","parent":"n2w5","prev":null,"next":"n2w7","depth":2,"start":400,"end":763,"label":196608,"key":"b7a619913bd4"},
+      {"id":"n2w7","sel":"2-what-exists","kind":"heading","parent":"n2w5","prev":"n2w6","next":"n2w8","depth":2,"start":763,"end":1112,"label":262144,"key":"81fcf3d607fe"},
+      {"id":"n2w8","sel":"3-delivered-functionality","kind":"heading","parent":"n2w5","prev":"n2w7","next":"n2w9","depth":2,"start":1112,"end":2099,"label":327680,"key":"d23b5fd0e291"},
+      {"id":"n2w9","sel":"4-boundary","kind":"heading","parent":"n2w5","prev":"n2w8","next":"n2wa","depth":2,"start":2099,"end":2428,"label":393216,"key":"853cbb38cdfa"},
+      {"id":"n2wa","sel":"5-acceptance","kind":"heading","parent":"n2w5","prev":"n2w9","next":"n2wb","depth":2,"start":2428,"end":3386,"label":458752,"key":"60be1965cca0"},
+      {"id":"n2wb","sel":"6-decisions","kind":"heading","parent":"n2w5","prev":"n2wa","next":"n2wc","depth":2,"start":3386,"end":4226,"label":524288,"key":"786256d59630"},
+      {"id":"n2wc","sel":"7-open","kind":"heading","parent":"n2w5","prev":"n2wb","next":null,"depth":2,"start":4226,"end":4510,"label":589824,"key":"05e458127f69"}
+    ] },
     ".guidelines/.orders/ORD-2026-08-30-01.dispatch.json": { "format": "json", "nodes": [
       {"id":"n1ia","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":69207,"label":65536,"key":"99bf5ef97567"},
       {"id":"n1ib","sel":"/supersedes","kind":"array","parent":"n1ia","prev":null,"next":"n1ij","depth":1,"start":264,"end":1504,"label":131072,"key":"bdc444141a27"},
@@ -3293,36 +3305,36 @@
       {"id":"n272","sel":"ems-001-queue--a-execução-assíncrona","kind":"heading","parent":"n26e","prev":"n271","next":null,"depth":3,"start":36776,"end":36949,"label":3670016,"key":"58c28e8817b5"}
     ] },
     ".guidelines/.plan/README.md": { "format": "md", "nodes": [
-      {"id":"n273","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":22001,"label":65536,"key":"7fda4c9c43a5"},
-      {"id":"n274","sel":"plano--o-que-vem-a-seguir","kind":"heading","parent":"n273","prev":null,"next":null,"depth":1,"start":0,"end":22001,"label":131072,"key":"7fda4c9c43a5"},
-      {"id":"n275","sel":"autorizado-pelo-regente-ainda-não-construído","kind":"heading","parent":"n274","prev":null,"next":"n27b","depth":2,"start":211,"end":12693,"label":196608,"key":"3fcf47c13da8"},
+      {"id":"n273","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":22577,"label":65536,"key":"bb2fb442ad5d"},
+      {"id":"n274","sel":"plano--o-que-vem-a-seguir","kind":"heading","parent":"n273","prev":null,"next":null,"depth":1,"start":0,"end":22577,"label":131072,"key":"bb2fb442ad5d"},
+      {"id":"n275","sel":"autorizado-pelo-regente-ainda-não-construído","kind":"heading","parent":"n274","prev":null,"next":"n27b","depth":2,"start":211,"end":13269,"label":196608,"key":"f4cbc18b85db"},
       {"id":"n276","sel":"0-caminhos-virtuais--guidelinesshortcutsvirtual--decidido-primeiro-da-fila","kind":"heading","parent":"n275","prev":null,"next":"n277","depth":3,"start":261,"end":4947,"label":262144,"key":"db7ef22f3031"},
       {"id":"n277","sel":"1-section-de-cabeçalho-irmã-do-schema--decidido-faltando-fazer","kind":"heading","parent":"n275","prev":"n276","next":"n278","depth":3,"start":4947,"end":5580,"label":327680,"key":"207967cde0f7"},
-      {"id":"n278","sel":"2-gatilhos-de-re-ferência","kind":"heading","parent":"n275","prev":"n277","next":"n279","depth":3,"start":5580,"end":6457,"label":393216,"key":"db188b1695e1"},
-      {"id":"n279","sel":"3-quatro-defeitos-medidos-e-não-consertados-no-js","kind":"heading","parent":"n275","prev":"n278","next":"n27a","depth":3,"start":6457,"end":7410,"label":458752,"key":"6759d481ef04"},
-      {"id":"n27a","sel":"5-o-glyph-em-rust--a-série-ems-001","kind":"heading","parent":"n275","prev":"n279","next":null,"depth":3,"start":7410,"end":12693,"label":524288,"key":"ff72c6003313"},
-      {"id":"n27b","sel":"aberto-esperando-o-regente","kind":"heading","parent":"n274","prev":"n275","next":"n27i","depth":2,"start":12693,"end":18640,"label":589824,"key":"732765cb4465"},
-      {"id":"n2q9","sel":"os-dois-itens-dos-caminhos-virtuais","kind":"heading","parent":"n27b","prev":null,"next":"n2qa","depth":3,"start":13272,"end":13620,"label":694681,"key":"0b33cf7eeaec"},
-      {"id":"n2qa","sel":"duas-medições-devidas-e-nenhuma-tem-instrumento-escrito","kind":"heading","parent":"n27b","prev":"n2q9","next":"n2qb","depth":3,"start":13620,"end":14345,"label":747110,"key":"3ecc594842b7"},
-      {"id":"n2qb","sel":"duas-propostas-de-agente-sem-assinatura","kind":"heading","parent":"n27b","prev":"n2qa","next":"n27f","depth":3,"start":14345,"end":15086,"label":799539,"key":"e8c2b9fb1348"},
-      {"id":"n27f","sel":"a-e-06-adiada-com-a-direção-dada","kind":"heading","parent":"n27b","prev":"n2qb","next":"n27g","depth":3,"start":15086,"end":15457,"label":851968,"key":"13aa184865f4"},
-      {"id":"n27g","sel":"pendências-de-registro-sem-casa-hoje","kind":"heading","parent":"n27b","prev":"n27f","next":"n27h","depth":3,"start":15457,"end":17138,"label":917504,"key":"44ab3cff30e6"},
-      {"id":"n27h","sel":"o-resto","kind":"heading","parent":"n27b","prev":"n27g","next":null,"depth":3,"start":17138,"end":18640,"label":983040,"key":"a410fa1528c2"},
-      {"id":"n27i","sel":"adiado-por-decisão-não-por-esquecimento","kind":"heading","parent":"n274","prev":"n27b","next":"n27j","depth":2,"start":18640,"end":21464,"label":1048576,"key":"f18699ac18fd"},
-      {"id":"n27j","sel":"reaberto-por-decisão","kind":"heading","parent":"n274","prev":"n27i","next":null,"depth":2,"start":21464,"end":22001,"label":1114112,"key":"7081a4ce0f2a"}
+      {"id":"n278","sel":"2-gatilhos-de-re-ferência","kind":"heading","parent":"n275","prev":"n277","next":"n2we","depth":3,"start":5580,"end":6457,"label":393216,"key":"db188b1695e1"},
+      {"id":"n2we","sel":"3-seis-defeitos-medidos-e-não-consertados-no-js","kind":"heading","parent":"n275","prev":"n278","next":"n27a","depth":3,"start":6457,"end":7986,"label":458752,"key":"5aadaa4e6ec6"},
+      {"id":"n27a","sel":"5-o-glyph-em-rust--a-série-ems-001","kind":"heading","parent":"n275","prev":"n2we","next":null,"depth":3,"start":7986,"end":13269,"label":524288,"key":"ff72c6003313"},
+      {"id":"n27b","sel":"aberto-esperando-o-regente","kind":"heading","parent":"n274","prev":"n275","next":"n27i","depth":2,"start":13269,"end":19216,"label":589824,"key":"732765cb4465"},
+      {"id":"n2q9","sel":"os-dois-itens-dos-caminhos-virtuais","kind":"heading","parent":"n27b","prev":null,"next":"n2qa","depth":3,"start":13848,"end":14196,"label":694681,"key":"0b33cf7eeaec"},
+      {"id":"n2qa","sel":"duas-medições-devidas-e-nenhuma-tem-instrumento-escrito","kind":"heading","parent":"n27b","prev":"n2q9","next":"n2qb","depth":3,"start":14196,"end":14921,"label":747110,"key":"3ecc594842b7"},
+      {"id":"n2qb","sel":"duas-propostas-de-agente-sem-assinatura","kind":"heading","parent":"n27b","prev":"n2qa","next":"n27f","depth":3,"start":14921,"end":15662,"label":799539,"key":"e8c2b9fb1348"},
+      {"id":"n27f","sel":"a-e-06-adiada-com-a-direção-dada","kind":"heading","parent":"n27b","prev":"n2qb","next":"n27g","depth":3,"start":15662,"end":16033,"label":851968,"key":"13aa184865f4"},
+      {"id":"n27g","sel":"pendências-de-registro-sem-casa-hoje","kind":"heading","parent":"n27b","prev":"n27f","next":"n27h","depth":3,"start":16033,"end":17714,"label":917504,"key":"44ab3cff30e6"},
+      {"id":"n27h","sel":"o-resto","kind":"heading","parent":"n27b","prev":"n27g","next":null,"depth":3,"start":17714,"end":19216,"label":983040,"key":"a410fa1528c2"},
+      {"id":"n27i","sel":"adiado-por-decisão-não-por-esquecimento","kind":"heading","parent":"n274","prev":"n27b","next":"n27j","depth":2,"start":19216,"end":22040,"label":1048576,"key":"f18699ac18fd"},
+      {"id":"n27j","sel":"reaberto-por-decisão","kind":"heading","parent":"n274","prev":"n27i","next":null,"depth":2,"start":22040,"end":22577,"label":1114112,"key":"7081a4ce0f2a"}
     ] },
     ".guidelines/.plan/ladder.toml": { "format": "text", "nodes": [
       {"id":"n27k","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":22070,"label":65536,"key":"e2676accd6e0"}
     ] },
     ".guidelines/.shortcuts/README.md": { "format": "md", "nodes": [
-      {"id":"n27l","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":6732,"label":65536,"key":"1afa14c1ed23"},
-      {"id":"n27m","sel":"atalhos--comece-por-aqui","kind":"heading","parent":"n27l","prev":null,"next":null,"depth":1,"start":0,"end":6732,"label":131072,"key":"1afa14c1ed23"},
+      {"id":"n27l","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":6867,"label":65536,"key":"918c510221f6"},
+      {"id":"n27m","sel":"atalhos--comece-por-aqui","kind":"heading","parent":"n27l","prev":null,"next":null,"depth":1,"start":0,"end":6867,"label":131072,"key":"918c510221f6"},
       {"id":"n27n","sel":"onde-estou","kind":"heading","parent":"n27m","prev":null,"next":"n27o","depth":2,"start":428,"end":1968,"label":196608,"key":"1af548a01536"},
       {"id":"n27o","sel":"os-sete-eixos","kind":"heading","parent":"n27m","prev":"n27n","next":"n27p","depth":2,"start":1968,"end":3024,"label":262144,"key":"d4be430c352f"},
       {"id":"n27p","sel":"o-mapa-do-motor-em-cinco-linhas","kind":"heading","parent":"n27m","prev":"n27o","next":"n27q","depth":2,"start":3024,"end":3913,"label":327680,"key":"4eff65de1ecf"},
       {"id":"n27q","sel":"os-documentos-que-mais-se-consulta","kind":"heading","parent":"n27m","prev":"n27p","next":"n27r","depth":2,"start":3913,"end":5413,"label":393216,"key":"14358ec5f2c4"},
-      {"id":"n27r","sel":"os-outros-documentos","kind":"heading","parent":"n27m","prev":"n27q","next":"n27s","depth":2,"start":5413,"end":6396,"label":458752,"key":"2a05d5132deb"},
-      {"id":"n27s","sel":"vocabulário-do-projeto","kind":"heading","parent":"n27m","prev":"n27r","next":null,"depth":2,"start":6396,"end":6732,"label":524288,"key":"0f20052b10b5"}
+      {"id":"n27r","sel":"os-outros-documentos","kind":"heading","parent":"n27m","prev":"n27q","next":"n27s","depth":2,"start":5413,"end":6531,"label":458752,"key":"2f315f895659"},
+      {"id":"n27s","sel":"vocabulário-do-projeto","kind":"heading","parent":"n27m","prev":"n27r","next":null,"depth":2,"start":6531,"end":6867,"label":524288,"key":"0f20052b10b5"}
     ] },
     ".guidelines/.sources/COMPILER_LESSONS.md": { "format": "md", "nodes": [
       {"id":"n27t","sel":"","kind":"file","parent":null,"prev":null,"next":null,"depth":0,"start":0,"end":7317,"label":65536,"key":"06c92f189a21"},
