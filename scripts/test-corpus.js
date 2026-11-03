@@ -3391,6 +3391,11 @@ async function runRelay() {
        /\/glyph-engine-alias\.html\?engine=relay$/.test(onRust) ? null : "opened " + onRust);
     ok("RL-17", "without it, the page on its own core",
        /\/glyph-engine-alias\.html$/.test(onCore) ? null : "opened " + onCore);
+    /* the address it opens is the one the server is bound to: --host 127.0.0.1
+       keeps the installed app on this machine, and the firewall asks nothing */
+    const onLoopback = await opened(["--host", "127.0.0.1"]);
+    ok("RL-18", "with --host 127.0.0.1 the server is bound to the loopback alone",
+       /^http:\/\/127\.0\.0\.1:\d+\/glyph-engine-alias\.html$/.test(onLoopback) ? null : "opened " + onLoopback);
   } finally {
     server.kill();
   }
@@ -3434,7 +3439,7 @@ console.log(" bundle ORD   " + String(rZP).padStart(4) + "/16");
 console.log(" global store " + rGS + "/3");
 console.log(" context      " + rCX + "/3");
 console.log(" coverage     " + String(rOC).padStart(4) + "/" + ORACLE_COVERAGE.length);
-console.log(" engine relay " + String(rRL).padStart(4) + "/17");
+console.log(" engine relay " + String(rRL).padStart(4) + "/18");
 console.log("=================================================");
 
 if (EXPORT_ORACLE) {
