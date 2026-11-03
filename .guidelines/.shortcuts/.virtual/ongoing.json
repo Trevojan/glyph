@@ -4,6 +4,20 @@
   "updated": "2026-11-03",
   "items": [
     {
+      "id": "ORD-0013",
+      "title": "the installer: a simple .msi, carrying node and serve-dev.js under ADR B",
+      "state": "ongoing",
+      "who": "AA",
+      "since": "2026-11-03",
+      "where": [
+        "branch:ccr-25b46078-6uxsw5",
+        "order:EMS-001/ORD-0013",
+        ".guidelines/.orders/EMS-001/ORD-0013/ORD-0013.xml"
+      ],
+      "next": "build the .msi and hand it to the Regent; the val needs a clean Windows machine and the Regent",
+      "source": ".guidelines/.orders/EMS-001/README.md"
+    },
+    {
       "id": "UPD-cfc53a8f",
       "title": "regency update unstamped -> 3.1",
       "state": "review",
