@@ -1,0 +1,144 @@
+{
+  "scopeName": "source.glyph",
+  "name": "Glyph",
+  "patterns": [
+    {
+      "include": "#raw"
+    },
+    {
+      "include": "#off"
+    },
+    {
+      "include": "#logic"
+    },
+    {
+      "include": "#template"
+    },
+    {
+      "include": "#chain"
+    },
+    {
+      "include": "#placeholder"
+    },
+    {
+      "include": "#command"
+    },
+    {
+      "include": "#literal"
+    },
+    {
+      "include": "#mood"
+    },
+    {
+      "include": "#return"
+    },
+    {
+      "include": "#punctuation"
+    }
+  ],
+  "repository": {
+    "raw": {
+      "name": "markup.raw.verbatim.glyph",
+      "begin": "(?i)\\[\\s*raw\\s*\\]",
+      "end": "(?i)\\[\\s*/\\s*raw\\s*\\]",
+      "beginCaptures": {
+        "0": {
+          "name": "keyword.control.raw.glyph"
+        }
+      },
+      "endCaptures": {
+        "0": {
+          "name": "keyword.control.raw.glyph"
+        }
+      }
+    },
+    "off": {
+      "name": "markup.raw.off.glyph",
+      "begin": "(?i)\\[\\s*off\\s*\\]",
+      "end": "(?i)\\[\\s*on\\s*\\]",
+      "beginCaptures": {
+        "0": {
+          "name": "keyword.control.mode.glyph"
+        }
+      },
+      "endCaptures": {
+        "0": {
+          "name": "keyword.control.mode.glyph"
+        }
+      }
+    },
+    "logic": {
+      "name": "meta.embedded.logic.glyph",
+      "begin": "(?i)\\[\\s*logic\\b[^\\]]*\\]",
+      "end": "(?i)\\[\\s*/\\s*logic\\s*\\]",
+      "beginCaptures": {
+        "0": {
+          "name": "keyword.control.logic.glyph"
+        }
+      },
+      "endCaptures": {
+        "0": {
+          "name": "keyword.control.logic.glyph"
+        }
+      }
+    },
+    "template": {
+      "name": "keyword.other.template.glyph",
+      "match": "\\[--\\s*[A-Za-z0-9_.-]+"
+    },
+    "chain": {
+      "name": "keyword.operator.chain.glyph",
+      "match": "\\[="
+    },
+    "placeholder": {
+      "name": "variable.parameter.glyph",
+      "match": "(?<=\\[)ph-[A-Za-z0-9_.-]+"
+    },
+    "command": {
+      "name": "entity.name.function.glyph",
+      "match": "(?<=\\[)(?:/\\s*)?[A-Za-z][A-Za-z0-9_.-]*"
+    },
+    "literal": {
+      "patterns": [
+        {
+          "name": "string.quoted.single.glyph",
+          "begin": "'",
+          "end": "'|(?=\\])|$"
+        },
+        {
+          "name": "string.quoted.backtick.glyph",
+          "begin": "`",
+          "end": "`|(?=\\])"
+        }
+      ]
+    },
+    "mood": {
+      "name": "constant.language.mood.glyph",
+      "match": "/[A-Za-z]+/(?:[A-Za-z]+/)*"
+    },
+    "return": {
+      "name": "keyword.control.return.glyph",
+      "match": "(?:(?<=^)|(?<=[\\s\\],;]))(?:R:|[Rr]-(?![A-Za-z0-9]))"
+    },
+    "punctuation": {
+      "patterns": [
+        {
+          "name": "punctuation.section.brackets.begin.glyph",
+          "match": "\\["
+        },
+        {
+          "name": "punctuation.section.brackets.end.glyph",
+          "match": "\\]"
+        },
+        {
+          "name": "punctuation.separator.glyph",
+          "match": ";;?|,"
+        },
+        {
+          "name": "keyword.operator.chain.glyph",
+          "match": "-"
+        }
+      ]
+    }
+  }
+}
