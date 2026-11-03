@@ -10,7 +10,7 @@
 
 | section | state |
 |---|---|
-| environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed; the local session of 2026-09-26: Windows 11, node v22.17.1, cargo 1.88.0, and Edge as the Chromium the drivers ask for |
+| environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed; the local session of 2026-09-26: Windows 11, node v22.17.1, cargo 1.88.0, and Edge as the Chromium the drivers ask for; the cloud session of 2026-11-03: node v22.23.4, cargo 1.97.0, and, installed for ORD-0013 on the Regent's word, `wixl` 0.103 (msitools), mingw-w64 GCC 13 and Rust's `x86_64-pc-windows-gnu` target |
 | ground | read in the order the handoff names; `npm run check` (33 buckets, 41 s) and `npm run check:rust` (20 crates, 3 s) green on the clone at `ea8fc59`, before anything was touched |
 | layout | **closed** — its val holds (below), five banks |
 | queue | ORD-0001 to ORD-0012 closed, ORD-0011 at `cf3bb31` and ORD-0012 at `73da9f9`, both on the local machine on 2026-09-26. ORD-0013, the installer, open since 2026-11-03: a simple `.msi` first, under ADR B as signed, so the installed app carries node and `serve-dev.js` (the Regent's answer of 2026-11-03); its val waits for a clean Windows machine and the Regent. First on the plan: the virtual paths, by the Regent's word. The tag `conformance-v0` is on `030ed76`, on the remote since 2026-09-27 |
@@ -26,6 +26,9 @@
 3. **The answers of 2026-09-27 that ask for work:** questions 1, 2, 3, 4, 6, 10 and 12,
    in [`.plan`](../../.plan/README.md) §5, and question 11, the user's own
    stores on the user's machine, with the installer (ORD-0013).
+4. **ORD-0013's val:** on a clean Windows machine, install
+   `Glyph-3.6.9.07-x64.msi`, open **Glyph** from the Start menu and emit an
+   Order (below, *Open, and why*).
 
 ## Questions for the Regent
 
@@ -474,11 +477,66 @@ c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828  -
 
 ## Open, and why
 
-**ORD-0011, the app on the Rust engine**, closed at `cf3bb31`; opened by the commit that carries
-this line. Its source carries the readings it is built on: ADR B's relay, a
-transport of the same shape as `GlyphCore`, a synchronous request (question
-9), the tree rebuilt from the full envelope, the repository's stores
-(question 11), and the switch as one query parameter, `engine=relay`.
+**ORD-0013, the installer**, open since `a5b8e18` (2026-11-03). The Regent
+answered its gate: *"go for a simple .msi first. we'll handle later on to make
+it achieve exquisite performance"*, read as ADR B as signed, so the installed
+app carries node and `serve-dev.js`, which serves the page and relays
+`POST /engine` to `glyph-engine` ([`.decisions/`](../../.decisions/README.md),
+2026-11-03). On the Regent's *"Build here"*, the `.msi` is built in the cloud.
+Three work banks: with `--engine rust`, `serve-dev.js` opens the page on the
+relay (`e337d16`); `--host` binds the server to one address and the page opens
+on it, so the installed app answers this machine alone and the firewall asks
+nothing, while without the flag the server keeps every interface (`984fc35`);
+and `npm run msi`, `scripts/build-msi.js` (`a7aa1b2`).
+
+**The installer paths, against the filter.** The Regent's answer chose the
+format, an `.msi`; the other formats (an NSIS or Inno Setup `.exe`, MSIX, a
+zip) were left by it, not measured. Inside the format:
+
+| path | here | on Windows | crates in the product | read |
+|---|---|---|---|---|
+| `wixl` (msitools 0.103) | builds, 4.4 s | — | 0 | chosen: it builds where the session runs, from the WiX v3 schema |
+| WiX v3 `candle` + `light` | — | the fallback `build-msi.js` calls when `wixl` is absent; **not exercised** | 0 | the same `glyph.wxs` |
+| `cargo-wix`, `cargo-packager` | — | — | not measured | a crate goes through the filter first, and nothing asks for one |
+
+**The `.msi`, measured at `a7aa1b2`.** `Glyph-3.6.9.07-x64.msi`, 37 306 368
+bytes, sha256 `e411bc99822ac8d684b716bc1422e9378a66eeb60fd4bc68fc9d6cce4e097e78`;
+53 files, 92 883 520 bytes staged, of which `node.exe` is 87 034 184, 94% — v22.23.4
+`win-x64`, the zip's sha256 `cbc74b5e…5f20` as the release's `SHASUMS256.txt`
+says. `glyph-engine.exe` and `glyph.exe`, 2.5 MB each, import system DLLs
+alone: `KERNEL32`, `msvcrt`, `ntdll`, `USERENV`, `WS2_32`, `bcryptprimitives`
+and `api-ms-win-core-synch-l1-2-0`. Per machine, 64-bit, in
+`Program Files\Glyph` laid out as the repository is, with `MajorUpgrade` on the
+UpgradeCode `F53D74FF-DBAD-4E7A-A721-07E59CCD2E4A`, and a **Glyph** shortcut in
+the Start menu: `node\node.exe "scripts\serve-dev.js" --engine rust --host 127.0.0.1`.
+
+**Checked here, before the Regent's machine:**
+
+- the closure: every `src` and `href` of the page, `url()` and relative import
+  resolves in the stage — observed refusing with `.scope/asset` left out
+  (`favicon.ico (reached from glyph-engine-alias.html)`);
+- `msiextract` gives back the 53 staged files byte for byte;
+- the tables: Template `x64;1033`, the 53 file components 64-bit, the
+  shortcut's keyed on HKCU, `ALLUSERS` 1, the two Upgrade rows,
+  `RemoveExistingProducts` after `InstallValidate`;
+- the stage served alone, the Linux `glyph-engine` at the Windows one's path,
+  driven in Chromium: the page opened on `?engine=relay` at 127.0.0.1, 27 calls
+  through `POST /engine`, every one 200, no file missing, no console error, and
+  *emitir ORD* wrote `ORD-0001.zip` with its five files.
+
+**The val waits for the Regent**: a clean Windows machine installs the `.msi`,
+opens **Glyph** from the Start menu and emits an Order. On the way, SmartScreen
+names an unknown publisher, since the `.msi` is unsigned, and Windows asks for
+elevation, since it installs per machine.
+
+**A simple `.msi` first; left for the performance work:**
+
+- node's console window stays open while the app runs, and closing it stops the app;
+- the port is 8731, so a second launch while one runs fails;
+- the page keeps its moulds per origin: `127.0.0.1:8731` does not see what `localhost:8731` saved;
+- the engine answers with the repository's stores, not the user's (question 11);
+- no dialogs: the `.msi` installs with the basic progress window;
+- a rebuild's bytes differ: every `.msi` carries a fresh package code and its time.
 
 ### ORD-0010's ADR, signed: B
 
@@ -1265,4 +1323,8 @@ crates' tests arrived.
 | 65 | `47eed0d` | `scripts/link-graph.js --check` in `npm run check`, observed failing on a broken link and an orphan; 16 orphan documents linked from the index and the plan | — | green, `check` and `check:rust` |
 | 66 | `afed370` | the Regent's answers of 2026-09-27, third round: two diagnostics for a command without effect, both XML draft proposals, `EMS-000` titled *Generic*; PIN in three forms, the validation's alias as `pin-if`'s first parameter, the type selector with an optional id; the spec keeps the ORDs and `EMS.json` the rules; repair over everything traffic declares; the rest settled by measured proposal in each ORD | — | green, `check` and `check:rust` |
 | 67 | `709dc31`, `dd0caca`, `003dbbf` | regency 3.1 rules the guidelines: the stamp, `.orders/README.md` and six `README.md.template` to merge by hand; the agents' ledger in `.shortcuts/.virtual/`, pointed to by the index; the regency journal tracked beside it | — | green, `check` |
-| 68 | this commit | ORD-0013 emitted and open: a simple `.msi` first, under ADR B as signed, the installed app carrying node and `serve-dev.js` (the Regent, 2026-11-03) | — | green, `check` |
+| 68 | `a5b8e18` | ORD-0013 emitted and open: a simple `.msi` first, under ADR B as signed, the installed app carrying node and `serve-dev.js` (the Regent, 2026-11-03) | — | green, `check` |
+| 69 | `e337d16` | ORD-0013 work 1 — with `--engine rust`, `serve-dev.js` opens the page on the relay | — | RL-16 red first (`opened …/glyph-engine-alias.html`), then green; `check` |
+| 70 | `984fc35` | ORD-0013 work 2 — `--host` binds the server to one address, and the page opens on the bound one | — | RL-18 red first (`opened http://localhost:…`), then green; `check` |
+| 71 | `a7aa1b2` | ORD-0013 work 3 — `npm run msi`: the page, the Rust engine and node in one `.msi` | — | the closure red first with `.scope/asset` left out, then green; `msiextract` equal to the stage; `check` |
+| 72 | this commit | ORD-0013 at its val: the `.msi` measured, and the stage driven in Chromium up to an emitted Order; the clean machine waits for the Regent | — | green, `check` and `check:rust` |

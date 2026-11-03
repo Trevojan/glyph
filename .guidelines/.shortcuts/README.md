@@ -14,9 +14,9 @@
 |---|---|
 | versão | **3.6.9.07** |
 | suíte | `npm run check` — verde, 34 baldes, 114 fontes declaradas no snapshot; `npm run check:rust` escreve o oráculo no commit sob teste e compila e testa `rust/` |
-| EMS-001 | fechadas da `ORD-0001` à `ORD-0012`, cada uma com o commit e o digest no [registro da série](../.orders/EMS-001/README.md). A `ORD-0013`, o instalador, está aberta desde 2026-11-03: um `.msi` simples primeiro, com o node e o `serve-dev.js` pela ADR B; a validação pede uma máquina Windows limpa e o Regente |
+| EMS-001 | fechadas da `ORD-0001` à `ORD-0012`, cada uma com o commit e o digest no [registro da série](../.orders/EMS-001/README.md). A `ORD-0013`, o instalador, está aberta desde 2026-11-03: um `.msi` simples primeiro, com o node e o `serve-dev.js` pela ADR B, escrito por `npm run msi` e medido na nuvem; a validação pede uma máquina Windows limpa e o Regente |
 | último marco | o Glyph responde em Rust (2026-09-26): o app, atrás de `?engine=relay`, dá pelo motor Rust os mesmos bytes que pelo JS nas 114 fontes, em todo painel (`ORD-0011`), e o binário `glyph` responde as flags do `glyph-cli.js` (`ORD-0012`). Antes disso: o layout das séries e as `ORD-0001` a `ORD-0010`, na nuvem (2026-09-25); o trabalho de 2026-09-24, com as stores como objeto de contexto, o oráculo das 114 fontes, o workspace `rust/`, os nomes ratificados e o plugin; o núcleo em treze módulos |
-| próximo | a `ORD-0013`: o `.msi` se constrói e vai para o Regente rodar numa máquina Windows limpa; o que espera o Regente está no [retorno](../.orders/EMS-001/RETURN.md). Depois, os caminhos virtuais ([`.plan`](../.plan/README.md) §0), quando o Regente os chamar |
+| próximo | a validação da `ORD-0013`, do Regente: numa máquina Windows limpa, instalar o `Glyph-3.6.9.07-x64.msi`, abrir o **Glyph** pelo menu Iniciar e emitir uma Ordem; o que mais espera o Regente está no [retorno](../.orders/EMS-001/RETURN.md). Depois, os caminhos virtuais ([`.plan`](../.plan/README.md) §0), quando o Regente os chamar |
 
 ## Os sete eixos
 
