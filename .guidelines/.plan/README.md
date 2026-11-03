@@ -116,9 +116,10 @@ Da `ORD-0001` à `ORD-0012`, fechadas: a nuvem correu da `ORD-0001` à `ORD-0010
 e esta máquina a `ORD-0011` e a `ORD-0012`; o [registro da
 série](../.orders/EMS-001/README.md) guarda o commit e o digest de cada uma. O
 app roda no motor Rust atrás de `?engine=relay`, e o binário `glyph` responde as
-flags do `glyph-cli.js`. A fila para na `ORD-0013`, o instalador: pede uma
-máquina Windows limpa e o Regente, e sob a ADR B leva node ou um segundo
-protocolo. O instalador é também o que torna o app **standalone** no sentido do
+flags do `glyph-cli.js`. A `ORD-0013`, o instalador, está aberta: um `.msi`
+simples primeiro, que leva o node e o `serve-dev.js` pela ADR B, escrito por
+`npm run msi`; a validação pede uma máquina Windows limpa e o Regente, e a
+performance vem depois (o Regente, 2026-11-03). O instalador é também o que torna o app **standalone** no sentido do
 Regente: o Glyph Explorer mora na máquina de cada usuário, e tudo o que é
 pessoal — os templates e os moulds que ele guarda — fica lá, nunca no
 repositório público, que entrega só os templates básicos de exemplo. O motor

@@ -6,15 +6,17 @@
     {
       "id": "ORD-0013",
       "title": "the installer: a simple .msi, carrying node and serve-dev.js under ADR B",
-      "state": "ongoing",
+      "state": "review",
       "who": "AA",
       "since": "2026-11-03",
       "where": [
         "branch:ccr-25b46078-6uxsw5",
         "order:EMS-001/ORD-0013",
-        ".guidelines/.orders/EMS-001/ORD-0013/ORD-0013.xml"
+        ".guidelines/.orders/EMS-001/ORD-0013/ORD-0013.xml",
+        "scripts/build-msi.js",
+        ".guidelines/.orders/EMS-001/RETURN.md#open-and-why"
       ],
-      "next": "build the .msi and hand it to the Regent; the val needs a clean Windows machine and the Regent",
+      "next": "the val, the Regent's: on a clean Windows machine, install Glyph-3.6.9.07-x64.msi (npm run msi), open Glyph from the Start menu, emit an Order",
       "source": ".guidelines/.orders/EMS-001/README.md"
     },
     {
