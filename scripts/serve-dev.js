@@ -18,7 +18,11 @@ const __dirname = path.dirname(__filename);
  * The decision was to keep ESM and make serving the way in, not to walk the
  * module system back. So this file is no longer development-only: it IS the app
  * launcher, and `glyph.cmd` at the repository root is the single click.
- *   node serve-dev.js [port] [--engine rust] [--no-open]
+ *   node serve-dev.js [port] [--engine rust] [--host <address>] [--no-open]
+ *
+ * `--host` binds the server to one address, and the page opens on it: the
+ * installed app binds 127.0.0.1, so it answers this machine alone and the
+ * firewall asks nothing. Without it, every interface.
  *
  * It also relays the engine (EMS-001 ORD-0010, ADR B): `POST /engine` writes
  * the page's request, one JSON line, to an engine process's stdin and answers
@@ -49,6 +53,7 @@ const TYPES = {
 };
 
 const RUST = process.argv.includes("--engine") && process.argv[process.argv.indexOf("--engine") + 1] === "rust";
+const HOST = process.argv.includes("--host") ? process.argv[process.argv.indexOf("--host") + 1] : null;
 const ENGINE = RUST
   ? [path.join(ROOT, "rust", "target", "release", "glyph-engine" + (process.platform === "win32" ? ".exe" : "")), []]
   : [process.execPath, [path.join(__dirname, "glyph-protocol.js")]];
@@ -107,8 +112,11 @@ const server = http.createServer((req, res) => {
     res.end(data);
   });
 });
-server.listen(PORT, () => {
-  const url = "http://localhost:" + server.address().port + "/glyph-engine-alias.html" + (RUST ? "?engine=relay" : "");
+const listening = () => {
+  /* the address the page opens on is the one the server is bound to */
+  const bound = server.address().address;
+  const host = bound === "::" || bound === "0.0.0.0" ? "localhost" : bound;
+  const url = "http://" + host + ":" + server.address().port + "/glyph-engine-alias.html" + (RUST ? "?engine=relay" : "");
   console.log("glyph: " + url);
   /* one click means the browser opens itself. Zero dependencies, so this is
      the platform's own opener rather than a package. */
@@ -117,4 +125,6 @@ server.listen(PORT, () => {
               : process.platform === "darwin" ? "open" : "xdg-open";
     cp.exec(cmd + ' "' + url + '"', () => {});
   }
-});
+};
+if (HOST) server.listen(PORT, HOST, listening);
+else server.listen(PORT, listening);
