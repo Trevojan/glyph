@@ -1,0 +1,38 @@
+[block
+  [ph-name`order`],
+  [ctx
+    [ph-goal`what this Order dispatches for?`],
+    [ph-step`to which step this ORD belongs?`],
+    [ph-repo`relative path to working directory`],
+    [ph-author`who emmitted this ORD?`],
+    [ph-deadline`check DoD until when?`],
+    [ph-position`to which EMS this ORD belongs?`],
+    [skl`call-team`
+    [ins`listen to this Order, classify and emmit the dispatch manifesto for /regency:team`]
+  ]
+  [section`hierarchy`
+    [dfn`O-4`,`solution, holding the name and the app itself; never referred to as "O-4" after named`]
+    [dfn`O-3`,`module, the bigger feature; fragments in O-2 and is never worked on directly`]
+    [dfn`O-2`,`step, the O-1 group that fills an O-3; owner of its file and checkpoint`]
+    [dfn`O-1`,`task, atomic, a code file; the unity of work and takeback`]
+    [ref`repo's relative path to the ladder`]
+    [dont`fragment again an already fragmented ladder`]
+  ]
+  [--germinate
+    [ph-target`o que o módulo ainda não pode construir, e exatamente qual condição falta`]
+    [ph-effort`os degraus desta escada, um por linha de esforço, do primeiro ao fechamento`]
+    [ph-branch`id da tarefa, arquivo que ela entrega, e o recorte exato do que entra e do que fica de fora`]
+    [ph-branch`repetir uma vez por tarefa que esta Ordem abre`]
+    [ph-limit`o que esta Ordem não toca, de qual dependência isso depende, e o que não acontece em produção`]
+    [ph-lock`o que precisa estar assinado antes de abrir qualquer D1; branch de cada tipo de artefato; comando que mantém a main verde`]
+    [ph-fruit`o que precisa existir ao fim: folhas assinadas, decisões registradas, tarefas na main com a suíte verde`]
+    [ph-suposition`o que se assume verdadeiro para esta Ordem abrir, e o que acontece se a suposição falhar`]
+    [ph-criteria`critérios do MINIMUM_PLAN na parte que estas tarefas tocam, e o portão de abertura assinado`]
+  ]
+  [section`resume`
+    [get
+      [whr`last delivered Task and its current state`]
+    ]
+      [go`seguir dali, nunca do topo da árvore`]
+  ]]
+];
