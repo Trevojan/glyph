@@ -18,6 +18,7 @@
 | decisão | razão |
 |---|---|
 | **O regency 3.1 rege as `.guidelines/`: o stamp mora em [`.shortcuts/regency.json`](../.shortcuts/regency.json), e o ledger dos agentes em `.shortcuts/.virtual/ongoing.json`, na pasta onde o [`.plan`](../.plan/README.md) §0 constrói os caminhos virtuais** | respondido em duas perguntas de 2026-11-03: *"Apply"*, para o plano `UPD-cfc53a8f` — seis `README.md.template` ao lado dos README que o projeto editou, para mesclar à mão; o `.orders/README.md`, template do regency ainda sem preencher, com numeração plana contra as séries de 2026-09-25; e o stamp —; e *"Create it now"*, para o ledger |
+| **O journal do regency, `.shortcuts/.virtual/checkpoints.jsonl`, é rastreado no git com o ledger**, como o regency manda (R5.3) | respondido em 2026-11-03: *"Track it"*, contra ignorá-lo como o estado de máquina do Claude Code no `.gitignore` da raiz. O journal guarda cada escrita de arquivo e cada comando de git da sessão; cada commit ou push lhe acrescenta uma linha, e a árvore volta suja depois de cada push. O `index.sqlite`, cache, fica fora pelo `.gitignore` da própria pasta |
 
 ## 2026-09-27
 
