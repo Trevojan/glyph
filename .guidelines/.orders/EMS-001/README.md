@@ -8,6 +8,8 @@ com o pacote que o `--bundle` escreve, e a contagem é desta série.
 
 ## A Ordem aberta
 
+- [`EMS-001/ORD-0013`](ORD-0013/ORD-0013.xml) — o instalador: um `.msi` simples primeiro, que leva o node e o `serve-dev.js` pela ADR B; aberta em 2026-11-03, com a resposta do Regente na própria Ordem
+
 ## Ordens fechadas
 
 | ORD | o que entregou | commit | digest |

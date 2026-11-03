@@ -1,0 +1,9 @@
+[block'ORD-0013-installer'
+  [ctx'the spec of EMS-001','.guidelines/.orders/EMS-001/EMS-001.pgml']
+  [onlyif'ORD-0011 closed','ORD-0012 closed']
+  [tgt'an installer for Windows that puts the binary and the page on a clean machine']
+  [cnst'a simple .msi first; its performance is later work, as the Regent answered on 2026-11-03']
+  [cnst'ADR B as signed: the installed app carries node and serve-dev.js, which serves the page and relays POST /engine to glyph-engine']
+  [ins'measure every installer path against the filter before choosing one']
+  [val'the installer','a clean machine installs, opens the app and emits an Order']
+];
