@@ -3,7 +3,8 @@
   "regency": "3.1",
   "updated": "2026-11-03",
   "files": {
-    ".orders/README.md": "1da712532c2e"
+    ".orders/README.md": "1da712532c2e",
+    ".shortcuts/.virtual/README.md": "a280cf3ce4aa"
   },
   "history": [
     {
@@ -12,6 +13,13 @@
       "on": "2026-11-03",
       "plan": "UPD-cfc53a8f",
       "ops": 7
+    },
+    {
+      "from": "3.1",
+      "to": "3.1",
+      "on": "2026-11-03",
+      "plan": "UPD-31af6caf",
+      "ops": 1
     }
   ]
 }
