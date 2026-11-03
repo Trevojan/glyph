@@ -24,7 +24,9 @@ const __dirname = path.dirname(__filename);
  * the page's request, one JSON line, to an engine process's stdin and answers
  * with the line the engine writes back. The engine is `glyph-protocol.js` on
  * this same node, or the Rust `glyph-engine` with `--engine rust`; it starts
- * at the first request, and again after it dies.
+ * at the first request, and again after it dies. With `--engine rust` the
+ * page opens on the relay, `?engine=relay`, so it runs on the Rust engine: the
+ * way the installed app opens (EMS-001 ORD-0013).
  */
 
 "use strict";
@@ -106,7 +108,7 @@ const server = http.createServer((req, res) => {
   });
 });
 server.listen(PORT, () => {
-  const url = "http://localhost:" + server.address().port + "/glyph-engine-alias.html";
+  const url = "http://localhost:" + server.address().port + "/glyph-engine-alias.html" + (RUST ? "?engine=relay" : "");
   console.log("glyph: " + url);
   /* one click means the browser opens itself. Zero dependencies, so this is
      the platform's own opener rather than a package. */

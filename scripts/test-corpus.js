@@ -3377,6 +3377,20 @@ async function runRelay() {
     ok("RL-15", "parse counts every command, past the envelope's depth",
        live !== 260 ? "the probe is not deep enough: " + live + " commands"
          : deep.commands !== live ? "answered " + deep.commands + " for " + live : null);
+    /* the page the launcher opens: on the relay when the engine is the Rust
+       one, so the installed app (ORD-0013) runs on glyph-engine */
+    const opened = args => new Promise((resolve, reject) => {
+      const s = cp.spawn(process.execPath, [path.join(__dirname, "serve-dev.js"), "0", "--no-open"].concat(args),
+                         { stdio: ["ignore", "pipe", "inherit"] });
+      let out = "";
+      s.stdout.on("data", c => { out += c; const m = out.match(/glyph: (\S+)/); if (m) { s.kill(); resolve(m[1]); } });
+      s.on("exit", () => reject(new Error("serve-dev.js exited")));
+    });
+    const onRust = await opened(["--engine", "rust"]), onCore = await opened([]);
+    ok("RL-16", "with --engine rust the launcher opens the page on the relay",
+       /\/glyph-engine-alias\.html\?engine=relay$/.test(onRust) ? null : "opened " + onRust);
+    ok("RL-17", "without it, the page on its own core",
+       /\/glyph-engine-alias\.html$/.test(onCore) ? null : "opened " + onCore);
   } finally {
     server.kill();
   }
@@ -3420,7 +3434,7 @@ console.log(" bundle ORD   " + String(rZP).padStart(4) + "/16");
 console.log(" global store " + rGS + "/3");
 console.log(" context      " + rCX + "/3");
 console.log(" coverage     " + String(rOC).padStart(4) + "/" + ORACLE_COVERAGE.length);
-console.log(" engine relay " + String(rRL).padStart(4) + "/15");
+console.log(" engine relay " + String(rRL).padStart(4) + "/17");
 console.log("=================================================");
 
 if (EXPORT_ORACLE) {
