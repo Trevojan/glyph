@@ -8,6 +8,9 @@
 
 ## Documentos
 
+> Leitura longa que virou nota própria nesta pasta. A coluna **decidiu** é
+> obrigatória: sem ela a nota é um resumo, e resumo se relê do original.
+
 | arquivo | assunto | decidiu |
 |---|---|---|
 | [`COMPILER_LESSONS.md`](COMPILER_LESSONS.md) | falhas comuns em compiladores, e o que fazer com mensagem de erro | o gatilho **aponta**, não explica; `suggest()` precisa de filtro semântico, não de limiar melhor; ~85% dos erros reais são delimitação, não lógica |

@@ -12,6 +12,9 @@ pertence ao eixo da pergunta que ele responde; mover para cá seria esconder.
 
 ## O registro
 
+Mover sem registrar é o mesmo que apagar, com passos a mais. Uma linha por
+movimento, a mais nova no topo:
+
 | quando | o quê | por quê | o que ficou no lugar |
 |---|---|---|---|
 | 2026-09-06 | [`GLOSSARY_CLOSED.md`](GLOSSARY_CLOSED.md) | era `GLOSSARY.md` §6, 113 linhas — **20% do glossário que a skill carrega a cada sessão** — narrando o que foi fechado. A referência normativa diz o que o vocabulário **é** | `GLOSSARY.md` §6, um ponteiro. A numeração `§6.x` foi mantida aqui, então os apontadores no motor, em `rules.json` e na suíte resolvem |
