@@ -1,0 +1,2 @@
+# regency: the index is a cache, rebuilt by scripts/idx.py build
+index.sqlite*
