@@ -159,12 +159,14 @@ Not development-only any more: it is how the app is opened, for the reason above
 `glyph.cmd` is a two-line wrapper around it.
 
 ```bash
-node scripts/serve-dev.js            # serves and opens the browser
-node scripts/serve-dev.js --no-open  # serves only
+node scripts/serve-dev.js                    # serves and opens the browser
+node scripts/serve-dev.js --no-open          # serves only
+node scripts/serve-dev.js --host 127.0.0.1   # answers this machine alone
 ```
 
 Serves at `http://localhost:8731`, and reaches another device on the same
-network. It also relays the engine: `POST /engine` takes one JSON request and
+network; with `--host`, it is bound to that address alone, and the page opens
+on it. It also relays the engine: `POST /engine` takes one JSON request and
 answers one JSON line, from `scripts/glyph-protocol.js` in the same node, or
 from the Rust `glyph-engine` with `--engine rust`. The app goes through it when
 its address carries `?engine=relay`; without it, the app runs on the JS core.
@@ -173,7 +175,7 @@ its address carries `?engine=relay`; without it, the app runs on the JS core.
 
 ```bash
 cargo build --release --manifest-path rust/Cargo.toml -p glyph-cli
-node scripts/serve-dev.js --engine rust   # then open the app with ?engine=relay
+node scripts/serve-dev.js --engine rust   # opens the app on the relay, ?engine=relay
 ```
 
 `rust/target/release/glyph` answers the flags of `glyph-cli.js` with the same
@@ -181,6 +183,22 @@ bytes, and with no argument reads Glyph on stdin and writes the XML.
 `glyph-engine` answers the protocol on stdio. Both are held to the oracle the
 JS writes at the same commit (`npm run check:rust`); the series that built them,
 and where it stops, is [`EMS-001`](.guidelines/.orders/EMS-001/README.md).
+
+### The installer — Windows
+
+```bash
+npm run msi   # rust/target/msi/Glyph-<version>-x64.msi
+```
+
+One `.msi` puts the page, `glyph-engine.exe` and the node that serves them in
+`Program Files\Glyph`, laid out as this repository is, and a **Glyph** entry in
+the Start menu that runs `serve-dev.js --engine rust --host 127.0.0.1`: the
+page on the Rust engine, on this machine alone. The node is the official
+`win-x64` build of the version that runs the script, checked against the
+release's `SHASUMS256.txt`. It needs cargo — off Windows, with the
+`x86_64-pc-windows-gnu` target and mingw-w64 — and an MSI builder: `wixl`
+(msitools) where it exists, else WiX Toolset v3's `candle` and `light`.
+`EMS-001` `ORD-0013`.
 
 ---
 
@@ -235,6 +253,7 @@ built.
 | `scripts/core/` | the engine, thirteen modules: `util vocabulary version stores lexer logic templates rules parser emit-xml emit-ast burn inverse`; `node scripts/seam-graph.js` prints who imports whom |
 | `scripts/glyph-ui.js` · `glyph-moulds.js` | interface and moulds (pt-BR) |
 | `scripts/serve-dev.js` | static server, for driving the app in a real browser, and the relay of `POST /engine` |
+| `scripts/build-msi.js` | the Windows installer: the page, the Rust engine and node in one `.msi` |
 | `scripts/glyph-cli.js` · `glyph-zip.js` | the command line, and the zip its `--bundle` writes |
 | `scripts/glyph-protocol.js` · `glyph-transport.js` | the engine as a process, one JSON request a line, and the app's switch to it (`?engine=relay`) |
 | `scripts/glyph-plugin.js` · `commands/` · `.claude-plugin/` | the engine as slash commands |

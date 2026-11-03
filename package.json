@@ -14,6 +14,7 @@
     "check": "node scripts/build-templates.js --check && node scripts/build-skill.js --check && node scripts/check-globals.js && node scripts/dag.js && node scripts/seam-graph.js --check && node scripts/crate-graph.js --check && node scripts/ladder.js --check && node scripts/link-graph.js --check && node scripts/test-corpus.js",
     "check:rust": "node scripts/crate-graph.js --check && node scripts/test-corpus.js --export-oracle && cargo test --manifest-path rust/Cargo.toml",
     "serve": "node scripts/serve-dev.js",
+    "msi": "node scripts/build-msi.js",
     "snapshot": "node scripts/test-corpus.js --update-snapshot"
   },
   "note": "`type: module` exists so the core can be split into files the browser can load without a bundler — see .guidelines/HGML_PLAN.md D1, open since v1.1. There are no `dependencies` and there never will be: zero-dependency is a property of this repository, not an accident of it. This file adds scripts and a module system, nothing else.",
