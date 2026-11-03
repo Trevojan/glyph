@@ -1,7 +1,7 @@
 {
   "_about": "Registro do trabalho dos agentes: o primeiro relance ao voltar a este repositório. Aponta, nunca copia. O modelo é o do toolkit Regency, library/virtualpath.md §3; o detalhe de cada item mora no source.",
   "schema": 1,
-  "updated": "2026-11-02",
+  "updated": "2026-11-03",
   "items": [
     {
       "id": "REGENCY-NORM",
@@ -126,6 +126,23 @@
         ".scope/generics/production.pgml"
       ],
       "next": "o layout foi ratificado em 2026-11-02; o Regente vê a extensão no Extension Development Host e põe em .scope/generics/ a production.pgml da versão corrente que a sessão escreveu"
+    },
+    {
+      "id": "REGENCY-3.0",
+      "title": "regency update unstamped -> 3.0",
+      "state": "review",
+      "source": ".decisions/README.md, 2026-11-02",
+      "who": "DV",
+      "since": "2026-11-02",
+      "where": [
+        "plan:UPD-74c1741d",
+        ".shortcuts/regency.json",
+        ".orders/README.md",
+        ".shortcuts/.virtual/README.md",
+        "seis .template ao lado dos README de .changelog, .constraints, .decisions, .history, .plan e .sources",
+        "fingerprints.json importado para o index.sqlite e apagado"
+      ],
+      "next": "mesclar à mão os seis .template, e ajustar o .orders/README.md ao esquema de EMS e NEM deste projeto"
     }
   ]
 }
