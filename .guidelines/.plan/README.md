@@ -118,13 +118,15 @@ Decidíveis hoje, sem mecanismo novo:
 realmente escreveu (§0 do `COMPILER_LESSONS.md`). Precisa de **filtro
 semântico** — categoria, espécie, tabela de composição — não de limiar melhor.
 
-### 3. Quatro defeitos, medidos e não consertados no JS
+### 3. Seis defeitos, medidos e não consertados no JS
 
 | | medido |
 |---|---|
 | `;;` **migra** | `[nt'a'];;[nt'b']` volta como `[nt'a'][nt'b'];;` — a quebra sai de entre os blocos e vai para o fim. E some inteira na queima. |
 | `;` é **assimétrico entre aspas** | encerra um literal de crase, não encerra um de apóstrofo. As duas formas deveriam ser intercambiáveis. |
 | param de template nu vira prosa | `[--germinate a,b]` → `PlaceholderPending` ×2 e os valores caem como `<off>`. Param de template é **sempre literal** — as duas aspas servem, a palavra nua não. |
+| placeholder que o template não declara **some em silêncio** | `[--germinate[ph-esforco'E']]`: o `germinate` declara só `alvo` e `criterio`, e o `E` não chega ao XML nem a um diagnóstico. Seis dos oito placeholders passados ao `germinate` na [`order-generic.pgml`](../../.scope/generics/order-generic.pgml) somem assim. Medido em 2026-11-02 |
+| o nome de um placeholder **queima como comando** | `` [ph-x`q`] `` queima como `[ph [x[/x] 'q' [/ph]`, e a queima relida dá um `UnknownCommand` por lacuna, então a queima de uma Order Matrix nunca relê limpa. Medido em 2026-11-02 |
 | o `toXML` do JS **cresce com o quadrado das linhas** | L-03, L-02 e L-01 levam 23 ms, 0,44 s e 6,2 s; 84% do L-02 é a passada estrutural (`packageSpan`, `packageIndent` e o seu `^ +`). O port em Rust lê cada linha uma vez e faz o L-01 em 0,13 s. Fixado por decisão (pergunta 13 do [retorno](../.orders/EMS-001/RETURN.md)): o JS não é consertado, e as fontes longas vão pelo Rust |
 
 ### 5. O Glyph em Rust — a série EMS-001
