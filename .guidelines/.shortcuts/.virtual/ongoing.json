@@ -36,9 +36,13 @@
         ".guidelines/.plan/README.md.template",
         ".guidelines/.sources/README.md.template",
         ".guidelines/.decisions/README.md",
-        ".guidelines/.shortcuts/README.md"
+        ".guidelines/.shortcuts/README.md",
+        ".guidelines/.shortcuts/.virtual/README.md",
+        ".guidelines/.plan/README.md",
+        ".guidelines/.history/README.md",
+        ".guidelines/.sources/README.md"
       ],
-      "next": "/regency:update applies UPD-31af6caf (.shortcuts/.virtual/README.md), approved 2026-11-03 and refused then for a dirty tree; merge the six README.md.template files by hand; fill .orders/README.md, regency's unfilled template, whose flat ORD numbering contradicts the EMS series decision of 2026-09-25"
+      "next": "the Regent's review: UPD-31af6caf applied; the six templates merged into the READMEs (the .template files stay, as migrate.py re-proposes deleted ones); .orders/README.md filled for the EMS series; 'o mais simples suficiente' waits in .plan for ratification; /regency:update now puts .orders/README.md.template beside the filled page"
     }
   ]
 }
