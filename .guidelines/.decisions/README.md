@@ -16,6 +16,14 @@ do Regente, vai **citada** — a frase original decide melhor que uma paráfrase
 
 ---
 
+## 2026-11-04
+
+| decisão | razão |
+|---|---|
+| **O mais simples suficiente entra em [`.constraints/`](../.constraints/README.md), *Do método*** | respondido em 2026-11-04: *"Add it"*, sobre o método fixo que o regency 3.1 traz de projeto a projeto |
+| **O índice `.shortcuts/README.md` passa no `shortcuts.py check` do regency**: caminhos inteiros onde o nome é de arquivo, o mapa do motor em cinco linhas de fato, e o bloco de estado que o regency gera | respondido em 2026-11-04: *"Fit it"*. O `link-graph.js` do projeto continua sendo o portão |
+| **Os caminhos virtuais (§0 do [`.plan`](../.plan/README.md)) esperam a validação da `ORD-0013`** | respondido em 2026-11-04: *"Not yet"* |
+
 ## 2026-11-03
 
 | decisão | razão |
