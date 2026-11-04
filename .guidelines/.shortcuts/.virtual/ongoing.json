@@ -1,7 +1,7 @@
 {
   "_about": "The agents' work: the first peek on returning to this repository. It points, never copies. Model: regency library/virtualpath.md section 3.",
   "schema": 1,
-  "updated": "2026-11-03",
+  "updated": "2026-11-04",
   "items": [
     {
       "id": "ORD-0013",
@@ -40,9 +40,11 @@
         ".guidelines/.shortcuts/.virtual/README.md",
         ".guidelines/.plan/README.md",
         ".guidelines/.history/README.md",
-        ".guidelines/.sources/README.md"
+        ".guidelines/.sources/README.md",
+        ".guidelines/.constraints/README.md",
+        ".guidelines/.orders/README.md.template"
       ],
-      "next": "the Regent's review: UPD-31af6caf applied; the six templates merged into the READMEs (the .template files stay, as migrate.py re-proposes deleted ones); .orders/README.md filled for the EMS series; 'o mais simples suficiente' waits in .plan for ratification; /regency:update now puts .orders/README.md.template beside the filled page"
+      "next": "the Regent's review: UPD-31af6caf and UPD-19cb24af applied; the six templates merged into the READMEs (the .template files stay, as migrate.py re-proposes deleted ones); .orders/README.md filled for the EMS series; 'o mais simples suficiente' in .constraints and the index fitted to shortcuts.py check, both on the Regent's word of 2026-11-04"
     }
   ]
 }
