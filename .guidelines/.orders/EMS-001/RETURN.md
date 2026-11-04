@@ -1327,4 +1327,6 @@ crates' tests arrived.
 | 69 | `e337d16` | ORD-0013 work 1 — with `--engine rust`, `serve-dev.js` opens the page on the relay | — | RL-16 red first (`opened …/glyph-engine-alias.html`), then green; `check` |
 | 70 | `984fc35` | ORD-0013 work 2 — `--host` binds the server to one address, and the page opens on the bound one | — | RL-18 red first (`opened http://localhost:…`), then green; `check` |
 | 71 | `a7aa1b2` | ORD-0013 work 3 — `npm run msi`: the page, the Rust engine and node in one `.msi` | — | the closure red first with `.scope/asset` left out, then green; `msiextract` equal to the stage; `check` |
-| 72 | this commit | ORD-0013 at its val: the `.msi` measured, and the stage driven in Chromium up to an emitted Order; the clean machine waits for the Regent | — | green, `check` and `check:rust` |
+| 72 | `651dbea` | ORD-0013 at its val: the `.msi` measured, and the stage driven in Chromium up to an emitted Order; the clean machine waits for the Regent | — | green, `check` and `check:rust` |
+| 73 | `2c366b1` to `88ff822` | regency 3.1 complete: `UPD-31af6caf` and `UPD-19cb24af` applied, the templates merged, `.orders/README.md` for the EMS series, the index fitted to `shortcuts.py check`, the simplest sufficient a constraint (the Regent, 2026-11-04); `plumbing`, `testing` and a local `main` at `88ff822` | — | green, `check` |
+| 74 | this commit | the handoff of 2026-11-04, `HANDOFF-2026-11-04.pgml`: ORD-0013 at its val, the queue waiting on the Regent | — | green, `check` |
