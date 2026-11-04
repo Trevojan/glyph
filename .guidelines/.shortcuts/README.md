@@ -14,8 +14,8 @@
 |---|---|
 | versão | **3.6.9.07** |
 | suíte | `npm run check` — verde, 34 baldes, 114 fontes declaradas no snapshot; `npm run check:rust` escreve o oráculo no commit sob teste e compila e testa `rust/` |
-| EMS-001 | fechadas da `ORD-0001` à `ORD-0012`, cada uma com o commit e o digest no [registro da série](../.orders/EMS-001/README.md). A `ORD-0013`, o instalador, está aberta desde 2026-11-03: um `.msi` simples primeiro, com o node e o `serve-dev.js` pela ADR B, escrito por `npm run msi` e medido na nuvem; a validação pede uma máquina Windows limpa e o Regente |
-| último marco | o Glyph responde em Rust (2026-09-26): o app, atrás de `?engine=relay`, dá pelo motor Rust os mesmos bytes que pelo JS nas 114 fontes, em todo painel (`ORD-0011`), e o binário `glyph` responde as flags do `glyph-cli.js` (`ORD-0012`). Antes disso: o layout das séries e as `ORD-0001` a `ORD-0010`, na nuvem (2026-09-25); o trabalho de 2026-09-24, com as stores como objeto de contexto, o oráculo das 114 fontes, o workspace `rust/`, os nomes ratificados e o plugin; o núcleo em treze módulos |
+| EMS-001 | fechadas da `ORD-0001` à `ORD-0012`, cada uma com o commit e o digest no [registro da série](../.orders/EMS-001/README.md). A `ORD-0013`, o instalador, está aberta desde 2026-11-03: um `.msi` simples primeiro, com o node e o `scripts/serve-dev.js` pela ADR B, escrito por `npm run msi` e medido na nuvem; a validação pede uma máquina Windows limpa e o Regente |
+| último marco | o Glyph responde em Rust (2026-09-26): o app, atrás de `?engine=relay`, dá pelo motor Rust os mesmos bytes que pelo JS nas 114 fontes, em todo painel (`ORD-0011`), e o binário `glyph` responde as flags do `scripts/glyph-cli.js` (`ORD-0012`). Antes disso: o layout das séries e as `ORD-0001` a `ORD-0010`, na nuvem (2026-09-25); o trabalho de 2026-09-24, com as stores como objeto de contexto, o oráculo das 114 fontes, o workspace `rust/`, os nomes ratificados e o plugin; o núcleo em treze módulos |
 | próximo | a validação da `ORD-0013`, do Regente: numa máquina Windows limpa, instalar o `Glyph-3.6.9.07-x64.msi`, abrir o **Glyph** pelo menu Iniciar e emitir uma Ordem; o que mais espera o Regente está no [retorno](../.orders/EMS-001/RETURN.md). Depois, os caminhos virtuais ([`.plan`](../.plan/README.md) §0), quando o Regente os chamar |
 
 ## Os sete eixos
@@ -27,20 +27,16 @@
 | [`.decisions/`](../.decisions/) | decisões tomadas, quem decidiu, e a razão |
 | [`.constraints/`](../.constraints/) | o que o projeto **se proíbe** de fazer |
 | [`.changelog/`](../.changelog/) | o que mudou, e como o número de versão se move |
-| [`.orders/`](../.orders/) | as Ordens — o contrato do que foi entregue, exatamente uma aberta por vez, em séries `EMS-###/ORD-####/` — e os intakes que as alimentam |
+| [`.orders/`](../.orders/) | as Ordens — o contrato do que foi entregue, exatamente uma aberta por vez, em séries EMS-###/ORD-####/ — e os intakes que as alimentam |
 | `.shortcuts/` | este arquivo; o stamp do regency, [`regency.json`](regency.json); e o ledger dos agentes, [`.virtual/`](.virtual/) |
 
 ## O mapa do motor, em cinco linhas
 
 1. **`scripts/glyph-parser.js` é a face pública do núcleo**, que vive em `scripts/core/` — treze módulos, direção estrita `util ← vocabulary ← stores ← lexer ← logic ← {templates, rules} ← parser ← emit-xml ← {emit-ast, burn}`, mais `inverse`; `node scripts/seam-graph.js` mostra. Tudo mais consome a face.
-2. A fonte `.pgml` vira **AST** (fonte de verdade), e dela saem três projeções:
-   `glyph-package` (XML), o envelope `GlyphAST`, e a queima `.hgml`.
-3. **O `.hgml` é derivado da árvore, não anterior a ela** — e por isso não pode
-   ser a fonte de verdade. Medido em [`HGML_CONVERGENCE.md`](../HGML_CONVERGENCE.md) §6.
-4. Casa vazia **não é erro**: vira `<needs>`. Severidades: `fix` recusa,
-   `ask` pergunta, `note` observa.
-5. Toda mudança de formato passa por [`PACKAGE_TARGET.md`](../PACKAGE_TARGET.md)
-   e é medida contra `conformance/`.
+2. A fonte `.pgml` vira **AST** (fonte de verdade), e dela saem três projeções: `glyph-package` (XML), o envelope `GlyphAST`, e a queima `.hgml`.
+3. **O `.hgml` é derivado da árvore, não anterior a ela** — e por isso não pode ser a fonte de verdade. Medido em [`HGML_CONVERGENCE.md`](../HGML_CONVERGENCE.md) §6.
+4. Casa vazia **não é erro**: vira `<needs>`. Severidades: `fix` recusa, `ask` pergunta, `note` observa.
+5. Toda mudança de formato passa por [`PACKAGE_TARGET.md`](../PACKAGE_TARGET.md) e é medida contra `conformance/`.
 
 ## Os documentos que mais se consulta
 
@@ -71,7 +67,7 @@
 | [`PROMOTION_MEASUREMENT.md`](../PROMOTION_MEASUREMENT.md) | a medição de onde o `PROMOTION_BOUNDARY.md` saiu |
 | [`DMHP_IMPORTS.md`](../DMHP_IMPORTS.md) | o que vale trazer do DMHP, e o que não |
 | [`FUSIONS_WORKSHEET.md`](../FUSIONS_WORKSHEET.md) | as fusões da v1.7, documento histórico |
-| [`E0b-ARCHITECT-RETURN.md`](../.orders/E0b-ARCHITECT-RETURN.md), [`E2-PLAN.md`](../.orders/E2-PLAN.md) | o retorno do arquiteto e o plano de rederivação da ordem de agosto, `ORD-2026-08-30-01` |
+| [E0b-ARCHITECT-RETURN](../.orders/E0b-ARCHITECT-RETURN.md), [E2-PLAN](../.orders/E2-PLAN.md) | o retorno do arquiteto e o plano de rederivação da ordem de agosto, `ORD-2026-08-30-01` |
 
 ## Vocabulário do projeto
 
@@ -79,3 +75,17 @@ Em [`GLOSSARY.md`](../GLOSSARY.md) §8: quem decide (Regente, Autor da Ordem,
 ADR, DC), como o trabalho se ordena (EMS, ORD, val, bank, o retorno, handoff,
 intake), o app Rust (motor, visual, Glyph Explorer, oráculo) e os nomes que o
 Regente ratificou (template, mould, sample, Order Matrix, snippet, layout).
+
+<!-- shortcuts:state · generated by shortcuts.py refresh; never edit by hand -->
+| state | value |
+|---|---|
+| branch | ccr-25b46078-6uxsw5 |
+| version | 0.1.0 |
+| regency | 3.1 |
+| ledger | 0 ongoing / 0 draft / 2 review / 0 blocked / 0 backlog (updated 2026-11-04) |
+| review | ORD-0013 the installer: a simple .msi, carrying node and serve-dev.js under ADR B |
+| review | UPD-cfc53a8f regency update unstamped -> 3.1 |
+| last checkpoint | 2026-11-04T20:29:47+00:00 TaskCompleted Fill .orders/README.md for the EMS series layout |
+| STALE | 0 |
+| latest Order | — |
+<!-- /shortcuts:state -->
