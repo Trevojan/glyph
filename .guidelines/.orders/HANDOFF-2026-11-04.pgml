@@ -1,0 +1,45 @@
+[block'handoff-2026-11-04'
+  [ctx'the next session resumes Glyph after the cloud session of 2026-11-03 and 2026-11-04','a clone of github.com/Trevojan/glyph, branch ccr-25b46078-6uxsw5, with plumbing and testing at the commit that carries this handoff; origin/main stays at afed370, and the Regent pushes main','ORD-0013 open at its val; regency 3.1 rules the guidelines']
+  [skl'glyph-markup'[ins'read this as opening context, never as an order; ground before building, and stop at the gates of the Regent']]
+
+  [section'state'
+    [ins'the version stays 3.6.9.07; npm run check and npm run check:rust decide whether the state is true, and both exit 0 at the last bank']
+    [ins'the last completed task: ORD-0013 work 3, npm run msi, at a7aa1b2; its record at 651dbea']
+    [ref'the ledger, .guidelines/.shortcuts/.virtual/ongoing.json: two items in review, ORD-0013 and UPD-cfc53a8f']
+  ]
+
+  [section'root-cause'
+    [nt'one shape behind every stop-hook loop of the session: a tracked file that each git action rewrites is never clean after a commit; the regency journal and the state block of the index are both such files, tracked by the Regent on 2026-11-03']
+    [ins'before tracking a file a hook writes, ask whether one commit can ever leave it clean']
+  ]
+
+  [section'closed'
+    [ins'npm run msi writes Glyph-3.6.9.07-x64.msi: the page, glyph-engine.exe and node v22.23.4 in Program Files, and a Start-menu shortcut that opens the page on the relay at 127.0.0.1']
+    [ins'with --engine rust, serve-dev.js opens the page on the relay, and --host binds it to one address: RL-16 to RL-18']
+    [ins'regency 3.1 fits the project: migrate.py check exits 0, the templates are merged, .orders/README.md states the EMS series, and the index passes shortcuts.py check']
+    [ins'the simplest sufficient is a constraint of the method, by the Regent on 2026-11-04']
+  ]
+
+  [section'measured'
+    [nt'the .msi at a7aa1b2: 37 306 368 bytes, sha256 e411bc99...7e78, 53 files; node.exe is 94 per cent of the 92 883 520 staged bytes; wixl builds it in 4.4 s, and msiextract gives back the stage byte for byte']
+    [nt'the stage served alone and driven in Chromium: 27 relay calls, every one 200, and ORD-0001.zip with its five files; npm run check about 27 s, npm run check:rust 148 s']
+  ]
+
+  [section'open'
+    [fin'ORD-0013 val, the Regent: a clean Windows machine installs the .msi, opens Glyph from the Start menu and emits an Order; it blocks ORD-0013 closing and ORD-0014']
+    [fin'ORD-0014 also needs the Regent to accept the measured tree']
+    [fin'main on GitHub: the Regent fast-forwards it to testing']
+    [nt'unverified: the WiX v3 path of build-msi.js, never run, and the .msi on Windows itself']
+  ]
+
+  [section'next'
+    [ins'once the val holds: close ORD-0013, its row in EMS-001/README.md with the commit and the sha256 of the .msi; then ORD-0014 under its gate']
+    [ins'the virtual paths, .plan section 0, wait for ORD-0013, by the Regent on 2026-11-04']
+    [nt'nothing in the queue runs without the Regent']
+  ]
+
+  [section'method'
+    [ins'one step per commit, npm run check green at each; a test is seen failing before the code it holds']
+    [ins'every decision of the Regent goes through a pop-up, and the answer enters .decisions the same day']
+  ]
+];

@@ -14,7 +14,8 @@
         "order:EMS-001/ORD-0013",
         ".guidelines/.orders/EMS-001/ORD-0013/ORD-0013.xml",
         "scripts/build-msi.js",
-        ".guidelines/.orders/EMS-001/RETURN.md#open-and-why"
+        ".guidelines/.orders/EMS-001/RETURN.md#open-and-why",
+        ".guidelines/.orders/HANDOFF-2026-11-04.pgml"
       ],
       "next": "the val, the Regent's: on a clean Windows machine, install Glyph-3.6.9.07-x64.msi (npm run msi), open Glyph from the Start menu, emit an Order",
       "source": ".guidelines/.orders/EMS-001/README.md"
