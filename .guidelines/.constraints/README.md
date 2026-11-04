@@ -24,6 +24,7 @@
 | **Perda conhecida é fixada com a razão** | e um pino que deixa de valer é **invertido**, não deletado — uma suíte que descarta pino aposentado perde a memória do que ele guardava |
 | **O golden deriva da especificação** | nunca de uma implementação (lock T5) |
 | **Um agente não ratifica norma que escreveu** | |
+| **O mais simples suficiente** | antes de construir, parar no primeiro degrau que resolve, e escrever numa linha qual degrau mais simples foi recusado e por quê; o desnecessário de custo médio se pula, e validação numa fronteira de confiança, erro que perde dado, segurança e acessibilidade nunca contam como desnecessários |
 | **Uma ordem aberta é imutável salvo por versão** | e duas ordens concorrentes são proibidas — por isso o material novo vira *intake* |
 
 ## Da escrita
