@@ -3,9 +3,10 @@
 //!   contradictions: the criterion for "commands don't contradict each other", as a finite external table.
 //!
 //! EMS-001 ORD-0006. `compile_rules` reads the rules store; `check_rules` walks
-//! the tree against it and raises through the parser's `g`. The compiled rules
-//! stay in the caller's hands: the JS hangs them on the store object, which is
-//! why its envelope hashes them (EMS-001/RETURN.md, question 3).
+//! the tree against it and raises through the parser's `g`. A store compiles
+//! once: `compiled_of` keeps what `compile_rules` answers in a table keyed by
+//! the store and holding it weakly, the port of the JS `compiledOf` and its
+//! `WeakMap` (EMS-002 ORD-0006 and ORD-0013).
 //!
 //! The JS keeps its name tables in plain objects, and the port answers as they
 //! do: a name `Object.prototype` holds is found in every one of them. A
@@ -13,35 +14,38 @@
 //! through that same lookup (ORD-0004) — makes `checkRules` throw, and the
 //! port stops there with the JS's message.
 
-use glyph_stores::{Context, Value};
-use glyph_util::json::number;
+use glyph_stores::Context;
+use glyph_json::Json;
+use glyph_json::number;
 use glyph_util::tree::{Diag, Id, Thrown, Tree};
 use glyph_util::{esc, inherited};
 use std::collections::HashSet;
+use std::sync::atomic::{AtomicUsize, Ordering};
+use std::sync::{Arc, Mutex, PoisonError, Weak};
 
 /// `String(v)`; `None` is `undefined`.
-fn js_string(v: Option<&Value>) -> String {
+fn js_string(v: Option<&Json>) -> String {
     match v {
         None => "undefined".into(),
-        Some(Value::Null) => "null".into(),
-        Some(Value::Bool(b)) => b.to_string(),
-        Some(Value::Num(n)) => number(*n),
-        Some(Value::Str(s)) => s.clone(),
-        Some(Value::Arr(a)) => a.iter().map(|x| match x {
-            Value::Null => String::new(),
+        Some(Json::Null) => "null".into(),
+        Some(Json::Bool(b)) => b.to_string(),
+        Some(Json::Num(n)) => number(*n),
+        Some(Json::Str(s)) => s.clone(),
+        Some(Json::Arr(a)) => a.iter().map(|x| match x {
+            Json::Null => String::new(),
             x => js_string(Some(x)),
         }).collect::<Vec<_>>().join(","),
-        Some(Value::Obj(_)) => "[object Object]".into(),
+        Some(Json::Obj(_)) => "[object Object]".into(),
     }
 }
 /// `esc(v)`: null and absence read as the empty string.
-fn esc_v(v: Option<&Value>) -> String {
+fn esc_v(v: Option<&Json>) -> String {
     match v {
-        None | Some(Value::Null) => String::new(),
+        None | Some(Json::Null) => String::new(),
         v => esc(&js_string(v)),
     }
 }
-fn truthy(v: Option<&Value>) -> Option<&Value> {
+fn truthy(v: Option<&Json>) -> Option<&Json> {
     v.filter(|v| v.truthy())
 }
 
@@ -52,75 +56,98 @@ pub fn pair_key(a: &str, b: &str) -> String {
 
 /// `expandNames`: `@class` resolved against the store's classes; a bare name
 /// is itself.
-pub fn expand_names(store: &Value, name: Option<&Value>) -> Vec<String> {
+pub fn expand_names(store: &Json, name: Option<&Json>) -> Vec<String> {
     let text = js_string(name);
     match text.strip_prefix('@') {
         None => vec![text],
-        Some(class) => store.get("classes").and_then(|c| c.get(class)).and_then(Value::arr)
+        Some(class) => store.get("classes").and_then(|c| c.get(class)).and_then(Json::arr)
             .map(|a| a.iter().map(|x| js_string(Some(x))).collect()).unwrap_or_default(),
     }
 }
 
-pub struct Order<'a> {
-    pub rule: &'a Value,
+pub struct Order {
+    pub rule: Json,
     pub first: String,
     pub then: Vec<String>,
 }
-pub struct Pre<'a> {
-    pub rule: &'a Value,
+pub struct Pre {
+    pub rule: Json,
     pub target: String,
     pub accept: Vec<String>,
 }
-pub struct Blend<'a> {
-    pub rule: &'a Value,
+pub struct Blend {
+    pub rule: Json,
     pub when: Vec<String>,
     pub emit: String,
     pub means: String,
 }
 
 /// The store, compiled: the pairs by key, in the order each key first appears.
-pub struct Compiled<'a> {
-    pub pairs: Vec<(String, &'a Value)>,
-    pub order: Vec<Order<'a>>,
-    pub pre: Vec<Pre<'a>>,
-    pub blends: Vec<Blend<'a>>,
+pub struct Compiled {
+    pub pairs: Vec<(String, Json)>,
+    pub order: Vec<Order>,
+    pub pre: Vec<Pre>,
+    pub blends: Vec<Blend>,
 }
 
-pub fn compile_rules(store: &Value) -> Compiled<'_> {
+static COMPILATIONS: AtomicUsize = AtomicUsize::new(0);
+
+/// How many times a store was compiled in this process: what the gate reads
+/// to see that the same store compiles once.
+pub fn compilations() -> usize {
+    COMPILATIONS.load(Ordering::Relaxed)
+}
+
+/// `compiledOf(store)`: the store compiled once, kept beside it by its
+/// identity; a store that is dropped leaves the table at the next call.
+pub fn compiled_of(store: &Arc<Json>) -> Arc<Compiled> {
+    static TABLE: Mutex<Vec<(Weak<Json>, Arc<Compiled>)>> = Mutex::new(Vec::new());
+    let mut table = TABLE.lock().unwrap_or_else(PoisonError::into_inner);
+    table.retain(|(w, _)| w.strong_count() > 0);
+    if let Some((_, c)) = table.iter().find(|(w, _)| std::ptr::eq(w.as_ptr(), Arc::as_ptr(store))) {
+        return Arc::clone(c);
+    }
+    let c = Arc::new(compile_rules(store));
+    table.push((Arc::downgrade(store), Arc::clone(&c)));
+    c
+}
+
+pub fn compile_rules(store: &Json) -> Compiled {
+    COMPILATIONS.fetch_add(1, Ordering::Relaxed);
     let mut c = Compiled { pairs: Vec::new(), order: Vec::new(), pre: Vec::new(), blends: Vec::new() };
-    for r in store.get("rules").and_then(Value::arr).unwrap_or(&[]) {
-        match r.get("kind").and_then(Value::str) {
+    for r in store.get("rules").and_then(Json::arr).unwrap_or(&[]) {
+        match r.get("kind").and_then(Json::str) {
             Some("pair") => {
                 let k = pair_key(&js_string(r.get("a")), &js_string(r.get("b")));
                 match c.pairs.iter_mut().find(|(x, _)| *x == k) {
-                    Some(slot) => slot.1 = r,
-                    None => c.pairs.push((k, r)),
+                    Some(slot) => slot.1 = r.clone(),
+                    None => c.pairs.push((k, r.clone())),
                 }
             }
             /* a blend that cannot say what it means is refused here, not warned about */
             Some("blend") => {
-                let when = r.get("when").and_then(Value::arr).unwrap_or(&[]);
+                let when = r.get("when").and_then(Json::arr).unwrap_or(&[]);
                 if truthy(r.get("means")).is_none() || truthy(r.get("emit")).is_none() || when.len() < 2 {
                     continue;
                 }
                 let when = when.iter().flat_map(|n| expand_names(store, Some(n))).collect();
-                c.blends.push(Blend { rule: r, when, emit: js_string(r.get("emit")), means: js_string(r.get("means")) });
+                c.blends.push(Blend { rule: r.clone(), when, emit: js_string(r.get("emit")), means: js_string(r.get("means")) });
             }
             /* `first` never matches itself: it is usually one of the class in `then` */
             Some("order") => {
                 let first = js_string(r.get("first"));
                 let then = expand_names(store, r.get("then")).into_iter().filter(|n| *n != first).collect();
-                c.order.push(Order { rule: r, first, then });
+                c.order.push(Order { rule: r.clone(), first, then });
             }
             /* a set in the JS: each name once, where it first came */
             Some("precondition") => {
                 let mut accept: Vec<String> = Vec::new();
-                for x in r.get("requiresBefore").and_then(Value::arr).unwrap_or(&[]).iter().flat_map(|n| expand_names(store, Some(n))) {
+                for x in r.get("requiresBefore").and_then(Json::arr).unwrap_or(&[]).iter().flat_map(|n| expand_names(store, Some(n))) {
                     if !accept.contains(&x) {
                         accept.push(x);
                     }
                 }
-                c.pre.push(Pre { rule: r, target: js_string(r.get("target")), accept });
+                c.pre.push(Pre { rule: r.clone(), target: js_string(r.get("target")), accept });
             }
             _ => {}
         }
@@ -128,39 +155,11 @@ pub fn compile_rules(store: &Value) -> Compiled<'_> {
     c
 }
 
-/// The store as the JS object stands once `checkRules` has run on it: its own
-/// keys, then the `__compiled` it hangs there — a store that brings its own
-/// keeps it. The envelope hashes the store in this state (EMS-001/RETURN.md,
-/// question 3).
-pub fn with_cache(store: &Value) -> Value {
-    let Value::Obj(kv) = store else { return store.clone() };
-    if store.get("__compiled").is_some_and(Value::truthy) {
-        return store.clone();
-    }
-    let c = compile_rules(store);
-    let s = |x: &str| Value::Str(x.to_string());
-    let strs = |v: &[String]| Value::Arr(v.iter().map(|x| s(x)).collect());
-    let compiled = Value::Obj(vec![
-        ("pairs".into(), Value::Obj(c.pairs.iter().map(|(k, r)| (k.clone(), (*r).clone())).collect())),
-        ("order".into(), Value::Arr(c.order.iter().map(|o| Value::Obj(vec![
-            ("rule".into(), o.rule.clone()), ("first".into(), s(&o.first)), ("then".into(), strs(&o.then))])).collect())),
-        ("pre".into(), Value::Arr(c.pre.iter().map(|p| Value::Obj(vec![
-            ("rule".into(), p.rule.clone()), ("target".into(), s(&p.target)),
-            ("accept".into(), Value::Obj(p.accept.iter().map(|a| (a.clone(), Value::Num(1.0))).collect()))])).collect())),
-        ("blends".into(), Value::Arr(c.blends.iter().map(|b| Value::Obj(vec![
-            ("rule".into(), b.rule.clone()), ("when".into(), strs(&b.when)), ("emit".into(), s(&b.emit)),
-            ("means".into(), s(&b.means))])).collect())),
-    ]);
-    let mut kv: Vec<(String, Value)> = kv.iter().filter(|(k, _)| k != "__compiled").cloned().collect();
-    kv.push(("__compiled".into(), compiled));
-    Value::Obj(kv)
-}
-
 /// `checkRules(segments, opts, G)`.
 pub fn check_rules<X: Clone>(tree: &Tree<X>, ctx: &Context, g: &mut dyn FnMut(Diag)) -> Result<(), Thrown> {
     let Some(store) = ctx.rules.as_ref() else { return Ok(()) };
-    let c = compile_rules(store);
-    let exempt: Vec<String> = store.get("scope").and_then(|s| s.get("exemptUnder")).and_then(Value::arr)
+    let c = compiled_of(store);
+    let exempt: Vec<String> = store.get("scope").and_then(|s| s.get("exemptUnder")).and_then(Json::arr)
         .map(|a| a.iter().map(|x| js_string(Some(x))).collect()).unwrap_or_default();
     let n = |id: Id| &tree.nodes[id];
     let canon = |id: Id| n(id).canonical.clone().unwrap_or_default();
@@ -184,7 +183,7 @@ pub fn check_rules<X: Clone>(tree: &Tree<X>, ctx: &Context, g: &mut dyn FnMut(Di
         false
     };
     let mut seen: HashSet<String> = HashSet::new();
-    let mut fire = |r: &Value, id: String, msg: String, en: String, g: &mut dyn FnMut(Diag)| {
+    let mut fire = |r: &Json, id: String, msg: String, en: String, g: &mut dyn FnMut(Diag)| {
         if !seen.insert(id) {
             return;
         }
@@ -197,7 +196,7 @@ pub fn check_rules<X: Clone>(tree: &Tree<X>, ctx: &Context, g: &mut dyn FnMut(Di
         g(Diag::new(&sev, label.as_deref().unwrap_or("regra"), msg + &pt, &format!("Rule:{}", js_string(r.get("id"))))
             .en(label.as_deref().unwrap_or("rule"), en + &us));
     };
-    let report_pair = |x: Id, y: Id, fire: &mut dyn FnMut(&Value, String, String, String)| {
+    let report_pair = |x: Id, y: Id, fire: &mut dyn FnMut(&Json, String, String, String)| {
         let key = pair_key(&canon(x), &canon(y));
         let Some((_, r)) = c.pairs.iter().find(|(k, _)| *k == key) else { return };
         if under_exempt(x) || under_exempt(y) {
@@ -272,7 +271,7 @@ pub fn check_rules<X: Clone>(tree: &Tree<X>, ctx: &Context, g: &mut dyn FnMut(Di
                 }
                 let (la, lb) = (low(&canon(id)), low(&o.first));
                 let why = esc_v(o.rule.get("why"));
-                fire(o.rule, format!("{}@{}", js_string(o.rule.get("id")), uid(id)),
+                fire(&o.rule, format!("{}@{}", js_string(o.rule.get("id")), uid(id)),
                      format!("{la} vem antes de {lb} — {why}."), format!("{la} comes before {lb} — {why}."), g);
                 break;
             }
@@ -289,7 +288,7 @@ pub fn check_rules<X: Clone>(tree: &Tree<X>, ctx: &Context, g: &mut dyn FnMut(Di
                 }
                 let t = low(&p.target);
                 let why = esc_v(p.rule.get("why"));
-                fire(p.rule, format!("{}@{}", js_string(p.rule.get("id")), uid(id)),
+                fire(&p.rule, format!("{}@{}", js_string(p.rule.get("id")), uid(id)),
                      format!("{t} sem enquadramento antes — {why}."), format!("{t} with no framing before it — {why}."), g);
             }
         }

@@ -1,0 +1,11 @@
+[block'ORD-0019-o4-semicolons'
+  [ctx'the spec of EMS-002','.guidelines/.orders/EMS-002/EMS-002.pgml']
+  [tgt'the first of the three residuals of O4, in the Rust only, answered on 2026-10-25: in the burn, a line break between two blocks keeps its own mark, the line ;; where a segment break writes the blank line, so the hgml carries what the tree carries; an ORD of the batch the version moves once for']
+  [ctx'O4, decided on 2026-09-27: the old defects are fixed in the Rust only, the JS keeps its answer until it leaves, and the differential test names each as a known difference; the oracle the Rust is held to is what the JS answers']
+  [ctx'measured at f5580cc: of the 115 declared sources only R-03 holds a line break between two blocks; in the oracle modules three burns of hgml.json reach one, and the burn reaches the tests of the CLI, the engine, the protocol and the round trips as well']
+  [cnst'the known difference is named once, in the testkit, as the undo that maps the line ;; back to the blank line; no other hgml line is ;; since a literal is quoted and a comment opens with a hash, so the undo reaches nothing else']
+  [cnst'every comparison of a burn undoes that one difference and then holds the bytes; the burn test asserts the difference is reached, so the undo never undoes nothing']
+  [cnst'the JS is not changed: the snapshot is the JS answer, and no hash of it moves']
+  [val'the mark','the Rust writes the line ;; between two blocks where a segment break writes the blank line, one line for each break; a direct test holds the lines the decision names, seen failing before it counts']
+  [val'the known difference','the oracle tests of the burn, the round trips, the CLI, the engine and the protocol name the difference, undo it before comparing, and hold everything else byte for byte']
+];

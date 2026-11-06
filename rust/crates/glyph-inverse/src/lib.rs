@@ -10,11 +10,11 @@
 //! reverse tables are plain objects), and a document deeper than V8's stack
 //! (EMS-001/RETURN.md, ORD-0009).
 
-use glyph_util::json::{number, Json};
+use glyph_json::{number, Json};
 use glyph_util::tree::Thrown;
 use glyph_util::{esc, inherited, inherited_text, js_space, js_trim};
 use glyph_version::VERSION;
-use glyph_vocab::{derived, get, SESSION};
+use glyph_vocab::{derived, get, known_word, FORMER_ELEMENT, OPERAND_ATTR, SESSION};
 
 /// Where the port stops as the JS stops when V8's stack gives out: past this
 /// many levels of the document. V8's own limit is not a number — measured on
@@ -317,6 +317,25 @@ fn alpha_first(s: &str) -> bool {
     s.chars().next().is_some_and(|c| c.is_ascii_alphabetic())
 }
 
+/// `linkInProse`: whether prose, written back after a command or its `]`,
+/// would read as a chain link — a run of `-` that opens the prose or follows
+/// whitespace in it and touches a known word, or a `-` and spaces or tabs that
+/// open it before one: the two shapes the lexer takes as a link.
+fn link_in_prose(s: &str) -> bool {
+    let c: Vec<char> = s.chars().collect();
+    let known_at = |at: usize| {
+        c.get(at).is_some_and(|x| x.is_ascii_alphabetic())
+            && known_word(&c[at..].iter().take_while(|&&x| x.is_ascii_alphanumeric() || x == '_' || x == '.').collect::<String>())
+    };
+    let run = (0..c.len()).any(|p| {
+        c[p] == '-' && (p == 0 || js_space(c[p - 1])) && known_at((p..c.len()).find(|&j| c[j] != '-').unwrap_or(c.len()))
+    });
+    run || (c.first() == Some(&'-') && {
+        let k = (1..c.len()).find(|&j| c[j] != ' ' && c[j] != '\t').unwrap_or(c.len());
+        k > 1 && known_at(k)
+    })
+}
+
 fn xml_kids(el: &El, diag: &mut Vec<Diag>, depth: usize) -> Result<String, Thrown> {
     if depth > STACK_DEPTH {
         return Err(overflow());
@@ -359,30 +378,61 @@ pub fn clone_with_chain(attrs: &[(String, String)], v: &str) -> Vec<(String, Str
 fn from_xml_logic(el: &El) -> String {
     let lines: Vec<String> = el.children.iter().filter(|c| c.tag == "rule")
         .filter_map(|c| xml_child(c, "source").map(xml_text)).collect();
-    let nm = el.attr("name").filter(|n| !n.is_empty()).map_or(String::new(), |n| format!(":{}", lit_safe_xml(n)));
+    /* the fence is named by its first literal, and `[/logic]` closes it */
+    let nm = el.attr("name").filter(|n| !n.is_empty()).map_or(String::new(), as_literal);
     format!("[logic{nm}]\n{}\n[/logic]", lines.join("\n"))
+}
+
+/// `slotFills`, once the scan is done: each slot as a named fill, in the
+/// order its first run met it, when it wrote anything.
+fn slot_fills(order: &[String], parts: &[(String, String)]) -> String {
+    order.iter().filter_map(|n| {
+        let mine: Vec<&str> = parts.iter().filter(|(k, _)| k == n).map(|(_, s)| s.as_str()).collect();
+        (!mine.is_empty()).then(|| format!("{}]", apart(format!("[ph-{n}"), &mine.concat())))
+    }).collect()
 }
 
 fn from_xml_template(el: &El, diag: &mut Vec<Diag>, depth: usize) -> Result<String, Thrown> {
     let head = format!("[--{}{}", el.attr("name").unwrap_or(""), if el.truthy("define") { "=" } else { "" });
     if el.truthy("expanded") {
-        /* the bound values are the call; the expansion is regenerated */
-        fn scan(list: &[El], fills: &mut String, depth: usize) -> Result<(), Thrown> {
+        /* the call is what carries a slot — the bound value, and what its fill
+           held past it — and a fill is a run of siblings with one slot: the
+           value, or the hole's own <needs>, then what the fill carried. A slot
+           already rebuilt is a hole the body names twice. The expansion is
+           regenerated. */
+        fn scan(list: &[El], order: &mut Vec<String>, parts: &mut Vec<(String, String)>, diag: &mut Vec<Diag>,
+                depth: usize) -> Result<(), Thrown> {
             if depth > STACK_DEPTH {
                 return Err(overflow());
             }
+            let (mut run, mut skip): (Option<&str>, bool) = (None, false);
             for c in list {
-                if c.tag == "user-input" && c.attr("slot").is_some_and(alpha_first) {
-                    *fills += &format!("[ph-{}{}]", c.attr("slot").unwrap_or(""), as_literal(&xml_text(c)));
+                if c.tag == "#text" {
                     continue;
                 }
-                scan(&c.children, fills, depth + 1)?;
+                let Some(name) = c.attr("slot").filter(|s| alpha_first(s)) else {
+                    run = None;
+                    scan(&c.children, order, parts, diag, depth + 1)?;
+                    continue;
+                };
+                if run != Some(name) {
+                    run = Some(name);
+                    skip = order.iter().any(|n| n == name);
+                    if !skip {
+                        order.push(name.to_string());
+                    }
+                }
+                if skip || c.tag == "needs" {
+                    continue;
+                }
+                let src = if c.tag == "user-input" { as_literal(&xml_text(c)) } else { from_xml_node(c, diag, depth + 1)? };
+                parts.push((name.to_string(), src));
             }
             Ok(())
         }
-        let mut fills = String::new();
-        scan(&el.children, &mut fills, depth)?;
-        return Ok(format!("{head}{fills}]"));
+        let (mut order, mut parts) = (Vec::new(), Vec::new());
+        scan(&el.children, &mut order, &mut parts, diag, depth)?;
+        return Ok(format!("{head}{}]", slot_fills(&order, &parts)));
     }
     Ok(format!("{head}{}]", xml_kids(el, diag, depth)?))
 }
@@ -409,10 +459,20 @@ fn from_xml_node(el: &El, diag: &mut Vec<Diag>, depth: usize) -> Result<String, 
     match tag {
         "#text" | "mood" | "break" => return Ok(String::new()),
         "user-input" => return Ok(as_literal(&xml_text(el))),
-        "off" => return Ok(format!(" {} ", lit_safe_xml(&xml_text(el)))),
+        /* an <off> with nothing in it is an `[off]` region with nothing in it */
+        "off" => {
+            let prose = lit_safe_xml(&xml_text(el));
+            if prose.is_empty() {
+                return Ok("[off][on]".into());
+            }
+            /* prose with a `-` that starts a word before a known word would
+               come back as a chain link: it returns fenced */
+            return Ok(if link_in_prose(&prose) { format!(" [off]{prose}[on] ") } else { format!(" {prose} ") });
+        }
         "raw" => return Ok(format!("[raw]{}[/raw]", xml_text(el))),
         "logic" => return Ok(from_xml_logic(el)),
-        "template" => return from_xml_template(el, diag, depth),
+        /* a <template> with a name is a call or a definition; with none, the command TPL */
+        "template" if el.attr("name").is_some_and(|n| !n.is_empty()) => return from_xml_template(el, diag, depth),
         "unresolved" => {
             let t = lit_safe_xml(el.attr("tag").unwrap_or(""));
             if let Some(op) = chain_op_of(el, diag) {
@@ -424,6 +484,7 @@ fn from_xml_node(el: &El, diag: &mut Vec<Diag>, depth: usize) -> Result<String, 
            again from the vocabulary are not source */
         "needs" => {
             return Ok(match el.attr("slot").filter(|s| alpha_first(s)) {
+                Some(slot) if xml_text(el) == NO_ANSWER => format!("[ph-{slot}]"),
                 Some(slot) => format!("[ph-{slot}`{}`]", lit_safe_xml(&xml_text(el))),
                 None => String::new(),
             });
@@ -435,6 +496,15 @@ fn from_xml_node(el: &El, diag: &mut Vec<Diag>, depth: usize) -> Result<String, 
     let name = match derived().gloss_reverse.iter().find(|(k, _)| k == tag) {
         Some((_, hit)) => Some(hit.canonical.to_lowercase()),
         None if inherited(tag) => return Err(Thrown("Cannot read properties of undefined (reading 'toLowerCase')".into())),
+        /* a retired element name is read, and named */
+        None if get(FORMER_ELEMENT, tag).is_some() => {
+            let now = get(FORMER_ELEMENT, tag).unwrap_or_default();
+            let canonical = derived().gloss_reverse.iter().find(|(k, _)| k == now).map(|(_, hit)| hit.canonical.to_lowercase());
+            diag.push(Diag { sev: "note", code: "XmlFormerElement",
+                msg: format!("<code>&lt;{}&gt;</code> is the former name of <code>&lt;{now}&gt;</code> — lido como <code>[{}</code>.",
+                             esc(tag), canonical.as_deref().unwrap_or("")) });
+            canonical
+        }
         None => get(SESSION, tag).filter(|g| !g.is_empty()).map(|_| tag.to_string()),
     };
     let Some(name) = name else {
@@ -446,8 +516,63 @@ fn from_xml_node(el: &El, diag: &mut Vec<Diag>, depth: usize) -> Result<String, 
         return Ok(format!("{op}{name}"));
     }
     let lead = if el.attr("join") == Some("item") { "," } else { "" };
-    let colon = el.attr("name").filter(|n| !n.is_empty()).map_or(String::new(), |n| format!(":{}", lit_safe_xml(n)));
-    Ok(format!("{lead}[{name}{colon}{}]", xml_kids(el, diag, depth)?))
+    if name == "ph" {
+        return Ok(format!("{lead}{}", from_xml_placeholder(el, diag, depth)?));
+    }
+    /* the number of a part, the condition of an if and the name of a block or
+       a section come back as the literal they were; a `name` on any other
+       element, which an older document or a hand carries, is an operand
+       literal all the same, written where the name stood */
+    let oa = get(OPERAND_ATTR, &name.to_uppercase());
+    let named = if oa == Some("name") { String::new() }
+                else { el.attr("name").filter(|n| !n.is_empty()).map_or(String::new(), as_literal) };
+    let operand = oa.and_then(|a| el.attr(a)).map_or(String::new(), as_literal);
+    /* a literal ends at its quote, so a link written after it is the link it is */
+    Ok(format!("{lead}{}", not_switch(format!("[{name}{named}{operand}{}]", xml_kids(el, diag, depth)?))))
+}
+
+/// What the emitter writes in the `<needs>` of a hole with no question: the
+/// engine asking, never an answer, so the way back writes no question for it
+/// (PACKAGE_TARGET §8).
+const NO_ANSWER: &str = "sem resposta";
+
+/// `fromXmlPlaceholder`: the `<needs>` inside a `<placeholder>` is the hole —
+/// an alpha `slot` is the name, its text the question, put back as a literal
+/// where it stood; with no name, a link written first stands after a space.
+fn from_xml_placeholder(el: &El, diag: &mut Vec<Diag>, depth: usize) -> Result<String, Thrown> {
+    let at = el.children.iter().position(|c| c.tag == "needs");
+    let slot = at.and_then(|i| el.children[i].attr("slot")).filter(|s| alpha_first(s));
+    let named = el.attr("name").filter(|n| !n.is_empty()).map_or(String::new(), as_literal);
+    let mut body = el.clone();
+    if let Some(i) = at {
+        let text = xml_text(&el.children[i]);
+        if text == NO_ANSWER {
+            body.children.remove(i);
+        } else {
+            body.children[i] = El { tag: "user-input".into(), attrs: Vec::new(), v: None,
+                children: vec![El { tag: "#text".into(), attrs: Vec::new(), children: Vec::new(), v: Some(text) }] };
+        }
+    }
+    let rest = xml_kids(&body, diag, depth)?;
+    let gap = if slot.is_none() && named.is_empty() && rest.starts_with(['-', ',']) { " " } else { "" };
+    Ok(format!("[ph{}{named}{gap}{rest}]", slot.map_or(String::new(), |s| format!("-{s}"))))
+}
+
+/// `apart`: two pieces written side by side read as one when a name ends the
+/// first and a name starts the second, or the first ends a mood header —
+/// `[ctx` and the prose `foo` came back as `[ctxfoo]`. A space between them is
+/// what the source had, and whitespace between tokens is no node.
+fn apart(a: String, b: &str) -> String {
+    let name = |c: char| c.is_ascii_alphanumeric() || c == '_' || c == '.';
+    if (a.ends_with(name) || a.ends_with('/')) && b.starts_with(name) { format!("{a} {b}") } else { a + b }
+}
+
+/// `notSwitch`: the command OFF with nothing inside is written `[modeoff]`,
+/// the element's own name read back as input, never `[off]`, the switch that
+/// opens a verbatim region.
+fn not_switch(cmd: String) -> String {
+    let switch = cmd.strip_prefix('[').and_then(|c| c.strip_suffix(']')).is_some_and(|c| js_trim(c).eq_ignore_ascii_case("off"));
+    if switch { "[modeoff]".into() } else { cmd }
 }
 
 /// `packageUnpass`: `<chain>` and `<holds>` given back as the operators
@@ -516,8 +641,11 @@ fn from_xml_block(el: &El, diag: &mut Vec<Diag>, depth: usize) -> Result<String,
             pre += &format!("/{}/", keys.join("/"));
         }
     }
+    /* `r-` stands apart from the mood header: a letter right after its
+       closing `/` is read as one more mood code */
     if let Some(exp) = xml_child(el, "user-expectative") {
-        return Ok(format!("{pre}r-{}", xml_kids(exp, diag, depth + 1)?));
+        let gap = if pre.is_empty() { "" } else { " " };
+        return Ok(format!("{pre}{gap}r-{}", xml_kids(exp, diag, depth + 1)?));
     }
     let mut body = String::new();
     for c in el.children.iter().filter(|c| c.tag != "mood" && c.tag != "#text") {
@@ -619,8 +747,26 @@ pub fn from_ast(env: &Json) -> Back {
         let t = text_of(v);
         if form.and_then(Json::str) == Some("tick") && !t.contains('`') { format!("`{t}`") } else { as_literal(&t) }
     };
+    /* a link written after prose keeps the space that makes its `-` start a
+       word: `a-crit` is one hyphenated word, `a -crit` is a link */
+    fn after_prose(prev: Option<&Json>, n: &Json, diag: &mut Vec<Diag>, lit: &dyn Fn(Option<&Json>, Option<&Json>) -> String) -> String {
+        let s = node(n, diag, lit);
+        if prev.and_then(|p| p.get("type")).and_then(Json::str) == Some("Text")
+            && n.get("type").and_then(Json::str) == Some("Command") && truthy(n.get("chainElement"))
+            && !truthy(n.get("slotName")) && n.get("origin").and_then(Json::str) != Some("item")
+        {
+            format!(" {s}")
+        } else {
+            s
+        }
+    }
     fn kids(list: Option<&Json>, diag: &mut Vec<Diag>, lit: &dyn Fn(Option<&Json>, Option<&Json>) -> String) -> String {
-        list.and_then(Json::arr).unwrap_or(&[]).iter().map(|n| node(n, diag, lit)).collect()
+        let (mut out, mut prev) = (String::new(), None);
+        for n in list.and_then(Json::arr).unwrap_or(&[]) {
+            out = apart(out, &after_prose(prev, n, diag, lit));
+            prev = Some(n);
+        }
+        out
     }
     fn node(n: &Json, diag: &mut Vec<Diag>, lit: &dyn Fn(Option<&Json>, Option<&Json>) -> String) -> String {
         /* an array is an object to the JS, and reaches the vocabulary check */
@@ -633,37 +779,84 @@ pub fn from_ast(env: &Json) -> Back {
                 if n.get("form").and_then(Json::str) == Some("raw") { text_of(n.get("value")) } else { lit(n.get("value"), n.get("form")) }
             }
             Some("Literal") => lit(n.get("value"), n.get("form")),
-            Some("Text") => text_of(n.get("value")),
+            /* prose that would read back as a chain link returns fenced, as
+               fromXML returns it: the same <off>, and no invented link */
+            Some("Text") => {
+                let tv = text_of(n.get("value"));
+                if link_in_prose(&tv) { format!("[off]{tv}[on]") } else { tv }
+            }
             Some("ModeOff") => format!("[off]{}[on]", kids(n.get("body"), diag, lit)),
             Some("Template") => {
                 let name = text_of(n.get("name"));
                 if truthy(n.get("expanded")) {
-                    fn scan(list: Option<&Json>, fills: &mut String, lit: &dyn Fn(Option<&Json>, Option<&Json>) -> String) {
-                        for c in list.and_then(Json::arr).unwrap_or(&[]) {
-                            let ty = c.get("type").and_then(Json::str);
-                            if ty == Some("Command") && truthy(c.get("slotName")) {
-                                continue;
-                            }
-                            if matches!(ty, Some("Literal" | "Raw")) && truthy(c.get("slot"))
-                                && alpha_first(&text_of(c.get("slot"))) {
-                                *fills += &format!("[ph-{}{}]", text_of(c.get("slot")), lit(c.get("value"), c.get("form")));
-                                continue;
-                            }
-                            if truthy(c.get("body")) {
-                                scan(c.get("body"), fills, lit);
-                            }
+                    /* a bound value is the call, and so is what its fill
+                       carried; an unbound hole is the template's own prompt,
+                       and writing that back turns a question into an answer —
+                       the same rule <needs> follows. The slot of a node: a
+                       hole's name, when it holds nothing but its name and its
+                       question; a <placeholder> is looked inside, where what
+                       the fill carried follows its question */
+                    fn slot_of(c: &Json) -> Option<(String, bool)> {
+                        let ty = c.get("type").and_then(Json::str);
+                        if ty == Some("Command") && truthy(c.get("slotName")) {
+                            return None;
+                        }
+                        if ty == Some("Command") && c.get("canonical").and_then(Json::str) == Some("PH") && !truthy(c.get("slot")) {
+                            let hk = c.get("body").and_then(Json::arr).unwrap_or(&[]);
+                            let b = hk.iter().position(|k| truthy(k.get("slotName")));
+                            let q = hk.iter().position(|k| matches!(k.get("type").and_then(Json::str), Some("Literal" | "Raw")));
+                            let bare = (0..hk.len()).all(|i| Some(i) == b || Some(i) == q);
+                            let b = b.filter(|_| bare)?;
+                            let (raw, canonical) = (hk[b].get("raw"), hk[b].get("canonical"));
+                            let name = if truthy(raw) { text_of(raw) } else if truthy(canonical) { text_of(canonical) } else { String::new() };
+                            return Some((name, true));
+                        }
+                        match c.get("slot") {
+                            Some(Json::Str(s)) if !s.is_empty() => Some((s.clone(), false)),
+                            Some(Json::Obj(_)) => match c.get("slot").and_then(|s| s.get("hole")) {
+                                Some(Json::Str(h)) if !h.is_empty() => Some((h.clone(), true)),
+                                _ => None,
+                            },
+                            _ => None,
                         }
                     }
-                    let mut fills = String::new();
-                    scan(n.get("body"), &mut fills, lit);
-                    return format!("[--{name}{fills}]");
+                    fn scan(list: Option<&Json>, order: &mut Vec<String>, parts: &mut Vec<(String, String)>, diag: &mut Vec<Diag>,
+                            lit: &dyn Fn(Option<&Json>, Option<&Json>) -> String) {
+                        let (mut run, mut skip, mut prev): (Option<String>, bool, Option<&Json>) = (None, false, None);
+                        for c in list.and_then(Json::arr).unwrap_or(&[]) {
+                            let Some((name, hole)) = slot_of(c).filter(|(s, _)| alpha_first(s)) else {
+                                run = None;
+                                if matches!(c, Json::Obj(_)) {
+                                    scan(c.get("body"), order, parts, diag, lit);
+                                }
+                                continue;
+                            };
+                            if run.as_deref() != Some(name.as_str()) {
+                                run = Some(name.clone());
+                                prev = None;
+                                skip = order.contains(&name);
+                                if !skip {
+                                    order.push(name.clone());
+                                }
+                            }
+                            if skip || hole {
+                                continue;
+                            }
+                            let src = after_prose(prev, c, diag, lit);
+                            parts.push((name, src));
+                            prev = Some(c);
+                        }
+                    }
+                    let (mut order, mut parts) = (Vec::new(), Vec::new());
+                    scan(n.get("body"), &mut order, &mut parts, diag, lit);
+                    return format!("[--{name}{}]", slot_fills(&order, &parts));
                 }
                 format!("[--{name}{}{}]", if truthy(n.get("isDefinition")) { "=" } else { "" }, kids(n.get("body"), diag, lit))
             }
             Some("Verbatim") => format!("[raw]{}[/raw]", text_of(n.get("value"))),
             Some("Logic") => {
                 let lines: Vec<String> = n.get("rules").and_then(Json::arr).unwrap_or(&[]).iter().map(|r| text_of(r.get("source"))).collect();
-                let name = if truthy(n.get("name")) { format!(":{}", text_of(n.get("name"))) } else { String::new() };
+                let name = if truthy(n.get("name")) { as_literal(&text_of(n.get("name"))) } else { String::new() };
                 format!("[logic{name}]\n{}\n[/logic]", lines.join("\n"))
             }
             Some("Truncated") => {
@@ -682,8 +875,15 @@ pub fn from_ast(env: &Json) -> Back {
                 if truthy(n.get("chainElement")) {
                     return format!("{}{name}", if item { "," } else { "-" });
                 }
-                let colon = if truthy(n.get("name")) { format!(":{}", lit_safe_xml(&text_of(n.get("name")))) } else { String::new() };
-                format!("{}[{name}{colon}{}]", if item { "," } else { "" }, kids(n.get("body"), diag, lit))
+                /* a `name` an envelope carries is an operand literal, where it stood */
+                let named = if truthy(n.get("name")) { as_literal(&text_of(n.get("name"))) } else { String::new() };
+                /* the `-` straight after `[ph` binds the name: a hole whose
+                   first child is a link writes it after a space */
+                let first = n.get("body").and_then(Json::arr).and_then(|b| b.first());
+                let gap = if text_of(n.get("canonical")) == "PH" && !truthy(n.get("name"))
+                    && first.is_some_and(|f| f.get("type").and_then(Json::str) == Some("Command")
+                        && truthy(f.get("chainElement")) && !truthy(f.get("slotName"))) { " " } else { "" };
+                format!("{}{}", if item { "," } else { "" }, not_switch(format!("{}]", apart(format!("[{name}{named}{gap}"), &kids(n.get("body"), diag, lit)))))
             }
             _ => {
                 diag.push(Diag { sev: "note", code: "AstUnknownNode",
@@ -702,10 +902,15 @@ pub fn from_ast(env: &Json) -> Back {
         if truthy(seg.get("continues")) {
             pre += "[=";
         }
+        /* a letter right after the mood header is read as one more mood
+           code, so `r-` stands apart from the closing `/` */
         if truthy(seg.get("isReturn")) {
+            if pre.ends_with('/') {
+                pre.push(' ');
+            }
             pre += "r-";
         }
-        parts.push(format!("{pre}{}{}", kids(seg.get("body"), &mut diag, &lit), if truthy(seg.get("breaks")) { ";;" } else { "" }));
+        parts.push(format!("{}{}", apart(pre, &kids(seg.get("body"), &mut diag, &lit)), if truthy(seg.get("breaks")) { ";;" } else { "" }));
     }
     /* `;;` already closed its segment, so it is not followed by `;` */
     let mut src = String::new();

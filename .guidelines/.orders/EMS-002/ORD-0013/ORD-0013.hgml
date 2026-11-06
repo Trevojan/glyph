@@ -1,0 +1,97 @@
+[block
+  'ORD-0013-once'
+  [ctx
+    'the spec of EMS-002'
+    '.guidelines/.orders/EMS-002/EMS-002.pgml'
+  [/ctx]
+  [tgt
+    'the Rust stops redoing on every call what the JS does once, question 12 of the EMS-001 return, answered b on 2026-09-27: only the Rust changes, the rules compiled once a context and ck in integer arithmetic'
+  [/tgt]
+  [ctx
+    'measured at dc875f9 in a release build: a toAST of the empty source takes 7.9 ms in the Rust and 0.30 ms in the JS, 7.8 of them in ck over the three stores, 240 ns a UTF-16 unit, where the reduction to 32 bits runs trunc and a remainder on doubles up to 2 to the 62; an empty parse takes 20 µs, 12 of them copying the rules store into the Parse and 5 compiling it; a template body and a composite in the burn copy the three stores into a context of their own, 89 µs each, and the germinate template with two quoted parameters takes 288 µs against the 64 of the JS'
+  [/ctx]
+  [cnst
+    'the product of ck stays a double, because the JS takes it in a double and the digest is what that product gives; every step around it moves to integers. measured on expansions.json: the product in a double 91 µs, integers alone 250 µs, as it is 4 048 µs, the three equal on 20 234 inputs'
+  [/cnst]
+  [cnst
+    'a store is shared, never copied, as the JS passes the same object: a context holds each store behind an Arc, and the rules compile once a store, in a weak table keyed by it, the port of compiledOf'
+  [/cnst]
+  [cnst
+    'no emitted byte moves: the oracle of the cases, cli.json and registry.json answer as before, and the JS is not tuned'
+  [/cnst]
+  [cmp
+    'the digest'
+    'ck in integer arithmetic answers the bytes the JS writes, and a mutant on the product dies before it counts'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+  [cmp
+    'the stores'
+    'a context made for a body or a formula shares the stores of its caller, and the same store compiles once; each seen failing before it counts'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+  [cmp
+    'the cost'
+    'the toAST, the empty parse, the template body and the burn, measured before and after, in the closing record'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+[/block]

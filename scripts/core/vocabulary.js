@@ -84,7 +84,7 @@ export var CATS = [
   { id:"intensidade", label:"Intensidade", note:"grau de força e de ênfase", items:[
     ["HGH","alta"],["LOW","baixa"],["BOLD","ênfase forte"],["LIGHT","ênfase suave"]
   ]},
-  { id:"molde", label:"Molde", note:"peças de estrutura e template", items:[
+  { id:"frame", label:"Frame", note:"peças de estrutura e template", items:[
     ["TPL","template"],["PH","casa a preencher"],["VAR","variável"],["PARAM","parâmetro"],
     ["DEF","define"],["SECTION","seção"],["BLOCK","bloco"],["LOGIC","bloco de conta"],["SKL","skill"]
   ]},
@@ -103,7 +103,7 @@ export var INSTR = {
   CLAR:"Clarification", CONF:"Confirmation", RESTR:"Restriction", ONLYIF:"Only If",
   UNLS:"Unless", INSTOF:"Instead Of", FOREX:"For Example", SEEAL:"See Also", DONT:"Do Not",
   PT:"Part", RSN:"Reason", TGT:"Target", QST:"Question", TRYFR:"Try For Result", PROB:"Problem",
-  SKEP:"Skeptic", IMAG:"Imagine", RMBR:"Remember", FRGT:"Forget",
+  SKEP:"Sceptic", IMAG:"Imagine", RMBR:"Remember", FRGT:"Forget",
   ITR:"Iterate", CMP:"Compare", CTRD:"Contradict", SIMP:"Simplify", ELAB:"Elaborate",
   HYP:"Hypothesis", EVAL:"Evaluate", BRST:"Brainstorm", RTNL:"Rationale", ALT:"Alternative",
   LIM:"Limitation", VRFY:"Verify", CNSD:"Consider", GEN:"Generalise", SPEC:"Specify",
@@ -220,7 +220,7 @@ export var PUNCT = [
   ["[--nome","chama template"],
   ["[--nome=","define template"],
   ["[=","este bloco continua do anterior"],
-  ["[logic-nome]","abre bloco de conta"]
+  ["[logic'nome']","abre bloco de conta"]
 ];
 
 /* valency: what each command needs to receive to be determinate.
@@ -345,6 +345,47 @@ Object.keys(GLOSS_REVERSE).forEach(function (el) {
 Object.keys(ELEMENT_INPUT).forEach(function (k) {
   if (ELEMENT_INPUT_COLLISIONS.some(function (c) { return c.spelling === k; })) delete ELEMENT_INPUT[k];
 });
+
+/* FORMER_ELEMENT — an element name a rename retired, and the name it became.
+   A retired name is demoted to a recogniser, never deleted into silence: it
+   is still read, as `[skeptic` and as `<skeptic>`, and the parse names what it
+   is called now (O10, decided 2026-09-27). Its input spelling joins
+   ELEMENT_INPUT under the same rule: a name a table claims is left alone. */
+export var FORMER_ELEMENT = {
+  skeptic:"sceptic"
+};
+Object.keys(FORMER_ELEMENT).forEach(function (old) {
+  var key = old.toUpperCase().replace(/[^A-Z0-9]+/g, ""), hit = GLOSS_REVERSE[FORMER_ELEMENT[old]];
+  if (!hit || ELEMENT_INPUT[key] || MODE[key] || STRUCT[key] || META[key] || ALIAS[key] || INSTR[key]) return;
+  ELEMENT_INPUT[key] = { canonical:hit.canonical, tier:hit.tier };
+});
+
+/* OPERAND_ATTR — the commands whose operand travels as an attribute of the
+   element instead of a <user-input>: the number of a part and the condition
+   of an if (decided 2026-09-27), and the name of a section and of a block,
+   their first literal (decided 2026-10-26). No other command carries a name. */
+export var OPERAND_ATTR = {
+  PT:"n", IF:"cond", SECTION:"name", BLOCK:"name"
+};
+
+/* the element a retired spelling names now, or null */
+export function formerElement(name) {
+  var key = String(name).toUpperCase().replace(/[^A-Z0-9]+/g, "");
+  var old = Object.keys(FORMER_ELEMENT).filter(function (o) { return o.toUpperCase().replace(/[^A-Z0-9]+/g, "") === key; })[0];
+  return old ? FORMER_ELEMENT[old] : null;
+}
+
+/* A word the static tables know: the six probes classify() makes before the
+   element names, MODE STRUCT META ALIAS INSTR and SESSION, own properties
+   only — 144 names, and `constructor` is not one of them. The lexer reads a
+   `-` that starts a word as a chain link only before such a word, and the
+   inverse fences prose that holds one, so the way back never reads as a link
+   what was prose. */
+export function knownWord(w) {
+  var s = String(w == null ? "" : w), U = s.toUpperCase(), L = s.toLowerCase();
+  var own = function (t, k) { return Object.prototype.hasOwnProperty.call(t, k); };
+  return own(MODE, U) || own(STRUCT, U) || own(META, U) || own(ALIAS, U) || own(INSTR, U) || own(SESSION, L);
+}
 
 export var EMO_REVERSE = {};
 Object.keys(EMO).forEach(function (k) { EMO_REVERSE[String(EMO[k]).toLowerCase()] = k; });

@@ -5,6 +5,7 @@
 [workspace]
 resolver = "3"
 members = [
+    "crates/glyph-json",
     "crates/glyph-util",
     "crates/glyph-vocab",
     "crates/glyph-version",
@@ -25,6 +26,7 @@ members = [
     "crates/glyph-protocol",
     "crates/glyph-cli",
     "crates/glyph-lsp",
+    "crates/glyph-vpath",
 ]
 
 [workspace.package]

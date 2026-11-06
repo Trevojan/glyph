@@ -8,8 +8,8 @@
 //!
 //! Shared by `#[path]` and not by a crate: it is test scaffolding, not the
 //! engine, so `crate-graph.js` has no arrow to hold it to. It reads with
-//! `glyph_util::json`, so every crate that includes it has `glyph-util` among
-//! its dev-dependencies.
+//! `glyph-json` and rebuilds trees with `glyph_util::tree`, so every crate that
+//! includes it has both among its dev-dependencies.
 
 #![allow(dead_code)]
 
@@ -21,7 +21,7 @@ use std::sync::{Mutex, OnceLock};
 /// The command that writes the oracle, named by every failure to find it.
 pub const WRITE_IT: &str = "node scripts/test-corpus.js --export-oracle";
 
-pub use glyph_util::json::{parse, Json};
+pub use glyph_json::{parse, Json};
 
 /// What a test asks of a value it trusts: the answer, or a failure naming
 /// the key.
@@ -187,9 +187,10 @@ fn mood_json(e: &Emotion) -> Json {
     Json::Obj(kv)
 }
 
-const FIELDS: [&str; 29] = ["id", "raw", "tier", "canonical", "gloss", "alias", "colon", "autoClosed", "editorial",
+const FIELDS: [&str; 29] = ["id", "raw", "tier", "canonical", "gloss", "alias", "autoClosed", "editorial",
     "origin", "chainElement", "slotName", "depth", "literal", "v", "form", "role", "text", "rawFence", "template",
-    "isDef", "mode", "isDefinition", "expanded", "boundSlot", "species", "compositionDepth", "isBinder", "suggestion"];
+    "isDef", "mode", "isDefinition", "expanded", "boundSlot", "fromSource", "species", "compositionDepth", "isBinder",
+    "suggestion"];
 
 fn index(v: &Json) -> usize {
     v.num().filter(|n| *n >= 0.0).unwrap_or_else(|| panic!("not an index: {v:?}")) as usize
@@ -213,7 +214,6 @@ pub fn tree_of(dump: &Json) -> Tree<()> {
                 "canonical" => nd.canonical = Some(text(v)),
                 "gloss" => nd.gloss = Some(gloss_of(v)),
                 "alias" => nd.alias = Some(flag(v)),
-                "colon" => nd.colon = Some(maybe(v)),
                 "autoClosed" => nd.auto_closed = Some(flag(v)),
                 "editorial" => nd.editorial = Some(flag(v)),
                 "origin" => nd.origin = Some(maybe(v)),
@@ -232,6 +232,7 @@ pub fn tree_of(dump: &Json) -> Tree<()> {
                 "isDefinition" => nd.is_definition = Some(flag(v)),
                 "expanded" => nd.expanded = Some(flag(v)),
                 "boundSlot" => nd.bound_slot = Some(text(v)),
+                "fromSource" => nd.from_source = Some(flag(v)),
                 "species" => nd.species = Some(text(v)),
                 "compositionDepth" => nd.composition_depth = Some(v.num()),
                 "isBinder" => nd.is_binder = Some(flag(v)),
@@ -295,7 +296,6 @@ pub fn dump_of<X: Clone>(tree: &Tree<X>, full: bool) -> Json {
                 "canonical" => nd.canonical.as_deref().map(s),
                 "gloss" => nd.gloss.as_ref().map(gloss_json),
                 "alias" => nd.alias.map(Json::Bool),
-                "colon" => nd.colon.as_ref().map(|c| c.as_deref().map_or(Json::Null, s)),
                 "autoClosed" => nd.auto_closed.map(Json::Bool),
                 "editorial" => nd.editorial.map(Json::Bool),
                 "origin" => nd.origin.as_ref().map(|o| o.as_deref().map_or(Json::Null, s)),
@@ -314,6 +314,7 @@ pub fn dump_of<X: Clone>(tree: &Tree<X>, full: bool) -> Json {
                 "isDefinition" => nd.is_definition.map(Json::Bool),
                 "expanded" => nd.expanded.map(Json::Bool),
                 "boundSlot" => nd.bound_slot.as_deref().map(s),
+                "fromSource" => nd.from_source.map(Json::Bool),
                 "species" => nd.species.as_deref().map(s),
                 "compositionDepth" => nd.composition_depth.map(|d| d.map_or(Json::Null, Json::Num)),
                 "isBinder" => nd.is_binder.map(Json::Bool),
@@ -429,4 +430,126 @@ pub fn snapshot_digest(id: &str, projection: &str) -> String {
     let snap = read(&repo().join(".guidelines").join("corpus-snapshot.json"));
     snap.get("cases").and_then(|c| c.get(id)).and_then(|c| c.get(projection)).and_then(Json::str)
         .unwrap_or_else(|| panic!("the snapshot has no {projection} digest for {id}")).to_string()
+}
+
+/// The differences the Rust keeps from the JS by decision: the JS keeps its
+/// answer until it leaves, the Rust answers right, and each difference is
+/// named here and undone before the bytes are compared, so everything else
+/// is still held byte for byte (O4, decided 2026-10-25).
+pub mod known {
+    use super::{Json, Must};
+    use std::fs;
+    use std::sync::OnceLock;
+
+    /// O4, residual 1: the burn writes `;;` between two blocks where the JS
+    /// writes the blank line. No other `.hgml` line is `;;` — a literal is
+    /// quoted and a comment opens with `#` — so the undo reaches nothing else.
+    pub fn semicolons(rust: &str) -> String {
+        rust.split('\n').map(|l| if l == ";;" { "" } else { l }).collect::<Vec<_>>().join("\n")
+    }
+
+    /// O4, residual 2: inside a literal only the quote that opened it closes
+    /// it, a line break as well, so the apostrophe reads as the backtick does.
+    /// Each source of the oracle it reaches, with the tokens the decision
+    /// gives it: the JS's for the same source written with backticks, the form
+    /// and the closing named for the apostrophe.
+    pub const QUOTES: &[(&str, &str)] = &[
+        ("'a\nb'", r#"[{"k":"literal","v":"a\nb","s":0,"e":5,"form":"quote","closedBy":"quote"}]"#),
+    ];
+
+    /// The tokens residual 2 gives a named source.
+    pub fn quotes(src: &str) -> Option<Json> {
+        QUOTES.iter().find(|(s, _)| *s == src).map(|(_, t)| glyph_json::parse(t).expect("a named source's tokens"))
+    }
+
+    /// O4, residual 3: a bare word where a template parameter goes is refused
+    /// by name, with the arguments as the author wrote them, quoted. Each probe
+    /// of the oracle it reaches, with the diagnostics the decision gives it in
+    /// both languages: the JS's, with a refusal naming each bare word in place
+    /// of the silence or of `[?`.
+    pub const BARE: &[(&str, &str)] = &[
+        ("[--germinate a,b]",
+         r#"{"pt":[{"sev":"fix","lab":"parâmetro não é literal","msg":"o 1º parâmetro de <code>[--germinate</code> recebeu <code>a</code>. Parâmetro de template é sempre literal: <code>[--germinate`a`,`b`]</code>.","code":"TemplateParamNotLiteral","at":null,"plain":"o 1º parâmetro de [--germinate recebeu a. Parâmetro de template é sempre literal: [--germinate`a`,`b`]."},{"sev":"fix","lab":"parâmetro não é literal","msg":"o 2º parâmetro de <code>[--germinate</code> recebeu <code>b</code>. Parâmetro de template é sempre literal: <code>[--germinate`a`,`b`]</code>.","code":"TemplateParamNotLiteral","at":null,"plain":"o 2º parâmetro de [--germinate recebeu b. Parâmetro de template é sempre literal: [--germinate`a`,`b`]."},{"sev":"ask","lab":"casa vazia","msg":"<code>alvo</code> over seeds (every aspect of a situation, being it good, bad or neutral)","code":"PlaceholderPending","at":null,"plain":"alvo over seeds (every aspect of a situation, being it good, bad or neutral)"},{"sev":"ask","lab":"casa vazia","msg":"<code>criterio</code> the external criterion to validate against","code":"PlaceholderPending","at":null,"plain":"criterio the external criterion to validate against"}],"en":[{"sev":"fix","lab":"parameter is not a literal","msg":"argument 1 of <code>[--germinate</code> got <code>a</code>. A template parameter is always a literal: <code>[--germinate`a`,`b`]</code>.","code":"TemplateParamNotLiteral","at":null,"plain":"argument 1 of [--germinate got a. A template parameter is always a literal: [--germinate`a`,`b`]."},{"sev":"fix","lab":"parameter is not a literal","msg":"argument 2 of <code>[--germinate</code> got <code>b</code>. A template parameter is always a literal: <code>[--germinate`a`,`b`]</code>.","code":"TemplateParamNotLiteral","at":null,"plain":"argument 2 of [--germinate got b. A template parameter is always a literal: [--germinate`a`,`b`]."},{"sev":"ask","lab":"empty field","msg":"<code>alvo</code> over seeds (every aspect of a situation, being it good, bad or neutral)","code":"PlaceholderPending","at":null,"plain":"alvo over seeds (every aspect of a situation, being it good, bad or neutral)"},{"sev":"ask","lab":"empty field","msg":"<code>criterio</code> the external criterion to validate against","code":"PlaceholderPending","at":null,"plain":"criterio the external criterion to validate against"}]}"#),
+        ("[--reinforce rule,`why`]",
+         r#"{"pt":[{"sev":"fix","lab":"parâmetro não é literal","msg":"o 1º parâmetro de <code>[--reinforce</code> recebeu <code>rule</code>. Parâmetro de template é sempre literal: <code>[--reinforce`rule`,`why`]</code>.","code":"TemplateParamNotLiteral","at":null,"plain":"o 1º parâmetro de [--reinforce recebeu rule. Parâmetro de template é sempre literal: [--reinforce`rule`,`why`]."},{"sev":"ask","lab":"casa vazia","msg":"<code>why</code> why it must hold, so it is not dropped later","code":"PlaceholderPending","at":null,"plain":"why why it must hold, so it is not dropped later"}],"en":[{"sev":"fix","lab":"parameter is not a literal","msg":"argument 1 of <code>[--reinforce</code> got <code>rule</code>. A template parameter is always a literal: <code>[--reinforce`rule`,`why`]</code>.","code":"TemplateParamNotLiteral","at":null,"plain":"argument 1 of [--reinforce got rule. A template parameter is always a literal: [--reinforce`rule`,`why`]."},{"sev":"ask","lab":"empty field","msg":"<code>why</code> why it must hold, so it is not dropped later","code":"PlaceholderPending","at":null,"plain":"why why it must hold, so it is not dropped later"}]}"#),
+    ];
+
+    /// The diagnostics residual 3 gives a named probe, in `lang`.
+    pub fn bare(src: &str, lang: &str) -> Option<Json> {
+        BARE.iter().find(|(s, _)| *s == src)
+            .map(|(_, d)| glyph_json::parse(d).expect("a named probe's diagnostics").get(lang).cloned().expect("both languages"))
+    }
+
+    /// The envelope residual 3 gives a named probe: the JS's, its diagnostics
+    /// the decided ones in the envelope's shape, `{code, severity, label,
+    /// message}`.
+    pub fn bare_envelope(src: &str, lang: &str, js: &Json) -> Option<Json> {
+        let decided = bare(src, lang)?;
+        let field = |g: &Json, k: &str| g.get(k).cloned().unwrap_or(Json::Null);
+        let diags = Json::Arr(decided.arr()?.iter().map(|g| Json::Obj(vec![
+            ("code".into(), field(g, "code")), ("severity".into(), field(g, "sev")),
+            ("label".into(), field(g, "lab")), ("message".into(), field(g, "plain")),
+        ])).collect());
+        let Json::Obj(kv) = js.clone() else { return None };
+        Some(Json::Obj(kv.into_iter().map(|(k, v)| if k == "diagnostics" { (k, diags.clone()) } else { (k, v) }).collect()))
+    }
+
+    /// A mood whose innermost open command is a template (decided
+    /// 2026-10-25, the Rust only): the JS throws, and the Rust answers the
+    /// document. The bytes each named source takes, by oracle module (`parse`,
+    /// `xml`, `ast`, `hgml`) and answer, from `testkit/known/template-moods.json`,
+    /// read with the oracle's own engine and repository stores in place of the
+    /// ones written there, so neither the version nor a store moving stales them.
+    pub fn template_mood(src: &str, module: &str, key: &str) -> Option<Json> {
+        template_moods().get("sources")?.get(src)?.get(module)?.get(key).cloned()
+    }
+
+    /// What the JS throws on every named source.
+    pub fn template_mood_js() -> &'static str {
+        template_moods().s("js")
+    }
+
+    /// How many sources are named.
+    pub fn template_mood_sources() -> usize {
+        template_moods().get("sources").and_then(Json::obj).map_or(0, |s| s.len())
+    }
+
+    fn template_moods() -> &'static Json {
+        static DATA: OnceLock<Json> = OnceLock::new();
+        DATA.get_or_init(|| {
+            let file = super::repo().join("rust").join("testkit").join("known").join("template-moods.json");
+            let text = fs::read_to_string(&file).unwrap_or_else(|e| panic!("{}: {e}", file.display()));
+            let written = glyph_json::parse(&text).unwrap_or_else(|e| panic!("{}: {e}", file.display()));
+            let engine = super::module("ast").s("engine");
+            let data = glyph_json::parse(&text.replace(written.s("engine"), engine)).expect("the engine replaced");
+            /* the repository's stores, as any plain run of the envelope carries them */
+            let plain = super::module("ast").a("runs").iter()
+                .find(|r| r.get("full").and_then(|f| f.get("stores")).is_some()
+                    && !["probeTemplates", "templates", "withRules", "expansions"].iter().any(|k| r.get(k).is_some()))
+                .and_then(|r| r.get("full").and_then(|f| f.get("stores")).cloned())
+                .expect("ast.json holds a run with the repository's stores");
+            fn stores(v: Json, with: &Json) -> Json {
+                match v {
+                    Json::Obj(kv) => Json::Obj(kv.into_iter()
+                        .map(|(k, v)| if k == "stores" { (k, with.clone()) } else { (k, stores(v, with)) }).collect()),
+                    Json::Arr(a) => Json::Arr(a.into_iter().map(|v| stores(v, with)).collect()),
+                    v => v,
+                }
+            }
+            stores(data, &plain)
+        })
+    }
+
+    /// The same undo over every string of a JSON answer that carries a burn.
+    pub fn semicolons_json(rust: &str) -> String {
+        fn walk(v: Json) -> Json {
+            match v {
+                Json::Str(s) => Json::Str(semicolons(&s)),
+                Json::Arr(a) => Json::Arr(a.into_iter().map(walk).collect()),
+                Json::Obj(kv) => Json::Obj(kv.into_iter().map(|(k, v)| (k, walk(v))).collect()),
+                v => v,
+            }
+        }
+        glyph_json::parse(rust).map_or_else(|_| rust.to_string(), |v| glyph_json::stringify(&walk(v)))
+    }
 }

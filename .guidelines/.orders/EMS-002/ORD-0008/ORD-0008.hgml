@@ -1,0 +1,94 @@
+[block
+  'ORD-0008-registered'
+  [ctx
+    'the spec of EMS-002'
+    '.guidelines/.orders/EMS-002/EMS-002.pgml'
+  [/ctx]
+  [tgt
+    'a template body reads what the caller registered, question 6 of the EMS-001 return, answered c'
+  [/tgt]
+  [ctx
+    'the JS expander parses a body with the call templates alone, so its rules and its composition table fall to what useRules and useExpansions registered: the CLI registers the repository stores, the page registers its own, the protocol process registers nothing, and the Rust hands a body none; a body that breaks a rule raises it once with nothing registered and twice with the rules registered'
+  [/ctx]
+  [cnst
+    'the JS first: the protocol process registers the stores it answers with when it runs as the engine, and never when it is imported, so the suite keeps registering nothing until its last bucket'
+  [/cnst]
+  [cnst
+    'the formula parse of the burn also falls to what is registered in the JS, and its diagnostics are dropped and no formula calls a template, so nothing it emits can differ; it is left as it is, and said so'
+  [/cnst]
+  [cmp
+    'the registry'
+    'the Rust keeps what the caller registered beside the context, and a template body reads it, as the JS body reads useRules and useExpansions'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+  [cmp
+    'the callers'
+    'the CLI and the engine behind the app register the repository stores in both engines, the JS protocol first, so a body that breaks a rule reads the same in the CLI and in the app by both engines'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+  [cmp
+    'the oracle'
+    'the export records template bodies with nothing registered and with the repository registered, the Rust answers both byte for byte, and the oracle of the cases does not move'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+[/block]

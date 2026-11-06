@@ -1,0 +1,10 @@
+[block'ORD-0009-zip'
+  [ctx'the spec of EMS-002','.guidelines/.orders/EMS-002/EMS-002.pgml']
+  [tgt'the zip of a series ORD only behind a flag, question 1 of the EMS-001 return, answered c']
+  [ctx'in a series --bundle writes the folder ORD-####/ alone, and outside one it writes the zip; there is no way to ask a series for the zip']
+  [cnst'the zip of a series ORD is the zip a flat bundle writes, named ORD-####.zip beside the folder, so the count of the series, which counts folders, does not move']
+  [cnst'outside a series --zip asks for what --bundle already writes, and changes nothing']
+  [cnst'the README documents the flags of the CLI and declares their block as its source: the flag lands in both together']
+  [val'the flag','in a series, --bundle writes the folder and, with --zip, the zip beside it, in both engines, the JS first']
+  [val'the oracle','the export runs the flag in a series and outside one, and the Rust answers the same bytes and the same files']
+];

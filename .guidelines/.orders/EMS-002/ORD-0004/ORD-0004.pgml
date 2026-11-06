@@ -1,0 +1,12 @@
+[block'ORD-0004-order'
+  [ctx'the spec of EMS-002','.guidelines/.orders/EMS-002/EMS-002.pgml']
+  [onlyif'ORD-0003 closed']
+  [tgt'glyph-vpath: order maintenance, layer 3 of .plan section 0, as order queries over the positions the index holds']
+  [cnst'the order is the index own: files in the order the index lists them, then nodes by start, the one that holds the other first; it is computed once on load, and nothing new is stored']
+  [cnst'above answers the nodes of the same file that end where a node starts or before, nearest first; between answers every node from one reference to the other in order, across files']
+  [cnst'a reference is a virtual path, an alias, a recovery or a NodeID, read as resolve reads it, and one the index does not hold is refused']
+  [nev'stable positions in the index, order labels by Dietz–Sleator and relative offsets: they would hold 42.0 percent of the rows an edit rewrites, under the 50 percent declared, INTAKE-VIRTUAL-PATH section 25']
+  [val'before','for any two references, before answers which comes first, or that one holds the other, in constant time']
+  [val'above and between','above answers what precedes a node in its file, nearest first, and between the nodes from one reference to another in order, each by a search in logarithmic time; between refuses when the second comes first']
+  [val'the order','the order agrees with the files and offsets of the index on every pair of the repository, and answers right after a node is inserted, moved or removed']
+];

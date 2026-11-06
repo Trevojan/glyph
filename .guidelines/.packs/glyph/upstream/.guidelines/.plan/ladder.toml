@@ -1,0 +1,627 @@
+# Glyph ladder — the Rust port and what follows it, one module per step.
+#
+# Revised from the ladder Opus 5.5 drafted (~/Downloads/ladder.toml, 2026-09-24)
+# by the audit in ../.orders/INTAKE-RUST-LADDER.md and the Regent's answers of
+# 2026-09-24. `node scripts/ladder.js --check` refuses a cycle, a dangling
+# dependency, a premise relied on before it is grounded, and a module marked
+# done whose dependencies are not.
+#
+# status: open · started · done
+
+[meta]
+name = "glyph-ladder"
+min_after = "M16"
+half_max_after = "M21"
+
+# ── premises ─────────────────────────────────────────────────────────────────
+[[premise]]
+id = "P01"
+claim = "The declared corpus (114 snapshot sources, 5 hand-derived goldens, 5 examples), exported whole as the oracle, captures the behaviour worth keeping"
+grounded_by = "M01"
+if_false = ["M09", "M10a", "M10b", "M10c", "M10d"]
+
+[[premise]]
+id = "P02"
+claim = "Glyph admits an error-tolerant recursive-descent parser over a lossless tree"
+grounded_by = "M02"
+if_false = ["M08", "M09", "M12"]
+
+[[premise]]
+id = "P03"
+claim = "LSP covers the intellisense wanted: diagnostics, completion, hover, signatures, semantic tokens, code actions"
+grounded_by = "M03"
+if_false = ["M14", "M22"]
+
+[[premise]]
+id = "P04"
+claim = "The crate graph can be held to the JS core's measured seams mechanically"
+grounded_by = "M06"
+if_false = ["M07"]
+
+[[premise]]
+id = "P05"
+claim = "ADRs signed by the Regente and DCs with checks can be enforced at the gate"
+grounded_by = "M04"
+if_false = ["M18"]
+
+[[premise]]
+id = "P06"
+claim = "The Rust port can reproduce every diagnostic code one to one"
+grounded_by = "M02"
+if_false = ["M09"]
+
+[[premise]]
+id = "P07"
+claim = "The JS engine's performance is measured, so the Rust gains are provable"
+grounded_by = "M05"
+if_false = ["M11"]
+
+[[premise]]
+id = "P08"
+claim = "A heuristic trim reaches full recall with zero false drops on golden EMSs"
+grounded_by = "M19"
+if_false = ["M20"]
+
+[[premise]]
+id = "P09"
+claim = "A local open model fits the Regente's machine within the latency budget"
+grounded_by = "M20"
+if_false = ["M20"]
+
+[[premise]]
+id = "P10"
+claim = "VS Code views are enough for the Explorer"
+grounded_by = "M21"
+if_false = ["M22"]
+
+[[premise]]
+id = "P11"
+claim = "Pins plus frontmatter express an EMS without losing intent (the ems.js prototype is not in this repository)"
+grounded_by = "M02"
+if_false = ["M16"]
+
+# ── ground ───────────────────────────────────────────────────────────────────
+[[module]]
+id = "M01"
+stage = "ground"
+title = "Inventory and oracle"
+status = "started"
+depends = []
+relies_on = []
+closes_when = "every capability of the JS engine and its tools is listed with the module that ports it; the oracle exports every declared source; every diagnostic code has a declared source; the commit is tagged conformance-v0"
+tasks = [
+  "Inventory the engine and its tools against the ladder (INTAKE-RUST-LADDER §1) — done",
+  "node scripts/test-corpus.js --export-oracle: one language-neutral JSON per declared source — done",
+  "Classify each case keep, drop or revise, with the reason",
+  "List every diagnostic code no declared source reaches — done: 13",
+  "Declare a source per code (ORACLE_COVERAGE) — 12 of 13 done; TemplateCycle waits on M02b.T02",
+  "Tag the commit conformance-v0",
+]
+
+[[module]]
+id = "M02"
+stage = "ground"
+title = "Language specification"
+status = "started"
+depends = ["M01"]
+relies_on = []
+closes_when = ".guidelines/glyph-grammar.ebnf describes the language the engine parses today and a zero-dependency recogniser accepts every declared source; each diagnostic code maps to the rule that raises it"
+tasks = [
+  "Table the lexer's 23 token kinds: kind, pattern, examples from the oracle",
+  "Bring the EBNF from v1.3.0.0 to the engine: [raw] fence, [off]/[on], return R:/r-, the closed form [x[/x], comma between elements, the optional ]",
+  "Refused spellings (\\mood\\, / as divider) as recognisers, not as absences",
+  "A recogniser that runs the EBNF over the corpus, observed failing first",
+  "Map every diagnostic code to its grammar rule",
+  "ADR: grammar and error-recovery policy — drafted by the owning role, signed by the Regente",
+]
+
+[[module]]
+id = "M02b"
+stage = "ground"
+title = "Settle the oracle's bytes before the port"
+status = "started"
+depends = ["M01"]
+relies_on = []
+closes_when = "the stores travel as one context object; the snapshot projects each case with its own stores; each measured defect is either fixed in JS or pinned as behaviour the port reproduces; diagnostics carry a source span"
+tasks = [
+  "Stores as a context object (createContext), byte-identical, no fallback to the globals — done",
+  "The snapshot projects a case with its own opts (moves the T-cases' hashes: a decision)",
+  "The three measured defects of .plan §3 (;; migrates, ; asymmetric in quotes, bare template param): fix in JS or pin — the Regente's",
+  "Diagnostics gain the source span the tokens already have, in JS first",
+]
+
+[[module]]
+id = "M03"
+stage = "ground"
+title = "Editor tooling"
+status = "open"
+depends = ["M02"]
+relies_on = []
+closes_when = "capability matrix agreed; a toy Rust language server shows diagnostics and completion in VS Code and in one VS Code fork"
+tasks = [
+  "Map each wanted intellisense feature to its LSP method",
+  "Choose the LSP transport against the measured filter (§9): lsp-server + lsp-types, 19 crates, depth 5 — against tower-lsp-server, 52 crates with tokio",
+  "Spike a toy server plus a minimal VS Code client; install the .vsix in VS Code and one fork",
+  "Choose the highlighting path: semantic tokens, TextMate grammar or tree-sitter",
+  "ADR: LSP first; VS Code extension as first client — signed by the Regente",
+]
+
+[[module]]
+id = "M04"
+stage = "ground"
+title = "Decision practice: ADR and DC"
+status = "open"
+depends = []
+relies_on = []
+closes_when = "an ADR is a row of .decisions/ with reversibility and supersedes; a DC is a row of .constraints/ naming its gate; ADR-001..003 signed; the gate runs the DC checks"
+tasks = [
+  "ADR fields on the .decisions/ row (date, decision, who, reason) plus reversibility and supersedes — no second register",
+  "DC as a .constraints/ row: when-then, the gate that checks it, the ADR it enforces",
+  "Draft ADR-001 Rust migration, ADR-002 LSP first, ADR-003 local judge for the Regente's signature",
+  "Norm (the Regente's, 2026-09-24): the owning role drafts and proposes an ADR; the Regente signs it, and only a signed ADR binds; the Regente's decision overrides the architecture's progress; changing a signed ADR costs one questionnaire session with the Regente",
+  "DC checks in npm run check as a check family",
+  "Reconcile with the Orbital DC id grammar (D-15)",
+]
+
+[[module]]
+id = "M05"
+stage = "ground"
+title = "Performance baseline"
+status = "open"
+depends = ["M01"]
+relies_on = []
+closes_when = "a committed bench reports p50, p95 and memory per stage over the oracle; each theory on the shortlist names the metric it must move"
+tasks = [
+  "Commit the per-stage bench INTAKE-RUST §1 ran from a scratchpad",
+  "Measure the HGML burn blow-up and its cost per composite",
+  "Shortlist: interning, arenas, lossless red-green tree, incremental reparse, demand-driven computation",
+  "Drop every theory with no metric to move",
+  "ADR: performance targets for the Rust core — signed by the Regente",
+]
+
+# ── core: one crate per JS module, each held to its oracle ───────────────────
+[[module]]
+id = "M06"
+stage = "core"
+title = "Cargo workspace on the measured seams"
+status = "started"
+depends = ["M02", "M04"]
+relies_on = ["P05"]
+closes_when = "rust/ builds; crate-graph.js refuses an arrow the JS core does not have; npm run check:rust runs fmt, clippy with warnings denied and the differential runner"
+tasks = [
+  "rust/: 20 crates, one per JS core module plus the tools — done",
+  "scripts/crate-graph.js --check in npm run check, observed failing — done",
+  "npm run check:rust: tests — done; fmt and clippy -D warnings",
+  "Vendoring (the Regente, 2026-09-24): every adopted crate passes the measured filter of INTAKE-RUST-LADDER §9 first, then enters by cargo vendor into rust/vendor/ with rust/.cargo/config.toml replacing crates-io; builds run --offline --locked",
+  "crate-graph.js refuses an external crate that is not in rust/vendor/",
+  "Differential runner: cargo test reads the oracle and compares bytes",
+  "Commit hook: the task id and the ADR or DC it cites",
+]
+
+[[module]]
+id = "M07a"
+stage = "core"
+title = "glyph-util, glyph-version"
+status = "open"
+depends = ["M06"]
+relies_on = ["P04"]
+closes_when = "esc, xesc, lev, walk and VERSION equal their JS on the oracle"
+tasks = ["Port util.js", "Port version.js"]
+
+[[module]]
+id = "M07"
+stage = "core"
+title = "glyph-vocab, glyph-stores: vocabulary as data"
+status = "open"
+depends = ["M07a"]
+relies_on = ["P02", "P04"]
+closes_when = "build.rs generates the tables from the same four sources build-templates.js reads; table digests equal the JS stores; the context is a struct passed by reference"
+tasks = [
+  "The single sources: GLOSSARY.md, expansions.txt, rules.json, templates.json",
+  "Generate commands, aliases, arity classes, moods, species and formulas in build.rs",
+  "The context (createContext) as a struct; no global store",
+  "Digest check against the JS stores",
+  "Gloss collisions and alias integrity as unit tests",
+]
+
+[[module]]
+id = "M08"
+stage = "core"
+title = "glyph-lex"
+status = "open"
+depends = ["M07"]
+relies_on = ["P02"]
+closes_when = "tokens equal the oracle's on every case, spans in UTF-16 as the JS gives them; concatenated tokens equal the source"
+tasks = [
+  "Token kinds from the M02 table; spans in bytes and UTF-16",
+  "Error tokens instead of failure",
+  "Quote, backtick, raw fence and logic-block states",
+  "Differential test against the oracle's tokens",
+  "Fuzz: never panics, always lossless",
+]
+
+[[module]]
+id = "M08b"
+stage = "core"
+title = "glyph-logic"
+status = "open"
+depends = ["M07a"]
+relies_on = []
+closes_when = "parseLogic, expandExpr and freeVars equal their JS on every [logic] source"
+tasks = ["Port logic.js", "Differential test on the oracle's Logic nodes"]
+
+[[module]]
+id = "M09a"
+stage = "core"
+title = "glyph-templates"
+status = "open"
+depends = ["M07"]
+relies_on = []
+closes_when = "expansion, holes and the cycle guard equal the JS; the parser reaches it as a function argument, as in JS, so the crates stay acyclic"
+tasks = ["Port templates.js with parse passed in", "Differential test on the T-cases"]
+
+[[module]]
+id = "M09b"
+stage = "core"
+title = "glyph-rules"
+status = "open"
+depends = ["M07"]
+relies_on = []
+closes_when = "every rule of rules.json fires as in JS; the compiled rules live in the context, not on the store object"
+tasks = ["Port rules.js", "Compile once per context (the JS caches onto the store object, and a copy carries it)"]
+
+[[module]]
+id = "M09"
+stage = "core"
+title = "glyph-parse: parser and diagnostics"
+status = "open"
+depends = ["M08", "M08b", "M09a", "M09b", "M02b"]
+relies_on = ["P01", "P02", "P06"]
+closes_when = "AST and diagnostics equal the oracle on 100% of the declared sources; the lossless tree round-trips to the source"
+tasks = [
+  "Lossless tree with recovery at semicolon, closing bracket and newline",
+  "Lower the tree to AST schema 2; node kinds as one enum",
+  "Arity, severities (fix, ask, note), refusals, semantic rules",
+  "Differential test; a mismatch opens a spec question, not a code patch",
+  "Fuzz: no panic; every input yields a tree",
+]
+
+[[module]]
+id = "M10a"
+stage = "core"
+title = "glyph-xml"
+status = "open"
+depends = ["M09"]
+relies_on = []
+closes_when = "XML byte-equal to the oracle, describe mode included"
+tasks = ["Port emit-xml.js", "Differential test"]
+
+[[module]]
+id = "M10b"
+stage = "core"
+title = "glyph-envelope"
+status = "open"
+depends = ["M09"]
+relies_on = []
+closes_when = "the GlyphAST envelope byte-equal to the oracle, the double FNV-1a ck kept as is"
+tasks = ["Port emit-ast.js", "ck as two 32-bit FNV-1a runs — a u64 is a format change and the Regente's", "Differential test"]
+
+[[module]]
+id = "M10c"
+stage = "core"
+title = "glyph-burn"
+status = "open"
+depends = ["M09"]
+relies_on = []
+closes_when = ".hgml byte-equal to the oracle; it re-parses with no fix"
+tasks = ["Port burn.js with its blends", "The formula parse reads only the composition table", "Differential test"]
+
+[[module]]
+id = "M10d"
+stage = "core"
+title = "glyph-inverse: fromXML, fromAST, the canonical printer"
+status = "open"
+depends = ["M07"]
+relies_on = []
+closes_when = "fromXML and fromAST equal the JS; fromAST is the .pgml formatter, one function"
+tasks = ["Port inverse.js", "Round-trip tests"]
+
+[[module]]
+id = "M10e"
+stage = "core"
+title = "glyph-schema"
+status = "open"
+depends = ["M06"]
+relies_on = []
+closes_when = "accepts and refuses the same envelopes as glyph-check.js"
+tasks = ["Port glyph-check.js against ast-schema.json"]
+
+[[module]]
+id = "M10f"
+stage = "core"
+title = "glyph-diff"
+status = "open"
+depends = ["M10b"]
+relies_on = []
+closes_when = "same classification as glyph-diff.js, --measure included"
+tasks = ["Port glyph-diff.js"]
+
+[[module]]
+id = "M10g"
+stage = "core"
+title = "glyph-trace"
+status = "open"
+depends = ["M10b"]
+relies_on = []
+closes_when = "same spans as glyph-trace.js; --at answers the same"
+tasks = ["Port glyph-trace.js"]
+
+[[module]]
+id = "M10h"
+stage = "core"
+title = "glyph-bundle"
+status = "open"
+depends = ["M06"]
+relies_on = []
+closes_when = "the ORD zip is byte-equal to glyph-zip.js's"
+tasks = ["Port glyph-zip.js"]
+
+[[module]]
+id = "M11b"
+stage = "core"
+title = "glyph-wasm: the core in the browser"
+status = "open"
+depends = ["M10a", "M10b", "M10c", "M10d"]
+relies_on = []
+closes_when = "the twelve functions glyph-ui.js calls answer the same from WASM, run on the corpus inside the page; the app keeps working on the JS core until the Regente chooses which one it serves"
+tasks = [
+  "The boundary: tokenize, classify, suggest, parse, walk, elName, serializeAST, toHGML, fromXML, useTemplates, useRules, useExpansions",
+  "The corpus run inside the page",
+  "The page loads either core behind one switch",
+]
+
+[[module]]
+id = "M11"
+stage = "core"
+title = "glyph-cli: flag parity"
+status = "open"
+depends = ["M10a", "M10b", "M10c", "M10d", "M10e", "M10h", "M05"]
+relies_on = ["P07"]
+closes_when = "the glyph binary answers every glyph-cli.js flag with the same bytes; the bench meets the signed targets"
+tasks = [
+  "Flag parity: --ast --xml --diag --expand --hgml --from-xml --file --bundle --out",
+  "glyph check and glyph dag",
+  "Bench against the M05 baseline",
+  "Release binaries for Windows, Linux, macOS",
+]
+
+[[module]]
+id = "M11d"
+stage = "core"
+title = "JS and Rust in lockstep"
+status = "open"
+depends = ["M11", "M11b"]
+relies_on = []
+closes_when = "npm run check runs the differential test whenever cargo is present, so a change to the JS that the Rust does not follow fails the check"
+tasks = [
+  "The JS stays: the reference, the skill's payload and the browser app's core (the Regente, 2026-09-24)",
+  "Differential test in the check",
+]
+
+# ── editor ───────────────────────────────────────────────────────────────────
+[[module]]
+id = "M12"
+stage = "editor"
+title = "Language server v1: see"
+status = "open"
+depends = ["M09", "M03", "M10g"]
+relies_on = ["P03"]
+closes_when = "in VS Code a .pgml file shows diagnostics at their span, semantic highlighting and hover glosses from the Rust server"
+tasks = [
+  "Server skeleton on the chosen framework",
+  "Incremental document sync",
+  "Diagnostics with fix, ask and note mapped to severities, at the span M02b gave them",
+  "Semantic tokens by tier: instruction, structure, meta, mode, mood",
+  "Hover: definition, formula, species",
+  "UTF-16 position tests",
+]
+
+[[module]]
+id = "M13"
+stage = "editor"
+title = "Language server v2: write"
+status = "open"
+depends = ["M12"]
+relies_on = []
+closes_when = "completion, signature help and a code action for every refusal work across the declared sources"
+tasks = [
+  "Completion: commands and aliases (canonical first), moods after a slash, templates after [--",
+  "Signature help from arity and slot questions",
+  "A code action per refusal (SlashInChain, BackslashMood, UnknownEmotion and the rest)",
+  "Did-you-mean from the engine's suggest",
+]
+
+[[module]]
+id = "M14"
+stage = "editor"
+title = "VS Code extension"
+status = "open"
+depends = ["M12"]
+relies_on = []
+closes_when = ".vsix installs in VS Code and one fork; published on Open VSX and the Marketplace"
+tasks = [
+  "Language configuration: brackets, auto-close, comments",
+  "Client launching the bundled server per platform",
+  "File associations .pgml and .hgml",
+  "Package per target",
+  "Publish",
+]
+
+[[module]]
+id = "M15"
+stage = "editor"
+title = "Templates and snippets"
+status = "open"
+depends = ["M13", "M14"]
+relies_on = []
+closes_when = "definition and references work on templates; every snippet, section, block and template shape included, is served from one data file"
+tasks = [
+  "Document symbols: sections, blocks, templates",
+  "Definition and references for templates",
+  "Workspace template index",
+  "Snippet library as data, one source — the only home of snippets",
+  "Safe template rename",
+]
+
+# ── orders ───────────────────────────────────────────────────────────────────
+[[module]]
+id = "M16"
+stage = "orders"
+title = "EMS and ORD in Rust"
+status = "open"
+depends = ["M10a", "M10b", "M13"]
+relies_on = ["P11"]
+closes_when = "EMS and ORD behave as the prototype's tests describe; EMS faults show inline in the editor"
+tasks = [
+  "PIN enters expansions.txt, GLOSSARY.md and the JS engine first, so the oracle has it",
+  "EMS and ORD frontmatter schemas with validation",
+  "Split by pins",
+  "Traffic validation: disjoint writes, resolvable reads, no cycles",
+  "Forward-only re-emission into .history",
+  "EMS faults as diagnostics",
+  "glyph emit",
+]
+
+[[module]]
+id = "M17"
+stage = "orders"
+title = "Registry and resolve"
+status = "open"
+depends = ["M16"]
+relies_on = []
+closes_when = "id to path to sha index over .guidelines; DanglingRead checks it; go-to-definition on paths and ids"
+tasks = [
+  "Decide G-01 first: is the registry the virtual-paths index (INTAKE-VIRTUAL-PATH)?",
+  "Index format",
+  "Kept current by the client: LSP didChangeWatchedFiles, and a sha check on read — no file-watcher crate",
+  "Virtual paths as views of the index",
+  "Staleness by sha",
+  "Definition and hover on ids",
+]
+
+[[module]]
+id = "M18"
+stage = "orders"
+title = "Bridge to call-team"
+status = "open"
+depends = ["M17", "M04"]
+relies_on = ["P05"]
+closes_when = "an ORD render is the packet; call-team reads the EMS manifest; DC checks run in the gate"
+tasks = [
+  "packets.md becomes the ORD render layout",
+  "call-team takes its units from the EMS manifest",
+  "Gate runs the DC checks",
+  "Review packet lists the ORDs and their traffic",
+]
+
+# ── trim ─────────────────────────────────────────────────────────────────────
+[[module]]
+id = "M19"
+stage = "trim"
+title = "Heuristic trim and eval"
+status = "open"
+depends = ["M17"]
+relies_on = []
+closes_when = "eval over at least 20 golden EMSs reports recall and tokens; false drops are zero"
+tasks = [
+  "Golden EMS set from past orders",
+  "Chunk the shared sections",
+  "Score by reference graph and lexical overlap",
+  "Render full, hieroglyph, pointer or drop",
+  "Trace per ORD",
+  "Eval report",
+]
+
+[[module]]
+id = "M20"
+stage = "trim"
+title = "Local judge"
+status = "open"
+depends = ["M19", "M05"]
+relies_on = ["P08"]
+closes_when = "the local adapter beats the heuristic on the eval within the latency budget, or a signed ADR records why not"
+tasks = [
+  "Profile the machine: CPU, RAM, GPU and VRAM, OS",
+  "The model runs as its own process (a local llama.cpp or Ollama server); Glyph speaks HTTP to localhost and links no runtime (§9)",
+  "Typed-choice interface: probabilities from token log-probabilities",
+  "Criteria per question, written as extensions of the instruction",
+  "Confidence gating with the asymmetry rule",
+  "Side-by-side eval",
+  "ADR — signed by the Regente",
+]
+
+# ── explorer ─────────────────────────────────────────────────────────────────
+[[module]]
+id = "M21"
+stage = "explorer"
+title = "Explorer inside VS Code"
+status = "open"
+depends = ["M17", "M15"]
+relies_on = []
+closes_when = ".guidelines tree with frontmatter, .orders with traffic graph, emit and re-emit — all inside the extension"
+tasks = [
+  "Tree view of the axes with frontmatter",
+  "Frontmatter validation",
+  ".orders view: EMS to ORDs",
+  "Traffic graph webview",
+  "Emit and re-emit commands",
+  "Pin gutter decorations",
+]
+
+[[module]]
+id = "M22"
+stage = "explorer"
+title = "Standalone shell and mobile helper"
+status = "open"
+depends = ["M21", "M11b"]
+relies_on = ["P10"]
+closes_when = "built only if P10 fails or a mobile helper is wanted: the browser app on the M11b core, with Monaco and the same server; a native shell only by a signed ADR"
+tasks = [
+  "The shell is the browser app on the M11b core — Tauri measured at 236 crates, depth 16 (§9)",
+  "Monaco with a language client to the same server",
+  "Mobile helper scope: validate and emit, no authoring",
+  "ADR — signed by the Regente",
+]
+
+# ── intake ───────────────────────────────────────────────────────────────────
+[[module]]
+id = "M23"
+stage = "intake"
+title = "Situation to EMS draft"
+status = "open"
+depends = ["M16"]
+relies_on = []
+closes_when = "the order header is generated from a situation, with declared assumptions and class ceilings enforced"
+tasks = [
+  "Absorb the old intake: classes, question ceilings, locked decisions",
+  "Question bank as data",
+  "Draft EMS with assumptions",
+  "Regente confirmation loop",
+  "Test on archived orders",
+]
+
+[[module]]
+id = "M24"
+stage = "intake"
+title = "Return ledger: the MAX metric"
+status = "open"
+depends = ["M18", "M23"]
+relies_on = []
+closes_when = "every return is classified input-gap or reality; input-gap returns per EMS are reported"
+tasks = [
+  "Return schema",
+  "Classification, confirmed by the Regente",
+  "Link each return to the EMS section that should have said it",
+  "Dashboard in the Explorer",
+  "Feed the intake question bank",
+]

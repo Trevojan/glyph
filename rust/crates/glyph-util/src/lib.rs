@@ -3,13 +3,10 @@
 //!   the layer no banner ever named.
 //!
 //! EMS-001 ORD-0002 ports `esc`, `xesc`, `lev` and `walk`; `tests/oracle.rs`
-//! holds each to what the JS answers on everything the oracle holds. `json` is
-//! the platform's `JSON.parse` and `JSON.stringify`, which the Rust lacks
-//! (ORD-0003); `tests/json.rs` holds it to every file the oracle writes.
-//! `tree` is the parser's tree as an arena, with `stripTags` (ORD-0006);
+//! holds each to what the JS answers on everything the oracle holds. `tree` is
+//! the parser's tree as an arena, with `stripTags` (ORD-0006);
 //! `inherited` names what a plain JS object answers for without being told.
 
-pub mod json;
 pub mod tree;
 
 /// The names every plain JS object answers through `Object.prototype`: the

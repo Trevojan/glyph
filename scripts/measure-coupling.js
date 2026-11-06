@@ -1,185 +1,404 @@
 #!/usr/bin/env node
 /**
- * measure-coupling — does a repository's history show the staleness a
- * virtual-path index exists to catch?
+ * measure-coupling — four measures over a repository's history, for sizing
+ * the virtual paths before they are built.
  *
- *   node measure-coupling.js [repo] [--since <commit>] [--json]
+ *   node measure-coupling.js [repo] [--rev REV] [--since REV] [--k N] [--json]
  *
- * Three measures over the commits reachable from HEAD, chronological, merges
- * left out. Nothing here knows what a `.pgml` is: any repository path can be
- * handed to it. The thresholds are the ones INTAKE-VIRTUAL-PATH §6 stamped on
- * 2026-09-11, and they live in this file so that the commit that adds or moves
- * them comes before the commit that records a number.
+ *   repo      the repository to measure (default: this one)
+ *   --rev     the last commit of the universe (default: HEAD)
+ *   --since   also report the window after this commit, apart
+ *   --k       the lag window of M1 (default: 3)
+ *   --json    print the numbers as JSON instead of the report
  *
- * Universe
- *   code  `*.js`, `*.mjs`, `*.rs`; the `js` arm keeps `*.js` alone, as in §6
- *   doc   `*.md`, except `CHANGELOG.md` and files named `CHANGELIST*`
- *   generated, out of every measure: `scripts/glyph-data.js`, `.claude/skills/**`,
- *         `EXAMPLES.md` — rebuilt by a script, so they co-change by construction
- *   mass  a commit touching more than 15 files is out of M3 — moves and renames
- *         carry unrelated files together
- *   key   M1 and M3 by basename, as §6, and by path as a second arm
+ * The measures and the thresholds that read them are declared in
+ * `.guidelines/.orders/INTAKE-VIRTUAL-PATH.md` §18, committed before this file:
  *
- * M1 — staleness base rate. A commit touching code is co-updated when it also
- *   touches a doc; lagged when it does not and a doc-only commit follows within
- *   k = 3; unpaired otherwise, reported and never folded.
- *   rate = lagged / (co-updated + lagged).
- *   < 10 % stop · ≥ 25 % justified · between, M2 decides.
- * M2 — edit locality. Each doc edit of a file that existed before with ≥ 5
- *   lines: (added + deleted) / lines before. The distribution, never the mean.
- *   median < 20 % anchors buy scope · > 50 % anchors are dead metadata.
- * M3 — co-change coupling. For each (code, doc) pair, support = commits
- *   touching both, lift = P(both) / (P(code) · P(doc)).
- *   ≥ 1 pair with lift > 2 and support ≥ 3 → a coupling exists to index.
+ *   M1  staleness — a code commit is co-updated (touches a doc), lagged (a
+ *       doc-only commit follows within k) or unpaired (reported apart)
+ *   M2  edit locality — (added + deleted) / lines before, per doc edit of a
+ *       file that had at least five lines
+ *   M3  co-change coupling — support and lift per (code, doc) pair, commits
+ *       touching more than 15 files left out
+ *   M4  anchor survival — a heading slug that disappears is moved, renamed
+ *       (its body reappears under a new slug, line-set Jaccard >= 0.5) or deleted
+ *   M5  structural recovery — of the breaks whose content lived on, keyed by
+ *       path, the share the same text, the same body or the same file renamed
+ *       finds again (§20)
+ *   M6  recovery by the path — of what the structure leaves, the slug whose
+ *       trigrams are closest, against the slug whose body is (§22)
+ *   M7  what an edit rewrites — of the sections whose index row would change,
+ *       the share whose text is the same and only the coordinates moved (§24)
+ *
+ * Identity follows renames (`git log -M`) and is keyed by the latest name.
+ * Nothing here knows what a `.pgml` is: any repository path can be handed in.
  */
 "use strict";
-import { execFileSync, spawnSync } from "node:child_process";
+import { execFileSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 import path from "node:path";
 
 const argv = process.argv.slice(2);
-const flag = n => { const i = argv.indexOf(n); return i === -1 ? null : (argv[i + 1] || ""); };
-const JSON_OUT = argv.indexOf("--json") !== -1;
-const SINCE = flag("--since");
-const REPO = path.resolve(argv.find((a, i) => !a.startsWith("--") && argv[i - 1] !== "--since") || ".");
+const opt = name => { const i = argv.indexOf(name); return i === -1 ? null : argv.splice(i, 2)[1]; };
+const JSON_OUT = argv.indexOf("--json") !== -1 && !!argv.splice(argv.indexOf("--json"), 1);
+const REV = opt("--rev") || "HEAD";
+const SINCE = opt("--since");
+const K = Number(opt("--k") || 3);
+const REPO = path.resolve(argv[0] || path.join(path.dirname(fileURLToPath(import.meta.url)), ".."));
 
-const K = 3, K_SPREAD = [1, 2, 3, 5, 8], MASS = 15, MIN_LINES = 5;
-const T = { m1Stop: 0.10, m1Go: 0.25, m2Scope: 0.20, m2Dead: 0.50, m3Lift: 2, m3Support: 3 };
+const MASS = 15, JACCARD = 0.5;
+const CODE = /\.(js|rs|py)$/, DOC = /\.md$/;
+const EXCLUDED = p => p === "scripts/glyph-data.js" || p.startsWith(".claude/skills/glyph-markup/") ||
+  /(^|\/)CHANGELOG\.md$/.test(p) || /(^|\/)CHANGELIST[^/]*$/.test(p) || p.startsWith(".guidelines/.history/");
 
-const git = args => execFileSync("git", ["-C", REPO].concat(args),
-  { encoding: "utf8", maxBuffer: 1 << 28 });
+const git = (...args) => execFileSync("git", ["-C", REPO, ...args], { encoding: "utf8", maxBuffer: 1 << 28 });
+const show = (rev, file) => { try { return git("show", rev + ":" + file); } catch { return null; } };
 
-const base = p => p.split("/").pop();
-const generated = p => p === "scripts/glyph-data.js" || p.startsWith(".claude/skills/") || base(p) === "EXAMPLES.md";
-const isDoc = p => /\.md$/i.test(p) && base(p) !== "CHANGELOG.md" && !/^CHANGELIST/.test(base(p)) && !generated(p);
-const codeOf = arm => arm === "js"
-  ? p => /\.js$/.test(p) && !generated(p)
-  : p => /\.(js|mjs|rs)$/.test(p) && !generated(p);
+/* ---------- the history, identity following renames ---------- */
 
-/* the commits, oldest first, each with its parent and its numstat */
-function commits() {
-  const out = git(["log", "--reverse", "--no-merges", "--no-renames", "--format=@@%H %P", "--numstat", "HEAD"]);
-  const list = [];
-  for (const chunk of out.split("@@").slice(1)) {
-    const lines = chunk.split("\n");
-    const [sha, parent] = lines[0].trim().split(" ");
-    const files = [];
-    for (const l of lines.slice(1)) {
-      const m = /^(\d+|-)\t(\d+|-)\t(.+)$/.exec(l);
-      if (m) files.push({ path: m[3], add: m[1] === "-" ? null : +m[1], del: m[2] === "-" ? null : +m[2] });
-    }
-    list.push({ sha, parent: parent || null, files });
+function readLog() {
+  const commits = [];
+  for (const block of git("log", "--reverse", "--no-merges", "-M", "--name-status", "--format=%x00%H", REV).split("\0").slice(1)) {
+    const [hash, ...lines] = block.trim().split("\n");
+    const changes = lines.filter(Boolean).map(l => {
+      const f = l.split("\t");
+      return f[0][0] === "R" ? { st: "R", from: f[1], to: f[2] } : { st: f[0][0], from: f[1], to: f[1] };
+    });
+    commits.push({ hash, changes });
   }
-  if (!SINCE) return list;
-  const from = git(["rev-parse", SINCE]).trim();
-  const at = list.findIndex(c => c.sha === from);
-  if (at === -1) throw new Error("--since " + SINCE + " is not on the first history of HEAD");
-  return list.slice(at + 1);
+  return commits;
 }
 
-/* line counts of `<parent>:<path>` in one git process */
-function lineCounts(reqs) {
-  if (!reqs.length) return [];
-  const r = spawnSync("git", ["-C", REPO, "cat-file", "--batch"],
-    { input: reqs.join("\n") + "\n", maxBuffer: 1 << 30 });
-  const buf = r.stdout, counts = [];
-  let i = 0;
-  while (i < buf.length && counts.length < reqs.length) {
-    const nl = buf.indexOf(10, i);
-    const head = buf.slice(i, nl).toString("utf8").split(" ");
-    if (head[1] === "missing" || head.length < 3) { counts.push(null); i = nl + 1; continue; }
-    const size = +head[2], body = buf.slice(nl + 1, nl + 1 + size);
-    let n = 0; for (const b of body) if (b === 10) n++;
-    if (size && body[size - 1] !== 10) n++;
-    counts.push(n);
-    i = nl + 1 + size + 1;
+function assignIdentity(commits) {
+  const live = new Map(), last = [];
+  for (const c of commits) for (const ch of c.changes) {
+    let id = ch.st === "A" ? undefined : live.get(ch.from);
+    if (id === undefined) { id = last.length; last.push(ch.to); }
+    if (ch.st === "R") live.delete(ch.from);
+    if (ch.st === "D") live.delete(ch.from); else live.set(ch.to, id);
+    last[id] = ch.to;
+    ch.id = id;
   }
-  return counts;
+  for (const c of commits) for (const ch of c.changes) {
+    ch.name = last[ch.id];
+    ch.excluded = EXCLUDED(ch.from) || EXCLUDED(ch.to) || EXCLUDED(ch.name);
+    ch.kind = CODE.test(ch.name) ? "code" : DOC.test(ch.name) ? "doc" : null;
+  }
+  for (const c of commits) {
+    c.mass = c.changes.length > MASS;
+    const kept = c.changes.filter(ch => !ch.excluded && ch.kind);
+    c.code = new Set(kept.filter(ch => ch.kind === "code").map(ch => ch.name));
+    c.doc = new Set(kept.filter(ch => ch.kind === "doc").map(ch => ch.name));
+    c.docEdits = kept.filter(ch => ch.kind === "doc");
+  }
+  return commits;
 }
 
-const median = xs => { const s = xs.slice().sort((a, b) => a - b); return s.length ? s[(s.length - 1) >> 1] : null; };
-const quart = (xs, q) => { const s = xs.slice().sort((a, b) => a - b); return s.length ? s[Math.floor((s.length - 1) * q)] : null; };
+/* ---------- M1 ---------- */
 
-function m1(list, isCode, k) {
+function m1(commits, from) {
   let co = 0, lagged = 0, unpaired = 0;
-  list.forEach((c, i) => {
-    const code = c.files.some(f => isCode(f.path)), doc = c.files.some(f => isDoc(f.path));
-    if (!code) return;
-    if (doc) { co++; return; }
-    const next = list.slice(i + 1, i + 1 + k);
-    if (next.some(n => n.files.some(f => isDoc(f.path)) && !n.files.some(f => isCode(f.path)))) lagged++;
-    else unpaired++;
+  for (let i = from; i < commits.length; i++) {
+    const c = commits[i];
+    if (!c.code.size) continue;
+    if (c.doc.size) { co++; continue; }
+    const follows = commits.slice(i + 1, i + 1 + K).some(n => n.doc.size && !n.code.size);
+    follows ? lagged++ : unpaired++;
+  }
+  return { codeCommits: co + lagged + unpaired, coUpdated: co, lagged, unpaired, rate: ratio(lagged, co + lagged) };
+}
+
+/* ---------- M2 ---------- */
+
+function numstat(hash) {
+  const out = {};
+  for (const l of git("show", "-M", "--numstat", "--format=", hash).split("\n").filter(Boolean)) {
+    const [a, d, p] = l.split("\t");
+    out[expandRename(p)] = a === "-" ? null : Number(a) + Number(d);
+  }
+  return out;
+}
+const expandRename = p => {
+  const m = p.match(/^(.*)\{(.*) => (.*)\}(.*)$/);
+  if (m) return (m[1] + m[3] + m[4]).replace(/\/\//g, "/");
+  return p.includes(" => ") ? p.split(" => ")[1] : p;
+};
+
+function m2(commits, from) {
+  const samples = [];
+  for (let i = from; i < commits.length; i++) {
+    const c = commits[i];
+    const edits = c.docEdits.filter(ch => ch.st === "M" || ch.st === "R");
+    if (!edits.length) continue;
+    const ns = numstat(c.hash);
+    for (const ch of edits) {
+      const churn = ns[ch.to];
+      if (churn == null) continue;
+      const before = show(c.hash + "^", ch.from);
+      const lines = before === null ? 0 : before.split("\n").length - (before.endsWith("\n") ? 1 : 0);
+      if (lines >= 5) samples.push(churn / lines);
+    }
+  }
+  samples.sort((a, b) => a - b);
+  const q = f => samples.length ? samples[Math.min(samples.length - 1, Math.floor(f * samples.length))] : null;
+  return { samples: samples.length, q1: q(0.25), median: q(0.5), q3: q(0.75), max: samples.at(-1) ?? null,
+    under20: ratio(samples.filter(s => s < 0.2).length, samples.length),
+    over50: ratio(samples.filter(s => s > 0.5).length, samples.length) };
+}
+
+/* ---------- M3 ---------- */
+
+function m3(commits, from) {
+  const pool = commits.slice(from).filter(c => !c.mass);
+  const n = pool.length, count = new Map(), pair = new Map();
+  const inc = (m, k) => m.set(k, (m.get(k) || 0) + 1);
+  for (const c of pool) {
+    for (const f of [...c.code, ...c.doc]) inc(count, f);
+    for (const a of c.code) for (const b of c.doc) inc(pair, a + "\t" + b);
+  }
+  const pairs = [...pair].map(([k, support]) => {
+    const [code, doc] = k.split("\t");
+    return { code, doc, support, lift: support * n / (count.get(code) * count.get(doc)) };
+  }).filter(p => p.lift > 2 && p.support >= 3).sort((a, b) => b.support - a.support || b.lift - a.lift);
+  return { commits: n, massLeftOut: commits.length - from - n, pairs };
+}
+
+/* ---------- M4 ---------- */
+
+function sections(text) {
+  const out = new Map(), lines = text.split("\n"), heads = [];
+  const offset = [0];
+  lines.forEach(l => offset.push(offset[offset.length - 1] + l.length + 1));
+  let fence = false;
+  lines.forEach((l, i) => {
+    if (/^\s*(```|~~~)/.test(l)) fence = !fence;
+    const m = !fence && l.match(/^(#{1,6})\s+(.*?)\s*#*\s*$/);
+    if (m) heads.push({ level: m[1].length, text: m[2], at: i });
   });
-  const rate = co + lagged ? lagged / (co + lagged) : null;
-  return { codeCommits: co + lagged + unpaired, co, lagged, unpaired, rate };
+  const seen = new Map();
+  heads.forEach(h => {
+    const base = slug(h.text), k = seen.get(base) || 0;
+    seen.set(base, k + 1);
+    h.slug = k ? base + "-" + k : base;
+  });
+  heads.forEach((h, j) => {
+    for (let p = j - 1; p >= 0; p--) if (heads[p].level < h.level) { h.parent = heads[p].slug; break; }
+  });
+  heads.forEach((h, j) => {
+    const sibs = heads.filter(o => o.parent === h.parent && o.level === h.level), at = sibs.indexOf(h);
+    h.prev = at > 0 ? sibs[at - 1].slug : null;
+    h.next = at < sibs.length - 1 ? sibs[at + 1].slug : null;
+  });
+  heads.forEach((h, j) => {
+    let end = lines.length;
+    for (const n of heads.slice(j + 1)) if (n.level <= h.level) { end = n.at; break; }
+    const body = lines.slice(h.at + 1, end);
+    out.set(h.slug, { set: new Set(body.map(s => s.trim()).filter(Boolean)),
+      text: lines.slice(h.at, end).join("\n"), body: body.join("\n"),
+      parent: h.parent ?? null, prev: h.prev, next: h.next,
+      line: h.at, lines: end - h.at, start: offset[h.at], end: offset[end] });
+  });
+  return out;
 }
+const slug = t => t.replace(/!?\[([^\]]*)\]\([^)]*\)/g, "$1").toLowerCase()
+  .replace(/[^\p{L}\p{N}\s_-]/gu, "").trim().replace(/\s/g, "-");
+const jaccard = (a, b) => {
+  if (!a.size || !b.size) return 0;
+  let inter = 0;
+  for (const x of a) if (b.has(x)) inter++;
+  return inter / (a.size + b.size - inter);
+};
 
-function m2(list) {
-  const edits = [];
-  for (const c of list) if (c.parent)
-    for (const f of c.files) if (isDoc(f.path) && f.add !== null) edits.push({ c, f });
-  const counts = lineCounts(edits.map(e => e.c.parent + ":" + e.f.path));
-  const xs = [];
-  edits.forEach((e, i) => { const n = counts[i]; if (n !== null && n >= MIN_LINES) xs.push((e.f.add + e.f.del) / n); });
-  return { samples: xs.length, q1: quart(xs, 0.25), median: median(xs), q3: quart(xs, 0.75),
-           max: xs.length ? Math.max.apply(null, xs) : null,
-           under20: xs.length ? xs.filter(x => x < 0.2).length / xs.length : null,
-           over50: xs.length ? xs.filter(x => x > 0.5).length / xs.length : null };
-}
-
-function m3(list, isCode, key) {
-  const cs = list.filter(c => c.files.length <= MASS);
-  const N = cs.length, nOf = new Map(), pair = new Map();
-  for (const c of cs) {
-    const code = new Set(), doc = new Set();
-    for (const f of c.files) { if (isCode(f.path)) code.add(key(f.path)); else if (isDoc(f.path)) doc.add(key(f.path)); }
-    for (const x of code) nOf.set("c:" + x, (nOf.get("c:" + x) || 0) + 1);
-    for (const x of doc) nOf.set("d:" + x, (nOf.get("d:" + x) || 0) + 1);
-    for (const a of code) for (const b of doc) { const p = a + "\t" + b; pair.set(p, (pair.get(p) || 0) + 1); }
+function m4(commits, from) {
+  let created = 0, moved = 0, renamed = 0, deleted = 0, carriedByFileRename = 0;
+  for (let i = from; i < commits.length; i++) {
+    const c = commits[i];
+    if (!c.docEdits.length) continue;
+    const removed = [], added = [];
+    for (const ch of c.docEdits) {
+      const before = ch.st === "A" ? new Map() : sections(show(c.hash + "^", ch.from) ?? "");
+      const after = ch.st === "D" ? new Map() : sections(show(c.hash, ch.to) ?? "");
+      if (ch.st === "R") carriedByFileRename += [...before.keys()].filter(s => after.has(s)).length;
+      for (const [s, sec] of before) if (!after.has(s)) removed.push({ file: ch.name, s, body: sec.set });
+      for (const [s, sec] of after) if (!before.has(s)) added.push({ file: ch.name, s, body: sec.set });
+    }
+    created += added.length;
+    for (const r of removed) {
+      if (added.some(a => a.s === r.s && a.file !== r.file)) moved++;
+      else if (added.some(a => jaccard(a.body, r.body) >= JACCARD)) renamed++;
+      else deleted++;
+    }
   }
-  const pairs = [];
-  for (const [p, s] of pair) {
-    const [a, b] = p.split("\t");
-    const lift = (s / N) / ((nOf.get("c:" + a) / N) * (nOf.get("d:" + b) / N));
-    pairs.push({ code: a, doc: b, support: s, lift });
+  return { created, moved, renamed, deleted, breaks: moved + renamed, rate: ratio(moved + renamed, created),
+    carriedByFileRename };
+}
+
+/* ---------- M5 ---------- */
+
+/* the slugs a commit removed and added, keyed by path, and the files rule 3
+   pairs: an old file with the new file that holds more than half of its slugs
+   again, by the same slug or the same text */
+function breaks(c) {
+  const removed = [], added = [];
+  for (const ch of c.docEdits) {
+    const before = ch.st === "A" ? new Map() : sections(show(c.hash + "^", ch.from) ?? "");
+    const after = ch.st === "D" ? new Map() : sections(show(c.hash, ch.to) ?? "");
+    const keep = ch.from === ch.to;
+    for (const [s, sec] of before) if (!keep || !after.has(s)) removed.push({ file: ch.from, s, ...sec });
+    for (const [s, sec] of after) if (!keep || !before.has(s)) added.push({ file: ch.to, s, ...sec });
   }
-  const real = pairs.filter(p => p.lift > T.m3Lift && p.support >= T.m3Support)
-    .sort((x, y) => y.support - x.support || y.lift - x.lift);
-  return { commits: N, massOut: list.length - N, pairs: pairs.length, real };
-}
-
-const verdict1 = r => r === null ? "no code commit" : r < T.m1Stop ? "stop" : r >= T.m1Go ? "justified" : "M2 decides";
-const verdict2 = m => m === null ? "no sample" : m < T.m2Scope ? "anchors buy scope" : m > T.m2Dead ? "anchors are dead metadata" : "between";
-
-const list = commits();
-const res = { repo: REPO, head: git(["rev-parse", "--short", "HEAD"]).trim(), since: SINCE, commits: list.length,
-              first: list.length ? list[0].sha.slice(0, 7) : null, last: list.length ? list[list.length - 1].sha.slice(0, 7) : null,
-              arms: {} };
-for (const arm of ["all", "js"]) {
-  const isCode = codeOf(arm);
-  res.arms[arm] = {
-    m1: Object.assign(m1(list, isCode, K), { spread: K_SPREAD.map(k => [k, m1(list, isCode, k).rate]) }),
-    m3: { basename: m3(list, isCode, base), path: m3(list, isCode, p => p) }
-  };
-}
-res.m2 = m2(list);
-
-if (JSON_OUT) { process.stdout.write(JSON.stringify(res, null, 2) + "\n"); process.exit(0); }
-const pct = x => x === null ? "—" : (100 * x).toFixed(1) + " %";
-console.log("repo " + res.repo + " at " + res.head + (SINCE ? ", after " + SINCE : "") + ": " +
-            res.commits + " commits, " + res.first + " → " + res.last);
-for (const arm of ["all", "js"]) {
-  const a = res.arms[arm], m = a.m1;
-  console.log("\n[" + arm + "] M1 " + pct(m.rate) + " — " + verdict1(m.rate) + "; " + m.codeCommits +
-              " code commits: co-updated " + m.co + ", lagged " + m.lagged + ", unpaired " + m.unpaired);
-  console.log("[" + arm + "]    k: " + m.spread.map(([k, r]) => k + " → " + pct(r)).join(", "));
-  for (const key of ["basename", "path"]) {
-    const g = a.m3[key];
-    console.log("[" + arm + "] M3 by " + key + ": " + g.real.length + " pair(s) over the bar, of " + g.pairs +
-                "; " + g.commits + " commits, " + g.massOut + " mass commits out");
-    for (const p of g.real) console.log("        " + p.code + " ↔ " + p.doc + "  lift " + p.lift.toFixed(2) + ", support " + p.support);
+  const pairs = new Map();
+  for (const file of new Set(removed.map(r => r.file))) {
+    const mine = removed.filter(r => r.file === file);
+    const votes = new Map();
+    for (const r of mine) {
+      const there = added.filter(a => a.s === r.s || a.text === r.text).map(a => a.file);
+      for (const f of new Set(there)) votes.set(f, (votes.get(f) || 0) + 1);
+    }
+    for (const [f, n] of votes) if (n * 2 > mine.length) pairs.set(file, f);
   }
+  return { removed, added, pairs };
 }
-const d = res.m2;
-console.log("\nM2 median " + pct(d.median) + " — " + verdict2(d.median) + "; " + d.samples + " samples, q1 " +
-            pct(d.q1) + ", q3 " + pct(d.q3) + ", max " + pct(d.max) + "; under 20 % " + pct(d.under20) +
-            ", over 50 % " + pct(d.over50));
+const unique = list => list.length === 1 ? list[0] : null;
+/* rules 1 to 3 of §20: how the structure finds a removed slug again, or null */
+const structural = (r, added, pairs) =>
+  unique(added.filter(a => a.text === r.text)) ? "text"
+    : r.body.trim() && unique(added.filter(a => a.body === r.body)) ? "body"
+    : pairs.has(r.file) && added.some(a => a.file === pairs.get(r.file) && a.s === r.s) ? "file" : null;
+
+function m5(commits, from) {
+  let lived = 0, recovered = 0, renamedLived = 0, renamedRecovered = 0, samePlace = 0, renamedSamePlace = 0, deleted = 0, falsePlace = 0;
+  const by = { text: 0, body: 0, file: 0 };
+  for (let i = from; i < commits.length; i++) {
+    const c = commits[i];
+    if (!c.docEdits.length) continue;
+    const { removed, added, pairs } = breaks(c);
+    for (const r of removed) {
+      const moved = added.some(a => a.s === r.s && a.file !== r.file);
+      const renamed = !moved && added.some(a => jaccard(a.set, r.set) >= JACCARD);
+      if (!moved && !renamed) {
+        /* a deletion the same place would wrongly carry: its precision */
+        const home = pairs.get(r.file) ?? r.file;
+        if (unique(added.filter(a => a.file === home && a.parent === r.parent && a.prev === r.prev && a.next === r.next))) falsePlace++;
+        deleted++;
+        continue;
+      }
+      lived++;
+      if (renamed) renamedLived++;
+      const how = structural(r, added, pairs);
+      if (how) { recovered++; by[how]++; if (renamed) renamedRecovered++; continue; }
+      /* post hoc, apart from the rate (§21): the same place — the same parent
+         and the same neighbours, in the same file or the one it paired with */
+      const home = pairs.get(r.file) ?? r.file;
+      const place = added.filter(a => a.file === home && a.parent === r.parent && a.prev === r.prev && a.next === r.next);
+      if (unique(place)) { samePlace++; if (renamed) renamedSamePlace++; }
+    }
+  }
+  return { lived, recovered, rate: ratio(recovered, lived), by, renamedLived, renamedRecovered, samePlace, renamedSamePlace, deleted, falsePlace };
+}
+
+/* ---------- M6 ---------- */
+
+const trigrams = t => t.length < 3 ? new Set([t]) : new Set([...Array(t.length - 2).keys()].map(i => t.slice(i, i + 3)));
+
+/* the one candidate whose score is largest and at least JACCARD, or null */
+function best(candidates, score) {
+  let top = null, at = -1, tie = false;
+  for (const a of candidates) {
+    const x = score(a);
+    if (x > at) { top = a; at = x; tie = false; } else if (x === at) tie = true;
+  }
+  return top && at >= JACCARD && !tie ? top : null;
+}
+
+function m6(commits, from) {
+  let cases = 0, truths = 0, predictions = 0, right = 0;
+  const wrong = { deleted: 0, other: 0 };
+  for (let i = from; i < commits.length; i++) {
+    const c = commits[i];
+    if (!c.docEdits.length) continue;
+    const { removed, added, pairs } = breaks(c);
+    for (const r of removed) {
+      if (structural(r, added, pairs)) continue;
+      cases++;
+      const truth = best(added, a => jaccard(a.set, r.set));
+      const home = pairs.get(r.file) ?? r.file;
+      const mine = trigrams(r.s);
+      const guess = best(added.filter(a => a.file === home), a => jaccard(trigrams(a.s), mine));
+      if (truth) truths++;
+      if (!guess) continue;
+      predictions++;
+      if (truth && guess.file === truth.file && guess.s === truth.s) right++;
+      else wrong[truth ? "other" : "deleted"]++;
+    }
+  }
+  return { cases, truths, predictions, right, wrong, precision: ratio(right, predictions), recall: ratio(right, truths) };
+}
+
+/* ---------- M7 ---------- */
+
+function m7(commits, from) {
+  let rewritten = 0, shifted = 0, edits = 0;
+  for (let i = from; i < commits.length; i++) {
+    const c = commits[i];
+    for (const ch of c.docEdits) {
+      if (ch.st === "D") continue;
+      const before = ch.st === "A" ? new Map() : sections(show(c.hash + "^", ch.from) ?? "");
+      const after = sections(show(c.hash, ch.to) ?? "");
+      edits++;
+      for (const [slug, a] of after) {
+        const b = before.get(slug);
+        const moved = b && (b.start !== a.start || b.end !== a.end || b.line !== a.line || b.lines !== a.lines);
+        if (b && b.text === a.text && !moved) continue;
+        rewritten++;
+        if (b && b.text === a.text) shifted++;
+      }
+    }
+  }
+  return { edits, rewritten, shifted, share: ratio(shifted, rewritten) };
+}
+
+/* ---------- report ---------- */
+
+const ratio = (a, b) => b ? a / b : null;
+const pct = x => x == null ? "—" : (100 * x).toFixed(1) + " %";
+
+function measure(commits, from) {
+  return { commits: commits.length - from, m1: m1(commits, from), m2: m2(commits, from), m3: m3(commits, from), m4: m4(commits, from), m5: m5(commits, from), m6: m6(commits, from), m7: m7(commits, from) };
+}
+
+const commits = assignIdentity(readLog());
+const result = { repo: REPO, rev: git("rev-parse", "--short", REV).trim(), k: K, whole: measure(commits, 0) };
+if (SINCE) {
+  const since = git("rev-parse", SINCE).trim();
+  const at = commits.findIndex(c => c.hash === since);
+  if (at === -1) { console.error("measure-coupling: " + SINCE + " is not in the history of " + REV); process.exit(1); }
+  result.since = { rev: since.slice(0, 7), ...measure(commits, at + 1) };
+}
+
+if (JSON_OUT) { console.log(JSON.stringify(result, null, 2)); process.exit(0); }
+
+function print(title, r) {
+  console.log("\n" + title + " — " + r.commits + " commits");
+  console.log("  M1  code commits " + r.m1.codeCommits + ": co-updated " + r.m1.coUpdated + ", lagged " + r.m1.lagged +
+              ", unpaired " + r.m1.unpaired + " → rate " + pct(r.m1.rate) + " (k=" + K + ")");
+  console.log("  M2  " + r.m2.samples + " doc edits: q1 " + pct(r.m2.q1) + ", median " + pct(r.m2.median) + ", q3 " + pct(r.m2.q3) +
+              ", max " + pct(r.m2.max) + "; under 20 % " + pct(r.m2.under20) + ", over 50 % " + pct(r.m2.over50));
+  console.log("  M3  " + r.m3.commits + " commits (" + r.m3.massLeftOut + " mass left out), " + r.m3.pairs.length + " pair(s) with lift > 2 and support >= 3");
+  r.m3.pairs.forEach(p => console.log("        " + p.code + " ↔ " + p.doc + "  support " + p.support + ", lift " + p.lift.toFixed(2)));
+  console.log("  M4  " + r.m4.created + " slugs created: moved " + r.m4.moved + ", renamed " + r.m4.renamed + ", deleted " + r.m4.deleted +
+              " → break rate " + pct(r.m4.rate) + "; " + r.m4.carriedByFileRename + " slug(s) carried by a file rename");
+  console.log("  M5  " + r.m5.lived + " content-lived breaks by path: recovered " + r.m5.recovered + " → " + pct(r.m5.rate) +
+              " (text " + r.m5.by.text + ", body " + r.m5.by.body + ", file " + r.m5.by.file + "); of the renamed, " +
+              r.m5.renamedRecovered + " of " + r.m5.renamedLived);
+  console.log("  M6  " + r.m6.cases + " breaks the structure leaves, " + r.m6.truths + " with a successor by content: the path predicts " +
+              r.m6.predictions + ", right " + r.m6.right + " (wrong onto a deletion " + r.m6.wrong.deleted + ", onto another slug " + r.m6.wrong.other +
+              ") → precision " + pct(r.m6.precision) + ", recall " + pct(r.m6.recall));
+  console.log("  M7  " + r.m7.edits + " doc edits rewrite " + r.m7.rewritten + " rows; " + r.m7.shifted +
+              " of them only shifted, the text the same → shift share " + pct(r.m7.share));
+  console.log("      post hoc, the same place: " + r.m5.samePlace + " more, " + r.m5.renamedSamePlace + " of them renamed; and it would carry " +
+              r.m5.falsePlace + " of the " + r.m5.deleted + " deletions onto a new section");
+}
+console.log("measure-coupling " + result.repo + " at " + result.rev);
+print("whole history", result.whole);
+if (result.since) print("after " + result.since.rev, result.since);

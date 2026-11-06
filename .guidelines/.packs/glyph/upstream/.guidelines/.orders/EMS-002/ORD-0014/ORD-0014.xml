@@ -1,0 +1,51 @@
+<glyph-package engine="3.6.9.07">
+  <schema/>
+  <block once="true">
+    <block binds="ORD-0014-renames">
+      <user-input>ORD-0014-renames</user-input>
+      <context>
+        <user-input>the spec of EMS-002</user-input>
+        <user-input>.guidelines/.orders/EMS-002/EMS-002.pgml</user-input>
+      </context>
+      <target>
+        <user-input>the renames that move the emitted output, O8, O9 and O10 of INTAKE-RUST-LADDER, answered on 2026-09-27: one ORD, the JS first and the Rust byte for byte; the first of the batch the version moves once for, answered on 2026-10-25</user-input>
+      </target>
+      <context>
+        <user-input>O10: the vocabulary says Skeptic and the glossary Sceptic, so SKEP emits skeptic; the Regent answered rename to sceptic, with skeptic still read in the source and in the XML</user-input>
+      </context>
+      <context>
+        <user-input>O8: molde means template in four places, the diagnostic of a parameter that is not a literal, a constraint of templates.json and the class note of rules.json that say preset, and the comment of the XML of an empty source; the app keeps the saved moulds under glyph.moldes.user.v1</user-input>
+      </context>
+      <context>
+        <user-input>O9: the vocabulary category molde holds TPL, PH, VAR, PARAM, DEF, SECTION, BLOCK, LOGIC and SKL; the Regent answered frame</user-input>
+      </context>
+      <context>
+        <user-input>measured at 0f71bd8 on the JS: sceptic moves 1 xml hash, L-04, and the 115 ast hashes, through the element the composition table carries; the texts of O8 move the 115 ast hashes again, through the checksums of the template and rule stores; frame moves no hash of the snapshot and moves the oracle module that carries the category</user-input>
+      </context>
+      <constraint>
+        <user-input>a retired construct becomes a recogniser and is never deleted into silence: skeptic in the source and in the XML reads as SKEP, with a note naming sceptic</user-input>
+      </constraint>
+      <constraint>
+        <user-input>technical terms settle in English, also in the Portuguese interface: the category is Frame in both languages, and preset is a retired word</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the version does not move in this ORD: it moves once, when the batch closes; each move of the snapshot is written in .decisions in the commit that makes it</user-input>
+      </constraint>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>sceptic</user-input>
+        <user-input>SKEP emits sceptic, and the former spelling skeptic is still read, in the source and in the XML, and named; the Rust answers byte for byte</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>mould and template</user-input>
+        <user-input>the diagnostic says template, preset leaves the stores, the comment of an empty source says mould, and the key of the saved moulds migrates once without losing one, seen failing before it counts</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>frame</user-input>
+        <user-input>the vocabulary category of the structure and template pieces is frame, in the engine, the app and the glossary</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>

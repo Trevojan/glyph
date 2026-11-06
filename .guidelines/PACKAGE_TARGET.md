@@ -47,7 +47,7 @@ being the single grammar.
 ## 2. The root
 
 ```xml
-<glyph-package engine="3.6.9.07">
+<glyph-package engine="4.7.10.08">
   <block once="true"> … </block>
 </glyph-package>
 ```
@@ -214,6 +214,22 @@ bracketed ones.
 
 ---
 
+## 3c. Two operands as attributes — `<part n>` and `<if cond>`
+
+> **Added 2026-10-25**, by the Regent's answer of 2026-09-27 to the two
+> proposals the draft of 1.4.4 got right and left for a decision.
+
+`[pt'1.1'` emits `<part n="1.1">` and `[if'x'` emits `<if cond="x">`: the
+number of a part and the condition of an if are what the element *is about*, so
+they travel on it instead of arriving as a `<user-input>` a reader has to know
+to look at first. The operand is the literal a binding takes — the first that
+is neither raw nor a result — and it moves only when it carries nothing else:
+a literal with a template `slot` or a `ref` stays `<user-input>`, and so does
+an empty one, so nothing it carried is lost. A frame counts the operand where it
+was written, so an `<if>` with a condition asks for none. `fromXML()` reads the
+attribute back as the literal, in the same step. Which command takes which
+attribute is `OPERAND_ATTR` in `vocabulary.js`.
+
 ## 4. `<invoke>` — the command call
 
 > **Delivered decision (Q10).** `<invoke>` is the **command call**, and to the
@@ -278,14 +294,22 @@ where the information is non-obvious.
 
 `depth` is `compositionDepth` verbatim — `PROB` is 1, `LRN` and `ASSM` are 2.
 
-### 4.4 `<template>` is unchanged
+### 4.4 `<template>` is the macro, and `slot` follows what the call wrote
 
 An earlier draft of this section read `<invoke>` as the *template* call and
 proposed retiring `expanded="true"`. That was wrong and is withdrawn.
-`<template>`, `define`, `expanded`, `means` and every slot rule of
-`XML_REFERENCE.md` §5 stay exactly as they are. A template is a macro over
-source; a command is a function in the vocabulary. They are different things and
-the format keeps them apart.
+`<template>`, `define`, `expanded` and `means` are what `XML_REFERENCE.md` §5
+writes. A template is a macro over source; a command is a function in the
+vocabulary. They are different things and the format keeps them apart.
+
+`slot` names the parameter a node of the call was written for, on whatever
+element the node becomes: the bound value on `<user-input>`, the unbound hole on
+`<needs>`, and what a named fill holds past its value on its own element —
+`<criticise slot="rule">` for the `[crit` written inside `[ph-rule'a'…]`. A fill
+that names no hole keeps its own name as its `slot` (decided 2026-10-25: a known
+command never vanishes). It is the one attribute `fromXML()` rebuilds the call
+from, so G3 holds unchanged: the encoding of an empty slot is `<needs slot>`,
+and nothing here changes it.
 
 ### 4.5 Divergence from `OPERATOR_TARGET.md`
 
@@ -304,7 +328,7 @@ constraint. Recorded so the divergence is deliberate rather than silent.
 ## 5. `<schema>`
 
 ```xml
-<glyph-package engine="3.6.9.07">
+<glyph-package engine="4.7.10.08">
   <schema/>
   …
 </glyph-package>

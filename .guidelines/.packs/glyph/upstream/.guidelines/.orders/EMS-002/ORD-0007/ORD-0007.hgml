@@ -1,0 +1,97 @@
+[block
+  'ORD-0007-json'
+  [ctx
+    'the spec of EMS-002'
+    '.guidelines/.orders/EMS-002/EMS-002.pgml'
+  [/ctx]
+  [tgt
+    'JSON in a crate of its own under every other, question 4 of the EMS-001 return, answered b'
+  [/tgt]
+  [ctx
+    'JSON sits in glyph-util, which vocabulary.js and stores.js do not import, so glyph-stores keeps a Value of its own with the same six variants, and the envelope converts one into the other'
+  [/ctx]
+  [cnst
+    'the oracle of glyph-json is the platform, JSON.parse and JSON.stringify as the JS engine has them, and its tests are the ones glyph-util held for it'
+  [/cnst]
+  [cnst
+    'a floor crate depends on no crate of the workspace, and every crate may depend on it'
+  [/cnst]
+  [cnst
+    'no projection moves: a refactor of the Rust under the same oracle'
+  [/cnst]
+  [cmp
+    'the crate'
+    'glyph-json holds what glyph_util::json held and replaces the Value of glyph-stores, one JSON type for the workspace'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+  [cmp
+    'the graph'
+    'crate-graph.js names glyph-json with its oracle, as the floor every crate may reach and that reaches none, seen failing before it counts'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+  [cmp
+    'the oracle'
+    'every crate answers the oracle as before, byte for byte'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+[/block]

@@ -1,0 +1,23 @@
+<glyph-package engine="3.5.8.06">
+  <schema/>
+  <block once="true">
+    <block binds="ORD-0002-util">
+      <user-input>ORD-0002-util</user-input>
+      <context>
+        <user-input>the spec of EMS-001</user-input>
+        <user-input>.guidelines/.orders/EMS-001/EMS-001.pgml</user-input>
+      </context>
+      <only-if>
+        <user-input>ORD-0001 closed</user-input>
+      </only-if>
+      <target>
+        <user-input>glyph-util and glyph-version: esc, xesc, lev, walk and VERSION</user-input>
+      </target>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>glyph-util and glyph-version</user-input>
+        <user-input>each function equals its JS on every string the oracle holds</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>

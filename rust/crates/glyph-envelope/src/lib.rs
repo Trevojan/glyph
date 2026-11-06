@@ -4,14 +4,14 @@
 //!
 //! EMS-001 ORD-0009. `serialize_ast` is the projection and `to_ast` the one
 //! call; the envelope is a `Json` value built in the JS's key order, so
-//! `glyph_util::json::stringify` writes the bytes `JSON.stringify` writes. A
+//! `glyph_json::stringify` writes the bytes `JSON.stringify` writes. A
 //! value JSON drops — the function `Object` a session word or a mood holds as
 //! its gloss — is dropped here too.
 
 use glyph_parse::{parse, Extra, Gap, Opts};
-use glyph_stores::{Context, Value};
-use glyph_util::json::{stringify, Json};
-use glyph_util::tree::{Emotion, Gloss, Id, Segment, Thrown, Tree, LIMITS};
+use glyph_stores::Context;
+use glyph_json::{stringify, Json};
+use glyph_util::tree::{Emotion, Gloss, Id, Node, Segment, Thrown, Tree, LIMITS};
 use glyph_version::VERSION;
 use glyph_vocab::el_name;
 
@@ -20,36 +20,22 @@ pub const AST_SCHEMA: f64 = 2.0;
 
 /// `ck`: two FNV-1a runs over UTF-16 units, as the JS computes them — the
 /// XOR on signed 32-bit integers and the product in a double, which drops the
-/// low bits past 2⁵³ before `>>> 0` keeps 32 of them.
+/// low bits past 2⁵³ before `>>> 0` keeps 32 of them. The product is the one
+/// step in a double, since the digest is what that product gives; it holds an
+/// integer below 2⁶³, so the rest is integer arithmetic (EMS-002 ORD-0013).
 pub fn ck(s: &str) -> String {
-    fn uint32(x: f64) -> u32 {
-        let m = x.trunc() % 4294967296.0;
-        (if m < 0.0 { m + 4294967296.0 } else { m }) as u32
-    }
     let (mut a, mut b): (u32, u32) = (0x811c9dc5, 0x01000193);
     for (i, c) in s.encode_utf16().enumerate() {
-        let c = c as i32;
-        a = uint32(f64::from((a as i32) ^ c) * 16777619.0);
-        b = uint32(f64::from((b as i32) ^ (uint32(f64::from(c) + i as f64) as i32)) * 2246822507.0);
+        let c = u32::from(c);
+        a = (f64::from((a ^ c) as i32) * 16777619.0) as i64 as u32;
+        b = (f64::from((b ^ c.wrapping_add(i as u32)) as i32) * 2246822507.0) as i64 as u32;
     }
     format!("{a:08x}{b:08x}")
 }
 
-/// A store as JSON, in the key order the JS enumerates.
-pub fn json_of(v: &Value) -> Json {
-    match v {
-        Value::Null => Json::Null,
-        Value::Bool(b) => Json::Bool(*b),
-        Value::Num(n) => Json::Num(*n),
-        Value::Str(s) => Json::Str(s.clone()),
-        Value::Arr(a) => Json::Arr(a.iter().map(json_of).collect()),
-        Value::Obj(kv) => Json::Obj(kv.iter().map(|(k, v)| (k.clone(), json_of(v))).collect()),
-    }
-}
-
 /// `storeCk`: a store's fingerprint by its serialised form; null when none.
-pub fn store_ck(store: Option<&Value>) -> Json {
-    store.map_or(Json::Null, |s| Json::Str(ck(&stringify(&json_of(s)))))
+pub fn store_ck(store: Option<&Json>) -> Json {
+    store.map_or(Json::Null, |s| Json::Str(ck(&stringify(s))))
 }
 
 /// What the envelope is asked for beyond the parse.
@@ -108,6 +94,16 @@ fn obj(kv: Vec<(&str, Option<Json>)>) -> Json {
     Json::Obj(kv.into_iter().filter_map(|(k, v)| v.map(|v| (k.to_string(), v))).collect())
 }
 
+/// `withSlot`: `slot` on a node other than a literal is the template
+/// parameter a named fill carried it in for, past its value — present only
+/// there, so every other node of every envelope keeps its shape.
+fn with_slot(mut o: Json, nd: &Node<Extra>) -> Json {
+    if let (Json::Obj(kv), Some(slot)) = (&mut o, nd.bound_slot.as_deref().filter(|x| !x.is_empty())) {
+        kv.push(("slot".into(), s(slot)));
+    }
+    o
+}
+
 /// `astShallow`: the node without its body.
 pub fn ast_shallow(tree: &Tree<Extra>, id: Id) -> Json {
     let nd = &tree.nodes[id];
@@ -118,18 +114,18 @@ pub fn ast_shallow(tree: &Tree<Extra>, id: Id) -> Json {
                         ("slot", or_null(&nd.bound_slot)), ("role", or_null(&nd.role))]);
     }
     if nd.text == Some(true) {
-        return obj(vec![("type", Some(s("Text"))), ("value", opt_str(&nd.v))]);
+        return with_slot(obj(vec![("type", Some(s("Text"))), ("value", opt_str(&nd.v))]), nd);
     }
     if nd.mode.as_deref().is_some_and(|m| !m.is_empty()) {
         return obj(vec![("type", Some(s("ModeOff")))]);
     }
     if nd.raw_fence == Some(true) {
-        return obj(vec![("type", Some(s("Verbatim"))), ("value", Some(s(nd.v.as_deref().unwrap_or(""))))]);
+        return with_slot(obj(vec![("type", Some(s("Verbatim"))), ("value", Some(s(nd.v.as_deref().unwrap_or(""))))]), nd);
     }
     if nd.logic.is_some() {
         let lg = nd.extra.as_ref().expect("a logic node carries its Logic");
         let strs = |v: &[String]| Json::Arr(v.iter().map(|x| s(x)).collect());
-        return obj(vec![
+        return with_slot(obj(vec![
             ("type", Some(s("Logic"))),
             ("name", Some(if lg.name.is_empty() { Json::Null } else { s(&lg.name) })),
             ("rules", Some(Json::Arr(lg.rules.iter().map(|r| obj(vec![
@@ -137,12 +133,12 @@ pub fn ast_shallow(tree: &Tree<Extra>, id: Id) -> Json {
                 ("source", Some(s(&r.source))), ("expr", Some(s(&r.expr))), ("then", or_null(&r.then)),
                 ("reads", Some(s(&r.reads))), ("uses", Some(strs(&r.uses)))])).collect()))),
             ("missing", Some(strs(&lg.missing))),
-        ]);
+        ]), nd);
     }
     if nd.is_template() {
-        return obj(vec![("type", Some(s("Template"))), ("name", opt_str(&nd.template)),
-                        ("isDefinition", Some(Json::Bool(nd.is_def == Some(true)))),
-                        ("expanded", Some(Json::Bool(nd.expanded == Some(true))))]);
+        return with_slot(obj(vec![("type", Some(s("Template"))), ("name", opt_str(&nd.template)),
+                                  ("isDefinition", Some(Json::Bool(nd.is_def == Some(true)))),
+                                  ("expanded", Some(Json::Bool(nd.expanded == Some(true))))]), nd);
     }
     let tier = nd.tier.clone().unwrap_or_default();
     let canonical = nd.canonical.clone().unwrap_or_default();
@@ -156,7 +152,7 @@ pub fn ast_shallow(tree: &Tree<Extra>, id: Id) -> Json {
         _ => None,
     };
     let element = if tier == "unknown" || tier == "empty" { Json::Null } else { s(&el_name(&canonical, &tier, text_gloss)) };
-    obj(vec![
+    with_slot(obj(vec![
         ("type", Some(s("Command"))),
         ("raw", opt_str(&nd.raw)),
         ("canonical", opt_str(&nd.canonical)),
@@ -168,7 +164,11 @@ pub fn ast_shallow(tree: &Tree<Extra>, id: Id) -> Json {
         ("origin", Some(nd.origin.clone().flatten().filter(|o| !o.is_empty()).map_or(Json::Null, |o| s(&o)))),
         ("slotName", Some(Json::Bool(nd.slot_name == Some(true)))),
         ("editorial", Some(Json::Bool(nd.editorial == Some(true)))),
-        ("name", Some(nd.colon.clone().flatten().filter(|c| !c.is_empty()).map_or(Json::Null, |c| s(&c)))),
+        /* null from this engine: the name of a block or a section is its first
+           literal, a child like any other, and only the XML carries it as an
+           attribute (OPERAND_ATTR). fromAST reads a name an envelope holds as
+           an operand literal. */
+        ("name", Some(Json::Null)),
         ("depth", nd.depth.map(|d| Json::Num(d as f64))),
         ("autoClosed", Some(Json::Bool(nd.auto_closed == Some(true)))),
         ("suggestion", Some(match &nd.suggestion {
@@ -181,7 +181,7 @@ pub fn ast_shallow(tree: &Tree<Extra>, id: Id) -> Json {
             None | Some(None) => Json::Null,
             Some(Some(d)) => Json::Num(d),
         })),
-    ])
+    ]), nd)
 }
 
 /// `astHasBody`: a command, a template or a mode carries `body`.
@@ -281,9 +281,9 @@ fn segment_json(tree: &Tree<Extra>, sg: &Segment, truncated: &mut usize, panel: 
     seg
 }
 
-/// `serializeAST(segments, gaps, opts)`. `rules` is the rules store as the
-/// parse left it; `source` is the text the envelope describes.
-pub fn serialize_ast(tree: &Tree<Extra>, gaps: &[Gap], ctx: &Context, rules: Option<&Value>, source: Option<&str>, o: &AstOpts) -> Json {
+/// `serializeAST(segments, gaps, opts)`: the stores are the context's, as
+/// the JS reads them off `opts`; `source` is the text the envelope describes.
+pub fn serialize_ast(tree: &Tree<Extra>, gaps: &[Gap], ctx: &Context, source: Option<&str>, o: &AstOpts) -> Json {
     let mut truncated = 0;
     let segments: Vec<Json> = tree.segments.iter().map(|sg| segment_json(tree, sg, &mut truncated, o.panel)).collect();
     let mut diagnostics: Vec<Json> = gaps.iter().map(|g| {
@@ -299,8 +299,8 @@ pub fn serialize_ast(tree: &Tree<Extra>, gaps: &[Gap], ctx: &Context, rules: Opt
         ("schema".into(), Json::Num(AST_SCHEMA)),
         ("version".into(), s(VERSION)),
         ("source".into(), source.map_or(Json::Null, |t| src_descriptor(t, o))),
-        ("stores".into(), Json::Obj(vec![("templates".into(), store_ck(Some(&ctx.templates))), ("rules".into(), store_ck(rules)),
-                                          ("expansions".into(), store_ck(ctx.expansions.as_ref()))])),
+        ("stores".into(), Json::Obj(vec![("templates".into(), store_ck(Some(&ctx.templates))), ("rules".into(), store_ck(ctx.rules.as_deref())),
+                                          ("expansions".into(), store_ck(ctx.expansions.as_deref()))])),
         ("projection".into(), s(if o.panel { "panel" } else { "full" })),
         ("segments".into(), Json::Arr(segments)),
     ];
@@ -322,5 +322,5 @@ pub fn serialize_ast(tree: &Tree<Extra>, gaps: &[Gap], ctx: &Context, rules: Opt
 /// the caller names a language; here the caller's `Opts` says which.
 pub fn to_ast(src: &str, o: &Opts, a: &AstOpts) -> Result<Json, Thrown> {
     let p = parse(src, o)?;
-    Ok(serialize_ast(&p.tree, &p.gaps, o.ctx, p.rules.as_ref(), Some(src), a))
+    Ok(serialize_ast(&p.tree, &p.gaps, o.ctx, Some(src), a))
 }

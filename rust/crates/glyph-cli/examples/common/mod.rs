@@ -7,7 +7,7 @@ use glyph_burn::{to_hgml, BurnOpts};
 use glyph_envelope::{to_ast, AstOpts};
 use glyph_parse::Opts;
 use glyph_stores::Context;
-use glyph_util::json::{parse, stringify, Json};
+use glyph_json::{parse, stringify, Json};
 use glyph_util::tree::Thrown;
 use glyph_xml::to_xml;
 

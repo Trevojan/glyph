@@ -1,0 +1,45 @@
+{
+  "schema": 1,
+  "note": "Where the engine's output is meant to land. Data, not code: model ids and harness surfaces change on someone else's schedule, so they are declared here instead of compiled into the engine. `available:false` lists a harness that is known but not wired yet — a listed-and-off harness informs, an invented one lies. The UI reads this to show the Regent, before anything is emitted, which file will be written and with what header.",
+
+  "harnesses": [
+    {
+      "id": "claude-code",
+      "label": "Claude Code",
+      "available": true,
+      "writes": ".claude/agents/<role>.md",
+      "registers": "frontmatter `tools:` — a fixed discovery path, not a convention",
+      "models": [
+        { "id": "inherit", "label": "herda da sessão", "note": "no model: line" },
+        { "id": "opus",    "label": "Opus 5",     "full": "claude-opus-5" },
+        { "id": "sonnet",  "label": "Sonnet 5",   "full": "claude-sonnet-5" },
+        { "id": "haiku",   "label": "Haiku 4.5",  "full": "claude-haiku-4-5-20251001" },
+        { "id": "fable",   "label": "Fable 5",    "full": "claude-fable-5" }
+      ]
+    },
+    {
+      "id": "anthropic-api",
+      "label": "API Anthropic",
+      "available": false,
+      "writes": "—",
+      "registers": "the `tools` parameter of the Messages API",
+      "models": []
+    },
+    {
+      "id": "orbital",
+      "label": "Runtime _ORBITAL",
+      "available": false,
+      "writes": "—",
+      "registers": "to be defined with the runtime",
+      "models": []
+    }
+  ],
+
+  "roles": [
+    { "id": "dv", "label": "DV — implements" },
+    { "id": "qa", "label": "QA — risk opinion" },
+    { "id": "po", "label": "PO — accepts" },
+    { "id": "da", "label": "DA — instruments" },
+    { "id": "custom", "label": "outro / avulso" }
+  ]
+}

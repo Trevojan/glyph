@@ -14,13 +14,14 @@
 //! pt-BR words of the empty document, of an unanswered hole and of a
 //! variable no line defines.
 
-use glyph_parse::{collect_bindings, binding_of, parse, Extra, Opts};
-use glyph_stores::{atoms_of, def_of, depth_of, formula_of, species_of, stands_alone, Context, Value};
-use glyph_util::json::number;
-use glyph_util::tree::{Gloss, Id, Thrown, Tree, LIMITS};
+use glyph_parse::{collect_bindings, binding_of, deep_inference, parse, unbound_refs, Extra, Opts};
+use glyph_stores::{atoms_of, def_of, depth_of, formula_of, species_of, stands_alone, Context};
+use glyph_json::Json;
+use glyph_json::number;
+use glyph_util::tree::{Gloss, Id, Node, Thrown, Tree, LIMITS};
 use glyph_util::{inherited, inherited_text, js_space, js_trim, xesc};
 use glyph_version::VERSION;
-use glyph_vocab::{derived, el_name, get, FRAMES, SLOTS};
+use glyph_vocab::{derived, el_name, get, FRAMES, OPERAND_ATTR, SLOTS};
 
 /// `pad`: two spaces a level, up to the ceiling.
 pub fn pad(d: usize) -> String {
@@ -43,13 +44,13 @@ fn gloss_arg(g: &Option<Gloss>) -> Option<&str> {
         _ => None,
     }
 }
-fn js_value(v: Option<&Value>) -> String {
+fn js_value(v: Option<&Json>) -> String {
     match v {
-        None | Some(Value::Null) => String::new(),
-        Some(Value::Str(s)) => s.clone(),
-        Some(Value::Num(n)) => number(*n),
-        Some(Value::Bool(b)) => b.to_string(),
-        Some(Value::Arr(_) | Value::Obj(_)) => "[object Object]".into(),
+        None | Some(Json::Null) => String::new(),
+        Some(Json::Str(s)) => s.clone(),
+        Some(Json::Num(n)) => number(*n),
+        Some(Json::Bool(b)) => b.to_string(),
+        Some(Json::Arr(_) | Json::Obj(_)) => "[object Object]".into(),
     }
 }
 
@@ -90,11 +91,20 @@ pub fn collect(tree: &Tree<Extra>, list: &[Id], acc: &mut Vec<String>, bad: &mut
     }
 }
 
-/// `emitLogic`, for the Logic a `[logic]` node carries.
-pub fn emit_logic(extra: &Extra, d: usize, l: &mut Vec<String>) {
+/// `slotAttr`: the parameter a template call wrote this node for, on
+/// whatever element the node becomes. A bound value is `<user-input slot>`,
+/// and what a named fill carried past its value is marked the same way, so
+/// the call can be rebuilt from the expansion.
+pub fn slot_attr<X>(nd: &Node<X>) -> String {
+    nd.bound_slot.as_deref().filter(|s| !s.is_empty()).map_or(String::new(), |s| format!(" slot=\"{}\"", xesc(s)))
+}
+
+/// `emitLogic`, for the Logic a `[logic]` node carries; `slot` is the
+/// node's `slotAttr`.
+pub fn emit_logic(extra: &Extra, d: usize, l: &mut Vec<String>, slot: &str) {
     let lg = extra.as_ref().expect("a logic node carries its Logic");
     let name = if lg.name.is_empty() { String::new() } else { format!(" name=\"{}\"", xesc(&lg.name)) };
-    l.push(format!("{}<logic{name}>", pad(d)));
+    l.push(format!("{}<logic{name}{slot}>", pad(d)));
     for r in &lg.rules {
         let mut at = vec![format!("kind=\"{}\"", r.kind)];
         if let Some(n) = r.name.as_deref().filter(|n| !n.is_empty()) {
@@ -119,20 +129,93 @@ pub fn emit_logic(extra: &Extra, d: usize, l: &mut Vec<String>) {
 
 enum Frame {
     Node(Id, usize),
+    /// a bare link that heads the run a hole's name opened: `chain="extend"`
+    /// whichever operator wrote it
+    Head(Id, usize),
     Tail(Vec<String>),
+    /// the hole's own `<needs>` line, inside a `<placeholder>`
+    Line(String, usize),
+}
+
+/// `holeOf`: the hole's `<needs>` line, unchanged in shape (PACKAGE_TARGET G3),
+/// and — when the PH holds more than its name and its question — the order its
+/// `<placeholder>` writes: `None` is the `<needs>`, where the question was
+/// written (with no question, after the name and the links straight after it).
+struct Hole {
+    needs: String,
+    kids: Option<Vec<Option<Id>>>,
+    run_head: Option<Id>,
+}
+
+fn hole_of(tree: &Tree<Extra>, id: Id) -> Hole {
+    let kids = &tree.nodes[id].children;
+    let name = kids.iter().copied().find(|&c| tree.nodes[c].slot_name == Some(true));
+    let q = kids.iter().copied().find(|&c| tree.nodes[c].is_literal());
+    let slot = name.map_or(String::new(), |c| format!(" slot=\"{}\"", xesc(tree.nodes[c].raw.as_deref().unwrap_or(""))));
+    let text = q.map_or("sem resposta".to_string(), |c| tree.nodes[c].v.clone().unwrap_or_default());
+    let needs = format!("<needs{slot}>{}</needs>", xesc(&text));
+    let filled = q.is_some_and(|c| tree.nodes[c].bound_slot.as_deref().is_some_and(|s| !s.is_empty()));
+    let held = kids.iter().any(|&c| Some(c) != name && Some(c) != q);
+    if !held && !filled {
+        return Hole { needs, kids: None, run_head: None };
+    }
+    let mut run: Vec<Id> = Vec::new();
+    if let Some(n) = name {
+        let at = kids.iter().position(|&c| c == n).unwrap_or(0);
+        run.extend(kids[at + 1..].iter().copied().take_while(|&c| tree.nodes[c].chain_element == Some(true)));
+    }
+    let mut out: Vec<Option<Id>> = kids.iter().copied().filter(|&c| Some(c) != name)
+        .map(|c| if Some(c) == q && !filled { None } else { Some(c) }).collect();
+    if q.is_none() {
+        out.insert(run.len(), None);
+    }
+    Hole { needs, kids: Some(out), run_head: run.first().copied() }
 }
 
 /// `emit`: one node and everything under it, iteratively — a tail frame holds
 /// the lines that close a node, pushed before its children so they come after.
+/// `operandAttr`: the operand of a PT or an IF travels as an attribute —
+/// `[pt'1.1'` is `<part n="1.1">`, `[if'x'` is `<if cond="x">` (decided
+/// 2026-09-27) — and the first literal of a BLOCK or a SECTION is its name,
+/// `[block'review'` is `<block name="review">` (decided 2026-10-26), when it
+/// carries nothing else: no template slot, no reference, some text. The
+/// attribute's name and the literal.
+fn operand_attr(tree: &Tree<Extra>, id: Id, binds: &[String]) -> Option<(&'static str, Id)> {
+    let nd = &tree.nodes[id];
+    let name = get(OPERAND_ATTR, nd.canonical.as_deref()?)?;
+    if nd.chain_element == Some(true) {
+        return None;
+    }
+    let lit = nd.children.iter().copied().find(|&c| {
+        let k = &tree.nodes[c];
+        k.is_literal() && k.form.as_deref() != Some("raw") && k.role.as_deref() != Some("result")
+    })?;
+    let k = &tree.nodes[lit];
+    if k.bound_slot.as_deref().is_some_and(|s| !s.is_empty()) {
+        return None;
+    }
+    let v = js_trim(k.v.as_deref().unwrap_or(""));
+    /* `binds` is a plain object: a member of the prototype is bound */
+    if v.is_empty() || (k.is_binder != Some(true) && (binds.contains(&v) || inherited(&v))) {
+        return None;
+    }
+    Some((name, lit))
+}
+
 pub fn emit(tree: &mut Tree<Extra>, root: Id, start: usize, l: &mut Vec<String>, ctx: &Context, describe: bool, binds: &[String]) {
     let mut stack = vec![Frame::Node(root, start)];
     while let Some(f) = stack.pop() {
-        let (id, d) = match f {
+        let (id, d, head) = match f {
             Frame::Tail(t) => {
                 l.extend(t);
                 continue;
             }
-            Frame::Node(id, d) => (id, d),
+            Frame::Line(s, d) => {
+                l.push(format!("{}{s}", pad(d)));
+                continue;
+            }
+            Frame::Node(id, d) => (id, d, false),
+            Frame::Head(id, d) => (id, d, true),
         };
         let push_kids = |stack: &mut Vec<Frame>, kids: &[Id], d: usize| stack.extend(kids.iter().rev().map(|&k| Frame::Node(k, d)));
         let nd = tree.nodes[id].clone();
@@ -140,10 +223,10 @@ pub fn emit(tree: &mut Tree<Extra>, root: Id, start: usize, l: &mut Vec<String>,
         if nd.is_literal() {
             let v = nd.v.clone().unwrap_or_default();
             if nd.form.as_deref() == Some("raw") {
-                l.push(format!("{}<off>{}</off>", pad(d), xesc(&js_trim(&v))));
+                l.push(format!("{}<off{}>{}</off>", pad(d), slot_attr(&nd), xesc(&js_trim(&v))));
                 continue;
             }
-            let slot = nd.bound_slot.as_deref().filter(|s| !s.is_empty()).map_or(String::new(), |s| format!(" slot=\"{}\"", xesc(s)));
+            let slot = slot_attr(&nd);
             let role = if nd.role.as_deref() == Some("result") { " role=\"result\"" } else { "" };
             /* a literal whose text is a bound name refers to it; `binds` is a
                plain object, so the prototype's names are bound too */
@@ -158,19 +241,25 @@ pub fn emit(tree: &mut Tree<Extra>, root: Id, start: usize, l: &mut Vec<String>,
             continue;
         }
         if nd.text == Some(true) {
-            l.push(format!("{}<off>{}</off>", pad(d), xesc(nd.v.as_deref().unwrap_or(""))));
+            l.push(format!("{}<off{}>{}</off>", pad(d), slot_attr(&nd), xesc(nd.v.as_deref().unwrap_or(""))));
             continue;
         }
+        /* one `[off]` region, one <off> (XML_REFERENCE §4): a region with no
+           raw child is the element with nothing in it */
         if nd.mode.as_deref().is_some_and(|m| !m.is_empty()) {
-            push_kids(&mut stack, &nd.children, d);
+            if nd.children.is_empty() {
+                l.push(format!("{}<off></off>", pad(d)));
+            } else {
+                push_kids(&mut stack, &nd.children, d);
+            }
             continue;
         }
         if nd.raw_fence == Some(true) {
-            l.push(format!("{}<raw>{}</raw>", pad(d), xesc(nd.v.as_deref().unwrap_or(""))));
+            l.push(format!("{}<raw{}>{}</raw>", pad(d), slot_attr(&nd), xesc(nd.v.as_deref().unwrap_or(""))));
             continue;
         }
         if nd.logic.is_some() {
-            emit_logic(&nd.extra, d, l);
+            emit_logic(&nd.extra, d, l, &slot_attr(&nd));
             continue;
         }
         if nd.is_template() {
@@ -179,8 +268,9 @@ pub fn emit(tree: &mut Tree<Extra>, root: Id, start: usize, l: &mut Vec<String>,
                 (Some(g), true) if !matches!(g, Gloss::Text(t) if t.is_empty()) => format!(" means=\"{}\"", xesc(&gloss_text(g))),
                 _ => String::new(),
             };
-            let ta = format!(" name=\"{}\"{}{}{means}", xesc(nd.template.as_deref().unwrap_or("")),
-                             if nd.is_def == Some(true) { " define=\"true\"" } else { "" }, if expanded { " expanded=\"true\"" } else { "" });
+            let ta = format!(" name=\"{}\"{}{}{means}{}", xesc(nd.template.as_deref().unwrap_or("")),
+                             if nd.is_def == Some(true) { " define=\"true\"" } else { "" }, if expanded { " expanded=\"true\"" } else { "" },
+                             slot_attr(&nd));
             if nd.children.is_empty() {
                 l.push(format!("{}<template{ta}/>", pad(d)));
                 continue;
@@ -191,12 +281,11 @@ pub fn emit(tree: &mut Tree<Extra>, root: Id, start: usize, l: &mut Vec<String>,
             continue;
         }
         /* an empty template slot: the question travels in place of the answer */
-        if nd.canonical.as_deref() == Some("PH") {
-            let name = nd.children.iter().find(|&&c| tree.nodes[c].slot_name == Some(true))
-                .map_or(String::new(), |&c| format!(" slot=\"{}\"", xesc(tree.nodes[c].raw.as_deref().unwrap_or(""))));
-            let q = nd.children.iter().find(|&&c| tree.nodes[c].is_literal())
-                .map_or("sem resposta".to_string(), |&c| tree.nodes[c].v.clone().unwrap_or_default());
-            l.push(format!("{}<needs{name}>{}</needs>", pad(d), xesc(&q)));
+        /* a hole that holds nothing but its name and its question is its
+           <needs> line alone; one that holds more is a <placeholder> */
+        let hole = (nd.canonical.as_deref() == Some("PH")).then(|| hole_of(tree, id));
+        if let Some(Hole { needs, kids: None, .. }) = &hole {
+            l.push(format!("{}{needs}", pad(d)));
             continue;
         }
 
@@ -205,11 +294,12 @@ pub fn emit(tree: &mut Tree<Extra>, root: Id, start: usize, l: &mut Vec<String>,
         /* `chain` marks a bare link by the operator that attached it; `join`
            is the same for `,` between bracketed siblings */
         let chain = match origin.as_deref() {
-            Some(o @ ("extend" | "item")) if bare => Some(format!("chain=\"{o}\"")),
+            Some(o @ ("extend" | "item")) if bare => Some(format!("chain=\"{}\"", if head { "extend" } else { o })),
             _ => None,
         };
         let join = (!bare && origin.as_deref() == Some("item")).then(|| "join=\"item\"".to_string());
         let (canonical, tier) = (nd.canonical.clone().unwrap_or_default(), nd.tier.clone().unwrap_or_default());
+        let moved = if tier == "unknown" || tier == "empty" { None } else { operand_attr(tree, id, binds) };
         let (open, close) = if tier == "unknown" || tier == "empty" {
             let mut at = vec![format!("tag=\"{}\"", xesc(nd.raw.as_deref().unwrap_or("")))];
             if let Some(Some(s)) = &nd.suggestion {
@@ -217,6 +307,9 @@ pub fn emit(tree: &mut Tree<Extra>, root: Id, start: usize, l: &mut Vec<String>,
             }
             at.extend(chain.clone());
             at.extend(join.clone());
+            if let Some(s) = slot_attr(&nd).strip_prefix(' ') {
+                at.push(s.to_string());
+            }
             (format!("<unresolved {}", at.join(" ")), "unresolved".to_string())
         } else {
             let el = el_name(&canonical, &tier, gloss_arg(&nd.gloss));
@@ -224,11 +317,14 @@ pub fn emit(tree: &mut Tree<Extra>, root: Id, start: usize, l: &mut Vec<String>,
             if nd.editorial == Some(true) {
                 attrs.push("force=\"editorial\"".into());
             }
-            if let Some(Some(c)) = nd.colon.as_ref().filter(|c| c.as_deref().is_some_and(|c| !c.is_empty())) {
-                attrs.push(format!("name=\"{}\"", xesc(c)));
-            }
             attrs.extend(chain.clone());
             attrs.extend(join.clone());
+            if let Some(s) = slot_attr(&nd).strip_prefix(' ') {
+                attrs.push(s.to_string());
+            }
+            if let Some((a, lit)) = moved {
+                attrs.push(format!("{a}=\"{}\"", xesc(tree.nodes[lit].v.as_deref().unwrap_or(""))));
+            }
             /* a primitive that received an operand */
             if stands_alone(&canonical, ctx)
                 && nd.children.iter().any(|&c| tree.nodes[c].is_canonical() && tree.nodes[c].chain_element != Some(true)) {
@@ -260,21 +356,23 @@ pub fn emit(tree: &mut Tree<Extra>, root: Id, start: usize, l: &mut Vec<String>,
         };
 
         let kids = tree.value_children(id);
-        let colon = nd.colon.as_ref().is_some_and(|c| c.as_deref().is_some_and(|c| !c.is_empty()));
         /* ordered slots: each empty position travels as <needs slot="n"> */
         let slots = if bare { None } else { slots_of(&canonical) };
         let mut slot_needs: Vec<(usize, String)> = Vec::new();
         if let Some((len, named)) = slots {
-            let got = kids.len() + usize::from(colon);
-            for k in got..len.unwrap_or(0) {
+            for k in kids.len()..len.unwrap_or(0) {
                 slot_needs.push((k + 1, named.get(k).copied().unwrap_or("").to_string()));
             }
         }
         let frame = if slots.is_some() { None } else { get(FRAMES, &canonical) };
-        let needs = frame.filter(|_| !bare && kids.is_empty() && !colon)
-            .map(|f| f.first().copied().unwrap_or("").replacen('*', "", 1));
+        let needs = frame.filter(|_| !bare && kids.is_empty())
+            .map(|f| f.first().copied().unwrap_or("").replacen('*', "", 1))
+            .or_else(|| deep_inference(tree, id, ctx).map(|_| "the subject".to_string()));
 
-        if nd.children.is_empty() && needs.is_none() && slot_needs.is_empty() {
+        /* the frame counts the operand where it was written; the element does not repeat it */
+        let all: Vec<Id> = nd.children.iter().copied().filter(|&c| moved.is_none_or(|(_, lit)| c != lit)).collect();
+        let empty = hole.as_ref().and_then(|h| h.kids.as_ref()).map_or(all.is_empty(), |k| k.is_empty());
+        if empty && needs.is_none() && slot_needs.is_empty() {
             l.push(format!("{}{open}/>", pad(d)));
             continue;
         }
@@ -284,9 +382,23 @@ pub fn emit(tree: &mut Tree<Extra>, root: Id, start: usize, l: &mut Vec<String>,
         }
         let mut tail: Vec<String> = slot_needs.iter()
             .map(|(pos, want)| format!("{}<needs slot=\"{pos}\">{}</needs>", pad(d + 1), xesc(want))).collect();
+        /* a name a reference writes and nothing binds */
+        tail.extend(unbound_refs(tree, id, binds).iter()
+            .map(|v| format!("{}<needs var=\"{}\">referenciado e nunca ligado</needs>", pad(d + 1), xesc(v))));
         tail.push(format!("{}</{close}>", pad(d)));
         stack.push(Frame::Tail(tail));
-        push_kids(&mut stack, &nd.children, d + 1);
+        match hole {
+            Some(Hole { needs: line, kids: Some(kids), run_head }) => {
+                for k in kids.iter().rev() {
+                    stack.push(match *k {
+                        None => Frame::Line(line.clone(), d + 1),
+                        Some(c) if Some(c) == run_head => Frame::Head(c, d + 1),
+                        Some(c) => Frame::Node(c, d + 1),
+                    });
+                }
+            }
+            _ => push_kids(&mut stack, &all, d + 1),
+        }
     }
 }
 
@@ -457,7 +569,7 @@ pub fn package_pass(l: Vec<String>, ctx: &Context) -> Vec<String> {
 /// `buildXml(segments, opts)`.
 pub fn build_xml(tree: &mut Tree<Extra>, ctx: &Context, describe: bool) -> String {
     if tree.segments.is_empty() {
-        return "<!-- escolha um molde ou escreva do lado esquerdo -->".into();
+        return "<!-- escolha um mould ou escreva do lado esquerdo -->".into();
     }
     /* the scope is the whole document: a reference resolves to a binding
        written later as readily as to one written earlier */
@@ -466,6 +578,15 @@ pub fn build_xml(tree: &mut Tree<Extra>, ctx: &Context, describe: bool) -> Strin
     for s in 0..tree.segments.len() {
         let sg = tree.segments[s].clone();
         l.push(format!("{}<block{}>", pad(1), block_attrs(sg.continues)));
+        /* a mood colours the whole segment, a return segment as well: the
+           block's first child on both branches (XML_REFERENCE §6) */
+        if let Some(first) = sg.mood.first() {
+            let mut a = vec![format!("dominant=\"{}\"", xesc(&gloss_text(&first.gloss)))];
+            if sg.mood.len() > 1 {
+                a.push(format!("also=\"{}\"", xesc(&sg.mood[1..].iter().map(|m| gloss_text(&m.gloss)).collect::<Vec<_>>().join(","))));
+            }
+            l.push(format!("{}<mood {}/>", pad(2), a.join(" ")));
+        }
         if sg.is_return {
             let (mut exp, mut bad) = (Vec::new(), Vec::new());
             collect(tree, &sg.children, &mut exp, &mut bad);
@@ -480,13 +601,6 @@ pub fn build_xml(tree: &mut Tree<Extra>, ctx: &Context, describe: bool) -> Strin
                 l.push(format!("{}</user-expectative>", pad(2)));
             }
         } else {
-            if let Some(first) = sg.mood.first() {
-                let mut a = vec![format!("dominant=\"{}\"", xesc(&gloss_text(&first.gloss)))];
-                if sg.mood.len() > 1 {
-                    a.push(format!("also=\"{}\"", xesc(&sg.mood[1..].iter().map(|m| gloss_text(&m.gloss)).collect::<Vec<_>>().join(","))));
-                }
-                l.push(format!("{}<mood {}/>", pad(2), a.join(" ")));
-            }
             for &c in &sg.children {
                 emit(tree, c, 2, &mut l, ctx, describe, &binds);
             }

@@ -544,13 +544,280 @@ He may want the measurements back; nothing here hides that they are owed.
 
 ## 17. Housekeeping, outside the study
 
-The plan stated the `ORD-xxxxx` bundle **does not exist**. *Measured:* it does —
-`ORD-0010.manifest.json`, 3.4.7.05, 2026-09-08. By the plan's own rule the item
-had closed, and the plan dropped it: the bundle is in
-[`.changelog/`](../.changelog/README.md) now, under 3.6.9.07, *"o `--bundle` em
-séries"*.
+`.plan/` §4 states the `ORD-xxxxx` bundle **does not exist**. *Measured:* it
+does — `ORD-0010.manifest.json`, 3.4.7.05, 2026-09-08. By the plan's own rule
+the item has closed and belongs in `.changelog/`. Recorded, not moved.
 
-## 18. Re-measured, 2026-10-16 — the history since §7 says stop
+## 18. The October re-measurement, before the code — thresholds
+
+The Regent put the virtual paths first in line, in seven layers
+([`.plan`](../.plan/README.md) §0), and asked for the history to be measured
+before the code. The design is decided; what the four measures below decide is
+**its shape** — the severity of the stale gate, the granularity of the
+fingerprint, the seed of `sources:`, and whether the first ORD can key on the
+slug or must carry the `NodeID` from the start. Declared in this section and
+committed before `scripts/measure-coupling.js` exists; the commit is the stamp.
+
+**Universe.** Every commit reachable from the stamp commit, oldest first;
+reported twice: the whole history, and the commits after `49c392a` — the
+window §7 never saw, so an out-of-sample test of it. *Code* = `*.js`, `*.rs`,
+`*.py`. *Doc* = `*.md`. **Identity follows renames** (`git log -M`, git's
+default similarity), keyed by the latest name — not the basename, which §6
+used and which now collides (`README.md` in thirteen folders). **Declared
+exclusions**, both sides, before measuring — §7 found them post hoc:
+generated files (`scripts/glyph-data.js`, everything under
+`.claude/skills/glyph-markup/`), logs (`CHANGELOG.md`, `CHANGELIST*`), the
+attic (`.guidelines/.history/`), and, for M3 only, commits touching more than
+15 files (moves carried together).
+
+**M1 — staleness rate**, defined as §6 (k = 3, lagged / (co-updated +
+lagged), unpaired reported apart). Decides **the severity of a stale
+fingerprint in `npm run check`**: `≥ 25 %` → `fix`, the gate refuses and
+re-stamping is a deliberate act in the commit; `< 10 %` → `note`, printed and
+passing; between → M2's verdict decides (local → `fix`, wholesale → `note`).
+
+**M2 — edit locality**, defined as §6. Decides **the granularity of the
+fingerprint**: median `< 20 %` → per node (section, key, block); median
+`> 50 %` → per file; between → per file.
+
+**M3 — co-change coupling**, defined as §6, over the declared exclusions.
+Decides **the seed of `sources:`**: each pair with lift `> 2` and support
+`≥ 3` becomes a proposed `sources:` line in the document's frontmatter,
+marked *gated* where a check already ties the two; no pair → `sources:`
+starts empty and is written by hand.
+
+**M4 — anchor survival.** For each commit and each changed doc, the heading
+slugs before and after (GitHub's slug rule). A slug that disappears is
+**moved** if the same slug appears in another doc of the same commit,
+**renamed** if its section body reappears under a new slug of the same commit
+with line-set Jaccard `≥ 0.5`, **deleted** otherwise. Breaks = moved +
+renamed: a `file#slug` that stopped resolving while its content lived on.
+Rate = breaks / slugs ever created. Decides **the key of the first ORD**:
+`< 5 %` → the index keys on the slug, and `NodeID` and the recovery index
+(layers 2 and 7) follow in later ORDs; `≥ 5 %` → the slug is not identity
+enough, and the first ORD carries the `NodeID` with recovery by content.
+
+## 19. The October re-measurement — measured
+
+`node scripts/measure-coupling.js --rev 32abcc1 --since 49c392a`, the stamp
+commit as the last of the universe. 202 commits; the window after `49c392a` is
+101. Measured 2026-10-23.
+
+| | whole history | after `49c392a` | rule (§18) | verdict |
+|---|---|---|---|---|
+| **M1** staleness | **19.5 %** — 128 code commits: 70 co-updated, 17 lagged, 41 unpaired | 5.0 % — 56: 38, 2, 16 | between → M2 | M2 is local → **`fix`** |
+| **M2** locality | **median 6.5 %**, q1 2.3 %, q3 14.3 %; 85 % under a fifth, 5 % over half; 284 edits | median 6.6 %; 88 %, 2 %; 203 edits | `< 20 %` → node | **per node** |
+| **M3** coupling | **8 pairs**, 192 commits, 10 mass left out | 0 pairs | each pair a `sources:` line | **8 proposed lines** |
+| **M4** anchor breaks | **2.3 %** — 827 slugs created: 0 moved, 19 renamed, 219 deleted | 3.3 % — 246: 0, 8, 6 | `< 5 %` → slug | **the slug keys the first ORD** |
+
+**The seed of `sources:`**, each pair a proposed line in the document's
+frontmatter:
+
+| document | sources | support | lift | today |
+|---|---|---|---|---|
+| `.guidelines/XML_REFERENCE.md` | `scripts/glyph-parser.js` | 6 | 2.29 | gated — the suite's `D` bucket |
+| `README.md` | `scripts/glyph-cli.js` | 3 | 8.73 | **ungated**, as in §7: the README names the CLI's modes and nothing checks them |
+| `.guidelines/.orders/EMS-001/RETURN.md` | `rust/testkit/oracle.rs` (6), `rust/crates/glyph-util/src/lib.rs` (4), `glyph-util/src/tree.rs`, `glyph-parse/src/lib.rs`, `glyph-protocol/src/lib.rs`, `scripts/glyph-protocol.js` (3 each) | 3–6 | 3.10 | ungated |
+
+**What the numbers say beyond the verdicts.**
+
+- **Staleness fell by three quarters in the second half** — 23.4 % (§7) to
+  5.0 % — while the gates grew: `build-skill --check` on the version, the
+  link graph, the seam and crate graphs. The whole-history verdict stands,
+  and it is cheap: a `fix` that fires one commit in twenty.
+- **Six of the eight pairs end in `RETURN.md`**, the journal of the sessions
+  that ran the EMS-001 queue. It co-changes with the code it reports on the
+  way `CHANGELOG.md` does, and `CHANGELOG.md` is excluded as a log. Whether a
+  return is a log or a document that rots is the Regent's to say; by the
+  declared rule its six lines are proposed.
+- **The 19 renamed anchors are this repository's own rule at work**: titles
+  stamped with the version (`… v3.5.8.06` → `… v3.6.9.07`), numbering that
+  shifts (`§3.4` → `§3.5`), and headings that *declare the state*
+  (`os seis eixos` → `os sete eixos`). The slug breaks because the prose is
+  kept true. A heading carrying a version is an anchor that breaks on every
+  release.
+- **A file rename breaks `file#slug` too**, and M4 does not count it: identity
+  follows renames by declaration. Counted, 103 more slugs break — **14.8 %**
+  over the whole history, and still **3.3 %** in the window, where no doc was
+  renamed. The 103 are the reorganisation of 2026-09-04 to 09-06. The verdict
+  stands on the declared definition; the condition that would flip it is a
+  second reorganisation, and the index has to name a file that moved, not
+  return nothing.
+
+## 20. The NodeID — what structure alone recovers, threshold
+
+The Regent called layer 2 on 2026-10-23. A `NodeID` is only as good as the
+rule that carries it from one build to the next, and the rule decides the size
+of the ORD: **structural** matching needs nothing but the fingerprints the
+index already keeps; **similarity** matching needs a signature of each node's
+content stored beside it, and is what layer 7, the recovery index, is for.
+Declared here and committed before `M5` exists in `scripts/measure-coupling.js`.
+
+**Universe and exclusions** as §18. **Breaks** are counted by path: in each
+commit, each changed doc's slugs before and after, keyed `file#slug`, so a
+file rename removes every slug of the old name. A removed slug whose content
+lived on — the same slug in another doc of the commit, or its section body
+under a new slug with line-set Jaccard `≥ 0.5`, the M4 definitions — is a
+**content-lived break**; the rest are deletions, out of the count.
+
+**M5 — structural recovery.** A content-lived break is recovered when one of
+the three structural rules finds its successor among the commit's added slugs:
+
+1. **the same text**: its section, heading included, appears unchanged at
+   exactly one added slug;
+2. **the same body**: its section without the heading line, not empty,
+   appears unchanged at exactly one added slug;
+3. **the same file renamed**: more than half of the old file's slugs reappear
+   in one new file with the same slug or the same text, and the slug is there.
+
+Rate = recovered / content-lived breaks, over the whole history.
+
+Decides **the scope of the NodeID ORD**: `≥ 80 %` → the ORD carries identity
+by structure alone, and similarity stays in layer 7; `< 80 %` → the ORD also
+carries similarity matching, with a content signature per node in the index.
+
+## 21. The NodeID — measured
+
+`node scripts/measure-coupling.js --rev 798baed --since 49c392a`, the stamp of
+§20 as the last commit: 208 commits, the window 107. Measured 2026-10-23.
+
+| | whole history | after `49c392a` | rule (§20) | verdict |
+|---|---|---|---|---|
+| **M5** structural recovery | **91.1 %** — 113 of 124 content-lived breaks: the same text 93, the same body 10, the same file renamed 10 | 30.0 % — 3 of 10, all by the same body | `≥ 80 %` → structure | **identity by structure alone; similarity stays in layer 7** |
+| of them, renamed headings | 10 of 21 | 3 of 10 | — | — |
+
+**What the verdict leaves to layer 7.** The whole-history rate is carried by
+the reorganisation of September, whose 103 file renames moved sections with
+their text intact. The breaks that keep happening are **headings renamed while
+their body changes** — the version in a title, a row added under *os sete
+eixos*, and this session's own §0 heading, renamed twice as the work moved —
+and structure recovers 3 of the 10 in the window. That is the case the
+recovery index exists for.
+
+**A fourth structural rule, measured after the verdict and refused.** *The same
+place* — the same parent and the same neighbours, in the same file or the one
+it paired with — recovers the other 11 renamed headings of the whole history
+and 7 of the window. It would also carry **17 of the 219 deletions** onto the
+new section that took their place, 3 of the 6 in the window: 11 right of 28.
+A false identity is worse than a break, because a break is refused aloud and a
+false identity answers an old path with other text. The rule stays out of
+the NodeID ORD, and its count stays in the script, apart from the rate.
+
+## 22. The recovery index — what the path alone recovers, threshold
+
+The Regent called layer 7 on 2026-10-23. It answers a path that no node and no
+alias holds any more, and §21 says which case it is for: a heading renamed
+while its body changes. Two ways to recover it, at two costs:
+
+- **by the path** — a q-gram search of the asked slug against the slugs that
+  live now. Nothing is stored; the search runs when a path misses.
+- **by the content** — a line-set similarity between the section that went and
+  the sections that came. The index keeps fingerprints, not text, so the old
+  text has to come from somewhere: the previous version of the file, read from
+  git at build time and checked against the fingerprint the index holds for it.
+
+Declared here and committed before `M6` exists in `scripts/measure-coupling.js`.
+
+**Universe, exclusions and breaks** as §20: path-keyed, per commit. The cases
+are the removed slugs **the structure did not recover** (rules 1 to 3 of §20) —
+what reaches layer 7.
+
+**M6 — recovery by the path.** For each case, the **truth** is the added slug of
+the commit whose section body has the largest line-set Jaccard with the removed
+one, when that is `≥ 0.5` and the largest is unique; otherwise the slug was
+deleted and the truth is *none*. The **prediction** is the added slug, in the
+same file or the one it paired with by rule 3, whose character-trigram Jaccard
+with the removed slug is largest, when that is `≥ 0.5` and the largest is
+unique; otherwise *none*. Precision = right predictions / predictions; recall =
+right predictions / cases whose truth is not *none*. Over the whole history.
+
+Decides **how layer 7 recovers**: precision `≥ 90 %` **and** recall `≥ 80 %` →
+by the path, at query time, nothing stored; otherwise → by the content, at build
+time, against the previous version of the file from git.
+
+## 23. The recovery index — measured
+
+`node scripts/measure-coupling.js --rev 6173ad5 --since 49c392a`: 213 commits,
+the window 112. Measured 2026-10-23.
+
+| | whole history | after `49c392a` | rule (§22) | verdict |
+|---|---|---|---|---|
+| breaks the structure leaves | 231, **12** with a successor by content | 14, 8 | — | — |
+| **M6** by the path | predicts 14, right 5: **precision 35.7 %, recall 41.7 %**; the 9 wrong all fall on a deletion | predicts 3, right 2: 66.7 %, 25.0 % | precision `≥ 90 %` and recall `≥ 80 %` | **fails: layer 7 recovers by the content** |
+
+**Why the path fails.** A slug that changes only in its version or its number
+has trigrams close to the new one, and those are the five it gets right. A
+slug that changes in its words does not, and a deleted section often leaves a
+sibling whose slug looks like its own — *what is a chain* beside *what is not
+a chain*. The path tells two headings apart; it does not tell what lives under
+them.
+
+**What the content rule is.** It is the definition of the truth here — line-set
+Jaccard `≥ 0.5`, the largest unique — so its precision cannot be measured
+from the history, only its reach: the 12 of the whole history and the 8 of the
+window are what it recovers by construction. It never fires on a deletion,
+because a deletion is a section with no such successor. What it costs is the
+old text, which the index does not keep.
+
+## 24. Order maintenance — what an edit rewrites, threshold
+
+The Regent called layer 3 on 2026-10-23. Two things are asked of it, and they
+cost differently:
+
+- **the order queries** — `before(a, b)`, what comes above a node, what lies
+  between two — are answered by the index as it is: a build materialises every
+  node with its file and its offset, so the order is a sort at load, O(1) to
+  compare and O(log n) to search, with nothing stored;
+- **the update in O(k log n)** — an edit that touches k nodes rewrites k rows
+  of the index, never the rows after it. Today a row holds absolute offsets
+  and lines, so an edit early in a file shifts every row below it, and the
+  diff of `index.json` grows with the file, not with the edit. Holding the
+  rows still asks for **stable positions**: an order label per node, kept
+  across builds and given between its neighbours when a node arrives
+  (Dietz–Sleator), and offsets held relative to the previous sibling or the
+  parent.
+
+Declared here and committed before `M7` exists in `scripts/measure-coupling.js`.
+
+**Universe and exclusions** as §18; Markdown docs, each edited file of each
+commit, its sections keyed by slug before and after (M4's reading).
+
+**M7 — what an edit rewrites.** A section of the after-version is **rewritten**
+when it is new or when its row would differ: its text, or its start, end,
+first line or line count. It is **shifted** when its text is the same and only
+its coordinates moved. Shift share = shifted / rewritten, summed over the
+whole history.
+
+Decides **what the order maintenance ORD stores**: shift share `≥ 50 %` →
+stable positions, order labels by Dietz–Sleator and relative offsets, so an
+edit rewrites the rows it touches; `< 50 %` → the positions stay absolute, and
+the ORD is the order queries over them.
+
+## 25. Order maintenance — measured
+
+`node scripts/measure-coupling.js --rev 35fb43e --since 49c392a`: 218 commits,
+the window 117. Measured 2026-10-23.
+
+| | whole history | after `49c392a` | rule (§24) | verdict |
+|---|---|---|---|---|
+| **M7** what an edit rewrites | 390 doc edits rewrite 2 933 rows; **1 232 only shifted: 42.0 %** | 263 edits, 1 719 rows; 806 shifted: 46.9 % | shift share `≥ 50 %` → stable positions | **the positions stay absolute; the ORD is the order queries** |
+
+**What the verdict leaves out, and what it would buy.** Stable positions —
+order labels by Dietz–Sleator and offsets held relative to the previous sibling
+or the parent — would hold still four rows in ten of what a commit rewrites in
+`index.json`. The other six are the edit itself and the sections that hold it,
+which change in either scheme, because a section's fingerprint is its text and
+the text of a section includes what is under it. Four in ten is a quieter
+diff, not a different cost: the build reads every file either way, because the
+check has to.
+
+**The window runs closer to the bar** — 46.9 % against 42.0 % — because the
+documents of this period grow in the middle (the plan, the decisions, the
+intakes) more than at the end. The measure is in the script; the day it crosses
+50 % on a re-run, the verdict turns, and the order queries this ORD builds stay
+as they are, because they read the order and not how it is stored.
+
+## 26. Re-measured, 2026-10-16 — the history since §7 says stop
 
 The plan's §0 asks for the three measures again before any code, with the
 thresholds declared before running. The instrument is

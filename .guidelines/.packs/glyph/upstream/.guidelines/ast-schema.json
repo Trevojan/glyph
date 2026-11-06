@@ -1,0 +1,245 @@
+{
+  "schema": 2,
+  "note": "The declared shape of a Glyph AST envelope. HAND-AUTHORED, deliberately: a schema derived from the engine cannot catch the engine, and the whole reason the AST was promoted to source of truth is that another machine must be able to read it without this implementation. glyph-check.js validates envelopes against this file, and the corpus asserts that what the engine emits conforms — so a drift in either direction is caught, the same way XML_REFERENCE and D-03 hold each other.",
+  "appliesTo": "the `full` projection. The `panel` projection is thinned for the screen and is deliberately NOT validated: absence there is meaningless, which is exactly why it never leaves the browser.",
+  "envelope": {
+    "required": [
+      "type",
+      "schema",
+      "version",
+      "projection",
+      "source",
+      "stores",
+      "segments",
+      "diagnostics"
+    ],
+    "optional": [
+      "truncatedNodes"
+    ],
+    "constants": {
+      "type": "GlyphAST",
+      "projection": "full",
+      "schema": 2
+    },
+    "note": "`schema` is the shape of this envelope; `version` is the engine that produced it. They were one field, and a reader had to pin an engine build to say it understood the shape. `stores` fingerprints templates, rules and expansions: species, compositionDepth and def are FUNCTIONS of the expansions store, so re-importing against a different one changes meaning silently — the defect class this whole order is named after. `source` is a DESCRIPTOR and not the text (T12), because offsets with no anchor are unresolvable on arrival."
+  },
+  "diagnostic": {
+    "required": [
+      "code",
+      "severity",
+      "label",
+      "message"
+    ],
+    "optional": [
+      "at"
+    ],
+    "at": {
+      "required": [
+        "s",
+        "e"
+      ],
+      "note": "the character span in the source that caused the refusal. Optional because not every diagnostic has a token to point at; required to be well-formed when present, because a coordinate that lies is worse than none."
+    },
+    "severity": [
+      "fix",
+      "ask",
+      "note"
+    ]
+  },
+  "nodes": {
+    "Segment": {
+      "required": [
+        "type",
+        "mood",
+        "isReturn",
+        "continues",
+        "breaks",
+        "autoClosedCount",
+        "body"
+      ],
+      "note": "a Segment carries no `at`: it is a container and its span is the span of its body. Every node inside it carries one."
+    },
+    "Command": {
+      "required": [
+        "type",
+        "raw",
+        "canonical",
+        "tier",
+        "gloss",
+        "element",
+        "isAlias",
+        "chainElement",
+        "origin",
+        "slotName",
+        "editorial",
+        "name",
+        "depth",
+        "autoClosed",
+        "suggestion",
+        "emotions",
+        "species",
+        "compositionDepth",
+        "body",
+        "at"
+      ],
+      "optional": [
+        "slot"
+      ],
+      "origin": [
+        "root",
+        "nest",
+        "extend",
+        "item",
+        null
+      ],
+      "note": "`origin` records which operator produced the edge to the parent and `chainElement` records whether the node was written bare. They are independent: `[in-rwk]` and `[in-[rwk]]` share an origin and differ in bareness. Conflating them is the defect release 2.4.5.01 exists to close."
+    },
+    "Literal": {
+      "required": [
+        "type",
+        "value",
+        "form",
+        "slot",
+        "role",
+        "at"
+      ],
+      "form": [
+        "quote",
+        "tick",
+        "raw"
+      ],
+      "role": [
+        "operand",
+        "result",
+        null
+      ],
+      "note": "`slot` is the template parameter this literal was bound to, or null. It reached the XML as <user-input slot=\"…\"> long before it reached the AST; writing fromAST is what proved it missing. `role` is decided by position: a literal written before any BRACKETED nested command is what the command operates on (`operand`), one written after such a nest names what came back (`result`). A chain link does not count — §0.1 says `[A-B]` applies both to the same operand. It is null only at the top of a segment, where there is no command to be operand of."
+    },
+    "Raw": {
+      "required": [
+        "type",
+        "value",
+        "form",
+        "slot",
+        "role",
+        "at"
+      ],
+      "role": [
+        "operand",
+        "result",
+        null
+      ],
+      "note": "A raw literal is a Literal whose `form` is `raw`, emitted by the same branch, so it carries `role` for the same reason: a fact the document carries is not one the envelope makes a reader re-derive."
+    },
+    "Verbatim": {
+      "required": [
+        "type",
+        "value",
+        "at"
+      ],
+      "optional": [
+        "slot"
+      ],
+      "note": "The body of a `[raw]…[/raw]` fence (or of an unclosed one, which the parser refuses with UnclosedRaw), kept verbatim: Glyph quoted inside Glyph, never parsed."
+    },
+    "Text": {
+      "required": [
+        "type",
+        "value",
+        "at"
+      ],
+      "optional": [
+        "slot"
+      ]
+    },
+    "ModeOff": {
+      "required": [
+        "type",
+        "body",
+        "at"
+      ]
+    },
+    "Template": {
+      "required": [
+        "type",
+        "name",
+        "isDefinition",
+        "expanded",
+        "body",
+        "at"
+      ],
+      "optional": [
+        "slot"
+      ],
+      "note": "`expanded` distinguishes an invocation that carries its expansion from a definition body. Without it a reconstruction writes the expansion where the author typed the call."
+    },
+    "Logic": {
+      "required": [
+        "type",
+        "name",
+        "rules",
+        "missing",
+        "at"
+      ],
+      "optional": [
+        "slot"
+      ]
+    },
+    "Truncated": {
+      "required": [
+        "type",
+        "reason",
+        "atDepth",
+        "omittedNodes",
+        "at"
+      ],
+      "note": "the AST used to truncate silently past a depth ceiling on the grounds that it was only an inspection panel. It is the source of truth now, so a truncated envelope must be unmistakable to a reader who did not produce it."
+    }
+  },
+  "rules": [
+    "1. every key declared `required` for a node's type is present, whatever its value",
+    "2. no key appears that is not declared `required` or `optional` for that type",
+    "3. every node carries a `type`, and it is one this file names",
+    "4. the envelope declares `projection: \"full\"` — a `panel` envelope is refused rather than validated leniently",
+    "5. `origin` is one of the declared values, or null",
+    "6. a diagnostic carrying `at` carries both `s` and `e`",
+    "7. `version` is present and non-empty: an envelope that will not say which engine produced it cannot be checked against anything",
+    "8. every node of the `full` projection carries `at`, well-formed or null; a Segment does not, because its span is its body's",
+    "9. `schema` matches the declared constant: an envelope of another shape is refused, not read leniently",
+    "10. `stores` names all three fingerprints, each a checksum or null",
+    "11. an envelope carrying `truncatedNodes` is refused: it is incomplete by its own admission, and a source of truth that omits part of itself is not one"
+  ],
+  "at": {
+    "required": [
+      "s",
+      "e"
+    ],
+    "note": "the span in the source that produced the node, or null when the node was synthesised rather than written (a Truncated marker has no author). Present on every node of the `full` projection. It is what lets a reader without the engine locate a refusal, and it is the substrate a trace is built on: given a span, which command; given a command, which span."
+  },
+  "source": {
+    "required": [
+      "length",
+      "checksum",
+      "encoding",
+      "newline",
+      "uri"
+    ],
+    "optional": [
+      "text"
+    ],
+    "newline": [
+      "lf",
+      "crlf",
+      "mixed"
+    ],
+    "note": "null when serializeAST was called without a source. `text` appears only under {embedSource:true}, which T12 allows for examples and teaching models and forbids in the general export."
+  },
+  "stores": {
+    "required": [
+      "templates",
+      "rules",
+      "expansions"
+    ],
+    "note": "each is a 64-bit checksum of the store's serialised form, or null when that store was not loaded — which is itself the fact a receiver needs. The function is declared in the engine (`ck`) rather than taken from a platform library, so a port reproduces it bit for bit instead of inventing its own and disagreeing about whether two stores are the same."
+  }
+}

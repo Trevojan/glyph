@@ -1,0 +1,10 @@
+[block'ORD-0010-classify'
+  [ctx'the spec of EMS-002','.guidelines/.orders/EMS-002/EMS-002.pgml']
+  [tgt'classify answered by the page from the tables it loads, question 10 of the EMS-001 return, answered c']
+  [ctx'behind engine=relay the transport swaps the twelve calls, one request each, and a keystroke on L-01 makes 8 005 of them, one classify a command token']
+  [cnst'the transport stops swapping classify, and the page answers it with the JS core and the tables glyph-data.js loads; the other eleven stay one request each']
+  [cnst'the browser that measures it is an instrument outside the repository, since the JS side has no dependency; the suite holds what node can hold, the swap set']
+  [val'the requests','behind engine=relay, every call but classify is one request, and classify is answered by the page; L-01 stops making 8 000 trips']
+  [val'the panels','the declared sources give the same bytes in every panel through the relay and through the JS']
+  [val'the swap','the suite holds the calls the transport swaps to the eleven, seen failing before it counts']
+];

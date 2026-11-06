@@ -1,0 +1,2326 @@
+{
+  "type": "GlyphAST",
+  "schema": 2,
+  "version": "3.4.7.05",
+  "source": {
+    "length": 4793,
+    "checksum": "df2088165d1fea00",
+    "encoding": "utf-8",
+    "newline": "lf",
+    "uri": null
+  },
+  "stores": {
+    "templates": "766c0464151b0b00",
+    "rules": "7d6ba3d0185bf400",
+    "expansions": "f79796602cfc0200"
+  },
+  "projection": "full",
+  "segments": [
+    {
+      "type": "Segment",
+      "mood": [],
+      "isReturn": false,
+      "continues": false,
+      "breaks": 0,
+      "autoClosedCount": 0,
+      "body": [
+        {
+          "type": "Command",
+          "raw": "block",
+          "canonical": "BLOCK",
+          "tier": "struct",
+          "gloss": "Block",
+          "element": "block",
+          "isAlias": false,
+          "chainElement": false,
+          "origin": "root",
+          "slotName": false,
+          "editorial": false,
+          "name": null,
+          "depth": 0,
+          "autoClosed": false,
+          "suggestion": null,
+          "emotions": [],
+          "species": "atom",
+          "compositionDepth": 0,
+          "at": {
+            "s": 0,
+            "e": 6
+          },
+          "body": [
+            {
+              "type": "Literal",
+              "value": "linkedin-post",
+              "form": "quote",
+              "slot": null,
+              "role": "operand",
+              "at": {
+                "s": 6,
+                "e": 21
+              }
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 24,
+                "e": 28
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "a post carrying one observation the author already had",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 28,
+                    "e": 84
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": "any social feed written in a second language",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 85,
+                    "e": 131
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": "filled by the Regente before drafting",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 132,
+                    "e": 171
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "skl",
+              "canonical": "SKL",
+              "tier": "struct",
+              "gloss": "Skill",
+              "element": "skill",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 175,
+                "e": 179
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "glyph-markup",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 179,
+                    "e": 193
+                  }
+                },
+                {
+                  "type": "Command",
+                  "raw": "ins",
+                  "canonical": "INS",
+                  "tier": "instr",
+                  "gloss": "Instruction",
+                  "element": "instruction",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 193,
+                    "e": 197
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "hear this order, draft the post, then audit and reflect before concluding it",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 197,
+                        "e": 275
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "section",
+              "canonical": "SECTION",
+              "tier": "struct",
+              "gloss": "Section",
+              "element": "section",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 281,
+                "e": 289
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "species",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 289,
+                    "e": 298
+                  }
+                },
+                {
+                  "type": "Command",
+                  "raw": "dfn",
+                  "canonical": "DFN",
+                  "tier": "instr",
+                  "gloss": "Define Symbol",
+                  "element": "define-symbol",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 303,
+                    "e": 307
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "observation",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 307,
+                        "e": 320
+                      }
+                    },
+                    {
+                      "type": "Literal",
+                      "value": "something the author noticed and can state in one sentence — the whole payload of the post",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 321,
+                        "e": 413
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "dfn",
+                  "canonical": "DFN",
+                  "tier": "instr",
+                  "gloss": "Define Symbol",
+                  "element": "define-symbol",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 419,
+                    "e": 423
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "framework",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 423,
+                        "e": 434
+                      }
+                    },
+                    {
+                      "type": "Literal",
+                      "value": "a method other people are expected to adopt — what an observation turns into when the writer inflates it",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 435,
+                        "e": 541
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "dfn",
+                  "canonical": "DFN",
+                  "tier": "instr",
+                  "gloss": "Define Symbol",
+                  "element": "define-symbol",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 547,
+                    "e": 551
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "import",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 551,
+                        "e": 559
+                      }
+                    },
+                    {
+                      "type": "Literal",
+                      "value": "a claim the writer added that the author never made, arriving as a paragraph that reads well and holds nothing the author said",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 560,
+                        "e": 688
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "dfn",
+                  "canonical": "DFN",
+                  "tier": "instr",
+                  "gloss": "Define Symbol",
+                  "element": "define-symbol",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 694,
+                    "e": 698
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "cold read",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 698,
+                        "e": 709
+                      }
+                    },
+                    {
+                      "type": "Literal",
+                      "value": "reading the draft as someone meeting the subject for the first time, with no access to the conversation that produced it",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 710,
+                        "e": 832
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "dfn",
+                  "canonical": "DFN",
+                  "tier": "instr",
+                  "gloss": "Define Symbol",
+                  "element": "define-symbol",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 838,
+                    "e": 842
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "load-bearing phrase",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 842,
+                        "e": 863
+                      }
+                    },
+                    {
+                      "type": "Literal",
+                      "value": "a phrase the whole point rests on, doing that work with no example beside it",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 864,
+                        "e": 942
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "nt",
+                  "canonical": "NT",
+                  "tier": "instr",
+                  "gloss": "Note",
+                  "element": "note",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 948,
+                    "e": 951
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "the author writes to be read once, not to be followed",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 951,
+                        "e": 1006
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "dont",
+                  "canonical": "DONT",
+                  "tier": "instr",
+                  "gloss": "Do Not",
+                  "element": "do-not",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 1012,
+                    "e": 1017
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "promote an observation to a framework because a framework is easier to structure",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 1017,
+                        "e": 1099
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "section",
+              "canonical": "SECTION",
+              "tier": "struct",
+              "gloss": "Section",
+              "element": "section",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 1108,
+                "e": 1116
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "write",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1116,
+                    "e": 1123
+                  }
+                },
+                {
+                  "type": "Command",
+                  "raw": "intn",
+                  "canonical": "INTN",
+                  "tier": "instr",
+                  "gloss": "Intention",
+                  "element": "intention",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "composite",
+                  "compositionDepth": 1,
+                  "at": {
+                    "s": 1128,
+                    "e": 1133
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "the reader leaves holding one word or one distinction, and nothing to adopt",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 1133,
+                        "e": 1210
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "ph",
+                  "canonical": "PH",
+                  "tier": "struct",
+                  "gloss": "Placeholder",
+                  "element": "placeholder",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 1216,
+                    "e": 1219
+                  },
+                  "body": [
+                    {
+                      "type": "Command",
+                      "raw": "observation",
+                      "canonical": "OBSERVATION",
+                      "tier": "unknown",
+                      "gloss": "",
+                      "element": null,
+                      "isAlias": false,
+                      "chainElement": true,
+                      "origin": null,
+                      "slotName": true,
+                      "editorial": false,
+                      "name": null,
+                      "depth": 3,
+                      "autoClosed": false,
+                      "suggestion": null,
+                      "emotions": [],
+                      "species": null,
+                      "compositionDepth": null,
+                      "at": {
+                        "s": 1220,
+                        "e": 1231
+                      },
+                      "body": []
+                    },
+                    {
+                      "type": "Literal",
+                      "value": "the observation, in one sentence, as the author stated it and not as it could be generalised",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 1231,
+                        "e": 1325
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "ph",
+                  "canonical": "PH",
+                  "tier": "struct",
+                  "gloss": "Placeholder",
+                  "element": "placeholder",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 1331,
+                    "e": 1334
+                  },
+                  "body": [
+                    {
+                      "type": "Command",
+                      "raw": "annoyance",
+                      "canonical": "ANNOYANCE",
+                      "tier": "unknown",
+                      "gloss": "",
+                      "element": null,
+                      "isAlias": false,
+                      "chainElement": true,
+                      "origin": null,
+                      "slotName": true,
+                      "editorial": false,
+                      "name": null,
+                      "depth": 3,
+                      "autoClosed": false,
+                      "suggestion": null,
+                      "emotions": [],
+                      "species": null,
+                      "compositionDepth": null,
+                      "at": {
+                        "s": 1335,
+                        "e": 1344
+                      },
+                      "body": []
+                    },
+                    {
+                      "type": "Literal",
+                      "value": "the concrete annoyance that produced it — what went wrong, how often, at whose cost",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 1344,
+                        "e": 1429
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "ph",
+                  "canonical": "PH",
+                  "tier": "struct",
+                  "gloss": "Placeholder",
+                  "element": "placeholder",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 1435,
+                    "e": 1438
+                  },
+                  "body": [
+                    {
+                      "type": "Command",
+                      "raw": "tone",
+                      "canonical": "TONE",
+                      "tier": "unknown",
+                      "gloss": "",
+                      "element": null,
+                      "isAlias": false,
+                      "chainElement": true,
+                      "origin": null,
+                      "slotName": true,
+                      "editorial": false,
+                      "name": null,
+                      "depth": 3,
+                      "autoClosed": false,
+                      "suggestion": null,
+                      "emotions": [],
+                      "species": null,
+                      "compositionDepth": null,
+                      "at": {
+                        "s": 1439,
+                        "e": 1443
+                      },
+                      "body": []
+                    },
+                    {
+                      "type": "Literal",
+                      "value": "the register the opening sets, stated as what the author would actually say out loud",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 1443,
+                        "e": 1529
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "req",
+                  "canonical": "REQ",
+                  "tier": "instr",
+                  "gloss": "Requirement",
+                  "element": "requirement",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 1535,
+                    "e": 1539
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "every claim in the draft traces to something the author said",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 1539,
+                        "e": 1601
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "fmt",
+                  "canonical": "FMT",
+                  "tier": "instr",
+                  "gloss": "Format",
+                  "element": "format",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 1607,
+                    "e": 1611
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "running prose, no headers, no numbered framework, no call to action",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 1611,
+                        "e": 1680
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "lim",
+                  "canonical": "LIM",
+                  "tier": "instr",
+                  "gloss": "Limitation",
+                  "element": "limitation",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 1686,
+                    "e": 1690
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "the draft may be dense, and density is not the same as structure",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 1690,
+                        "e": 1756
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "cnst",
+                  "canonical": "CNST",
+                  "tier": "instr",
+                  "gloss": "Constraint",
+                  "element": "constraint",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 1762,
+                    "e": 1767
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "the post stays unpitchable: no problem-solution shape, no scaling claim, no before and after",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 1767,
+                        "e": 1861
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "nev",
+                  "canonical": "NEV",
+                  "tier": "instr",
+                  "gloss": "Never",
+                  "element": "never",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": true,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 1867,
+                    "e": 1871
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "a paragraph enters the draft to fill a shape the author did not ask for",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 1871,
+                        "e": 1944
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "section",
+              "canonical": "SECTION",
+              "tier": "struct",
+              "gloss": "Section",
+              "element": "section",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 1953,
+                "e": 1961
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "audit",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1961,
+                    "e": 1968
+                  }
+                },
+                {
+                  "type": "Template",
+                  "name": "scientific-review",
+                  "isDefinition": false,
+                  "expanded": true,
+                  "at": {
+                    "s": 1973,
+                    "e": 2000
+                  },
+                  "body": [
+                    {
+                      "type": "Command",
+                      "raw": "crit",
+                      "canonical": "CRIT",
+                      "tier": "instr",
+                      "gloss": "Criticise",
+                      "element": "criticise",
+                      "isAlias": false,
+                      "chainElement": false,
+                      "origin": "root",
+                      "slotName": false,
+                      "editorial": false,
+                      "name": null,
+                      "depth": 0,
+                      "autoClosed": false,
+                      "suggestion": null,
+                      "emotions": [],
+                      "species": "composite",
+                      "compositionDepth": 2,
+                      "at": {
+                        "s": 0,
+                        "e": 5
+                      },
+                      "body": [
+                        {
+                          "type": "Literal",
+                          "value": "the draft, read cold — start to finish, once, with no prior context assumed",
+                          "form": "quote",
+                          "slot": "target",
+                          "role": null,
+                          "at": null
+                        }
+                      ]
+                    },
+                    {
+                      "type": "Command",
+                      "raw": "rwk",
+                      "canonical": "RWK",
+                      "tier": "instr",
+                      "gloss": "Rework",
+                      "element": "rework",
+                      "isAlias": false,
+                      "chainElement": false,
+                      "origin": "root",
+                      "slotName": false,
+                      "editorial": false,
+                      "name": null,
+                      "depth": 0,
+                      "autoClosed": false,
+                      "suggestion": null,
+                      "emotions": [],
+                      "species": "atom",
+                      "compositionDepth": 0,
+                      "at": {
+                        "s": 54,
+                        "e": 58
+                      },
+                      "body": [
+                        {
+                          "type": "Literal",
+                          "value": "the target itself, corrected by what the critique found",
+                          "form": "tick",
+                          "slot": null,
+                          "role": "operand",
+                          "at": {
+                            "s": 58,
+                            "e": 115
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "Command",
+                      "raw": "val",
+                      "canonical": "VAL",
+                      "tier": "instr",
+                      "gloss": "Validate",
+                      "element": "validate",
+                      "isAlias": false,
+                      "chainElement": false,
+                      "origin": "root",
+                      "slotName": false,
+                      "editorial": false,
+                      "name": null,
+                      "depth": 0,
+                      "autoClosed": false,
+                      "suggestion": null,
+                      "emotions": [],
+                      "species": "composite",
+                      "compositionDepth": 5,
+                      "at": {
+                        "s": 116,
+                        "e": 120
+                      },
+                      "body": [
+                        {
+                          "type": "Literal",
+                          "value": "the reworked result",
+                          "form": "tick",
+                          "slot": null,
+                          "role": "operand",
+                          "at": {
+                            "s": 120,
+                            "e": 141
+                          }
+                        },
+                        {
+                          "type": "Literal",
+                          "value": "a reader who works in this field, meets the subject here for the first time, and gets it without asking a question",
+                          "form": "quote",
+                          "slot": "standard",
+                          "role": null,
+                          "at": null
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "find",
+                  "canonical": "FIND",
+                  "tier": "instr",
+                  "gloss": "Find",
+                  "element": "find",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 2235,
+                    "e": 2240
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "every load-bearing phrase standing without an example beside it",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 2240,
+                        "e": 2305
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "warn",
+                  "canonical": "WARN",
+                  "tier": "instr",
+                  "gloss": "Warning",
+                  "element": "warning",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 2311,
+                    "e": 2316
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "a load-bearing phrase makes the reader supply the example from personal experience, and a newer reader has none to supply",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 2316,
+                        "e": 2439
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "scru",
+                  "canonical": "SCRU",
+                  "tier": "instr",
+                  "gloss": "Scrutinise",
+                  "element": "scrutinise",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "composite",
+                  "compositionDepth": 5,
+                  "at": {
+                    "s": 2445,
+                    "e": 2450
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "the closing lines, for a defence against a reading nobody offered",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 2450,
+                        "e": 2517
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "vrfy",
+                  "canonical": "VRFY",
+                  "tier": "instr",
+                  "gloss": "Verify",
+                  "element": "verify",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "composite",
+                  "compositionDepth": 1,
+                  "at": {
+                    "s": 2523,
+                    "e": 2528
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "terminology is consistent across the draft — the same thing named the same way, capitalised the same way, every time",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 2528,
+                        "e": 2646
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "avd",
+                  "canonical": "AVD",
+                  "tier": "instr",
+                  "gloss": "Avoid",
+                  "element": "avoid",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 2652,
+                    "e": 2656
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "idiom carried over from the first language of the author, and words that only exist in that language",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 2656,
+                        "e": 2758
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "prob",
+                  "canonical": "PROB",
+                  "tier": "instr",
+                  "gloss": "Problem",
+                  "element": "problem",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "composite",
+                  "compositionDepth": 1,
+                  "at": {
+                    "s": 2764,
+                    "e": 2769
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "a shape an investor can lift: a bottleneck being fixed, a thing that scales, a state before and a state after",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 2769,
+                        "e": 2880
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "nt",
+                  "canonical": "NT",
+                  "tier": "instr",
+                  "gloss": "Note",
+                  "element": "note",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 2886,
+                    "e": 2889
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "the audit reports; it does not rewrite",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 2889,
+                        "e": 2929
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "section",
+              "canonical": "SECTION",
+              "tier": "struct",
+              "gloss": "Section",
+              "element": "section",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 2938,
+                "e": 2946
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "reflect",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 2946,
+                    "e": 2955
+                  }
+                },
+                {
+                  "type": "Template",
+                  "name": "loop",
+                  "isDefinition": false,
+                  "expanded": true,
+                  "at": {
+                    "s": 2960,
+                    "e": 2974
+                  },
+                  "body": [
+                    {
+                      "type": "Command",
+                      "raw": "itr",
+                      "canonical": "ITR",
+                      "tier": "instr",
+                      "gloss": "Iterate",
+                      "element": "iterate",
+                      "isAlias": false,
+                      "chainElement": false,
+                      "origin": "root",
+                      "slotName": false,
+                      "editorial": false,
+                      "name": null,
+                      "depth": 0,
+                      "autoClosed": false,
+                      "suggestion": null,
+                      "emotions": [],
+                      "species": "atom",
+                      "compositionDepth": 0,
+                      "at": {
+                        "s": 0,
+                        "e": 4
+                      },
+                      "body": [
+                        {
+                          "type": "Literal",
+                          "value": "each paragraph, against what the author actually stated",
+                          "form": "quote",
+                          "slot": "target",
+                          "role": null,
+                          "at": null
+                        }
+                      ]
+                    },
+                    {
+                      "type": "Command",
+                      "raw": "ins",
+                      "canonical": "INS",
+                      "tier": "instr",
+                      "gloss": "Instruction",
+                      "element": "instruction",
+                      "isAlias": false,
+                      "chainElement": false,
+                      "origin": "root",
+                      "slotName": false,
+                      "editorial": false,
+                      "name": null,
+                      "depth": 0,
+                      "autoClosed": false,
+                      "suggestion": null,
+                      "emotions": [],
+                      "species": "atom",
+                      "compositionDepth": 0,
+                      "at": {
+                        "s": 36,
+                        "e": 40
+                      },
+                      "body": [
+                        {
+                          "type": "Literal",
+                          "value": "one more import named and cut, going finer than the pass before — a whole thesis first, then a clause, then a single adjective doing the same work",
+                          "form": "quote",
+                          "slot": "pass",
+                          "role": null,
+                          "at": null
+                        }
+                      ]
+                    },
+                    {
+                      "type": "Command",
+                      "raw": "cond",
+                      "canonical": "COND",
+                      "tier": "instr",
+                      "gloss": "Condition",
+                      "element": "condition",
+                      "isAlias": false,
+                      "chainElement": false,
+                      "origin": "root",
+                      "slotName": false,
+                      "editorial": false,
+                      "name": null,
+                      "depth": 0,
+                      "autoClosed": false,
+                      "suggestion": null,
+                      "emotions": [],
+                      "species": "atom",
+                      "compositionDepth": 0,
+                      "at": {
+                        "s": 142,
+                        "e": 147
+                      },
+                      "body": [
+                        {
+                          "type": "Literal",
+                          "value": "every paragraph traces to the author, and no paragraph needs a claim the author did not make in order to hold together",
+                          "form": "quote",
+                          "slot": "until",
+                          "role": null,
+                          "at": null
+                        }
+                      ]
+                    },
+                    {
+                      "type": "Command",
+                      "raw": "real",
+                      "canonical": "REAL",
+                      "tier": "instr",
+                      "gloss": "Realistic",
+                      "element": "realistic",
+                      "isAlias": false,
+                      "chainElement": false,
+                      "origin": "root",
+                      "slotName": false,
+                      "editorial": false,
+                      "name": null,
+                      "depth": 0,
+                      "autoClosed": false,
+                      "suggestion": null,
+                      "emotions": [],
+                      "species": "atom",
+                      "compositionDepth": 0,
+                      "at": {
+                        "s": 215,
+                        "e": 220
+                      },
+                      "body": [
+                        {
+                          "type": "Literal",
+                          "value": "each pass against the stop condition, before opening the next one",
+                          "form": "tick",
+                          "slot": null,
+                          "role": "operand",
+                          "at": {
+                            "s": 220,
+                            "e": 287
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "dist",
+                  "canonical": "DIST",
+                  "tier": "instr",
+                  "gloss": "Distinguish",
+                  "element": "distinguish",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 3354,
+                    "e": 3359
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "what the author stated",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 3359,
+                        "e": 3383
+                      }
+                    },
+                    {
+                      "type": "Literal",
+                      "value": "what the writer added and then read back as if it had been stated",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 3384,
+                        "e": 3451
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "warn",
+                  "canonical": "WARN",
+                  "tier": "instr",
+                  "gloss": "Warning",
+                  "element": "warning",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 3457,
+                    "e": 3462
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "if a paragraph collapses once an unstated claim is removed, that claim was imported and the paragraph was built on it",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 3462,
+                        "e": 3581
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Template",
+                  "name": "reinforce",
+                  "isDefinition": false,
+                  "expanded": true,
+                  "at": {
+                    "s": 3587,
+                    "e": 3606
+                  },
+                  "body": [
+                    {
+                      "type": "Command",
+                      "raw": "prio",
+                      "canonical": "PRIO",
+                      "tier": "instr",
+                      "gloss": "Priority",
+                      "element": "priority",
+                      "isAlias": false,
+                      "chainElement": false,
+                      "origin": "root",
+                      "slotName": false,
+                      "editorial": false,
+                      "name": null,
+                      "depth": 0,
+                      "autoClosed": false,
+                      "suggestion": null,
+                      "emotions": [],
+                      "species": "atom",
+                      "compositionDepth": 0,
+                      "at": {
+                        "s": 0,
+                        "e": 5
+                      },
+                      "body": [
+                        {
+                          "type": "Command",
+                          "raw": "mand",
+                          "canonical": "MAND",
+                          "tier": "instr",
+                          "gloss": "Mandatory",
+                          "element": "mandatory",
+                          "isAlias": false,
+                          "chainElement": false,
+                          "origin": "nest",
+                          "slotName": false,
+                          "editorial": false,
+                          "name": null,
+                          "depth": 1,
+                          "autoClosed": false,
+                          "suggestion": null,
+                          "emotions": [],
+                          "species": "atom",
+                          "compositionDepth": 0,
+                          "at": {
+                            "s": 5,
+                            "e": 10
+                          },
+                          "body": [
+                            {
+                              "type": "Literal",
+                              "value": "a correction from the author is authoritative and settles it — reread the chain before defending the sentence",
+                              "form": "quote",
+                              "slot": "rule",
+                              "role": null,
+                              "at": null
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "Command",
+                      "raw": "rsn",
+                      "canonical": "RSN",
+                      "tier": "instr",
+                      "gloss": "Reason",
+                      "element": "reason",
+                      "isAlias": false,
+                      "chainElement": false,
+                      "origin": "root",
+                      "slotName": false,
+                      "editorial": false,
+                      "name": null,
+                      "depth": 0,
+                      "autoClosed": false,
+                      "suggestion": null,
+                      "emotions": [],
+                      "species": "atom",
+                      "compositionDepth": 0,
+                      "at": {
+                        "s": 53,
+                        "e": 57
+                      },
+                      "body": [
+                        {
+                          "type": "Literal",
+                          "value": "the writer is the one who lost the thread, and defending the sentence spends the turn that should have fixed it",
+                          "form": "quote",
+                          "slot": "why",
+                          "role": null,
+                          "at": null
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "cnst",
+                  "canonical": "CNST",
+                  "tier": "instr",
+                  "gloss": "Constraint",
+                  "element": "constraint",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 3865,
+                    "e": 3870
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "an import is cut, never softened into a hedge that keeps it in the draft",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 3870,
+                        "e": 3944
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Template",
+                  "name": "track",
+                  "isDefinition": false,
+                  "expanded": true,
+                  "at": {
+                    "s": 3950,
+                    "e": 3965
+                  },
+                  "body": [
+                    {
+                      "type": "Command",
+                      "raw": "ctx",
+                      "canonical": "CTX",
+                      "tier": "instr",
+                      "gloss": "Context",
+                      "element": "context",
+                      "isAlias": false,
+                      "chainElement": false,
+                      "origin": "root",
+                      "slotName": false,
+                      "editorial": false,
+                      "name": null,
+                      "depth": 0,
+                      "autoClosed": false,
+                      "suggestion": null,
+                      "emotions": [],
+                      "species": "atom",
+                      "compositionDepth": 0,
+                      "at": {
+                        "s": 0,
+                        "e": 4
+                      },
+                      "body": [
+                        {
+                          "type": "Literal",
+                          "value": "this post, and the next one the author writes on the same subject",
+                          "form": "quote",
+                          "slot": "scope",
+                          "role": null,
+                          "at": null
+                        }
+                      ]
+                    },
+                    {
+                      "type": "Command",
+                      "raw": "drvf",
+                      "canonical": "DRVF",
+                      "tier": "instr",
+                      "gloss": "Derive From",
+                      "element": "derive-from",
+                      "isAlias": false,
+                      "chainElement": false,
+                      "origin": "root",
+                      "slotName": false,
+                      "editorial": false,
+                      "name": null,
+                      "depth": 0,
+                      "autoClosed": false,
+                      "suggestion": null,
+                      "emotions": [],
+                      "species": "composite",
+                      "compositionDepth": 2,
+                      "at": {
+                        "s": 61,
+                        "e": 66
+                      },
+                      "body": [
+                        {
+                          "type": "Literal",
+                          "value": "each import found, and which paragraph carried it",
+                          "form": "quote",
+                          "slot": "item",
+                          "role": null,
+                          "at": null
+                        }
+                      ]
+                    },
+                    {
+                      "type": "Command",
+                      "raw": "elab",
+                      "canonical": "ELAB",
+                      "tier": "instr",
+                      "gloss": "Elaborate",
+                      "element": "elaborate",
+                      "isAlias": false,
+                      "chainElement": false,
+                      "origin": "root",
+                      "slotName": false,
+                      "editorial": false,
+                      "name": null,
+                      "depth": 0,
+                      "autoClosed": false,
+                      "suggestion": null,
+                      "emotions": [],
+                      "species": "atom",
+                      "compositionDepth": 0,
+                      "at": {
+                        "s": 112,
+                        "e": 117
+                      },
+                      "body": [
+                        {
+                          "type": "Literal",
+                          "value": "the chain: where it entered, what changed it, where it stands now",
+                          "form": "tick",
+                          "slot": null,
+                          "role": "operand",
+                          "at": {
+                            "s": 117,
+                            "e": 184
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "lrn",
+                  "canonical": "LRN",
+                  "tier": "instr",
+                  "gloss": "Learn",
+                  "element": "learn",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "composite",
+                  "compositionDepth": 2,
+                  "at": {
+                    "s": 4120,
+                    "e": 4124
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "the imports found here — they arrive the same way next time, as the paragraph that reads best",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 4124,
+                        "e": 4219
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "section",
+              "canonical": "SECTION",
+              "tier": "struct",
+              "gloss": "Section",
+              "element": "section",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 4228,
+                "e": 4236
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "conclude",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 4236,
+                    "e": 4246
+                  }
+                },
+                {
+                  "type": "Command",
+                  "raw": "get",
+                  "canonical": "GET",
+                  "tier": "instr",
+                  "gloss": "Get",
+                  "element": "get",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 4251,
+                    "e": 4255
+                  },
+                  "body": [
+                    {
+                      "type": "Command",
+                      "raw": "whr",
+                      "canonical": "WHR",
+                      "tier": "instr",
+                      "gloss": "Where",
+                      "element": "where",
+                      "isAlias": false,
+                      "chainElement": false,
+                      "origin": "nest",
+                      "slotName": false,
+                      "editorial": false,
+                      "name": null,
+                      "depth": 3,
+                      "autoClosed": false,
+                      "suggestion": null,
+                      "emotions": [],
+                      "species": "atom",
+                      "compositionDepth": 0,
+                      "at": {
+                        "s": 4255,
+                        "e": 4259
+                      },
+                      "body": [
+                        {
+                          "type": "Literal",
+                          "value": "the last version the author corrected, never the last version the writer preferred",
+                          "form": "quote",
+                          "slot": null,
+                          "role": "operand",
+                          "at": {
+                            "s": 4259,
+                            "e": 4343
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "fin",
+                  "canonical": "FIN",
+                  "tier": "instr",
+                  "gloss": "Finally",
+                  "element": "finally",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 4350,
+                    "e": 4354
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "on the open question, with the observation stated once and nothing after it",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 4354,
+                        "e": 4431
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "dont",
+                  "canonical": "DONT",
+                  "tier": "instr",
+                  "gloss": "Do Not",
+                  "element": "do-not",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 4437,
+                    "e": 4442
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "close with a call to action, a summary of what was just said, or a defence that no system is being sold",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 4442,
+                        "e": 4547
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "warn",
+                  "canonical": "WARN",
+                  "tier": "instr",
+                  "gloss": "Warning",
+                  "element": "warning",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 4553,
+                    "e": 4558
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "a pre-emptive defence tells the reader there was something to suspect",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 4558,
+                        "e": 4629
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "conf",
+                  "canonical": "CONF",
+                  "tier": "instr",
+                  "gloss": "Confirmation",
+                  "element": "confirmation",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 4635,
+                    "e": 4640
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "the draft against the author, before it is called finished",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 4640,
+                        "e": 4700
+                      }
+                    },
+                    {
+                      "type": "Command",
+                      "raw": "hmn",
+                      "canonical": "HMN",
+                      "tier": "meta",
+                      "gloss": "Human",
+                      "element": "human",
+                      "isAlias": false,
+                      "chainElement": false,
+                      "origin": "nest",
+                      "slotName": false,
+                      "editorial": false,
+                      "name": null,
+                      "depth": 3,
+                      "autoClosed": false,
+                      "suggestion": null,
+                      "emotions": [],
+                      "species": "atom",
+                      "compositionDepth": 0,
+                      "at": {
+                        "s": 4700,
+                        "e": 4704
+                      },
+                      "body": []
+                    }
+                  ]
+                },
+                {
+                  "type": "Command",
+                  "raw": "rdy",
+                  "canonical": "RDY",
+                  "tier": "instr",
+                  "gloss": "Ready",
+                  "element": "ready",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 4711,
+                    "e": 4715
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "the post ships as prose the author can paste, and not as a document",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "at": {
+                        "s": 4715,
+                        "e": 4784
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "diagnostics": [
+    {
+      "code": "PlaceholderPending",
+      "severity": "ask",
+      "label": "empty field",
+      "message": "observation the observation, in one sentence, as the author stated it and not as it could be generalised"
+    },
+    {
+      "code": "PlaceholderPending",
+      "severity": "ask",
+      "label": "empty field",
+      "message": "annoyance the concrete annoyance that produced it — what went wrong, how often, at whose cost"
+    },
+    {
+      "code": "PlaceholderPending",
+      "severity": "ask",
+      "label": "empty field",
+      "message": "tone the register the opening sets, stated as what the author would actually say out loud"
+    },
+    {
+      "code": "Rule:elab-before-thinking",
+      "severity": "note",
+      "label": "order",
+      "message": "[crit comes before [elab — a topic and its elaboration do not justify each other when the thinking op comes first. Suggestion: elab + thinking — elaborate, then operate on what was elaborated."
+    }
+  ]
+}

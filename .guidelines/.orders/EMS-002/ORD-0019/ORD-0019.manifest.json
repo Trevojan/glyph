@@ -1,0 +1,16 @@
+{
+  "order": "ORD-0019",
+  "engine": "3.6.9.07",
+  "emitted": "2026-10-25T13:39:34.605Z",
+  "files": [
+    "ORD-0019.pgml",
+    "ORD-0019.xml",
+    "ORD-0019.json",
+    "ORD-0019.hgml"
+  ],
+  "source": "/tmp/claude-0/ORD-0019.pgml",
+  "diagnostics": {
+    "fix": 0,
+    "total": 0
+  }
+}

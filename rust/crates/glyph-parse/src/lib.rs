@@ -19,12 +19,14 @@
 
 use glyph_lex::{classify, js_trim, suggest, tokenize, Token};
 use glyph_logic::{parse_logic, Logic};
-use glyph_rules::{check_rules, with_cache};
-use glyph_stores::{entry_of, expansion_registry, Context, Value};
-use glyph_templates::{check_template_constraints, expand_invocations, Parsed, SubParse};
+use glyph_rules::check_rules;
+use glyph_stores::{entry_of, expansion_registry, Context, Registered};
+use glyph_json::{number, Json};
+use glyph_templates::{check_template_constraints, expand_invocations, Inherited, Parsed, SubParse};
 use glyph_util::tree::{strip_tags, Diag, Emotion, Gloss, Id, Node, Segment, Span, Suggestion, Thrown, Tree, LIMITS};
 use glyph_util::{esc, inherited};
-use glyph_vocab::{derived, get, ALIAS, EDITORIAL_ONLY, EMO, FRAMES, INSTR, META, NAMED_STRUCT, SESSION, SLOTS, STRUCT};
+use glyph_vocab::{derived, former_element, get, ALIAS, EDITORIAL_ONLY, EMO, FRAMES, INSTR, META, MODE, NAMED_STRUCT, SESSION, SLOTS, STRUCT};
+use std::sync::Arc;
 
 /// What the parser carries beyond the shared node: the Logic a `[logic]`
 /// block read.
@@ -41,11 +43,16 @@ pub struct Opts<'a> {
     pub en: bool,
     /// `opts._expanding`: the templates being expanded around this parse.
     pub expanding: Vec<String>,
+    /// What the caller registered, which a template's body is parsed with.
+    pub registered: &'a Registered,
+    /// The definitions the source that called this body wrote: what the JS
+    /// hands a body in `templates`, over the store.
+    pub inherited: &'a [Inherited<Extra>],
 }
 
 impl<'a> Opts<'a> {
     pub fn new(ctx: &'a Context) -> Opts<'a> {
-        Opts { ctx, session: true, valency: true, en: false, expanding: Vec::new() }
+        Opts { ctx, session: true, valency: true, en: false, expanding: Vec::new(), registered: Registered::none(), inherited: &[] }
     }
 }
 
@@ -68,9 +75,6 @@ pub struct Parse {
     pub tree: Tree<Extra>,
     pub gaps: Vec<Gap>,
     pub tokens: Vec<Token>,
-    /// The rules store as the parse leaves it: the JS's `checkRules` hangs its
-    /// compiled rules on the store object, and the envelope hashes that.
-    pub rules: Option<Value>,
 }
 
 /// A table the JS reads as `TABLE[key]`: a key of its own, or one
@@ -105,35 +109,6 @@ fn slots_of(canonical: &str) -> Option<Slots> {
 /// `String(v)` of a token's value; `undefined` when there is none.
 fn js_str(v: &Option<String>) -> String {
     v.clone().unwrap_or_else(|| "undefined".into())
-}
-
-/// `.replace(/\s+,/g, ",")`
-fn tighten_commas(s: &str) -> String {
-    let c: Vec<char> = s.chars().collect();
-    let mut out = String::new();
-    let mut i = 0;
-    while i < c.len() {
-        if js_space(c[i]) {
-            let mut j = i;
-            while j < c.len() && js_space(c[j]) {
-                j += 1;
-            }
-            if j < c.len() && c[j] == ',' {
-                out.push(',');
-                i = j + 1;
-                continue;
-            }
-            out.extend(&c[i..j]);
-            i = j;
-            continue;
-        }
-        out.push(c[i]);
-        i += 1;
-    }
-    out
-}
-fn js_space(c: char) -> bool {
-    u16::try_from(c as u32).is_ok_and(glyph_lex::js_space)
 }
 
 /// `/^[A-Za-z_][A-Za-z0-9_.-]*$/`: a binding is a name, not prose.
@@ -222,8 +197,12 @@ impl State<'_, '_> {
         self.pending = None;
     }
 
-    fn command(&mut self, tk: &Token) {
-        let v = tk.v.as_deref().unwrap_or("");
+    /// `named`: the command's name when the token is not one — a stray `[on]`
+    /// is the command ON written closed.
+    fn command(&mut self, i: usize, named: Option<&str>) {
+        let tokens = self.tokens;
+        let tk = &tokens[i];
+        let v = named.or(tk.v.as_deref()).unwrap_or("");
         let cl = classify(v, self.o.ctx, self.o.session);
         let parent = self.top();
         let in_ph = parent.is_some_and(|p| self.tree.nodes[p].canonical.as_deref() == Some("PH"));
@@ -232,8 +211,14 @@ impl State<'_, '_> {
             self.fix("sem nome", "<code>[</code> sem nome. Um <code>[</code> = um comando.".into(), "EmptyCommandName",
                      "no name", "<code>[</code> with no name. One <code>[</code> is one command.".into());
         }
-        /* `[ph-alvo`: the bare tag is the hole's name, not a chain link */
-        let slot_name = in_ph && bare;
+        /* `[ph-alvo`: the `-` straight after `[ph` binds the hole's one name;
+           any other bare tag in the hole is a chain link (ORD-0026, ORD-0025) */
+        let slot_name = in_ph && bare && parent.is_some_and(|p| {
+            let ph = &self.tree.nodes[p];
+            let (Some(t), Some(b), Some(o)) = (ph.tok.as_ref(), i.checked_sub(1).map(|j| &tokens[j]),
+                                               i.checked_sub(2).map(|j| &tokens[j])) else { return false };
+            ph.children.is_empty() && b.k == "extend" && b.s == t.e && o.k == t.k && o.s == t.s && o.e == t.e
+        });
         let gloss = match cl.gloss {
             glyph_lex::Gloss::Text(t) => Some(Gloss::Text(t)),
             glyph_lex::Gloss::Prototype => Some(Gloss::Prototype),
@@ -247,8 +232,8 @@ impl State<'_, '_> {
             Some(self.pending.unwrap_or(if bare { "extend" } else if parent.is_some() { "nest" } else { "root" }).to_string())
         };
         let mut nd = Node {
-            id: Some(self.uid), raw: tk.v.clone(), tier: Some(cl.tier.into()), canonical: Some(cl.canonical.clone()), gloss,
-            alias: Some(cl.alias == Some(true)), colon: Some(None), auto_closed: Some(false), tok: Self::span(tk),
+            id: Some(self.uid), raw: named.map(str::to_string).or_else(|| tk.v.clone()), tier: Some(cl.tier.into()), canonical: Some(cl.canonical.clone()), gloss,
+            alias: Some(cl.alias == Some(true)), auto_closed: Some(false), tok: Self::span(tk),
             editorial: Some(has_num(EDITORIAL_ONLY, &cl.canonical)), origin: Some(origin), chain_element: Some(bare),
             slot_name: Some(slot_name), depth: Some(self.stack.len()), ..Default::default()
         };
@@ -267,6 +252,16 @@ impl State<'_, '_> {
             self.fix("não existe", format!("<code>[{}</code> fora do vocabulário.{pt}", esc(v)), "UnknownCommand",
                      "does not exist", format!("<code>[{}</code> is outside the vocabulary.{en}", esc(v)));
         }
+        /* a retired element name is read, and named */
+        if let Some(was) = former_element(v)
+            && derived().gloss_reverse.iter().any(|(k, hit)| k == was && hit.canonical == cl.canonical)
+        {
+            let now = cl.canonical.to_lowercase();
+            self.g(Diag::new("note", "grafia antiga",
+                             format!("<code>[{}</code> é a grafia antiga de <code>[{was}</code>, e é lido como <code>[{now}</code>.", esc(v)),
+                             "FormerElementName")
+                .en("former spelling", format!("<code>[{}</code> is the former spelling of <code>[{was}</code>, and reads as <code>[{now}</code>.", esc(v))));
+        }
         let id = self.add(nd);
         self.attach(id);
         if tk.k == "open" {
@@ -275,32 +270,106 @@ impl State<'_, '_> {
         self.pending = None;
     }
 
-    fn colon(&mut self, i: usize) -> usize {
-        let Some(t2) = self.top() else { return i };
-        let (mut parts, mut j, mut saw_comma) = (Vec::new(), i + 1, false);
-        while j < self.tokens.len() {
-            let nx = &self.tokens[j];
-            match nx.k {
-                "close" | "semi" | "open" | "linebreak" | "logic" => break,
-                "comma" => {
-                    saw_comma = true;
-                    parts.push(",".to_string());
+    /// `colonHead`: what was written between `[` and the colon — the
+    /// command's name, and the chain written straight after it (`[rw-cr:`,
+    /// `[ph-a:`). Anything else in between stands as `…`, so the message never
+    /// shows a head that was not written.
+    fn colon_head(&self, id: Id, at: usize) -> String {
+        let nd = &self.tree.nodes[id];
+        let mut h = match nd.template.as_deref() {
+            Some(t) if !t.is_empty() => format!("--{t}"),
+            _ => js_str(&nd.raw),
+        };
+        let Some(k) = nd.tok.as_ref().and_then(|t| self.tokens.iter().position(|x| x.k == t.k && x.s == t.s && x.e == t.e))
+        else { return h };
+        for tm in &self.tokens[k + 1..at.max(k + 1)] {
+            match tm.k {
+                "extend" => h.push('-'),
+                "comma" => h.push(','),
+                "bareTag" => h.push_str(&js_str(&tm.v)),
+                _ => {
+                    h.push('…');
+                    return h;
                 }
-                "literal" | "text" => parts.push(js_trim(&js_str(&nx.v))),
-                "equals" => parts.push("=".into()),
-                "extend" => parts.push("-".into()),
+            }
+        }
+        h
+    }
+
+    /// `retiredColon`: the retired colon, named once per colon with the form
+    /// that replaces it — the command as written, and each item as a literal.
+    fn retired_colon(&mut self, head: &str, items: &[(String, &str, bool)], at: (usize, usize)) {
+        let now: String = items.iter().enumerate().map(|(k, (v, form, comma))| {
+            let q = if *form == "tick" { format!("`{v}`") } else { format!("'{v}'") };
+            format!("{}{q}", if k > 0 && *comma { "," } else { "" })
+        }).collect();
+        let (h, now) = (esc(head), esc(&format!("[{head}{now}")));
+        let d = Diag::new("ask", "dois-pontos",
+            format!("<code>[{h}:</code> é a forma aposentada do dois-pontos, e o texto fica no documento. Escreva <code>{now}</code>."),
+            "RetiredColon")
+            .en("colon", format!("<code>[{h}:</code> is the retired colon form, and the text stays in the document. Write <code>{now}</code>."));
+        self.g(Diag { at: Some(at), ..d });
+    }
+
+    /// The colon form retired (decided 2026-10-25 and 2026-10-26): a
+    /// recogniser at `ask`, once per colon, and what it held stays in the
+    /// document as the command's operand — each item between commas a literal,
+    /// in the order written, and a literal written in it that literal. `=` and
+    /// a `-` inside an item are its text. The run ends where the colon's always
+    /// did, and at a `-` that is a chain link (EMS-002 ORD-0025), which goes on
+    /// as the link it is. With no command open the colon is prose punctuation.
+    fn colon(&mut self, i: usize) -> usize {
+        struct Cur {
+            v: String,
+            s: usize,
+            e: usize,
+            comma: bool,
+        }
+        /* a quote ends at a line break, so an item that holds one is a tick */
+        fn flush(cur: &mut Option<Cur>, items: &mut Vec<(Token, bool)>) {
+            if let Some(c) = cur.take() {
+                let iv = js_trim(&c.v);
+                if !iv.is_empty() {
+                    let form = if iv.contains('\n') { "tick" } else { "quote" };
+                    items.push((Token { k: "literal", v: Some(iv), s: c.s, e: c.e, form: Some(form), closed_by: Some(form),
+                                        ..Token::default() }, c.comma));
+                }
+            }
+        }
+        let Some(t2) = self.top() else { return i };
+        let tokens = self.tokens;
+        let (mut items, mut cur, mut j, mut comma): (Vec<(Token, bool)>, Option<Cur>, usize, bool) = (Vec::new(), None, i + 1, false);
+        while j < tokens.len() {
+            let nx = &tokens[j];
+            match nx.k {
+                "text" | "equals" => {
+                    let c = cur.get_or_insert_with(|| Cur { v: String::new(), s: nx.s, e: nx.e, comma: std::mem::take(&mut comma) });
+                    /* whitespace between two tokens is a gap the lexer left out */
+                    if nx.s > c.e {
+                        c.v.push_str(&" ".repeat(nx.s - c.e));
+                    }
+                    c.v.push_str(&if nx.k == "equals" { "=".to_string() } else { js_str(&nx.v) });
+                    c.e = nx.e;
+                }
+                "comma" => {
+                    flush(&mut cur, &mut items);
+                    comma = true;
+                }
+                "literal" => {
+                    flush(&mut cur, &mut items);
+                    items.push((nx.clone(), std::mem::take(&mut comma)));
+                }
                 _ => break,
             }
             j += 1;
         }
-        let colon = js_trim(&tighten_commas(&parts.join(" ")));
-        let nd = &mut self.tree.nodes[t2];
-        nd.colon = Some(Some(colon));
-        let canonical = nd.canonical.clone().unwrap_or_else(|| "undefined".into());
-        let raw = esc(nd.raw.as_deref().unwrap_or(""));
-        if saw_comma && !has_text(STRUCT, &canonical) {
-            self.g(Diag::new("ask", "ordem incerta", format!("<code>[{raw}: a,b,c]</code> ordem não inferível. Aninhe."), "AmbiguousSlotOrder")
-                .en("order unclear", format!("<code>[{raw}: a,b,c]</code> order cannot be inferred. Nest them.")));
+        flush(&mut cur, &mut items);
+        let head = self.colon_head(t2, i);
+        let named: Vec<(String, &str, bool)> = items.iter()
+            .map(|(t, c)| (js_str(&t.v), t.form.unwrap_or("quote"), *c)).collect();
+        self.retired_colon(&head, &named, (tokens[i].s, tokens[i].e));
+        for (t, _) in &items {
+            self.literal(t);
         }
         j - 1
     }
@@ -372,7 +441,7 @@ impl State<'_, '_> {
                 .en("loose word", format!("<code>{}</code> on its own. Logic: <code>[if</code> <code>[unls</code> <code>[logic]</code>.", esc(&v))));
         } else if v.chars().next().is_some_and(|c| c.is_ascii_alphabetic()) && v.chars().all(word) {
             let (uw, lw) = (v.to_uppercase(), v.to_lowercase());
-            let known = has_text(INSTR, &uw) || has_text(ALIAS, &uw) || has_text(STRUCT, &uw) || has_text(META, &uw)
+            let known = has_text(INSTR, &uw) || has_text(ALIAS, &uw) || has_text(STRUCT, &uw) || has_text(META, &uw) || has_text(MODE, &uw)
                 || (self.o.session && has_text(SESSION, &lw));
             if known {
                 self.g(Diag::new("ask", "comando solto",
@@ -393,7 +462,7 @@ impl State<'_, '_> {
     fn token(&mut self, i: usize) -> usize {
         let tk = &self.tokens[i];
         match tk.k {
-            "open" | "bareTag" => self.command(tk),
+            "open" | "bareTag" => self.command(i, None),
             "rawfence" => {
                 let origin = self.pending.unwrap_or("nest").to_string();
                 let id = self.add(Node { raw_fence: Some(true), v: tk.body.clone(), tok: Self::span(tk), origin: Some(Some(origin)),
@@ -412,6 +481,13 @@ impl State<'_, '_> {
                 let id = self.add(Node { logic: Some(lg.name.clone()), tok: Self::span(tk), origin: Some(Some(origin)),
                                          extra: Some(lg), ..Default::default() });
                 self.attach(id);
+                /* `[logic:calc]` opens the fence it names, and asks for `[logic'calc']` */
+                if let Some(c) = tk.colon {
+                    let name = js_str(&tk.v);
+                    let form = if name.contains('\'') { "tick" } else { "quote" };
+                    let items = if name.is_empty() { Vec::new() } else { vec![(name, form, false)] };
+                    self.retired_colon("logic", &items, (c, c + 1));
+                }
                 self.diags.extend(gaps);
                 if tk.closed != Some(true) {
                     self.fix("não fechou", "<code>[logic]</code> sem <code>[/logic]</code>.".into(), "UnclosedLogic",
@@ -453,7 +529,8 @@ impl State<'_, '_> {
             "extend" => {
                 self.pending = Some("extend");
                 let next = self.tokens.get(i + 1).map(|t| t.k);
-                if !matches!(next, Some("open" | "bareTag" | "literal" | "text")) {
+                let stray_on = self.tokens.get(i + 1).is_some_and(|t| t.k == "mode" && t.stray == Some(true));
+                if !matches!(next, Some("open" | "bareTag" | "literal" | "text")) && !stray_on {
                     self.fix("pendurado", "<code>-</code> sem cadeia. Ex.: <code>[rw-cr</code>.".into(), "DanglingChain",
                              "dangling", "<code>-</code> with no chain. E.g. <code>[rw-cr</code>.".into());
                 }
@@ -490,6 +567,17 @@ impl State<'_, '_> {
                     let id = self.add(Node { mode: Some("off".into()), tok: Self::span(tk), ..Default::default() });
                     self.push_loose(id);
                     self.seg.pending_mode = Some(Some(id));
+                } else if tk.stray == Some(true) {
+                    /* `[on]` with no `[off]` open is the command ON written
+                       closed; the note names that nothing was off */
+                    self.command(i, Some("on"));
+                    self.seg.pending_mode = Some(None);
+                    let d = Diag::new("note", "modo texto",
+                        "<code>[on]</code> sem <code>[off]</code> aberto antes: nada estava desligado. \
+                         Fica como o comando <code>&lt;mode-on/&gt;</code>.".into(), "UnmatchedOnMode")
+                        .en("text mode", "<code>[on]</code> with no <code>[off]</code> open before it: nothing was off. \
+                                          It stays as the command <code>&lt;mode-on/&gt;</code>.".into());
+                    self.g(Self::at(d, tk));
                 } else {
                     self.seg.pending_mode = Some(None);
                 }
@@ -539,11 +627,89 @@ pub fn binding_of<X: Clone>(tree: &mut Tree<X>, id: Id) -> Option<String> {
     Some(v)
 }
 
-/// `collectBindings`: one name, one result, over the whole package.
+/// `DEEP_INFERENCE`: the depth from which a composite with no operand asks.
+pub const DEEP_INFERENCE: f64 = 5.0;
+
+/// `deepInference(nd, opts)`: the deep-inference alarm (decided 2026-09-27).
+/// A composite whose formula runs `DEEP_INFERENCE` levels or more, holding no
+/// operand, where no frame and no ordered slot asks for one, answers its
+/// depth: the alarm asks for the subject, GLOSSARY §0.3's word for the operand
+/// of a formula. A chain link holds no operand of its own and is not asked.
+pub fn deep_inference<X: Clone>(tree: &Tree<X>, id: Id, ctx: &Context) -> Option<f64> {
+    let nd = &tree.nodes[id];
+    let canonical = nd.canonical.as_deref().filter(|c| !c.is_empty())?;
+    if nd.chain_element == Some(true) || nd.slot_name == Some(true) {
+        return None;
+    }
+    /* SLOTS and FRAMES are plain objects: a name the prototype holds is in both */
+    if get(SLOTS, canonical).is_some() || get(FRAMES, canonical).is_some() || inherited(canonical) {
+        return None;
+    }
+    let e = entry_of(canonical, ctx)?;
+    let depth = e.get("depth").and_then(Json::num)?;
+    if e.get("species").and_then(Json::str) != Some("composite") || depth < DEEP_INFERENCE {
+        return None;
+    }
+    if !tree.value_children(id).is_empty() {
+        return None;
+    }
+    Some(depth)
+}
+
+/// `unboundRefs`: the names a REF's literals write and nothing binds — a
+/// reference is written `[ref'nome']`, and prose under REF is not a name
+/// (decided 2026-09-27).
+pub fn unbound_refs<X: Clone>(tree: &Tree<X>, id: Id, binds: &[String]) -> Vec<String> {
+    let nd = &tree.nodes[id];
+    if nd.canonical.as_deref() != Some("REF") {
+        return Vec::new();
+    }
+    nd.children.iter().map(|&c| &tree.nodes[c])
+        .filter(|c| c.is_literal() && c.form.as_deref() != Some("raw") && c.is_binder != Some(true))
+        .map(|c| js_trim(c.v.as_deref().unwrap_or("")))
+        /* `binds` is a plain object: a member of the prototype is bound */
+        .filter(|v| bind_name(v) && !binds.contains(v) && !inherited(v))
+        .collect()
+}
+
+/// `checkReferences`: an unbound name asks, as `UndefinedVariable` does
+/// inside the `[logic]` fence.
+pub fn check_references<X: Clone>(tree: &Tree<X>, binds: &[String], g: &mut dyn FnMut(Diag)) {
+    for id in tree.segments.iter().flat_map(|sg| tree.walk(&sg.children)).collect::<Vec<_>>() {
+        for v in unbound_refs(tree, id, binds) {
+            g(Diag::new("ask", "referência solta",
+                        format!("<code>{}</code> é referenciado e nunca ligado. Entrada externa, ou falta a ligação?", esc(&v)),
+                        "UnboundReference")
+                .en("unbound reference", format!("<code>{}</code> is referenced and never bound. External input, or a missing binding?", esc(&v))));
+        }
+    }
+}
+
+/// `insideDefinitions`: what a definition `[--name=…]` holds. The body
+/// occurs where a call expands it, and that is where its result is named.
+pub fn inside_definitions<X: Clone>(tree: &Tree<X>) -> Vec<bool> {
+    let mut inside = vec![false; tree.nodes.len()];
+    for id in tree.segments.iter().flat_map(|sg| tree.walk(&sg.children)) {
+        let nd = &tree.nodes[id];
+        if nd.is_template() && nd.is_def == Some(true) {
+            for k in tree.walk(&nd.children) {
+                inside[k] = true;
+            }
+        }
+    }
+    inside
+}
+
+/// `collectBindings`: one name, one result, over the whole package. Read
+/// inside a definition too, one call would name every result twice.
 pub fn collect_bindings<X: Clone>(tree: &mut Tree<X>, g: &mut dyn FnMut(Diag)) -> Vec<String> {
     let mut order: Vec<String> = Vec::new();
+    let declared = inside_definitions(tree);
     let ids: Vec<Id> = tree.segments.iter().flat_map(|sg| tree.walk(&sg.children)).collect();
     for id in ids {
+        if declared[id] {
+            continue;
+        }
         let Some(name) = binding_of(tree, id) else { continue };
         /* `binds` is a plain object: a member of the prototype is there already */
         if order.contains(&name) || inherited(&name) {
@@ -573,11 +739,14 @@ pub fn parse(src: &str, o: &Opts) -> Result<Parse, Thrown> {
     let mut g = |d: Diag| diags.push(d);
 
     /* expansion first: every later pass must see the body, not the bare call */
-    expand_invocations(&mut tree, ctx, o.session, &o.expanding, &mut g, &mut |body, sub: SubParse| {
+    expand_invocations(&mut tree, ctx, o.session, &o.expanding, o.inherited, &mut g, &mut |body, sub: SubParse<Extra>| {
         /* the JS hands parse the registry alone, and the rules and the
-           composition table fall to what is registered, which here is none */
-        let sub_ctx = Context::new(Some(sub.templates.clone()), None, None);
-        let r = parse(body, &Opts { ctx: &sub_ctx, session: sub.session, valency: sub.valency, en: false, expanding: sub.expanding })?;
+           composition table fall to what the caller registered: the same
+           stores, shared */
+        let reg = o.registered;
+        let sub_ctx = Context::shared(Some(Arc::clone(sub.templates)), reg.rules.clone(), reg.expansions.clone());
+        let r = parse(body, &Opts { ctx: &sub_ctx, session: sub.session, valency: sub.valency, en: false, expanding: sub.expanding,
+                                    registered: reg, inherited: &sub.inherited })?;
         Ok(Parsed { tree: r.tree, gaps: r.gaps.into_iter().map(|p| Diag { at: p.at, code_first: p.code_first, ..Diag::new(&p.sev, &p.lab, p.msg, &p.code) }).collect() })
     })?;
 
@@ -592,7 +761,12 @@ pub fn parse(src: &str, o: &Opts) -> Result<Parse, Thrown> {
         let kids = &tree.nodes[id].children;
         let name = kids.iter().find(|&&c| tree.nodes[c].slot_name == Some(true))
             .map(|&c| format!("<code>{}</code> ", esc(tree.nodes[c].raw.as_deref().unwrap_or(""))));
-        let q = kids.iter().find(|&&c| tree.nodes[c].is_literal()).map(|&c| esc(tree.nodes[c].v.as_deref().unwrap_or("")));
+        let q_id = kids.iter().copied().find(|&c| tree.nodes[c].is_literal());
+        /* a hole a template call filled kept what it held, and asks nothing */
+        if q_id.is_some_and(|c| tree.nodes[c].bound_slot.as_deref().is_some_and(|s| !s.is_empty())) {
+            continue;
+        }
+        let q = q_id.map(|c| esc(tree.nodes[c].v.as_deref().unwrap_or("")));
         let name = name.unwrap_or_default();
         g(Diag::new("ask", "casa vazia", format!("{name}{}", q.clone().unwrap_or_else(|| "sem resposta".into())), "PlaceholderPending")
             .en("empty field", format!("{name}{}", q.unwrap_or_else(|| "no answer".into()))));
@@ -661,7 +835,7 @@ pub fn parse(src: &str, o: &Opts) -> Result<Parse, Thrown> {
                 continue;
             }
             let c = esc(&canonical.to_lowercase());
-            let got = tree.value_children(id).len() + usize::from(nd.colon.as_ref().is_some_and(|c| c.as_deref().is_some_and(|c| !c.is_empty())));
+            let got = tree.value_children(id).len();
             /* strict positional arity comes before the frame */
             if let Some(slots) = slots_of(&canonical) {
                 let (len, named): (Option<usize>, &[&str]) = match slots {
@@ -677,7 +851,17 @@ pub fn parse(src: &str, o: &Opts) -> Result<Parse, Thrown> {
                 }
                 continue;
             }
-            let Some(frame) = get(FRAMES, &canonical) else { continue };
+            let Some(frame) = get(FRAMES, &canonical) else {
+                if let Some(deep) = deep_inference(&tree, id, ctx) {
+                    let pt = get(&derived().ptbr, &canonical).filter(|p| !p.is_empty()).map_or(String::new(), |p| format!(" ({p})"));
+                    let en = get(INSTR, &canonical).filter(|p| !p.is_empty()).map_or(String::new(), |p| format!(" ({p})"));
+                    let deep = number(deep);
+                    g(Diag::new("ask", "inferência profunda",
+                                format!("<code>[{c}</code>{pt} expande {deep} níveis: <strong>the subject</strong>?"), "DeepInference")
+                        .en("deep inference", format!("<code>[{c}</code>{en} expands {deep} levels: <strong>the subject</strong>?")));
+                }
+                continue;
+            };
             let want = frame.first().copied().unwrap_or("");
             if got == 0 {
                 let pt = get(&derived().ptbr, &canonical).filter(|p| !p.is_empty()).map_or(String::new(), |p| format!(" ({p})"));
@@ -699,14 +883,15 @@ pub fn parse(src: &str, o: &Opts) -> Result<Parse, Thrown> {
             let Some(canonical) = tree.nodes[id].canonical.clone().filter(|c| !c.is_empty()) else { continue };
             let Some(e) = entry_of(&canonical, ctx) else { continue };
             let nd = &mut tree.nodes[id];
-            nd.species = e.get("species").and_then(Value::str).map(str::to_string);
-            nd.composition_depth = Some(e.get("depth").and_then(Value::num));
+            nd.species = e.get("species").and_then(Json::str).map(str::to_string);
+            nd.composition_depth = Some(e.get("depth").and_then(Json::num));
         }
     }
 
     check_rules(&tree, ctx, &mut g)?;
     check_template_constraints(&tree, ctx, &mut g)?;
-    collect_bindings(&mut tree, &mut g);
+    let bound = collect_bindings(&mut tree, &mut g);
+    check_references(&tree, &bound, &mut g);
 
     /* templates: a definition with no body, an invocation of nothing known */
     let mut defined: Vec<String> = Vec::new();
@@ -725,7 +910,8 @@ pub fn parse(src: &str, o: &Opts) -> Result<Parse, Thrown> {
             invoked.push(name);
         }
     }
-    let known = |k: &str| match ctx.templates.get(k) {
+    /* the registry of a body holds what the calling source defined */
+    let known = |k: &str| o.inherited.iter().any(|d| d.key == k) || match ctx.templates.get(k) {
         Some(v) => v.truthy(),
         None => inherited(k),
     };
@@ -753,5 +939,5 @@ pub fn parse(src: &str, o: &Opts) -> Result<Parse, Thrown> {
         Gap { plain: strip_tags(&msg), sev: d.sev, lab, msg, code: if d.code.is_empty() { "Note".into() } else { d.code }, at: d.at,
               code_first: d.code_first }
     }).collect();
-    Ok(Parse { tree, gaps, tokens, rules: ctx.rules.as_ref().map(with_cache) })
+    Ok(Parse { tree, gaps, tokens })
 }

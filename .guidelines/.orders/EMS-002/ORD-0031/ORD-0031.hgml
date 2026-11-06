@@ -1,0 +1,57 @@
+[block
+  'ORD-0031-colon'
+  [ctx
+    'the spec of EMS-002'
+    '.guidelines/.orders/EMS-002/EMS-002.pgml'
+  [/ctx]
+  [ctx
+    'the map of the inclusion'
+    '.guidelines/.orders/INTAKE-INCLUSION.md'
+  [/ctx]
+  [tgt
+    'the colon form retires, as the Regent decided on 2026-10-25 and 2026-10-26: a recogniser at ask, the text kept as the operand, the name only on the commands that take one, from their first literal; the last ORD of the batch the version moves once for'
+  [/tgt]
+  [ctx
+    'the Regent, 2026-10-25: the colon is typed with a shift, so it is not good to exist; the name attribute should be the first parameter typed as a literal, which limits names to certain commands, valid and intentional; templates exist to reduce typing'
+  [/ctx]
+  [ctx
+    'measured at 0634b44: a colon stores its text as the name of any element and counts it as the operand; a comma list raises AmbiguousSlotOrder; a logic fence is named by its colon; the way back writes a name back as a colon; one declared source, OC-01, writes a colon, and P-07 and P-15 name a section and a block with a literal'
+  [/ctx]
+  [cnst
+    'a colon raises RetiredColon at ask once, naming the replacement written with literals, and its text becomes operand literals, one per comma item, in source order, so the colon form emits the same document as the form the message names; AmbiguousSlotOrder retires with it, and OC-01 becomes the declared source of the new code'
+  [/cnst]
+  [cnst
+    'the name exists only on block, section and the logic fence, from the first literal, under the rule of OPERAND_ATTR; binds stays beside it, so a reference to a named block still resolves'
+  [/cnst]
+  [cnst
+    'a logic opener with a literal after it, closed by its end tag, is the named fence; the colon opener still opens it and asks; the way back writes no colon: a name comes back as the first literal'
+  [/cnst]
+  [cnst
+    'the snapshot moves by decision: P-07 and P-15 in xml, OC-01 in xml, ast and hgml, written in .decisions; the Rust is ported byte for byte'
+  [/cnst]
+  [cmp
+    'the colon'
+    'every colon form asks once and emits the bytes of its literal form, the name sits only on block, section and the logic fence, and both ways back write no colon; each seen failing before it counts, and the Rust answers byte for byte'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+[/block]
