@@ -10,8 +10,8 @@ use glyph_inverse::from_xml;
 use glyph_lex::{classify, suggest, tokenize, Token};
 use glyph_logic::{expand_expr, free_vars, parse_logic};
 use glyph_parse::{parse, Opts};
-use glyph_stores::Context;
-use glyph_util::json::{parse as parse_json, stringify, Json};
+use glyph_stores::{Context, Registered};
+use glyph_json::{parse as parse_json, stringify, Json};
 use glyph_util::tree::Thrown;
 use glyph_vocab::el_name;
 use glyph_xml::to_xml;
@@ -30,6 +30,7 @@ fn token_json(t: &Token) -> Json {
     put("s", Some(Json::Num(t.s as f64)));
     put("e", Some(Json::Num(t.e as f64)));
     put("closed", t.closed.map(Json::Bool));
+    put("colon", t.colon.map(|c| Json::Num(c as f64)));
     put("stray", t.stray.map(Json::Bool));
     put("form", t.form.map(|f| Json::Str(f.into())));
     put("closedBy", t.closed_by.map(|f| Json::Str(f.into())));
@@ -179,7 +180,10 @@ fn str_field(req: &Json, name: &str) -> String {
 
 /// Process a single request and return the response.
 fn run(ctx: &Context, req: &Json) -> Result<Json, String> {
-    let mut opts = Opts::new(ctx);
+    // the engine registers the stores it answers with, as glyph-protocol.js
+    // does when it runs as the engine (EMS-002 ORD-0008)
+    let registered = Registered::of(ctx);
+    let mut opts = Opts { registered: &registered, ..Opts::new(ctx) };
 
     // Set language if specified in request
     if req.get("lang").and_then(Json::str) == Some("en") {
@@ -232,7 +236,7 @@ fn run(ctx: &Context, req: &Json) -> Result<Json, String> {
         "parse" => {
             let src = str_field(req, "src");
             // For toAST, default lang to "en" when not specified (per JS behavior)
-            let ast_opts = Opts { en: req.get("lang").and_then(Json::str) != Some("pt"), session, ..Opts::new(&ctx) };
+            let ast_opts = Opts { en: req.get("lang").and_then(Json::str) != Some("pt"), session, registered: &registered, ..Opts::new(ctx) };
             let ast = to_ast(&src, &ast_opts, &AstOpts::default())
                 .map_err(|Thrown(e)| e)?;
             let parse_result = parse(&src, &opts).map_err(|Thrown(e)| e)?;
@@ -276,7 +280,7 @@ fn run(ctx: &Context, req: &Json) -> Result<Json, String> {
                 AstOpts::default()
             };
             // Default to en for toAST when lang not specified
-            let ast_opts_lang = Opts { en: req.get("lang").and_then(Json::str) != Some("pt"), session, ..Opts::new(&ctx) };
+            let ast_opts_lang = Opts { en: req.get("lang").and_then(Json::str) != Some("pt"), session, registered: &registered, ..Opts::new(ctx) };
             to_ast(&src, &ast_opts_lang, &ast_opts).map_err(|Thrown(e)| e)
         }
         "toHGML" => {

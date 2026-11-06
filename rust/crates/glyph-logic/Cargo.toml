@@ -9,4 +9,6 @@ publish = false
 glyph-util = { path = "../glyph-util" }
 
 [dev-dependencies]
+glyph-util = { path = "../glyph-util" }
+glyph-json = { path = "../glyph-json" }
 glyph-lex = { path = "../glyph-lex" }

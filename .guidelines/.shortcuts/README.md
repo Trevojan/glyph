@@ -12,11 +12,12 @@
 
 | | |
 |---|---|
-| versão | **3.6.9.07** |
-| suíte | `npm run check` — verde, 34 baldes, 114 fontes declaradas no snapshot; `npm run check:rust` escreve o oráculo no commit sob teste e compila e testa `rust/` |
+| versão | **4.7.10.08** |
+| suíte | `npm run check` — verde, 38 baldes, 118 fontes declaradas no snapshot, uma com caracteres fora do BMP; `npm run check:rust` escreve o oráculo no commit sob teste e compila e testa `rust/` |
 | EMS-001 | fechadas da `ORD-0001` à `ORD-0013`, cada uma com o commit e o digest no [registro da série](../.orders/EMS-001/README.md); a `ORD-0013`, o instalador, fechou com o val do Regente em 2026-10-21. A vaga é da `ORD-0014`, a janela própria, com o aval dele |
-| último marco | o Glyph responde em Rust (2026-09-26): o app, atrás de `?engine=relay`, dá pelo motor Rust os mesmos bytes que pelo JS nas 114 fontes, em todo painel (`ORD-0011`), e o binário `glyph` responde as flags do `glyph-cli.js` (`ORD-0012`). Antes disso: o layout das séries e as `ORD-0001` a `ORD-0010`, na nuvem (2026-09-25); o trabalho de 2026-09-24, com as stores como objeto de contexto, o oráculo das 114 fontes, o workspace `rust/`, os nomes ratificados e o plugin; o núcleo em treze módulos |
-| próximo | a **`ORD-0014`**, o Explorer numa janela própria pelo `msedge --app`; depois a spec da **EMS-002**, cuja primeira peça é a opção c da pergunta 11 ([`.plan`](../.plan/README.md) §5). O que resta esperando o Regente está em [`.plan`](../.plan/README.md), *Aberto, esperando o Regente* |
+| último marco | os caminhos virtuais (2026-10-23): `glyph-vpath` resolve `arquivo#seletor`, ou um `NodeID` que sobrevive a mover, renomear a chave, o bloco, o arquivo ou o cabeçalho sobre o mesmo corpo, para uma fatia exata, com offsets — e o que a identidade não segue, o cabeçalho renomeado com o corpo mudado, volta pelo conteúdo, como *index miss* —, sobre um índice de `.guidelines/` que o `npm run check` mantém honesto, e o `README.md` fica defasado quando as flags da CLI mudam sem ele (`EMS-002/ORD-0001` a `ORD-0004`). Antes disso: o Glyph responde em Rust (2026-09-26): o app, atrás de `?engine=relay`, dá pelo motor Rust os mesmos bytes que pelo JS nas 114 fontes, em todo painel (`ORD-0011`), e o binário `glyph` responde as flags do `glyph-cli.js` (`ORD-0012`). Antes disso: o layout das séries e as `ORD-0001` a `ORD-0010`, na nuvem (2026-09-25); o trabalho de 2026-09-24, com as stores como objeto de contexto, o oráculo das 114 fontes, o workspace `rust/`, os nomes ratificados e o plugin; o núcleo em treze módulos |
+| EMS-002 | aberta em 2026-10-23, o Glyph 100% em Rust ([registro da série](../.orders/EMS-002/README.md)): da `ORD-0001` à `ORD-0031` fechadas — `glyph-vpath`, o `NodeID`, o índice de recuperação, a manutenção de ordem, a fonte declarada fora do BMP, as regras compiladas fora da store, o `glyph-json`, o registro ao lado do contexto, o `--zip`, o `classify` pela página, os stores de cada caso no snapshot, a régua das crates o Rust que deixa de refazer a cada chamada o que o JS faz uma vez as renomeações (O8, O9, O10) a sintaxe de referência `[ref'nome']`, o alarme de inferência profunda, `<part n>` e `<if cond>`, o blend só no mesmo alvo e os três resíduos de O4 no Rust; o `.plan` §0 está construído. Nenhuma Ordem aberta nesta série |
+| próximo | a **`ORD-0014`** da EMS-001, o Explorer numa janela própria pelo `msedge --app`; depois, na EMS-002, a opção c da pergunta 11 e o resto do [`.plan`](../.plan/README.md) §5. O que resta esperando o Regente está em [`.plan`](../.plan/README.md), *Aberto, esperando o Regente* |
 | última rodada do Regente | **2026-10-21**: o val da `ORD-0013` feito, o aval da `ORD-0014`, os status da escada, a spec da EMS-002 com as tabelas vindas do motor, e a opção c da pergunta 11 — em [`.decisions/`](../.decisions/README.md) |
 
 ## Os sete eixos
@@ -48,6 +49,7 @@
 | quando a pergunta é | abra |
 |---|---|
 | "que elemento esse comando emite?" | [`XML_REFERENCE.md`](../XML_REFERENCE.md) |
+| "qual trecho de qual arquivo?" | `npm run vpath -- resolve 'arquivo#seletor' --text` (ou um `NodeID`, `n42`), `npm run vpath -- up` para os pais, `before`, `above` e `between` para a ordem, `npm run vpath -- list arquivo` para os seletores, e `npm run vpath -- misses` para as falhas do índice — o índice está em `.virtual/` |
 | "o que essa notação significa?" | [`GLOSSARY.md`](../GLOSSARY.md) §0.1, §0.3 |
 | "o documento emitido pode fazer isso?" | [`PACKAGE_TARGET.md`](../PACKAGE_TARGET.md) |
 | "isto é domínio ou síntese?" | [`PROMOTION_BOUNDARY.md`](../PROMOTION_BOUNDARY.md) §2 |
@@ -55,7 +57,7 @@
 | "o que o estudo de setembro mediu e decidiu?" | [`.orders/INTAKE-FIELD-2026-09.md`](../.orders/INTAKE-FIELD-2026-09.md) §5 aponta os outros sete |
 | "Rust?" | [`.orders/INTAKE-RUST.md`](../.orders/INTAKE-RUST.md) — os dois lados, pesados; o Regente decidiu migrar ([`.decisions/`](../.decisions/README.md), 2026-09-24) |
 | "a escada de migração perde alguma coisa?" | [`.orders/INTAKE-RUST-LADDER.md`](../.orders/INTAKE-RUST-LADDER.md) — a escada medida contra o motor, e o que o vendoring compra (§9); §8 é o que espera o Regente |
-| "o que se constrói em Rust, e em que ordem?" | [`.plan/`](../.plan/README.md) §5, a série EMS-001 |
+| "o que se constrói em Rust, e em que ordem?" | [`.plan/`](../.plan/README.md) §5, as séries EMS-001 e [EMS-002](../.orders/EMS-002/README.md) |
 | "duas fontes, uma intenção?" | [`HGML_CONVERGENCE.md`](../HGML_CONVERGENCE.md) |
 | "como escrever um exemplo de conformidade?" | [`conformance/README.md`](../../conformance/README.md) |
 | "como escrevo Glyph?" | a skill em [`.claude/skills/glyph-markup/`](../../.claude/skills/glyph-markup/) — gerada, e provada contra o motor |

@@ -176,7 +176,16 @@ const POSITIVE = [
     xml:["<for-example>","<example>"] },
   { id:"P-34", name:"ONLYIF is a necessary condition, COND a generic gate.",
     src:"[ONLYIF'o teste passar'][COND'houver tempo']", clean:true,
-    cmds:["ONLYIF","COND"], xml:["<only-if>","<condition>"] }
+    cmds:["ONLYIF","COND"], xml:["<only-if>","<condition>"] },
+  /* the one declared source with characters outside the BMP (EMS-002
+     ORD-0005, question 2 of the EMS-001 return, answered a): each of them is
+     two UTF-16 units and one character, so lev and every projection after
+     the lexer are held to the units the JS counts, in a literal, in a
+     criticised operand and in the prose after the commands */
+  { id:"P-35", name:"Letters and signs outside the BMP travel whole.",
+    src:"[nt'𝔾 é a letra do glifo, 🜂 o fogo'][crit'𝔊𝔩𝔶𝔭𝔥 😀'] 🜂 prosa fora", clean:true,
+    cmds:["NT","CRIT"], xml:["<user-input>𝔾 é a letra do glifo, 🜂 o fogo</user-input>",
+                             "<user-input>𝔊𝔩𝔶𝔭𝔥 😀</user-input>", "<off>🜂 prosa fora</off>"] }
 ];
 
 const INCOMPLETE = [
@@ -268,7 +277,7 @@ const LONG = [
     src:"[ins".repeat(400) + ";", maxXmlBytes:40000 },
   { id:"L-04", name:"r- block preserves the content, not just the summary",
     src:"r-[tgt`user command blocks`[skep[crit-[scru",
-    xml:["<user-input>user command blocks</user-input>", 'expects="target,skeptic,criticise,scrutinise"'] },
+    xml:["<user-input>user command blocks</user-input>", 'expects="target,sceptic,criticise,scrutinise"'] },
   { id:"L-05", name:"deep nesting gets flagged",
     src:"[ins".repeat(12) + ";", code:"DeepNesting" },
   { id:"L-06", name:"`;` closing a lot at once gets flagged",
@@ -321,6 +330,58 @@ const TEMPLATES = [
          "<user-input slot=\"criterion\">crit</user-input>"] }
 ];
 
+/* Template inclusion: a known command never vanishes (decided 2026-10-25,
+   with the Regent's answers on fills and on source definitions). What a call
+   writes reaches the expansion — what a named fill holds past its value
+   travels with it into the hole's place under the hole's slot, a fill no hole
+   names lands after the body under its own name, a literal past every
+   parameter lands after the body — and a definition written in the source
+   expands where it is called, over the store. A bucket of its own, held by
+   the round trip (RT-08, RT-09) and by the parse probes, not by the snapshot:
+   ORACLE_COVERAGE carries one declared source per new code. */
+const INCLUSION = [
+  { id:"TI-01", name:"a named fill carries its command into the hole's place",
+    src:"[--reinforce[ph-rule'a'[crit'x']][ph-why'b']]", opts:WITH_TPL, noFix:true,
+    xml:[/<mandatory[^>]*>\s*<user-input slot="rule">a<\/user-input>\s*<criticise slot="rule">/] },
+  { id:"TI-02", name:"a fill with no value keeps the hole asking, and its command after it",
+    src:"[--reinforce[ph-rule[crit'x']]'b']", opts:WITH_TPL, noFix:true,
+    xml:[/<needs slot="rule">[^<]*<\/needs>\s*<criticise slot="rule">/, '<user-input slot="why">b</user-input>'] },
+  { id:"TI-03", name:"a fill no hole names lands after the body, under its own name",
+    src:"[--reinforce'a''b'[ph-zzz'v'[crit'x']]]", opts:WITH_TPL, code:"TemplateUnknownParam",
+    xml:[/<\/reason>\s*<user-input slot="zzz">v<\/user-input>\s*<criticise slot="zzz">/] },
+  { id:"TI-04", name:"a hole filled twice binds the first value, and keeps the second",
+    src:"[--reinforce[ph-rule'a'][ph-rule'z'[crit'x']]'b']", opts:WITH_TPL, noFix:true,
+    xml:[/<user-input slot="rule">a<\/user-input>\s*<user-input slot="rule">z<\/user-input>\s*<criticise slot="rule">/] },
+  { id:"TI-05", name:"a literal past every parameter lands after the body",
+    src:"[--reinforce'a''b''c']", opts:WITH_TPL, noFix:true,
+    xml:[/<\/reason>\s*<user-input>c<\/user-input>/] },
+  { id:"TI-06", name:"a definition written in the source expands where it is called",
+    src:"[--t=[crit'x']][--t]", opts:WITH_TPL, noFix:true, codeAbsent:"UndefinedTemplate",
+    xml:[/<template name="t" expanded="true">\s*<criticise>/] },
+  { id:"TI-07", name:"its holes bind by position, in the order the body names them",
+    src:"[--t=[mand[ph-x`q`],[ph-y`r`]]][--t'a''b']", opts:WITH_TPL, noFix:true,
+    xml:['<user-input slot="x">a</user-input>', '<user-input slot="y">b</user-input>'] },
+  { id:"TI-08", name:"a definition written twice is refused, and the first holds",
+    src:"[--t=[crit'x']][--t=[sum'y']][--t]", opts:WITH_TPL, code:"TemplateDefinedTwice",
+    xml:[/<template name="t" expanded="true">\s*<criticise>/] },
+  { id:"TI-09", name:"the source definition is the one its call reads, over the store",
+    src:"[--reinforce=[crit[ph-q`what`]]][--reinforce'x']", opts:WITH_TPL, noFix:true,
+    xml:[/<template name="reinforce" expanded="true">\s*<criticise>/, '<user-input slot="q">x</user-input>'],
+    xmlAbsent:["<priority"] },
+  { id:"TI-10", name:"a definition declares: its body names a result only where it is called",
+    src:"[--t=[sum'a'[ctx]]][--t]", opts:WITH_TPL, noFix:true, codeAbsent:"DuplicateBinding" },
+  { id:"TI-11", name:"the shape a template promises holds for what a fill carried",
+    src:"[--loop[ph-target'x'[gen'y']]'p''u']", opts:WITH_BOTH, code:"TemplateConstraint:no-coarsen" },
+  /* a hole that holds more is a <placeholder> (EMS-002 ORD-0026), and what the
+     fill carried stays inside it: [answer, …carried, …held] */
+  { id:"TI-12", name:"in a <placeholder>, the answer, then what the fill carried, then what the hole held",
+    src:"[--t=[mand[ph-x`q`[crit'h']]]][--t[ph-x'a'[sum'c']]]", opts:WITH_TPL, noFix:true,
+    xml:[/<placeholder[^>]*>\s*<user-input slot="x">a<\/user-input>\s*<summary slot="x">\s*<user-input>c<\/user-input>\s*<\/summary>\s*<criticise>/] },
+  { id:"TI-13", name:"in an unfilled <placeholder>, the question, then what the fill carried, then what the hole held",
+    src:"[--t=[mand[ph-x`q`[crit'h']]]][--t[ph-x[sum'c']]]", opts:WITH_TPL, noFix:true,
+    xml:[/<placeholder[^>]*>\s*<needs slot="x">q<\/needs>\s*<summary slot="x">\s*<user-input>c<\/user-input>\s*<\/summary>\s*<criticise>/] }
+];
+
 /* Template constraints: the rules above are local (command vs command).
    These check the SHAPE a template promised, only inside its own expansion —
    the gap that let a loop be handed commands dissolving the loop itself. */
@@ -359,13 +420,13 @@ const CONSTRAINTS = [
  * One declared source per diagnostic code the arrays above never reached.
  * Eight of these had no test anywhere in this file; the others were tested
  * with inline sources, which have no id and so never reached the snapshot or
- * the oracle a port is held to. Declared, they travel in both. Projected with
- * the repository's stores, like every snapshot source — TemplateCycle needs a
- * cyclic store and stays in T-06/T-07 until the snapshot honours a case's own
- * opts.
+ * the oracle a port is held to. Declared, they travel in both. TemplateCycle
+ * is not among them: it needs a cyclic store, and T-07 and T-08 bring one,
+ * which the snapshot honours (O5, EMS-002 ORD-0011).
  * ------------------------------------------------------------------ */
 const ORACLE_COVERAGE = [
-  { id:"OC-01", src:"[crit: a,b,c]", code:"AmbiguousSlotOrder" },
+  /* the colon, retired (2026-10-26): a recogniser at `ask`, the text kept */
+  { id:"OC-01", src:"[crit: a,b,c]", code:"RetiredColon" },
   { id:"OC-02", src:"[logic]\nx = 1\ny = x < 5\n[/logic]", code:"CapFloorNotice" },
   { id:"OC-03", src:"[logic]\na = 1\na = 2\n[/logic]", code:"DuplicateBinding" },
   { id:"OC-04", src:"[logic]\na = 1\n!\n[/logic]", code:"EmptyLogicLine" },
@@ -376,7 +437,67 @@ const ORACLE_COVERAGE = [
   { id:"OC-09", src:"[logic]\ny = z + 1\n[/logic]", code:"UndefinedVariable" },
   { id:"OC-10", src:"[--reinforce[ctx],`interprete`]", code:"TemplateParamNotLiteral" },
   { id:"OC-11", src:"[nt`a ] b`]", code:"TruncatedLiteral" },
-  { id:"OC-12", src:"[raw] never closed", code:"UnclosedRaw" }
+  { id:"OC-12", src:"[raw] never closed", code:"UnclosedRaw" },
+  /* the inclusion of 2026-10-25 (EMS-002 ORD-0024): a stray [on] is the
+     command ON, and says nothing was off */
+  { id:"OC-13", src:"[crit'x'][on] the rest is read", code:"UnmatchedOnMode" },
+  /* the inclusion of 2026-10-25, on fills and source definitions: a fill no
+     hole names, and a template defined twice in one package */
+  { id:"OC-14", src:"[--reinforce'a''b'[ph-zzz'v']]", code:"TemplateUnknownParam" },
+  { id:"OC-15", src:"[--t=[ctx'x']][--t=[ctx'y']][--t]", code:"TemplateDefinedTwice" }
+];
+
+/* ------------------------------------------------------------------ *
+ * PH — a command held by a placeholder reaches the XML (EMS-002 ORD-0026)
+ *
+ * A hole that holds nothing but its name and its question is the bare <needs>
+ * line it always was. One that holds more — a nested command, a chain link,
+ * another literal, prose — is the <placeholder> XML_REFERENCE §7 already
+ * names, its <needs> unchanged inside (PACKAGE_TARGET G3), standing where the
+ * question was written. The `-` straight after `[ph` binds the one name; any
+ * other bare tag in the hole is a chain link. A filled template hole keeps
+ * what it held. Each case was seen failing on cda8d0b before it counted, and
+ * both ways back must give the same document again.
+ *
+ * Not declared in the snapshot: no new code needs a declared source (M01),
+ * so the Rust is held by the parse probes instead.
+ * ------------------------------------------------------------------ */
+const HELD_TPL = { templates: {
+  held: { gloss: "A hole that holds an example.", params: [{ name: "target" }],
+          body: "[crit[ph-target`what to fix`[ex'the login handler']]]" } } };
+const PLACEHOLDER = [
+  { id:"PH-01", name:"a hole with a question holds a nested command", src:"[ph'q'[crit'x']]",
+    code:"PlaceholderPending", xml:["<placeholder", "<needs>q</needs>", "<criticise>", "<user-input>x</user-input>"] },
+  { id:"PH-02", name:"a named hole holds a nested command", src:"[ph-a[crit'x']]",
+    code:"PlaceholderPending", xml:["<placeholder", '<needs slot="a">sem resposta</needs>', "<criticise>"] },
+  { id:"PH-03", name:"after the hole's name, `-` is a chain link", src:"[ph-a-crit]",
+    code:"PlaceholderPending", xml:["<placeholder>", "<chain>", "<criticise/>", '<needs slot="a">sem resposta</needs>'] },
+  { id:"PH-04", name:"a link after the question is a link, not the hole's name", src:"[ph'q'-crit]",
+    code:"PlaceholderPending", xml:["<placeholder>", "<needs>q</needs>", "<criticise/>"], xmlAbsent:['slot="crit"'] },
+  { id:"PH-05", name:"a link after a space is a link, not the hole's name", src:"[ph -crit]",
+    code:"PlaceholderPending", xml:["<placeholder>", "<needs>sem resposta</needs>", "<criticise/>"], xmlAbsent:["slot="] },
+  { id:"PH-06", name:"a link after a nested command is a link", src:"[ph[crit'x']-rev]",
+    code:"PlaceholderPending", xml:["<criticise>", "<review/>"], xmlAbsent:['slot="rev"'] },
+  { id:"PH-07", name:"a `,` after the name heads the chain the name opened", src:"[ph-a,crit]",
+    code:"PlaceholderPending", xml:["<chain>", "<criticise/>"], xmlAbsent:['chain="item"'] },
+  { id:"PH-08", name:"an unknown word after the name is not a second name", src:"[ph-a-zzz]",
+    code:"UnknownCommand", noFix:false, requireFix:true, xml:['<unresolved tag="zzz"/>', '<needs slot="a">sem resposta</needs>'] },
+  { id:"PH-09", name:"a second literal stays in the hole", src:"[ph'q''r']",
+    code:"PlaceholderPending", xml:["<placeholder>", "<needs>q</needs>", "<user-input>r</user-input>"] },
+  { id:"PH-10", name:"prose stays in the hole", src:"[ph'q' prose]",
+    code:"PlaceholderPending", xml:["<placeholder>", "<off>prose</off>"] },
+  { id:"PH-11", name:"the command the frame asks about is in the document", src:"[ph[ctx]]",
+    code:"UnfilledSlot", xml:["<placeholder", "<context>", "<needs>what it refers to</needs>"] },
+  { id:"PH-12", name:"the question binds, and the document says so", src:"[ph'q'[crit'x']][ctx'q']",
+    code:"PlaceholderPending", xml:['<placeholder binds="q">', '<user-input ref="q">q</user-input>'] },
+  { id:"PH-13", name:"a filled hole keeps what it held, and asks nothing", src:"[--held'the parser']", opts:HELD_TPL,
+    codeAbsent:"PlaceholderPending", xml:["<placeholder>", '<user-input slot="target">the parser</user-input>', "<example>"] },
+  { id:"PH-14", name:"an empty hole of a template keeps what it held", src:"[--held]", opts:HELD_TPL,
+    code:"PlaceholderPending", xml:["<placeholder>", '<needs slot="target">what to fix</needs>', "<example>"] },
+  { id:"PH-15", name:"a hole of name and question alone is still <needs> alone", src:"[ph-a`q`]",
+    code:"PlaceholderPending", xml:['<needs slot="a">q</needs>'], xmlAbsent:["<placeholder"] },
+  { id:"PH-16", name:"a hole of a name alone is still <needs> alone", src:"[ph-a]",
+    code:"PlaceholderPending", xml:['<needs slot="a">sem resposta</needs>'], xmlAbsent:["<placeholder"] }
 ];
 
 const RULE_CASES = [
@@ -513,8 +634,9 @@ function check(tc, rules) {
   if (tc.segments !== undefined && res.segments.length !== tc.segments)
     why.push("segments " + res.segments.length + " != " + tc.segments);
 
+  /* a fragment, or a pattern where what matters is that one element follows another */
   (tc.xml || []).forEach(frag => {
-    if (xml.indexOf(frag) === -1) why.push("XML does not contain: " + frag);
+    if (frag instanceof RegExp ? !frag.test(xml) : xml.indexOf(frag) === -1) why.push("XML does not contain: " + frag);
   });
   (tc.xmlAbsent || []).forEach(frag => {
     if (xml.indexOf(frag) !== -1) why.push("XML contains what it should not: " + frag);
@@ -564,9 +686,30 @@ const rN = runGroup("Invalid — require a `fix` diagnostic", INVALID, { require
 const rR = runGroup("v1.8 regressions closed in v1.0.9", REGRESSION, { noFix:false });
 const rL = runGroup("Long blocks — the engine must not break", LONG, { noFix:false });
 const rT = runGroup("Templates — invocation expands the definition", TEMPLATES, { noFix:false });
+const rTI = runGroup("Template inclusion — what a call writes reaches the expansion", INCLUSION, { noFix:false });
 const rC = runGroup("Semantic rules — pair, order, precondition", RULE_CASES, { noFix:false });
 const rK = runGroup("Template constraints — the shape a template promises", CONSTRAINTS, { noFix:false });
 const rG = runGroup("Guard — rules must not break normal usage", POSITIVE_WITH_RULES, { noFix:true });
+
+/* The placeholder bucket: each case's document, then both ways back. fromXML
+   reads a <needs> inside a <placeholder> as source, so the XML must come back
+   the same; fromAST must give the same document too. */
+function runPlaceholder() {
+  const n = runGroup("Placeholder — a command held by a hole reaches the XML", PLACEHOLDER, { noFix:true });
+  let trips = 0;
+  PLACEHOLDER.forEach(tc => {
+    const o = tc.opts || {};
+    const xml = G.toXML(tc.src, o);
+    const viaXml = G.toXML(G.fromXML(xml, o).src, o), viaAst = G.toXML(G.fromAST(G.toAST(tc.src, o), o).src, o);
+    if (viaXml === xml && viaAst === xml) { trips++; return; }
+    console.log("  ✗ " + tc.id + ".trip: " + (viaXml !== xml ? "fromXML" : "fromAST") + " gives another document");
+    failures.push(tc.id + ".trip");
+  });
+  console.log("  " + (trips === PLACEHOLDER.length ? "✓" : "✗") + " PH-trip: " + trips + "/" + PLACEHOLDER.length +
+              " come back as the same document by both ways");
+  return n + (trips === PLACEHOLDER.length ? 1 : 0);
+}
+const rPH = runPlaceholder();
 
 /* ------------------------------------------------------------------ *
  * X — composition table (v1.1.0.0)
@@ -781,12 +924,15 @@ function runHgmlChecks() {
   /* the pattern layer — L6a. The .hgml had no consumer, and T26 says a format
      without one is a format whose consumer has not been built yet. This is it:
      co-occurrence in the BURNT form maps to one richer element, matched over
-     atoms so it is invariant to which surface synonym the author typed. */
-  const blendSrc = "[in[rev`o fluxo`][scru`a logica`]]";
+     atoms so it is invariant to which surface synonym the author typed. The
+     atoms fuse when they work on one subject (decided 2026-09-27), so the two
+     commands here are about one thing, and SCRU reaches DIST through its
+     formula. */
+  const blendSrc = "[in[rev`o fluxo`][scru`o fluxo`]]";
   const BLEND_OPTS = { expansions: require("../.guidelines/expansions.json"), rules: RULESTORE };
   const blended = G.toHGML(blendSrc, BLEND_OPTS);
   ok("H-10", "a blend folds co-occurring atoms into one element",
-     /\[heavyreview/.test(blended) && /'o fluxo'/.test(blended) && /'a logica'/.test(blended)
+     /\[heavyreview/.test(blended) && /'o fluxo'/.test(blended)
        ? null : "did not fire, or lost a literal: " + blended.slice(0, 120));
 
   /* the trap HGML_PLAN names: an invented element that cannot say what it means
@@ -802,18 +948,28 @@ function runHgmlChecks() {
      the vocabulary cannot place, is not a burn the engine can consume. */
   ok("H-10b", "a fired blend re-parses clean, as a known name",
      (function () {
-       const h = G.toHGML("[rev'x'],[dist'y']", BLEND_OPTS);
+       const h = G.toHGML("[rev'x'],[dist'x']", BLEND_OPTS);
        const g = (G.parse(h, { rules: RULESTORE }).gaps || []).filter(x => x.sev === "fix");
        const cl = G.classify("heavyreview", { rules: RULESTORE });
        return !g.length && cl.tier === "blend" ? null
             : "fix-level on re-parse: " + g.map(x => x.code).join(",") + " | tier " + cl.tier;
      })());
 
+  /* `scope: "sameTarget"` checks the target (decided 2026-09-27): REV of one
+     thing beside DIST of another are two acts, and burn as two commands; the
+     field intake of 2026-09 found them fused */
+  ok("H-10c", "a blend fuses only atoms that work on one subject",
+     (function () {
+       const apart = G.toHGML("[rev'x'],[dist'y']", BLEND_OPTS);
+       const via = G.toHGML("[rev'x'],[scru'y']", BLEND_OPTS);
+       return !/heavyreview/.test(apart) && /^\[rev$/m.test(apart) && /^\[dist$/m.test(apart) && !/heavyreview/.test(via) ? null
+            : "different subjects fused: " + JSON.stringify(apart.slice(0, 160));
+     })());
+
   ok("H-12", "a blend with no `means` is refused at compile time",
      (function () {
        const store = JSON.parse(JSON.stringify(RULESTORE));
        store.rules.push({ id:"no-means", kind:"blend", when:["REV","DIST"], emit:"x" });
-       delete store.__compiled;
        const out = G.toHGML(blendSrc, { expansions:require("../.guidelines/expansions.json"), rules:store });
        return /\[x/.test(out) ? "it emitted an element that cannot say what it means" : null;
      })());
@@ -930,13 +1086,18 @@ function runFromXmlChecks() {
      unk.stable && /zzzz/.test(unk.back.src) ? null
        : "unresolved lost: " + JSON.stringify(unk.back.src));
 
-  /* PINNED, documented loss. [tpl:name'…'] and [--name…] emit the same
-     <template name="…"> and nothing separates them, so the invocation is
-     the reading. If this ever changes, the docs change with it. */
+  /* The pin, inverted (2026-10-26). [tpl:name'…'] and [--name…] emitted the
+     same <template name="…">, and the invocation was the reading. With the
+     colon retired, `name` is the call's alone: the command TPL writes a
+     <template> with no name, and it comes back as [tpl with its literals —
+     the colon form's included — never as a [-- invocation. */
   const tplColon = trip("[crit[tpl:somename'body text']]");
-  ok("F-09", "[tpl: comes back as a [-- invocation — pinned, not a bug",
-     /\[--somename/.test(tplColon.back.src) ? null
-       : "expected a [--somename invocation, got " + JSON.stringify(tplColon.back.src));
+  const tplLit = trip("[crit[tpl'somename''body text']]");
+  ok("F-09", "<template> with no name comes back as [tpl, never as a [-- invocation",
+     /\[--/.test(tplColon.back.src) || /\[--/.test(tplLit.back.src)
+       ? "came back as an invocation: " + JSON.stringify(tplColon.back.src)
+       : !tplLit.stable || tplLit.back.src !== "[crit[tpl'somename''body text']]" ? "[tpl'…' moved: " + JSON.stringify(tplLit.back.src)
+       : tplColon.x1 !== tplLit.x1 ? "the colon form emits another document than its literals" : null);
 
   /* A standing guard: editing the vocabulary must not introduce two
      different commands that kebab to one element name. */
@@ -1016,6 +1177,41 @@ function runFromXmlChecks() {
   ok("F-23", "the inverse writes the slash spelling, never the backslash",
      emo.stable && /\/eth\//.test(emo.back.src) && emo.back.src.indexOf("\\") === -1
        ? null : "the abandoned spelling came back: " + JSON.stringify(emo.back.src));
+
+  /* A mood colours its whole segment, a return segment as well (XML_REFERENCE
+     §6): wherever `/eth/` is written in it, it is the block's first child,
+     ahead of <user-expectative>, and both ways back write it again, with `r-`
+     apart from the mood header so the `r` is not read as one more mood code. */
+  const moodBack = ["r- [ctx'x']/eth/", "/eth/ r- [ctx'x']", "[ctx'x'] /eth/ r-", "[ctx'x'/eth/] r-", "r- /eth/",
+                    "/eth/prd/hop/ R: [ctx'x']"].map(src => {
+    const t = trip(src), viaAst = G.fromAST(G.toAST(src, opts), opts);
+    const first = /<block once="true">\s*<mood dominant="enthusiasm"( also="pride,hope")?\/>\s*<user-expectative /.test(t.x1);
+    return first && t.stable && /^\/eth\/(prd\/hop\/)? r-/.test(t.back.src) &&
+           G.toXML(viaAst.src, opts) === t.x1 ? null : src + " → " + t.x1.replace(/\s+/g, " ") + " ← " + JSON.stringify(t.back.src);
+  }).filter(Boolean);
+  ok("F-24", "a mood in a return segment reaches <mood>, and comes back",
+     moodBack.length ? moodBack.join("; ") : null);
+
+  /* the way back writes the space a name needs: prose right after a command's
+     name, or after a mood header, would otherwise merge with it — `[ctx foo]`
+     came back as `[ctxfoo]`, a known command turned unknown (EMS-002, the
+     inclusion of 2026-10-25) */
+  const glued = ["[ctx foo]", "[ctx rd]", "[ctx foo bar]", "[ctx foo[sum]]", "[ctx-crit foo]", "/eth/ prose [ctx]", "[in[ctx] note]"]
+    .map(s => [s, G.fromAST(G.toAST(s, opts), opts).src])
+    .filter(([s, b]) => G.toXML(b, opts) !== G.toXML(s, opts));
+  ok("F-25", "fromAST keeps the space a name needs from the prose after it",
+     glued.length ? glued.map(([s, b]) => s + " came back as " + b).join("; ") : null);
+
+  /* the way back invents nothing and glues nothing (EMS-002 ORD-0030): a hole
+     with no question came back with "sem resposta" as its question, and a fill
+     carrying prose came back with the prose glued to the hole's name */
+  const TOPTS = { templates: TPL.templates, expansions: opts.expansions };
+  const invented = ["[ph-x]", "[ph-x[crit'h']]", "[in[ph-alvo]]"]
+    .map(s => [s, G.fromXML(G.toXML(s, opts), opts).src]).filter(([, b]) => /sem resposta/.test(b));
+  const fill = "[--reinforce[ph-rule plain]'b']", fillBack = G.fromAST(G.toAST(fill, TOPTS), TOPTS).src;
+  ok("F-26", "the way back invents no question and glues no prose to a hole's name",
+     invented.length ? invented.map(([s, b]) => s + " came back as " + b).join("; ")
+       : G.toXML(fillBack, TOPTS) !== G.toXML(fill, TOPTS) ? fill + " came back as " + fillBack : null);
 
   return F.length;
 }
@@ -1109,6 +1305,12 @@ function runReferenceChecks() {
     { id: "4-06", src: "[in-rwk]",
       /* rederived for glyph-package (E2, late): a run of one is still a run */
       expect: x => /<instruction>\s*<chain>\s*<rework\/>\s*<\/chain>\s*<\/instruction>/.test(x) },
+    /* the link after the operand, a space or a `]` (2026-10-25: a known
+       command never vanishes) */
+    { id: "4-16", src: "[ctx'x'-crit]",
+      expect: x => /<context>\s*<user-input>x<\/user-input>\s*<chain>\s*<criticise\/>\s*<\/chain>\s*<\/context>/.test(x) &&
+                   G.toXML("[ctx -crit]", WITH_BOTH) === G.toXML("[ctx-crit]", WITH_BOTH) &&
+                   /<\/context>\s*<chain>\s*<criticise\/>\s*<\/chain>\s*<\/block>/.test(G.toXML("[ctx]-crit", WITH_BOTH)) },
     { id: "4-07", src: "[in-rwk,ctx]",
       /* rederived for glyph-package (E2): the run is wrapped and the attribute
          does not survive it, position carrying the operator - PACKAGE_TARGET.md
@@ -1119,6 +1321,9 @@ function runReferenceChecks() {
        gone from the grammar (C-01) and now from the engine; the refusal that
        replaced it lives in bucket N, where a malformed construct belongs. */
     { id: "4-09", src: "[off]hello [ins'x'][on]", expect: x => /<off>hello \[ins'x'\]<\/off>/.test(x) },
+    /* the row added by EMS-002 ORD-0024: an [on] with no [off] open is the
+       command ON written closed */
+    { id: "4-15", src: "[on]x", expect: x => /<mode-on\/>\s*<off>x<\/off>/.test(x) },
     /* the two rows added on 2026-09-05: `,` between bracketed siblings, and
        the verbatim fence. D-08 requires a probe per documented row, which is
        what keeps §4 from drifting away from the engine. */
@@ -1227,6 +1432,18 @@ function runReferenceChecks() {
               : "the skill shows a document the engine does not emit");
   }
 
+  /* The same exposure in §10: its worked round trip named the block with the
+     colon and carried a formula the table no longer held, and no probe read
+     it. The source and the document it shows are held to the engine. */
+  const s10 = (md.split(/\n## 10\. /)[1] || "").split(/\n## 11\. /)[0];
+  const s10src = (s10.match(/```\n([^\n]+)\n```/) || [])[1];
+  const s10xml = (s10.match(/```xml\n([\s\S]*?)\n```/) || [])[1];
+  const s10real = s10src && G.toXML(s10src, { templates: TPL.templates, rules: RULESTORE,
+    expansions: require("../.guidelines/expansions.json") }).trim();
+  ok("D-12", "the §10 round trip shows what the engine emits",
+     !s10src || !s10xml ? "no source and xml pair found in §10"
+       : s10xml.trim() !== s10real ? "§10 shows a document the engine does not emit for " + JSON.stringify(s10src)
+       : /\[[A-Za-z]+:/.test(s10src) ? "§10 writes the colon" : null);
 
   return D.length;
 }
@@ -1306,7 +1523,8 @@ function runAstInvariant() {
   const PINNED = {
     "[in-[rwk]]": "`-[` normalises to `[` by design (OPERATOR_TARGET §3.2): marking a bracketed child too would force fromXML to decide whether chain=\"extend\" meant `-rwk` or `-[rwk]`",
     "[off]p[on]": "the mode toggle is lost: <off> reconstructs as prose, so ModeOff becomes Text. NOT a documented non-survivor — found by this check",
-    "[logic]let a = 1[/logic]": "fromXmlLogic writes a newline after the opening tag, so every rule's `line` shifts by one. Found by this check"
+    "[logic]let a = 1[/logic]": "fromXmlLogic writes a newline after the opening tag, so every rule's `line` shifts by one. Found by this check",
+    "[ph-a,crit]": "the `,` after a hole's name continues the run the name opened, and the name is not a chain member in the XML, so the <chain> it heads reads back as `-`: `origin` goes from `item` to `extend` (EMS-002 ORD-0026, decided 2026-10-25); fromAST is exact"
   };
 
   const CASES = [].concat(POSITIVE, INCOMPLETE, INVALID, REGRESSION, TEMPLATES, RULE_CASES)
@@ -1410,6 +1628,27 @@ function runAstInvariant() {
      (thin.src === "" && (thin.diag || []).some(d => d.code === "ThinnedAST" && d.sev === "fix"))
        ? null : "it tried: " + JSON.stringify(thin.src));
 
+  /* What a call writes into a fill carries the fill's slot, a fill no hole
+     names carries its own, and a source definition is source: all of it comes
+     back from both inverses. The literal past every parameter carries no slot,
+     which is the template-overflow loss README pins (RT-09). A `,` between
+     bracketed siblings is the cause RT-01 pins, and only the XML path has it. */
+  const overflow = INCLUSION.filter(c => c.id === "TI-05").map(c => c.src);
+  const inclusionBroke = [];
+  INCLUSION.filter(c => overflow.indexOf(c.src) === -1).forEach(c => {
+    const viaAst = G.fromAST(G.toAST(c.src, opts), opts).src;
+    if (meaning(c.src) !== meaning(viaAst)) inclusionBroke.push(c.id + " via AST: " + viaAst);
+    const viaXml = G.fromXML(G.toXML(c.src, opts), opts).src;
+    if (!commaBetweenBrackets(c.src) && meaning(c.src) !== meaning(viaXml)) inclusionBroke.push(c.id + " via XML: " + viaXml);
+  });
+  ok("RT-08", "what a call writes into a fill, and a source definition, survive both inverses",
+     inclusionBroke.length ? inclusionBroke.slice(0, 4).join(" | ") : null);
+  const overflowHealed = overflow.filter(src =>
+    meaning(src) === meaning(G.fromXML(G.toXML(src, opts), opts).src) ||
+    meaning(src) === meaning(G.fromAST(G.toAST(src, opts), opts).src));
+  ok("RT-09", "the literal past every parameter is still the pinned overflow loss",
+     overflowHealed.length ? "it comes back now — invert this pin and the README line: " + overflowHealed.join(" | ") : null);
+
   return D.length;
 }
 const rRT = runAstInvariant();
@@ -1441,7 +1680,7 @@ function runSchemaChecks() {
   const opts = { templates: TPL.templates, rules: RULESTORE,
                  expansions: require("../.guidelines/expansions.json") };
   const CORPUS = [].concat(POSITIVE, INCOMPLETE, INVALID, REGRESSION, LONG,
-                           TEMPLATES, CONSTRAINTS, RULE_CASES, ORACLE_COVERAGE);
+                           TEMPLATES, CONSTRAINTS, RULE_CASES, ORACLE_COVERAGE, INCLUSION);
 
   const bad = [], truncated = [], acceptedAnyway = [];
   CORPUS.forEach(c => {
@@ -1665,10 +1904,11 @@ const rE = runExampleChecks();
  * result checksummed. Taken BEFORE the cut, this is what proves afterwards that
  * nothing else moved.
  *
- * Stores are passed explicitly and identically for every case, rather than per
- * case: what a refactor must preserve is `same input + same stores -> same
- * bytes`, and a uniform maximal store exercises more of the engine than the
- * narrower per-case opts do.
+ * Stores are passed explicitly: the repository's three for every case, with
+ * the stores a case brings laid over them. What a refactor must preserve is
+ * `same input + same stores -> same bytes`; the maximal set exercises more of
+ * the engine than a case's narrower opts do, and a store a case brings of its
+ * own — a cyclic template — is projected with it (O5, EMS-002 ORD-0011).
  *
  *   node scripts/test-corpus.js --update-snapshot
  *
@@ -1690,6 +1930,12 @@ function runSnapshotChecks() {
   const SNAP_OPTS = { templates: TPL.templates, rules: RULESTORE,
                       expansions: require("../.guidelines/expansions.json") };
 
+  /* a case is projected with its own stores laid over these (O5, EMS-002
+     ORD-0011): the stores it names replace the repository's, the rest stay */
+  const caseOpts = c => c.opts ? { ...SNAP_OPTS, ...c.opts } : SNAP_OPTS;
+  const ownStores = c => Object.keys(c.opts || {}).filter(k => c.opts[k] !== SNAP_OPTS[k])
+    .reduce((o, k) => (o[k] = c.opts[k], o), {});
+
   const sum = s => crypto.createHash("sha256").update(s, "utf8").digest("hex").slice(0, 16);
 
   /* the eight declared arrays; the inline sources of the X/H/F/D checks are
@@ -1706,14 +1952,15 @@ function runSnapshotChecks() {
        every version bump invalidate all 101 entries at once and bury real
        drift in the noise. The snapshot measures SHAPE; the stamp is recorded
        once in the file's own `engine` field, where it belongs. */
+    const O = caseOpts(c);
     const astShape = s => {
-      const a = G.toAST(s, SNAP_OPTS);
+      const a = G.toAST(s, O);
       delete a.version;
       return JSON.stringify(a);
     };
-    [["xml", s => G.toXML(s, SNAP_OPTS)],
+    [["xml", s => G.toXML(s, O)],
      ["ast", astShape],
-     ["hgml", s => G.toHGML(s, SNAP_OPTS)]].forEach(pair => {
+     ["hgml", s => G.toHGML(s, O)]].forEach(pair => {
       try { one[pair[0]] = sum(pair[1](c.src)); }
       catch (e) { one[pair[0]] = "THREW"; threw.push(c.id + "." + pair[0] + ": " + e.message); }
     });
@@ -1764,15 +2011,17 @@ function runSnapshotChecks() {
     const texts = [];
     CORPUS.forEach(c => {
       if (!c || !c.id || typeof c.src !== "string") return;
-      const ast = guard(() => { const a = G.toAST(c.src, SNAP_OPTS); delete a.version; return a; });
+      const O = caseOpts(c), own = ownStores(c);
+      const ast = guard(() => { const a = G.toAST(c.src, O); delete a.version; return a; });
       const text = JSON.stringify({
         id: c.id, engine: G.VERSION, src: c.src, digest: now[c.id],
-        tokens: guard(() => G.tokenize(c.src, SNAP_OPTS)),
-        diagnostics: guard(() => (G.parse(c.src, SNAP_OPTS).gaps || [])
+        ...(Object.keys(own).length ? { stores: own } : {}),
+        tokens: guard(() => G.tokenize(c.src, O)),
+        diagnostics: guard(() => (G.parse(c.src, O).gaps || [])
           .map(g => ({ sev: g.sev, code: g.code, plain: g.plain }))),
-        xml: guard(() => G.toXML(c.src, SNAP_OPTS)),
+        xml: guard(() => G.toXML(c.src, O)),
         ast: ast,
-        hgml: guard(() => G.toHGML(c.src, SNAP_OPTS))
+        hgml: guard(() => G.toHGML(c.src, O))
       }, null, 1) + "\n";
       fs.writeFileSync(path.join(dir, c.id + ".json"), text);
       texts.push(text);
@@ -1846,8 +2095,8 @@ function runSnapshotChecks() {
        them, their digests, and what is read off them — for every name the
        composition table and the vocabulary know, and three it does not —
        with the stores loaded and with none. The digests are of the stores as
-       read from disk: by now the suite's parses have hung `__compiled` on the
-       rules object (rules.js), and the envelope's `stores.rules` hashes it */
+       read from disk, which is what the envelope's `stores.rules` hashes: the
+       compiled rules live beside the store (rules.js), never on it */
     const EXP = SNAP_OPTS.expansions;
     const fresh = f => JSON.parse(fs.readFileSync(path.resolve(__dirname, "../.guidelines/" + f), "utf8"));
     const names = [...new Set([...Object.keys(EXP.commands),
@@ -1896,7 +2145,18 @@ function runSnapshotChecks() {
       "a;b;;c", ";;;", "[in-rwk,fmt ,  sum]", "[a, b]", "[a,b-c, d]", "[in- rwk]", "[a -b]", "[a-b-c]",
       "r- x", " R: x", "r: x", "r-x", "R-", "[in r- ]", "  r  - x", "R :x", "a:b=c",
       " [nt x]　", "\t[ctx]\r\n", "﻿[ctx]", "[nt'😀']x😀", "[nt`😀`] 😀;",
-      "ação [ctx'fichação'] ç", "[nt'a b'] x y"
+      "ação [ctx'fichação'] ç", "[nt'a b'] x y",
+      "[ctx'x'-crit]", "[ctx -crit]", "[ctx]-crit", "[ctx/ctx]-crit", "a -crit", "[ctx] - crit", "[ctx]-constructor", "[ctx'x' -Crit]",
+      "x'-crit", "[ctx]-crit]", "[raw]x[/raw]-crit", "[on]-crit", "/eth/-crit",
+      "-crit", "--crit", "[ctx]--crit", "[ctx --crit]", "[in--rwk]", "a--crit", "a ---crit", "--zzz",
+      "[ctx foo -crit]", "a\n-crit", "[ctx];-crit", "[ctx'x';-crit]", "[ctx],-crit", "[ctx'x',-crit]",
+      "[in-rwk,-fmt]", "a, -crit", "[ctx'x'/eth/-crit]", "[ctx'x' - crit]", "[ctx - crit]", "[in-rwk - fmt]",
+      "[ctx] -\tcrit", "[ctx]\n- crit", "x - crit", "- crit", "[ctx] -- crit", "[ctx] -\ncrit", "[ctx]; - crit",
+      "[logic]a = 1[/logic]-crit", "[=-crit", "[ctx;;-crit", "[ctx:'x'-crit]", "[ctx: foo -crit]", "[ctx:-crit]",
+      "[dfn x=-crit]", "r -crit", "r --crit", "[--t= -crit]", "\\eth\\-crit", "(-crit)", "x/-crit", "[ctx]-crit.",
+      "[ctx] -crit,rev", "-crit'x'", "[ph:foo -crit]", "-ins'x',ctx",
+      "[logic'calc']x[/logic]", "[logic`calc`]x[/logic]", "[logic 'calc' ]x[/logic]", "[logic'x']", "[logic'x'y]z[/logic]",
+      "[logic'a]b'][/logic]", "[logic:'x']a[/logic]", "[logic`it's`]a[/logic]", "[logic'']a[/logic]", "[ctx: a: b]"
     ];
     const lexSources = [...new Set([...PROBES, ...S.filter(x => x.length <= 4096)])];
     const lexed = lexSources.map(x => [x, G.tokenize(x)]);
@@ -1959,9 +2219,9 @@ function runSnapshotChecks() {
        prototype answers for `constructor` — is written as what it is, since
        JSON would drop it */
     const valueOf = v => typeof v === "function" ? { function: v.name } : v;
-    const FIELDS = ["id", "raw", "tier", "canonical", "gloss", "alias", "colon", "autoClosed", "editorial", "origin",
+    const FIELDS = ["id", "raw", "tier", "canonical", "gloss", "alias", "autoClosed", "editorial", "origin",
        "chainElement", "slotName", "depth", "literal", "v", "form", "role", "text", "rawFence", "template",
-       "isDef", "mode", "isDefinition", "expanded", "boundSlot"];
+       "isDef", "mode", "isDefinition", "expanded", "boundSlot", "fromSource"];
     /* `full` adds what only the whole parse sets — the species pass, the
        bindings, the suggestion — and the segments' own fields; every key a
        node or a segment holds must be one the dump knows */
@@ -2029,7 +2289,12 @@ function runSnapshotChecks() {
       Constructor: { gloss: "Found by its own name only.", params: [], body: "[nt'ctor']" },
       bare: { gloss: "Constrained with no rules store.", params: [], body: "[itr[elab]]", constraints: [{ id: "no-sum", forbid: "sum" }] },
       wraprep: { gloss: "A body whose own expansion throws.", params: [], body: "[ctx'w'][--rep]" },
-      clash: { gloss: "A body that breaks a rule.", params: [], body: "[mand'x'][opt'x']" }
+      clash: { gloss: "A body that breaks a rule.", params: [], body: "[mand'x'][opt'x']" },
+      /* holes that hold more than their name and question (ORD-0026) */
+      held: { gloss: "A hole that holds an example.", params: [{ name: "target" }],
+              body: "[crit[ph-target`what to fix`[ex'the login handler']]]" },
+      heldlink: { gloss: "A hole with a link after its name.", params: [{ name: "target" }],
+                  body: "[crit[ph-target-rev`what`]]" }
     };
     const probeTemplates = { ...TPL.templates, ...PROBE_TEMPLATES };
     const TEMPLATE_PROBES = [
@@ -2042,13 +2307,14 @@ function runSnapshotChecks() {
       "[ctx'c'][brst'x']", "[pos[ngt]]", "[pos'a'][ngt'b']", "[--pair[ph-first[ctx]]'b']",
       "[--strs'a''b']", "[--strs[ph-beta'B']'a']", "[--ctor'a''b']", "[--ctor[ph-constructor'C']'a']", "[--rep]",
       "[--rep[ph-constructor'x']]", "[--Constructor]", "[--constructor]", "[constructor]", "[mand'x'][opt'x'];[ctx[__proto__]]",
-      "[pos[constructor]]", "[opt[opt[mand'x']]]", "[--wraprep]", "[--clash]"
+      "[pos[constructor]]", "[opt[opt[mand'x']]]", "[--wraprep]", "[--clash]",
+      "[--held]", "[--held'the parser']", "[--held[ph-target'the parser']]", "[--heldlink]", "[--heldlink'x']"
     ];
     /* without a rules store: checkRules stays out, and the constraints read their
        own names — `[constructor` is one of them, through Object.prototype */
     const BARE_PROBES = ["[--bare[constructor]]", "[--bare[sum'x']]", "[--bare[constructor[sum'x']]]", "[--fenced'q'[constructor]]"];
     const treeRuns = [];
-    const MODULE_CODE = /^(TemplateCycle|TemplateParamNotLiteral|TemplateConstraint:|Rule:)/;
+    const MODULE_CODE = /^(TemplateCycle|TemplateParamNotLiteral|TemplateUnknownParam|TemplateDefinedTwice|TemplateConstraint:|Rule:)/;
     const RANK = { fix: 0, ask: 1, note: 2 };
     const catcher = caught => (sev, lab, msg, code, enLab, enMsg) => caught.push({ sev: sev, lab: lab, msg: msg,
       code: code || "Note", enLab: enLab || null, enMsg: enMsg || null });
@@ -2082,7 +2348,9 @@ function runSnapshotChecks() {
     };
     const runTrees = (id, src, templates, rules) => {
       const ctx = G.createContext({ templates: templates, rules: rules, expansions: SNAP_OPTS.expansions });
-      const run = { id: id, src: src, probe: templates !== TPL.templates, withRules: !!rules };
+      const run = { id: id, src: src, probe: templates === probeTemplates, withRules: !!rules };
+      /* a case's own templates travel whole (O5, EMS-002 ORD-0011) */
+      if (templates !== TPL.templates && templates !== probeTemplates) run.templates = templates;
       const base = G.parse(src, { ...SNAP_OPTS, templates: {}, rules: null });
       expandLevel(base, ctx, run);
       const caught = [], Gc = catcher(caught);
@@ -2106,7 +2374,7 @@ function runSnapshotChecks() {
         throw new Error("trees.json: the run of " + id + " is not what parse does");
       treeRuns.push(run);
     };
-    CORPUS.forEach(c => { if (c && c.id && typeof c.src === "string") runTrees(c.id, c.src, TPL.templates, RULESTORE); });
+    CORPUS.forEach(c => { if (c && c.id && typeof c.src === "string") runTrees(c.id, c.src, caseOpts(c).templates, caseOpts(c).rules); });
     TEMPLATE_PROBES.forEach((src, k) => runTrees("probe-" + (k + 1), src, probeTemplates, RULESTORE));
     BARE_PROBES.forEach((src, k) => runTrees("bare-" + (k + 1), src, probeTemplates, null));
     /* compileRules, over the repository's store and a probe store: a key met
@@ -2158,20 +2426,68 @@ function runSnapshotChecks() {
       "[sum'toString'[ctx]]", "[sum'__proto__'[ctx]]", "[sum'two words'[ctx]]", "[sum[ctx]'late']", "[sum'x'-ctx]",
       "[xyzzy]", "[summ]", "[constructor]", "[__proto__'x']", "[pos[constructor]]", "[rw-cr-ctx]", "[a-b,c]",
       "[ctx[--germinate'x']]", "[mand'x'][opt'x']", "[ctx'x'][ctx'y'];[ctx]", "[CTX'Upper']", "[cx'alias']",
-      "[heavyreview]", "[ctx`x`'y'[sum]'z']", "[ctx]]", "[--t'a'", "[ctx[--t]]]"
-    ];
+      "[heavyreview]", "[ctx`x`'y'[sum]'z']", "[ctx]]", "[--t'a'", "[ctx[--t]]]", "[skeptic'x']", "[sceptic'x']",
+      "[ref'nada']", "[ref'RFC 2119']", "[ref'a'][sum'a'[ctx]]", "[ref'a','b'[ctx]]",
+      "[fbk]", "[fbk'plan b']", "[fbk: x]", "[rev-fbk]", "[fbk[ctx]]", "[hyp]",
+      "[pt'1.1']", "[if'a > b'[ctx'x']]", "[sum'ready'[ctx]][if'ready']", "[if'']", "[pt:intro'1.1'[ctx]]", "[if`it's \"x\"`]", "[if]",
+      "[--germinate a,b]", "[--reinforce rule,`why`]", "[--reinforce `r`,`w` and more]",
+      "[--t=/eth/]", "[--zz/eth/]", "[--reinforce'a''b'/eth/]", "[--t=[ctx'x']/eth/]",
+      "[on]", "[on]x", "[ctx[on]]", "[ctx'x'][on]", "[on];", "r- [on]", "[off]a[on][on]b", "[off]a[on]b", "[on", "[modeon]",
+      "[ctx-[on]]", "[off]", "[ctx'x'][off]", "[ctx[off]", "[off][on]", "[off] ", "off", "on", "[ctx off]", "[ctx,off]",
+      "[off;[ctx'a']", "[ctx'a'],[off", "[on'x']", "[off'x']", "[ctx-on]",
+      "[ctx'x'-crit]", "[ctx -crit]", "[ctx]-crit", "[in[ctx]-crit]", "[ctx-'x'-crit]", "[ctx]-crit,rev", "[ctx/ctx]-crit",
+      "[ctx'x'-crit/eth/]", "[ins`a`]->[ins`b`]", "a -crit", "[ctx] - crit", "[ins'well-known']", "well-known", "[ctx]-constructor",
+      "[ctx]-rd", "[ph'q'-crit]", "[sum'x'-ctx]", "[ctx]-zzz",
+      "-crit", "--crit", "[ctx]--crit", "[ctx --crit]", "[in--rwk]", "a--crit", "a ---crit", "--zzz",
+      "[ctx foo -crit]", "a\n-crit", "[ctx];-crit", "[ctx'x';-crit]", "[ctx],-crit", "[ctx'x',-crit]",
+      "[in-rwk,-fmt]", "a, -crit", "[ctx'x'/eth/-crit]", "[ctx'x' - crit]", "[ctx - crit]", "[in-rwk - fmt]",
+      "[ctx] -\tcrit", "[ctx]\n- crit", "x - crit", "- crit", "[ctx] -- crit", "[ctx] -\ncrit", "[ctx]; - crit",
+      "[logic]a = 1[/logic]-crit", "[=-crit", "[ctx;;-crit", "[ctx:'x'-crit]", "[ctx: foo -crit]", "[ctx:-crit]",
+      "[dfn x=-crit]", "r -crit", "r --crit", "[--t= -crit]", "\\eth\\-crit", "(-crit)", "x/-crit", "[ctx]-crit.",
+      "[ctx] -crit,rev", "-crit'x'", "[ph:foo -crit]", "-ins'x',ctx",
+      "[ph'q'[crit'x']]", "[ph-a[crit'x']]", "[ph-a-crit]", "[ph -crit]", "[ph[crit'x']-rev]", "[ph-a,crit]",
+      "[ph-a-zzz]", "[ph'q''r']", "[ph'q' prose]", "[ph'q'[crit'x']][ctx'q']", "[ph-a`q`]", "[ph-a]",
+      "[ph[crit'x']'q']", "[ph-a-crit'q']", "[ph-a'q'-crit]", "[ph -crit'q']", "[ph -crit,rev]", "[ph- a[crit]]",
+      "[ph-a-crit,rev[sum'x']'q']", "[ph[off]x[on]]", "[ph[logic]a = 1[/logic]]", "[ph[raw]x[/raw]]",
+      "r- [ph'q'[crit'x']]", "[ctx[ph-a[crit'x']]]", "[ph'q'[ph-b[crit'x']]]",
+      "[crit'a','b','c']", "[ctx: a: b]", "[ph-a: q]", "[rw-cr: x]", "[ctx'x': y]", "[ctx[sum]: y]", "[--germinate: crit]",
+      "[ctx: 'a'-crit]", "[ctx: a=b]", "[ctx: a ,, b]", "[ctx: a\nb]", "[val: a]", "[block:review[ctx'x']]", "note: hello",
+      "[block'review'[ctx'x']][ref'review']", "[section'intro'[ctx]]", "[sum'review'[ctx'x']][block'review']", "[block'']",
+      "[block[ctx'x']'late']", "[tpl:somename'body text']", "[tpl'x']", "[logic'calc']a = 1[/logic]", "[logic`calc`]a = 1[/logic]",
+      "[logic:calc]a = 1[/logic]", "[logic:]a = 1[/logic]", "[logic: it's]a = 1[/logic]", "[logic'x']", "[logic 'x']", "[logic'x'] y"
+    ].concat(INCLUSION.map(c => c.src), [
+      /* the inclusion's edges: a repeat fill that carries, a carried run with
+         `,`, a carried prose word, a call before its source definition, a
+         definition calling itself, a binding in a definition never called, a
+         fill no hole names carrying a constrained command, a hole nested in a
+         fill, and a definition whose hole holds more with no question */
+      "[--best-of'c','A','B'[ph-more'C'[crit'x']][ph-more'D'][ph-criterion'k']]",
+      "[--reinforce[ph-rule[crit'x'],[sum'y']]'b']", "[--reinforce[ph-rule'a' plain words]'b']",
+      "[--t][--t=[mand[ph-x`q`]]][--t'v']", "[--t=[--t]][--t]", "[--t=[sum'a'[ctx]]][ref'a']",
+      "[--loop'x''p''u'[ph-zzz'v'[instof'w']]]", "[--reinforce[ph-rule'a'[ph-q`nested`]]'b']",
+      "[--t=[mand[ph-x[crit'h']]]][--t[ph-x[sum'c']]]",
+      /* a fill that carries prose and then a chain link (EMS-002 ORD-0025) */
+      "[--reinforce[ph-rule'a' w -crit]'b']", "[--reinforce'a''b'[ph-zzz'v' w -crit,rev]]"
+    ]);
     const NO_SESSION = ["constructor", "[constructor]", "rd", "[ctx] prose ist"];
     const NO_VALENCY = ["[gt'a']", "[ctx]", "[cat'a']"];
     const parseRuns = [], xmlRuns = [];
-    /* emit-xml.js (from ORD-0008): toXML over the same sources and options,
-       plain and with `describe` */
-    const runXml = (id, src, opts) => {
-      const run = { id: id, src: src };
-      if (opts.templates !== SNAP_OPTS.templates) run.probeTemplates = true;
+    /* how a run's stores differ from the uniform set, so a port can build
+       them again: the probe templates by name, a case's own templates whole
+       (ORD-0011), no rules, a composition store of its own, and the flags */
+    const marks = (run, opts) => {
+      if (opts.templates === probeTemplates) run.probeTemplates = true;
+      else if (opts.templates !== SNAP_OPTS.templates) run.templates = opts.templates;
       if (opts.rules !== SNAP_OPTS.rules) run.withRules = false;
       if (opts.expansions !== SNAP_OPTS.expansions) run.expansions = opts.expansions;
       if (opts.session === false) run.session = false;
       if (opts.valency === false) run.valency = false;
+    };
+    /* emit-xml.js (from ORD-0008): toXML over the same sources and options,
+       plain and with `describe` */
+    const runXml = (id, src, opts) => {
+      const run = { id: id, src: src };
+      marks(run, opts);
       for (const [k, o] of [["xml", opts], ["describe", { ...opts, describe: true }]]) {
         try { run[k] = G.toXML(src, o); } catch (e) { run[k] = { thrown: e.message }; }
       }
@@ -2183,11 +2499,7 @@ function runSnapshotChecks() {
     const astRuns = [];
     const runAst = (id, src, opts, probe) => {
       const run = { id: id, src: src };
-      if (opts.templates !== SNAP_OPTS.templates) run.probeTemplates = true;
-      if (opts.rules !== SNAP_OPTS.rules) run.withRules = false;
-      if (opts.expansions !== SNAP_OPTS.expansions) run.expansions = opts.expansions;
-      if (opts.session === false) run.session = false;
-      if (opts.valency === false) run.valency = false;
+      marks(run, opts);
       const variants = [["full", opts]];
       if (probe) variants.push(["panel", { ...opts, projection: "panel" }], ["pt", { ...opts, lang: "pt" }],
                                ["embed", { ...opts, uri: "file:///x.pgml", embedSource: true }]);
@@ -2201,11 +2513,7 @@ function runSnapshotChecks() {
     const hgmlRuns = [];
     const runHgml = (id, src, opts, probe) => {
       const run = { id: id, src: src };
-      if (opts.templates !== SNAP_OPTS.templates) run.probeTemplates = true;
-      if (opts.rules !== SNAP_OPTS.rules) run.withRules = false;
-      if (opts.expansions !== SNAP_OPTS.expansions) run.expansions = opts.expansions;
-      if (opts.session === false) run.session = false;
-      if (opts.valency === false) run.valency = false;
+      marks(run, opts);
       for (const [k, o] of probe ? [["hgml", opts], ["keepText", { ...opts, keepText: true }]] : [["hgml", opts]]) {
         try { run[k] = G.toHGML(src, o); } catch (e) { run[k] = { thrown: e.message }; }
       }
@@ -2216,11 +2524,7 @@ function runSnapshotChecks() {
       runHgml(id, src, opts, !/^[A-Z]+-\d+$/.test(id));
       runAst(id, src, opts, !/^[A-Z]+-\d+$/.test(id));
       const run = { id: id, src: src };
-      if (opts.templates !== SNAP_OPTS.templates) run.probeTemplates = true;
-      if (opts.rules !== SNAP_OPTS.rules) run.withRules = false;
-      if (opts.expansions !== SNAP_OPTS.expansions) run.expansions = opts.expansions;
-      if (opts.session === false) run.session = false;
-      if (opts.valency === false) run.valency = false;
+      marks(run, opts);
       for (const lang of ["pt", "en"]) {
         let r;
         try { r = G.parse(src, lang === "en" ? { ...opts, lang: "en" } : opts); }
@@ -2232,7 +2536,7 @@ function runSnapshotChecks() {
       }
       parseRuns.push(run);
     };
-    CORPUS.forEach(c => { if (c && c.id && typeof c.src === "string") runParse(c.id, c.src, SNAP_OPTS); });
+    CORPUS.forEach(c => { if (c && c.id && typeof c.src === "string") runParse(c.id, c.src, caseOpts(c)); });
     PARSE_PROBES.forEach((src, k) => runParse("probe-" + (k + 1), src, SNAP_OPTS));
     NO_SESSION.forEach((src, k) => runParse("nosession-" + (k + 1), src, { ...SNAP_OPTS, session: false }));
     NO_VALENCY.forEach((src, k) => runParse("novalency-" + (k + 1), src, { ...SNAP_OPTS, valency: false }));
@@ -2244,16 +2548,47 @@ function runSnapshotChecks() {
     ["[ctx[sum'x']]", "[ref'x'][nt'y']"].forEach((src, k) => runParse("store-" + (k + 1), src, { ...SNAP_OPTS, expansions: PROBE_EXPANSIONS }));
     BARE_PROBES.forEach((src, k) => runParse("tpl-bare-" + (k + 1), src, { ...SNAP_OPTS, templates: probeTemplates, rules: null }));
     fs.writeFileSync(path.join(mods, "parse.json"), JSON.stringify({ engine: G.VERSION, runs: parseRuns }, null, 1) + "\n");
+
+    /* registry.json (EMS-002 ORD-0008): a template's body is parsed with what
+       useRules and useExpansions registered, never with the call's stores, so
+       each probe answers twice — with nothing registered, the state every file
+       above is written in, and with the repository's stores registered, as the
+       CLI and the engine run — and the registry is emptied again after */
+    const REGISTRY_EXTRAS = { ...PROBE_TEMPLATES, clash: { body: "[mand'x'][opt'x']" }, nested: { body: "[crit[--clash]]" } };
+    const regOpts = { ...SNAP_OPTS, templates: { ...TPL.templates, ...REGISTRY_EXTRAS } };
+    const REGISTRY_PROBES = ["[--clash]", "[--clash][--clash]", "[crit[--clash]]", "[ovr[--clash]]", "[--nested]"]
+      .concat(TEMPLATE_PROBES, TEMPLATES.map(c => c.src));
+    const regAnswer = src => {
+      const one = {};
+      for (const lang of ["pt", "en"]) {
+        try { one[lang] = G.parse(src, lang === "en" ? { ...regOpts, lang: "en" } : regOpts).gaps.map(g => ({ sev: g.sev, code: g.code, plain: g.plain })); }
+        catch (e) { one[lang] = { thrown: e.message }; }
+      }
+      one.xml = guard(() => G.toXML(src, regOpts));
+      one.hgml = guard(() => G.toHGML(src, regOpts));
+      return one;
+    };
+    const unregistered = REGISTRY_PROBES.map(regAnswer);
+    G.useRules(SNAP_OPTS.rules);
+    G.useExpansions(SNAP_OPTS.expansions);
+    const registered = REGISTRY_PROBES.map(regAnswer);
+    G.useRules(null);
+    G.useExpansions(null);
+    fs.writeFileSync(path.join(mods, "registry.json"), JSON.stringify({
+      engine: G.VERSION, templates: REGISTRY_EXTRAS, sources: REGISTRY_PROBES, none: unregistered, registered: registered
+    }, null, 1) + "\n");
     /* and the emitter's own branches: a literal named after a member of the
        prototype, a mood the prototype answers, return blocks, a chain against
-       a conjunction, an imperative, bindings and their references */
+       a conjunction, an imperative, bindings and their references, and a
+       mood in a return block */
     const XML_PROBES = ["[ctx'toString']", "[ctx'__proto__'][sum'constructor']", "[ctx'x']/constructor/", "/eth/cnf/clm/[ctx]",
       "r- [tgt'x'][zzz]", "R: [ctx[sum]]", "r-", "r- [ph-x`q`]", "[a-b,c]", "[a-b-c]", "[in-rwk,ctx]", "[simp'X'],[core]",
       "[simp'X'][core]", "[simp'X'],[core],[ctx'y']", "[a],[b[c],[d]]", "[bold[ctx]]", "[bold'x']", "[sum`organized`[ctx]][ref'organized']",
       "[sum`organized`[ctx]] organized", "[crit'x']", "[logic q]a -> b\n! c -> d = e\nz = y + 1[/logic]", "[ctx: a, b]",
       "[ph-x`q`][ph-y]", "[--germinate]", "[--germinate[ph-alvo'A']]", "[dfn'a']", "[in-zzz]", "[a],[zzz]", "[ctx`x` 'y']",
       "[ctx[raw] <b> & [/raw]]", "[off]a <b> \"c\"[on]", "[gt'a'[ctx]]", "[ctx-cat'a']", "[ctx;;[sum]", "[ctx]] [sum]",
-      "[ctx'a'];[=[sum'b']", ...["[a[x]],[b[y]]", "[a[a]],[b]", "[a[a[x]]],[b]"].map(t => "[ctx".repeat(13) + t)];
+      "[ctx'a'];[=[sum'b']", ...["[a[x]],[b[y]]", "[a[a]],[b]", "[a[a[x]]],[b]"].map(t => "[ctx".repeat(13) + t),
+      "r- [ctx'x']/eth/", "/eth/prd/hop/ R: [ctx[sum]]", "r- /eth/"];
     XML_PROBES.forEach((src, k) => runXml("xml-" + (k + 1), src, SNAP_OPTS));
     fs.writeFileSync(path.join(mods, "xml.json"), JSON.stringify({ engine: G.VERSION, runs: xmlRuns }, null, 1) + "\n");
     /* and the envelope's own: line endings, a tree cut in the panel, the
@@ -2301,7 +2636,10 @@ function runSnapshotChecks() {
      PKG('<instruction chain="extend"/><user-input>x</user-input><context chain="item"/>'),
      PKG('<context><instruction chain="extend"/><user-input>x</user-input><example chain="item"/></context>'),
      PKG('<context chain="item"/>'),
-     PKG("<" + Object.keys(VOCAB.SESSION)[0] + "/>"), PKG('<user-expectative expects="context"><context/></user-expectative>')
+     PKG("<" + Object.keys(VOCAB.SESSION)[0] + "/>"), PKG('<user-expectative expects="context"><context/></user-expectative>'),
+     PKG('<block name="review" binds="review"><context/></block><section name=""/><part name="intro" n="1.1"/>'),
+     PKG('<template><user-input>x</user-input></template><placeholder name="q"><needs slot="a">w</needs><criticise chain="extend"/></placeholder>'),
+     PKG('<logic name="it&apos;s"><rule kind="let"><source>a = 1</source></rule></logic>')
     ].forEach(x => { try { G.fromXML(x); } catch (e) { /* recorded where it throws */ } });
     const ENV = segs => ({ type: "GlyphAST", schema: 2, projection: "full", segments: segs });
     [ENV([{ mood: [{ name: "eth" }, {}], continues: true, isReturn: true, breaks: 1, body: [
@@ -2612,6 +2950,17 @@ function runSpellingChecks() {
        ? "[instead-of] now parses as INSTOF; the hyphen is the chain operator and must stay one"
        : null);
 
+  /* SP-04 — a retired element name is still read, both ways, and named (O10) */
+  const wrote = G.parse("[skeptic'x']", opts);
+  const fwd = wrote.segments[0] && wrote.segments[0].children[0];
+  const back = G.fromXML(G.toXML("[skep'x']", opts).replace(/sceptic>/g, "skeptic>"), opts);
+  ok("SP-04", "[skeptic and <skeptic> still read as SKEP, each with a note naming sceptic",
+     !fwd || fwd.canonical !== "SKEP" ? "[skeptic no longer reads as SKEP"
+       : !wrote.gaps.some(g => g.sev === "note" && g.code === "FormerElementName") ? "[skeptic reads, but nothing names [sceptic"
+       : !/^\[skep'x'\]$/.test(back.src) ? "<skeptic> came back as " + JSON.stringify(back.src)
+       : !back.diag.some(d => d.sev === "note" && d.code === "XmlFormerElement") ? "<skeptic> reads, but nothing names <sceptic>"
+       : null);
+
   return D.length;
 }
 const rSP = runSpellingChecks();
@@ -2716,6 +3065,25 @@ function runLiteralRoleChecks() {
      lit && lit.role === "result" ? null
        : "the envelope literal carries role=" + JSON.stringify(lit && lit.role));
 
+  /* the operand of a PT and of an IF travels as an attribute (decided
+     2026-09-27), and only when it carries nothing else */
+  const part = G.toXML("[pt'1.1']", opts), cond = G.toXML("[if'a > b'[ctx'x']]", opts);
+  ok("RO-06", "the number of a part is n, the condition of an if is cond, and neither repeats as a child",
+     !/<part n="1\.1"\/>/.test(part) ? "the part: " + JSON.stringify(part)
+       : !/<if cond="a &gt; b">/.test(cond) || /<user-input>a &gt; b<\/user-input>/.test(cond) ? "the if: " + JSON.stringify(cond)
+       : null);
+
+  const kept = ["[sum'ready'[ctx]][if'ready']", "[if'']"].filter(s => / cond="/.test(G.toXML(s, opts)));
+  ok("RO-07", "an operand that carries a reference, or no text, stays <user-input>",
+     kept.length ? "moved anyway: " + kept.join(", ") : null);
+
+  ok("RO-08", "an if with its condition asks for no condition",
+     !G.parse("[if'x']", opts).gaps.some(g => g.code === "UnfilledSlot") ? null : "[if'x'] asked for the condition");
+
+  const back = ["[pt'1.1']", "[if'a > b'[ctx'x']]"].map(s => [s, G.fromXML(G.toXML(s, opts), opts).src]).filter(([s, b]) => b !== s);
+  ok("RO-09", "fromXML reads n and cond back as the literal",
+     back.length ? back.map(([s, b]) => s + " came back as " + b).join("; ") : null);
+
   return D.length;
 }
 const rRO = runLiteralRoleChecks();
@@ -2775,6 +3143,28 @@ function runBindingChecks() {
      G.parse("[var`x`[get[ctx]]];[sum`x`[itr[ctx]]]", opts)
        .gaps.some(g => g.code === "DuplicateBinding" && g.sev === "fix") ? null
        : "a name bound twice raised nothing");
+
+  /* `[ref'nome']`, decided 2026-09-27: outside the [logic] fence, a name a
+     reference writes and nothing binds asks for it, as UndefinedVariable does
+     inside the fence; prose under REF is not a name */
+  const loose = G.parse("[ref'nada']", opts), looseXml = G.toXML("[ref'nada']", opts);
+  ok("BD-07", "a name a reference writes and nothing binds asks, with <needs var> beside the literal",
+     !loose.gaps.some(g => g.code === "UnboundReference" && g.sev === "ask") ? "an unbound reference raised nothing"
+       : !/<user-input>nada<\/user-input>\s*<needs var="nada">/.test(looseXml) ? "no <needs var> after the kept literal: " + JSON.stringify(looseXml)
+       : null);
+
+  const later = "[ref'a'][sum'a'[ctx]]";
+  ok("BD-08", "a reference resolves to a binding written later, and asks nothing",
+     !G.parse(later, opts).gaps.some(g => g.code === "UnboundReference") && /<user-input ref="a">a<\/user-input>/.test(G.toXML(later, opts)) ? null
+       : "a reference to a later binding was not resolved");
+
+  ok("BD-09", "prose under REF is not a name, and asks nothing",
+     !G.parse("[ref'RFC 2119']", opts).gaps.some(g => g.code === "UnboundReference") && G.toXML("[ref'RFC 2119']", opts).indexOf("<needs var") === -1 ? null
+       : "prose under REF was asked for as a name");
+
+  ok("BD-10", "the way back drops the <needs var> the reference raised",
+     G.fromXML(looseXml, opts).src === "[ref'nada']" ? null
+       : "came back as " + JSON.stringify(G.fromXML(looseXml, opts).src));
 
   return D.length;
 }
@@ -2969,9 +3359,410 @@ function runImperativeChecks() {
   ok("IM-05", "os cinco primitivos que o codigo ja nomeava continuam primitivos",
      wrong.length ? "deixaram de ser: " + wrong.join(", ") : null);
 
+  /* o alarme de inferencia profunda (decidido em 2026-09-27): um composto de
+     profundidade 5 ou mais sem operando pergunta pelo sujeito onde nada
+     pergunta; onde um frame pergunta, a pergunta e a dele */
+  const bare = G.parse("[fbk]", opts), bareXml = G.toXML("[fbk]", opts);
+  ok("DI-01", "um composto profundo sem operando, onde nada pergunta, pergunta pelo sujeito",
+     !bare.gaps.some(g => g.code === "DeepInference" && g.sev === "ask") ? "[fbk] nu nao perguntou"
+       : bareXml.indexOf("<needs>the subject</needs>") === -1 ? "sem <needs>: " + JSON.stringify(bareXml) : null);
+
+  const quiet = ["[fbk'plan b']", "[fbk: x]", "[rev-fbk]", "[fbk[ctx]]"]
+    .filter(s => G.parse(s, opts).gaps.some(g => g.code === "DeepInference") || G.toXML(s, opts).indexOf("the subject") !== -1);
+  ok("DI-02", "com operando, com dois-pontos, como elo de cadeia ou com um comando dentro, nao pergunta",
+     quiet.length ? "perguntou em " + quiet.join(", ") : null);
+
+  const hyp = G.parse("[hyp]", opts).gaps;
+  ok("DI-03", "onde um frame ja pergunta, a pergunta e a do frame, e o alarme nao repete",
+     hyp.some(g => g.code === "UnfilledSlot") && !hyp.some(g => g.code === "DeepInference") ? null
+       : "[hyp]: " + hyp.map(g => g.code).join(", "));
+
+  ok("DI-04", "o alarme corre com a valencia",
+     !G.parse("[fbk]", { ...opts, valency: false }).gaps.some(g => g.code === "DeepInference") ? null
+       : "perguntou com valency:false");
+
+  ok("DI-05", "a volta descarta o <needs> que o alarme escreveu",
+     G.fromXML(bareXml, opts).src === "[fbk]" ? null : "voltou como " + JSON.stringify(G.fromXML(bareXml, opts).src));
+
   return D.length;
 }
 const rIM = runImperativeChecks();
+
+/* ------------------------------------------------------------------ *
+ * the mode words -- [off] and [on] never vanish
+ *
+ * The inclusion decided on 2026-10-25 (EMS-002 ORD-0024). Measured before it:
+ * a stray [on] left the XML byte-identical to the source without it, an [off]
+ * as the last characters left no trace, and the bare words off and on were
+ * prose with no diagnostic while the other 142 known names asked.
+ * ------------------------------------------------------------------ */
+function runModeWordChecks() {
+  console.log("\n--- the mode words ---");
+  const D = [];
+  const ok = (id, name, why) => {
+    if (why) { console.log("  ✗ " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  ✓ " + id + ": " + name); D.push(id); }
+  };
+  const opts = { templates: TPL.templates, rules: RULESTORE,
+                 expansions: require("../.guidelines/expansions.json") };
+  const codes = src => G.parse(src, opts).gaps.map(g => g.code);
+  const count = (s, sub) => s.split(sub).length - 1;
+  const back = src => { const x = G.toXML(src, opts); return [x, G.fromXML(x, opts).src]; };
+  const same = src => { const [x, s] = back(src); return G.toXML(s, opts) === x; };
+  const sameAst = src => { const env = G.toAST(src, opts); return G.toXML(G.fromAST(env, opts).src, opts) === G.toXML(src, opts); };
+
+  const one = G.parse("[on]", opts), oneGap = one.gaps.filter(g => g.code === "UnmatchedOnMode");
+  ok("MO-01", "a stray [on] is the command ON, with a note at its place",
+     ((one.segments[0] || { children: [] }).children[0] || {}).canonical !== "ON" ? "no command ON in the tree"
+       : G.toXML("[on]", opts).indexOf("<mode-on/>") === -1 ? "no <mode-on/> in the XML"
+       : G.toHGML("[on]", opts).indexOf("[on[/on]") === -1 ? "no [on in the burn"
+       : !(oneGap.length === 1 && oneGap[0].sev === "note" && oneGap[0].at && oneGap[0].at.s === 0 && oneGap[0].at.e === 4) ? "the note: " + JSON.stringify(oneGap)
+       : null);
+
+  const STRAY = ["[on]", "[on]x", "[ctx[on]]", "[ctx'x'][on]", "[on];", "r- [on]", "[off]a[on][on]b"];
+  const lost = STRAY.filter(s => count(G.toXML(s, opts), "<mode-on/>") !== 1 || codes(s).filter(c => c === "UnmatchedOnMode").length !== 1);
+  ok("MO-02", "every stray [on] reaches <mode-on/> with one note", lost.length ? "lost in " + lost.join(", ") : null);
+
+  ok("MO-03", "the [on] that closes a region is not the command",
+     G.toXML("[off]a[on]b", opts).indexOf("mode-on") === -1 && codes("[off]a[on]b").indexOf("UnmatchedOnMode") === -1 ? null
+       : "the closing [on] became a command");
+
+  const trips = ["[on]", "[on", "[modeon]", "[off]a[on][on]b"].filter(s => !same(s) || !sameAst(s));
+  ok("MO-04", "a stray [on], [on and [modeon] come back to the same XML, both ways",
+     trips.length ? "lost on the way back: " + trips.join(", ") : null);
+
+  ok("MO-05", "a chain before a stray [on] does not dangle",
+     codes("[ctx-[on]]").indexOf("DanglingChain") === -1 ? null : "[ctx-[on]] is a DanglingChain");
+
+  const eof = ["[off]", "[ctx'x'][off]"].filter(s => codes(s).indexOf("UnclosedOffMode") === -1 || G.toXML(s, opts).indexOf("<off></off>") === -1);
+  ok("MO-06", "an [off] at the end raises UnclosedOffMode and leaves its empty region",
+     eof.length ? "silent in " + eof.join(", ") : null);
+
+  const empty = ["[off]", "[off][on]", "[off] "].filter(s => !same(s));
+  ok("MO-07", "an empty region comes back", empty.length ? "lost on the way back: " + empty.join(", ") : null);
+
+  const loose = ["off", "on", "OFF", "[ctx off]"].filter(s => codes(s).indexOf("LooseCommandWord") === -1);
+  ok("MO-08", "the bare words off and on ask like every known name", loose.length ? "silent: " + loose.join(", ") : null);
+
+  const sw = ["[off", "[off;[ctx'a']", "[ctx'a'],[off"].filter(s => { const [x, b] = back(s); return /\[off\]/.test(b) || G.toXML(b, opts) !== x; });
+  ok("MO-09", "the empty command OFF comes back as [modeoff], never as the switch",
+     sw.length ? "came back as the switch: " + sw.join(", ") : null);
+
+  const cmd = ["[on'x']", "[off'x']", "[ctx-on]"].filter(s => !/mode-o(n|ff)/.test(G.toXML(s, opts)) || !same(s));
+  ok("MO-10", "the mode words with an operand or as a link keep their element both ways",
+     cmd.length ? "lost: " + cmd.join(", ") : null);
+
+  return D.length;
+}
+const rMO = runModeWordChecks();
+
+
+/* ------------------------------------------------------------------ *
+ * elo de cadeia -- o `-` que abre uma palavra, colado a um nome conhecido
+ *
+ * `[ctx'x'-crit]`, `[ctx -crit]`, `[ctx]-crit`, `a -crit`, `;-crit`,
+ * `/eth/-crit`, `[/raw]-crit`, `-crit` e `--crit` faziam de `crit`, um nome
+ * que o vocabulario conhece, um <off> sem diagnostico nenhum. Um comando
+ * conhecido nunca some (decidido em 2026-10-25 e 2026-10-26), e a regra que o
+ * acolhe e a cadeia que a gramatica ja escreve -- `{ "-" , chain_item }`
+ * (glyph-grammar.ebnf), espaco entre tokens nao e no, e o elo pertence ao
+ * escopo em que esta: o comando aberto, ou o bloco. O `-` abre uma palavra
+ * quando antes dele so ha o comeco, uma ficha ou espaco; com espaco DEPOIS
+ * dele, so depois de um comando, do operando ou de um `]` na mesma linha.
+ * So um nome conhecido vira elo; a prosa fica prosa.
+ * ------------------------------------------------------------------ */
+function runChainLinkChecks() {
+  console.log("\n--- elo de cadeia ---");
+  const D = [];
+  const ok = (id, name, why) => {
+    if (why) { console.log("  ✗ " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  ✓ " + id + ": " + name); D.push(id); }
+  };
+  const opts = { templates: TPL.templates, rules: RULESTORE,
+                 expansions: require("../.guidelines/expansions.json") };
+  const X = src => G.toXML(src, opts);
+  const links = src => G.tokenize(src).filter(t => t.k === "extend").length;
+  const quiet = src => G.parse(src, opts).gaps.length === 0;
+
+  /* depois do operando: o literal e o operando dos dois, como em [crit-ctx'x'] */
+  const c2 = X("[ctx'x'-crit]");
+  const c2n = G.parse("[ctx'x'-crit]", opts).segments[0].children[0].children
+    .filter(c => c.canonical === "CRIT")[0];
+  ok("LK-01", "depois do operando, o `-` abre a cadeia no comando que o segura",
+     !/<context>\s*<user-input>x<\/user-input>\s*<chain>\s*<criticise\/>\s*<\/chain>\s*<\/context>/.test(c2)
+       ? "emitiu " + JSON.stringify(c2)
+       : !c2n || c2n.origin !== "extend" || !c2n.chainElement ? "o no de CRIT nao e um elo"
+       : !quiet("[ctx'x'-crit]") ? "levantou diagnostico"
+       : X("[ctx-'x'-crit]") !== c2 ? "a forma da gramatica, [ctx-'x'-crit], emite outros bytes"
+       : X("[sum'x'-ctx]").indexOf("<chain>\n        <context/>") === -1 ? "[sum'x'-ctx] ainda perde o ctx" : null);
+
+  /* depois de um espaco: espaco entre tokens nao e no */
+  const spaced = [["[ctx -crit]", "[ctx-crit]"], ["[ctx'x' -crit]", "[ctx'x'-crit]"],
+                  ["[in-rwk -fmt]", "[in-rwk-fmt]"], ["[in-rwk, fmt -sum]", "[in-rwk,fmt-sum]"]]
+    .filter(p => X(p[0]) !== X(p[1]));
+  ok("LK-02", "um espaco antes do `-` nao muda o elo",
+     spaced.length ? spaced.map(p => p[0] + " != " + p[1]).join(" | ") : null);
+
+  /* depois de um `]`: o escopo para o qual o `]` devolve -- o comando de fora, ou o bloco */
+  const x2 = X("[ctx]-crit"), nested = X("[in[ctx]-crit]");
+  ok("LK-03", "depois de um `]`, o elo pertence ao escopo que o `]` devolve",
+     !/<\/context>\n    <chain>\n      <criticise\/>\n    <\/chain>\n  <\/block>/.test(x2) ? "no bloco: " + JSON.stringify(x2)
+       : !/<instruction>\s*<context>[\s\S]*<\/context>\s*<chain>\s*<criticise\/>\s*<\/chain>\s*<\/instruction>/.test(nested)
+         ? "dentro de [in: " + JSON.stringify(nested)
+       : X("[ctx'x'[/ctx]-crit") !== X("[ctx'x']-crit") ? "[/ctx] e ] devolvem escopos diferentes" : null);
+
+  /* a prosa fica prosa: so um nome conhecido COLADO a um `-` que abre uma
+     palavra e elo */
+  const prose = ["[a -b]", "[ins`a`]->[ins`b`]", "x - y", "well-known", "[ins'well-known']",
+                 "[ctx]-critx", "[ctx]-constructor", "[ctx]-zzz"]
+    .filter(src => links(src) !== 0);
+  ok("LK-04", "a prosa com hifen nao vira elo",
+     prose.length ? "virou elo: " + prose.join(", ") : null);
+
+  /* os 144 nomes das tabelas, e so eles: a sessao o parser aplica, nao o lexer */
+  const names = [].concat(Object.keys(VOCAB.MODE), Object.keys(VOCAB.STRUCT), Object.keys(VOCAB.META),
+                          Object.keys(VOCAB.ALIAS), Object.keys(VOCAB.INSTR), Object.keys(VOCAB.SESSION));
+  const uniq = [...new Set(names.map(n => n.toLowerCase()))];
+  const missed = uniq.filter(n => links("[ctx]-" + n) !== 1 || links("[ctx'x'-" + n + "]") !== 1 || links("[ctx -" + n + "]") !== 1);
+  const offSession = G.parse("[ctx]-rd", { ...opts, session: false }).gaps.map(g => g.code);
+  ok("LK-05", "cada um dos 144 nomes e elo nas tres posicoes",
+     uniq.length !== 144 ? "as tabelas tem " + uniq.length + " nomes"
+       : missed.length ? "nao viraram elo: " + missed.join(", ")
+       : offSession.indexOf("UnknownCommand") === -1 ? "sem sessao, [ctx]-rd nao disse que rd nao existe: " + offSession.join(",") : null);
+
+  /* a volta: a arvore e o documento devolvem a mesma fonte que relida da os mesmos bytes */
+  const trips = ["[ctx'x'-crit]", "[ctx -crit]", "[ctx]-crit", "[in[ctx]-crit]", "[ctx'x']-crit,ex",
+                 "[ctx'x'-crit,ex'y']", "[sum'x'-ctx]", "[ctx]-rd"]
+    .filter(src => {
+      const x = X(src);
+      return X(G.fromXML(x, opts).src) !== x || X(G.fromAST(G.toAST(src, opts), opts).src) !== x;
+    });
+  ok("LK-06", "fromXML e fromAST devolvem o elo como elo",
+     trips.length ? "a volta mudou: " + trips.join(", ") : null);
+
+  /* a volta nao inventa: um <off> que comeca por `-` e um nome conhecido volta cercado */
+  const old = '<glyph-package engine="' + G.VERSION + '">\n  <schema/>\n  <block once="true">\n    <context>\n' +
+              '      <user-input>x</user-input>\n      <off>-crit</off>\n    </context>\n  </block>\n</glyph-package>';
+  const back = G.fromXML(old, opts).src;
+  ok("LK-07", "um <off> que comeca por um nome conhecido volta como prosa",
+     X(back) !== old ? "voltou como " + JSON.stringify(back) + " e emitiu outro documento"
+       : X(G.fromXML(X("[ctx][off]-crit[on]"), opts).src) !== X("[ctx][off]-crit[on]") ? "[off]-crit[on] voltou como elo" : null);
+
+  /* depois de prosa: o `-` que abre uma palavra e elo do escopo em que esta,
+     o comando aberto ou o bloco; o que nao abre palavra segue prosa */
+  const ap = X("a -crit"), cf = X("[ctx foo -crit]");
+  const glued = ["a-crit", "(-crit)", "x/-crit", "[ctx]-crit.", "[ctx'x'-critx]"].filter(src => links(src) !== 0);
+  ok("LK-08", "depois de prosa, o `-` que abre uma palavra e elo do escopo em que esta",
+     !/<block once="true">\s*<off>a<\/off>\s*<chain>\s*<criticise\/>\s*<\/chain>\s*<\/block>/.test(ap) ? "no bloco: " + JSON.stringify(ap)
+       : !/<context>\s*<off>foo<\/off>\s*<chain>\s*<criticise\/>\s*<\/chain>\s*<\/context>/.test(cf) ? "dentro de [ctx: " + JSON.stringify(cf)
+       : !quiet("a -crit") || !quiet("[ctx foo -crit]") ? "levantou diagnostico"
+       : X("a\n-crit") !== ap ? "uma quebra de linha antes do `-` muda o elo"
+       : glued.length ? "virou elo sem abrir palavra: " + glued.join(", ") : null);
+
+  /* depois de qualquer ficha: `;` abre o bloco seguinte, `,` e um humor ficam
+     no escopo, um cercado fechado devolve o escopo, e o comeco e o bloco */
+  const atBlock = ["[ctx];-crit", "-crit", "/eth/-crit", "[raw]x[/raw]-crit", "[off]x[on]-crit",
+                   "[logic]a = 1[/logic]-crit", "[=-crit", "[ctx];;-crit", "a, -crit"]
+    .filter(src => !/<chain>\s*<criticise\/>\s*<\/chain>\s*<\/block>\s*<\/glyph-package>/.test(X(src)));
+  const inScope = [["[ctx'x',-crit]", "[ctx'x'-crit]"], ["[in-rwk,-fmt]", "[in-rwk-fmt]"],
+                   ["[ctx'x'/eth/-crit]", "/eth/[ctx'x'-crit]"], ["[dfn x=-crit]", "[dfn x= -crit]"]]
+    .filter(p => X(p[0]) !== X(p[1]) || X(p[0]).indexOf("<chain>") === -1);
+  const everyName = [].concat(Object.keys(VOCAB.MODE), Object.keys(VOCAB.STRUCT), Object.keys(VOCAB.META),
+                              Object.keys(VOCAB.ALIAS), Object.keys(VOCAB.INSTR), Object.keys(VOCAB.SESSION))
+    .map(nm => nm.toLowerCase())
+    .filter(nm => ["-", "a -", ";-", "a,-", "/eth/-", "[raw]x[/raw]-", "--"].some(p => links(p + nm) !== 1));
+  ok("LK-09", "depois de `;`, de `,`, de um humor, de um cercado e no comeco, o elo e do escopo em que esta",
+     atBlock.length ? "o elo nao ficou no bloco: " + atBlock.join(", ")
+       : inScope.length ? "o elo nao ficou no escopo: " + inScope.map(p => p[0]).join(", ")
+       : everyName.length ? "nao viraram elo: " + [...new Set(everyName)].join(", ") : null);
+
+  /* com espaco depois do `-`: so onde o `-` ja esta no lugar de um elo -- um
+     comando, o operando ou o `]` antes dele, na mesma linha; depois de prosa,
+     no comeco ou depois de uma quebra de linha, `- nome` e travessao e item de lista */
+  const spacedLinks = [["[ctx] - crit", "[ctx]-crit"], ["[ctx'x' - crit]", "[ctx'x'-crit]"],
+                       ["[ctx - crit]", "[ctx-crit]"], ["[in-rwk - fmt]", "[in-rwk-fmt]"], ["[ctx] -\tcrit", "[ctx]-crit"]]
+    .filter(p => X(p[0]) !== X(p[1]));
+  const spacedProse = ["x - crit", "- crit", "[ctx]\n- crit", "[ctx] -- crit", "[ctx] -\ncrit", "[ctx]; - crit", "x - y"]
+    .filter(src => links(src) !== 0);
+  ok("LK-10", "com espaco depois do `-`, o elo so onde o `-` ja esta no lugar de um",
+     spacedLinks.length ? "nao e o elo: " + spacedLinks.map(p => p[0]).join(", ")
+       : spacedProse.length ? "a prosa virou elo: " + spacedProse.join(", ") : null);
+
+  /* uma corrida de tracos que abre palavra e um elo so; `[--` segue o template */
+  const runs = [["--crit", "-crit"], ["[ctx]--crit", "[ctx]-crit"], ["[ctx --crit]", "[ctx -crit]"],
+                ["[in--rwk]", "[in-rwk]"], ["a ---crit", "a -crit"]].filter(p => X(p[0]) !== X(p[1]));
+  ok("LK-11", "`--crit` e um elo, e uma corrida de tracos e um so",
+     runs.length ? "outro documento: " + runs.map(p => p[0]).join(", ")
+       : G.tokenize("[--crit]")[0].k !== "tpl" ? "[--crit] deixou de ser template"
+       : ["a--crit", "--zzz", "[ctx]--critx"].some(src => links(src) !== 0) ? "a prosa virou elo" : null);
+
+  /* o texto depois do dois-pontos termina num elo: o elo e do comando, nunca
+     do texto, que fica no documento como o operando que a forma [x'texto' escreve */
+  const named = [["[ctx:'x'-crit]", "[ctx'x'-crit]"], ["[ctx: 'x' -crit]", "[ctx'x'-crit]"], ["[ctx: foo -crit]", "[ctx'foo'-crit]"]]
+    .filter(([src, lit]) => X(src) !== X(lit) ||
+      !/<context>\s*<user-input>(x|foo)<\/user-input>\s*<chain>\s*<criticise\/>\s*<\/chain>\s*<\/context>/.test(X(src)));
+  ok("LK-12", "o texto depois do dois-pontos termina num elo",
+     named.length ? "o texto levou o elo: " + named.map(p => p[0] + " -> " + JSON.stringify(X(p[0]))).join(" | ")
+       : X("[ctx:-crit]") !== X("[ctx-crit]") ? "[ctx:-crit] nao e [ctx-crit]" : null);
+
+  /* a volta: cada posicao nova volta como elo, pelo documento e pela arvore */
+  const newTrips = ["a -crit", "[ctx foo -crit]", "[ctx];-crit", "[ctx'x',-crit]", "a, -crit", "/eth/-crit",
+                    "[ctx'x'/eth/-crit]", "[raw]x[/raw]-crit", "-crit", "--crit", "[ctx] - crit", "[ctx'x' - crit]",
+                    "[in--rwk]", "[ctx:'x'-crit]", "[ctx: foo -crit]", "[off]x[on]-crit", "[=-crit",
+                    "[--reinforce[ph-rule'a' w -crit]'b']"]
+    .filter(src => {
+      const x = X(src);
+      return !/<(criticise|rework)[\s\/]/.test(x) ||
+             X(G.fromXML(x, opts).src) !== x || X(G.fromAST(G.toAST(src, opts), opts).src) !== x;
+    });
+  ok("LK-13", "fromXML e fromAST devolvem cada posicao nova como elo",
+     newTrips.length ? "a volta mudou ou nao ha elo: " + newTrips.join(", ") : null);
+
+  /* a volta nao inventa: prosa com um `-` que abre palavra antes de um nome
+     conhecido -- um <off> de outro motor, ou `- nome` depois de uma quebra de
+     linha -- volta cercada, e o mesmo documento */
+  const block = body => '<glyph-package engine="' + G.VERSION + '">\n  <schema/>\n  <block once="true">\n' + body +
+                        '\n  </block>\n</glyph-package>';
+  const olds = [block("    <off>a -crit</off>"), block("    <off>--crit</off>"),
+                block("    <context>\n      <user-input>x</user-input>\n    </context>\n    <off>- crit</off>")];
+  const invented = olds.filter(o => { const b = G.fromXML(o, opts).src; return b.indexOf("[off]") === -1 || X(b) !== o; });
+  const bullet = G.fromAST(G.toAST("[ctx'x']\n- crit", opts), opts).src;
+  ok("LK-14", "prosa com `-` que abre palavra antes de um nome conhecido volta cercada",
+     invented.length ? "voltou como elo ou sem cerca: " + invented.map(o => JSON.stringify(G.fromXML(o, opts).src)).join(" | ")
+       : bullet.indexOf("[off]") === -1 || X(bullet) !== X("[ctx'x']\n- crit") ? "fromAST: " + JSON.stringify(bullet) : null);
+
+  return D.length;
+}
+const rLK = runChainLinkChecks();
+
+/* ------------------------------------------------------------------ *
+ * dois-pontos -- a forma `[x: texto]` aposentada (2026-10-25 e 2026-10-26)
+ *
+ * `:` custa um shift, e o nome e o primeiro parametro digitado como
+ * literal, so nos comandos que tem nome. O Regente: "Recogniser, ask only".
+ * `[x: texto]` pergunta em `ask` uma vez por dois-pontos, nomeando a forma
+ * `[x'texto'`, e o texto segue no documento como operando: cada item entre
+ * virgulas e um literal, na ordem escrita, e a forma que a pergunta nomeia
+ * emite os mesmos bytes. O `name` existe so no `block`, na `section` e na
+ * cerca `[logic]`, pelo primeiro literal; `[logic'calc']…[/logic]` e a cerca
+ * nomeada. O AmbiguousSlotOrder se aposenta com o dois-pontos: a ordem e a
+ * escrita. A volta nunca escreve dois-pontos. Cada caso foi visto falhando
+ * na copia de base antes de contar.
+ * ------------------------------------------------------------------ */
+function runColonChecks() {
+  console.log("\n--- dois-pontos ---");
+  const D = [];
+  const ok = (id, name, why) => {
+    if (why) { console.log("  ✗ " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  ✓ " + id + ": " + name); D.push(id); }
+  };
+  const opts = { templates: TPL.templates, rules: RULESTORE,
+                 expansions: require("../.guidelines/expansions.json") };
+  const X = src => G.toXML(src, opts);
+  const codes = (src, o) => G.parse(src, o || opts).gaps.map(g => g.code);
+  /* a forma com dois-pontos e a forma que a pergunta nomeia */
+  const PAIRS = [["[crit: a,b,c]", "[crit'a','b','c']"], ["[ctx: a = b - c]", "[ctx'a = b - c']"],
+                 ["[ctx: 'q' `r`]", "[ctx'q'`r`]"], ["[pt:intro'1.1'[ctx]]", "[pt'intro''1.1'[ctx]]"],
+                 ["[--germinate: crit]", "[--germinate'crit']"], ["[ctx: 'a'-crit]", "[ctx'a'-crit]"],
+                 ["[ph-a: q]", "[ph-a'q']"], ["[rw-cr: x]", "[rw-cr'x']"], ["[block: a, b]", "[block'a','b']"],
+                 ["[val: a]", "[val'a']"], ["[fbk: x]", "[fbk'x']"], ["[ctx: a: b]", "[ctx'a''b']"],
+                 ["[ctx:]", "[ctx]"], ["[block:review[req[crit[tgt'the launchpad prompt']]]]", "[block'review'[req[crit[tgt'the launchpad prompt']]]]"],
+                 ["[logic:calc]a = 1[/logic]", "[logic'calc']a = 1[/logic]"]];
+
+  /* uma pergunta por dois-pontos, em ask, no dois-pontos, nomeando a forma que o substitui */
+  const one = G.parse("[crit: a,b,c]", opts).gaps.filter(g => g.code === "RetiredColon");
+  const en = G.parse("[crit: a,b,c]", { ...opts, lang: "en" }).gaps.filter(g => g.code === "RetiredColon");
+  const per = PAIRS.filter(([c]) => codes(c).filter(k => k === "RetiredColon").length !== (c.match(/:/g) || []).length);
+  ok("CO-01", "o dois-pontos pergunta em ask, uma vez por dois-pontos, e nomeia a forma [x'texto'",
+     one.length !== 1 ? "[crit: a,b,c] perguntou " + one.length + " vezes"
+       : one[0].sev !== "ask" ? "severidade " + one[0].sev
+       : !one[0].at || one[0].at.s !== 5 || one[0].at.e !== 6 ? "a posicao nao e a do dois-pontos: " + JSON.stringify(one[0].at)
+       : one[0].plain.indexOf("[crit'a','b','c'") === -1 ? "nao nomeia [crit'a','b','c': " + one[0].plain
+       : !en.length || en[0].plain.indexOf("[crit'a','b','c'") === -1 || en[0].msg === one[0].msg ? "sem a mensagem em ingles"
+       : per.length ? "perguntas fora de uma por dois-pontos: " + per.map(p => p[0]).join(", ") : null);
+
+  /* o texto fica: a forma com dois-pontos emite os bytes da forma que a pergunta nomeia */
+  const moved = PAIRS.filter(([c, l]) => X(c) !== X(l));
+  ok("CO-02", "o texto do dois-pontos fica no documento como operando, item por item, na ordem escrita",
+     moved.length ? "outro documento: " + moved.map(p => p[0]).join(", ") : null);
+
+  /* nada pergunta duas vezes: a valencia conta os literais como conta qualquer literal */
+  const twice = PAIRS.filter(([c, l]) => {
+    const a = codes(c).filter(k => k !== "RetiredColon").sort().join(), b = codes(l).sort().join();
+    return a !== b;
+  });
+  ok("CO-03", "fora a pergunta do dois-pontos, as perguntas sao as da forma com literais",
+     twice.length ? "perguntou outra coisa: " + twice.map(p => p[0] + " " + codes(p[0]).join(",")).join(" | ") : null);
+
+  /* o no nao carrega o dois-pontos, e AmbiguousSlotOrder nao existe mais para disparar */
+  const carried = [], askedOrder = [], named = [];
+  PAIRS.forEach(([c]) => {
+    const r = G.parse(c, opts);
+    r.segments.forEach(sg => G.walk(sg.children, nd => { if (Object.prototype.hasOwnProperty.call(nd, "colon")) carried.push(c); }));
+    if (r.gaps.some(g => g.code === "AmbiguousSlotOrder")) askedOrder.push(c);
+    G.toAST(c, opts).segments.forEach(function walkAst(n) {
+      (n.body || []).forEach(walkAst);
+      if (n.type === "Command" && n.name !== null) named.push(c);
+    });
+  });
+  ok("CO-04", "nenhum no carrega `colon`, o AST nao escreve `name` num comando, e AmbiguousSlotOrder nao dispara",
+     carried.length ? "carrega colon: " + carried.join(", ")
+       : askedOrder.length ? "AmbiguousSlotOrder: " + askedOrder.join(", ")
+       : named.length ? "Command.name escrito: " + named.join(", ") : null);
+
+  /* o name e o primeiro literal do block e da section, e so deles */
+  const blk = X("[block'review'[ctx'x']][ref'review']");
+  const sec = X("[section'intro'[ctx'x']]");
+  const others = ["[ctx'review'[ctx'x']]", "[crit'review']", "[pt'1.1'[ctx'x']]", "[if'ready'[ctx'x']]", "[tpl'x']",
+                  "[sum'review'[ctx'x']][block'review']", "[block'']", "[block[ctx'x']'late']"]
+    .map(X).join("\n");
+  const nameOn = [...new Set((blk + sec + others).match(/<[a-z-]+ [^>]*\bname="/g) || [])].map(t => t.slice(1, t.indexOf(" ")));
+  ok("CO-05", "o name sai do primeiro literal do block e da section, e de nenhum outro elemento",
+     !/<block name="review" binds="review">\n\s*<context>/.test(blk) ? "block: " + JSON.stringify(blk)
+       : !/<user-input ref="review">review<\/user-input>/.test(blk) || codes("[block'review'[ctx'x']][ref'review']").includes("UnboundReference")
+         ? "a referencia ao block nao resolve"
+       : !/<section name="intro" binds="intro">\n\s*<context>/.test(sec) ? "section: " + JSON.stringify(sec)
+       : nameOn.some(t => t !== "block" && t !== "section") ? "name em " + nameOn.join(", ")
+       : !/<block>\n\s*<user-input ref="review">review<\/user-input>/.test(X("[sum'review'[ctx'x']][block'review']"))
+         ? "um literal que e referencia virou name"
+       : !/<block>\n\s*<user-input><\/user-input>/.test(X("[block'']")) ? "um literal vazio virou name" : null);
+
+  /* a cerca [logic] se nomeia pelo primeiro literal; sem [/logic] o literal e operando do comando */
+  const fence = X("[logic'calc']a = 1[/logic]");
+  const unclosed = X("[logic'x']"), tick = X("[logic`calc`]a = 1[/logic]");
+  ok("CO-06", "[logic'calc']…[/logic] e a cerca nomeada; [logic'x'] sem [/logic] segue o comando",
+     !/<logic name="calc">\n\s*<rule kind="let" var="a">/.test(fence) ? "cerca: " + JSON.stringify(fence)
+       : codes("[logic'calc']a = 1[/logic]").length ? "a cerca perguntou: " + codes("[logic'calc']a = 1[/logic]").join(",")
+       : tick !== fence ? "a crase nomeia outra cerca"
+       : X("[logic:calc]a = 1[/logic]") !== fence ? "[logic:calc] nao e a mesma cerca"
+       : !/<logic>\n\s*<user-input>x<\/user-input>\n\s*<\/logic>/.test(unclosed) || codes("[logic'x']").length ? "[logic'x']: " + JSON.stringify(unclosed)
+       : !codes("[logic]").includes("UnclosedLogic") || X("[logic-dano]\nhp = 1\n[/logic]").indexOf('<logic name="dano">') === -1
+         ? "[logic] e [logic-nome] mudaram" : null);
+
+  /* a volta nunca escreve dois-pontos, e devolve os mesmos bytes */
+  const colonIn = s => /\[(?:--)?[A-Za-z][A-Za-z0-9_.-]*\s*:/.test(s.replace(/'[^'\n]*'|`[^`]*`/g, "''"));
+  const back = PAIRS.map(p => p[0]).concat(["[block'review'[ctx'x']]", "[section'my part'[ctx]]", "[logic q]a -> b[/logic]"])
+    .filter(src => {
+      const x = X(src), bx = G.fromXML(x, opts).src, ba = G.fromAST(G.toAST(src, opts), opts).src;
+      return colonIn(bx) || colonIn(ba) || X(bx) !== x || X(ba) !== x;
+    });
+  const PKG = b => '<glyph-package engine="' + G.VERSION + '">\n  <schema/>\n  <block once="true">\n' + b + '\n  </block>\n</glyph-package>';
+  const legacy = [[PKG('<context name="a, b"/>'), "[ctx'a, b']"], [PKG('<block name="review"><context/></block>'), "[block'review'[ctx]]"],
+                  [PKG('<logic name="q"><rule kind="let"><source>a = 1</source></rule></logic>'), "[logic'q']\na = 1\n[/logic]"],
+                  [PKG('<part name="intro" n="1.1"/>'), "[pt'intro''1.1']"], [PKG('<template><user-input>x</user-input></template>'), "[tpl'x']"]]
+    .filter(([x, want]) => G.fromXML(x, opts).src !== want);
+  const env = { type: "GlyphAST", schema: 2, projection: "full", segments: [{ body: [
+    { type: "Command", raw: "ctx", canonical: "CTX", name: "a, b", body: [] },
+    { type: "Logic", name: "q", rules: [{ source: "a = 1" }] }] }] };
+  const envBack = G.fromAST(env, opts).src;
+  ok("CO-07", "fromXML e fromAST nunca escrevem dois-pontos: o name volta como literal",
+     back.length ? "a volta mudou ou escreveu dois-pontos: " + back.join(", ")
+       : legacy.length ? "XML antigo: " + legacy.map(l => JSON.stringify(G.fromXML(l[0], opts).src) + " != " + l[1]).join(" | ")
+       : envBack !== "[ctx'a, b'][logic'q']\na = 1\n[/logic]" ? "envelope com name: " + JSON.stringify(envBack) : null);
+
+  return D.length;
+}
+const rCO = runColonChecks();
 
 
 /* ------------------------------------------------------------------ *
@@ -3284,7 +4075,7 @@ function runContextGuard() {
   const loose = { templates: TPL.templates, rules: RULESTORE, expansions: require("../.guidelines/expansions.json") };
   const ctx = G.createContext(loose);
   const CORPUS = [].concat(POSITIVE, INCOMPLETE, INVALID, REGRESSION, LONG,
-                           TEMPLATES, CONSTRAINTS, RULE_CASES, ORACLE_COVERAGE);
+                           TEMPLATES, CONSTRAINTS, RULE_CASES, ORACLE_COVERAGE, INCLUSION);
   const three = (src, o) => {
     const a = G.toAST(src, o); delete a.version;
     return G.toXML(src, o) + "\n" + JSON.stringify(a) + "\n" + G.toHGML(src, o);
@@ -3298,11 +4089,9 @@ function runContextGuard() {
   const ruleCodes = o => (G.parse("[mand'x'][opt'x']", o).gaps || []).map(g => g.code);
   /* the baseline is a loose store that is present and empty — it cannot fall
      back, in this engine or in one without contexts, so it measures the rules
-     alone and not the mechanism under test. `__compiled` is cleared because
-     compileRules caches onto the store object itself, and a copy would carry
-     the original's compiled rules along with it */
+     alone and not the mechanism under test */
   const noRules = ruleCodes(Object.assign({}, loose,
-    { rules: Object.assign({}, RULESTORE, { rules: [], __compiled: undefined }) }));
+    { rules: Object.assign({}, RULESTORE, { rules: [] }) }));
   const fromRules = ruleCodes(loose).filter(c => noRules.indexOf(c) === -1);
   const leaked = ruleCodes(G.createContext({ templates: TPL.templates }))
     .filter(c => fromRules.indexOf(c) !== -1);
@@ -3401,119 +4190,20 @@ async function runRelay() {
   } finally {
     server.kill();
   }
+
+  /* the page behind engine=relay (EMS-002 ORD-0010, question 10 of the
+     EMS-001 return, answered c): one request a call, but classify, which the
+     page answers from the tables it already loads — a keystroke on L-01 made
+     8 005 requests, one classify a command token */
+  const TRANSPORT = await import("./glyph-transport.js");
+  const swapped = Object.keys(TRANSPORT.relayCore()).sort();
+  const asked = PROTOCOL.CALLS.filter(c => c !== "classify").map(c => c === "toXML" ? "buildXml" : c === "toAST" ? "serializeAST" : c).sort();
+  ok("RL-16", "the transport swaps every call but classify",
+     JSON.stringify(swapped) === JSON.stringify(asked) ? null
+       : "swaps " + swapped.join(",") + " — the page answers classify, and the engine the other eleven");
   return D.length;
 }
 const rRL = await runRelay();
-
-/* ------------------------------------------------------------------
- * virtual paths, layers 1 to 4 (.plan §0): an address per format with
- * cardinality 1, an identity that survives a move, an order that keeps its
- * labels, and closed coverage. Each case runs on a scratch tree outside the
- * repository, so nothing is left behind when the suite dies midway.
- * ------------------------------------------------------------------ */
-async function runVirtualPath() {
-  console.log("\n--- virtual paths — address, identity, order, offsets ---");
-  const D = [];
-  const ok = (id, name, why) => {
-    if (why) { console.log("  ✗ " + id + ": " + name); console.log("      " + why); failures.push(id); }
-    else { console.log("  ✓ " + id + ": " + name); D.push(id); }
-  };
-  const VP = await import("./virtual-path.js");
-  const fsx = require("fs"), os = require("os");
-  const at = (text, file, sel) => {
-    try { const r = VP.resolveIn(text, file, sel); return text.slice(r.start, r.end); } catch (e) { return "error: " + e.message; }
-  };
-  const refuses = (text, file, sel) => { try { VP.resolveIn(text, file, sel); return false; } catch (e) { return /resolves to/.test(e.message); } };
-
-  const MD = "# A\nx\n## B `b`\ny\n# C\nz\n## B `b`\nw\n";
-  ok("VP-01", "a heading runs to the next heading of its level or higher",
-     at(MD, "d.md", "b-b") !== "## B `b`\ny\n" ? JSON.stringify(at(MD, "d.md", "b-b")) : null);
-  ok("VP-02", "a repeated heading is slugged -1, as GitHub does",
-     at(MD, "d.md", "b-b-1") !== "## B `b`\nw\n" ? JSON.stringify(at(MD, "d.md", "b-b-1")) : null);
-
-  const JS = '{ "a/b": { "c": [1, 2] }, "d": "e" }';
-  ok("VP-03", "a JSON Pointer reaches a container and a leaf, ~1 escaped",
-     at(JS, "d.json", "/a~1b/c") !== "[1, 2]" || at(JS, "d.json", "/a~1b/c/1") !== "2" || at(JS, "d.json", "/d") !== '"e"'
-       ? "container " + JSON.stringify(at(JS, "d.json", "/a~1b/c")) : null);
-
-  const XML = "<r><i>1</i><i>2</i><j/></r>";
-  ok("VP-04", "an element path names the nth sibling, and a bare name shared by two is refused",
-     at(XML, "d.xml", "/r/i[2]") !== "<i>2</i>" || at(XML, "d.xml", "/r/j") !== "<j/>" || !refuses(XML, "d.xml", "/r/i")
-       ? "i[2] " + JSON.stringify(at(XML, "d.xml", "/r/i[2]")) : null);
-
-  const CODE = "a\n// @block:k\nbody\n// @endblock:k\nprose that names `@block:k` inline\n";
-  let nested = false;
-  try { VP.treeOf("# @block:a\n# @block:b\n# @endblock:b\n# @endblock:a\n", "x.py"); } catch (e) { nested = /do not nest/.test(e.message); }
-  ok("VP-05", "a block is the lines between its markers, a mention in prose is not a marker, and blocks do not nest",
-     at(CODE, "x.js", "@block:k") !== "body\n" ? JSON.stringify(at(CODE, "x.js", "@block:k"))
-       : !nested ? "a nested block was accepted" : null);
-
-  ok("VP-06", "a selector that resolves to nothing is an error, never an empty slice",
-     !refuses(MD, "d.md", "nope") || !refuses(JS, "d.json", "/zz") ? "an absent selector answered" : null);
-
-  /* a scratch repository: .guidelines with three files */
-  const root = fsx.mkdtempSync(path.join(os.tmpdir(), "glyph-vp-"));
-  const put = (f, t) => { fsx.mkdirSync(path.dirname(path.join(root, f)), { recursive: true }); fsx.writeFileSync(path.join(root, f), t); };
-  const idOf = (ix, file, sel) => (ix.files[file].nodes.find(n => n.sel === sel) || {}).id;
-  try {
-    put(".guidelines/a.md", "# One\none\n# Two\ntwo\n# Three\nthree\n");
-    put(".guidelines/b.json", '{ "k": { "v": 1 } }');
-    put(".guidelines/.shortcuts/.virtual/ongoing.json", "{}");
-    const first = VP.build(root).index;
-    ok("VP-07", "the index covers .guidelines and leaves .shortcuts/.virtual out",
-       Object.keys(first.files).join(",") !== ".guidelines/a.md,.guidelines/b.json" ? Object.keys(first.files).join(",") : null);
-
-    /* Three moves above One; a new heading arrives between them */
-    put(".guidelines/a.md", "# Three\nthree\n# One\none\n# New\nnew\n# Two\ntwo\n");
-    const second = VP.build(root, first);
-    const keptIds = ["one", "two", "three"].every(s => idOf(first.index || first, ".guidelines/a.md", s) === idOf(second.index, ".guidelines/a.md", s));
-    ok("VP-08", "a slice moved inside its file keeps its NodeID",
-       !keptIds ? "ids changed: " + ["one", "two", "three"].map(s => idOf(first, ".guidelines/a.md", s) + "→" + idOf(second.index, ".guidelines/a.md", s)).join(" ") : null);
-
-    /* Two's body is rewritten in place: the same selector keeps the id, whatever the digest says */
-    const MOVED = "# Three\nthree\n# One\none\n# New\nnew\n# Two\ntwo\n";
-    put(".guidelines/a.md", MOVED.replace("two\n", "two, rewritten\n"));
-    const edited = VP.build(root, second.index).index;
-    ok("VP-14", "a slice edited in place keeps its NodeID by its selector",
-       idOf(second.index, ".guidelines/a.md", "two") !== idOf(edited, ".guidelines/a.md", "two") ? "the edited heading got a new id" : null);
-    put(".guidelines/a.md", MOVED);
-
-    const lab = (ix, s) => ix.files[".guidelines/a.md"].nodes.find(n => n.sel === s).label;
-    const o = VP.open(root, second.index), A = ".guidelines/a.md#";
-    ok("VP-09", "before(a, b) follows the new order, and only the nodes that moved or arrived get new labels",
-       !o.before(A + "three", A + "one") || !o.before(A + "new", A + "two") || o.before(A + "two", A + "one")
-         ? "the order is wrong"
-         : lab(first, "one") !== lab(second.index, "one") || lab(first, "two") !== lab(second.index, "two")
-           ? "labels of nodes still in order moved" : second.relabels > 2 ? second.relabels + " labels written for 2 nodes" : null);
-
-    /* the file is renamed: its slices keep their ids by digest */
-    fsx.renameSync(path.join(root, ".guidelines/b.json"), path.join(root, ".guidelines/c.json"));
-    const third = VP.build(root, second.index).index;
-    ok("VP-10", "a slice carried to another file keeps its NodeID",
-       idOf(second.index, ".guidelines/b.json", "/k") !== idOf(third, ".guidelines/c.json", "/k") ? "the object under /k got a new id" : null);
-
-    const r = VP.open(root, third).extract(A + "new");
-    ok("VP-11", "the extraction answers its own address and the offsets where the slice sits",
-       r.vp !== A + "new" || fsx.readFileSync(path.join(root, ".guidelines/a.md"), "utf8").slice(r.start, r.end) !== "# New\nnew\n"
-         ? JSON.stringify(r) : null);
-
-    /* closed coverage: a file the index does not hold, and an index behind its files */
-    fsx.writeFileSync(path.join(root, ".guidelines/.shortcuts/.virtual/index.json"), VP.serialise(third));
-    const clean = VP.check(root);
-    put(".guidelines/d.md", "# D\nd\n");
-    const breaches = VP.check(root);
-    ok("VP-12", "the check holds on a current index, and refuses a file the index does not hold",
-       clean.length ? "breached when current: " + clean.join("; ")
-         : !breaches.some(b => /not in the index/.test(b)) || !breaches.some(b => /behind the files/.test(b)) ? breaches.join("; ") : null);
-    put(".guidelines/e.md", "");
-    ok("VP-13", "an empty file breaks closed coverage",
-       !VP.check(root).some(b => /e\.md.*empty/.test(b)) ? "the empty file passed" : null);
-  } finally {
-    fsx.rmSync(root, { recursive: true, force: true });
-  }
-  return D.length;
-}
-const rVP = await runVirtualPath();
 
 
 
@@ -3524,13 +4214,15 @@ console.log(" Invalid      " + rN + "/" + INVALID.length);
 console.log(" Regressions  " + rR + "/" + REGRESSION.length);
 console.log(" Long blocks  " + rL + "/" + LONG.length);
 console.log(" Templates    " + rT + "/" + TEMPLATES.length);
+console.log(" Inclusion    " + rTI + "/" + INCLUSION.length);
 console.log(" Rules        " + rC + "/" + RULE_CASES.length);
 console.log(" Constraints  " + rK + "/" + CONSTRAINTS.length);
 console.log(" Guard        " + rG + "/" + POSITIVE_WITH_RULES.length);
+console.log(" Placeholder  " + rPH + "/" + (PLACEHOLDER.length + 1));
 console.log(" Composition  " + rX + "/17");
 console.log(" .hgml burn   " + rH + "/15");
-console.log(" fromXML      " + rF + "/23");
-console.log(" reference    " + rD + "/11");
+console.log(" fromXML      " + rF + "/26");
+console.log(" reference    " + rD + "/12");
 console.log(" round trip   " + rRT + "/7");
 console.log(" ast schema   " + rSC + "/3");
 console.log(" glyph-package" + String(rPK).padStart(4) + "/6");
@@ -3539,20 +4231,22 @@ console.log(" snapshot     " + rSN + "/4");
 console.log(" app          " + String(rAP).padStart(4) + "/3");
 console.log(" cli          " + String(rCL).padStart(4) + "/5");
 console.log(" diag wording " + String(rDG).padStart(4) + "/3");
-console.log(" spellings    " + String(rSP).padStart(4) + "/3");
+console.log(" spellings    " + String(rSP).padStart(4) + "/4");
 console.log(" raw fence    " + String(rRW).padStart(4) + "/5");
-console.log(" literal role " + String(rRO).padStart(4) + "/5");
-console.log(" bindings     " + String(rBD).padStart(4) + "/6");
+console.log(" literal role " + String(rRO).padStart(4) + "/9");
+console.log(" bindings     " + String(rBD).padStart(4) + "/10");
 console.log(" suggest      " + String(rSG).padStart(4) + "/4");
 console.log(" aspas        " + String(rQT).padStart(4) + "/3");
 console.log(" param template" + String(rTP).padStart(4) + "/4");
-console.log(" imperativo   " + String(rIM).padStart(4) + "/5");
+console.log(" imperativo   " + String(rIM).padStart(4) + "/10");
+console.log(" mode words   " + String(rMO).padStart(4) + "/10");
+console.log(" elo de cadeia" + String(rLK).padStart(4) + "/14");
+console.log(" dois-pontos  " + String(rCO).padStart(4) + "/7");
 console.log(" bundle ORD   " + String(rZP).padStart(4) + "/16");
 console.log(" global store " + rGS + "/3");
 console.log(" context      " + rCX + "/3");
 console.log(" coverage     " + String(rOC).padStart(4) + "/" + ORACLE_COVERAGE.length);
-console.log(" engine relay " + String(rRL).padStart(4) + "/15");
-console.log(" virtual path " + String(rVP).padStart(4) + "/14");
+console.log(" engine relay " + String(rRL).padStart(4) + "/16");
 console.log("=================================================");
 
 if (EXPORT_ORACLE) {
@@ -3700,12 +4394,15 @@ if (EXPORT_ORACLE) {
   const b = (args, env) => ({ args: args, env: env === undefined ? E : env });
   kase({ files: { "src.pgml": "[in[tgt`acentuação e c-cedilha: fichação`]]", "ORD-2026-08-30-01.pgml": "[nt'datada']" } },
     [b(["--file", "src.pgml", "--bundle"]), b(["--file", "src.pgml", "--bundle", "--out", "."]),
-     b(["[mand'x'][opt'x']", "--bundle"]), b(["--bundle", "--out", "./", "--file", "src.pgml"])]);
+     b(["[mand'x'][opt'x']", "--bundle"]), b(["--bundle", "--out", "./", "--file", "src.pgml"]),
+     b(["--file", "src.pgml", "--bundle", "--zip"])]);
   kase({ dirs: ["out", "EMS-001/ORD-2026-08-30-01", "EMS-002"],
          files: { "src.pgml": "[crit'the parser'][logic-risk[x = 2][/logic]", "EMS-001/EMS-001.pgml": "[nt'a spec']", "EMS-001/ORD-0007.pgml": "[nt'draft']" } },
     [b(["--file", "src.pgml", "--bundle", "--out", "EMS-001"]), b(["--file", "src.pgml", "--bundle", "--out", "EMS-001/"]),
      b(["--file", "src.pgml", "--bundle", "--out", "EMS-002"]), b(["[crit'x']", "--bundle", "--out", "out"]),
-     b(["--file", "src.pgml", "--bundle", "--out", "out/../EMS-001"])]);
+     b(["--file", "src.pgml", "--bundle", "--out", "out/../EMS-001"]),
+     /* EMS-002 ORD-0009: the zip of a series ORD, beside its folder, only when asked */
+     b(["--file", "src.pgml", "--bundle", "--out", "EMS-002", "--zip"]), b(["--zip", "--file", "src.pgml", "--bundle", "--out", "EMS-002"])]);
   kase({ files: { "src.pgml": "[crit'x']" } }, [b(["--file", "src.pgml", "--bundle", "--out", "nowhere"])], true);
   fsx.rmSync(root, { recursive: true, force: true });
   fsx.writeFileSync(path.join(mods, "cli.json"), JSON.stringify({ engine: G.VERSION, cases: cases }, null, 1) + "\n");

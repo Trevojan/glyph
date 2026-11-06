@@ -1,0 +1,84 @@
+<glyph-package engine="3.5.8.06">
+  <schema/>
+  <block once="true">
+    <block binds="local-session-ems-001">
+      <user-input>local-session-ems-001</user-input>
+      <context>
+        <user-input>the Regent resumes the EMS-001 queue on the local machine, from ORD-0011 open</user-input>
+        <user-input>a clone of github.com/Trevojan/glyph, branch claude/laughing-archimedes-3pf0wa, at the commit that carries this handoff</user-input>
+        <user-input>ORD-0001 to ORD-0010 closed, ADR B signed, the virtual paths first on the plan</user-input>
+      </context>
+      <skill imperative="true" binds="glyph-markup">
+        <user-input>glyph-markup</user-input>
+        <instruction>
+          <user-input>hear this order, ground before building, bank every step before the next, and stop at the gates of the Regent</user-input>
+        </instruction>
+      </skill>
+      <section binds="species">
+        <user-input>species</user-input>
+        <define-symbol>
+          <user-input>bank</user-input>
+          <user-input>a commit that passes npm run check and npm run check:rust, pushed, with the return updated in the same commit</user-input>
+        </define-symbol>
+        <define-symbol>
+          <user-input>the return</user-input>
+          <user-input>.guidelines/.orders/EMS-001/RETURN.md; its log at the foot names every commit and its checks</user-input>
+        </define-symbol>
+        <reference>
+          <user-input>the rules of HANDOFF-2026-09-24.pgml hold: its sections limits, queue and gates, word for word</user-input>
+        </reference>
+      </section>
+      <section binds="environment">
+        <user-input>environment</user-input>
+        <instruction>
+          <user-input>node 18 or later, cargo, and a Chrome or Chromium; on Windows the release binary is rust/target/release/glyph-engine.exe</user-input>
+        </instruction>
+        <instruction>
+          <user-input>git fetch origin claude/laughing-archimedes-3pf0wa and check it out; no worktrees</user-input>
+        </instruction>
+      </section>
+      <section binds="ground">
+        <user-input>ground</user-input>
+        <instruction>
+          <user-input>npm run check, then npm run check:rust, which writes the oracle to rust/target/oracle and oracle-modules; both green before anything is touched</user-input>
+        </instruction>
+        <instruction>
+          <user-input>cargo build --release --manifest-path rust/Cargo.toml -p glyph-cli, which writes glyph and glyph-engine</user-input>
+        </instruction>
+        <instruction>
+          <user-input>read .guidelines/.shortcuts/README.md, then the log and the section Open, and why of the return</user-input>
+        </instruction>
+      </section>
+      <section binds="queue">
+        <user-input>queue</user-input>
+        <instruction>
+          <user-input>ORD-0011, the app on the Rust engine: its transport is scripts/glyph-transport.js, behind engine=relay; 106 of the 114 sources give the same bytes through Rust in every panel at 25cc924</user-input>
+        </instruction>
+        <instruction>
+          <user-input>prove the eight L-cases: set CHROME to the browser and run node rust/crates/glyph-cli/examples/app_on_rust.mjs with ONLY set to ^L- and a long timeout; L-01 makes about 8 000 synchronous classify requests</user-input>
+        </instruction>
+        <instruction>
+          <user-input>when all 114 give the same bytes and the JS path holds, close ORD-0011: rows in the track of the spec, EMS-001/README.md and .shortcuts, with commit and digest; bank</user-input>
+        </instruction>
+        <note>
+          <user-input>if an L-case differs, the difference goes to the return first; a JS defect is never fixed inside an ORD</user-input>
+        </note>
+        <instruction>
+          <user-input>then ORD-0012, the Rust CLI: flag parity with scripts/glyph-cli.js, from its section of the spec, one ORD open at a time</user-input>
+        </instruction>
+      </section>
+      <section binds="gates">
+        <user-input>gates</user-input>
+        <finally>
+          <user-input>the queue at ORD-0013: the installer needs a clean Windows machine and the Regent, and under ADR B it carries node or a second protocol</user-input>
+        </finally>
+        <finally>
+          <user-input>the queue at any closed question of the return the next ORD depends on, questions 9 to 14 among them</user-input>
+        </finally>
+        <note>
+          <user-input>the virtual paths, .plan section 0, open as an ORD only when the Regent calls them; the three measurements over the git history come before any code</user-input>
+        </note>
+      </section>
+    </block>
+  </block>
+</glyph-package>

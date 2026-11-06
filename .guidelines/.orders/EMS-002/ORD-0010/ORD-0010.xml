@@ -1,0 +1,39 @@
+<glyph-package engine="3.6.9.07">
+  <schema/>
+  <block once="true">
+    <block binds="ORD-0010-classify">
+      <user-input>ORD-0010-classify</user-input>
+      <context>
+        <user-input>the spec of EMS-002</user-input>
+        <user-input>.guidelines/.orders/EMS-002/EMS-002.pgml</user-input>
+      </context>
+      <target>
+        <user-input>classify answered by the page from the tables it loads, question 10 of the EMS-001 return, answered c</user-input>
+      </target>
+      <context>
+        <user-input>behind engine=relay the transport swaps the twelve calls, one request each, and a keystroke on L-01 makes 8 005 of them, one classify a command token</user-input>
+      </context>
+      <constraint>
+        <user-input>the transport stops swapping classify, and the page answers it with the JS core and the tables glyph-data.js loads; the other eleven stay one request each</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the browser that measures it is an instrument outside the repository, since the JS side has no dependency; the suite holds what node can hold, the swap set</user-input>
+      </constraint>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the requests</user-input>
+        <user-input>behind engine=relay, every call but classify is one request, and classify is answered by the page; L-01 stops making 8 000 trips</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the panels</user-input>
+        <user-input>the declared sources give the same bytes in every panel through the relay and through the JS</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the swap</user-input>
+        <user-input>the suite holds the calls the transport swaps to the eleven, seen failing before it counts</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>

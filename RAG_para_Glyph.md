@@ -79,7 +79,7 @@ Cada etapa toca o **domínio estruturado**, não redes neurais ou heurísticas:
   "session_templates": {
     "CODEFIX": {
       "defined_at": "2026-08-26T10:15:00Z",
-      "body": "[RQ][CR[WN[PH: target]]][RW][FM][IM]",
+      "body": "[RQ][CR[WN[PH'target']]][RW][FM][IM]",
       "invocations": 3,
       "last_called": "2026-08-26T14:25:00Z"
     }
@@ -271,13 +271,13 @@ generate: "Instruction é wrapper ou comando aqui? (Conflito C-12)"
 
 **Primeira invocação:**
 ```
-[--CODEFIX: `login handler`]
+[--CODEFIX`login handler`]
 learn: registra invocação, padrão de argumentação
 ```
 
 **Décima invocação:**
 ```
-[--CODEFIX: `api/pedidos`]
+[--CODEFIX`api/pedidos`]
 domain check: template existe, já invocado 9x
 retrieve: histórico mostra sempre um argumento
 augment: slot esperado = "alvo do refactor"

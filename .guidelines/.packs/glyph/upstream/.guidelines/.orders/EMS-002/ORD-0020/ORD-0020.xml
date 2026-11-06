@@ -1,0 +1,37 @@
+<glyph-package engine="3.6.9.07">
+  <schema/>
+  <block once="true">
+    <block binds="ORD-0020-o4-quotes">
+      <user-input>ORD-0020-o4-quotes</user-input>
+      <context>
+        <user-input>the spec of EMS-002</user-input>
+        <user-input>.guidelines/.orders/EMS-002/EMS-002.pgml</user-input>
+      </context>
+      <target>
+        <user-input>the second of the three residuals of O4, in the Rust only, answered on 2026-10-25: inside a literal only the quote that opened it closes it, a line break as well, so the apostrophe reads as the backtick does; an ORD of the batch the version moves once for</user-input>
+      </target>
+      <context>
+        <user-input>the lexer of both engines ends an apostrophe literal at a line break and a backtick one does not; the grammar, glyph-grammar.ebnf, already gives both the same body, every character but the opening quote; the cost the Regent accepted is an apostrophe left open running past the line, to the next quote or bracket</user-input>
+      </context>
+      <context>
+        <user-input>measured at 74602f9: no declared source and no probe of parse, XML or burn reaches it; of the 1698 sources the tokenizer oracle holds, one does, an apostrophe literal holding a line break; the JS tokens of every source but four equal those of the same source with the two quotes swapped and swapped back, and the four are backtick sources this residual does not touch</user-input>
+      </context>
+      <constraint>
+        <user-input>the known difference is named in the testkit, beside the first, as each source it reaches with the tokens the decision gives it: the JS tokens of the same source written with backticks, with the form and the closing named for the apostrophe; a source it reaches that is not named fails</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the JS is not changed, and no hash of the snapshot moves</user-input>
+      </constraint>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the quote</user-input>
+        <user-input>the Rust lexer ends an apostrophe literal at its own quote or at the bracket, never at a line break; a direct test holds the tokens the decision names, seen failing before it counts</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the known difference</user-input>
+        <user-input>the tokenizer oracle test takes the named tokens for each named source, asserts the JS answer differs there, and holds every other source byte for byte</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>

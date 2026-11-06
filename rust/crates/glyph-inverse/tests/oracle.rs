@@ -13,10 +13,11 @@ use glyph_envelope::{to_ast, AstOpts};
 use glyph_inverse::{from_ast, from_xml, Back, STACK_DEPTH};
 use glyph_parse::{parse, Opts};
 use glyph_stores::Context;
-use glyph_util::json::Json;
+use glyph_json::Json;
 use glyph_util::tree::Thrown;
 use glyph_xml::to_xml;
 use oracle::{module, Must};
+use std::sync::Arc;
 
 /// The stores a recorded call named; `None` for a store of the suite's own.
 fn context(flags: &Json) -> Option<Context> {
@@ -25,15 +26,15 @@ fn context(flags: &Json) -> Option<Context> {
     if [pick("templates"), pick("rules"), pick("expansions")].contains(&Some("other")) {
         return None;
     }
-    Some(Context::new(
-        (pick("templates") == Some("repo")).then(|| repo.templates.clone()),
+    Some(Context::shared(
+        (pick("templates") == Some("repo")).then(|| Arc::clone(&repo.templates)),
         if pick("rules") == Some("repo") { repo.rules.clone() } else { None },
         if pick("expansions") == Some("repo") { repo.expansions.clone() } else { None },
     ))
 }
 fn opts<'a>(ctx: &'a Context, flags: &Json) -> Opts<'a> {
     Opts { ctx, session: flags.get("session") != Some(&Json::Bool(false)), valency: flags.get("valency") != Some(&Json::Bool(false)),
-           en: false, expanding: Vec::new() }
+           en: false, expanding: Vec::new(), registered: glyph_stores::Registered::none(), inherited: &[] }
 }
 fn back_json(b: &Back) -> (Json, Json) {
     (Json::Str(b.src.clone()), Json::Arr(b.diag.iter().map(|d| Json::Obj(vec![
@@ -96,7 +97,7 @@ fn every_round_trip_the_suite_runs_equals_the_js() {
                 };
                 let o = opts(&ctx, flags);
                 let out = to_hgml(t.s("src"), &BurnOpts { parse: &o, keep_text: false }).unwrap_or_else(|e| panic!("#{n}: {e:?}"));
-                assert_eq!(out, t.s("out"), "#{n}: the burn");
+                assert_eq!(oracle::known::semicolons(&out), t.s("out"), "#{n}: the burn");
                 let fix = match parse(&out, &o) {
                     Ok(p) => Json::Arr(p.gaps.iter().filter(|g| g.sev == "fix").map(|g| Json::Str(g.code.clone())).collect()),
                     Err(Thrown(m)) => Json::Obj(vec![("thrown".into(), Json::Str(m))]),

@@ -1,0 +1,54 @@
+[block
+  'ORD-0026-placeholder'
+  [ctx
+    'the spec of EMS-002'
+    '.guidelines/.orders/EMS-002/EMS-002.pgml'
+  [/ctx]
+  [ctx
+    'the map of the inclusion'
+    '.guidelines/.orders/INTAKE-INCLUSION.md'
+  [/ctx]
+  [tgt
+    'a command held by a placeholder reaches the XML, by the inclusion the Regent decided on 2026-10-25, answered with the placeholder wrapper; an ORD of the batch the version moves once for'
+  [/tgt]
+  [ctx
+    'measured at b827782: a command nested in a placeholder, its question or its name before it, stays in the AST and leaves the XML, because the placeholder branch writes the needs line and emits none of its children; a second bare tag under a placeholder becomes a second hole name, and only the first reaches the XML'
+  [/ctx]
+  [ctx
+    'the rules that include it: GLOSSARY section 0.3 normative, what is nested inside an item is the standard or aspect that item works against; XML_REFERENCE names placeholder the element of PH; PACKAGE_TARGET G3, needs keeps its shape; the dash after a placeholder binds the name, singular, and after it the dash is the chain operator again'
+  [/ctx]
+  [cnst
+    'a placeholder holding only its name and its question keeps the bare needs line; one holding more becomes the placeholder element, the needs where the question was written, then the rest in source order; a filled template hole keeps what it held'
+  [/cnst]
+  [cnst
+    'only the first bare tag names the hole, later ones are chain links; the way back reads a needs inside a placeholder as source'
+  [/cnst]
+  [cnst
+    'no declared source reaches it, so no hash of the snapshot moves unless a new code needs its declared source; the Rust is ported byte for byte, held by new parse probes'
+  [/cnst]
+  [cmp
+    'the placeholder'
+    'a command held by a placeholder reaches the XML in the placeholder element, a second bare tag is a chain link, and both ways back rebuild the source; each seen failing before it counts, and the Rust answers byte for byte'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+[/block]

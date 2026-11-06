@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(node scripts/test-corpus.js)",
+      "Bash(node scripts/dag.js)",
+      "Bash(node scripts/dag.js *)",
+      "Bash(node scripts/build-templates.js)",
+      "Bash(node scripts/glyph-parser.js *)",
+      "Bash(node scripts/read-expansions.js *)",
+      "Bash(node scripts/serve-dev.js)",
+      "Bash(node --check *)",
+      "Bash(git status *)",
+      "Bash(git log *)",
+      "Bash(git diff *)",
+      "Bash(git show *)"
+    ]
+  }
+}

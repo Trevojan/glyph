@@ -1,0 +1,9 @@
+[block'ORD-0015-ref'
+  [ctx'the spec of EMS-002','.guidelines/.orders/EMS-002/EMS-002.pgml']
+  [tgt'the reference syntax, answered on 2026-09-27: a reference to a bound name is written with REF and a quoted name; outside the logic fence, a name that does not resolve raises needs var; the second ORD of the batch the version moves once for']
+  [ctx'a command binds when it holds a name-shaped literal and a nested command, the scope is the whole glyph-package, and a literal whose text is a bound name carries ref; a REF whose name nothing binds emits the literal and says nothing, so an unresolved reference reads as prose; inside the logic fence a name used and never defined already raises UndefinedVariable and emits needs var']
+  [ctx'measured at 2358040: no declared source writes REF, so no hash of the snapshot moves; the oracle modules move by the probes this ORD adds']
+  [cnst'a name is what a binding takes, the shape BIND_NAME; a REF literal that is not name-shaped stays prose, and the literal is kept beside the needs it raises']
+  [cnst'the scope is the whole glyph-package: a reference resolves to a binding written later as readily as to one written earlier']
+  [val'the reference','a name-shaped literal under REF that no command of the document binds raises an ask, UnboundReference, and emits needs var beside the literal; a bound name keeps its ref, earlier or later; prose under REF raises nothing; the way back drops the needs; each seen failing before it counts, and the Rust answers byte for byte']
+];

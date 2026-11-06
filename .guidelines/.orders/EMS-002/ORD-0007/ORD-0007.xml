@@ -1,0 +1,42 @@
+<glyph-package engine="3.6.9.07">
+  <schema/>
+  <block once="true">
+    <block binds="ORD-0007-json">
+      <user-input>ORD-0007-json</user-input>
+      <context>
+        <user-input>the spec of EMS-002</user-input>
+        <user-input>.guidelines/.orders/EMS-002/EMS-002.pgml</user-input>
+      </context>
+      <target>
+        <user-input>JSON in a crate of its own under every other, question 4 of the EMS-001 return, answered b</user-input>
+      </target>
+      <context>
+        <user-input>JSON sits in glyph-util, which vocabulary.js and stores.js do not import, so glyph-stores keeps a Value of its own with the same six variants, and the envelope converts one into the other</user-input>
+      </context>
+      <constraint>
+        <user-input>the oracle of glyph-json is the platform, JSON.parse and JSON.stringify as the JS engine has them, and its tests are the ones glyph-util held for it</user-input>
+      </constraint>
+      <constraint>
+        <user-input>a floor crate depends on no crate of the workspace, and every crate may depend on it</user-input>
+      </constraint>
+      <constraint>
+        <user-input>no projection moves: a refactor of the Rust under the same oracle</user-input>
+      </constraint>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the crate</user-input>
+        <user-input>glyph-json holds what glyph_util::json held and replaces the Value of glyph-stores, one JSON type for the workspace</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the graph</user-input>
+        <user-input>crate-graph.js names glyph-json with its oracle, as the floor every crate may reach and that reaches none, seen failing before it counts</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the oracle</user-input>
+        <user-input>every crate answers the oracle as before, byte for byte</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>

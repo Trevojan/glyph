@@ -1,0 +1,312 @@
+{
+  "type": "GlyphAST",
+  "schema": 2,
+  "version": "3.5.8.06",
+  "source": {
+    "length": 576,
+    "checksum": "41e35158f7ae9000",
+    "encoding": "utf-8",
+    "newline": "lf",
+    "uri": null
+  },
+  "stores": {
+    "templates": "d127beace2f86000",
+    "rules": "9778b68073854800",
+    "expansions": "2549caa003b0a400"
+  },
+  "projection": "full",
+  "segments": [
+    {
+      "type": "Segment",
+      "mood": [],
+      "isReturn": false,
+      "continues": false,
+      "breaks": 0,
+      "autoClosedCount": 0,
+      "body": [
+        {
+          "type": "Command",
+          "raw": "block",
+          "canonical": "BLOCK",
+          "tier": "struct",
+          "gloss": "Block",
+          "element": "block",
+          "isAlias": false,
+          "chainElement": false,
+          "origin": "root",
+          "slotName": false,
+          "editorial": false,
+          "name": null,
+          "depth": 0,
+          "autoClosed": false,
+          "suggestion": null,
+          "emotions": [],
+          "species": "atom",
+          "compositionDepth": 0,
+          "at": {
+            "s": 0,
+            "e": 6
+          },
+          "body": [
+            {
+              "type": "Literal",
+              "value": "ORD-0010-protocol",
+              "form": "quote",
+              "slot": null,
+              "role": "operand",
+              "at": {
+                "s": 6,
+                "e": 25
+              }
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 28,
+                "e": 32
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the spec of EMS-001",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 32,
+                    "e": 53
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": ".guidelines/.orders/EMS-001/EMS-001.pgml",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 54,
+                    "e": 96
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "onlyif",
+              "canonical": "ONLYIF",
+              "tier": "instr",
+              "gloss": "Only If",
+              "element": "only-if",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 100,
+                "e": 107
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "ORD-0008 closed",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 107,
+                    "e": 124
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "tgt",
+              "canonical": "TGT",
+              "tier": "instr",
+              "gloss": "Target",
+              "element": "target",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 128,
+                "e": 132
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the engine as a process, and the protocol chosen by measurement",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 132,
+                    "e": 197
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "nt",
+              "canonical": "NT",
+              "tier": "instr",
+              "gloss": "Note",
+              "element": "note",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 201,
+                "e": 204
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "a page cannot open stdio: the browser reaches the engine by HTTP, either served by the engine itself or relayed to its stdio by scripts/serve-dev.js",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 204,
+                    "e": 354
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 358,
+                "e": 362
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "measure both over the 114 sources: time per call, lines written, crates added",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 362,
+                    "e": 441
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "val",
+              "canonical": "VAL",
+              "tier": "instr",
+              "gloss": "Validate",
+              "element": "validate",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "composite",
+              "compositionDepth": 5,
+              "at": {
+                "s": 445,
+                "e": 449
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the protocol",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 449,
+                    "e": 463
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": "the chosen protocol answers the twelve calls glyph-ui.js makes, and the choice is an ADR the Regent signs",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 464,
+                    "e": 571
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "diagnostics": []
+}

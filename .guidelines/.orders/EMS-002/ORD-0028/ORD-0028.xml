@@ -1,0 +1,42 @@
+<glyph-package engine="3.6.9.07">
+  <schema/>
+  <block once="true">
+    <block binds="ORD-0028-template-fills">
+      <user-input>ORD-0028-template-fills</user-input>
+      <context>
+        <user-input>the spec of EMS-002</user-input>
+        <user-input>.guidelines/.orders/EMS-002/EMS-002.pgml</user-input>
+      </context>
+      <context>
+        <user-input>the map of the inclusion</user-input>
+        <user-input>.guidelines/.orders/INTAKE-INCLUSION.md</user-input>
+      </context>
+      <target>
+        <user-input>what a template call carries never vanishes, by the inclusion the Regent decided on 2026-10-25: the commands inside a named fill, a named fill that names no parameter, and a template defined in the source and called in it; an ORD of the batch the version moves once for</user-input>
+      </target>
+      <context>
+        <user-input>measured at b827782: collectFills keeps only the first literal of a named fill and the expansion replaces the call, so a command inside the fill is lost in the AST too; a named fill that names no declared parameter is absent whole; and a template defined in the source is not expanded by a call in the same source, only the store expands, with UndefinedTemplate suppressed</user-input>
+      </context>
+      <context>
+        <user-input>the Regent answered: slot on any element, so PACKAGE_TARGET section 4.4 widens and a carried command carries the slot of its fill; the source definition overrides the store, a second definition is TemplateDefinedTwice, and bindings inside an uncalled definition stop counting</user-input>
+      </context>
+      <constraint>
+        <user-input>a command inside a named fill travels right after the bound value, carrying the slot; inside a placeholder the order is the bound value, the carried content, then what the hole held, so the way back reads it as one fill; a hole filled twice binds the first value</user-input>
+      </constraint>
+      <constraint>
+        <user-input>a named fill no hole takes lands after the body under its own name with TemplateUnknownParam at fix, the não sabe of the decision; a literal past every parameter lands after the body</user-input>
+      </constraint>
+      <constraint>
+        <user-input>definitions written in the source join the registry for the whole package, a call before the definition expands too, and a second definition of a name is TemplateDefinedTwice at fix; the AST keeps schema 2, the slot key optional</user-input>
+      </constraint>
+      <constraint>
+        <user-input>one declared source per new code, by M01, grows the snapshot with no existing hash moved; the Rust is ported byte for byte, held by new parse probes</user-input>
+      </constraint>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the fills</user-input>
+        <user-input>the commands of a fill, an unknown fill and a source definition reach every projection and both ways back; each seen failing before it counts, and the Rust answers byte for byte</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>

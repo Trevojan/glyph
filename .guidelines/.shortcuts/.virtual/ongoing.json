@@ -1,7 +1,7 @@
 {
   "_about": "Registro do trabalho dos agentes: o primeiro relance ao voltar a este repositório. Aponta, nunca copia. O modelo é o do toolkit Regency, library/virtualpath.md §3; o detalhe de cada item mora no source.",
   "schema": 1,
-  "updated": "2026-11-03",
+  "updated": "2026-11-06",
   "items": [
     {
       "id": "REGENCY-NORM",
@@ -16,10 +16,10 @@
     },
     {
       "id": "EMS-002-SPEC",
-      "title": "a spec da EMS-002: o Glyph 100% em Rust, começando pela opção c da pergunta 11 e pelas tabelas vindas do motor",
+      "title": "a próxima frente da EMS-002: a opção c da pergunta 11 e as tabelas vindas do motor",
       "state": "backlog",
       "source": ".decisions/README.md, 2026-10-21",
-      "next": "redigir quando a ORD-0014 fechar"
+      "next": "a série abriu em 2026-10-23 e o Regente ratificou a abertura; a spec desta frente falta redigir"
     },
     {
       "id": "LADDER-STATUS",
@@ -35,24 +35,10 @@
       "who": "DV",
       "since": "2026-10-21",
       "where": [
-        "branch:rust-port",
-        "order:ORD-0014"
+        "order:EMS-001/ORD-0014",
+        ".guidelines/.orders/EMS-001/ORD-0014/ORD-0014.xml"
       ],
-      "next": "emitir pelo motor, depois a janela: msedge --app num perfil próprio, sem console, o servidor parando quando a janela fecha"
-    },
-    {
-      "id": "VP-1-4",
-      "title": "caminhos virtuais, camadas 1 a 4, em JS na base",
-      "state": "review",
-      "source": ".plan/README.md §0",
-      "who": "DV",
-      "since": "2026-10-16",
-      "where": [
-        "branch:main",
-        "scripts/virtual-path.js",
-        ".guidelines/.shortcuts/.virtual/index.json"
-      ],
-      "next": "o Regente vê as camadas 1 a 4; o .history/study.md vazio e o seletor de .pgml esperam por ele"
+      "next": "emitida em 2026-10-22; falta a janela: msedge --app num perfil próprio, sem console, o servidor parando quando a janela fecha"
     },
     {
       "id": "PLAN-1",
@@ -128,21 +114,52 @@
       "next": "o layout foi ratificado em 2026-11-02; o Regente vê a extensão no Extension Development Host e põe em .scope/generics/ a production.pgml da versão corrente que a sessão escreveu"
     },
     {
-      "id": "REGENCY-3.0",
+      "id": "EMS-002-INCLUSION",
+      "title": "um comando conhecido nunca some: as 14 posições medidas",
+      "state": "review",
+      "who": "DV",
+      "since": "2026-10-25",
+      "source": ".guidelines/.decisions/README.md#2026-10-25",
+      "next": "as ORDs 0022 a 0031 construídas; as três leituras confirmadas pelo Regente em 2026-10-31",
+      "where": [
+        "order:EMS-002/ORD-0031"
+      ]
+    },
+    {
+      "id": "EMS-002-MOOD-TEMPLATE",
+      "title": "um humor dentro de um template, só no Rust",
+      "state": "review",
+      "who": "DV",
+      "since": "2026-10-25",
+      "source": ".guidelines/.decisions/README.md#2026-10-25",
+      "where": [
+        "order:EMS-002/ORD-0023"
+      ],
+      "next": "construída na ORD-0023"
+    },
+    {
+      "id": "VERSION-BATCH",
+      "title": "a versão se move uma vez quando o lote das que movem o emitido fecha",
+      "state": "review",
+      "who": "DV",
+      "since": "2026-10-25",
+      "source": ".guidelines/.decisions/README.md#2026-10-25",
+      "next": "4.7.10.08, o lote fechado",
+      "where": [
+        "CHANGELOG.md"
+      ]
+    },
+    {
+      "id": "REGENCY-UPDATE-3.0",
       "title": "regency update unstamped -> 3.0",
       "state": "review",
-      "source": ".decisions/README.md, 2026-11-02",
       "who": "DV",
-      "since": "2026-11-02",
+      "since": "2026-10-30",
       "where": [
-        "plan:UPD-74c1741d",
-        ".shortcuts/regency.json",
-        ".orders/README.md",
-        ".shortcuts/.virtual/README.md",
-        "seis .template ao lado dos README de .changelog, .constraints, .decisions, .history, .plan e .sources",
-        "fingerprints.json importado para o index.sqlite e apagado"
+        ".guidelines/.shortcuts/regency.json",
+        ".guidelines/.constraints/README.md"
       ],
-      "next": "mesclar à mão os seis .template, e ajustar o .orders/README.md ao esquema de EMS e NEM deste projeto"
+      "next": "plano UPD-74c1741d aplicado; os seis .template ficam ao lado dos READMEs editados, como o regency os guarda; só o .constraints trazia o que faltava (O mais simples suficiente), fundido"
     }
   ]
 }

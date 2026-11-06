@@ -1,0 +1,57 @@
+[block
+  'ORD-0011-app-on-rust'
+  [ctx
+    'the spec of EMS-001'
+    '.guidelines/.orders/EMS-001/EMS-001.pgml'
+  [/ctx]
+  [onlyif
+    'ORD-0009 closed'
+    'ORD-0010 closed'
+  [/onlyif]
+  [tgt
+    'the browser app talks to the Rust engine behind one switch, and glyph-ui.js changes only at its transport'
+  [/tgt]
+  [cnst
+    'the protocol is ADR B: the page posts one request line to /engine on its own origin, and serve-dev.js relays it to glyph-engine with --engine rust, or to glyph-protocol.js'
+  [/cnst]
+  [cnst
+    'the transport is a Core of the same shape as GlyphCore: the twelve calls go through /engine, and the tables, esc, xesc and walk stay the JS core'
+  [/cnst]
+  [nt
+    'run is synchronous: the transport asks with a synchronous request, the one reading that leaves glyph-ui.js untouched; question 9 of the return stays open for the Regent'
+  [/nt]
+  [nt
+    'parse cannot send the live tree: the transport rebuilds segments from the full envelope, and buildXml and serializeAST ask toXML and toAST of the source the segments came from'
+  [/nt]
+  [nt
+    'the engine answers with the repository stores; the templates a page merges stay on the JS path, as question 11 of the return reads it'
+  [/nt]
+  [ins
+    'the switch is one query parameter of the page, engine=relay; without it the page runs on the JS core as it does today'
+  [/ins]
+  [cmp
+    'the app on the Rust engine'
+    'the app drives the 114 sources through Rust with the same bytes as through JS, and the JS path still works'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+[/block]

@@ -35,19 +35,20 @@ npm run check:rust
 ```
 
 O primeiro roda os dois `--check` de geração, `check-globals`, o DAG, os grafos
-de costura, de crates e de links, a escada, a suíte e o teste da extensão VS Code
-([`vscode-extension/`](vscode-extension/README.md)); o segundo escreve o oráculo no
-commit sob teste e roda `cargo test` em `rust/`. **Um passo por commit, verde em
-cada um.**
+de costura, de crates e de links, a escada, o índice dos caminhos virtuais, a
+suíte e o teste da extensão VS Code ([`vscode-extension/`](vscode-extension/README.md));
+o segundo mede e gradua cada crate externa, escreve o oráculo no commit sob teste
+e roda `cargo test` em `rust/`. Os dois pedem `cargo`. **Um passo por commit, verde em cada um.**
+
+Editou um arquivo de `.guidelines/`, o `README.md` ou este? Rode
+`npm run vpath -- build`: o índice em `.guidelines/.shortcuts/.virtual/` cobre
+todos eles, e o `check` recusa o que mudou sem ele. Uma fatia se lê com
+`npm run vpath -- resolve 'arquivo#seletor' --text`, ou pelo `NodeID` do nó.
 
 Editou `.guidelines/rules.json`, `templates.json`, `expansions.txt` ou
 `GLOSSARY.md`? Rode `node scripts/build-templates.js` antes de verificar: essas
 são as fontes, e `scripts/glyph-data.js` e `.guidelines/expansions.json` são as
 cópias que o motor carrega.
-
-Editou qualquer arquivo de `.guidelines/`? Rode `node scripts/virtual-path.js`
-antes de verificar. Ele reescreve `.shortcuts/.virtual/index.json`, o índice dos
-caminhos virtuais, e mantém o `NodeID` de cada fatia que continua lá.
 
 ## Duas restrições que pegam todo agente novo
 

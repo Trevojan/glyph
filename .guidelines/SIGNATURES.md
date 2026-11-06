@@ -101,6 +101,10 @@ information, it is broken structure.
 [section'validation',[crit],[ask]]
 ```
 
+The name is the `name` of `<section>` and `<block>` (`XML_REFERENCE.md` §3),
+and the same first literal names a `[logic]` fence: `[logic'calc']…[/logic]`
+is `<logic name="calc">`. No other command takes a name.
+
 ## 6. Polarity and modality
 
 `[pos]` `[ngt]` `[mand]` `[opt]` act as prefixes modifying what follows. Zero
@@ -109,6 +113,10 @@ negates all three.
 
 - `[pos[A]]` is equivalent to `[A]`; `[ngt[A]]` is the logical negation of `[A]`.
 - `[mand[A]]` makes `A` mandatory; `[opt[A]]` makes it optional.
+- The mode words scope what they hold the same way: `[off'x']` reads its
+  operand with interpretation off, `[on'x']` with it on. `<mode-off>` and
+  `<mode-on>` carry the operand; the switch is the bare `[off]` … `[on]`
+  pair, which makes a region verbatim (ratified 2026-10-31).
 
 Careful with the neighbouring pair, which is **not** polarity: `[dont]` negates
 **doing something** (the action), `[deny]` rejects **what leads to a result**
@@ -124,7 +132,9 @@ survived in `glyph-grammar.ebnf` and was corrected alongside it.
 slots** — each becomes a `<needs>`.
 
 `;;` **also closes**, and additionally marks the break: the `<break/>` lands
-between the block it ends and the next one. Until 2026-09-05 it closed
+between the block it ends and the next one, and in the Rust's burn the line
+`;;` stands between the two blocks where `;` writes a blank line — the JS
+writes the blank line for both until it leaves (O4, 2026-10-25). Until 2026-09-05 it closed
 *nothing* and only split the reply, warning with `LinebreakInsideBlock` — and
 measured, that design did not hold: everything fell into one `<block>`, the
 `<break/>` landed *after* it instead of between, the way back rewrote `;;` at

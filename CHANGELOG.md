@@ -37,6 +37,38 @@ All notable changes to Glyph are documented here, most recent first.
 
 ---
 
+## [4.7.10.08] — a known command never vanishes, and the colon retires
+
+The batch of Orders that move the emitted output closes, and the number moves
+once for it (decided 2026-10-25), each digit by the largest change the batch
+holds. `release` moves because the emitted document changed shape and the
+grammar lost and gained constructs: `<sceptic>`, `<placeholder>`,
+`<part n>` and `<if cond>`, `<mood>` in a return segment, `slot` on any element
+a template fill carries, and the colon form `[x: …]` retired as a recogniser
+while `-` before a known name became a chain link wherever it starts a word.
+`frontend` moves because the app's category of structure pieces reads *Frame*
+in both languages and the saved moulds moved to `glyph.moulds.user.v1`, migrated
+once. `rules` moves because the vocabulary and the valency changed:
+`FORMER_ELEMENT`, `OPERAND_ATTR`, the deep-inference alarm, `UnboundReference`,
+the mode words in the loose-word check. `minor` carries the rest. No digit
+resets any other.
+
+### What moved in the emitted documents
+
+- **`engine=`** reads `4.7.10.08`: every XML the engine emits, the five
+  conformance examples and goldens, and every hash of the 118 declared sources
+  move by that attribute and the envelope's version.
+- **EMS-002 ORD-0014 to ORD-0031** — the renames (`<sceptic>`, *template* and
+  *mould*, the category `frame`); the reference syntax `[ref'name']`; the
+  deep-inference alarm; `<part n>` and `<if cond>`; the blend only on one
+  target; the three residuals of O4 in the Rust only; and the inclusion: a
+  known command never vanishes — the mood in a return segment, the mood inside
+  a template (Rust only), the mode words, the chain links, the `<placeholder>`,
+  the template fills and source definitions, the space the way back owes a
+  name, the way back that invents no question, and the colon's retirement.
+  Each Order's register row in `.guidelines/.orders/EMS-002/README.md` names
+  its commit and digests.
+
 ## [3.6.9.07] — the engine answers in Rust too, and the words the project runs on have one home
 
 `frontend` moves because the app can run on the Rust engine: behind `?engine=relay`

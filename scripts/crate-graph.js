@@ -13,7 +13,7 @@
  * `import` lines again rather than trusting a copy of them.
  *
  * Read from the Cargo.toml files as text, so the check needs Node and not a
- * Rust toolchain — `npm run check` stays runnable on a machine without cargo.
+ * Rust toolchain.
  *
  *   1. every JS core module has one crate, and every crate has a known oracle
  *   2. a core crate depends only on the crates its oracle's imports map to
@@ -21,6 +21,9 @@
  *   4. a tool crate depends only on core crates and on the tools it lists
  *   5. every external crate is vendored in rust/vendor/ — the Regent's norm of
  *      2026-09-24: the base that is not worth reinventing enters vendored
+ *   6. a floor crate depends on no crate of the workspace, and every crate may
+ *      depend on it: it stands in for what the JS has from its platform, so no
+ *      JS module imports it (EMS-002 ORD-0007)
  *
  * How deep a tree may be is measured (INTAKE-RUST-LADDER.md §9) and not
  * refused here: the threshold is the Regent's, and a gate is not where a norm
@@ -54,6 +57,11 @@ const CORE = {
   "inverse.js": "glyph-inverse"
 };
 
+/* the floor: what the JS has from its platform, a crate under every other */
+const FLOOR = {
+  "glyph-json": "JSON.parse and JSON.stringify, the platform's"
+};
+
 /* the tools: their JS files reach the core through glyph-parser.js, so any
    core crate is allowed; another tool only when listed here */
 const TOOLS = {
@@ -64,7 +72,8 @@ const TOOLS = {
   "glyph-protocol": { oracle: "scripts/glyph-protocol.js", tools: [] },
   "glyph-cli":    { oracle: "scripts/glyph-cli.js",
                     tools: ["glyph-schema", "glyph-diff", "glyph-trace", "glyph-bundle", "glyph-protocol"] },
-  "glyph-lsp":    { oracle: "— (new capability; M12–M15)", tools: ["glyph-trace"] }
+  "glyph-lsp":    { oracle: "— (new capability; M12–M15)", tools: ["glyph-trace"] },
+  "glyph-vpath":  { oracle: "— (new capability; .plan §0, EMS-002 ORD-0001)", tools: [] }
 };
 
 const errors = [];
@@ -103,13 +112,16 @@ Object.keys(CORE).forEach(f => { oracleOf[CORE[f]] = f; });
 
 coreCrates.forEach(c => { if (!crates[c]) errors.push("missing crate " + c + " (oracle core/" + oracleOf[c] + ")"); });
 Object.keys(TOOLS).forEach(c => { if (!crates[c]) errors.push("missing crate " + c + " (oracle " + TOOLS[c].oracle + ")"); });
+Object.keys(FLOOR).forEach(c => { if (!crates[c]) errors.push("missing crate " + c + " (oracle " + FLOOR[c] + ")"); });
 Object.keys(crates).forEach(c => {
-  if (!oracleOf[c] && !TOOLS[c]) errors.push("crate " + c + " has no oracle — add it to the map in crate-graph.js");
+  if (!oracleOf[c] && !TOOLS[c] && !FLOOR[c]) errors.push("crate " + c + " has no oracle — add it to the map in crate-graph.js");
 });
 
 Object.keys(crates).forEach(c => {
-  const deps = crates[c].local;
-  if (oracleOf[c]) {
+  const deps = crates[c].local.filter(d => !FLOOR[d] || FLOOR[c]);
+  if (FLOOR[c]) {
+    deps.forEach(d => errors.push(c + " → " + d + ": a floor crate depends on no crate of the workspace"));
+  } else if (oracleOf[c]) {
     const allowed = (jsImports[oracleOf[c]] || []).map(f => CORE[f]);
     deps.forEach(d => {
       if (TOOLS[d]) errors.push(c + " → " + d + ": a core crate depends on a tool (the arrow points inward)");
@@ -142,7 +154,7 @@ const pad = (s, n) => { s = String(s); return s.length >= n ? s.slice(0, n - 2) 
 console.log(pad("crate", 19) + pad("oracle", 32) + "depends on");
 console.log("-".repeat(96));
 Object.keys(crates).sort().forEach(c => {
-  const o = oracleOf[c] ? "core/" + oracleOf[c] : (TOOLS[c] ? TOOLS[c].oracle : "?");
+  const o = oracleOf[c] ? "core/" + oracleOf[c] : TOOLS[c] ? TOOLS[c].oracle : FLOOR[c] || "?";
   const ext = crates[c].external.length ? "  + external: " + crates[c].external.join(", ") : "";
   console.log("  " + pad(c, 17) + pad(o, 32) + (crates[c].local.join(" ") || "—") + ext);
 });

@@ -1,0 +1,270 @@
+<glyph>
+  <block once="true">
+    <section>
+      <user-input>root</user-input>
+      <problem>
+        <user-input>the emitted format is being replaced by glyph-package, and the parser discards the operator that the new format exists to record, so chain cannot be emitted faithfully today</user-input>
+      </problem>
+      <problem>
+        <user-input>version 3 commissions no deliverable that produces the specification, while E1 derives the golden from it and E3 validates against it, so both are blocked by a document the order never ordered</user-input>
+      </problem>
+      <problem>
+        <user-input>no deliverable wrote the emitter, while E3 was defined as coming before it and K1 required the five examples to emit: the third occurrence of one decision referenced everywhere and commissioned nowhere</user-input>
+      </problem>
+      <problem>
+        <user-input>the name glyph-package denoted two artefacts at once: the emitted document root in OPERATOR_TARGET and the six layer file bundle in glyph-check, which is the root cause of this release restated on the word the order is named after</user-input>
+      </problem>
+      <context>
+        <user-input>the AST of a-b-c and of a-b,c is byte identical, both children carry chainElement true and neither records which operator produced it</user-input>
+      </context>
+      <context>
+        <user-input>fromXML fabricates a needs element on the return trip of any extend, which is invention rather than loss, and is worse than the three documented non survivors</user-input>
+      </context>
+      <context>
+        <user-input>glyph-check.js line 21 already states in writing that glyph-package has no specification and that its branch is a stub, so the gap was recorded in the code and absent from the order</user-input>
+      </context>
+      <context>
+        <user-input>the Regent resolved the collision: glyph-package is the emitted document root, and the six layer bundle is a different artefact that keeps its own name</user-input>
+      </context>
+    </section>
+  </block>
+  <block once="true">
+    <section>
+      <user-input>trunk</user-input>
+      <instruction>
+        <user-input>step 1, precondition: carry the operator from the lexer to the XML, distinguish extend from comma, and give the divide operator either an implementation or a diagnostic with position</user-input>
+      </instruction>
+      <instruction>
+        <user-input>step 1b, precondition of steps 2 and 4: write the glyph-package specification, the grammar of the emitted document that succeeds the glyph root, against XML_REFERENCE and the decisions already recorded, so the golden and the validator have a normative source that is not an implementation</user-input>
+      </instruction>
+      <instruction>
+        <user-input>step 2: derive the glyph-package golden from the specification and the five examples, never from the current emitter</user-input>
+      </instruction>
+      <instruction>
+        <user-input>step 3: rederive the 173 vectors against the new format, keeping the thirteen buckets</user-input>
+      </instruction>
+      <instruction>
+        <user-input>step 4: glyph-check validates the new format, written before the new emitter</user-input>
+      </instruction>
+      <instruction>
+        <user-input>step 4b: write the glyph-package emitter, after the validator and never before it, because the gate comes before the topology; it is verified against the golden, which exists first and is not derived from it</user-input>
+      </instruction>
+      <instruction>
+        <user-input>step 5: decide fromXML, either a second reader for glyph-package or the inverse is declared dead in writing</user-input>
+      </instruction>
+      <instruction>
+        <user-input>step 6: rewrite XML_REFERENCE against the new emitter, and extend the D-03 and D-04 tests to cover operators, which they do not cover today</user-input>
+      </instruction>
+      <instruction>
+        <user-input>step 7: republish glyph-markup carrying the parser and the five examples, and retire glyph-markup-commons</user-input>
+      </instruction>
+    </section>
+  </block>
+  <block once="true">
+    <section>
+      <user-input>branches</user-input>
+      <reference>
+        <user-input>the five examples, pure glyph plus verified engine output, which are the conformance vectors of the document format and the base of its empty schema element</user-input>
+      </reference>
+      <reference>
+        <user-input>.guidelines/OPERATOR_TARGET.md sections 3.4 and 9, the only two places the emitted root and its invoke and chain children are described</user-input>
+      </reference>
+      <reference>
+        <user-input>.guidelines/XML_REFERENCE.md, the grammar of the document being succeeded, and the only document already tested against the engine</user-input>
+      </reference>
+      <reference>
+        <user-input>.guidelines/BUNDLE_TARGET.md, a reference for method rather than for shape: the mutation test acceptance, the refusal of a self attested gate, and the rule that a layer earns Glyph only when one source projects into two formats that cannot be diffed</user-input>
+      </reference>
+      <reference>
+        <user-input>scripts/glyph-parser.js chainElement and origin, the markers the engine computes and the emitter now serialises as the chain attribute</user-input>
+      </reference>
+      <reference>
+        <user-input>scripts/glyph-check.js, the validator that exists and whose glyph-package branch is a declared stub misnaming the artefact</user-input>
+      </reference>
+      <reference>
+        <user-input>the twenty decisions recorded in the dispatch manifest, which fix most of the format and are normative for the specification</user-input>
+      </reference>
+      <reference>
+        <user-input>the _ORBITAL guidelines flow.pgml and inspection.pgml, the regression corpus</user-input>
+      </reference>
+    </section>
+  </block>
+  <block once="true">
+    <section>
+      <user-input>limits</user-input>
+      <positive>
+        <user-input>in scope: the operator, the glyph-package specification, the format, the golden, the rederived vectors, glyph-check, XML_REFERENCE, the language sweep, and the two skills</user-input>
+      </positive>
+      <restriction>
+        <user-input>out of scope: the six layer bundle and its emitters, the agent file writer, the _ORBITAL runtime, and the retrieval engine of RAG_para_Glyph.md</user-input>
+      </restriction>
+      <restriction>
+        <user-input>the specification governs one emitted document per source; it does not describe a file tree, and it does not design a layer model</user-input>
+      </restriction>
+      <restriction>
+        <user-input>the specification records decisions already taken and closes the forks named in the assumptions; it does not reopen the twenty decisions</user-input>
+      </restriction>
+      <limitation>
+        <user-input>the four guarantees the current XML makes must survive the new format or the format is rejected: editorial force, block segmentation, needs, and exact string fidelity</user-input>
+      </limitation>
+      <limitation>
+        <user-input>source raw is carried only by examples and by teaching models of Glyph itself, never by the general export, because the surface where the XML is pasted does not necessarily read Glyph</user-input>
+      </limitation>
+    </section>
+  </block>
+  <block once="true">
+    <section>
+      <user-input>locks</user-input>
+      <constraint>
+        <user-input>glyph-package is the emitted document root that succeeds glyph, carrying invoke and chain; the six layer bundle of BUNDLE_TARGET is a different artefact and the two never share a name again</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the operator reaches the XML before any chain element is emitted, because a discarded operator cannot be serialised</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the specification comes before the golden and before the validator, because a golden derived from an implementation records what the code does rather than what the format is</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the gate comes before the topology: glyph-check validates the new format before the new emitter is written</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the golden derives from the specification and the five examples, never from an implementation</user-input>
+      </constraint>
+      <constraint>
+        <user-input>a chain is derivable from the chain attribute and sibling order alone, with no re parse and no access to the source, because a format that needs the source to be understood is not a deliverable</user-input>
+      </constraint>
+      <constraint>
+        <user-input>one step closes per commit and npm run check exits zero before the next step opens, so every step is a stopping point and no step hides behind another</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the work lives on branch claude/reload-skills-3059f5 and claude/reload-skills-f5b866 is not advanced in parallel, because a decision carried to one destination and not the others is the root cause this release exists to remove</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the single source of truth is the glyph repository; the other roots declare the version, never the content</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the release is 2.4.5.01, because the emitted format changes and the scheme puts parser work that changes what Glyph is in the release digit</user-input>
+      </constraint>
+      <constraint>
+        <user-input>normative material outranks example material everywhere: every example declares the engine version that produced it and is marked perishable, because model authored examples rot fast</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the schema element of glyph-package stays empty in this release, the five examples serving as its base</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the language sweep rides in this release: prose moves to en-EU, and the four element names spelled criticize, categorize, generalize and scrutinize are decided now, because the vectors, the reference and both skills are already being rewritten and doing it afterwards breaks the same files twice</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the order lives in the guidelines directory, which is deliberately not ignored, and never in scope, which the ignore rules exclude as client material</user-input>
+      </constraint>
+      <never force="editorial">
+        <user-input>no self attested gate, and no format without a consumer that parses it</user-input>
+      </never>
+      <never force="editorial">
+        <user-input>no acceptance criterion is rewritten so the code passes; a wrong criterion produces a new version of the specification</user-input>
+      </never>
+      <never force="editorial">
+        <user-input>no deliverable derives from a document the order does not commission, which is the defect that produced version 4</user-input>
+      </never>
+      <never force="editorial">
+        <user-input>no name denotes two artefacts, which is the defect that produced version 5</user-input>
+      </never>
+    </section>
+  </block>
+  <block once="true">
+    <section>
+      <user-input>fruit</user-input>
+      <target>
+        <user-input>a compiler whose emitted format records the operator it was given, and whose inverse returns what went in</user-input>
+      </target>
+      <ready>
+        <user-input>the glyph-package specification exists as a normative document defining the emitted root, its children, its attributes and its refusals, and no clause of it is derived from the emitter</user-input>
+      </ready>
+      <ready>
+        <user-input>the five examples emit the expected glyph-package, byte for byte</user-input>
+      </ready>
+      <ready>
+        <user-input>extend and comma return distinct from the XML and re emit identically, and no needs element is ever fabricated on the return trip</user-input>
+      </ready>
+      <ready>
+        <user-input>the divide operator either works or fails with a position, and never lands silently in an off element</user-input>
+      </ready>
+      <ready>
+        <user-input>the 173 vectors are rederived against the new format and all thirteen buckets are green</user-input>
+      </ready>
+      <ready>
+        <user-input>glyph-check rejects a malformed glyph-package by clause, and the mutation set breaks ten things in the golden and catches at least nine</user-input>
+      </ready>
+      <ready>
+        <user-input>glyph-check.js no longer calls the bundle a glyph-package, and its comment names the artefact its mode actually validates</user-input>
+      </ready>
+      <ready>
+        <user-input>XML_REFERENCE matches the emitter, and the doc test covers operators rather than bracket to element pairs alone</user-input>
+      </ready>
+      <ready>
+        <user-input>glyph-markup is published carrying the parser and the examples, declaring its version, and commons no longer exists</user-input>
+      </ready>
+      <ready>
+        <user-input>the order itself, re emitted under glyph-package, is registered as the first conformance vector of the new format</user-input>
+      </ready>
+    </section>
+  </block>
+  <block once="true">
+    <section>
+      <user-input>deferred</user-input>
+      <note>
+        <user-input>read of the dmh-protocol repository against 2.4.5.01, recorded so it is not rediscovered; nothing here is commissioned and nothing starts before E7 closes</user-input>
+      </note>
+      <reference>
+        <user-input>.guidelines/DMHP_IMPORTS.md, the analysis and the reasons</user-input>
+      </reference>
+      <add>
+        <user-input>D-01, atomic writes and an all or nothing build: build-templates emits two artefacts and phase two reads what phase one wrote, through a bare writeFileSync, so a crash leaves a state no commit represents</user-input>
+      </add>
+      <add>
+        <user-input>D-02, content addressed identity for conformance vectors, so a pin binds to the digest of its source rather than to the position E-01 and cannot migrate to another case</user-input>
+      </add>
+      <add>
+        <user-input>D-03, a generated and authored split at field level rather than only at file level, because the first human annotation on a generated store has nowhere to live</user-input>
+      </add>
+      <add>
+        <user-input>D-04, separating duplicate from conflicting, because same id with same content is idempotence and only same id with different content is a defect</user-input>
+      </add>
+      <add>
+        <user-input>D-05, an output diff across the corpus before the emitter changes, because glyph-diff compares two sources and nothing compares two emitter versions</user-input>
+      </add>
+      <restriction>
+        <user-input>not taken: the capability index, the level graph, the worker queue and the effort transfer, which solve another problem; and the command parser, which has no position, no code and no repair, where Glyph is strictly ahead</user-input>
+      </restriction>
+    </section>
+  </block>
+  <block once="true">
+    <section>
+      <user-input>assumptions</user-input>
+      <note>
+        <user-input>the question budget of class C2 is spent, so what was not asked is written here as an affirmation with its reason, to be knocked down in one line</user-input>
+      </note>
+      <assumption>
+        <user-input>the specification is written against the emitted document and XML_REFERENCE, and BUNDLE_TARGET is consulted for method rather than for shape, because the six layers describe the other artefact</user-input>
+      </assumption>
+      <assumption>
+        <user-input>glyph-package is one document per source and not a file tree, because the five examples are input to XML pairs and lock T5 makes the golden derive from them</user-input>
+      </assumption>
+      <assumption>
+        <user-input>the glyph-package root replaces the glyph root unconditionally rather than only where a chain or an invoke occurs, because a conditional root forces every consumer to branch on shape before it can read anything, and the empty case is the cheaper degenerate one</user-input>
+      </assumption>
+      <assumption>
+        <user-input>what production level means for _ORBITAL stays outside this order, because BUNDLE_TARGET section 7 says it is ratified by reading and the reading is not an agent task</user-input>
+      </assumption>
+      <assumption>
+        <user-input>f5b866 is abandoned rather than merged back later, because two live branches carrying one release is the root cause of this order restated as a branch</user-input>
+      </assumption>
+      <assumption>
+        <user-input>the language sweep is part of this release: prose moves to en-EU, and the four element names spelled criticize, categorize, generalize and scrutinize are decided now rather than later, because the vectors, the reference and both skills are already being rewritten and doing it afterwards breaks the same files twice</user-input>
+      </assumption>
+      <question>
+        <user-input>knock any of these down in one line and the order becomes version 6</user-input>
+      </question>
+    </section>
+  </block>
+</glyph>

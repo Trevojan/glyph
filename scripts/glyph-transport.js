@@ -1,12 +1,15 @@
 /**
  * glyph-transport.js — the page's engine, behind one switch (EMS-001 ORD-0011).
  *
- * With `engine=relay` in the page's address, the twelve calls glyph-ui.js
- * makes go to `POST /engine` on the page's own origin, which serve-dev.js
- * relays to the Rust `glyph-engine` (`--engine rust`) or to glyph-protocol.js
- * (ADR B). Without it the page runs on the JS core, untouched. Only the calls
- * are swapped, on the same GlyphCore object and before glyph-ui.js reads it;
- * the tables, `esc`, `xesc` and `walk` stay the JS core's.
+ * With `engine=relay` in the page's address, eleven of the twelve calls
+ * glyph-ui.js makes go to `POST /engine` on the page's own origin, one
+ * request each, which serve-dev.js relays to the Rust `glyph-engine`
+ * (`--engine rust`) or to glyph-protocol.js (ADR B). Without it the page runs
+ * on the JS core, untouched. Only the calls are swapped, on the same
+ * GlyphCore object and before glyph-ui.js reads it; the tables, `esc`, `xesc`
+ * and `walk` stay the JS core's, and so does `classify`, which the page
+ * answers from the tables it already loads — one a command token, it was
+ * 8 005 requests a keystroke on L-01 (EMS-002 ORD-0010).
  *
  * `run()` is synchronous, so each call is a synchronous request. `parse`
  * cannot receive the live tree: it answers the full envelope, and the
@@ -53,7 +56,6 @@ export function relayCore() {
       from.set(t, { src: text });
       return t;
     },
-    classify: (name, o) => ask({ call: "classify", name: name, lang: lang(o), ...session(o) }),
     suggest: name => ask({ call: "suggest", name: name }),
     elName: (canonical, tier, gloss) => ask({ call: "elName", canonical: canonical, tier: tier, gloss: gloss }),
     parseLogic: (name, body) => ask({ call: "parseLogic", name: name, body: body }),

@@ -1,0 +1,38 @@
+[block
+  'ORD-0002-util'
+  [ctx
+    'the spec of EMS-001'
+    '.guidelines/.orders/EMS-001/EMS-001.pgml'
+  [/ctx]
+  [onlyif
+    'ORD-0001 closed'
+  [/onlyif]
+  [tgt
+    'glyph-util and glyph-version: esc, xesc, lev, walk and VERSION'
+  [/tgt]
+  [cmp
+    'glyph-util and glyph-version'
+    'each function equals its JS on every string the oracle holds'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+[/block]

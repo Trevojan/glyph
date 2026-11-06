@@ -1,0 +1,61 @@
+<glyph>
+  <block once="true">
+    <template name="germinate" define="true">
+      <iterate>
+        <user-input>over seeds (every aspect of a situation, being it good, bad or neutral)</user-input>
+        <validate>
+          <learn>
+            <improve>
+              <user-input>basic thinking</user-input>
+              <skill>
+                <user-input>tree logic structure</user-input>
+                <target>
+                  <user-input>roots=problem,trunk=effort (anything that takes time and demands action),branches=resources(place, idea, person, method, any kind of),leaves = actions(effective denoted actions to be made to achieve the goal along the branch),fruit = the goal.</user-input>
+                </target>
+              </skill>
+            </improve>
+          </learn>
+          <user-input>logic breaking when it gets too long</user-input>
+        </validate>
+      </iterate>
+    </template>
+  </block>
+  <block once="true" continues="previous">
+    <off>rd</off>
+    <context>
+      <user-input>engine</user-input>
+      <intention>
+        <user-input>foresee semantics and logic problems when the user writes a long glyph query</user-input>
+      </intention>
+    </context>
+  </block>
+  <block once="true">
+    <template name="germinate">
+      <mandatory>
+        <org/>
+        <target>
+          <user-input>algorythm analysis</user-input>
+          <user-input>by problem</user-input>
+          <conclude>
+            <learn>
+              <avoid>
+                <user-input>ambiguity</user-input>
+              </avoid>
+            </learn>
+          </conclude>
+        </target>
+      </mandatory>
+    </template>
+  </block>
+  <block once="true" continues="previous">
+    <propose>
+      <alternative/>
+      <override force="editorial">
+        <user-input>strict business logic</user-input>
+      </override>
+    </propose>
+  </block>
+  <block once="true">
+    <user-expectative expects="target,skeptic,criticize,scrutinize"/>
+  </block>
+</glyph>

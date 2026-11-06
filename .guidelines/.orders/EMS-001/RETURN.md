@@ -53,7 +53,7 @@ Closed questions; an answered one carries the Regent's answer below its options.
    - c. the folder, and the zip only behind a flag
 
    Answered by the Regent on 2026-09-27: **c** — the folder, and the zip only behind a
-   flag. Not built yet: [`.plan`](../../.plan/README.md) §5.
+   flag. Built by [`EMS-002/ORD-0009`](../EMS-002/README.md): `--zip`.
 2. **The oracle holds no character outside the BMP. Does the corpus gain a
    source that does?** The lexer's probes now hold its spans to UTF-16 units;
    `lev` and every later projection are still held only by the corpus.
@@ -63,7 +63,8 @@ Closed questions; an answered one carries the Regent's answer below its options.
    - c. later, when ORD-0004 opens
 
    Answered by the Regent on 2026-09-27: **a** — a declared source with a character
-   outside the BMP, the snapshot moved by decision. Not built yet: [`.plan`](../../.plan/README.md) §5.
+   outside the BMP, the snapshot moved by decision. Built by [`EMS-002/ORD-0005`](../EMS-002/README.md):
+   `P-35`, 115 sources, and `lev` counting characters dies against it.
 3. **The envelope's `stores.rules` hashes the engine's cache with the store.
    What does the Rust envelope (ORD-0009) answer?**
    - a. the JS keeps its compiled rules off the store object; the envelope then
@@ -74,7 +75,8 @@ Closed questions; an answered one carries the Regent's answer below its options.
 
    Answered by the Regent on 2026-09-27: **a** — the JS keeps its compiled rules
    off the store object first, the envelope hashes the store alone, and the
-   `ast` hashes move by decision; the Rust follows. Not built yet.
+   `ast` hashes move by decision; the Rust follows. Built by
+   [`EMS-002/ORD-0006`](../EMS-002/README.md).
 4. **JSON sits in `glyph-util`, which `vocabulary.js` and `stores.js` do not
    import. Where does it belong in the crate graph?**
    - a. the platform, reachable from every crate: `crate-graph.js` learns one
@@ -84,7 +86,8 @@ Closed questions; an answered one carries the Regent's answer below its options.
    - c. as it is: `glyph-stores` keeps its own `Value`
 
    Answered by the Regent on 2026-09-27: **b** — JSON becomes a crate of its own
-   under every other, with an oracle entry in `crate-graph.js`. Not built yet.
+   under every other, with an oracle entry in `crate-graph.js`. Built by
+   [`EMS-002/ORD-0007`](../EMS-002/README.md): `glyph-json`, the floor.
 5. **ORD-0006's val names diagnostics that `parser.js` raises.** Of the 23
    diagnostics of the T-, C- and K-cases, `templates.js` and `rules.js` raise
    14; `parser.js` raises the other 9 (`PlaceholderPending` six times,
@@ -115,8 +118,9 @@ Closed questions; an answered one carries the Regent's answer below its options.
 
    Answered by the Regent on 2026-09-27: **c** — the Rust keeps a registry of its own
    beside the context, so a body reads what the caller registered, in the
-   CLI and the app as in the JS. Not built yet: the Rust hands a body no
-   rules and no composition table today.
+   CLI and the app as in the JS. Built by [`EMS-002/ORD-0008`](../EMS-002/README.md):
+   the Rust's `Registered` beside the context, and the JS protocol registering
+   as the CLI does.
 7. **ORD-0007's val names the envelope's digest, and the envelope is
    `emit-ast.js` — `glyph-envelope`, ORD-0009's, which opens only after
    ORD-0008.** Which reading holds?
@@ -153,7 +157,8 @@ Closed questions; an answered one carries the Regent's answer below its options.
       already loads
 
     Answered by the Regent on 2026-09-27: **c** — one request a call, and `classify`
-    answered from the tables the page already loads. Not built yet.
+    answered from the tables the page already loads. Built by
+    [`EMS-002/ORD-0010`](../EMS-002/README.md): L-01 costs 5 requests a keystroke.
 11. **The page merges the user's templates into the store (`useTemplates`,
     `glyph-ui.js` line 1010). Where do they live once the engine is a
     process?**
@@ -188,7 +193,9 @@ Closed questions; an answered one carries the Regent's answer below its options.
     Answered by the Regent on 2026-09-27: *"go gradually switching JS for Rust.
     each distinction you find is a step closer to 100% Rust-coded <- this is
     the goal."* Read as **b**: only the Rust changes, and the JS is not tuned
-    further. Not built yet.
+    further. Built by [`EMS-002/ORD-0013`](../EMS-002/README.md): `ck` in
+    integer arithmetic around its product, the stores shared and the rules
+    compiled once a store; the empty `toAST` takes 285 µs.
 13. **The JS `toXML` grows with the square of the lines.** L-03, L-02 and L-01
     take 23 ms, 0.44 s and 6.2 s, and 84% of L-02's is the structural pass
     (`packageSpan`, `packageIndent` and its `^ +`), which the port reads once

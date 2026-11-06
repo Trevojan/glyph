@@ -1,0 +1,1032 @@
+{
+  "schema": 1,
+  "id": "ORD-2026-08-30-01",
+  "version": 8,
+  "language": "en-EU",
+  "home": "'.guidelines/ORDERS/' in the glyph repository — .scope is excluded by the ignore rules as client material, so an order placed there would not survive",
+  "supersedes": [
+    {
+      "version": 1,
+      "reason": "class promotion C1 -> C2, not a competing order"
+    },
+    {
+      "version": 2,
+      "reason": "S7 was knocked down by the Regent; by the order's own rule a knocked assumption produces the next version"
+    },
+    {
+      "version": 3,
+      "reason": "E1 and E3 derive from a specification that no deliverable commissions; the missing precondition enters as E0b and the order stops looking complete"
+    },
+    {
+      "version": 4,
+      "reason": "S11 and S12 were written against the wrong referent of glyph-package; the Regent resolved Q7 to the emitted document root, and the six-layer bundle is a different artefact"
+    },
+    {
+      "version": 5,
+      "reason": "a deferred queue is recorded after E7; no deliverable is commissioned, no step is reordered, and E2 to E7 are untouched"
+    },
+    {
+      "version": 6,
+      "reason": "no deliverable wrote the emitter, while E3 is defined as coming before it and K1 requires the examples to emit; the third occurrence of this release's root cause, commissioned as E3b"
+    },
+    {
+      "version": 7,
+      "reason": "seven open questions answered in one sitting; E4 becomes executable and the line-ending decision lands"
+    }
+  ],
+  "immutable": true,
+  "release": "2.4.5.01",
+  "class": {
+    "from": "C1",
+    "to": "C2",
+    "label": "building on a prior contract — the emitted format, the 173 vectors and fromXML are already contract",
+    "question_cap": 4,
+    "spent": 4,
+    "remaining": 0,
+    "remainder_converted_to": "assumptions S11 to S17",
+    "questions_spent_in_v4": [
+      "where the order runs, since 2.4.5.01 was on a branch this session did not hold",
+      "where the order stops, which is the cadence lock T32"
+    ]
+  },
+  "regent_decisions": {
+    "format": "adopt glyph-package now",
+    "skill_folder": [
+      "the parser inside the folder",
+      "examples/ with the five pairs",
+      "retire glyph-markup-commons"
+    ],
+    "S5_release_digit": "accepted — 2.4.5.01",
+    "S6_empty_schema": "accepted — the five examples serve as its base",
+    "S7_source_raw": "REJECTED — carried only by examples and by teaching models of Glyph itself; the surface where the XML is pasted does not necessarily read Glyph",
+    "S8_references": "accepted, with a refinement: normative material must outrank example material, because model authored examples rot fast",
+    "S9_order_as_vector": "accepted",
+    "language": "en-EU across the system, always",
+    "S10_language_sweep": "CONFIRMED — promoted from assumption to lock T13",
+    "order_home": "the guidelines directory, deliberately not ignored; .scope would make the change disappear",
+    "skill_layout": "SKILL.md at the root, scripts/glyph-parser.js beside it, references/ at source level holding the generic official pattern of the XML output with everything needed to explain it including the failure treatments, and references/examples/ nested below it. The generic pattern does not rot because it describes the shape rather than an instance; examples are fridge items, bound to one input and one engine version",
+    "divide_operator": "DELETED — the slash belongs solely to the emotion delimiter. The architect's positioned-diagnostic recommendation is superseded; the removal must take the machinery out too, not only the documentation row",
+    "malformed_input": "an unparseable operator run is deliberately incomprehensible to Glyph and gets an error treatment: bucket N at fix severity, no fabricated mood element, the discarded token reported, a position carried",
+    "duplication_resolved": "references/ and the conformance vectors are not two copies of one truth: the vectors are specific input-to-output pairs living in the repository and are the test, while references/ sits one level of abstraction above them and is generic. D9 and E2 point at the vectors, not at the reference",
+    "backslash": "ABANDONED, per I-19. Removed from the engine in this release alongside the divider",
+    "source_of_truth": "the resulting AST is, from here forward, officially and immutably the source of truth. It is parseable and readable by every generative model that receives text, which is what makes it portable and internally verifiable. The .json serves as the directive export, carrying the structure and significance of the whole project; the .xml carries the real instructions. The XML remains the pasted deliverable, but it is a projection of the AST rather than a peer of it",
+    "Q2_diagnostic_positions": "ANSWERED by implication of the source-of-truth decision: serializeAST projects diagnostic positions. A refusal with no coordinate is not verifiable by a reader who does not have the engine, and verification by other models is the reason the AST was promoted",
+    "extension": "the source extension is .pgml — pure glyph markup language — never .glyph, which is already taken in another context. The repository already uses .pgml throughout the CHANGELOG and BUNDLE_TARGET; the .glyph naming in version 3 of this order was an error and has been renamed",
+    "no_format_is_dropped": "a generated document is never dropped for lacking a consumer. It is improved until it has one. If the harness does not exploit .hgml, .hgml is improved so the harness can; the same holds for .pgml and model tracing",
+    "target_of_v4": "the glyph-package specification, chosen over the remaining split and the descriptive comparison report; it is the item the handoff marked blocked",
+    "branch": "claude/reload-skills-3059f5, fast forwarded to 4fdd668; the work no longer lives on claude/reload-skills-f5b866 and that branch is not advanced in parallel",
+    "cadence": "one step per commit, npm run check exiting zero before the next step opens",
+    "glyph_package_referent": "RESOLVED (Q7) - glyph-package is the emitted document root, succeeding <glyph> and carrying <invoke> and <chain>, per OPERATOR_TARGET.md sections 3.4 and 9. The six-layer bundle of BUNDLE_TARGET.md is a different artefact and keeps its own name. scripts/glyph-check.js line 20 misnames it and is corrected in this release.",
+    "root_replacement": "unconditional: <glyph-package> replaces <glyph> for every emission, not only where a chain or invoke occurs. Declared as assumption S18, architect recommendation on Q8",
+    "invoke_element": "RESOLVED (Q10) - <invoke> is the COMMAND call, and must mean 'function' to the model receiving the document. Not the template call: <template>, define, expanded and means are unchanged. Specified in PACKAGE_TARGET.md section 4",
+    "fromXML": "SECOND READER (Q15). fromXML learns glyph-package: the new root, <chain> and <invoke>. The 22 pinned assertions are repaired rather than removed, and the XML panel stays editable. Constraint carried from finding A3: <invoke> is DERIVED and must be discarded on the return trip, never read back, or the inverse fabricates what A3 condemned",
+    "line_endings": "NORMALISE TO LF (Q13). The conformance sources move to \n, matching .gitattributes eol=lf and every file in the repository. Measured: the XML is identical either way so K1 is untouched; the AST checksum, length and positions change, which is what makes the envelope travel identically between machines",
+    "six_layer_bundle": "ITS OWN ORDER (Q9), opened after this one closes. Name, layers and emitters are decided there. T0 keeps the two artefacts apart in the meantime",
+    "promotion_boundary": "Q4: the agent prepares a reading of what PROMOTION_BOUNDARY.md normatises and where it bites; the Regent ratifies. Ratification stays the Regent’s",
+    "tracing": "Q5: DEFERRED until this order closes, with the format already stable",
+    "orbital_production_level": "Q6: OUTSIDE this order. S16 is promoted from assumption to decision; it blocks the _ORBITAL rollout, never this release",
+    "language_sweep_scope": "artefacts in en-EU, interface stays pt-BR. The lock said \"en-EU across the system, always\"; the PTBR gloss table is a deliberate interface feature, not drift, and the sweep goes where the language travels"
+  },
+  "verified_findings": [
+    {
+      "id": "A1",
+      "finding": "all five 'actual xml' blocks in the examples match v1.4.4.01 byte for byte, zero diagnostics",
+      "consequence": "the examples' baseline is trustworthy and becomes a vector"
+    },
+    {
+      "id": "A2",
+      "finding": "four of the five examples fail the round trip; only example5, which uses no operator, survives",
+      "consequence": "the operator is the boundary of the defect"
+    },
+    {
+      "id": "A3",
+      "finding": "fromXML of [rtnl-go'X'] re-emits with a needs element that did not exist",
+      "severity": "high",
+      "consequence": "a fourth, undocumented non survivor of the trip, and the only one that invents rather than loses"
+    },
+    {
+      "id": "A4",
+      "finding": "the parser DOES record which operator produced a child: origin at glyph-parser.js:1242 yields extend for a hyphen and item for a comma. What discards it is serializeAST, which does not export origin, and buildXml, which never reads it",
+      "consequence": "the repair is cheaper than briefed: stop dropping an existing field in two consumers, rather than thread a new one from the lexer. The chainOp field in the architecture is probably unnecessary",
+      "status": "CORRECTED — the original claim was wrong",
+      "superseded_claim": "the parser discards which operator produced a child — false, and it was briefed to the architect as the load-bearing premise",
+      "how_the_error_happened": "the exported AST is genuinely identical for both, and the conclusion was drawn from that symptom without opening the internal tree; the grep that would have found it filtered on extend, divide, chain and op, and origin matches none of those"
+    },
+    {
+      "id": "A5",
+      "finding": "[a-b-c'X'] emits flat siblings, not a nested pipeline",
+      "consequence": "the proposal's third invariant describes behaviour the engine does not have"
+    },
+    {
+      "id": "A6",
+      "finding": "the divide operator is documented at XML_REFERENCE.md line 101 and the engine emits it as an off element, with no diagnostic",
+      "severity": "high",
+      "consequence": "a phantom operator; D-03 and D-04 do not cover operators"
+    },
+    {
+      "id": "A7",
+      "finding": "[val'a','b','c'] passes clean against a declared arity of 2",
+      "consequence": "over-arity is never checked"
+    },
+    {
+      "id": "A8",
+      "finding": "the installed glyph-markup skill has 99 lines, declares no version, and teaches [SECTION: n], which the engine rejects at fix severity",
+      "consequence": "the stale decoder is loaded in the harness, not in _ORBITAL",
+      "correction": "the propagation map for C-01 and I-19 was richer than first recorded. The repository skill ALREADY carried both resolutions correctly — it states that the backslash was removed and that chaining is by hyphen alone. So the decisions reached the grammar AND the repository skill, and stopped before the engine, the reference and the installed skill. Two destinations right, three wrong; the installed copy predates all of it"
+    },
+    {
+      "id": "A9",
+      "finding": "inspection.pgml cites a Plans directory while the directory is PLAN",
+      "consequence": "a cited path is checked by nobody"
+    },
+    {
+      "id": "A10",
+      "finding": "four deliverable element names use US spelling: criticize, categorize, generalize, scrutinize; engine prose runs 14 -ize against 3 -ise",
+      "consequence": "en-EU is declared and unenforced, the same way the EN-EU chip was clickable and dead before 1.3.3.00"
+    },
+    {
+      "id": "A11",
+      "finding": "the divide operator collides with the emotion table: [in-rwk/ins/fmt] fabricates <mood dominant=\"insecurity\" also=\"?\"/> at block level and silently drops fmt",
+      "severity": "high",
+      "consequence": "a literal question mark is printed into the deliverable, and the only diagnostic is a [note] reporting the wrong thing — a misleading note rather than the absence of one"
+    },
+    {
+      "id": "A12",
+      "finding": "a hyphen before a bracket cancels the engine question: [in[rwk]] emits <needs>what to rework</needs> while [in-[rwk]] emits <rework/>",
+      "severity": "high",
+      "consequence": "one character silently deletes a needs element"
+    },
+    {
+      "id": "A13",
+      "finding": "chainElement at glyph-parser.js:1243 answers two questions at once — whether a child was written bare, and which operator attached it",
+      "consequence": "the fix splits the flag rather than adding an attribute; a design that only added an attribute would leave the round trip broken for the very inputs it was written to repair"
+    },
+    {
+      "id": "A14",
+      "finding": "the backslash emotion delimiter is not an undocumented alternative but an ABANDONED one: resolution I-19 replaced it with the slash, the grammar carries only the slash, and the engine still accepts both",
+      "consequence": "removal, same class as the divider, and the installed skill teaches the abandoned form because it predates the resolution"
+    },
+    {
+      "id": "A15",
+      "finding": "XML_REFERENCE.md has no section on failure. Ten sections cover what works; malformed input is undocumented, while incomplete input is documented at section 5",
+      "consequence": "the only document mechanically tested against the engine cannot catch a fabrication, because it never states what malformed input must produce"
+    },
+    {
+      "id": "A16",
+      "finding": "the divide operator was already removed by resolution C-01, recorded at glyph-grammar.ebnf line 37 and in the conflict register as a blocking item resolved in favour of the emotion delimiter",
+      "consequence": "the Regent's decision ratifies an existing resolution rather than making a new one. The work is finishing a propagation, not removing a live feature, which lowers the risk profile"
+    },
+    {
+      "id": "A17",
+      "finding": "XML_REFERENCE.md line 101 contradicts glyph-grammar.ebnf line 37 and has done so since C-01. The doc test D-01 to D-06 did not catch it because those tests check bracket-to-element pairs and never operators or delimiters",
+      "consequence": "the same blind spot that let A3, A11 and A12 live. Extending the doc test to operators is load-bearing, not tidiness"
+    },
+    {
+      "id": "A18",
+      "finding": "unrecognised shapes in the operator and delimiter region fail without a usable diagnostic. [in-/rwk] emits <rework/> with NO diagnostic and /zzz/ falls to <off>/zzz/</off> with NO diagnostic; the backslash forms emit a [note] that reports the wrong thing",
+      "severity": "high",
+      "consequence": "removing recognition without adding refusal keeps the silence and only changes the shape of the rubbish. This is why the removals and the error treatment cannot ship separately",
+      "note": "the architect predicted [in-/rwk] would fall to <off>/rwk</off>; verified, it already emits <rework/> today. The silence is the point; the predicted shape is not what happens",
+      "correction": "an earlier version of this finding said the backslash form was silent as well. It is not — it emits [note] UnknownEmotion. The error was mine: the probe read parse().diagnostics, which is always undefined because parse() returns {segments, gaps, tokens} and the diagnostics live in gaps. Every 'no diagnostic' reading taken through that field was vacuous rather than measured, and the ones that survive here were re-confirmed through the CLI --diag"
+    },
+    {
+      "id": "A19",
+      "finding": "an invalid backslash emotion emits <mood dominant=\"?\"/> — a literal placeholder in the deliverable — accompanied by a [note] UnknownEmotion that names the emotion table rather than the real fault",
+      "consequence": "the abandoned spelling fabricates more aggressively than the official one, which at least degrades to prose. Removing it is a defect removal, not only a tidy-up",
+      "corrected_from": "previously recorded as emitting no diagnostic at all. It emits a note; the note is misleading, not absent. The defect class is A11's, not A18's"
+    },
+    {
+      "id": "A20",
+      "finding": "the divide branch at glyph-parser.js:1307 is dead code: a divide token requires prev.k === extend, and after a colon the hyphen lexes as text",
+      "consequence": "one of the six inventoried sites needs no migration reasoning, only deletion"
+    },
+    {
+      "id": "A21",
+      "finding": "origin is a non-empty string on every node, so exporting it unconditionally re-weights the AST. Measured on the order itself: 47 of 47 nodes carry root or nest; the architect measured 244 of 267 across the corpus",
+      "consequence": "astLean must drop root and nest, or the export undoes the thinning the header comment at glyph-parser.js:1825 defends"
+    },
+    {
+      "id": "A22",
+      "finding": "the promotion contradicts the documented design. skills/glyph-markup/SKILL.md line 12 states that the XML is the deliverable and the AST is only an inspection panel, and the 45% AST slimming of release 1.2.0.1 was justified at glyph-parser.js:1825 by the premise that a long panel is a panel nobody reads",
+      "consequence": "the premise behind astLean inverts. Under the promotion, completeness outranks size on the source of truth, and the architect's recommendation to drop root and nest from the export is correct only under the retired premise"
+    },
+    {
+      "id": "A23",
+      "finding": "BUNDLE_TARGET.md line 168 asserts that .pgml and .hgml both already have a consumer. The harness does not consume .hgml, so the claim is aspirational rather than factual",
+      "consequence": "the same declared-and-unenforced pattern as C-01 and I-19, in the document that is supposed to gate new formats. It must state which consumers exist and which are still to be built"
+    },
+    {
+      "id": "A24",
+      "finding": "parse() returns {segments, gaps, tokens} and exposes diagnostics as `gaps`, while serializeAST projects them under the name `diagnostics`. A consumer reading parse().diagnostics gets undefined and sees an empty result rather than an error",
+      "severity": "medium",
+      "consequence": "the same silent-wrong-answer class the order exists to remove, one level up: a caller asking the wrong question is told nothing is wrong. It cost a wrong finding in this very order. Under T23 the AST projection name and the parse return name should agree, or the mismatch should be documented in XML_REFERENCE §11"
+    },
+    {
+      "id": "A25",
+      "finding": "toHGML has no depth guard. It survives 1600 levels of nesting and overflows the stack between 1600 and 3200, while toXML survives 8000 and toAST truncates at LIMITS.astDepth with an explicit marker",
+      "severity": "medium",
+      "consequence": "the two hardened projections each have a vector saying so — L-01 for the XML at 8000 levels, L-02 for the AST truncation. The burn was given neither, and nothing ever crossed the LONG sources with the .hgml projection, so the gap was invisible. Pinned in KNOWN_THROWS with its reason rather than hidden: a new throw fails SN-01, and closing this one means deleting the entry, not regenerating the snapshot",
+      "found_by": "the projection snapshot, on its first run"
+    },
+    {
+      "id": "A25",
+      "finding": "toHGML has no depth guard. It survives 1600 levels of nesting and overflows the stack between 1600 and 3200, while toXML survives 8000 and toAST truncates at LIMITS.astDepth with an explicit marker",
+      "severity": "medium",
+      "consequence": "the two hardened projections each have a vector saying so — L-01 for the XML at 8000 levels, L-02 for the AST truncation. The burn was given neither, and nothing ever crossed the LONG sources with the .hgml projection, so the gap was invisible. Pinned in KNOWN_THROWS with its reason rather than hidden: a new throw fails SN-01, and closing this one means deleting the entry, not regenerating the snapshot",
+      "found_by": "the projection snapshot, on its first run"
+    },
+    {
+      "id": "A26",
+      "finding": "the repository skill declared v1.3.0.0 and described the AST as an inspection panel, which T23 reverses",
+      "consequence": "K15 required both; the skill now declares the engine version and states the reversal with its reason, and build-skill.js --check refuses to publish a skill whose declared version does not match the engine"
+    },
+    {
+      "id": "G1",
+      "finding": "E-05 produces four rule diagnostics at 2.4.5.01: Rule:mand-dont at fix, Rule:req-dont, Rule:mand-avd and Rule:req-avd at ask",
+      "consequence": "finding A1, which records zero diagnostics across all five examples, was true when measured and is stale now; the golden records diagnostics per case",
+      "status": "SUPERSEDES A1 in part"
+    },
+    {
+      "id": "G2",
+      "finding": "Rule:* diagnostics carry no `at`, while parse diagnostics such as SlashInChain do",
+      "severity": "medium",
+      "consequence": "the Q2_diagnostic_positions decision says a refusal with no coordinate is not verifiable by a reader without the engine; a contradiction rule fires on two commands and has two positions available. Out of scope for E1, named so E5 must meet it"
+    },
+    {
+      "id": "G3",
+      "finding": "conformance/examples.json stores its sources with CRLF, while .gitattributes sets eol=lf for the repository and the AST source descriptor reports newline lf",
+      "consequence": "K1 is a byte-for-byte criterion; the golden carries the sources verbatim rather than normalising them, so the decision stays open rather than being made by transcription"
+    },
+    {
+      "id": "G4",
+      "finding": "XML_REFERENCE.md 11.2 heading says every refusal carries a position while its body says `at` is optional and additive",
+      "consequence": "an internal inconsistency in the only document held to the engine by tests; E5 territory"
+    },
+    {
+      "id": "G5",
+      "finding": "no deliverable commissioned the glyph-package emitter, though E3 is defined relative to it and K1 requires it",
+      "severity": "high",
+      "consequence": "K1, K2 and K3 were unreachable and a cascade running E2 to E7 would have improvised the missing step, which lock T34 forbids. Commissioned as E3b in v7"
+    },
+    {
+      "id": "G6",
+      "finding": "across 71 assertions on the emitted document, exactly two change, both in P-06",
+      "consequence": "independently reproduces the blast-radius measurement in OPERATOR_TARGET 7.1 by a different route; E2 is surgical, not a sweep"
+    },
+    {
+      "id": "G7",
+      "finding": "the corpus asserts by substring containment, not document equality",
+      "consequence": "S2 and S5 touch every document and move no assertion, because no fragment reaches the root line. This is why a format change of this size costs two lines"
+    },
+    {
+      "id": "G8",
+      "finding": "the five authored examples carry zero origin=item and cover none of mood, break, continues, off, template, logic, needs, unresolved or a multi-segment document",
+      "severity": "medium",
+      "consequence": "K1 is a SHAPE check and cannot reach G2 (block segmentation) or G3 (needs), two of the four named guarantees; their coverage lives in K4. The two criteria are not redundant and the order does not say so"
+    },
+    {
+      "id": "G9",
+      "finding": "D-4-07 [in-rwk,ctx] at test-corpus.js:963 is the ONLY forward vector in the corpus exercising a chain of more than one member",
+      "severity": "medium",
+      "consequence": "the proof of the central mechanism of this release rests on one vector; a sixth authored example with a two-member chain would be cheap insurance, and the sources are the Regent's to write"
+    },
+    {
+      "id": "G10",
+      "finding": "clause 6 of PACKAGE_TARGET.md 6, ChainWithoutHead, is undecidable from a conforming document: section 3.2 removes the very attribute it keys on",
+      "consequence": "it is a READER refusal inherited from XML_REFERENCE 11.3 and belongs to E4. Replaced by SchemaMissing, the clause section 5 requires and the table had omitted. Found by writing the validator, which is what writing the gate first is for"
+    },
+    {
+      "id": "G11",
+      "finding": "adding `element` to the expansion store moved the ast projection hash of all 101 snapshot cases, and no xml or hgml hash",
+      "consequence": "the AST envelope carries store fingerprints, so a store change is visible there and nowhere else. Snapshot regenerated; the xml hashes stay pinned to the current emitter"
+    },
+    {
+      "id": "G12",
+      "finding": "the E2 survey of the D bucket reported one XML-asserting vector and there were two: 4-06 was missed and only surfaced when the emitter landed",
+      "consequence": "rederived late. A survey is not a proof of coverage; the emitter is. Recorded because the same shape could hide a third"
+    },
+    {
+      "id": "G13",
+      "finding": "packagePass initially read the expansion store from the global registry while buildXml receives it through opts, so <invoke> vanished wherever the corpus passed stores per call",
+      "consequence": "caught by the authored examples, not by the golden - the golden test had registered the store globally. Two call paths for one store is the defect class GS-01..GS-03 exist to watch"
+    },
+    {
+      "id": "G14",
+      "finding": "the retired <glyph> root is refused by name (XmlLegacyRoot) rather than read leniently or ignored",
+      "consequence": "the same treatment the divide operator and the backslash mood got; a retired construct is demoted to a recogniser, never deleted into silence"
+    },
+    {
+      "id": "G15",
+      "finding": "XmlChainHasChildren and XmlChainStartsWithItem kept their documented names and changed trigger: inside a <chain> the position decides the operator, so a member carrying the attribute is reported rather than overwritten",
+      "consequence": "the reader still refuses to repair in silence, which is the rule the original comment stated and the new shape would otherwise have quietly dropped"
+    },
+    {
+      "id": "G16",
+      "finding": "`->` does not exist and is dropped in silence: [a]->[b] parses as two root commands and the arrow vanishes with no diagnostic",
+      "severity": "medium",
+      "consequence": "a character sequence that disappears without a refusal is the also=\"?\" shape section 11.5 removed. Unrelated to the effects feature; it should be refused by name",
+      "status": "RETRACTED - the finding was wrong",
+      "correction": "`->` is NOT dropped. It reaches the deliverable as <off>-&gt;</off>, verbatim, which is the documented treatment of prose between commands. The original claim came from reading AST origins without looking at the emitted document. Section 11.4 now lists the case, because the reference did not say it and that omission is what produced the false finding"
+    },
+    {
+      "id": "G17",
+      "finding": "the worked chain example in XML_REFERENCE section 4 was already stale before this release: it showed flat bare siblings, which predates the chain attribute E0 added",
+      "consequence": "a documented example nothing probed. D-07 probes the section 4 ROWS, not the worked example beneath them, so it drifted for a release without a red gate"
+    },
+    {
+      "id": "G18",
+      "finding": "D-11 failed on its first run because WITH_BOTH carries templates and rules but not expansions, so the comparison document had no <invoke>",
+      "consequence": "finding G13 a second time, from the other side: one store reached by two paths. The probe caught it immediately, which is the argument for probing a hand-written example at all"
+    },
+    {
+      "id": "G19",
+      "finding": "rules.json already held `why` and `suggest` in English; the pt-BR came from the assembly in the parser, which is why a rule diagnostic read half in each language",
+      "consequence": "one template string rather than 26 store entries. The mixed-language message was a defect under either reading of the lock"
+    },
+    {
+      "id": "G20",
+      "finding": "N-13 named two different corpus vectors, and the snapshot is keyed by id, so one replaced the other and [BASE'…'] had no byte-for-byte coverage at all",
+      "severity": "medium",
+      "consequence": "the count said 102 vectors and 101 snapshot cases and nothing compared the two. Found by D-04, the import that separates `duplicate` from `conflicting`; SN-03 then fired on its own terms - a source was gained - which is the proof the collision had been hiding one"
+    },
+    {
+      "id": "G21",
+      "finding": "the README promised the app opens by double-clicking the HTML over file://, and that stopped being true when the module system moved to ESM: a browser refuses a type=\"module\" script over file:// on CORS",
+      "severity": "high",
+      "consequence": "because the HTML and CSS still load, the page draws and nothing responds - it reads as a frozen app rather than a load error. Five gates were green throughout, because none of them loads the app at all. The Regent found it by trying to use it",
+      "reported_by": "the Regent",
+      "fixed": "serving is the way in now, glyph.cmd is the single click, and AP-01 to AP-03 check that the documented way in matches what the page requires"
+    }
+  ],
+  "four_guarantees": {
+    "note": "what the current XML guarantees and the proposed glyph-package does not carry. They survive the new format or the format is rejected.",
+    "items": [
+      "editorial force on ALW BYP OVR NEV FRGT",
+      "block once and the segment separator",
+      "the needs element — 'an empty slot does not block' has nowhere to live in the proposal",
+      "exact string fidelity: a pretty-printed text element changes the value"
+    ],
+    "why_they_were_missing": "the photograph sent to the external model was of vocabulary; all four are properties of operators, of the emitter and of the engine, and none fits in a table of commands"
+  },
+  "deliverables": [
+    {
+      "id": "E0",
+      "what": "the operator from lexer to XML: extend distinct from comma, divide implemented or diagnosed",
+      "precondition_of": [
+        "E1",
+        "E2",
+        "E3"
+      ],
+      "architecture": "`.guidelines/OPERATOR_TARGET.md`"
+    },
+    {
+      "id": "E0b",
+      "what": "the glyph-package specification: a normative grammar of the emitted document that succeeds the <glyph> root, written against XML_REFERENCE.md and the decisions already recorded here",
+      "precondition_of": [
+        "E1",
+        "E3"
+      ],
+      "why_it_is_new": "version 3 named the specification in lock T4 and in E1 and never commissioned it; scripts/glyph-check.js line 21 records the same gap in the code, where the glyph-package branch is a declared stub",
+      "owes": [
+        "the root element, its version attribute, and the unconditional replacement of <glyph>",
+        "<chain>: the grouping rule, derivable from the chain attribute and sibling order alone, with no re-parse and no source access",
+        "<invoke>: what it denotes and what it may contain",
+        "the four guarantees of the current XML, carried or the format is rejected",
+        "the empty schema element of this release, with the five examples as its base",
+        "the refusals: what a conforming reader must reject, and with what position"
+      ],
+      "does_not_own": [
+        "the six-layer bundle and its emitters, which are out of scope by the order",
+        "what production level means for _ORBITAL"
+      ],
+      "architecture": ".guidelines/ORDERS/E0b-ARCHITECT-RETURN.md",
+      "delivered": ".guidelines/PACKAGE_TARGET.md",
+      "status": "RETURNED by suba-architect - specification written; Q10 preserved as a decision frontier"
+    },
+    {
+      "id": "E1",
+      "what": "the glyph-package golden, derived from the specification and the five examples",
+      "blocked_by": "E0b",
+      "delivered": "conformance/golden.json",
+      "status": "RETURNED by suba-implementer - five expected documents, hand-derived from PACKAGE_TARGET.md, verified against examples.json and the expansion store",
+      "method": "hand derivation, not emitter output: no glyph-package emitter exists. Transcription checked against the examples for text content, element sequence, chain-run count from the AST, invoke placement and formula agreement with the store"
+    },
+    {
+      "id": "E2",
+      "what": "the 173 vectors rederived against the new format, thirteen buckets",
+      "delivered": [
+        "scripts/test-corpus.js (P-06, D-4-07)",
+        ".guidelines/ORDERS/E2-PLAN.md"
+      ],
+      "status": "RETURNED - two fragments rederived, both pinned `awaiting: E3b` until the emitter exists",
+      "method": "a document-to-document migration written from PACKAGE_TARGET.md, NOT an emitter. Its fidelity is proven rather than asserted: it reproduces all five hand-derived golden documents byte for byte. Only then applied to the corpus",
+      "measured": {
+        "vectors_read": 102,
+        "assertions_on_the_document": 71,
+        "survive_unchanged": 69,
+        "rederived": 2,
+        "agrees_with": "OPERATOR_TARGET.md 7.1, which recorded 1 failing vector (P-06) by another method"
+      }
+    },
+    {
+      "id": "E3",
+      "what": "glyph-check validating the new format, written before the emitter",
+      "blocked_by": "E0b",
+      "clarified_in_v5": "glyph-check gains a mode validating the glyph-package DOCUMENT, not the bundle; its line-20 comment is corrected in the same commit",
+      "delivered": [
+        "scripts/glyph-check.js (validatePackage, --package)",
+        "scripts/test-corpus.js (PK-01..PK-03)"
+      ],
+      "status": "RETURNED - twelve clauses, each carrying a position; 12/12 mutations caught; observed failing before it counted",
+      "standalone": "does not import the parser, for the same reason the AST validator does not: the receiving end may have the store and not the engine. build-templates.js now records `element` on all 120 commands so clauses 8 and 9 can key on it"
+    },
+    {
+      "id": "E3b",
+      "what": "the glyph-package emitter: the projection that produces the document PACKAGE_TARGET.md defines",
+      "why_it_is_new": "E3 is worded 'written before the emitter' and K1 says the five examples emit the expected glyph-package byte for byte, yet no deliverable wrote one. Same shape as E0b and as the glyph-package name collision: a thing referenced everywhere and commissioned nowhere",
+      "blocked_by": [
+        "E0b",
+        "E1",
+        "E3"
+      ],
+      "position_reason": "after E3, because lock T3 puts the gate before the topology: glyph-check validates the format before the emitter is written",
+      "precondition_of": [
+        "K1",
+        "K2",
+        "K3",
+        "E5"
+      ],
+      "owes": [
+        "the root and its engine attribute, unconditionally (specification section 2)",
+        "the empty <schema/> (section 5)",
+        "the <chain> grouping, with the chain attribute not surviving it (section 3)",
+        "<invoke> on composites only, first child, reads agreeing with the expansion store (section 4)",
+        "the four guarantees carried, or the format is rejected (section 7)"
+      ],
+      "does_not_own": [
+        "fromXML for the new format, which is E4",
+        "the six-layer bundle emitters, out of scope by the order"
+      ],
+      "specification": ".guidelines/PACKAGE_TARGET.md",
+      "verified_against": "conformance/golden.json, which exists first and is not derived from it",
+      "delivered": "scripts/glyph-parser.js (packagePass in buildXml)",
+      "status": "RETURNED - K1 met: the emitter reproduces all five hand-derived golden documents byte for byte",
+      "cross_checked": "105 corpus sources emitted and passed through glyph-check --package: zero throws, zero refusals. The gate written first now validates the topology it gated"
+    },
+    {
+      "id": "E4",
+      "what": "the fromXML decision: a second reader, or the inverse declared dead in writing",
+      "note": "reframed by T23: the question is no longer whether the inverse is worth keeping, but what the round-trip invariant is measured against. Under the promotion the candidate invariant is AST equality rather than XML equality, which is what test-corpus.js:647 currently asserts",
+      "decided": "a second reader (Q15)",
+      "owes": [
+        "read <glyph-package> as the root, and refuse <glyph> by name with a position",
+        "turn <chain> back into the operators: first member `-`, every other `,`",
+        "DISCARD <invoke> on the return trip - it is derived, and reading it back is exactly the fabrication finding A3 condemned",
+        "ignore <schema/>, which carries no authored content",
+        "unpin the 22 assertions now awaiting E4"
+      ],
+      "delivered": "scripts/glyph-parser.js (packageUnpass in fromXML)",
+      "status": "RETURNED - a second reader; all 22 pinned assertions repaired, none removed",
+      "method": "the exact inverse of packagePass: <schema/> and <invoke> are dropped, <chain> is expanded and position gives the operator back. Every reconstruction rule below it runs unchanged, so the diff is small and the tested logic is reused",
+      "A3_honoured": "<invoke> is derived and is DISCARDED on the return trip, never read back. Reading it would be the engine answering its own question, which is the fabrication finding A3 condemned"
+    },
+    {
+      "id": "E5",
+      "what": "XML_REFERENCE rewritten for the new format, D-03/D-04 extended to operators, AND a new section 11 on failure treatment, which the document does not have today",
+      "section_11": "the reference has ten sections and none covers malformed input: three incidental mentions of error across 424 lines. It documents the incomplete path (needs, section 5) and has nowhere to state the invalid path (fix severity). That asymmetry is why A3, A11 and A12 survived — the document tested against the engine could not contradict a fabrication it had no place to describe",
+      "blocked_by": "E3b",
+      "delivered": [
+        ".guidelines/XML_REFERENCE.md (sections 1, 4, 10, 11.2, 11.3)",
+        "scripts/test-corpus.js (the XmlLegacyRoot probe)"
+      ],
+      "status": "RETURNED - the reference describes the emitted format again; all ten D checks green",
+      "criterion_named_the_wrong_ids": "E5 asked to extend D-03 and D-04 to operators. Those two check the VOCABULARY table. Operator coverage exists in both directions under D-07 (every section 4 row behaves as documented) and D-08 (every section 4 row has a probe), which landed earlier in this release. The clause was written before that coverage had names",
+      "section_11_already_existed": "E5 also asked for \"a new section 11 on failure treatment, which the document does not have today\". It has one; only 11.2 and 11.3 needed correcting"
+    },
+    {
+      "id": "E6",
+      "what": "glyph-markup republished as SKILL.md + scripts/glyph-parser.js + references/ + references/examples/, with a declared version; commons retired",
+      "single_source": "the five examples live once, as the repository conformance vectors; references/examples/ is GENERATED at publish time with a banner declaring origin and engine version, so validator rule 10 of BUNDLE_TARGET catches a hand-edited copy",
+      "references_content": "a publish-time projection of XML_REFERENCE.md, which is the only document in the repository already tested against the engine (D-01 to D-06). Downstream of E5: the skill's references/ cannot be written before E5 rewrites the reference for the new format",
+      "delivered": [
+        "skills/glyph-markup/SKILL.md",
+        "scripts/test-corpus.js (D-11)"
+      ],
+      "status": "RETURNED - the skill describes the emitted format, and its worked document is probed rather than promised",
+      "already_in_place": "the layout, the declared version 2.4.5.01, references/ and references/examples/ and the retirement of glyph-markup-commons all landed earlier; only the hand-authored prose was stale"
+    },
+    {
+      "id": "E7",
+      "what": "the language sweep: prose to en-EU, and a decision on the four US-spelled element names",
+      "delivered": "scripts/glyph-parser.js",
+      "status": "RETURNED - the artefact speaks en-EU; the interface keeps pt-BR",
+      "element_names_already_done": "criticise, categorise, generalise and scrutinise landed earlier in the release; only the prose half was open",
+      "split": "the AST envelope defaults to lang en because it travels - read on another machine by something without this engine. parse() keeps pt-BR for the interface, which is not the deliverable. A caller wanting either asks by name"
+    }
+  ],
+  "done_when": [
+    {
+      "id": "K0b",
+      "expected": "the glyph-package specification exists as a normative document defining the emitted root, its children, its attributes and its refusals, and no clause of it is derived from the emitter",
+      "verified_by": "reading, by QA; the mechanical half is K8 onwards, once glyph-check implements the clauses"
+    },
+    {
+      "id": "K1",
+      "expected": "the five examples emit the expected glyph-package, byte for byte",
+      "status": "MET"
+    },
+    {
+      "id": "K2",
+      "expected": "extend and comma return distinct from the XML and re-emit identically; no needs element is ever fabricated",
+      "status": "MET - extend and item return distinct and re-emit identically"
+    },
+    {
+      "id": "K3",
+      "expected": "the divide operator works or fails with a position, and never lands silently in an off element",
+      "status": "MET via the emitter; the inverse half belongs to E4"
+    },
+    {
+      "id": "K4",
+      "command": "node scripts/test-corpus.js",
+      "expected": "all thirteen buckets green, rederived"
+    },
+    {
+      "id": "K5",
+      "expected": "XML_REFERENCE matches the emitter, and the doc test covers operators"
+    },
+    {
+      "id": "K6",
+      "expected": "the installed glyph-markup equals the repository's, with a declared version; commons absent"
+    },
+    {
+      "id": "K7",
+      "expected": "no Portuguese reaches the deliverable, and the -ize/-ise decision is applied uniformly"
+    },
+    {
+      "id": "K8",
+      "expected": "the mutation set breaks one thing per refusal clause of PACKAGE_TARGET.md 6 and at most one escapes",
+      "note": "was \"ten things, nine caught\", a count fixed before the clause list existed. Aligned to the specification, which is normative - not widened so code passes (lock T17). Implemented as PK-03; twelve clauses, 12/12 caught"
+    },
+    {
+      "id": "K9",
+      "expected": "no input produces a fabricated mood element, and no literal placeholder character reaches the XML"
+    },
+    {
+      "id": "K10",
+      "expected": "the divide machinery is absent from the lexer, the parser and XML_REFERENCE, with no dead token left unnamed"
+    },
+    {
+      "id": "K11",
+      "expected": "XML_REFERENCE carries a failure section stating, for every malformed construct, the severity and the emitted result, and the doc test exercises it the way D-03 exercises the vocabulary"
+    },
+    {
+      "id": "K12",
+      "expected": "the grammar, the reference, the engine and the published skill agree on the divider and on the emotion delimiter, verified mechanically rather than by reading"
+    },
+    {
+      "id": "K13",
+      "expected": "every retired construct produces a fix diagnostic naming its replacement, and no retired construct degrades silently into prose or into a fabricated element"
+    },
+    {
+      "id": "K14",
+      "expected": "the AST carries every field needed to reconstruct the XML and to locate every diagnostic, and a second model reading only the .json can say what the source meant and where it failed"
+    },
+    {
+      "id": "K15",
+      "expected": "SKILL.md no longer states that the AST is only an inspection panel, and the CHANGELOG records the reversal with its reason"
+    },
+    {
+      "id": "K16",
+      "expected": "each of the four formats names its consumer and whether that consumer exists today; no format is described as having a consumer it does not have"
+    },
+    {
+      "id": "K17",
+      "expected": "the diagnostics channel has one name across parse(), serializeAST() and the documentation, or the mismatch is stated in the reference and covered by a vector"
+    },
+    {
+      "id": "K18",
+      "expected": "toHGML has the same depth treatment as the other two projections — a ceiling with a diagnostic, or an iterative writer — and a LONG vector that says which, so the three projections stop disagreeing about what deep nesting means"
+    },
+    {
+      "id": "K19",
+      "expected": "toHGML has the same depth treatment as the other two projections — a ceiling with a diagnostic, or an iterative writer — and a LONG vector that says which, so the three projections stop disagreeing about what deep nesting means",
+      "note": "renumbered in v4: v3 carried two criteria under K18"
+    },
+    {
+      "id": "K20",
+      "expected": "scripts/glyph-check.js no longer calls the six-layer bundle a glyph-package; its comment names the artefact its mode actually validates",
+      "verified_by": "reading, and by grep: no occurrence of glyph-package denotes a file tree",
+      "status": "DONE - glyph-check.js no longer calls the six-layer bundle a glyph-package"
+    }
+  ],
+  "locks": [
+    "T0: glyph-package is the emitted document root succeeding <glyph>, carrying <invoke> and <chain>; the six-layer bundle of BUNDLE_TARGET is a different artefact and the two never share a name again",
+    "T1: the operator reaches the XML before any chain element is emitted",
+    "T2: the gate before the topology — glyph-check before the new emitter",
+    "T3: single source of truth is the glyph repository",
+    "T4: the golden derives from the specification and the examples, never from an implementation",
+    "T5: the cond A to B lines are L5, gate",
+    "T6: no self attested gate; and no NEW format is added without a consumer that parses it — superseded in the other direction for formats that already exist, which are improved into usefulness rather than dropped (T26)",
+    "T7: no acceptance criterion is rewritten so the code passes",
+    "T8: the four guarantees survive or the format is rejected",
+    "T9: glyph-markup-commons is retired",
+    "T10: the release is 2.4.5.01",
+    "T11: normative material outranks example material; every example declares the engine version that produced it and is marked perishable",
+    "T12: source raw is carried by examples and teaching models only, never by the general export",
+    "T13: the language sweep rides in 2.4.5.01, including the four US-spelled element names",
+    "T14: orders live in .guidelines/ORDERS/, never in .scope",
+    "T15: references/examples/ is generated from the conformance vectors, never hand-maintained; the banner is what rule 10 checks",
+    "T16: the slash is the emotion delimiter and nothing else; the divide operator is removed from the grammar, the engine and the documentation",
+    "T17: malformed input is bucket N at fix severity — an empty slot does not block protects missing information, never malformed information",
+    "T18: no placeholder character ever reaches the deliverable; a literal question mark in an attribute is a defect, not a fallback",
+    "T19: references/ holds the generic pattern at source level and does not rot; examples are perishable and sit below it, never beside it",
+    "T20: the backslash emotion delimiter is removed from the engine; the slash is the only spelling, as I-19 resolved",
+    "T21: the removals and the failure treatment ship together, never in separate commits — deleting recognition without adding refusal re-creates the silent failure the deletion exists to remove",
+    "T22: a retired construct is demoted to a recogniser that refuses it by name, never deleted into silence",
+    "T23: the AST is the source of truth, officially and immutably. The XML is a projection of it, never a peer",
+    "T24: completeness outranks size on the source of truth; thinning belongs to the panel projection alone",
+    "T25: serializeAST projects diagnostic positions — a refusal without a coordinate is not verifiable by a reader without the engine",
+    "T26: a generated document without a consumer is a document whose consumer has not been built yet. It is improved until it has one, never deleted for being unused",
+    "T27: the source extension is .pgml; .glyph is taken in another context and is never used for Glyph source",
+    "T28: a known loss is pinned with its reason and a new one fails the gate; a snapshot is never regenerated to make a red suite green",
+    "T28: a known loss is pinned with its reason and a new one fails the gate; a snapshot is never regenerated to make a red suite green",
+    "T29: everything in the published skill except SKILL.md is generated and checkable; SKILL.md is authored, and only the version it declares is enforced",
+    "T31: the specification comes before the golden and before the validator, because a golden derived from an implementation records what the code does rather than what the format is",
+    "T32: one step closes per commit and npm run check exits zero before the next step opens, so every step is a stopping point and no step hides behind another",
+    "T33: the work lives on claude/reload-skills-3059f5 and claude/reload-skills-f5b866 is not advanced in parallel, because a decision carried to one destination and not the others is the root cause this release exists to remove",
+    "T34: no deliverable derives from a document the order does not commission, which is the defect that produced this version",
+    "T35: a chain is derivable from the chain attribute and sibling order alone, with no re-parse and no access to the source, because a format that needs the source to be understood is not a deliverable",
+    "T36: no name denotes two artefacts, which is the defect that produced version 5"
+  ],
+  "assumptions": [
+    {
+      "id": "S11",
+      "claim": "the specification is written against the emitted document and XML_REFERENCE.md, and BUNDLE_TARGET.md is consulted for method rather than for shape",
+      "because": "the six layers describe the other artefact",
+      "replaces": "S11 of v4, which framed the specification on the six layers"
+    },
+    {
+      "id": "S12",
+      "claim": "glyph-package is one document per source, not a file tree",
+      "because": "the five examples are input-to-XML pairs and the golden derives from them",
+      "replaces": "S12 of v4, which called it a directory projection"
+    },
+    {
+      "id": "S18",
+      "claim": "the glyph-package root replaces the glyph root unconditionally, not only where a chain or an invoke occurs",
+      "because": "a conditional root forces every consumer to branch on shape before it can read anything, and the empty case is the cheaper degenerate one",
+      "answers": "Q8, on the architect's recommendation"
+    },
+    {
+      "id": "S16",
+      "claim": "what production level means for _ORBITAL stays outside this order",
+      "because": "BUNDLE_TARGET section 7 says it is ratified by reading, and the reading is not an agent task"
+    },
+    {
+      "id": "S17",
+      "claim": "f5b866 is abandoned rather than merged back later",
+      "because": "two live branches carrying one release is the root cause of this order restated as a branch"
+    },
+    {
+      "id": "S10",
+      "claim": "the language sweep is part of this release, and the four US-spelled element names are decided now",
+      "because": "the vectors, the reference and both skills are already being rewritten, and doing it afterwards breaks the same files twice"
+    }
+  ],
+  "cascade": {
+    "correction_loop": {
+      "rounds": 2,
+      "direction": "QA -> DV",
+      "escalation": "a third rejection of the same criterion goes to the Regent"
+    },
+    "subagents": [
+      {
+        "order": 1,
+        "skill": "suba-architect",
+        "delivers": "where the operator enters the lexer, the AST and the emitter",
+        "status": "returned — architecture settled, one Regent item open"
+      },
+      {
+        "order": 2,
+        "skill": "suba-architect",
+        "delivers": "E0b, the glyph-package specification",
+        "note": "the architect returned once already for E0; the format itself is the same kind of artefact and the four forks it must close are declared as S11 to S17",
+        "status": "returned - PACKAGE_TARGET.md written, one inference flagged as Q10"
+      },
+      {
+        "order": 3,
+        "skill": "suba-implementer",
+        "delivers": "E0, then E1 and E3"
+      },
+      {
+        "order": 4,
+        "skill": "suba-implementer",
+        "delivers": "E3b, the glyph-package emitter",
+        "note": "after E3 by lock T3; verified against the golden, which exists first and is not derived from it"
+      },
+      {
+        "order": 5,
+        "skill": "suba-tester",
+        "delivers": "E2 and the negative operator vectors"
+      },
+      {
+        "order": 6,
+        "skill": "suba-validator",
+        "delivers": "K1 to K7 executed, not estimated"
+      },
+      {
+        "order": 7,
+        "skill": "suba-scribe",
+        "delivers": "E5, E6, E7 and the changelog entry"
+      }
+    ]
+  },
+  "open_regent_questions": [
+    {
+      "id": "Q4",
+      "question": "ratifying PROMOTION_BOUNDARY.md",
+      "state": "the agent owes a reading; the Regent owes the ratification",
+      "blocks": "nothing"
+    },
+    {
+      "id": "Q14",
+      "question": "the sixth authored example, exercising a two-member chain",
+      "state": "a base was supplied and its derivation shown; the Regent authors the source",
+      "blocks": "nothing; it widens what K1 can prove"
+    }
+  ],
+  "blast_radius": {
+    "measured": true,
+    "method": "every src in the corpus was parsed, not estimated",
+    "vectors_failing": 1,
+    "which": "P-06 at test-corpus.js:50",
+    "shape_changed_still_passing": [
+      "R-01",
+      "L-04"
+    ],
+    "untouched": 170,
+    "reference_edits": "one new attribute row in section 3, three restated rows in section 4, one chain example in section 10"
+  },
+  "root_cause": {
+    "name": "propagation failure — a decision taken in one place and never carried to the others",
+    "note": "this is the pattern behind every blocker in the session. E0 to E7 are not seven unrelated repairs; they are the propagation of decisions already taken",
+    "instances": [
+      "C-01 resolved the slash collision in favour of the emotion delimiter and removed the divider. It reached glyph-grammar.ebnf lines 12 and 37 and stopped there: XML_REFERENCE.md line 101 still documents the divider and glyph-parser.js still implements it at six sites",
+      "I-19 replaced the backslash emotion delimiter with the slash. It reached the grammar, where the backslash appears nowhere, and stopped there: the engine still accepts the backslash and the installed skill still teaches it",
+      "the v1.7 changelist stated that active skill packages stay at v1.6 until reinstalled. The reinstall never happened, so the harness has been reading Glyph through a v1.6 decoder ever since",
+      "the HANDOFF searched for the specification under a different root and concluded it did not exist, while the repository was at v1.4.4.01 with 173 green vectors"
+    ]
+  },
+  "architecture_resolved": {
+    "chainOp": "WITHDRAWN — origin is the field, as the correction established. But origin alone is insufficient: [in-rwk] and [in-[rwk]] both carry origin=extend and chainElement=true today, differing only in tok.k. Verified",
+    "shape": "origin exported in astShallow, read in emit, chainElement narrowed to tk.k === bareTag, astLean dropping root and nest. Two export lines and a narrowing. No new field anywhere",
+    "blast_radius": "1 vector with BOTH removals in place — P-06 at test-corpus.js:50. Measured across all 98 src strings plus a textual sweep for the inline buckets. The suite holds two emotion usages, both slash form, zero divide tokens and zero hyphen-slash sequences",
+    "backslash_treatment": "the branch at :547-564 is DEMOTED TO A RECOGNISER rather than deleted: it refuses the shape with a fix diagnostic naming the slash form. The lone-backslash-to-prose fallback at :562 is deliberately kept so a stray backslash in prose is not caught up in it",
+    "astLean_reversal": "the architect's advice to drop root and nest was right under the old premise and is wrong under the new one. Resolution: astShallow, the source of truth, carries origin on every node including root and nest; astLean stays thin and keeps serving the panel. Two projections, not one compromise — the same split the Regent described for the two file uses"
+  },
+  "consumer_map": {
+    "purpose": "four projections of one AST, each with a distinct consumer, so alignment is proven rather than assumed. This is what makes resuming work cheap and what context engineering in Glyph is for",
+    "formats": [
+      {
+        "format": ".pgml",
+        "consumer": "the human writes it; model tracing",
+        "state": "source exists, tracing consumer to be built"
+      },
+      {
+        "format": ".json",
+        "consumer": "any generative model that receives text — portability and internal verification",
+        "state": "promoted to source of truth by T23"
+      },
+      {
+        "format": ".xml",
+        "consumer": "the surface where the instructions are pasted",
+        "state": "the deliverable; being replaced by glyph-package"
+      },
+      {
+        "format": ".hgml",
+        "consumer": "the harness",
+        "state": "atomic burn exists, harness consumer to be built"
+      }
+    ]
+  },
+  "retired_assumptions": [
+    {
+      "id": "S13",
+      "was": "the minimum layers stay L0 and L3",
+      "why_retired": "a property of the six-layer bundle, not of the document format"
+    },
+    {
+      "id": "S14",
+      "was": "failure transitions belong to L5 and not L3",
+      "why_retired": "a property of the six-layer bundle, not of the document format"
+    },
+    {
+      "id": "S15",
+      "was": "the role roster is targets.json as it stands",
+      "why_retired": "a property of the six-layer bundle, not of the document format"
+    }
+  ],
+  "resolved_questions": [
+    {
+      "id": "Q7",
+      "question": "which artefact is glyph-package",
+      "answer": "the emitted document root",
+      "resolved_in": "v5"
+    },
+    {
+      "id": "Q8",
+      "question": "conditional or unconditional root replacement",
+      "answer": "unconditional",
+      "resolved_in": "v5, as assumption S18"
+    },
+    {
+      "id": "Q10",
+      "question": "what <invoke> denotes",
+      "answer": "the command call; 'function' to the model",
+      "resolved_in": "E0b, by the Regent"
+    },
+    {
+      "id": "Q11",
+      "question": "does <invoke> need a precondition deliverable of its own",
+      "answer": "no separate precondition: <invoke> emission belongs to E3b, the emitter, which was itself the missing deliverable. The architect reading that it fitted inside E1 was wrong - E1 is the expectation, not the producer",
+      "resolved_in": "v7"
+    },
+    {
+      "id": "Q12",
+      "question": "K8 says ten mutations and nine catches; the specification has twelve clauses",
+      "answer": "K8 restated per clause, following the specification rather than the count",
+      "resolved_in": "E3"
+    },
+    {
+      "id": "Q15",
+      "question": "what happens to fromXML under glyph-package",
+      "answer": "a second reader",
+      "resolved_in": "v8"
+    },
+    {
+      "id": "Q13",
+      "question": "line endings of the conformance sources",
+      "answer": "normalise to LF",
+      "resolved_in": "v8"
+    },
+    {
+      "id": "Q9",
+      "question": "when the six-layer bundle is built and under what name",
+      "answer": "its own order, after this one",
+      "resolved_in": "v8"
+    },
+    {
+      "id": "Q5",
+      "question": "the tracing format",
+      "answer": "deferred until this order closes",
+      "resolved_in": "v8"
+    },
+    {
+      "id": "Q6",
+      "question": "production level for _ORBITAL",
+      "answer": "outside this order; S16 promoted to a decision",
+      "resolved_in": "v8"
+    }
+  ],
+  "deferred": {
+    "note": "NOT commissioned. Read of erosbnk/dmh-protocol against 2.4.5.01, recorded so it is not rediscovered. Analysis: .guidelines/DMHP_IMPORTS.md. Nothing here starts before E7 closes.",
+    "position": "after E7",
+    "items": [
+      {
+        "id": "D-01",
+        "what": "atomic writes and an all-or-nothing build: stage both build-templates outputs to .tmp and rename both, so a crash leaves the old pair or the new pair",
+        "value": "high",
+        "cost": "low",
+        "why": "build-templates.js emits two artefacts and phase two reads what phase one wrote; emit() is a bare writeFileSync. --check answers staleness, which is a different question",
+        "sites": [
+          "scripts/build-templates.js:60",
+          "scripts/build-skill.js:70",
+          "scripts/test-corpus.js:1450"
+        ],
+        "status": "DONE after E7",
+        "delivered": [
+          "scripts/build-templates.js",
+          "scripts/build-skill.js",
+          "scripts/test-corpus.js"
+        ],
+        "observed": "a disk failure simulated on the second staged file: both build outputs unchanged, zero stray .tmp. The property is demonstrated rather than asserted"
+      },
+      {
+        "id": "D-02",
+        "what": "content-addressed identity for conformance vectors: the pin binds to the digest of the source, not to the position E-01",
+        "value": "medium-high",
+        "cost": "low",
+        "why": "a pin that migrates to another case does not outlive its reason, it acquires a false one, and lock T10 does not catch that",
+        "touches": "E2, which rederives 173 vectors",
+        "status": "DONE after E7",
+        "delivered": [
+          "conformance/examples.json",
+          "conformance/golden.json",
+          "scripts/test-corpus.js (PK-04, PK-05)"
+        ],
+        "shape": "each case carries `digest`, sha256 over its src; a pin carries `pinnedTo` so it binds to the SOURCE it excuses rather than to a position"
+      },
+      {
+        "id": "D-03",
+        "what": "a generated/authored split at field level, not only at file level",
+        "value": "medium",
+        "cost": "none today - a rule, not code",
+        "why": "I1 is file-granular; the first human annotation on a generated store has no place to live",
+        "status": "DONE after E7 - recorded as a rule, not built",
+        "delivered": ".guidelines/BUNDLE_TARGET.md, invariant I1b",
+        "note": "no store carries an authored field today; it is written so the answer is not improvised"
+      },
+      {
+        "id": "D-04",
+        "what": "separate `duplicate` from `conflicting`: same id and same content is idempotence, same id and different content is a collision",
+        "value": "medium",
+        "cost": "low",
+        "why": "collapsing them makes a re-run indistinguishable from a real clash",
+        "status": "DONE after E7",
+        "delivered": "scripts/test-corpus.js (PK-06)",
+        "found": "a live collision: N-13 named two different vectors. Both ran and both passed, but the snapshot is keyed by id, so one silently replaced the other and [BASE…] was never covered byte for byte - 102 vectors against 101 snapshot cases. Renamed to N-22; the snapshot is 102 now"
+      },
+      {
+        "id": "D-05",
+        "what": "an output diff across the corpus before the emitter changes: what each of the 98 sources emits before and after, grouped by kind of divergence",
+        "value": "high",
+        "cost": "largest here",
+        "position": "last",
+        "why": "glyph-diff compares two sources; nothing compares two emitter versions. The blast radius was measured once by hand and is re-improvised per release",
+        "status": "DONE after E7, and re-scoped by measurement",
+        "delivered": "scripts/test-corpus.js (SN-04 classifies the drift)",
+        "rescoped": "the deferred note asked for an output diff across the corpus. Measuring found the snapshot already IS that diff: it records xml, ast and hgml per source and reports which moved. The half genuinely missing was WHAT KIND of change it was, which was computed by hand three times over this release. SN-04 now names it: all three projections reads as the parser, xml as the emitter, ast alone as a store or a diagnostic",
+        "not_done": "showing the before/after CONTENT of a changed case still needs stored content rather than hashes, which would grow the snapshot by orders of magnitude. Left undone deliberately; git history holds the before"
+      },
+      {
+        "id": "D-06",
+        "what": "effects: a value that passes through a transformation and comes out narrower",
+        "value": "high - it is disambiguation, not decoration",
+        "cost": "split in two; see .guidelines/ORDERS/INTAKE-EFFECTS.md",
+        "why": "the carrier already parses: the anonymous bracket [[A],[B]] yields subject-then-effects with the guard local to its member, and only a diagnostic stands in the way. [logic] is the precedent for fencing a sub-grammar, and templates and <invoke reads> are the precedent for substituting a named reference so the consumer never infers",
+        "open": "RESOLVED - named checkpoint, not rewind",
+        "status": "UNBLOCKED - ready to become an order",
+        "decision": "[res] references a declared point, never a computed state. The document records restore-to-X and does not perform it, so declared-never-applied holds and Glyph gains no evaluator",
+        "work_the_decision_creates": "the points already exist - <apply order> numbers every step, so a checkpoint addresses an ordinal with no new mechanism. What is open is how a NAME binds to a point, because an ordinal is a position and D-02 already established that a position is a label and not an identity"
+      }
+    ],
+    "rejected": [
+      {
+        "what": "the capability index, the D3/D2/D1 graph, the worker queue, effort transfer",
+        "why": "they solve DMHP's problem; Glyph has no capability-discovery problem"
+      },
+      {
+        "what": "the command parser",
+        "why": "twenty-two regexes with no position, no code and no repair; Glyph's refusals are strictly ahead and there is nothing to take"
+      },
+      {
+        "what": "PREVIEW/APPROVAL as a whole",
+        "why": "Glyph emits documents rather than applying mutations, so approval has nothing to gate; only the diff half transfers, as D-05"
+      }
+    ],
+    "status": "D-01 to D-05 done after E7; D-06 (effects) awaits the Regent on the restore fork"
+  },
+  "mechanisms": [
+    {
+      "name": "awaiting",
+      "added_in": "E2",
+      "what": "a vector rederived ahead of the deliverable that makes it pass is pinned `awaiting: \"<id>\"`. It is EXPECTED to fail until then, and the suite fails the moment it passes - the pin has outlived its reason",
+      "idiom": "the same bidirectional shape as RT-02, SN-01 and the examples' roundTrips pin",
+      "observed_failing": "both directions, before it counted: red while unpinned, and red when made to pass while still pinned"
+    }
+  ],
+  "blast_radius_E3b": {
+    "measured": true,
+    "method": "the full suite run after the emitter changed, then every corpus source emitted and validated",
+    "green_immediately": [
+      "Positive 31/31",
+      "Incomplete",
+      "Invalid",
+      "Regressions",
+      "Long",
+      "Templates",
+      "Rules",
+      "Constraints",
+      "Guard",
+      "Composition",
+      "hgml",
+      "ast schema",
+      "glyph-package",
+      "global store"
+    ],
+    "pinned_awaiting_E4": 22,
+    "which": "the 16 fromXML vectors, RT-01, RT-03, and the four authored pairs that round-tripped; fromXML reads <glyph> and what replaces it is E4's decision, not a regression",
+    "rederived_late": [
+      "4-06"
+    ],
+    "regenerated": [
+      "corpus-snapshot.json (xml and ast projections)",
+      "the published skill"
+    ]
+  },
+  "status": "ALL DELIVERABLES RETURNED - E0, E0b, E1, E2, E3, E3b, E4, E5, E6, E7",
+  "post_release": {
+    "Q4": "the premise was false: PROMOTION_BOUNDARY.md did not exist. It was listed in PROMOTION_MEASUREMENT.md as a deliverable to be written, and the open question read as though it had been written and merely awaited ratification. Fourth occurrence of the release root cause. Drafted at .guidelines/PROMOTION_BOUNDARY.md with section 5 left empty; an agent may not ratify a norm it wrote",
+    "app_launch": "Regent decision: the server is the future, no walking ESM back, but opening must cost one click. serve-dev.js now opens the browser and glyph.cmd wraps it; the README and the serve-dev header no longer claim file:// works or that nothing depends on the server"
+  }
+}

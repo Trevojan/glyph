@@ -1,0 +1,50 @@
+[block
+  'ORD-0024-modes'
+  [ctx
+    'the spec of EMS-002'
+    '.guidelines/.orders/EMS-002/EMS-002.pgml'
+  [/ctx]
+  [tgt
+    'the mode words never vanish, by the inclusion the Regent decided on 2026-10-25: a stray on, an off as the last characters, and the bare words off and on; an ORD of the batch the version moves once for'
+  [/tgt]
+  [ctx
+    'measured at b827782: a stray on, written with no off open before it, leaves the XML byte-identical to the source without it, the lexer marks it stray and nothing reads that; an off as the very last characters leaves no trace, because the lexer loop ends before the off branch can mark it unclosed, while an off followed by anything raises UnclosedOffMode; the bare words off and on are prose with no diagnostic, while the other 142 known names raise LooseCommandWord, because the known-word list leaves out MODE'
+  [/ctx]
+  [ctx
+    'the rules that include them: the element naming of XML_REFERENCE section 2 gives on its element mode-on, and the inverse already writes mode-on back as a closed on, which the lexer then dropped; UnclosedOffMode for every unclosed off; the loose-word check for every known name; nada desaparece em silencio, .constraints'
+  [/ctx]
+  [cnst
+    'outside an off region, a closed on is the command ON written closed, the same node an open on makes, with a note UnmatchedOnMode at its position naming that nothing was off; a chain operator before it is no longer a dangling chain'
+  [/cnst]
+  [cnst
+    'an off at the end raises UnclosedOffMode like any other unclosed off, and an empty region emits an empty off element, read back as an off and an on; the empty command OFF reads back as modeoff, the element spelling read as input, never as the switch'
+  [/cnst]
+  [cnst
+    'MODE joins the loose-word list, with the hint the others get; one declared source for the new code, OC-13, by M01, growing the snapshot with no hash moved; the Rust is ported byte for byte, held by new parse probes'
+  [/cnst]
+  [cmp
+    'the modes'
+    'a stray on is the command with its note, an off at the end raises UnclosedOffMode, the bare words raise LooseCommandWord, and every case comes back to the same XML; each seen failing before it counts, and the Rust answers byte for byte'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+[/block]

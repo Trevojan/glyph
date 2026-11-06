@@ -10,7 +10,7 @@
  * and the rules store; reaches into nothing that parses.
  */
 
-import { INSTR, ALIAS, STRUCT, META, MODE, EMO, SESSION, GLOSS_REVERSE, ELEMENT_INPUT } from "./vocabulary.js";
+import { INSTR, ALIAS, STRUCT, META, MODE, EMO, SESSION, GLOSS_REVERSE, ELEMENT_INPUT, knownWord } from "./vocabulary.js";
 import { rulesOf } from "./stores.js";
 
 /* ======================================================
@@ -18,6 +18,22 @@ import { rulesOf } from "./stores.js";
    ====================================================== */
 
 export var NAME_CH = /[A-Za-z0-9_.]/;
+
+/* What a `-` with a space AFTER it may follow, on the same line: the command
+   that holds the link, its operand, or the `]` that closed one — `[ctx - crit]`,
+   `[ctx'x' - crit]`, `[ctx] - crit`. After prose, at the start of the source
+   or past a line break, `- name` is the dash of prose and the bullet of a
+   list, and stays prose. */
+var LINK_AFTER = { open:1, bareTag:1, literal:1, close:1, closeTag:1 };
+
+/* Whether the run of NAME_CH at `at` is a name the bare-tag reader would take
+   (it starts with a letter) and the static tables know (vocabulary.js). */
+function knownWordAt(src, at) {
+  if (!/[A-Za-z]/.test(src[at] || "")) return false;
+  var j = at;
+  while (j < src.length && NAME_CH.test(src[j])) j++;
+  return knownWord(src.slice(at, j));
+}
 
 export function tokenize(src) {
   var T = [], i = 0, n = src.length;
@@ -31,14 +47,16 @@ export function tokenize(src) {
   }
   function addText(ch) { if (textStart < 0) textStart = i; textBuf += ch; }
 
-  while (i < n) {
+  /* `|| off`: an `[off]` that ends the source owes its `modeUnclosed` like
+     every other unclosed `[off]`, so the loop turns once more to say so. */
+  while (i < n || off) {
     if (off) {
       var up = src.toUpperCase(), idx = up.indexOf("[ON]", i);
       var end = idx === -1 ? n : idx;
       if (end > i) T.push({ k:"raw", v:src.slice(i, end), s:i, e:end });
       i = end;
       if (idx !== -1) { T.push({ k:"mode", v:"ON", s:i, e:i+4 }); i += 4; off = false; }
-      else T.push({ k:"modeUnclosed", v:"", s:n, e:n });
+      else { T.push({ k:"modeUnclosed", v:"", s:n, e:n }); off = false; }
       continue;
     }
 
@@ -65,16 +83,27 @@ export function tokenize(src) {
       var mChain = /^\[=/.exec(rest);
       if (mChain) { T.push({ k:"chain", v:"[=", s:i, e:i+2 }); i += 2; continue; }
 
-      var mLog = /^\[\s*logic\s*(?:[:\-\s]\s*([^\]]*?))?\s*\]/i.exec(rest);
+      /* The fence is named by its first literal, `[logic'calc']…[/logic]`
+         (decided 2026-10-26), the rule a block and a section follow. Only a
+         `[/logic]` makes that head a fence: `[logic'x']` with none is the
+         command LOGIC holding its operand. `[logic-calc]` and `[logic calc]`
+         name it too, and open it closed or not. `[logic:calc]` is the retired
+         colon form: it still opens the fence it names, and `colon` holds where
+         the `:` stands, for the parser to ask. */
+      var mLog = /^\[\s*logic\s*(?:'([^'\]\n]*)'|`([^`\]]*)`|([:\-\s])\s*([^\]]*?))?\s*\]/i.exec(rest);
       if (mLog) {
-        var lname = (mLog[1] || "").trim();
+        var lname = (mLog[1] != null ? mLog[1] : mLog[2] != null ? mLog[2] : mLog[4] || "").trim();
         var bodyStart = i + mLog[0].length;
         var mClose = /\[\s*\/\s*logic\s*\]/i.exec(src.slice(bodyStart));
-        var bodyEnd = mClose ? bodyStart + mClose.index : n;
-        T.push({ k:"logic", v:lname, body:src.slice(bodyStart, bodyEnd), s:i,
-                 e: mClose ? bodyEnd + mClose[0].length : n, closed:!!mClose });
-        i = mClose ? bodyEnd + mClose[0].length : n;
-        continue;
+        if (mClose || (mLog[1] == null && mLog[2] == null)) {
+          var bodyEnd = mClose ? bodyStart + mClose.index : n;
+          var lt = { k:"logic", v:lname, body:src.slice(bodyStart, bodyEnd), s:i,
+                     e: mClose ? bodyEnd + mClose[0].length : n, closed:!!mClose };
+          if (mLog[3] === ":") lt.colon = i + mLog[0].indexOf(":");
+          T.push(lt);
+          i = mClose ? bodyEnd + mClose[0].length : n;
+          continue;
+        }
       }
 
       /* The verbatim fence. `[logic]` proved the shape: fence a region and
@@ -101,6 +130,9 @@ export function tokenize(src) {
 
       var mOff = /^\[\s*off\s*\]/i.exec(rest);
       if (mOff) { T.push({ k:"mode", v:"OFF", s:i, e:i+mOff[0].length }); i += mOff[0].length; off = true; continue; }
+      /* Outside an `[off]` region there is nothing for `[on]` to close: it is
+         the command ON written closed, the spelling fromXML gives <mode-on/>.
+         `stray` is what tells the parser so. */
       var mOn = /^\[\s*on\s*\]/i.exec(rest);
       if (mOn) { T.push({ k:"mode", v:"ON", s:i, e:i+mOn[0].length, stray:true }); i += mOn[0].length; continue; }
 
@@ -209,6 +241,8 @@ export function tokenize(src) {
         T.push({ k:"return", v:"R:", s:textStart, e:i+1 });
         textBuf = ""; textStart = -1; i++; continue;
       }
+      /* the retired colon form, kept as a token so the parser can ask for it
+         and keep what follows as the operand */
       flushText(); T.push({ k:"colon", v:":", s:i, e:i+1 }); i++; continue;
     }
 
@@ -216,8 +250,39 @@ export function tokenize(src) {
 
     if (c === "-") {
       var prev = T[T.length-1];
+      /* The chain link, wherever a name the vocabulary knows touches a `-` that
+         starts a word: one with nothing before it but the start of the source,
+         a token, or whitespace — `[ctx'x'-crit]`, `[ctx -crit]`, `[ctx]-crit`,
+         `a -crit`, `[ctx foo -crit]`, `;-crit`, `,-crit`, `/eth/-crit`,
+         `[/raw]-crit`, `-crit` opening the document. Each of them made `crit`
+         into <off> with no diagnostic, and a known command never vanishes
+         (decided 2026-10-25 and 2026-10-26). The rule that takes it in is the
+         chain the grammar already writes, `{ "-" , chain_item }`, and it
+         belongs to the scope it is in: the command open on the stack, or the
+         block. A run of dashes is one link, so `--crit` is `-crit`. Only a
+         KNOWN name is a link — the 144 names of the static tables, never the
+         session switch, which the parser applies — so `a -b`, `x - y`, `->`
+         and `well-known`, whose `-` starts no word, stay the prose they are. */
+      var dk = i;
+      while (dk < n && src[dk] === "-") dk++;
+      if ((!textBuf.length || /\s$/.test(textBuf)) && knownWordAt(src, dk)) {
+        flushText();
+        T.push({ k:"extend", v:src.slice(i, dk), s:i, e:dk }); i = dk; expectBare = true; continue;
+      }
       if (!textBuf.length && prev && (prev.k === "open" || prev.k === "bareTag")) {
         T.push({ k:"extend", v:"-", s:i, e:i+1 }); i++; expectBare = true; continue;
+      }
+      /* With a space after the `-`, the name does not touch it: it is a link
+         only where the `-` already stands in a link's place, a command, its
+         operand or its `]` before it on the same line — `[ctx] - crit` — as
+         `[in- rwk]` has always read the space after the `-`. */
+      if (dk === i + 1 && !textBuf.trim().length && !/\n/.test(textBuf) && prev && LINK_AFTER[prev.k]) {
+        var sk = dk;
+        while (sk < n && (src[sk] === " " || src[sk] === "\t")) sk++;
+        if (sk > dk && knownWordAt(src, sk)) {
+          flushText();
+          T.push({ k:"extend", v:"-", s:i, e:i+1 }); i++; expectBare = true; continue;
+        }
       }
       addText(c); i++; continue;
     }

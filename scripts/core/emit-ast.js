@@ -80,11 +80,14 @@ export function astShallow(nd) {
   if (nd.literal) return { type: nd.form === "raw" ? "Raw" : "Literal", value: nd.v,
                            form: nd.form, slot: nd.boundSlot || null,
                            role: nd.role || null };
-  if (nd.text) return { type:"Text", value:nd.v };
+  /* `slot` on any other node is the template parameter a named fill carried
+     it in for, past its value — present only there, so every other node of
+     every envelope keeps its shape */
+  if (nd.text) return withSlot({ type:"Text", value:nd.v }, nd);
   if (nd.mode) return { type:"ModeOff" };
-  if (nd.rawFence) return { type:"Verbatim", value:String(nd.v == null ? "" : nd.v) };
+  if (nd.rawFence) return withSlot({ type:"Verbatim", value:String(nd.v == null ? "" : nd.v) }, nd);
   if (nd.logic) {
-    return {
+    return withSlot({
       type:"Logic",
       name: nd.logic.name || null,
       rules: nd.logic.rules.map(function (r) {
@@ -92,16 +95,16 @@ export function astShallow(nd) {
                  expr:r.expr, then:r.then || null, reads:r.reads, uses:r.uses || [] };
       }),
       missing: nd.logic.missing
-    };
+    }, nd);
   }
   /* `expanded` was in the XML and not in the AST, which made an expanded
      invocation indistinguishable from a definition body — writing fromAST is
      what surfaced it: the reconstruction wrote out the whole expansion where
      the author had typed `[--germinate]`. A projection called `full` that is
      missing a field the XML carries is not full. */
-  if (nd.template) return { type:"Template", name:nd.template,
-                            isDefinition:!!nd.isDef, expanded:!!nd.expanded };
-  return {
+  if (nd.template) return withSlot({ type:"Template", name:nd.template,
+                                     isDefinition:!!nd.isDef, expanded:!!nd.expanded }, nd);
+  return withSlot({
     type:"Command",
     raw: nd.raw,
     canonical: nd.canonical,
@@ -117,7 +120,11 @@ export function astShallow(nd) {
     origin: nd.origin || null,
     slotName: !!nd.slotName,
     editorial: !!nd.editorial,
-    name: nd.colon || null,
+    /* null from this engine: the name of a block or a section is its first
+       literal, a child like any other, and only the XML carries it as an
+       attribute (OPERAND_ATTR). fromAST reads a name an envelope holds as an
+       operand literal. */
+    name: null,
     depth: nd.depth,
     autoClosed: !!nd.autoClosed,
     suggestion: nd.suggestion ? nd.suggestion.name : null,
@@ -127,7 +134,12 @@ export function astShallow(nd) {
        deep the command sits in the vocabulary. Different axes, both useful. */
     species: nd.species || null,
     compositionDepth: (nd.compositionDepth === undefined) ? null : nd.compositionDepth
-  };
+  }, nd);
+}
+
+export function withSlot(o, nd) {
+  if (nd && nd.boundSlot) o.slot = nd.boundSlot;
+  return o;
 }
 
 /* Nodes that carry `body`. Logic holds rules, not children. */

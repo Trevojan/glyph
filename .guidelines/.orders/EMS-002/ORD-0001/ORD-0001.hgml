@@ -1,0 +1,144 @@
+[block
+  'ORD-0001-virtual-paths'
+  [ctx
+    'the spec of EMS-002'
+    '.guidelines/.orders/EMS-002/EMS-002.pgml'
+  [/ctx]
+  [tgt
+    'glyph-vpath: the virtual paths of .plan section 0, layers 1, 4, 5 and 6, keyed by the slug'
+  [/tgt]
+  [cnst
+    'JSON and XML enter the index to depth 2, the root at depth 0; a deeper selector resolves by reading the file, under the fingerprint the index holds for it'
+  [/cnst]
+  [cnst
+    'the line range is the first line and the count, as a windowed read takes them'
+  [/cnst]
+  [cnst
+    'the RETURN.md of a series is a log, and stays out of sources, as CHANGELOG.md does'
+  [/cnst]
+  [cmp
+    'the trees'
+    'the extension decides the selector: .md by heading slug, .json by JSON Pointer, .xml by element path, code and text by @block and @endblock; an empty selector is the whole file; zero nodes or many is an error, never an empty slice'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+  [cmp
+    'the index'
+    'every file of .guidelines, the attic and the index aside, with README.md and CLAUDE.md, in the index; each node with its byte range, its line range and its fingerprint, and every entry resolves to content that is not empty'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+  [cmp
+    'the resolver'
+    'many paths read each file once, the answer carries the offsets, the slice arrives under its own virtual path, and a fingerprint that no longer matches is refused'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+  [cmp
+    'sources'
+    'a document declares its sources in its frontmatter, the index answers which documents a file feeds by inversion, and the seeds of INTAKE-VIRTUAL-PATH section 19 enter'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+  [cmp
+    'the gate'
+    'npm run check refuses an index that drifted, a file left out, a source that does not resolve and a stale source, each seen failing before it counts'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+[/block]

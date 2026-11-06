@@ -1,0 +1,35 @@
+<glyph-package engine="3.6.9.07">
+  <schema/>
+  <block once="true">
+    <block binds="ORD-0017-part-if">
+      <user-input>ORD-0017-part-if</user-input>
+      <context>
+        <user-input>the spec of EMS-002</user-input>
+        <user-input>.guidelines/.orders/EMS-002/EMS-002.pgml</user-input>
+      </context>
+      <target>
+        <user-input>the two proposals of the XML draft, answered on 2026-09-27: the number of a PT becomes the attribute n of part and the condition of an IF becomes the attribute cond of if, instead of each arriving as user-input; through PACKAGE_TARGET.md and conformance, with fromXML reading both in the same step; an ORD of the batch the version moves once for</user-input>
+      </target>
+      <context>
+        <user-input>the proposals are the two the draft of release 1.4.4 got right and left for a decision, CHANGELOG.md; XML_REFERENCE.md says an attribute never carries instruction content</user-input>
+      </context>
+      <context>
+        <user-input>measured at 80dfc4d: of the 115 declared sources three write IF and none with a literal, and no conformance vector writes PT or IF, so no hash of the snapshot and no golden moves</user-input>
+      </context>
+      <constraint>
+        <user-input>the operand is the first literal that is neither raw nor a result, the one a binding takes; it moves to the attribute only when it carries nothing else, no template slot, no reference and some text, so nothing it carried is lost; otherwise it stays user-input as today</user-input>
+      </constraint>
+      <constraint>
+        <user-input>a frame counts the literal where it was: an if with a condition does not ask for the condition</user-input>
+      </constraint>
+      <constraint>
+        <user-input>which command takes which attribute is a table of the vocabulary, OPERAND_ATTR, read by the Rust at build time</user-input>
+      </constraint>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the attributes</user-input>
+        <user-input>PT with its number emits part n and IF with its condition emits if cond, the literal gone from the children; a literal that carries a slot or a reference, or is empty, stays user-input; fromXML reads n and cond back as the literal; XML_REFERENCE and PACKAGE_TARGET state the two attributes; each seen failing before it counts, and the Rust answers byte for byte</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>

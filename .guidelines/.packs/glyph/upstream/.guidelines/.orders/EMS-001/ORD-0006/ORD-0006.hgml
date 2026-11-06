@@ -1,0 +1,38 @@
+[block
+  'ORD-0006-templates-rules'
+  [ctx
+    'the spec of EMS-001'
+    '.guidelines/.orders/EMS-001/EMS-001.pgml'
+  [/ctx]
+  [onlyif
+    'ORD-0003 closed'
+  [/onlyif]
+  [tgt
+    'glyph-templates and glyph-rules, with parse passed to the expander as the JS passes it'
+  [/tgt]
+  [cmp
+    'glyph-templates and glyph-rules'
+    'the diagnostics of every T-, C- and K-case equal the oracle'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+[/block]

@@ -10,7 +10,7 @@
 //!
 //! Every field is optional where the JS object may lack it: a literal has no
 //! `canonical`, a command has no `v`. `Some(None)` is a field the JS holds as
-//! `null` (a command's `colon` before a colon arrives, a slot name's `origin`).
+//! `null` (a slot name's `origin`).
 //!
 //! `walk`, `valueChildren` and `stripTags` are util.js's.
 
@@ -58,7 +58,6 @@ pub struct Node<X> {
     pub canonical: Option<String>,
     pub gloss: Option<Gloss>,
     pub alias: Option<bool>,
-    pub colon: Option<Option<String>>,
     pub auto_closed: Option<bool>,
     pub editorial: Option<bool>,
     pub origin: Option<Option<String>>,
@@ -77,6 +76,9 @@ pub struct Node<X> {
     pub is_definition: Option<bool>,
     pub expanded: Option<bool>,
     pub bound_slot: Option<String>,
+    /// Set by the expander on a call it expanded from a definition written in
+    /// the source: the store's constraints of that name are not its own.
+    pub from_source: Option<bool>,
     /// Set by the species pass, from the composition store: the species, and
     /// the depth when the store holds a number (`null` otherwise).
     pub species: Option<String>,
@@ -169,6 +171,41 @@ impl<X: Clone> Tree<X> {
             self.nodes.push(nd);
         }
         other.segments.iter().flat_map(|s| s.children.iter().map(|c| c + base)).collect()
+    }
+
+    /// `copyNodes`: `list` and everything under it, copied for one call to a
+    /// definition written in the source, so the call binds its holes into the
+    /// copy and never into the definition. Every field is kept but `parent`,
+    /// which `reparent` sets where the copy lands.
+    pub fn copy_nodes(&mut self, list: &[Id]) -> Vec<Id> {
+        let roots: Vec<Id> = list.iter().map(|&id| self.copy_one(id)).collect();
+        let mut stack = roots.clone();
+        while let Some(c) = stack.pop() {
+            let kids: Vec<Id> = self.nodes[c].children.clone().into_iter().map(|k| self.copy_one(k)).collect();
+            self.nodes[c].children.clone_from(&kids);
+            stack.extend(kids);
+        }
+        roots
+    }
+    fn copy_one(&mut self, id: Id) -> Id {
+        let mut nd = self.nodes[id].clone();
+        nd.parent = None;
+        self.add(nd)
+    }
+
+    /// The nodes under `list` as a tree of their own, one segment holding the
+    /// roots: a definition of this source handed to a body parsed in another
+    /// arena, where the JS hands the body its registry, which holds it.
+    pub fn extract(&self, list: &[Id]) -> Tree<X> {
+        let ids = self.walk(list);
+        let at: std::collections::HashMap<Id, Id> = ids.iter().enumerate().map(|(i, &id)| (id, i)).collect();
+        let nodes = ids.iter().map(|&id| {
+            let mut nd = self.nodes[id].clone();
+            nd.parent = None;
+            nd.children = nd.children.iter().map(|k| at[k]).collect();
+            nd
+        }).collect();
+        Tree { nodes, segments: vec![Segment { children: list.iter().map(|k| at[k]).collect(), ..Default::default() }] }
     }
 
     /// `valueChildren`: the children that count as a filled slot.

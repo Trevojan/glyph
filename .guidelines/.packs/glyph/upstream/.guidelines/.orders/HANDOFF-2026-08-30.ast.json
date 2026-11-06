@@ -1,0 +1,1892 @@
+{
+  "type": "GlyphAST",
+  "schema": 2,
+  "version": "2.4.5.01",
+  "source": {
+    "length": 5214,
+    "checksum": "ff56a4d807aa8800",
+    "encoding": "utf-8",
+    "newline": "lf",
+    "uri": ".guidelines/ORDERS/HANDOFF-2026-08-30.pgml",
+    "text": "[section'state'\n  [nt'where the engine is']\n  [core'Glyph is at 2.4.5.01 on branch claude/reload-skills-f5b866. Five gates decide it: npm run check runs test-corpus, dag, check-globals, build-templates --check and build-skill --check, and all five exit zero']\n  [ctx'the suite is 31 positive, 6 incomplete, 16 invalid, 5 regressions, 8 long, 12 templates, 15 rules, 9 constraints, 31 guard, 17 composition, 12 hgml, 23 fromXML, 10 reference, 6 round trip, 3 ast schema, 5 examples, 4 snapshot, 3 global store']\n  [rdy'the standing gate is one command: npm run check']];\n\n[section'root cause'\n  [prob'every blocker found in this work is one shape: a decision taken in one place and never carried to the others']\n  [ex'resolution C-01 removed the slash divider and reached only the grammar, while the reference documented it and the engine implemented it at six sites']\n  [ex'resolution I-19 replaced the backslash emotion delimiter and also stopped at the grammar']\n  [ex'the v1.7 changelist said active skill packages stay at v1.6 until reinstalled, and the reinstall never happened']\n  [ex'the repository skill already carried both resolutions correctly, so two destinations were right and three were wrong']\n  [lrn'a decision is not made until it reaches every destination, and the only way to know it did is a command that fails when it did not']];\n\n[section'closed'\n  [nt'what this release finished']\n  [ins'the operator reaches the XML: origin was computed since always and dropped by two consumers, so extend and comma serialised identically and the inverse fabricated a needs element that the author had never been asked for']\n  [ins'chainElement was answering two independent questions and now answers one, which is why a hyphen before a bracket stopped cancelling the needs a bracketed command asks for']\n  [ins'two removals landed seven versions late, and both are demoted to recognisers rather than deleted, because deleting either one re-created the silence it was removed for']\n  [ins'no placeholder character reaches the deliverable: the mood attribute that printed a question mark is gone']\n  [ins'the AST is the source of truth: two named projections, full and panel, with full carrying origin, positions, the source descriptor, the store fingerprints and its own schema number']\n  [ins'fromAST exists, and writing it proved two fields missing from a projection called full']\n  [ins'the round trip invariant moved to the AST, and it caught three losses the XML invariant could not see']\n  [ins'the four US spellings in the deliverable became criticise, categorise, generalise and scrutinise']\n  [ins'the hgml has a consumer: a blend rule folds co-occurring atoms into one element and declares what it means in its own output']\n  [ins'the module system is ESM, package.json exists with no dependencies, and the CLI left the core']];\n\n[section'measured'\n  [nt'numbers, not estimates']\n  [ref'blast radius of the operator change: one vector, measured by parsing all 98 corpus sources rather than estimated']\n  [ref'the schema mutation set catches fourteen of fourteen']\n  [ref'compare and promote is 85 percent describable mechanically and about 1 percent promotable: the composition table decides generality on 2 of 191 divergence sites']\n  [ref'the seam graph says no seam of the core is a leaf, so the remaining split is twelve operations and not one']];\n\n[section'open'\n  [nt'the four that need the Regent, and none of them blocks the others']\n  [qst'the glyph-package format has no specification, so E1 and E3 cannot start: writing one is designing the product rather than executing the plan']\n  [qst'the packaging shape, L4: what the end user actually receives, and what the screen shows']\n  [qst'ratifying PROMOTION_BOUNDARY.md, which an agent may not do for a norm it wrote']\n  [qst'the tracing format: the substrate exists in glyph-trace.js, and the question is what to stack on it']\n  [assm'two versions of one Glyph source, before and after a revision, would change the promotion measurement: no such pair exists in the repository']];\n\n[section'next'\n  [nt'the order the work has, if nothing changes']\n  [ins'the remaining split, in the order the seam graph gives: vocabulary, then logic, then lexer, then the four emitters, then the parser']\n  [ins'the descriptive comparison report, which is useful without deciding anything']\n  [ins'the glyph-package specification, once the Regent decides its shape']\n  [lim'nothing here needs a decision to continue except the four above, and each of those blocks only itself']];\n\n[section'method'\n  [nt'how this was worked, because it is the part that transfers']\n  [cnst'the gate is written before the thing it gates, and every gate is observed failing before it counts']\n  [cnst'a known loss is pinned with its reason, and a pin that outlives its reason fails the suite']\n  [cnst'a retired construct is demoted to a recogniser that refuses it by name, never deleted into silence']\n  [cnst'writing the consumer is what proves the producer complete: fromAST found two missing fields, glyph-trace found a third']\n  [cnst'measure before building: the promotion measurement changed what gets built, and the seam graph stopped a split that had no map']];\n"
+  },
+  "stores": {
+    "templates": "d127beace2f86000",
+    "rules": "dfd4112faebdb800",
+    "expansions": "737d96fca2075800"
+  },
+  "projection": "full",
+  "segments": [
+    {
+      "type": "Segment",
+      "mood": [],
+      "isReturn": false,
+      "continues": false,
+      "breaks": 0,
+      "autoClosedCount": 0,
+      "body": [
+        {
+          "type": "Command",
+          "raw": "section",
+          "canonical": "SECTION",
+          "tier": "struct",
+          "gloss": "Section",
+          "element": "section",
+          "isAlias": false,
+          "chainElement": false,
+          "origin": "root",
+          "slotName": false,
+          "editorial": false,
+          "name": null,
+          "depth": 0,
+          "autoClosed": false,
+          "suggestion": null,
+          "emotions": [],
+          "species": "atom",
+          "compositionDepth": 0,
+          "at": {
+            "s": 0,
+            "e": 8
+          },
+          "body": [
+            {
+              "type": "Literal",
+              "value": "state",
+              "form": "quote",
+              "slot": null,
+              "at": {
+                "s": 8,
+                "e": 15
+              }
+            },
+            {
+              "type": "Command",
+              "raw": "nt",
+              "canonical": "NT",
+              "tier": "instr",
+              "gloss": "Note",
+              "element": "note",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 18,
+                "e": 21
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "where the engine is",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 21,
+                    "e": 42
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "core",
+              "canonical": "CORE",
+              "tier": "instr",
+              "gloss": "Core",
+              "element": "core",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 46,
+                "e": 51
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "Glyph is at 2.4.5.01 on branch claude/reload-skills-f5b866. Five gates decide it: npm run check runs test-corpus, dag, check-globals, build-templates --check and build-skill --check, and all five exit zero",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 51,
+                    "e": 258
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 262,
+                "e": 266
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the suite is 31 positive, 6 incomplete, 16 invalid, 5 regressions, 8 long, 12 templates, 15 rules, 9 constraints, 31 guard, 17 composition, 12 hgml, 23 fromXML, 10 reference, 6 round trip, 3 ast schema, 5 examples, 4 snapshot, 3 global store",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 266,
+                    "e": 509
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "rdy",
+              "canonical": "RDY",
+              "tier": "instr",
+              "gloss": "Ready",
+              "element": "ready",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 513,
+                "e": 517
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the standing gate is one command: npm run check",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 517,
+                    "e": 566
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Segment",
+      "mood": [],
+      "isReturn": false,
+      "continues": false,
+      "breaks": 0,
+      "autoClosedCount": 0,
+      "body": [
+        {
+          "type": "Command",
+          "raw": "section",
+          "canonical": "SECTION",
+          "tier": "struct",
+          "gloss": "Section",
+          "element": "section",
+          "isAlias": false,
+          "chainElement": false,
+          "origin": "root",
+          "slotName": false,
+          "editorial": false,
+          "name": null,
+          "depth": 0,
+          "autoClosed": false,
+          "suggestion": null,
+          "emotions": [],
+          "species": "atom",
+          "compositionDepth": 0,
+          "at": {
+            "s": 571,
+            "e": 579
+          },
+          "body": [
+            {
+              "type": "Literal",
+              "value": "root cause",
+              "form": "quote",
+              "slot": null,
+              "at": {
+                "s": 579,
+                "e": 591
+              }
+            },
+            {
+              "type": "Command",
+              "raw": "prob",
+              "canonical": "PROB",
+              "tier": "instr",
+              "gloss": "Problem",
+              "element": "problem",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "composite",
+              "compositionDepth": 1,
+              "at": {
+                "s": 594,
+                "e": 599
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "every blocker found in this work is one shape: a decision taken in one place and never carried to the others",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 599,
+                    "e": 709
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ex",
+              "canonical": "EX",
+              "tier": "instr",
+              "gloss": "Example",
+              "element": "example",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 713,
+                "e": 716
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "resolution C-01 removed the slash divider and reached only the grammar, while the reference documented it and the engine implemented it at six sites",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 716,
+                    "e": 866
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ex",
+              "canonical": "EX",
+              "tier": "instr",
+              "gloss": "Example",
+              "element": "example",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 870,
+                "e": 873
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "resolution I-19 replaced the backslash emotion delimiter and also stopped at the grammar",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 873,
+                    "e": 963
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ex",
+              "canonical": "EX",
+              "tier": "instr",
+              "gloss": "Example",
+              "element": "example",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 967,
+                "e": 970
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the v1.7 changelist said active skill packages stay at v1.6 until reinstalled, and the reinstall never happened",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 970,
+                    "e": 1083
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ex",
+              "canonical": "EX",
+              "tier": "instr",
+              "gloss": "Example",
+              "element": "example",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 1087,
+                "e": 1090
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the repository skill already carried both resolutions correctly, so two destinations were right and three were wrong",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 1090,
+                    "e": 1208
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "lrn",
+              "canonical": "LRN",
+              "tier": "instr",
+              "gloss": "Learn",
+              "element": "learn",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "composite",
+              "compositionDepth": 2,
+              "at": {
+                "s": 1212,
+                "e": 1216
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "a decision is not made until it reaches every destination, and the only way to know it did is a command that fails when it did not",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 1216,
+                    "e": 1348
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Segment",
+      "mood": [],
+      "isReturn": false,
+      "continues": false,
+      "breaks": 0,
+      "autoClosedCount": 0,
+      "body": [
+        {
+          "type": "Command",
+          "raw": "section",
+          "canonical": "SECTION",
+          "tier": "struct",
+          "gloss": "Section",
+          "element": "section",
+          "isAlias": false,
+          "chainElement": false,
+          "origin": "root",
+          "slotName": false,
+          "editorial": false,
+          "name": null,
+          "depth": 0,
+          "autoClosed": false,
+          "suggestion": null,
+          "emotions": [],
+          "species": "atom",
+          "compositionDepth": 0,
+          "at": {
+            "s": 1353,
+            "e": 1361
+          },
+          "body": [
+            {
+              "type": "Literal",
+              "value": "closed",
+              "form": "quote",
+              "slot": null,
+              "at": {
+                "s": 1361,
+                "e": 1369
+              }
+            },
+            {
+              "type": "Command",
+              "raw": "nt",
+              "canonical": "NT",
+              "tier": "instr",
+              "gloss": "Note",
+              "element": "note",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 1372,
+                "e": 1375
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "what this release finished",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 1375,
+                    "e": 1403
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 1407,
+                "e": 1411
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the operator reaches the XML: origin was computed since always and dropped by two consumers, so extend and comma serialised identically and the inverse fabricated a needs element that the author had never been asked for",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 1411,
+                    "e": 1632
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 1636,
+                "e": 1640
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "chainElement was answering two independent questions and now answers one, which is why a hyphen before a bracket stopped cancelling the needs a bracketed command asks for",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 1640,
+                    "e": 1812
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 1816,
+                "e": 1820
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "two removals landed seven versions late, and both are demoted to recognisers rather than deleted, because deleting either one re-created the silence it was removed for",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 1820,
+                    "e": 1989
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 1993,
+                "e": 1997
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "no placeholder character reaches the deliverable: the mood attribute that printed a question mark is gone",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 1997,
+                    "e": 2104
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 2108,
+                "e": 2112
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the AST is the source of truth: two named projections, full and panel, with full carrying origin, positions, the source descriptor, the store fingerprints and its own schema number",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 2112,
+                    "e": 2294
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 2298,
+                "e": 2302
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "fromAST exists, and writing it proved two fields missing from a projection called full",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 2302,
+                    "e": 2390
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 2394,
+                "e": 2398
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the round trip invariant moved to the AST, and it caught three losses the XML invariant could not see",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 2398,
+                    "e": 2501
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 2505,
+                "e": 2509
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the four US spellings in the deliverable became criticise, categorise, generalise and scrutinise",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 2509,
+                    "e": 2607
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 2611,
+                "e": 2615
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the hgml has a consumer: a blend rule folds co-occurring atoms into one element and declares what it means in its own output",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 2615,
+                    "e": 2741
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 2745,
+                "e": 2749
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the module system is ESM, package.json exists with no dependencies, and the CLI left the core",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 2749,
+                    "e": 2844
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Segment",
+      "mood": [],
+      "isReturn": false,
+      "continues": false,
+      "breaks": 0,
+      "autoClosedCount": 0,
+      "body": [
+        {
+          "type": "Command",
+          "raw": "section",
+          "canonical": "SECTION",
+          "tier": "struct",
+          "gloss": "Section",
+          "element": "section",
+          "isAlias": false,
+          "chainElement": false,
+          "origin": "root",
+          "slotName": false,
+          "editorial": false,
+          "name": null,
+          "depth": 0,
+          "autoClosed": false,
+          "suggestion": null,
+          "emotions": [],
+          "species": "atom",
+          "compositionDepth": 0,
+          "at": {
+            "s": 2849,
+            "e": 2857
+          },
+          "body": [
+            {
+              "type": "Literal",
+              "value": "measured",
+              "form": "quote",
+              "slot": null,
+              "at": {
+                "s": 2857,
+                "e": 2867
+              }
+            },
+            {
+              "type": "Command",
+              "raw": "nt",
+              "canonical": "NT",
+              "tier": "instr",
+              "gloss": "Note",
+              "element": "note",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 2870,
+                "e": 2873
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "numbers, not estimates",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 2873,
+                    "e": 2897
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ref",
+              "canonical": "REF",
+              "tier": "instr",
+              "gloss": "Reference",
+              "element": "reference",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 2901,
+                "e": 2905
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "blast radius of the operator change: one vector, measured by parsing all 98 corpus sources rather than estimated",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 2905,
+                    "e": 3019
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ref",
+              "canonical": "REF",
+              "tier": "instr",
+              "gloss": "Reference",
+              "element": "reference",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 3023,
+                "e": 3027
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the schema mutation set catches fourteen of fourteen",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 3027,
+                    "e": 3081
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ref",
+              "canonical": "REF",
+              "tier": "instr",
+              "gloss": "Reference",
+              "element": "reference",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 3085,
+                "e": 3089
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "compare and promote is 85 percent describable mechanically and about 1 percent promotable: the composition table decides generality on 2 of 191 divergence sites",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 3089,
+                    "e": 3251
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ref",
+              "canonical": "REF",
+              "tier": "instr",
+              "gloss": "Reference",
+              "element": "reference",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 3255,
+                "e": 3259
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the seam graph says no seam of the core is a leaf, so the remaining split is twelve operations and not one",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 3259,
+                    "e": 3367
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Segment",
+      "mood": [],
+      "isReturn": false,
+      "continues": false,
+      "breaks": 0,
+      "autoClosedCount": 0,
+      "body": [
+        {
+          "type": "Command",
+          "raw": "section",
+          "canonical": "SECTION",
+          "tier": "struct",
+          "gloss": "Section",
+          "element": "section",
+          "isAlias": false,
+          "chainElement": false,
+          "origin": "root",
+          "slotName": false,
+          "editorial": false,
+          "name": null,
+          "depth": 0,
+          "autoClosed": false,
+          "suggestion": null,
+          "emotions": [],
+          "species": "atom",
+          "compositionDepth": 0,
+          "at": {
+            "s": 3372,
+            "e": 3380
+          },
+          "body": [
+            {
+              "type": "Literal",
+              "value": "open",
+              "form": "quote",
+              "slot": null,
+              "at": {
+                "s": 3380,
+                "e": 3386
+              }
+            },
+            {
+              "type": "Command",
+              "raw": "nt",
+              "canonical": "NT",
+              "tier": "instr",
+              "gloss": "Note",
+              "element": "note",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 3389,
+                "e": 3392
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the four that need the Regent, and none of them blocks the others",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 3392,
+                    "e": 3459
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "qst",
+              "canonical": "QST",
+              "tier": "instr",
+              "gloss": "Question",
+              "element": "question",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "composite",
+              "compositionDepth": 1,
+              "at": {
+                "s": 3463,
+                "e": 3467
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the glyph-package format has no specification, so E1 and E3 cannot start: writing one is designing the product rather than executing the plan",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 3467,
+                    "e": 3610
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "qst",
+              "canonical": "QST",
+              "tier": "instr",
+              "gloss": "Question",
+              "element": "question",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "composite",
+              "compositionDepth": 1,
+              "at": {
+                "s": 3614,
+                "e": 3618
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the packaging shape, L4: what the end user actually receives, and what the screen shows",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 3618,
+                    "e": 3707
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "qst",
+              "canonical": "QST",
+              "tier": "instr",
+              "gloss": "Question",
+              "element": "question",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "composite",
+              "compositionDepth": 1,
+              "at": {
+                "s": 3711,
+                "e": 3715
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "ratifying PROMOTION_BOUNDARY.md, which an agent may not do for a norm it wrote",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 3715,
+                    "e": 3795
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "qst",
+              "canonical": "QST",
+              "tier": "instr",
+              "gloss": "Question",
+              "element": "question",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "composite",
+              "compositionDepth": 1,
+              "at": {
+                "s": 3799,
+                "e": 3803
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the tracing format: the substrate exists in glyph-trace.js, and the question is what to stack on it",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 3803,
+                    "e": 3904
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "assm",
+              "canonical": "ASSM",
+              "tier": "instr",
+              "gloss": "Assumption",
+              "element": "assumption",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "composite",
+              "compositionDepth": 2,
+              "at": {
+                "s": 3908,
+                "e": 3913
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "two versions of one Glyph source, before and after a revision, would change the promotion measurement: no such pair exists in the repository",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 3913,
+                    "e": 4055
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Segment",
+      "mood": [],
+      "isReturn": false,
+      "continues": false,
+      "breaks": 0,
+      "autoClosedCount": 0,
+      "body": [
+        {
+          "type": "Command",
+          "raw": "section",
+          "canonical": "SECTION",
+          "tier": "struct",
+          "gloss": "Section",
+          "element": "section",
+          "isAlias": false,
+          "chainElement": false,
+          "origin": "root",
+          "slotName": false,
+          "editorial": false,
+          "name": null,
+          "depth": 0,
+          "autoClosed": false,
+          "suggestion": null,
+          "emotions": [],
+          "species": "atom",
+          "compositionDepth": 0,
+          "at": {
+            "s": 4060,
+            "e": 4068
+          },
+          "body": [
+            {
+              "type": "Literal",
+              "value": "next",
+              "form": "quote",
+              "slot": null,
+              "at": {
+                "s": 4068,
+                "e": 4074
+              }
+            },
+            {
+              "type": "Command",
+              "raw": "nt",
+              "canonical": "NT",
+              "tier": "instr",
+              "gloss": "Note",
+              "element": "note",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 4077,
+                "e": 4080
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the order the work has, if nothing changes",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 4080,
+                    "e": 4124
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 4128,
+                "e": 4132
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the remaining split, in the order the seam graph gives: vocabulary, then logic, then lexer, then the four emitters, then the parser",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 4132,
+                    "e": 4265
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 4269,
+                "e": 4273
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the descriptive comparison report, which is useful without deciding anything",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 4273,
+                    "e": 4351
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 4355,
+                "e": 4359
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the glyph-package specification, once the Regent decides its shape",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 4359,
+                    "e": 4427
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "lim",
+              "canonical": "LIM",
+              "tier": "instr",
+              "gloss": "Limitation",
+              "element": "limitation",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 4431,
+                "e": 4435
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "nothing here needs a decision to continue except the four above, and each of those blocks only itself",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 4435,
+                    "e": 4538
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Segment",
+      "mood": [],
+      "isReturn": false,
+      "continues": false,
+      "breaks": 0,
+      "autoClosedCount": 0,
+      "body": [
+        {
+          "type": "Command",
+          "raw": "section",
+          "canonical": "SECTION",
+          "tier": "struct",
+          "gloss": "Section",
+          "element": "section",
+          "isAlias": false,
+          "chainElement": false,
+          "origin": "root",
+          "slotName": false,
+          "editorial": false,
+          "name": null,
+          "depth": 0,
+          "autoClosed": false,
+          "suggestion": null,
+          "emotions": [],
+          "species": "atom",
+          "compositionDepth": 0,
+          "at": {
+            "s": 4543,
+            "e": 4551
+          },
+          "body": [
+            {
+              "type": "Literal",
+              "value": "method",
+              "form": "quote",
+              "slot": null,
+              "at": {
+                "s": 4551,
+                "e": 4559
+              }
+            },
+            {
+              "type": "Command",
+              "raw": "nt",
+              "canonical": "NT",
+              "tier": "instr",
+              "gloss": "Note",
+              "element": "note",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 4562,
+                "e": 4565
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "how this was worked, because it is the part that transfers",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 4565,
+                    "e": 4625
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 4629,
+                "e": 4634
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the gate is written before the thing it gates, and every gate is observed failing before it counts",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 4634,
+                    "e": 4734
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 4738,
+                "e": 4743
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "a known loss is pinned with its reason, and a pin that outlives its reason fails the suite",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 4743,
+                    "e": 4835
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 4839,
+                "e": 4844
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "a retired construct is demoted to a recogniser that refuses it by name, never deleted into silence",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 4844,
+                    "e": 4944
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 4948,
+                "e": 4953
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "writing the consumer is what proves the producer complete: fromAST found two missing fields, glyph-trace found a third",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 4953,
+                    "e": 5073
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 5077,
+                "e": 5082
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "measure before building: the promotion measurement changed what gets built, and the seam graph stopped a split that had no map",
+                  "form": "quote",
+                  "slot": null,
+                  "at": {
+                    "s": 5082,
+                    "e": 5210
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "diagnostics": []
+}

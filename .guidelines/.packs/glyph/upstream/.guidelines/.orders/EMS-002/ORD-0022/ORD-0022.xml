@@ -1,0 +1,32 @@
+<glyph-package engine="3.6.9.07">
+  <schema/>
+  <block once="true">
+    <block binds="ORD-0022-mood-return">
+      <user-input>ORD-0022-mood-return</user-input>
+      <context>
+        <user-input>the spec of EMS-002</user-input>
+        <user-input>.guidelines/.orders/EMS-002/EMS-002.pgml</user-input>
+      </context>
+      <target>
+        <user-input>a mood written in a return segment reaches the XML, the first of the inclusions the Regent decided on 2026-10-25, a known construct that never vanishes; an ORD of the batch the version moves once for</user-input>
+      </target>
+      <context>
+        <user-input>measured at 0c8b55e: the five sources keep the mood in segment.mood with isReturn and no diagnostic, and the XML has no mood, because the return branch of buildXml never reads it; both inverses write the mood header glued to r-, which the lexer reads as an unterminated mood code, so the return marker is lost on the way back, already today through fromAST</user-input>
+      </context>
+      <context>
+        <user-input>the rule that includes it: XML_REFERENCE section 6, mood is a child of block, first among its children, a mood colours the whole segment; a return segment is a segment, the grammar writes segment as an emotion header and an element sequence, and buildXml wraps it in the same block</user-input>
+      </context>
+      <constraint>
+        <user-input>the mood goes first in the block, ahead of user-expectative, as PACKAGE_TARGET refusal 11 MoodMisplaced places it; it does not enter user-expectative, and expects does not change</user-input>
+      </constraint>
+      <constraint>
+        <user-input>no declared source writes a mood in a return segment, so no hash of the snapshot moves; three XML probes and one suite test hold it, and the Rust is ported byte for byte</user-input>
+      </constraint>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the mood</user-input>
+        <user-input>a mood in a return segment emits mood first in its block; fromXML and fromAST write a space between the mood header and r-, and the six test sources come back to the same XML; seen failing before it counts, and the Rust answers byte for byte</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>

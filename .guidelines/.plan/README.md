@@ -6,7 +6,7 @@
 
 ## Autorizado pelo Regente, ainda não construído
 
-### 0. Caminhos virtuais — `.guidelines/.shortcuts/.virtual/` — **decidido, primeiro da fila**
+### 0. Caminhos virtuais — `.guidelines/.shortcuts/.virtual/` — **construído, as sete camadas pela EMS-002**
 
 > *"quero que seja feito um sistema que implemente `.guidelines/.shortcuts/.virtual/`
 > e defina os caminhos virtuais com offsets e tudo o mais […] a síntese deve
@@ -57,34 +57,35 @@ O que vale em todas as camadas:
   O(log n), extração em O(log n + L) para L bytes devolvidos, e atualização em
   O(k log n) para k nós afetados pela edição, nunca pelo tamanho do repositório.
 
-Antes do código, a medição sobre o histórico do git, com os limiares declarados
-antes de rodar, está em
-[`INTAKE-VIRTUAL-PATH.md`](../.orders/INTAKE-VIRTUAL-PATH.md) §18 (2026-10-16,
-`scripts/measure-coupling.js`). Desde setembro, a taxa de defasagem é **4,8 %**,
-abaixo da barra de parar. As edições em `.md` seguem locais, com mediana de
-6,7 %, e a co-mudança código↔documento não tem nenhum par acima da barra.
+Medido antes do código, sobre os 202 commits do histórico, com os limiares
+declarados num commit anterior ao script
+([`INTAKE-VIRTUAL-PATH.md`](../.orders/INTAKE-VIRTUAL-PATH.md) §18 e §19,
+`scripts/measure-coupling.js`): a impressão digital defasada é `fix` no
+`npm run check`; a granularidade é o nó; o `sources:` nasce com as duas linhas
+propostas fora do `RETURN.md`, que é log; e a primeira ORD chaveia pelo slug,
+com o `NodeID`, a manutenção de ordem e o índice de recuperação nas seguintes.
 
-**Decidido em 2026-10-16** ([`.decisions/`](../.decisions/README.md)): as
-**camadas 1 a 4 vêm primeiro**, e o código mora **na base, em JS**, servindo as
-duas branches. As camadas 5 e 6 ficam adiadas pela medição, e a 7 vem depois
-delas. Duas ordens concorrentes são proibidas
-([`.constraints/`](../.constraints/README.md)), e a EMS-001 ocupa a vaga até a
-`ORD-0014` fechar. Por isso as camadas 1 a 4 correm
-como trabalho do plano no `main`, do mesmo jeito que o portão `CL-04`/`CL-05`, e
-não como uma segunda ORD.
+O crate `glyph-vpath` constrói as sete camadas, pelas
+[`ORD-0001` a `ORD-0004` da EMS-002](../.orders/EMS-002/README.md): as árvores
+por extensão; o índice (`.guidelines/.shortcuts/.virtual/index.json`, JSON e
+XML até a profundidade 2), com o `NodeID` de cada nó, o pai dele, os caminhos
+antigos como apelidos e as recuperações; o resolvedor; o `sources:` semeado no
+`README.md` e no `XML_REFERENCE.md`; e o portão no `npm run check`. A
+identidade passa de um build ao seguinte só pela estrutura — o mesmo caminho,
+o mesmo texto, o mesmo corpo, o mesmo arquivo renomeado —, como o M5 decidiu
+([`INTAKE-VIRTUAL-PATH.md`](../.orders/INTAKE-VIRTUAL-PATH.md) §21); o que ela
+não alcança, o cabeçalho renomeado com o corpo mudado, o build recupera pelo
+conteúdo, contra o texto antigo do cache ou do git, como o M6 decidiu (§23), e
+cada resposta por uma recuperação é uma *index miss* no log ao lado do índice.
+A ordem é a do índice, ordenada uma vez na carga: as posições ficam absolutas,
+e os rótulos de Dietz–Sleator com offsets relativos não entram, porque
+segurariam 42,0 % das linhas que uma edição reescreve, abaixo dos 50 %
+declarados (§25); a medida está no script, e vira no dia em que passar deles.
 
-**As camadas 1 a 4 estão construídas** em
-[`scripts/virtual-path.js`](../../scripts/virtual-path.js), e o índice é
-[`.shortcuts/.virtual/index.json`](../.shortcuts/.virtual/index.json): 135
-arquivos, 3 532 nós e 678 KB. `node scripts/virtual-path.js --check` está no
-`npm run check`, e o balde `virtual path` da suíte tem 14 casos, cada regra
-vista falhando numa mutação plantada. Quem edita `.guidelines/` passa a rodar
-`node scripts/virtual-path.js` antes do `check`, como já roda o
-`build-templates.js` quando edita as fontes do motor. Esperam o Regente: o
-`.history/study.md`, vazio desde o commit inicial, está fixado como perda
-conhecida no `KNOWN_EMPTY` do módulo, porque cortar o sótão é dele; e não existe
-seletor para `.pgml`, então um `.pgml` se endereça pelo arquivo inteiro ou por
-`@block`.
+Uma fatia se lê com `npm run vpath -- resolve 'arquivo#seletor' --text`, ou
+pelo `NodeID`; `up` dá a cadeia de pais, `before` como um nó está para outro,
+`above` o que vem acima dele no arquivo, `between` o que há de um ao outro, e
+`misses` as falhas registradas.
 
 ### 1. `<section>` de cabeçalho, irmã do `<schema/>` — **decidido, faltando fazer**
 
@@ -118,14 +119,14 @@ Decidíveis hoje, sem mecanismo novo:
 realmente escreveu (§0 do `COMPILER_LESSONS.md`). Precisa de **filtro
 semântico** — categoria, espécie, tabela de composição — não de limiar melhor.
 
-### 3. Seis defeitos, medidos e não consertados no JS
+### 3. Seis defeitos medidos: o que foi consertado nos dois motores, e o que o Rust conserta
 
-| | medido |
+| | estado |
 |---|---|
-| `;;` **migra** | `[nt'a'];;[nt'b']` volta como `[nt'a'][nt'b'];;` — a quebra sai de entre os blocos e vai para o fim. E some inteira na queima. |
-| `;` é **assimétrico entre aspas** | encerra um literal de crase, não encerra um de apóstrofo. As duas formas deveriam ser intercambiáveis. |
-| param de template nu vira prosa | `[--germinate a,b]` → `PlaceholderPending` ×2 e os valores caem como `<off>`. Param de template é **sempre literal** — as duas aspas servem, a palavra nua não. |
-| placeholder que o template não declara **some em silêncio** | `[--germinate[ph-esforco'E']]`: o `germinate` declara só `alvo` e `criterio`, e o `E` não chega ao XML nem a um diagnóstico. Seis dos oito placeholders passados ao `germinate` na [`order-generic.pgml`](../../.scope/generics/order-generic.pgml) somem assim. Medido em 2026-11-02 |
+| `;;` | consertado nos dois motores em 2026-09-06 (`1342488`): `[nt'a'];;[nt'b']` vai e volta exato, o `<break/>` entre os blocos. Na queima do Rust, `;;` é a linha `;;` entre os blocos desde a `EMS-002/ORD-0019`; a do JS dá a mesma linha em branco para `;;` e `;` até sair, e os testes do oráculo nomeiam a diferença. |
+| `;` dentro de literal | consertado nos dois motores em 2026-09-06 (`f6d07ae`): dentro de um literal, só a aspa que o abriu o fecha. No lexer do Rust, só a aspa que abriu um literal o fecha, também na quebra de linha, desde a `EMS-002/ORD-0020`; o do JS encerra o apóstrofo na quebra de linha até sair, e o teste do oráculo nomeia a diferença. |
+| param de template nu | o deslize é recusado desde 2026-09-06 (`03aedad`): um parâmetro que não é literal antes de um literal é `fix` `TemplateParamNotLiteral`. **Resta:** a palavra nua sem literal depois (`[--germinate a,b]`) cai como `<off>` com `PlaceholderPending` ×2, e a mensagem chama a palavra nua de `[?`, no JS até sair; no Rust, desde a `EMS-002/ORD-0021`, a palavra nua numa posição de parâmetro dá `fix` `TemplateParamNotLiteral` que a nomeia e mostra a forma entre aspas, a opção (a) do [§3 das perguntas](PERGUNTAS-ABERTAS.md), e os testes do oráculo nomeiam a diferença. |
+| humor dentro de um template | `/eth/` cujo comando aberto mais interno é um template: o JS lança `TypeError` (`parser.js:263`, o nó de template não tem lista de humores) até sair; o Rust responde com o documento — o humor colore a seção, primeiro no bloco — desde a `EMS-002/ORD-0023`, e os testes do oráculo nomeiam a diferença com os bytes em `rust/testkit/known/template-moods.json`. |
 | o nome de um placeholder **queima como comando** | `` [ph-x`q`] `` queima como `[ph [x[/x] 'q' [/ph]`, e a queima relida dá um `UnknownCommand` por lacuna, então a queima de uma Order Matrix nunca relê limpa. Medido em 2026-11-02 |
 | o `toXML` do JS **cresce com o quadrado das linhas** | L-03, L-02 e L-01 levam 23 ms, 0,44 s e 6,2 s; 84% do L-02 é a passada estrutural (`packageSpan`, `packageIndent` e o seu `^ +`). O port em Rust lê cada linha uma vez e faz o L-01 em 0,13 s. Fixado por decisão (pergunta 13 do [retorno](../.orders/EMS-001/RETURN.md)): o JS não é consertado, e as fontes longas vão pelo Rust |
 
@@ -162,53 +163,11 @@ EMS que o usuário conduz está em
 [`INTAKE-PIN-TRAFFIC.md`](../.orders/INTAKE-PIN-TRAFFIC.md), com o que ainda
 espera o Regente no §5 dele.
 
-Decidido em 2026-09-27, ainda não construído — cada item uma ORD quando o
-Regente chamar, o JS primeiro onde o oráculo muda:
-
-- **uma fonte declarada com caractere fora do BMP** (pergunta 2): o snapshot se
-  move por decisão, e `lev` e as projeções seguintes passam a ser provados nela;
-- **o cache das regras sai de cima da store** (pergunta 3): o JS guarda as regras
-  compiladas fora do objeto, o envelope hashea só a store, os hashes de `ast` se
-  movem por decisão, e o `glyph_rules::with_cache` do Rust sai;
-- **JSON num crate próprio** (pergunta 4), abaixo de todos, com entrada de oráculo
-  no `crate-graph.js`, no lugar do `glyph_util::json` e do `Value` do
-  `glyph-stores`;
-- **o corpo de um template lê o que o chamador registrou** (pergunta 6): o Rust
-  guarda um registro ao lado do contexto, e um corpo que quebra uma regra lê igual
-  na CLI e no app pelos dois motores;
-- **o zip de uma ORD de série só atrás de uma flag** (pergunta 1): o `--bundle`
-  escreve a pasta, e o zip quando pedido;
-- **o `classify` pelas tabelas da página** (pergunta 10): atrás de
-  `?engine=relay`, uma requisição por chamada, menos o `classify`, que a página
-  responde com as tabelas que já carrega — o L-01 deixa de fazer 8 000 idas;
-- **o snapshot respeita os stores de cada caso** (O5): os hashes dos casos T se
-  movem por decisão, e o `TemplateCycle` entra no oráculo;
-- **uma ORD de renomeações** (O8, O9, O10): o `SKEP` do `vocabulary.js` passa a
-  *Sceptic*, como o glossário já diz, e `<skeptic>` e `[skeptic` continuam lidos;
-  o diagnóstico *"Parâmetro de molde"* diz template; o *preset* sai do
-  `templates.json` e do `rules.json`; o comentário do XML de fonte vazia diz
-  mould; a chave `glyph.moldes.user.v1` migra uma vez, sem perder mould
-  nenhum; e a categoria `molde` do vocabulário vira `frame`;
-- **a régua das crates no portão** (O7): o `check:rust` mede a árvore de cada crate
-  externa e aplica *note*, *ask* e *fix*; `wry` + `tao` é *fix*, e a janela da
-  `ORD-0014` vai pelo `msedge --app`;
-- **a sintaxe de referência `[ref'nome']`**: um nome ligado que não resolve, fora
-  da cerca `[logic]`, dispara `<needs var>`;
-- **o alarme de inferência profunda**: composto de profundidade 5 ou mais sem
-  operando pergunta (`ask`);
-- **dois diagnósticos para um comando sem efeito**: *não trabalha* (`note`), um
-  comando conhecido sem efeito na posição em que está; *não sabe* (`fix`), fora
-  do vocabulário;
-- **as duas propostas do rascunho do XML**: `[pt'1.1'` → `<part n="1.1">` e
-  `[if'cond'` → `<if cond="…">`, pelo `PACKAGE_TARGET.md`, com o `fromXML` no
-  mesmo passo;
-- **o blend `REV` + `DIST` só no mesmo alvo**: o `sameTarget` passa a conferir o
-  alvo, e alvos diferentes queimam como dois comandos;
-- **os três defeitos antigos do §3, só no Rust** (O4): o Rust responde certo, e o
-  teste diferencial nomeia cada um como diferença conhecida;
-- **o Rust para de refazer a cada chamada o que o JS faz uma vez** (pergunta 12):
-  as regras compiladas uma vez por contexto e o `ck` em aritmética inteira, só no
-  Rust; o JS não é afinado.
+O lote das decididas em 2026-09-27 e 2026-10-25 que movem o emitido está
+construído, da `EMS-002/ORD-0014` à `ORD-0031`, e a versão se moveu uma vez
+quando ele fechou, para 4.7.10.08 (2026-10-30). O mapa da inclusão, posição por
+posição, está no [`INTAKE-INCLUSION.md`](../.orders/INTAKE-INCLUSION.md); três
+leituras construídas esperam o Regente, no §4 dele.
 
 O que a spec revoga está assinado, e entre isso está a escada como
 ordem de trabalho: [`ladder.toml`](ladder.toml) fica como o registro da
