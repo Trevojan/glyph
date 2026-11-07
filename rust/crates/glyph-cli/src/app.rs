@@ -22,8 +22,8 @@
 //! Run with no argument from a console, as a double-click does, the binary
 //! installs itself when it is not the installed copy, and then serves.
 
-use glyph_stores::{Context, Value};
-use glyph_util::json::{self, Json};
+use glyph_json::Json;
+use glyph_stores::Context;
 use std::io::{BufRead, BufReader, Read, Write};
 use std::net::{TcpListener, TcpStream};
 use std::path::{Path, PathBuf};
@@ -82,17 +82,6 @@ fn content_type(path: &str) -> &'static str {
     }
 }
 
-fn value(j: Json) -> Value {
-    match j {
-        Json::Null => Value::Null,
-        Json::Bool(b) => Value::Bool(b),
-        Json::Num(n) => Value::Num(n),
-        Json::Str(s) => Value::Str(s),
-        Json::Arr(a) => Value::Arr(a.into_iter().map(value).collect()),
-        Json::Obj(kv) => Value::Obj(kv.into_iter().map(|(k, v)| (k, value(v))).collect()),
-    }
-}
-
 fn env_dir(name: &str) -> Option<PathBuf> {
     std::env::var_os(name).filter(|v| !v.is_empty()).map(PathBuf::from)
 }
@@ -108,13 +97,13 @@ pub fn machine_context() -> Result<Context, String> {
     let Some(dir) = stores_dir().filter(|d| d.join("templates.json").is_file()) else {
         return Ok(Context::repository().clone());
     };
-    let read = |name: &str| -> Result<Option<Value>, String> {
+    let read = |name: &str| -> Result<Option<Json>, String> {
         let p = dir.join(name);
         if !p.is_file() {
             return Ok(None);
         }
         let text = std::fs::read_to_string(&p).map_err(|e| format!("{}: {e}", p.display()))?;
-        json::parse(&text).map(|j| Some(value(j))).map_err(|e| format!("{}: {e}", p.display()))
+        glyph_json::parse(&text).map(Some).map_err(|e| format!("{}: {e}", p.display()))
     };
     Ok(Context::new(read("templates.json")?, read("rules.json")?, read("expansions.json")?))
 }
