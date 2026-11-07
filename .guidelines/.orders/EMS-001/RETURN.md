@@ -13,7 +13,7 @@
 | environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed; the local session of 2026-09-26: Windows 11, node v22.17.1, cargo 1.88.0, and Edge as the Chromium the drivers ask for |
 | ground | read in the order the handoff names; `npm run check` (33 buckets, 41 s) and `npm run check:rust` (20 crates, 3 s) green on the clone at `ea8fc59`, before anything was touched |
 | layout | **closed** — its val holds (below), five banks |
-| queue | ORD-0001 to ORD-0013 closed, ORD-0011 at `cf3bb31` and ORD-0012 at `73da9f9`, both on the local machine on 2026-09-26. **ORD-0013, the installer**, emitted at `c3dc3ad` on the branch where the Rust translation runs, on 2026-10-16, and built at `bb3239a`: every installer path measured against the filter, written below in *ORD-0013, the installer paths measured*, and the measurement chose **A**, the binary installs itself. The Regent ran its val on a clean Windows machine and closed it on 2026-10-21. The tag `conformance-v0` is on `030ed76`, on the remote since 2026-09-27 |
+| queue | ORD-0001 to ORD-0013 closed, ORD-0011 at `cf3bb31` and ORD-0012 at `73da9f9`, both on the local machine on 2026-09-26. **ORD-0013, the installer**, emitted at `c3dc3ad` on the branch where the Rust translation runs, on 2026-10-16, and built at `bb3239a`: every installer path measured against the filter, written below in *ORD-0013, the installer paths measured*, and the measurement chose **A**, the binary installs itself. The Regent ran its val on a clean Windows machine and closed it on 2026-10-21. **ORD-0014, the window**, emitted at `2395734` and built at `d33684d`: measured below in *ORD-0014, the window measured*, and open at the Regent's val. The tag `conformance-v0` is on `030ed76`, on the remote since 2026-09-27 |
 
 ## Waiting for the Regent
 
@@ -21,10 +21,8 @@
 2. **The spec's direction is superseded, and the spec is not versioned.** On
    2026-09-27 the Regent set the goal as Glyph 100% in Rust, skill and app
    included, against this spec's *"the skill keeps the JS engine it ships"*;
-   the series closes as written at ORD-0014, and EMS-002 carries the new
-   direction. On 2026-10-15 he fixed when EMS-002 is born: **when ORD-0014
-   closes**, with the order of its ORDs coming out of a measured proposal for him
-   to cut.
+   the series closes as written at ORD-0014, and EMS-002, open since 2026-10-23,
+   carries the new direction.
 3. **The answers of 2026-09-27 that ask for work:** questions 1, 2, 3, 4, 6, 10 and 12,
    in [`.plan`](../../.plan/README.md) §5, and question 11, the user's own
    stores on the user's machine, with the installer (ORD-0013).
@@ -42,6 +40,7 @@
 5. **The asynchronous execution of the spec's `queue` section is closed here** —
    *"A"*: it passes to EMS-002 and leaves the open list. Measured, it saves at
    most 4 of 14 turns and runs into three constraints.
+6. **The val of ORD-0014** — below, in *ORD-0014, the window measured*.
 
 ## Questions for the Regent
 
@@ -334,6 +333,55 @@ templates that differ, named by their digest. It opens EMS-002.
 **The val**, run by the Regent on a clean Windows machine with the release
 binary, `sha256` `1e58f512cb90df24556f105a95ce69ef35f46274a7f6f9b21eab5f121e238789`:
 *"já fiz."* ORD-0013 closes on 2026-10-21.
+
+## ORD-0014, the window measured
+
+Built at `d33684d`, with no crate, as the spec's `[cnst]` asks: `msedge --app` on
+the page the engine serves, a profile of its own in `%LOCALAPPDATA%\Glyph\window`,
+the installed copy marked as a Windows program so that no console opens behind the
+window, and the default browser where Edge is missing, with a console holding the
+engine up on the installed copy.
+
+The first run with real windows found what `tests/app.rs` could not see, because
+its stand-in for Edge ends at once on every launch: Edge hands a launch to the
+browser already on the profile and ends, so with a window open and the engine
+killed, the shortcut brought up an engine that stopped at once, `windows=1
+engines=0`. The engine also waits for the `lockfile` Edge holds on the profile, and
+the test that guards this was seen failing first.
+
+**The window**, by `rust/crates/glyph-cli/examples/window_measure.ps1`, on
+2026-11-07: Windows 11 Pro 26300, Edge 156.0.4314.58, the debug binary, real windows
+on the desktop.
+
+| scenario | what it did |
+|---|---|
+| the shortcut | a window in 0.8 s, titled *Glyph — mould e motor*, no address bar; one engine, no console under it and no window of its own |
+| a second launch | a second window on the same browser; the launch ends, and closing one window leaves the engine up |
+| the last window closes | the engine gone in 0.4 s, no Edge on the profile, the `lockfile` gone |
+| the installed copy double-clicked, no argument | the same |
+| the engine killed with a window open, the shortcut again | two windows and one engine; with every window closed the engine stops, and the shortcut opens it again |
+| Edge missing, the installed copy | one engine, the default browser reached through a stand-in, and a console titled *Glyph* that says where the app is; closing it stops the engine in under 0.1 s |
+
+The first window took under 1 s in most runs, and 19 s and over 20 s in two of them.
+The cause is not measured.
+
+**The Order**, by `examples/window_order.mjs`, the release binary: one engine, and
+Edge twice on profiles of their own, as the app starts it, with the same flags plus
+the debugging port, and as a plain tab. The 118 sources of the oracle typed into
+both and the page's button clicked: 472 of 472 projections the same bytes, 4 220 753
+bytes, `sha256` `57b8dac539f210ec6d8c355cb47fcf2c630c5334352b17bf2d7a9f22ba85b872`,
+twice over; 118 of 118 manifests the same but for `emitted`; no error in the page.
+Those are the Blobs `emitOrder` makes, because Chromium holds back a page's automatic
+downloads. Five of the sources also went to the disk as zips, 20 of 20 projections
+the same, and the window's equal to its Blobs.
+
+**What this does not cover:** the registry half of `--install`, since the driver
+passes `--no-register`; a real default browser where Edge is missing; the Order from
+a window with no debugging port; and a browser other than Edge.
+
+**What is left** is the val, *"the app opens in its own window and the Order it
+emits equals the one the browser emits"*, which is the Regent's, with the release
+binary, `sha256` `bdf9716960977db5544328ad67f42d37f52c3a355e720f21f08c9ff9cdd97398`.
 
 ## ORDs closed
 
