@@ -1,7 +1,7 @@
 {
   "schema": 1,
-  "regency": "3.0",
-  "updated": "2026-11-02",
+  "regency": "3.3",
+  "updated": "2026-11-07",
   "files": {
     ".orders/README.md": "1da712532c2e",
     ".shortcuts/.virtual/README.md": "a280cf3ce4aa"
@@ -27,6 +27,13 @@
       "on": "2026-11-02",
       "plan": "UPD-74c1741d",
       "ops": 9
+    },
+    {
+      "from": "3.0",
+      "to": "3.3",
+      "on": "2026-11-07",
+      "plan": "UPD-94d33032",
+      "ops": 0
     }
   ]
 }
