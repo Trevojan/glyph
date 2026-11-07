@@ -145,7 +145,8 @@ série](../.orders/EMS-001/README.md) guarda o commit e o digest de cada uma. O
 binário `glyph` responde as flags do `glyph-cli.js`, se instala sem crate nenhuma
 e serve o app numa origem localhost sem node, com o motor respondendo pelas
 stores da máquina; o Regente fez o val na máquina Windows limpa em 2026-10-21. A
-vaga é da **`ORD-0014`, a janela própria pelo `msedge --app`**, com o aval dele.
+**`ORD-0014`, a janela própria pelo `msedge --app`**, é a Ordem aberta: construída
+e medida no [retorno](../.orders/EMS-001/RETURN.md), ela espera o val dele.
 O instalador é o que torna o app **standalone** no sentido do Regente: o Glyph
 Explorer mora na máquina de cada usuário, e tudo o que é pessoal — os templates
 e os moulds que ele guarda — fica lá, nunca no repositório público, que entrega
@@ -153,7 +154,7 @@ só os templates básicos de exemplo. Um template que o usuário salva na págin
 ainda não chega ao motor: o mecanismo é a **opção c da pergunta 11** do
 [retorno](../.orders/EMS-001/RETURN.md), escolhida em 2026-10-21 — o motor
 guarda as stores da máquina, e uma requisição leva só os templates que diferem,
-nomeados pelo digest —, e ele abre a EMS-002.
+nomeados pelo digest —, e ele espera na EMS-002.
 
 **O alvo é o Glyph 100% em Rust** — o motor, o núcleo do app e a skill —, com o
 JS saindo peça por peça, cada uma quando o Rust passa o oráculo nela. Até lá o
@@ -166,8 +167,8 @@ espera o Regente no §5 dele.
 O lote das decididas em 2026-09-27 e 2026-10-25 que movem o emitido está
 construído, da `EMS-002/ORD-0014` à `ORD-0031`, e a versão se moveu uma vez
 quando ele fechou, para 4.7.10.08 (2026-10-30). O mapa da inclusão, posição por
-posição, está no [`INTAKE-INCLUSION.md`](../.orders/INTAKE-INCLUSION.md); três
-leituras construídas esperam o Regente, no §4 dele.
+posição, está no [`INTAKE-INCLUSION.md`](../.orders/INTAKE-INCLUSION.md), e nada
+dela espera o Regente: o §4 dele diz o que ele respondeu.
 
 O que a spec revoga está assinado, e entre isso está a escada como
 ordem de trabalho: [`ladder.toml`](ladder.toml) fica como o registro da
@@ -240,7 +241,7 @@ nenhum agente pode ratificar:
 |---|---|
 | **estudo de setembro** | oito intakes em [`.orders/`](../.orders/): [`INTAKE-VIRTUAL-PATH`](../.orders/INTAKE-VIRTUAL-PATH.md) (mini-repo, medido: o custo de round-trip é o tamanho de `glyph-parser.js`), [`INTAKE-ORDER-COHERENCE`](../.orders/INTAKE-ORDER-COHERENCE.md) (a aresta declarada, ratificada em 2026-10-15 com `[ref'nem']`, `[ref'EMS']` e a fila do `repair`; não construída), [`INTAKE-BURN-INVARIANCE`](../.orders/INTAKE-BURN-INVARIANCE.md) (fechado), [`INTAKE-FORMAL-ANALYSIS`](../.orders/INTAKE-FORMAL-ANALYSIS.md), [`INTAKE-PARSER-SPLIT`](../.orders/INTAKE-PARSER-SPLIT.md) (o corte, feito: treze módulos), [`INTAKE-RUST`](../.orders/INTAKE-RUST.md) (steelman e defeater; o Regente decidiu migrar), [`INTAKE-RUST-LADDER`](../.orders/INTAKE-RUST-LADDER.md) (a escada auditada; nada nela espera o Regente — as dez perguntas `O` fecharam em 2026-09-24 e 2026-09-27, e o §8 registra quando cada uma fechou), [`INTAKE-FIELD-2026-09`](../.orders/INTAKE-FIELD-2026-09.md) (o kit de cliente; `H-09` fechou por ele, e os dois achados estruturais fecharam em 2026-10-15). |
 | **EMS-001** | as perguntas do [retorno](../.orders/EMS-001/RETURN.md) têm todas resposta, e os dois portões das duas últimas ORDs também. A execução assíncrona da seção `queue` **passou à EMS-002** em 2026-10-15 e saiu desta lista |
-| **EMS-002** | nasce quando a `ORD-0014` fechar, e a ordem das ORDs sai de uma proposta medida, para o Regente cortar — os catorze itens do §5 esperam nela |
+| **EMS-002** | aberta em 2026-10-23, e o [registro da série](../.orders/EMS-002/README.md) guarda o que fechou; a opção c da pergunta 11 e o resto do §5 esperam nela, cada peça como proposta medida para o Regente cortar |
 
 ## Adiado por decisão, não por esquecimento
 

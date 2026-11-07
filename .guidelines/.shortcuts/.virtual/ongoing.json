@@ -30,15 +30,18 @@
     {
       "id": "ORD-0014",
       "title": "a janela própria, pelo msedge --app",
-      "state": "ongoing",
+      "state": "review",
       "source": ".orders/EMS-001/EMS-001.pgml",
       "who": "DV",
       "since": "2026-10-21",
       "where": [
         "order:EMS-001/ORD-0014",
-        ".guidelines/.orders/EMS-001/ORD-0014/ORD-0014.xml"
+        ".guidelines/.orders/EMS-001/ORD-0014/ORD-0014.xml",
+        "rust/crates/glyph-cli/src/app.rs",
+        "rust/crates/glyph-cli/examples/window_measure.ps1",
+        "rust/crates/glyph-cli/examples/window_order.mjs"
       ],
-      "next": "emitida em 2026-10-22; falta a janela: msedge --app num perfil próprio, sem console, o servidor parando quando a janela fecha"
+      "next": "construída em d33684d e medida no RETURN.md; falta o val do Regente: o app abre na janela própria, e a Ordem que emite é igual à do navegador"
     },
     {
       "id": "PLAN-1",

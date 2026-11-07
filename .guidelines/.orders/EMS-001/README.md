@@ -8,10 +8,12 @@ com o pacote que o `--bundle` escreve, e a contagem é desta série.
 
 ## A Ordem aberta
 
-Nenhuma emitida. A vaga é da **`ORD-0014`, a janela própria**, com o `[onlyif]`
-inteiro satisfeito: a `ORD-0013` fechou, e a árvore medida está **aceita**, com
-a janela pelo `msedge --app` ([`.decisions/`](../../.decisions/README.md),
-2026-10-15). O Regente deu o aval em 2026-10-21.
+[**`ORD-0014`, a janela própria**](ORD-0014/ORD-0014.xml), emitida em `2395734`, com
+o `[onlyif]` inteiro satisfeito: a `ORD-0013` fechou, e a árvore medida está
+**aceita**, com a janela pelo `msedge --app` ([`.decisions/`](../../.decisions/README.md),
+2026-10-15). O Regente deu o aval em 2026-10-21. Está construída em `d33684d` e
+medida no [retorno](RETURN.md), em *ORD-0014, the window measured*; falta o val do
+Regente: o app abre na janela própria, e a Ordem que ele emite é igual à do navegador.
 
 ## Ordens fechadas
 
