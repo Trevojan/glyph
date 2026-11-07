@@ -1,0 +1,157 @@
+[block
+  'ORD-0032-stores'
+  [ctx
+    'the spec of EMS-002'
+    '.guidelines/.orders/EMS-002/EMS-002.pgml'
+  [/ctx]
+  [ctx
+    'questions 10 and 11 of the EMS-001 return'
+    '.guidelines/.orders/EMS-001/RETURN.md'
+  [/ctx]
+  [tgt
+    'behind engine=relay the page holds no store of its own: it receives the tables of the engine once, at load, and a request carries only the templates that differ from the stores of the engine, named by their digest, as the Regent decided on 2026-10-21'
+  [/tgt]
+  [ctx
+    'the Regent, 2026-10-21: on the tables, yes, do that, in place of classify answered from the JS tables of the page, which contradicts Glyph 100% in Rust; on the templates, c seems more consistent, follow it'
+  [/ctx]
+  [ctx
+    'measured at 06e8de3: the tables, classify and the template list of the page come from its JS files, so a machine whose stores differ is read two ways on one screen; useTemplates stays on the JS core, so a template the user saves expands on the JS path and reaches no engine behind the relay; the page reads 15 tables and VERSION, and classify reads 2 more, ELEMENT_INPUT and the blend rows of the rules'
+  [/ctx]
+  [cnst
+    'one ORD for both, because what differs can only be told against the templates of the engine, and the tables bring them'
+  [/cnst]
+  [cnst
+    'tables is a call of the protocol: VERSION, the 15 tables the page reads, ELEMENT_INPUT, BLENDS, the blend rows of the rules in store order, and templates, the map of the engine; the JS first, the Rust byte for byte, and the installed engine answers from the stores of its machine'
+  [/cnst]
+  [cnst
+    'a request may carry differ, a digest and the templates: the digest is ck of the JSON text of the templates, and the engine lays them over its own for that request; a digest that does not match and a shape that is not one are thrown, never guessed'
+  [/cnst]
+  [cnst
+    'in the page only the transport changes, and classify makes no request; no call falls to the JS behind the relay, so a page whose engine does not answer throws'
+  [/cnst]
+  [cmp
+    'the tables'
+    'tables answers the same bytes in both engines, and the installed engine answers the templates of its machine'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+  [cmp
+    'classify'
+    'the page answers classify from the tables with no request, the same answer as the engine on every name the oracle records'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+  [cmp
+    'the templates'
+    'a template that differs expands, overrides one of the engine, and moves the digest of the envelope as on the JS path, in both engines, and a wrong digest and a wrong shape are refused; each seen failing before it counts'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+  [cmp
+    'the page'
+    'the declared sources and a saved template give the same bytes in every panel through the relay to the Rust and through the JS, measured in a browser'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+  [cmp
+    'the bytes'
+    'no hash of the snapshot moves'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+[/block]

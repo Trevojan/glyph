@@ -17,9 +17,15 @@
     {
       "id": "EMS-002-SPEC",
       "title": "a próxima frente da EMS-002: a opção c da pergunta 11 e as tabelas vindas do motor",
-      "state": "backlog",
+      "state": "ongoing",
+      "who": "DV",
+      "since": "2026-11-07",
       "source": ".decisions/README.md, 2026-10-21",
-      "next": "a série abriu em 2026-10-23 e o Regente ratificou a abertura; a spec desta frente falta redigir"
+      "where": [
+        "order:EMS-002/ORD-0032",
+        ".guidelines/.orders/EMS-002/EMS-002.pgml"
+      ],
+      "next": "a ORD-0032 emitida, sem diagnósticos: o JS primeiro, o Rust byte a byte, cada portão visto falhando"
     },
     {
       "id": "LADDER-STATUS",
@@ -48,9 +54,14 @@
     {
       "id": "ORD-0011-parked",
       "title": "mapear o repositório, sem mover nada, agora que a EMS-001 fechou",
-      "state": "backlog",
+      "state": "review",
+      "who": "DV",
+      "since": "2026-11-07",
       "source": ".plan/README.md, Adiado por decisão",
-      "next": "a EMS-001 fechou em 2026-11-07, e a decisão de 2026-10-15 reabre só o mapeamento; falta fazer"
+      "where": [
+        ".guidelines/.orders/INTAKE-RESTRUCTURE.md"
+      ],
+      "next": "o mapa está feito e nada se moveu; as seis colisões, R1 a R6, esperam o Regente, e a R1 decide se há mapa: o Glyph já está no layout que o regency chama de padrão corrente"
     },
     {
       "id": "EFF-8",

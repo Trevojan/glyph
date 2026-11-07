@@ -1,0 +1,61 @@
+<glyph-package engine="4.7.10.08">
+  <schema/>
+  <block once="true">
+    <block name="ORD-0032-stores" binds="ORD-0032-stores">
+      <context>
+        <user-input>the spec of EMS-002</user-input>
+        <user-input>.guidelines/.orders/EMS-002/EMS-002.pgml</user-input>
+      </context>
+      <context>
+        <user-input>questions 10 and 11 of the EMS-001 return</user-input>
+        <user-input>.guidelines/.orders/EMS-001/RETURN.md</user-input>
+      </context>
+      <target>
+        <user-input>behind engine=relay the page holds no store of its own: it receives the tables of the engine once, at load, and a request carries only the templates that differ from the stores of the engine, named by their digest, as the Regent decided on 2026-10-21</user-input>
+      </target>
+      <context>
+        <user-input>the Regent, 2026-10-21: on the tables, yes, do that, in place of classify answered from the JS tables of the page, which contradicts Glyph 100% in Rust; on the templates, c seems more consistent, follow it</user-input>
+      </context>
+      <context>
+        <user-input>measured at 06e8de3: the tables, classify and the template list of the page come from its JS files, so a machine whose stores differ is read two ways on one screen; useTemplates stays on the JS core, so a template the user saves expands on the JS path and reaches no engine behind the relay; the page reads 15 tables and VERSION, and classify reads 2 more, ELEMENT_INPUT and the blend rows of the rules</user-input>
+      </context>
+      <constraint>
+        <user-input>one ORD for both, because what differs can only be told against the templates of the engine, and the tables bring them</user-input>
+      </constraint>
+      <constraint>
+        <user-input>tables is a call of the protocol: VERSION, the 15 tables the page reads, ELEMENT_INPUT, BLENDS, the blend rows of the rules in store order, and templates, the map of the engine; the JS first, the Rust byte for byte, and the installed engine answers from the stores of its machine</user-input>
+      </constraint>
+      <constraint>
+        <user-input>a request may carry differ, a digest and the templates: the digest is ck of the JSON text of the templates, and the engine lays them over its own for that request; a digest that does not match and a shape that is not one are thrown, never guessed</user-input>
+      </constraint>
+      <constraint>
+        <user-input>in the page only the transport changes, and classify makes no request; no call falls to the JS behind the relay, so a page whose engine does not answer throws</user-input>
+      </constraint>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the tables</user-input>
+        <user-input>tables answers the same bytes in both engines, and the installed engine answers the templates of its machine</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>classify</user-input>
+        <user-input>the page answers classify from the tables with no request, the same answer as the engine on every name the oracle records</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the templates</user-input>
+        <user-input>a template that differs expands, overrides one of the engine, and moves the digest of the envelope as on the JS path, in both engines, and a wrong digest and a wrong shape are refused; each seen failing before it counts</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the page</user-input>
+        <user-input>the declared sources and a saved template give the same bytes in every panel through the relay to the Rust and through the JS, measured in a browser</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the bytes</user-input>
+        <user-input>no hash of the snapshot moves</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>

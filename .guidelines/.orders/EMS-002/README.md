@@ -8,6 +8,8 @@ pacote que o `--bundle` escreve, e a contagem é desta série.
 
 ## A Ordem aberta
 
+- [`EMS-002/ORD-0032`](ORD-0032/ORD-0032.xml) — atrás da relay a página não guarda store próprio: as tabelas do motor uma vez, ao carregar, e os templates que diferem em cada requisição, nomeados pelo digest; aberta em 2026-11-07
+
 ## Ordens fechadas
 
 | ORD | o que entregou | commit | digest |

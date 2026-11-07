@@ -221,6 +221,12 @@
     [val'the colon','a colon raises RetiredColon at ask and its text becomes operand literals; name exists only on block, section and the logic fence, from their first literal; the way back writes no colon']
   ]
 
+  [section'ORD-0032-stores'
+    [tgt'the page holds no store of its own behind the relay: the tables of the engine once, at load, and a request carrying only the templates that differ, named by their digest, questions 10 and 11 of the EMS-001 return as the Regent answered them on 2026-10-21']
+    [val'the tables','tables is a call both engines answer byte for byte, and the page answers classify from it with no request']
+    [val'the templates','a request carries only the templates that differ, named by their digest, and the page gives the same bytes through the relay as through the JS']
+  ]
+
   [section'limits'
     [nev'a selector that answers an empty slice in silence']
     [dont'open an ORD before the ORD it depends on closes']

@@ -282,4 +282,9 @@ Respostas do Regente à auditoria da escada Rust
 
 ## Decisões que um agente tomou e o Regente ainda não ratificou
 
-Nenhuma, hoje.
+Tomadas na rodada de 2026-11-07, ao construir o que a de 2026-10-21 decidiu. Cada uma
+vale até o Regente dizer outra coisa.
+
+| decisão | razão |
+|---|---|
+| **As tabelas do motor e a opção c da pergunta 11 são uma ORD só, a [`EMS-002/ORD-0032`](../.orders/EMS-002/README.md)** | o que difere só se diz contra os templates do motor, e são as tabelas que os trazem à página; duas ORDs pediriam um commit entre elas, e a segunda esperaria a primeira fechar |
