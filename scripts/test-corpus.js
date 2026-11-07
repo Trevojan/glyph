@@ -4340,7 +4340,7 @@ if (EXPORT_ORACLE) {
   require("fs").writeFileSync(path.join(mods, "inverse.json"), JSON.stringify({ engine: G.VERSION, trips: trips }, null, 1) + "\n");
   console.log("  ! round trips written: " + trips.length + " calls to " + path.join(mods, "inverse.json"));
 
-  /* glyph-protocol.js (EMS-001 ORD-0010): the twelve calls over the case
+  /* glyph-protocol.js (EMS-001 ORD-0010): the calls over the case
      files, one request line and the line the JS answers; the names the
      tokens carry feed classify, suggest and elName, the logic blocks feed
      parseLogic, and each rule's expression expandExpr and freeVars */
@@ -4402,6 +4402,35 @@ if (EXPORT_ORACLE) {
    "{\"call\":\"parseLogic\",\"name\":\"a\",\"body\":\"x = 1\\ny > x\"}", "{\"call\":\"expandExpr\",\"raw\":\"a && !b || c >= 2\"}",
    "{\"call\":\"fromXML\",\"xml\":\"<glyph>\"}", "{\"call\":\"suggest\",\"name\":\"crti\"}", "{\"call\":\"suggest\",\"name\":\"constructor\"}",
    "{\"call\":\"classify\",\"name\":\"toString\"}"].forEach(ask);
+  /* the tables, and what a request brings over the engine's templates (EMS-002
+     ORD-0032): one that is new, one that overrides, one named `templates`, keys the
+     JS enumerates in another order, text past the BMP, a constraint, a parameter,
+     and the definitions a user's storage can hold that are not one */
+  ask({ call: "tables" });
+  const carry = t => ({ digest: G.ck(JSON.stringify(t)), templates: t });
+  const OVERS = [
+    {}, { mine: { body: "[nt'mine']" } }, { germinate: { body: "[nt'the page']" } }, { templates: { body: "[nt'named templates']" } },
+    { b: { body: "[nt'b']" }, 10: { body: "[nt'ten']" }, 2: { body: "[nt'two']" } }, { "ñ": { body: "[nt'ñandú 𝒳']" } },
+    { held: { body: "[nt'a']", constraints: [{ forbid: "NT", why: "no notes" }] } }, { slot: { body: "[tgt[ph-x'the x']]" } },
+    { x: 7 }, { x: null }, { x: {} }, { x: { body: 7 } }, { x: { body: true } }, { x: { body: {} } }, { x: { body: [] } },
+    { x: { body: ["a"] } }, { x: [] }, { x: "s" }
+  ];
+  const OVER_SOURCES = ["[nt'nothing of it']", "[--mine][--germinate'a']", "[--templates]", "[--b][--10][--2]", "[--ñ]", "[--held]",
+                        "[--slot`v`]", "[--slot]", "[--x]"];
+  OVERS.forEach(t => OVER_SOURCES.forEach(src => {
+    const differ = carry(t);
+    ["parse", "toXML", "toAST", "toHGML"].forEach(call => ask({ call: call, src: src, differ: differ }));
+    ask({ call: "toAST", src: src, differ: differ, projection: "panel", lang: "pt", session: false });
+    ask({ call: "parse", src: src, differ: differ, lang: "pt", session: false });
+  }));
+  const OVER = carry(OVERS[1]);
+  [{ call: "tables", differ: OVER }, { call: "classify", name: "crit", differ: OVER }, { call: "zz", differ: OVER },
+   { call: "zz", differ: 7 }, { call: "toXML", src: "[--mine]", differ: { digest: "0", templates: OVERS[1] } },
+   { call: "tables", differ: { digest: "0", templates: OVERS[1] } }]
+    .concat([null, 7, "s", true, [], {}, { digest: 7, templates: OVERS[1] }, { digest: OVER.digest }, { templates: OVERS[1] },
+             { digest: OVER.digest, templates: null }, { digest: OVER.digest, templates: [] }, { digest: OVER.digest, templates: 7 },
+             { digest: OVER.digest, templates: "s" }].map(d => ({ call: "toXML", src: "[--mine]", differ: d })))
+    .forEach(ask);
   fsx.writeFileSync(path.join(mods, "protocol.json"), JSON.stringify({ engine: G.VERSION, lines: lines }, null, 1) + "\n");
   console.log("  ! protocol written: " + lines.length + " requests to " + path.join(mods, "protocol.json"));
 

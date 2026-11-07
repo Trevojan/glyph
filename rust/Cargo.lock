@@ -133,6 +133,7 @@ dependencies = [
  "glyph-parse",
  "glyph-stores",
  "glyph-util",
+ "glyph-version",
  "glyph-vocab",
  "glyph-xml",
 ]
