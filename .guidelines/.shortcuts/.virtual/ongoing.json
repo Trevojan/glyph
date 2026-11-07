@@ -17,15 +17,19 @@
     {
       "id": "EMS-002-SPEC",
       "title": "a próxima frente da EMS-002: a opção c da pergunta 11 e as tabelas vindas do motor",
-      "state": "ongoing",
+      "state": "review",
       "who": "DV",
       "since": "2026-11-07",
       "source": ".decisions/README.md, 2026-10-21",
       "where": [
         "order:EMS-002/ORD-0032",
-        ".guidelines/.orders/EMS-002/EMS-002.pgml"
+        ".guidelines/.orders/EMS-002/EMS-002.pgml",
+        "scripts/glyph-transport.js",
+        "scripts/glyph-protocol.js",
+        "rust/crates/glyph-protocol/src/lib.rs",
+        "rust/crates/glyph-cli/examples/app_stores.mjs"
       ],
-      "next": "a ORD-0032 emitida, sem diagnósticos: o JS primeiro, o Rust byte a byte, cada portão visto falhando"
+      "next": "a ORD-0032 fechada em b936569, b150bbc, 458752c e 418e18a: RL-16 a RL-22, 7 824 linhas do protocol.json nos dois motores, 12 mutantes do JS e 5 do Rust vistos falhando, e o app_stores.mjs no Edge com todo painel igual; a leitura de uma ORD só para as duas respostas, e do motor sem estado, espera o Regente em .decisions"
     },
     {
       "id": "LADDER-STATUS",

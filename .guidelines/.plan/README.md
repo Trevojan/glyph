@@ -150,12 +150,12 @@ em 2026-11-07.
 O instalador é o que torna o app **standalone** no sentido do Regente: o Glyph
 Explorer mora na máquina de cada usuário, e tudo o que é pessoal — os templates
 e os moulds que ele guarda — fica lá, nunca no repositório público, que entrega
-só os templates básicos de exemplo. Um template que o usuário salva na página
-ainda não chega ao motor: a [`EMS-002/ORD-0032`](../.orders/EMS-002/README.md),
-aberta em 2026-11-07, o leva pela **opção c da pergunta 11** do
+só os templates básicos de exemplo. Atrás da relay a página não guarda store
+próprio, desde a [`EMS-002/ORD-0032`](../.orders/EMS-002/README.md): as tabelas
+vêm do motor uma vez, ao carregar, o `classify` responde delas sem requisição, e
+um template que o usuário salva chega ao motor pela **opção c da pergunta 11** do
 [retorno](../.orders/EMS-001/RETURN.md) — o motor guarda as stores da máquina, e
-uma requisição leva só os templates que diferem, nomeados pelo digest —, e traz
-as tabelas do motor à página uma vez, ao carregar.
+uma requisição leva só os templates que diferem, nomeados pelo digest.
 
 **O alvo é o Glyph 100% em Rust** — o motor, o núcleo do app e a skill —, com o
 JS saindo peça por peça, cada uma quando o Rust passa o oráculo nela. Até lá o
@@ -242,7 +242,7 @@ nenhum agente pode ratificar:
 |---|---|
 | **estudo de setembro** | oito intakes em [`.orders/`](../.orders/): [`INTAKE-VIRTUAL-PATH`](../.orders/INTAKE-VIRTUAL-PATH.md) (mini-repo, medido: o custo de round-trip é o tamanho de `glyph-parser.js`), [`INTAKE-ORDER-COHERENCE`](../.orders/INTAKE-ORDER-COHERENCE.md) (a aresta declarada, ratificada em 2026-10-15 com `[ref'nem']`, `[ref'EMS']` e a fila do `repair`; não construída), [`INTAKE-BURN-INVARIANCE`](../.orders/INTAKE-BURN-INVARIANCE.md) (fechado), [`INTAKE-FORMAL-ANALYSIS`](../.orders/INTAKE-FORMAL-ANALYSIS.md), [`INTAKE-PARSER-SPLIT`](../.orders/INTAKE-PARSER-SPLIT.md) (o corte, feito: treze módulos), [`INTAKE-RUST`](../.orders/INTAKE-RUST.md) (steelman e defeater; o Regente decidiu migrar), [`INTAKE-RUST-LADDER`](../.orders/INTAKE-RUST-LADDER.md) (a escada auditada; nada nela espera o Regente — as dez perguntas `O` fecharam em 2026-09-24 e 2026-09-27, e o §8 registra quando cada uma fechou), [`INTAKE-FIELD-2026-09`](../.orders/INTAKE-FIELD-2026-09.md) (o kit de cliente; `H-09` fechou por ele, e os dois achados estruturais fecharam em 2026-10-15). |
 | **EMS-001** | fechou em 2026-11-07, com a `ORD-0014`, e as perguntas do [retorno](../.orders/EMS-001/RETURN.md) têm todas resposta. A execução assíncrona da seção `queue` **passou à EMS-002** em 2026-10-15 e saiu desta lista |
-| **EMS-002** | aberta em 2026-10-23, e o [registro da série](../.orders/EMS-002/README.md) guarda o que fechou; a `ORD-0032`, as tabelas do motor e a opção c da pergunta 11, está aberta; o resto do §5 espera nela, cada peça como proposta medida para o Regente cortar |
+| **EMS-002** | aberta em 2026-10-23, e o [registro da série](../.orders/EMS-002/README.md) guarda o que fechou, da `ORD-0001` à `ORD-0032`; o resto do §5 espera nela, cada peça como proposta medida para o Regente cortar |
 | **as stores numa atualização** | o `--install` não sobrescreve as stores, de propósito, e por isso uma versão nova instalada sobre uma antiga segue lendo as que vieram da instalação antiga, mesmo sem edição nenhuma. Medido em 2026-11-07, com as stores de 2026-10-18 e o motor 4.7.10.08: o `.xml` e o `.hgml` das 118 fontes não mudam; o `.json` leva os digests antigos e, no K-04, um diagnóstico diz *preset*; e o `expansions.json` nomeia `skeptic`, sem chegar ao XML delas. Falta o Regente dizer se a instalação passa a atualizar o que não foi editado |
 
 ## Adiado por decisão, não por esquecimento
