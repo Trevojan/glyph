@@ -632,7 +632,9 @@ impl<X: Clone + Default> Expander<'_, '_, X> {
             }
             Def::Store(def, body) => {
                 let inherited = self.hand_down(tree);
-                let sub = (self.parse)(&js_string(Some(body)), SubParse {
+                /* a body that is not a string holds no tokens: the JS hands it to
+                   `parse`, which reads anything but a string as its token list */
+                let sub = (self.parse)(body.str().unwrap_or(""), SubParse {
                     session: self.session, valency: false, templates: registry, expanding: next, inherited,
                 })?;
                 /* the body's own syntax errors bubble up: the outer passes run
