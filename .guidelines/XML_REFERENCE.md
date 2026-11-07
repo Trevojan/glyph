@@ -512,7 +512,7 @@ outer three are segment wrappers — `once` and position tell them apart. `<summ
 operand and none was given: the empty field does not block, it asks.
 
 ```bash
-node scripts/glyph-parser.js "<the xml above>" --from-xml
+node scripts/glyph-cli.js "<the xml above>" --from-xml
 ```
 
 ---

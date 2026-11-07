@@ -9,8 +9,13 @@
  *
  *   node scripts/glyph-protocol.js < requests.jsonl
  *
- * The twelve calls `glyph-ui.js` makes, by the name the request carries:
+ * The twelve calls `glyph-ui.js` makes, by the name the request carries, and
+ * `tables`, what the page asks once, at load (EMS-002 ORD-0032):
  *
+ *   {"call":"tables"}                      VERSION, the tables the page reads,
+ *                                          ELEMENT_INPUT, BLENDS and templates:
+ *                                          what classify answers from, and the
+ *                                          templates the page merges over
  *   {"call":"tokenize","src":S}
  *   {"call":"classify","name":N}
  *   {"call":"suggest","name":N}
@@ -34,6 +39,13 @@
  * engine throws; a line that is not a JSON object answers
  * {"thrown":"bad request"}, and an unknown call {"thrown":"no such call"}.
  *
+ * Any request may carry "differ": {"digest":D,"templates":T}, the templates that
+ * differ from the engine's, laid over its own for that request, and D is `ck` of
+ * T's JSON text (question 11 of the EMS-001 return, answered c). The engine keeps
+ * nothing of them. A digest that does not match answers {"thrown":"differ: the
+ * templates do not match their digest"}, and a shape that is not this one
+ * {"thrown":"differ: not a digest and templates"}.
+ *
  * Run as the engine, it registers the stores it answers with, as the CLI and
  * the page do: a template's body is parsed with what is registered, so a body
  * that breaks a rule reads the same here as in the page (EMS-002 ORD-0008).
@@ -52,17 +64,37 @@ export const STORES = {
   expansions: require("../.guidelines/expansions.json")
 };
 
-export const CALLS = ["tokenize", "classify", "suggest", "elName", "parseLogic", "expandExpr", "freeVars",
+export const CALLS = ["tables", "tokenize", "classify", "suggest", "elName", "parseLogic", "expandExpr", "freeVars",
                       "parse", "toXML", "toAST", "toHGML", "fromXML"];
 
 const BAD = JSON.stringify({ thrown: "bad request" });
 
+/* the page reads these off GlyphCore; classify reads ELEMENT_INPUT and BLENDS too */
+function tables() {
+  return { VERSION: G.VERSION, CATS: G.CATS, INSTR: G.INSTR, ALIAS: G.ALIAS, ALIAS_OF: G.ALIAS_OF, STRUCT: G.STRUCT,
+           META: G.META, MODE: G.MODE, EMO: G.EMO, SESSION: G.SESSION, FRAMES: G.FRAMES,
+           EDITORIAL_ONLY: G.EDITORIAL_ONLY, PTBR: G.PTBR, CAT_OF: G.CAT_OF, LOGIC_OPS: G.LOGIC_OPS, PUNCT: G.PUNCT,
+           ELEMENT_INPUT: G.ELEMENT_INPUT, BLENDS: (STORES.rules.rules || []).filter(r => r.kind === "blend"),
+           templates: STORES.templates };
+}
+
+/* what a request brings, over the engine's own: under a `templates` key, so a
+   template named `templates` stays a template */
+function over(differ) {
+  const shaped = differ !== null && typeof differ === "object" && !Array.isArray(differ) && typeof differ.digest === "string" &&
+    differ.templates !== null && typeof differ.templates === "object" && !Array.isArray(differ.templates);
+  if (!shaped) throw new Error("differ: not a digest and templates");
+  if (G.ck(JSON.stringify(differ.templates)) !== differ.digest) throw new Error("differ: the templates do not match their digest");
+  return { templates: { ...STORES.templates, ...differ.templates } };
+}
+
 function run(q) {
-  const o = { templates: STORES.templates, rules: STORES.rules, expansions: STORES.expansions };
+  const o = { templates: q.differ === undefined ? STORES.templates : over(q.differ), rules: STORES.rules, expansions: STORES.expansions };
   if (q.lang === "pt" || q.lang === "en") o.lang = q.lang;
   if (q.session === false) o.session = false;
   const str = k => (typeof q[k] === "string" ? q[k] : "");
   switch (q.call) {
+    case "tables":     return tables();
     case "tokenize":   return G.tokenize(str("src"));
     case "classify":   return G.classify(str("name"), o);
     case "suggest":    return G.suggest(str("name"));

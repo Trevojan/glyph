@@ -37,7 +37,7 @@
  */
 import { esc, xesc, lev, walk } from "./core/util.js";
 import { CATS, INSTR, PTBR, CAT_OF, EDITORIAL_ONLY, ALIAS, ALIAS_OF, STRUCT, META, MODE, EMO,
-         SESSION, LOGIC_OPS, PUNCT, FRAMES, NAMED_STRUCT, elName, GLOSS_REVERSE, GLOSS_COLLISIONS }
+         SESSION, LOGIC_OPS, PUNCT, FRAMES, NAMED_STRUCT, ELEMENT_INPUT, elName, GLOSS_REVERSE, GLOSS_COLLISIONS }
   from "./core/vocabulary.js";
 import { VERSION } from "./core/version.js";
 import { useTemplates, templateRegistry, useExpansions, expansionRegistry,
@@ -47,7 +47,7 @@ import { tokenize, classify, suggest } from "./core/lexer.js";
 import { expandExpr, freeVars, parseLogic } from "./core/logic.js";
 import { parse } from "./core/parser.js";
 import { buildXml, toXML } from "./core/emit-xml.js";
-import { serializeAST, toAST } from "./core/emit-ast.js";
+import { serializeAST, toAST, ck } from "./core/emit-ast.js";
 import { burn, toHGML } from "./core/burn.js";
 import { fromXML, fromAST } from "./core/inverse.js";
 
@@ -56,7 +56,7 @@ const GlyphCore = {
   CATS: CATS, INSTR: INSTR, ALIAS: ALIAS, ALIAS_OF: ALIAS_OF, STRUCT: STRUCT,
   META: META, MODE: MODE, EMO: EMO, SESSION: SESSION, FRAMES: FRAMES,
   EDITORIAL_ONLY: EDITORIAL_ONLY, PTBR: PTBR, CAT_OF: CAT_OF,
-  LOGIC_OPS: LOGIC_OPS, PUNCT: PUNCT, NAMED_STRUCT: NAMED_STRUCT,
+  LOGIC_OPS: LOGIC_OPS, PUNCT: PUNCT, NAMED_STRUCT: NAMED_STRUCT, ELEMENT_INPUT: ELEMENT_INPUT,
   tokenize: tokenize, classify: classify, suggest: suggest, lev: lev, elName: elName,
   expandExpr: expandExpr, freeVars: freeVars, parseLogic: parseLogic,
   parse: parse, walk: walk,
@@ -67,7 +67,7 @@ const GlyphCore = {
   speciesOf: speciesOf, depthOf: depthOf, formulaOf: formulaOf, atomsOf: atomsOf,
   standsAlone: standsAlone,
   defOf: defOf,
-  buildXml: buildXml, toXML: toXML, toAST: toAST, serializeAST: serializeAST,
+  buildXml: buildXml, toXML: toXML, toAST: toAST, serializeAST: serializeAST, ck: ck,
   burn: burn, toHGML: toHGML,
   fromXML: fromXML, fromAST: fromAST, elementCanonicalMap: GLOSS_REVERSE, glossCollisions: GLOSS_COLLISIONS,
   esc: esc, xesc: xesc

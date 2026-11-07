@@ -4196,11 +4196,90 @@ async function runRelay() {
      page answers from the tables it already loads — a keystroke on L-01 made
      8 005 requests, one classify a command token */
   const TRANSPORT = await import("./glyph-transport.js");
-  const swapped = Object.keys(TRANSPORT.relayCore()).sort();
-  const asked = PROTOCOL.CALLS.filter(c => c !== "classify").map(c => c === "toXML" ? "buildXml" : c === "toAST" ? "serializeAST" : c).sort();
-  ok("RL-16", "the transport swaps every call but classify",
+  const answered = line => JSON.parse(PROTOCOL.answer(JSON.stringify(line)));
+  const tables = answered({ call: "tables" }).ok;
+  const core = TRANSPORT.relayCore(tables);
+  const swapped = Object.keys(core).sort();
+  const asked = PROTOCOL.CALLS.filter(c => c !== "tables").map(c => c === "toXML" ? "buildXml" : c === "toAST" ? "serializeAST" : c)
+    .concat("useTemplates").sort();
+  ok("RL-16", "the transport swaps every call the page makes, classify and useTemplates among them",
      JSON.stringify(swapped) === JSON.stringify(asked) ? null
-       : "swaps " + swapped.join(",") + " — the page answers classify, and the engine the other eleven");
+       : "swaps " + swapped.join(",") + " — the page asks " + asked.join(","));
+
+  /* the tables of the engine, once at load (EMS-002 ORD-0032, the Regent on
+     2026-10-21): what the page reads and what classify reads, and nothing of a
+     JS store. Node has no XMLHttpRequest, so an answer here is an answer that
+     asked nobody. */
+  const READ = ["VERSION", "CATS", "INSTR", "ALIAS", "ALIAS_OF", "STRUCT", "META", "MODE", "EMO", "SESSION",
+                "FRAMES", "EDITORIAL_ONLY", "PTBR", "CAT_OF", "LOGIC_OPS", "PUNCT"];
+  ok("RL-17", "tables answers what the page reads, ELEMENT_INPUT, BLENDS and the templates",
+     (() => {
+       if (!tables) return "no tables: " + PROTOCOL.answer("{\"call\":\"tables\"}").slice(0, 120);
+       const off = READ.filter(k => JSON.stringify(tables[k]) !== JSON.stringify(G[k]));
+       if (off.length) return "other than the core's: " + off.join(",");
+       if (JSON.stringify(tables.ELEMENT_INPUT) !== JSON.stringify(G.ELEMENT_INPUT)) return "ELEMENT_INPUT differs";
+       if (JSON.stringify(tables.BLENDS) !== JSON.stringify(RULESTORE.rules.filter(r => r.kind === "blend"))) return "BLENDS is not the blend rows in store order";
+       return JSON.stringify(tables.templates) !== JSON.stringify(TPL.templates) ? "templates is not the map of the engine" : null;
+     })());
+  const NAMES = ["", "crit", "CRIT", "cri", "rev", "ctx", "SECTION", "section", "off", "on", "feat", "heavyreview", "HEAVYREVIEW",
+                 "zzz", "constructor", "toString", "__proto__", "hasOwnProperty", "self-ref"]
+    .concat(Object.keys(G.INSTR), Object.keys(G.ALIAS), Object.keys(G.STRUCT), Object.keys(G.META), Object.keys(G.MODE),
+            Object.keys(G.SESSION), Object.keys(G.ELEMENT_INPUT), RULESTORE.rules.filter(r => r.kind === "blend").map(r => r.emit));
+  const classes = [undefined, { session: false }].flatMap(o => NAMES.map(n => [n, o]))
+    .filter(([n, o]) => JSON.stringify(core.classify(n, o)) !== JSON.stringify(G.classify(n, { rules: RULESTORE, ...o })));
+  ok("RL-18", "classify answers from the tables, with no request, as the engine does on every name",
+     classes.length ? classes.length + " differ, the first " + JSON.stringify(classes[0]) : null);
+
+  /* a request carries only what differs, named by its digest (question 11, c):
+     nothing the page holds as the engine holds it, and an empty set is no field */
+  const sets = [];
+  const spy = TRANSPORT.relayCore(tables, q => { sets.push(q.differ); return q.call === "parse" ? { ast: { segments: [] }, gaps: [], commands: 0 } : ""; });
+  spy.useTemplates({ templates: TPL.templates });
+  spy.parse("[nt'a']");
+  const mine = { mine: { body: "[nt'mine']" } };
+  spy.useTemplates({ templates: { ...TPL.templates, ...mine } });
+  spy.parse("[nt'b']");
+  const over = { germinate: { body: "[nt'the page']" } };
+  spy.useTemplates({ templates: { ...TPL.templates, ...over } });
+  ["parse", "toHGML"].forEach(c => spy[c]("[nt'c']"));
+  const carried = sets.map(d => JSON.stringify(d));
+  const named = t => JSON.stringify({ digest: G.ck(JSON.stringify(t)), templates: t });
+  ok("RL-19", "a request carries only the templates that differ, named by their digest",
+     carried[0] !== undefined ? "the same templates travelled: " + carried[0]
+       : carried[1] !== named(mine) ? "a new template travelled as " + carried[1]
+         : carried[2] !== named(over) || carried[3] !== named(over) ? "an override travelled as " + carried[2] : null);
+
+  /* the engine, over its own stores, with what differs laid on top: the bytes the
+     JS path gives for the store the page merges */
+  const merged = { ...TPL.templates, ...mine, ...over };
+  const differ = { mine: mine.mine, germinate: over.germinate };
+  const repo = { rules: RULESTORE, expansions: require("../.guidelines/expansions.json") };
+  const named2 = { digest: G.ck(JSON.stringify(differ)), templates: differ };
+  const USE = "[--mine][--germinate'a']";
+  const through = [["toXML", s => G.toXML(s, { templates: merged, ...repo })], ["toHGML", s => G.toHGML(s, { templates: merged, ...repo })],
+                   ["toAST", s => G.toAST(s, { templates: merged, ...repo })]]
+    .filter(([c, f]) => JSON.stringify(answered({ call: c, src: USE, differ: named2 }).ok) !== JSON.stringify(f(USE))).map(([c]) => c);
+  const unmerged = answered({ call: "toAST", src: USE }).ok;
+  const moved = answered({ call: "toAST", src: USE, differ: named2 }).ok;
+  ok("RL-20", "what differs expands, overrides and moves the digest of the envelope, as the JS path does",
+     through.length ? "differs from the JS path: " + through.join(",")
+       : !moved || !moved.stores || moved.stores.templates !== G.ck(JSON.stringify(merged)) ? "the envelope hashes another store"
+         : unmerged.stores.templates === moved.stores.templates ? "the digest of the envelope did not move" : null);
+
+  /* what a request brings is refused by name, never guessed */
+  const MISMATCH = "differ: the templates do not match their digest", SHAPE = "differ: not a digest and templates";
+  const wrong = [[{ digest: "0", templates: differ }, MISMATCH], [null, SHAPE], [7, SHAPE], [[], SHAPE], [{}, SHAPE],
+                 [{ digest: 7, templates: differ }, SHAPE], [{ digest: named2.digest }, SHAPE], [{ digest: named2.digest, templates: null }, SHAPE],
+                 [{ digest: named2.digest, templates: [] }, SHAPE], [{ digest: named2.digest, templates: 7 }, SHAPE]];
+  const passed = wrong.filter(([d, why]) => answered({ call: "toXML", src: USE, differ: d }).thrown !== why);
+  ok("RL-21", "a wrong digest and a wrong shape are thrown, each by its name",
+     passed.length ? passed.length + " answered otherwise, the first " + JSON.stringify(passed[0][0]) + ": "
+       + JSON.stringify(answered({ call: "toXML", src: USE, differ: passed[0][0] })).slice(0, 120) : null);
+
+  /* the engine keeps nothing between two requests */
+  const after = answered({ call: "toXML", src: USE }).ok;
+  ok("RL-22", "what a request brought is gone by the next one",
+     after !== G.toXML(USE, { templates: TPL.templates, ...repo }) ? "the next request read another store" : null);
   return D.length;
 }
 const rRL = await runRelay();
@@ -4246,7 +4325,7 @@ console.log(" bundle ORD   " + String(rZP).padStart(4) + "/16");
 console.log(" global store " + rGS + "/3");
 console.log(" context      " + rCX + "/3");
 console.log(" coverage     " + String(rOC).padStart(4) + "/" + ORACLE_COVERAGE.length);
-console.log(" engine relay " + String(rRL).padStart(4) + "/16");
+console.log(" engine relay " + String(rRL).padStart(4) + "/22");
 console.log("=================================================");
 
 if (EXPORT_ORACLE) {
