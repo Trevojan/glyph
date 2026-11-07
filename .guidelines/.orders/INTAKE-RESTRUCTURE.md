@@ -45,10 +45,11 @@ ledger and its README). Nothing of it maps.
 
 ### 3.2 What the ladder asks that the repository already holds
 
-`conformance/`, `glyph-grammar.ebnf`, the measurements of `INTAKE-RUST.md`,
-`.sources/COMPILER_LESSONS.md` and the thirteen modules of `scripts/core/` are where
-the order expected them, and [`ladder.toml`](../.plan/ladder.toml) is the record of the
-audit.
+Recorded in [`ladder.toml`](../.plan/ladder.toml), whose statuses follow the disk since
+2026-11-07: M01 and M02b are done, and each crate the EMS-001 built is started, its
+line naming the ORD that built it. `conformance/`, `glyph-grammar.ebnf`, the
+measurements of `INTAKE-RUST.md`, `.sources/COMPILER_LESSONS.md` and the thirteen
+modules of `scripts/core/` are where the order expected them.
 
 ### 3.3 The rows the order would have placed
 

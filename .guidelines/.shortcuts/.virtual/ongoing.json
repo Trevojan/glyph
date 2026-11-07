@@ -30,8 +30,14 @@
     {
       "id": "LADDER-STATUS",
       "title": "os status do ladder.toml no estado que a EMS-001 entregou",
-      "state": "backlog",
-      "source": ".decisions/README.md, 2026-10-21"
+      "state": "review",
+      "who": "DV",
+      "since": "2026-11-07",
+      "source": ".decisions/README.md, 2026-10-21",
+      "where": [
+        ".guidelines/.plan/ladder.toml"
+      ],
+      "next": "M01 e M02b done; os crates que a EMS-001 construiu started, cada linha nomeando a ORD, porque o ladder.js recusa done sobre a M06, que segue started sem fmt e clippy no check:rust; 2 done, 19 started, 17 open, 0 breach"
     },
     {
       "id": "PLAN-1",

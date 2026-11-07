@@ -288,3 +288,4 @@ vale até o Regente dizer outra coisa.
 | decisão | razão |
 |---|---|
 | **As tabelas do motor e a opção c da pergunta 11 são uma ORD só, a [`EMS-002/ORD-0032`](../.orders/EMS-002/README.md)** | o que difere só se diz contra os templates do motor, e são as tabelas que os trazem à página; duas ORDs pediriam um commit entre elas, e a segunda esperaria a primeira fechar |
+| **Um módulo do [`ladder.toml`](../.plan/ladder.toml) construído antes de uma dependência terminar fica `started`, e a linha dele nomeia a ORD que o construiu** | o `ladder.js --check` recusa `done` sobre uma dependência que não está `done`, e a M06 segue `started`: o `check:rust` não roda `fmt` nem `clippy`. Mudar o portão ou as dependências da auditoria é do Regente |

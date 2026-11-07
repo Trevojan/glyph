@@ -7,6 +7,10 @@
 # done whose dependencies are not.
 #
 # status: open · started · done
+#
+# The statuses follow what the disk holds (the Regent, 2026-10-21). A module built
+# ahead of a dependency that is not done stays started, since ladder.js refuses done
+# there, and its status line names what built it.
 
 [meta]
 name = "glyph-ladder"
@@ -85,7 +89,7 @@ if_false = ["M16"]
 id = "M01"
 stage = "ground"
 title = "Inventory and oracle"
-status = "started"
+status = "done"
 depends = []
 relies_on = []
 closes_when = "every capability of the JS engine and its tools is listed with the module that ports it; the oracle exports every declared source; every diagnostic code has a declared source; the commit is tagged conformance-v0"
@@ -94,15 +98,15 @@ tasks = [
   "node scripts/test-corpus.js --export-oracle: one language-neutral JSON per declared source — done",
   "Classify each case keep, drop or revise, with the reason",
   "List every diagnostic code no declared source reaches — done: 13",
-  "Declare a source per code (ORACLE_COVERAGE) — 12 of 13 done; TemplateCycle waits on M02b.T02",
-  "Tag the commit conformance-v0",
+  "Declare a source per code (ORACLE_COVERAGE) — done: TemplateCycle entered with EMS-002 ORD-0011",
+  "Tag the commit conformance-v0 — done: 030ed76",
 ]
 
 [[module]]
 id = "M02"
 stage = "ground"
 title = "Language specification"
-status = "started"
+status = "started"  # the grammar is written; no recogniser runs it over the corpus
 depends = ["M01"]
 relies_on = []
 closes_when = ".guidelines/glyph-grammar.ebnf describes the language the engine parses today and a zero-dependency recogniser accepts every declared source; each diagnostic code maps to the rule that raises it"
@@ -119,15 +123,15 @@ tasks = [
 id = "M02b"
 stage = "ground"
 title = "Settle the oracle's bytes before the port"
-status = "started"
+status = "done"
 depends = ["M01"]
 relies_on = []
 closes_when = "the stores travel as one context object; the snapshot projects each case with its own stores; each measured defect is either fixed in JS or pinned as behaviour the port reproduces; diagnostics carry a source span"
 tasks = [
   "Stores as a context object (createContext), byte-identical, no fallback to the globals — done",
-  "The snapshot projects a case with its own opts (moves the T-cases' hashes: a decision)",
-  "The three measured defects of .plan §3 (;; migrates, ; asymmetric in quotes, bare template param): fix in JS or pin — the Regente's",
-  "Diagnostics gain the source span the tokens already have, in JS first",
+  "The snapshot projects a case with its own opts (moves the T-cases' hashes: a decision) — done: EMS-002 ORD-0011",
+  "The three measured defects of .plan §3 (;; migrates, ; asymmetric in quotes, bare template param): fix in JS or pin — the Regente's: fixed in the Rust only and named in the JS, EMS-002 ORD-0019 to ORD-0021",
+  "Diagnostics gain the source span the tokens already have, in JS first — done",
 ]
 
 [[module]]
@@ -150,7 +154,7 @@ tasks = [
 id = "M04"
 stage = "ground"
 title = "Decision practice: ADR and DC"
-status = "open"
+status = "started"  # the norm of the signed ADR is in .constraints, and the ADR of EMS-001 ORD-0010 is signed; no reversibility, no DC family
 depends = []
 relies_on = []
 closes_when = "an ADR is a row of .decisions/ with reversibility and supersedes; a DC is a row of .constraints/ naming its gate; ADR-001..003 signed; the gate runs the DC checks"
@@ -167,7 +171,7 @@ tasks = [
 id = "M05"
 stage = "ground"
 title = "Performance baseline"
-status = "open"
+status = "started"  # rust/crates/glyph-cli/examples/protocol_measure.mjs measures each call; no committed bench per stage, no memory
 depends = ["M01"]
 relies_on = []
 closes_when = "a committed bench reports p50, p95 and memory per stage over the oracle; each theory on the shortlist names the metric it must move"
@@ -184,7 +188,7 @@ tasks = [
 id = "M06"
 stage = "core"
 title = "Cargo workspace on the measured seams"
-status = "started"
+status = "started"  # rust/ builds and crate-graph.js holds the seams; check:rust runs no fmt and no clippy
 depends = ["M02", "M04"]
 relies_on = ["P05"]
 closes_when = "rust/ builds; crate-graph.js refuses an arrow the JS core does not have; npm run check:rust runs fmt, clippy with warnings denied and the differential runner"
@@ -202,7 +206,7 @@ tasks = [
 id = "M07a"
 stage = "core"
 title = "glyph-util, glyph-version"
-status = "open"
+status = "started"  # built by EMS-001 ORD-0002; done waits on M06
 depends = ["M06"]
 relies_on = ["P04"]
 closes_when = "esc, xesc, lev, walk and VERSION equal their JS on the oracle"
@@ -212,7 +216,7 @@ tasks = ["Port util.js", "Port version.js"]
 id = "M07"
 stage = "core"
 title = "glyph-vocab, glyph-stores: vocabulary as data"
-status = "open"
+status = "started"  # built by EMS-001 ORD-0003; done waits on M06
 depends = ["M07a"]
 relies_on = ["P02", "P04"]
 closes_when = "build.rs generates the tables from the same four sources build-templates.js reads; table digests equal the JS stores; the context is a struct passed by reference"
@@ -228,7 +232,7 @@ tasks = [
 id = "M08"
 stage = "core"
 title = "glyph-lex"
-status = "open"
+status = "started"  # built by EMS-001 ORD-0004; done waits on M06
 depends = ["M07"]
 relies_on = ["P02"]
 closes_when = "tokens equal the oracle's on every case, spans in UTF-16 as the JS gives them; concatenated tokens equal the source"
@@ -244,7 +248,7 @@ tasks = [
 id = "M08b"
 stage = "core"
 title = "glyph-logic"
-status = "open"
+status = "started"  # built by EMS-001 ORD-0005; done waits on M06
 depends = ["M07a"]
 relies_on = []
 closes_when = "parseLogic, expandExpr and freeVars equal their JS on every [logic] source"
@@ -254,7 +258,7 @@ tasks = ["Port logic.js", "Differential test on the oracle's Logic nodes"]
 id = "M09a"
 stage = "core"
 title = "glyph-templates"
-status = "open"
+status = "started"  # built by EMS-001 ORD-0006; done waits on M06
 depends = ["M07"]
 relies_on = []
 closes_when = "expansion, holes and the cycle guard equal the JS; the parser reaches it as a function argument, as in JS, so the crates stay acyclic"
@@ -264,7 +268,7 @@ tasks = ["Port templates.js with parse passed in", "Differential test on the T-c
 id = "M09b"
 stage = "core"
 title = "glyph-rules"
-status = "open"
+status = "started"  # built by EMS-001 ORD-0006; done waits on M06
 depends = ["M07"]
 relies_on = []
 closes_when = "every rule of rules.json fires as in JS; the compiled rules live in the context, not on the store object"
@@ -274,7 +278,7 @@ tasks = ["Port rules.js", "Compile once per context (the JS caches onto the stor
 id = "M09"
 stage = "core"
 title = "glyph-parse: parser and diagnostics"
-status = "open"
+status = "started"  # built by EMS-001 ORD-0007; done waits on M06
 depends = ["M08", "M08b", "M09a", "M09b", "M02b"]
 relies_on = ["P01", "P02", "P06"]
 closes_when = "AST and diagnostics equal the oracle on 100% of the declared sources; the lossless tree round-trips to the source"
@@ -290,7 +294,7 @@ tasks = [
 id = "M10a"
 stage = "core"
 title = "glyph-xml"
-status = "open"
+status = "started"  # built by EMS-001 ORD-0008; done waits on M06
 depends = ["M09"]
 relies_on = []
 closes_when = "XML byte-equal to the oracle, describe mode included"
@@ -300,7 +304,7 @@ tasks = ["Port emit-xml.js", "Differential test"]
 id = "M10b"
 stage = "core"
 title = "glyph-envelope"
-status = "open"
+status = "started"  # built by EMS-001 ORD-0009; done waits on M06
 depends = ["M09"]
 relies_on = []
 closes_when = "the GlyphAST envelope byte-equal to the oracle, the double FNV-1a ck kept as is"
@@ -310,7 +314,7 @@ tasks = ["Port emit-ast.js", "ck as two 32-bit FNV-1a runs — a u64 is a format
 id = "M10c"
 stage = "core"
 title = "glyph-burn"
-status = "open"
+status = "started"  # built by EMS-001 ORD-0009; done waits on M06
 depends = ["M09"]
 relies_on = []
 closes_when = ".hgml byte-equal to the oracle; it re-parses with no fix"
@@ -320,7 +324,7 @@ tasks = ["Port burn.js with its blends", "The formula parse reads only the compo
 id = "M10d"
 stage = "core"
 title = "glyph-inverse: fromXML, fromAST, the canonical printer"
-status = "open"
+status = "started"  # built by EMS-001 ORD-0009; done waits on M06
 depends = ["M07"]
 relies_on = []
 closes_when = "fromXML and fromAST equal the JS; fromAST is the .pgml formatter, one function"
@@ -330,7 +334,7 @@ tasks = ["Port inverse.js", "Round-trip tests"]
 id = "M10e"
 stage = "core"
 title = "glyph-schema"
-status = "open"
+status = "open"  # the crate is a placeholder
 depends = ["M06"]
 relies_on = []
 closes_when = "accepts and refuses the same envelopes as glyph-check.js"
@@ -340,7 +344,7 @@ tasks = ["Port glyph-check.js against ast-schema.json"]
 id = "M10f"
 stage = "core"
 title = "glyph-diff"
-status = "open"
+status = "open"  # the crate is a placeholder
 depends = ["M10b"]
 relies_on = []
 closes_when = "same classification as glyph-diff.js, --measure included"
@@ -350,7 +354,7 @@ tasks = ["Port glyph-diff.js"]
 id = "M10g"
 stage = "core"
 title = "glyph-trace"
-status = "open"
+status = "open"  # the crate is a placeholder
 depends = ["M10b"]
 relies_on = []
 closes_when = "same spans as glyph-trace.js; --at answers the same"
@@ -360,7 +364,7 @@ tasks = ["Port glyph-trace.js"]
 id = "M10h"
 stage = "core"
 title = "glyph-bundle"
-status = "open"
+status = "started"  # EMS-001 ORD-0012: glyph-bundle writes the zip; done waits on M06
 depends = ["M06"]
 relies_on = []
 closes_when = "the ORD zip is byte-equal to glyph-zip.js's"
@@ -370,7 +374,7 @@ tasks = ["Port glyph-zip.js"]
 id = "M11b"
 stage = "core"
 title = "glyph-wasm: the core in the browser"
-status = "open"
+status = "open"  # revoked by the EMS-001 spec, 2026-09-24
 depends = ["M10a", "M10b", "M10c", "M10d"]
 relies_on = []
 closes_when = "the twelve functions glyph-ui.js calls answer the same from WASM, run on the corpus inside the page; the app keeps working on the JS core until the Regente chooses which one it serves"
@@ -384,7 +388,7 @@ tasks = [
 id = "M11"
 stage = "core"
 title = "glyph-cli: flag parity"
-status = "open"
+status = "started"  # EMS-001 ORD-0012: the binary answers the flags; no signed bench target
 depends = ["M10a", "M10b", "M10c", "M10d", "M10e", "M10h", "M05"]
 relies_on = ["P07"]
 closes_when = "the glyph binary answers every glyph-cli.js flag with the same bytes; the bench meets the signed targets"
@@ -399,7 +403,7 @@ tasks = [
 id = "M11d"
 stage = "core"
 title = "JS and Rust in lockstep"
-status = "open"
+status = "open"  # revoked by the EMS-001 spec, 2026-09-24
 depends = ["M11", "M11b"]
 relies_on = []
 closes_when = "npm run check runs the differential test whenever cargo is present, so a change to the JS that the Rust does not follow fails the check"
@@ -445,7 +449,7 @@ tasks = [
 id = "M14"
 stage = "editor"
 title = "VS Code extension"
-status = "open"
+status = "started"  # vscode-extension/, a client of no server yet
 depends = ["M12"]
 relies_on = []
 closes_when = ".vsix installs in VS Code and one fork; published on Open VSX and the Marketplace"
@@ -496,7 +500,7 @@ tasks = [
 id = "M17"
 stage = "orders"
 title = "Registry and resolve"
-status = "open"
+status = "started"  # the index of .guidelines with its fingerprints: glyph-vpath, EMS-002 ORD-0001 to ORD-0004
 depends = ["M16"]
 relies_on = []
 closes_when = "id to path to sha index over .guidelines; DanglingRead checks it; go-to-definition on paths and ids"
@@ -582,7 +586,7 @@ tasks = [
 id = "M22"
 stage = "explorer"
 title = "Standalone shell and mobile helper"
-status = "open"
+status = "open"  # revoked by the EMS-001 spec, 2026-09-24
 depends = ["M21", "M11b"]
 relies_on = ["P10"]
 closes_when = "built only if P10 fails or a mobile helper is wanted: the browser app on the M11b core, with Monaco and the same server; a native shell only by a signed ADR"
