@@ -13,6 +13,16 @@
 
 ---
 
+## 2026-11-07
+
+Palavras do Regente em resposta às seis recomendações da reconciliação desta data:
+*"good. proceed with all recommendations."*
+
+| decisão | razão |
+|---|---|
+| **O projeto se ajusta ao regency 3.3** pelo plano `UPD-94d33032` | o plano só carimba: 1/1, nenhum `.template` novo. Está em `13139ae` |
+| **A linha paralela `ccr-25b46078-6uxsw5`, `plumbing` e `testing` fica como está e não se mescla** | ela saiu de `afed370` e traz outra `ORD-0013`: um `.msi` com node, na versão 3.6.9.07, contra a resposta de 2026-10-16, que deixa o node fora do instalador, e o val de 2026-10-21 sobre o caminho A. Uma mesclagem de teste da `ccr` na `main` conflita em 18 arquivos. O registro está no [`.plan`](../.plan/README.md), *Adiado por decisão* |
+
 ## 2026-11-02
 
 Palavras do Regente trazidas à sessão em 2026-11-02, em resposta às três

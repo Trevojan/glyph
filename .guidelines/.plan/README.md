@@ -279,6 +279,12 @@ nenhum agente pode ratificar:
     mecânica.
 - **A tabela de prefixos de kit** não entra no motor (2026-10-15): nomear
   prefixo de kit é do autor do kit.
+- **A linha paralela `ccr-25b46078-6uxsw5`**, com `plumbing` e `testing` um commit
+  atrás dela, as duas só no remoto: uma sessão na nuvem que saiu de `afed370` e fez
+  outra `ORD-0013`, um `.msi` com node. A `ORD-0013` da `main` a supera, e as branches
+  ficam como estão, sem mesclar (2026-11-07, [`.decisions/`](../.decisions/README.md)).
+  O handoff dela pede avançar a `main` até `testing`, e isso não vale para esta `main`.
+  Só nela existem `scripts/build-msi.js` e o `--host` do `serve-dev.js`.
 
 ## Reaberto por decisão
 
