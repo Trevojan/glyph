@@ -28,22 +28,6 @@
       "source": ".decisions/README.md, 2026-10-21"
     },
     {
-      "id": "ORD-0014",
-      "title": "a janela própria, pelo msedge --app",
-      "state": "review",
-      "source": ".orders/EMS-001/EMS-001.pgml",
-      "who": "DV",
-      "since": "2026-10-21",
-      "where": [
-        "order:EMS-001/ORD-0014",
-        ".guidelines/.orders/EMS-001/ORD-0014/ORD-0014.xml",
-        "rust/crates/glyph-cli/src/app.rs",
-        "rust/crates/glyph-cli/examples/window_measure.ps1",
-        "rust/crates/glyph-cli/examples/window_order.mjs"
-      ],
-      "next": "construída em d33684d e medida no RETURN.md; falta o val do Regente: o app abre na janela própria, e a Ordem que emite é igual à do navegador"
-    },
-    {
       "id": "PLAN-1",
       "title": "a <section> de cabeçalho, irmã do <schema/>",
       "state": "backlog",
@@ -63,9 +47,10 @@
     },
     {
       "id": "ORD-0011-parked",
-      "title": "mapear o repositório, sem mover nada, quando a EMS-001 fechar",
+      "title": "mapear o repositório, sem mover nada, agora que a EMS-001 fechou",
       "state": "backlog",
-      "source": ".plan/README.md, Adiado por decisão"
+      "source": ".plan/README.md, Adiado por decisão",
+      "next": "a EMS-001 fechou em 2026-11-07, e a decisão de 2026-10-15 reabre só o mapeamento; falta fazer"
     },
     {
       "id": "EFF-8",

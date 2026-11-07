@@ -13,7 +13,7 @@
 | environment | node v22.22.2, cargo 1.94.1 — both present, nothing installed; the local session of 2026-09-26: Windows 11, node v22.17.1, cargo 1.88.0, and Edge as the Chromium the drivers ask for |
 | ground | read in the order the handoff names; `npm run check` (33 buckets, 41 s) and `npm run check:rust` (20 crates, 3 s) green on the clone at `ea8fc59`, before anything was touched |
 | layout | **closed** — its val holds (below), five banks |
-| queue | ORD-0001 to ORD-0013 closed, ORD-0011 at `cf3bb31` and ORD-0012 at `73da9f9`, both on the local machine on 2026-09-26. **ORD-0013, the installer**, emitted at `c3dc3ad` on the branch where the Rust translation runs, on 2026-10-16, and built at `bb3239a`: every installer path measured against the filter, written below in *ORD-0013, the installer paths measured*, and the measurement chose **A**, the binary installs itself. The Regent ran its val on a clean Windows machine and closed it on 2026-10-21. **ORD-0014, the window**, emitted at `2395734` and built at `d33684d`: measured below in *ORD-0014, the window measured*, and open at the Regent's val. The tag `conformance-v0` is on `030ed76`, on the remote since 2026-09-27 |
+| queue | ORD-0001 to ORD-0014 closed, and the series with them; ORD-0011 at `cf3bb31` and ORD-0012 at `73da9f9`, both on the local machine on 2026-09-26. **ORD-0013, the installer**, emitted at `c3dc3ad` on the branch where the Rust translation runs, on 2026-10-16, and built at `bb3239a`: every installer path measured against the filter, written below in *ORD-0013, the installer paths measured*, and the measurement chose **A**, the binary installs itself. The Regent ran its val on a clean Windows machine and closed it on 2026-10-21. **ORD-0014, the window**, emitted at `2395734` and built at `d33684d`: measured below in *ORD-0014, the window measured*. The Regent ran its val and closed it on 2026-11-07. The tag `conformance-v0` is on `030ed76`, on the remote since 2026-09-27 |
 
 ## Waiting for the Regent
 
@@ -21,7 +21,7 @@
 2. **The spec's direction is superseded, and the spec is not versioned.** On
    2026-09-27 the Regent set the goal as Glyph 100% in Rust, skill and app
    included, against this spec's *"the skill keeps the JS engine it ships"*;
-   the series closes as written at ORD-0014, and EMS-002, open since 2026-10-23,
+   the series closed as written at ORD-0014, and EMS-002, open since 2026-10-23,
    carries the new direction.
 3. **The answers of 2026-09-27 that ask for work:** questions 1, 2, 3, 4, 6, 10 and 12,
    in [`.plan`](../../.plan/README.md) §5, and question 11, the user's own
@@ -40,7 +40,6 @@
 5. **The asynchronous execution of the spec's `queue` section is closed here** —
    *"A"*: it passes to EMS-002 and leaves the open list. Measured, it saves at
    most 4 of 14 turns and runs into three constraints.
-6. **The val of ORD-0014** — below, in *ORD-0014, the window measured*.
 
 ## Questions for the Regent
 
@@ -375,13 +374,22 @@ Those are the Blobs `emitOrder` makes, because Chromium holds back a page's auto
 downloads. Five of the sources also went to the disk as zips, 20 of 20 projections
 the same, and the window's equal to its Blobs.
 
-**What this does not cover:** the registry half of `--install`, since the driver
-passes `--no-register`; a real default browser where Edge is missing; the Order from
-a window with no debugging port; and a browser other than Edge.
+**The val**, *"the app opens in its own window and the Order it emits equals the one
+the browser emits"*, run by the Regent on 2026-11-07 with the release binary, `sha256`
+`bdf9716960977db5544328ad67f42d37f52c3a355e720f21f08c9ff9cdd97398`. The session
+installed it and opened the app by the Start-menu shortcut at the Regent's word,
+*"instala e abre a janela daí"*; the install wrote the uninstall entry, version
+4.7.10.08, and kept the machine's stores of 2026-10-18 ([`.plan`](../../.plan/README.md),
+*O resto*). The Regent emitted `ORD-0001` with the page in EN-EU and closed the
+window, which stopped the engine: *"feito! o output da ORD está em Downloads."* That
+Order's source, typed into a plain tab on the same installed engine and in the same
+language, gives the same bytes in the four projections and the same manifest but for
+`emitted`. With the tab in PT-BR the `.json` differs by six labels of its diagnostics,
+`casa vazia` for `empty field`, and nothing else does. ORD-0014 closes on 2026-11-07,
+and the series with it.
 
-**What is left** is the val, *"the app opens in its own window and the Order it
-emits equals the one the browser emits"*, which is the Regent's, with the release
-binary, `sha256` `bdf9716960977db5544328ad67f42d37f52c3a355e720f21f08c9ff9cdd97398`.
+**What this does not cover:** a real default browser where Edge is missing, and a
+browser other than Edge.
 
 ## ORDs closed
 
@@ -400,6 +408,7 @@ binary, `sha256` `bdf9716960977db5544328ad67f42d37f52c3a355e720f21f08c9ff9cdd973
 | [`ORD-0011`](ORD-0011/ORD-0011.xml) | the app on the Rust engine: behind `engine=relay`, `glyph-transport.js` swaps the twelve calls, and the 114 sources give the same bytes in every panel through Rust and through JS; `parse` answers the count of commands beside the envelope (question 15) | `cf3bb31` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828` (the cases) and `e95a54e563f6424c6dc93d51be781fb2c744e32f28de5e38b3dab586624b1e78`, `oracle-modules/protocol.json`, 6 634 requests — on Windows, `sha256sum -t`, since Git Bash's binary marker changes the listing |
 | [`ORD-0012`](ORD-0012/ORD-0012.xml) | the Rust CLI: `glyph` answers the flags of `glyph-cli.js` — `--xml --ast --diag --hgml --expand --from-xml`, the source on argv or by `--file`, and `--bundle` with `--out`, flat and in a series — and `glyph-bundle` writes the zip; with `SOURCE_DATE_EPOCH`, the same bytes, the zip's time in UTC (question 16) | `73da9f9` | `c00119e0f6253564f53b9d05dafc8a6833a489e27a0af7caa42d45bc4c22d828` (the cases) and `92986fa15c3fb9d43e5f28cb251d5875fc43e17aad197582834917e05e6c1464`, `oracle-modules/cli.json`, 723 runs in 120 folders — written on Windows: the paths it records carry the platform's separator, so another platform digests its own |
 | [`ORD-0013`](ORD-0013/ORD-0013.xml) | the installer, by the measured path A: `glyph --serve` answers the page and `/engine` on a localhost origin with no node, `--install` and `--uninstall` with no crate, and the engine answers with the stores of the machine; the val on a clean Windows machine, the Regent's, run on 2026-10-21 | `bb3239a` | `1e58f512cb90df24556f105a95ce69ef35f46274a7f6f9b21eab5f121e238789`, the release `glyph.exe` the val installed |
+| [`ORD-0014`](ORD-0014/ORD-0014.xml) | the window: `msedge --app` on the page the engine serves, with no crate, on a profile of its own and with no console behind it, the engine stopping when Edge leaves the profile; the default browser where Edge is missing. The 118 sources give the same bytes from the window and from a tab; the val, the Regent's, run on 2026-11-07 | `d33684d` | `bdf9716960977db5544328ad67f42d37f52c3a355e720f21f08c9ff9cdd97398`, the release `glyph.exe` the val installed, and `57b8dac539f210ec6d8c355cb47fcf2c630c5334352b17bf2d7a9f22ba85b872`, the 472 projections of `window_order.mjs` |
 
 **ORD-0001, the proof**, run at `02c92ee` (the commit that emitted it; the
 closing commit changes no code):

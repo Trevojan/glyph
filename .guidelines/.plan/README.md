@@ -139,14 +139,14 @@ A spec da série está em
 fila, do oráculo congelado (`ORD-0001`) à janela própria (`ORD-0014`), cada uma
 presa ao oráculo byte a byte.
 
-Da `ORD-0001` à `ORD-0013`, fechadas: a nuvem correu da `ORD-0001` à `ORD-0010`,
-e esta máquina da `ORD-0011` à `ORD-0013`; o [registro da
+Da `ORD-0001` à `ORD-0014`, fechadas, e a série com elas: a nuvem correu da
+`ORD-0001` à `ORD-0010`, e esta máquina da `ORD-0011` à `ORD-0014`; o [registro da
 série](../.orders/EMS-001/README.md) guarda o commit e o digest de cada uma. O
 binário `glyph` responde as flags do `glyph-cli.js`, se instala sem crate nenhuma
 e serve o app numa origem localhost sem node, com o motor respondendo pelas
 stores da máquina; o Regente fez o val na máquina Windows limpa em 2026-10-21. A
-**`ORD-0014`, a janela própria pelo `msedge --app`**, é a Ordem aberta: construída
-e medida no [retorno](../.orders/EMS-001/RETURN.md), ela espera o val dele.
+`ORD-0014` abre o app numa janela própria pelo `msedge --app`, e ele fez o val dela
+em 2026-11-07.
 O instalador é o que torna o app **standalone** no sentido do Regente: o Glyph
 Explorer mora na máquina de cada usuário, e tudo o que é pessoal — os templates
 e os moulds que ele guarda — fica lá, nunca no repositório público, que entrega
@@ -158,8 +158,8 @@ nomeados pelo digest —, e ele espera na EMS-002.
 
 **O alvo é o Glyph 100% em Rust** — o motor, o núcleo do app e a skill —, com o
 JS saindo peça por peça, cada uma quando o Rust passa o oráculo nela. Até lá o
-JS é a referência, e só muda onde o oráculo precisa mudar. A EMS-001 fecha como
-está escrita; essa direção abre a EMS-002. O desenho do PIN, do tráfego e da
+JS é a referência, e só muda onde o oráculo precisa mudar. A EMS-001 fechou como
+está escrita; essa direção é a da EMS-002. O desenho do PIN, do tráfego e da
 EMS que o usuário conduz está em
 [`INTAKE-PIN-TRAFFIC.md`](../.orders/INTAKE-PIN-TRAFFIC.md), com o que ainda
 espera o Regente no §5 dele.
@@ -240,8 +240,9 @@ nenhum agente pode ratificar:
 | | |
 |---|---|
 | **estudo de setembro** | oito intakes em [`.orders/`](../.orders/): [`INTAKE-VIRTUAL-PATH`](../.orders/INTAKE-VIRTUAL-PATH.md) (mini-repo, medido: o custo de round-trip é o tamanho de `glyph-parser.js`), [`INTAKE-ORDER-COHERENCE`](../.orders/INTAKE-ORDER-COHERENCE.md) (a aresta declarada, ratificada em 2026-10-15 com `[ref'nem']`, `[ref'EMS']` e a fila do `repair`; não construída), [`INTAKE-BURN-INVARIANCE`](../.orders/INTAKE-BURN-INVARIANCE.md) (fechado), [`INTAKE-FORMAL-ANALYSIS`](../.orders/INTAKE-FORMAL-ANALYSIS.md), [`INTAKE-PARSER-SPLIT`](../.orders/INTAKE-PARSER-SPLIT.md) (o corte, feito: treze módulos), [`INTAKE-RUST`](../.orders/INTAKE-RUST.md) (steelman e defeater; o Regente decidiu migrar), [`INTAKE-RUST-LADDER`](../.orders/INTAKE-RUST-LADDER.md) (a escada auditada; nada nela espera o Regente — as dez perguntas `O` fecharam em 2026-09-24 e 2026-09-27, e o §8 registra quando cada uma fechou), [`INTAKE-FIELD-2026-09`](../.orders/INTAKE-FIELD-2026-09.md) (o kit de cliente; `H-09` fechou por ele, e os dois achados estruturais fecharam em 2026-10-15). |
-| **EMS-001** | as perguntas do [retorno](../.orders/EMS-001/RETURN.md) têm todas resposta, e os dois portões das duas últimas ORDs também. A execução assíncrona da seção `queue` **passou à EMS-002** em 2026-10-15 e saiu desta lista |
+| **EMS-001** | fechou em 2026-11-07, com a `ORD-0014`, e as perguntas do [retorno](../.orders/EMS-001/RETURN.md) têm todas resposta. A execução assíncrona da seção `queue` **passou à EMS-002** em 2026-10-15 e saiu desta lista |
 | **EMS-002** | aberta em 2026-10-23, e o [registro da série](../.orders/EMS-002/README.md) guarda o que fechou; a opção c da pergunta 11 e o resto do §5 esperam nela, cada peça como proposta medida para o Regente cortar |
+| **as stores numa atualização** | o `--install` não sobrescreve as stores, de propósito, e por isso uma versão nova instalada sobre uma antiga segue lendo as que vieram da instalação antiga, mesmo sem edição nenhuma. Medido em 2026-11-07, com as stores de 2026-10-18 e o motor 4.7.10.08: o `.xml` e o `.hgml` das 118 fontes não mudam; o `.json` leva os digests antigos e, no K-04, um diagnóstico diz *preset*; e o `expansions.json` nomeia `skeptic`, sem chegar ao XML delas. Falta o Regente dizer se a instalação passa a atualizar o que não foi editado |
 
 ## Adiado por decisão, não por esquecimento
 
@@ -254,7 +255,7 @@ nenhum agente pode ratificar:
   guardada em [`.orders/parked/restructure-glyph-repo/`](../.orders/parked/restructure-glyph-repo/);
   não é a `EMS-001/ORD-0011`. Reestrutura o
   repositório lendo `_ORBITAL`, que só existe nesta máquina. Segue estacionada
-  por decisão de 2026-10-15, e **quando a EMS-001 fechar** reabre só a parte de
+  por decisão de 2026-10-15, e **com a EMS-001 fechada** reabre só a parte de
   **mapear** — o `[find]` e o `[nt]`, sem mover arquivo nenhum —, devolvendo uma
   tabela de colisões para o Regente ler. Mapear não gasta a vaga da Ordem
   aberta.

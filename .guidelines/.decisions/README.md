@@ -15,13 +15,14 @@
 
 ## 2026-11-07
 
-Palavras do Regente em resposta às seis recomendações da reconciliação desta data:
-*"good. proceed with all recommendations."*
+Palavras do Regente trazidas à sessão nesta data, em resposta às seis recomendações da
+reconciliação e ao pedido do val.
 
 | decisão | razão |
 |---|---|
-| **O projeto se ajusta ao regency 3.3** pelo plano `UPD-94d33032` | o plano só carimba: 1/1, nenhum `.template` novo. Está em `13139ae` |
-| **A linha paralela `ccr-25b46078-6uxsw5`, `plumbing` e `testing` fica como está e não se mescla** | ela saiu de `afed370` e traz outra `ORD-0013`: um `.msi` com node, na versão 3.6.9.07, contra a resposta de 2026-10-16, que deixa o node fora do instalador, e o val de 2026-10-21 sobre o caminho A. Uma mesclagem de teste da `ccr` na `main` conflita em 18 arquivos. O registro está no [`.plan`](../.plan/README.md), *Adiado por decisão* |
+| **O val da `ORD-0014` está feito, a `ORD-0014` fecha, e a EMS-001 fecha com ela** | *"feito! o output da ORD está em Downloads."* A sessão instalou o binário de release e abriu o app pelo atalho, a pedido dele (*"instala e abre a janela daí"*); ele emitiu a `ORD-0001`, e o [retorno](../.orders/EMS-001/RETURN.md) guarda a medição dessa Ordem contra uma aba |
+| **O projeto se ajusta ao regency 3.3** pelo plano `UPD-94d33032` | *"good. proceed with all recommendations."* O plano só carimba: 1/1, nenhum `.template` novo. Está em `13139ae` |
+| **A linha paralela `ccr-25b46078-6uxsw5`, `plumbing` e `testing` fica como está e não se mescla** | na mesma resposta. Ela saiu de `afed370` e traz outra `ORD-0013`: um `.msi` com node, na versão 3.6.9.07, contra a resposta de 2026-10-16, que deixa o node fora do instalador, e o val de 2026-10-21 sobre o caminho A. Uma mesclagem de teste da `ccr` na `main` conflita em 18 arquivos. O registro está no [`.plan`](../.plan/README.md), *Adiado por decisão* |
 
 ## 2026-11-02
 
