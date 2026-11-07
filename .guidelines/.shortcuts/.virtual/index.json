@@ -1,7 +1,7 @@
 {
   "note": "written by glyph-vpath build, EMS-002; never edited by hand",
   "depth": 2,
-  "next": 3049,
+  "next": 3050,
   "files": {
     ".guidelines/.changelog/README.md": {
       "nodes": [
@@ -3484,17 +3484,18 @@
     },
     ".guidelines/.shortcuts/regency.json": {
       "nodes": [
-        ["n2784", "", 0, 565, 1, 32, "b04268e8e58c6c00", "", ""],
+        ["n2784", "", 0, 689, 1, 39, "2fcf24d8be396a00", "", ""],
         ["n2785", "/schema", 14, 15, 2, 1, "340ca71c160082b8", "", "n2784"],
-        ["n2786", "/regency", 30, 35, 3, 1, "ef6023301ede7a00", "", "n2784"],
-        ["n2787", "/updated", 50, 62, 4, 1, "ebb8f50c24b45000", "", "n2784"],
+        ["n2786", "/regency", 30, 35, 3, 1, "cc5dad8055479a00", "", "n2784"],
+        ["n2787", "/updated", 50, 62, 4, 1, "edc5c42487870000", "", "n2784"],
         ["n2788", "/files", 75, 173, 5, 4, "0e94a11f31827c00", "", "n2784"],
         ["n2789", "/files/.orders~1README.md", 102, 116, 6, 1, "6a6a1a675b163400", "", "n2788"],
         ["n2790", "/files/.shortcuts~1.virtual~1README.md", 155, 169, 7, 1, "c26b6bec0a938600", "", "n2788"],
-        ["n2791", "/history", 188, 562, 9, 23, "5f24091845815e00", "", "n2784"],
+        ["n2791", "/history", 188, 686, 9, 30, "bd7d1fe8b01de800", "", "n2784"],
         ["n2792", "/history/0", 194, 311, 10, 7, "1b4d27d051809500", "", "n2791"],
         ["n2914", "/history/1", 317, 435, 17, 7, "1974955f2cdf0d00", "", "n2791"],
-        ["n3046", "/history/2", 441, 558, 24, 7, "989323c0ec822a00", "", "n2791"]
+        ["n3046", "/history/2", 441, 558, 24, 7, "989323c0ec822a00", "", "n2791"],
+        ["n3049", "/history/3", 564, 682, 31, 7, "b0fcb6df33018400", "", "n2791"]
       ]
     },
     ".guidelines/.sources/COMPILER_LESSONS.md": {

@@ -1,7 +1,7 @@
 {
   "_about": "Registro do trabalho dos agentes: o primeiro relance ao voltar a este repositório. Aponta, nunca copia. O modelo é o do toolkit Regency, library/virtualpath.md §3; o detalhe de cada item mora no source.",
   "schema": 1,
-  "updated": "2026-11-06",
+  "updated": "2026-11-07",
   "items": [
     {
       "id": "REGENCY-NORM",
@@ -160,6 +160,17 @@
         ".guidelines/.constraints/README.md"
       ],
       "next": "plano UPD-74c1741d aplicado; os seis .template ficam ao lado dos READMEs editados, como o regency os guarda; só o .constraints trazia o que faltava (O mais simples suficiente), fundido"
+    },
+    {
+      "id": "REGENCY-UPDATE-3.3",
+      "title": "regency update 3.0 -> 3.3",
+      "state": "review",
+      "who": "DV",
+      "since": "2026-11-07",
+      "where": [
+        ".guidelines/.shortcuts/regency.json"
+      ],
+      "next": "plano UPD-94d33032 aplicado, 1/1 (stamp), nenhum .template novo"
     }
   ]
 }
