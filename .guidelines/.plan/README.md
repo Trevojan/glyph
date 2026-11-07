@@ -188,9 +188,8 @@ ORD que a constrói, parando no portão dele — a forma que ele ratificou em
 
 ### Os dois itens dos caminhos virtuais
 
-Nomeados pelo §0, construídas as camadas 1 a 4: o `.history/study.md`, vazio
-desde o commit inicial, está fixado como perda conhecida no `KNOWN_EMPTY` do
-módulo, porque cortar o sótão é decisão dele; e **não existe seletor para
+Nomeados pelo §0: o `.history/study.md`, vazio desde o commit inicial, espera o
+Regente, porque cortar o sótão é decisão dele; e **não existe seletor para
 `.pgml`**, então um `.pgml` se endereça pelo arquivo inteiro ou por `@block`.
 
 ### Duas medições devidas, e nenhuma tem instrumento escrito
@@ -261,10 +260,6 @@ nenhum agente pode ratificar:
 - **Os caminhos B e C do mini-repo** saem como não justificados por medição
   (2026-10-15): se o mini-repo vier, vem pelo caminho A. Qualquer um dos dois
   reabre com medição na mão.
-- **As camadas 5 e 6 dos caminhos virtuais**, as impressões digitais e o grafo
-  de invalidação, adiadas em 2026-10-16. A medição do §0 mostra que elas detectam
-  um evento que o repositório deixou de produzir. Reabrem com uma medição nova,
-  pelo mesmo `scripts/measure-coupling.js`.
 - **O resto da normalização na Regency**, pulado pela norma de 2026-10-16
   (*"if unnecessary and mid cost, skip it like a nonfunctional requirement"*,
   [`.constraints/`](../.constraints/README.md)). O registro de trabalho entrou;
@@ -276,12 +271,11 @@ nenhum agente pode ratificar:
     as ORDs fechadas da EMS-001, que são atos, seguem com o nome antigo;
   - **o manifesto de linhagem**, `.virtual/manifest.json`: ele é funcional, e não
     cosmético, porque alimenta o `vp.py code`/`slice`/`stale` e as linhas
-    `STALE` dos hooks. Mesmo assim não é necessário. A função de detectar
-    defasagem é a das camadas 5 e 6, que a medição adiou. A função de endereçar
-    norma e código é a das camadas 1 a 4, que se constroem na base com cobertura
-    fechada, e um manifesto escrito à mão ao lado delas seria um segundo índice.
-    O custo é médio: uma fatia por norma, mantida à mão. Reabre quando o índice
-    das camadas 1 a 4 puder emiti-lo por inversão mecânica.
+    `STALE` dos hooks. Mesmo assim não é necessário. As funções de detectar
+    defasagem e de endereçar norma e código são do `glyph-vpath`, e um manifesto
+    escrito à mão ao lado dele seria um segundo índice. O custo é médio: uma fatia
+    por norma, mantida à mão. Reabre quando o índice puder emiti-lo por inversão
+    mecânica.
 - **A tabela de prefixos de kit** não entra no motor (2026-10-15): nomear
   prefixo de kit é do autor do kit.
 
