@@ -5,16 +5,18 @@
 //! bytes it returns.
 
 use glyph_burn::{to_hgml, BurnOpts};
-use glyph_envelope::{to_ast, AstOpts};
+use glyph_envelope::{ck, to_ast, AstOpts};
 use glyph_inverse::from_xml;
 use glyph_lex::{classify, suggest, tokenize, Token};
 use glyph_logic::{expand_expr, free_vars, parse_logic};
 use glyph_parse::{parse, Opts};
 use glyph_stores::{Context, Registered};
-use glyph_json::{parse as parse_json, stringify, Json};
+use glyph_json::{parse as parse_json, set, stringify, Json};
 use glyph_util::tree::Thrown;
-use glyph_vocab::el_name;
+use glyph_version::VERSION;
+use glyph_vocab::{derived, el_name, Named, ALIAS, CATS, EDITORIAL_ONLY, EMO, FRAMES, INSTR, LOGIC_OPS, META, MODE, PUNCT, SESSION, STRUCT};
 use glyph_xml::to_xml;
+use std::sync::Arc;
 
 /// JSON-encode a single token for the tokenize response.
 fn token_json(t: &Token) -> Json {
@@ -178,8 +180,80 @@ fn str_field(req: &Json, name: &str) -> String {
         .unwrap_or_default()
 }
 
+fn text(v: &str) -> Json {
+    Json::Str(v.to_string())
+}
+
+/// An object, its keys in the order the JS enumerates them.
+fn object(rows: impl IntoIterator<Item = (String, Json)>) -> Json {
+    let mut kv = Vec::new();
+    rows.into_iter().for_each(|(k, v)| set(&mut kv, k, v));
+    Json::Obj(kv)
+}
+
+fn strings(t: &[(&str, &str)]) -> Json {
+    object(t.iter().map(|(k, v)| (k.to_string(), text(v))))
+}
+
+fn pairs(t: &[(&str, &str)]) -> Json {
+    Json::Arr(t.iter().map(|(a, b)| Json::Arr(vec![text(a), text(b)])).collect())
+}
+
+fn named(t: &[(String, Named)]) -> Json {
+    object(t.iter().map(|(k, n)| (k.clone(), object([("canonical".into(), text(n.canonical)), ("tier".into(), text(n.tier))]))))
+}
+
+/// `tables`: what the page reads off `GlyphCore`, what `classify` reads besides,
+/// and the templates of these stores (EMS-002 ORD-0032).
+fn tables(ctx: &Context) -> Json {
+    let d = derived();
+    let blends = ctx.rules.as_deref().and_then(|r| r.get("rules")).and_then(Json::arr).unwrap_or(&[]).iter()
+        .filter(|r| r.get("kind").and_then(Json::str) == Some("blend")).cloned().collect();
+    Json::Obj(vec![
+        ("VERSION".into(), text(VERSION)),
+        ("CATS".into(), Json::Arr(CATS.iter().map(|c| object([
+            ("id".into(), text(c.id)), ("label".into(), text(c.label)), ("note".into(), text(c.note)),
+            ("items".into(), pairs(c.items))])).collect())),
+        ("INSTR".into(), strings(INSTR)),
+        ("ALIAS".into(), strings(ALIAS)),
+        ("ALIAS_OF".into(), object(d.alias_of.iter().map(|(k, v)| (k.to_string(), Json::Arr(v.iter().map(|a| text(a)).collect()))))),
+        ("STRUCT".into(), strings(STRUCT)),
+        ("META".into(), strings(META)),
+        ("MODE".into(), strings(MODE)),
+        ("EMO".into(), strings(EMO)),
+        ("SESSION".into(), strings(SESSION)),
+        ("FRAMES".into(), object(FRAMES.iter().map(|(k, v)| (k.to_string(), Json::Arr(v.iter().map(|x| text(x)).collect()))))),
+        ("EDITORIAL_ONLY".into(), object(EDITORIAL_ONLY.iter().map(|(k, v)| (k.to_string(), Json::Num(*v))))),
+        ("PTBR".into(), strings(&d.ptbr)),
+        ("CAT_OF".into(), strings(&d.cat_of)),
+        ("LOGIC_OPS".into(), pairs(LOGIC_OPS)),
+        ("PUNCT".into(), pairs(PUNCT)),
+        ("ELEMENT_INPUT".into(), named(&d.element_input)),
+        ("BLENDS".into(), Json::Arr(blends)),
+        ("templates".into(), (*ctx.templates).clone()),
+    ])
+}
+
+/// What a request brings, over the stores it is answered with: the templates that
+/// differ, named by their digest (question 11 of the EMS-001 return, answered c).
+/// Nothing of them stays. The context is made here and not by `Context::shared`, so
+/// a template named `templates` stays a template.
+fn over(ctx: &Context, differ: &Json) -> Result<Context, String> {
+    let (Some(digest), Some(templates @ Json::Obj(kv))) = (differ.get("digest").and_then(Json::str), differ.get("templates")) else {
+        return Err("differ: not a digest and templates".to_string());
+    };
+    if ck(&stringify(templates)) != digest {
+        return Err("differ: the templates do not match their digest".to_string());
+    }
+    let mut merged = ctx.templates.obj().map(<[_]>::to_vec).unwrap_or_default();
+    kv.iter().for_each(|(k, v)| set(&mut merged, k.clone(), v.clone()));
+    Ok(Context { templates: Arc::new(Json::Obj(merged)), rules: ctx.rules.clone(), expansions: ctx.expansions.clone() })
+}
+
 /// Process a single request and return the response.
-fn run(ctx: &Context, req: &Json) -> Result<Json, String> {
+fn run(stores: &Context, req: &Json) -> Result<Json, String> {
+    let brought = req.get("differ").map(|d| over(stores, d)).transpose()?;
+    let ctx = brought.as_ref().unwrap_or(stores);
     // the engine registers the stores it answers with, as glyph-protocol.js
     // does when it runs as the engine (EMS-002 ORD-0008)
     let registered = Registered::of(ctx);
@@ -194,6 +268,7 @@ fn run(ctx: &Context, req: &Json) -> Result<Json, String> {
 
     let call = str_field(req, "call");
     match call.as_str() {
+        "tables" => Ok(tables(stores)),
         "tokenize" => {
             let src = str_field(req, "src");
             Ok(Json::Arr(

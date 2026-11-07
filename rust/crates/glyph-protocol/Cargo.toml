@@ -12,6 +12,7 @@ glyph-stores = { path = "../glyph-stores" }
 glyph-lex = { path = "../glyph-lex" }
 glyph-logic = { path = "../glyph-logic" }
 glyph-vocab = { path = "../glyph-vocab" }
+glyph-version = { path = "../glyph-version" }
 glyph-parse = { path = "../glyph-parse" }
 glyph-xml = { path = "../glyph-xml" }
 glyph-envelope = { path = "../glyph-envelope" }
