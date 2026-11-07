@@ -174,8 +174,10 @@ Closed questions; an answered one carries the Regent's answer below its options.
     to let very customized material in there"*; *"the only templates that
     should appear after installing are the basic ones for user examples."*
     The engine answers with the stores of the user's machine, and the
-    installer (ORD-0013) is where they live; behind `?engine=relay` today it
-    answers with the repository's alone.
+    installer (ORD-0013) is where they live. On 2026-10-21 the Regent took
+    **c**. Built by [`EMS-002/ORD-0032`](../EMS-002/README.md): the page asks
+    the engine's tables once, at load, and a request carries only the
+    templates that differ, named by their digest.
 12. **The Rust redoes on every call what the JS does once, or cheaper.** Every
     parse copies the rules store with its compiled cache (`with_cache`, 54% of
     an empty parse's instructions: 95 µs against the JS's 4.5 µs, which
