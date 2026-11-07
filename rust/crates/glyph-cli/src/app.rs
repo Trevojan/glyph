@@ -17,17 +17,29 @@
 //! `--serve`, and writes the uninstall entry under `HKCU` with `reg.exe`.
 //! `--uninstall` takes all of that back and leaves the stores, which are the
 //! user's. `--no-register` leaves the registry alone, for the tests, and
-//! `--no-open` leaves the browser closed.
+//! `--no-open` leaves the app closed.
+//!
+//! EMS-001 ORD-0014: the app opens in a window of its own, `msedge --app` on the
+//! page the engine serves, with no crate. The window has a profile of its own,
+//! `%LOCALAPPDATA%\Glyph\window`, so Edge cannot hand it to the user's browser, and
+//! the engine stops when Edge has left that profile: the process started has ended,
+//! and so has the `lockfile` Edge holds there for as long as a browser runs on it.
+//! Where Edge is missing the page opens in the default browser and the engine stays
+//! up until its console closes.
+//!
+//! The installed copy is this binary marked as a Windows program, so the shortcut
+//! opens no console behind the window; the binary itself stays a console program,
+//! because it is also the CLI.
 //!
 //! Run with no argument from a console, as a double-click does, the binary
-//! installs itself when it is not the installed copy, and then serves.
+//! installs itself when it is not the installed copy, and the installed copy serves.
 
 use glyph_json::Json;
 use glyph_stores::Context;
 use std::io::{BufRead, BufReader, Read, Write};
 use std::net::{TcpListener, TcpStream};
 use std::path::{Path, PathBuf};
-use std::process::Command;
+use std::process::{Child, Command};
 use std::sync::Arc;
 
 pub const PORT: u16 = 8732;
@@ -129,6 +141,7 @@ fn connection(stream: TcpStream, ctx: Arc<Context>) {
         let mut parts = line.split_whitespace();
         let (method, target) = (parts.next().unwrap_or(""), parts.next().unwrap_or("/"));
         let mut len = 0;
+        let mut closing = false;
         loop {
             let mut h = String::new();
             if reader.read_line(&mut h).unwrap_or(0) == 0 || h.trim_end().is_empty() {
@@ -138,6 +151,7 @@ fn connection(stream: TcpStream, ctx: Arc<Context>) {
                 if k.eq_ignore_ascii_case("content-length") {
                     len = v.trim().parse().unwrap_or(0);
                 }
+                closing |= k.eq_ignore_ascii_case("connection") && v.trim().eq_ignore_ascii_case("close");
             }
         }
         let mut body = vec![0; len];
@@ -160,7 +174,7 @@ fn connection(stream: TcpStream, ctx: Arc<Context>) {
             },
             _ => respond(&mut out, "405 Method Not Allowed", "text/plain; charset=utf-8", b"GET or POST /engine"),
         };
-        if sent.is_err() {
+        if sent.is_err() || closing {
             break;
         }
     }
@@ -179,9 +193,42 @@ fn open_browser(url: &str) {
     }
 }
 
-/// An engine of this app already holds the port: it answers a request.
+/// Edge where its installer puts it, for the machine or for this user.
+fn edge() -> Option<PathBuf> {
+    ["ProgramFiles(x86)", "ProgramFiles", "LOCALAPPDATA"].iter().filter_map(|v| env_dir(v))
+        .map(|d| d.join("Microsoft").join("Edge").join("Application").join("msedge.exe"))
+        .find(|p| p.is_file())
+}
+
+fn open_window(url: &str) -> Option<Child> {
+    let profile = places().ok()?.profile;
+    Command::new(edge()?)
+        .args([format!("--app={url}"), format!("--user-data-dir={}", profile.display())])
+        .args(["--no-first-run", "--no-default-browser-check"])
+        .spawn().ok()
+}
+
+/// The app's window, and `None` when the page went to the default browser.
+fn show(url: &str) -> Option<Child> {
+    let window = open_window(url);
+    if window.is_none() {
+        open_browser(url);
+    }
+    window
+}
+
+/// The installed copy has no console: where Edge is missing, one opens to say
+/// where the app is and to stop it, as the console of `glyph --serve` does.
+fn console_window(url: &str) -> Option<Child> {
+    let line = format!("title Glyph & echo Glyph is running at {url} - close this window to stop it & pause >nul");
+    Command::new("cmd").args(["/c", &line]).spawn().ok()
+}
+
+/// An engine of this app already holds the port: it answers a request, and a
+/// program that holds the port and never answers is not waited on.
 fn already_serving(port: u16) -> bool {
     let Ok(mut s) = TcpStream::connect(("127.0.0.1", port)) else { return false };
+    let _ = s.set_read_timeout(Some(std::time::Duration::from_secs(5)));
     let q = r#"{"call":"freeVars","raw":"x"}"#;
     let req = format!("POST /engine HTTP/1.1\r\nHost: 127.0.0.1\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{q}", q.len());
     let mut got = String::new();
@@ -200,7 +247,7 @@ pub fn serve(port: u16, open: bool) -> i32 {
         Ok(l) => l,
         Err(_) if port != 0 && already_serving(port) => {
             if open {
-                open_browser(&format!("http://127.0.0.1:{port}{ENTRY}"));
+                show(&format!("http://127.0.0.1:{port}{ENTRY}"));
             }
             println!("Glyph is already running at http://127.0.0.1:{port}/");
             return 0;
@@ -212,10 +259,21 @@ pub fn serve(port: u16, open: bool) -> i32 {
     };
     let bound = listener.local_addr().map(|a| a.port()).unwrap_or(port);
     let url = format!("http://127.0.0.1:{bound}/");
-    println!("Glyph is running at {url} — close this window to stop it");
+    let window = if open { show(&format!("http://127.0.0.1:{bound}{ENTRY}")) } else { None };
+    let closing = if window.is_some() { "close its window" } else { "close this window" };
+    println!("Glyph is running at {url} — {closing} to stop it");
     let _ = std::io::stdout().flush();
-    if open {
-        open_browser(&format!("http://127.0.0.1:{bound}{ENTRY}"));
+    let stops_the_engine = window.or_else(|| if open && is_installed_copy() { console_window(&url) } else { None });
+    if let Some(mut child) = stops_the_engine {
+        let lock = places().ok().map(|p| p.profile.join("lockfile"));
+        std::thread::spawn(move || {
+            let _ = child.wait();
+            /* Edge hands a launch to the browser already on the profile and ends at once */
+            while lock.as_ref().is_some_and(|l| l.exists()) {
+                std::thread::sleep(std::time::Duration::from_millis(250));
+            }
+            std::process::exit(0);
+        });
     }
     for stream in listener.incoming().flatten() {
         let ctx = Arc::clone(&ctx);
@@ -236,6 +294,8 @@ pub struct Places {
     pub icon: PathBuf,
     pub shortcut: Option<PathBuf>,
     pub stores: PathBuf,
+    /// The window's Edge profile, where the page keeps what it keeps in the browser's storage.
+    pub profile: PathBuf,
 }
 
 pub fn places() -> Result<Places, String> {
@@ -243,7 +303,8 @@ pub fn places() -> Result<Places, String> {
     let dir = local.join("Programs").join("Glyph");
     let shortcut = env_dir("APPDATA").map(|a| a.join("Microsoft").join("Windows").join("Start Menu").join("Programs").join("Glyph.lnk"));
     Ok(Places { exe: dir.join("glyph.exe"), icon: dir.join("glyph.ico"), shortcut,
-                stores: stores_dir().ok_or("APPDATA is not set")?, dir })
+                stores: stores_dir().ok_or("APPDATA is not set")?,
+                profile: local.join("Glyph").join("window"), dir })
 }
 
 const UNINSTALL_KEY: &str = r"HKCU\Software\Microsoft\Windows\CurrentVersion\Uninstall\Glyph";
@@ -252,9 +313,28 @@ fn ps_quote(p: &Path) -> String {
     format!("'{}'", p.display().to_string().replace('\'', "''"))
 }
 
+/// A console program the app runs for itself: started from the installed copy,
+/// which has no console, it would put one of its own on the screen.
+fn hidden(cmd: &mut Command) -> &mut Command {
+    #[cfg(windows)]
+    std::os::windows::process::CommandExt::creation_flags(cmd, 0x0800_0000); // CREATE_NO_WINDOW
+    cmd
+}
+
 fn run_quiet(cmd: &mut Command) -> Result<(), String> {
-    let out = cmd.output().map_err(|e| e.to_string())?;
+    let out = hidden(cmd).output().map_err(|e| e.to_string())?;
     if out.status.success() { Ok(()) } else { Err(String::from_utf8_lossy(&out.stderr).trim().to_string()) }
+}
+
+/// The installed copy: the binary marked as a Windows program, the byte
+/// `editbin /subsystem:windows` writes, the optional header's subsystem field.
+fn windowed(mut exe: Vec<u8>) -> Result<Vec<u8>, String> {
+    let at = exe.get(0x3c..0x40).and_then(|b| b.try_into().ok()).map(|b| u32::from_le_bytes(b) as usize + 0x5c);
+    match at.and_then(|at| exe.get_mut(at)) {
+        Some(field) if matches!(*field, 2 | 3) => *field = 2,
+        _ => return Err("this binary has no subsystem field to mark".to_string()),
+    }
+    Ok(exe)
 }
 
 pub fn is_installed_copy() -> bool {
@@ -276,7 +356,8 @@ pub fn install(register: bool) -> Result<Places, String> {
     std::fs::create_dir_all(&p.dir).map_err(|e| format!("{}: {e}", p.dir.display()))?;
     let me = std::env::current_exe().map_err(|e| e.to_string())?;
     if !same_file(&me, &p.exe) {
-        std::fs::copy(&me, &p.exe).map_err(|e| format!("{}: {e}", p.exe.display()))?;
+        let bytes = std::fs::read(&me).map_err(|e| format!("{}: {e}", me.display()))?;
+        std::fs::write(&p.exe, windowed(bytes)?).map_err(|e| format!("{}: {e}", p.exe.display()))?;
     }
     let icon = PAGE.iter().find(|(n, _)| n.ends_with("favicon.ico")).map(|(_, b)| *b).unwrap_or_default();
     std::fs::write(&p.icon, icon).map_err(|e| format!("{}: {e}", p.icon.display()))?;
@@ -332,7 +413,7 @@ pub fn uninstall(register: bool) -> Result<Places, String> {
     if same_file(&me, &p.exe) {
         /* a running binary cannot remove itself: a shell does it once this one has ended */
         let line = format!("ping -n 3 127.0.0.1 >nul & del /f /q \"{}\" & rmdir \"{}\"", p.exe.display(), p.dir.display());
-        Command::new("cmd").args(["/c", &line]).spawn().map_err(|e| e.to_string())?;
+        hidden(Command::new("cmd").args(["/c", &line])).spawn().map_err(|e| e.to_string())?;
     } else {
         if p.exe.exists() {
             std::fs::remove_file(&p.exe).map_err(|e| format!("{}: {e}", p.exe.display()))?;
@@ -366,7 +447,8 @@ pub fn route(argv: &[String]) -> Option<i32> {
     if has("--uninstall") {
         return Some(match uninstall(register) {
             Ok(p) => {
-                println!("Glyph is removed; the stores stay in {}, and they are yours", p.stores.display());
+                println!("Glyph is removed; the stores stay in {} and the window's profile in {}, and they are yours",
+                         p.stores.display(), p.profile.display());
                 0
             }
             Err(e) => {
@@ -395,16 +477,26 @@ pub fn route(argv: &[String]) -> Option<i32> {
     None
 }
 
-/// A double-click: install when this is not the installed copy, then serve.
+/// A double-click: the installed copy serves; any other copy installs and hands
+/// over to it, and ends, its console with it.
 pub fn double_click() -> i32 {
-    if !is_installed_copy() {
-        match install(true) {
-            Ok(p) => println!("Glyph is installed in {}; the Start menu opens it from now on", p.dir.display()),
-            Err(e) => {
-                eprintln!("the install stopped: {e}");
-                return 1;
+    if is_installed_copy() {
+        return serve(PORT, true);
+    }
+    match install(true) {
+        Ok(p) => {
+            println!("Glyph is installed in {}; the Start menu opens it from now on", p.dir.display());
+            match Command::new(&p.exe).arg("--serve").spawn() {
+                Ok(_) => 0,
+                Err(e) => {
+                    eprintln!("{}: {e}", p.exe.display());
+                    1
+                }
             }
         }
+        Err(e) => {
+            eprintln!("the install stopped: {e}");
+            1
+        }
     }
-    serve(PORT, true)
 }
