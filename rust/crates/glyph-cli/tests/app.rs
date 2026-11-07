@@ -125,6 +125,33 @@ fn the_engine_answers_with_the_stores_of_the_machine() {
     let _ = std::fs::remove_dir_all(&home);
 }
 
+/// EMS-002 ORD-0032: the tables carry the templates of the machine, and what a
+/// request brings goes over them and does not stay.
+#[test]
+fn the_page_reads_the_machine_and_brings_what_differs() {
+    let home = scratch("differ");
+    let stores = home.join("Roaming").join("Glyph").join("stores");
+    std::fs::create_dir_all(&stores).unwrap();
+    std::fs::write(stores.join("templates.json"), r#"{ "templates": { "machine": { "body": "[nt'of the machine']" } } }"#).unwrap();
+    let app = serve(&home);
+    let ask = |q: &str| String::from_utf8(http(app.port, "POST", "/engine", q).1).unwrap();
+
+    let tables = glyph_json::parse(&ask(r#"{"call":"tables"}"#)).unwrap();
+    let held = tables.get("ok").and_then(|t| t.get("templates")).expect("the tables name the templates");
+    assert_eq!(glyph_json::stringify(held), r#"{"machine":{"body":"[nt'of the machine']"}}"#, "the machine's, not the repository's");
+
+    let mine = r#"{"mine":{"body":"[nt'of the page']"}}"#;
+    let src = "[--machine][--mine]";
+    let a = ask(&format!(r#"{{"call":"toXML","src":"{src}","differ":{{"digest":"{}","templates":{mine}}}}}"#, glyph_envelope::ck(mine)));
+    assert!(a.contains("of the machine") && a.contains("of the page"), "{a}");
+    let a = ask(&format!(r#"{{"call":"toXML","src":"{src}"}}"#));
+    assert!(a.contains("of the machine") && !a.contains("of the page"), "nothing stays: {a}");
+    let a = ask(&format!(r#"{{"call":"toXML","src":"{src}","differ":{{"digest":"0","templates":{mine}}}}}"#));
+    assert!(a.contains("do not match their digest"), "{a}");
+    drop(app);
+    let _ = std::fs::remove_dir_all(&home);
+}
+
 /// The optional header's subsystem field: 3 a console program, 2 a Windows one.
 #[cfg(windows)]
 fn subsystem_at(exe: &[u8]) -> usize {
