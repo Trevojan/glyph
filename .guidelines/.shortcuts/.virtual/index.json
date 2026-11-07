@@ -4233,9 +4233,9 @@
         ["scripts/glyph-cli.js#@block:flags", "14f9ad4e10950400"]
       ],
       "nodes": [
-        ["n1774", "", 0, 12679, 1, 295, "468c98246a251000", "", ""],
-        ["n1775", "glyph", 55, 12679, 5, 291, "834e3a48be6c6e00", "88435cc604974180", "n1774"],
-        ["n1776", "run-it", 620, 8186, 21, 188, "19800fc887f8a800", "fa8c8cd0e7b60d00", "n1775"],
+        ["n1774", "", 0, 13001, 1, 299, "a5fda1c88de27600", "", ""],
+        ["n1775", "glyph", 55, 13001, 5, 295, "7faeecf83211ec00", "a6a380d6fd656780", "n1774"],
+        ["n1776", "run-it", 620, 8508, 21, 192, "8462d0b4a46ab600", "a5014988ebbfbe00", "n1775"],
         ["n1777", "the-app--one-click", 631, 1410, 23, 20, "7fbc128e23598800", "904a908640f185a8", "n1776"],
         ["n1778", "the-command-line--needs-node", 1410, 1926, 43, 17, "51fb86fcdbc3da00", "548f3202b39e6200", "n1776"],
         ["n1779", "--bundle--a-ordem-inteira-numerada-como-um-adr", 1926, 3554, 60, 31, "cb9ad3cea5553200", "7cfa1ce821761a00", "n1776"],
@@ -4244,12 +4244,12 @@
         ["n1782", "self-describing-xml", 5636, 6010, 148, 13, "70f6dba4f1a95c00", "f535b1e6cec4e340", "n1776"],
         ["n1783", "the-server", 6010, 6674, 161, 16, "fe14fa5c514ddc00", "a51f2920b2a6c000", "n1776"],
         ["n1784", "the-rust-engine--needs-cargo", 6674, 7254, 177, 13, "f21f8d90be255f40", "d0e20ac04d3b2800", "n1776"],
-        ["n3048", "the-app-with-no-node--one-file", 7254, 8186, 190, 19, "c89afdd84c86f200", "708a9670002a0000", "n1776"],
-        ["n1785", "after-editing", 8186, 8912, 209, 21, "80106c4edae41900", "a64b1dda83ba7a00", "n1775"],
-        ["n1786", "verify", 8912, 9203, 230, 11, "855c56409d0eba00", "c8127ff02d41e100", "n1775"],
-        ["n1787", "where-things-live", 9203, 11268, 241, 29, "40ded3d89aa98e00", "4f64392828518400", "n1775"],
-        ["n1788", "documentation", 11268, 12216, 270, 17, "d8d559f4fc0dfa00", "6272f92c56c1eb00", "n1775"],
-        ["n1789", "versioning--appfrontrulescontent", 12216, 12679, 287, 9, "c8ddd09cf5d2de00", "41dcbb5e365a4c00", "n1775"]
+        ["n3048", "the-app-with-no-node--one-file", 7254, 8508, 190, 23, "959db4842f42ee00", "f3b7dd3ef8ed9a00", "n1776"],
+        ["n1785", "after-editing", 8508, 9234, 213, 21, "80106c4edae41900", "a64b1dda83ba7a00", "n1775"],
+        ["n1786", "verify", 9234, 9525, 234, 11, "855c56409d0eba00", "c8127ff02d41e100", "n1775"],
+        ["n1787", "where-things-live", 9525, 11590, 245, 29, "40ded3d89aa98e00", "4f64392828518400", "n1775"],
+        ["n1788", "documentation", 11590, 12538, 274, 17, "d8d559f4fc0dfa00", "6272f92c56c1eb00", "n1775"],
+        ["n1789", "versioning--appfrontrulescontent", 12538, 13001, 291, 9, "c8ddd09cf5d2de00", "41dcbb5e365a4c00", "n1775"]
       ]
     }
   },

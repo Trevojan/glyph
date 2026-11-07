@@ -67,6 +67,10 @@ fn main() {
         if std::io::stdin().read_to_end(&mut bytes).is_ok() && !bytes.is_empty() {
             return first_binary(&String::from_utf8_lossy(&bytes));
         }
+        /* the installed copy has no console, so no terminal on its stdin */
+        if app::is_installed_copy() {
+            std::process::exit(app::double_click());
+        }
     }
     cli(argv)
 }

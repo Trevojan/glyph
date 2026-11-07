@@ -125,6 +125,126 @@ fn the_engine_answers_with_the_stores_of_the_machine() {
     let _ = std::fs::remove_dir_all(&home);
 }
 
+/// The optional header's subsystem field: 3 a console program, 2 a Windows one.
+#[cfg(windows)]
+fn subsystem_at(exe: &[u8]) -> usize {
+    u32::from_le_bytes(exe[0x3c..0x40].try_into().unwrap()) as usize + 0x5c
+}
+
+/// The binary run from a scratch folder, so that no test opens a real browser or
+/// a real Edge: `whoami.exe` stands in for each, and a program is looked for
+/// beside the running binary first. It ends at once, as a closed window does.
+#[cfg(windows)]
+fn staged(home: &Path, with_edge: bool) -> Command {
+    let stand_in = Path::new(&std::env::var_os("SystemRoot").unwrap()).join("System32").join("whoami.exe");
+    let bin = home.join("bin");
+    std::fs::create_dir_all(&bin).unwrap();
+    std::fs::copy(env!("CARGO_BIN_EXE_glyph"), bin.join("glyph.exe")).unwrap();
+    std::fs::copy(&stand_in, bin.join("rundll32.exe")).unwrap();
+    if with_edge {
+        let edge = home.join("Local").join("Microsoft").join("Edge").join("Application");
+        std::fs::create_dir_all(&edge).unwrap();
+        std::fs::copy(&stand_in, edge.join("msedge.exe")).unwrap();
+    }
+    let mut c = Command::new(bin.join("glyph.exe"));
+    c.env("APPDATA", home.join("Roaming")).env("LOCALAPPDATA", home.join("Local"))
+        .env("ProgramFiles(x86)", home.join("no-edge")).env("ProgramFiles", home.join("no-edge"));
+    c
+}
+
+#[test]
+fn a_second_launch_finds_the_engine_and_ends() {
+    let home = scratch("second");
+    let first = serve(&home);
+    let child = glyph(&home).args(["--serve", "--no-open", "--port", &first.port.to_string()])
+        .stdout(Stdio::piped()).spawn().expect("the second launch runs");
+    let mut second = Server { child, port: first.port };
+    let started = std::time::Instant::now();
+    let status = loop {
+        if let Some(status) = second.child.try_wait().unwrap() {
+            break status;
+        }
+        assert!(started.elapsed().as_secs() < 15, "the second launch is still waiting on the first");
+        std::thread::sleep(std::time::Duration::from_millis(50));
+    };
+    assert!(status.success(), "{status}");
+    let mut said = String::new();
+    second.child.stdout.take().expect("stdout").read_to_string(&mut said).unwrap();
+    assert!(said.contains("already running"), "{said:?}");
+    drop(second);
+    drop(first);
+    let _ = std::fs::remove_dir_all(&home);
+}
+
+#[cfg(windows)]
+#[test]
+fn the_engine_stops_when_the_window_closes() {
+    let home = scratch("window");
+    let child = staged(&home, true).args(["--serve", "--port", "0"]).stdout(Stdio::piped()).spawn().expect("the app runs");
+    let mut app = Server { child, port: 0 };
+    let mut line = String::new();
+    BufReader::new(app.child.stdout.take().expect("stdout")).read_line(&mut line).expect("the first line");
+    assert!(line.contains("close its window"), "{line:?}");
+    let started = std::time::Instant::now();
+    let status = loop {
+        if let Some(status) = app.child.try_wait().unwrap() {
+            break status;
+        }
+        assert!(started.elapsed().as_secs() < 15, "the window closed and the engine is still running");
+        std::thread::sleep(std::time::Duration::from_millis(50));
+    };
+    assert!(status.success(), "{status}");
+    drop(app);
+    let _ = std::fs::remove_dir_all(&home);
+}
+
+/// Edge hands a launch to the browser already on the profile and ends at once:
+/// the stand-in ends as it does, and the `lockfile` is what that browser holds.
+#[cfg(windows)]
+#[test]
+fn the_engine_stays_for_a_window_handed_to_the_browser_on_the_profile() {
+    let home = scratch("handed");
+    let lock = home.join("Local").join("Glyph").join("window").join("lockfile");
+    std::fs::create_dir_all(lock.parent().unwrap()).unwrap();
+    std::fs::write(&lock, "").unwrap();
+    let child = staged(&home, true).args(["--serve", "--port", "0"]).stdout(Stdio::piped()).spawn().expect("the app runs");
+    let mut app = Server { child, port: 0 };
+    let mut line = String::new();
+    BufReader::new(app.child.stdout.take().expect("stdout")).read_line(&mut line).expect("the first line");
+    std::thread::sleep(std::time::Duration::from_secs(2));
+    assert!(app.child.try_wait().unwrap().is_none(), "Edge handed the window over and ended, and the window is open");
+    std::fs::remove_file(&lock).unwrap();
+    let started = std::time::Instant::now();
+    let status = loop {
+        if let Some(status) = app.child.try_wait().unwrap() {
+            break status;
+        }
+        assert!(started.elapsed().as_secs() < 15, "Edge left the profile and the engine is still running");
+        std::thread::sleep(std::time::Duration::from_millis(50));
+    };
+    assert!(status.success(), "{status}");
+    drop(app);
+    let _ = std::fs::remove_dir_all(&home);
+}
+
+#[cfg(windows)]
+#[test]
+fn where_edge_is_missing_the_engine_stays_up_for_the_default_browser() {
+    let home = scratch("no-edge");
+    let child = staged(&home, false).args(["--serve", "--port", "0"]).stdout(Stdio::piped()).spawn().expect("the app runs");
+    let mut app = Server { child, port: 0 };
+    let mut line = String::new();
+    BufReader::new(app.child.stdout.take().expect("stdout")).read_line(&mut line).expect("the first line");
+    app.port = line.split("127.0.0.1:").nth(1).and_then(|r| r.split('/').next()).and_then(|p| p.parse().ok())
+        .unwrap_or_else(|| panic!("no port in {line:?}"));
+    assert!(line.contains("close this window"), "{line:?}");
+    std::thread::sleep(std::time::Duration::from_secs(2));
+    assert!(app.child.try_wait().unwrap().is_none(), "the browser's opener ended, and the engine stays");
+    assert!(http(app.port, "GET", "/", "").0.starts_with("HTTP/1.1 302"));
+    drop(app);
+    let _ = std::fs::remove_dir_all(&home);
+}
+
 #[cfg(windows)]
 #[test]
 fn the_binary_installs_itself_and_takes_itself_back() {
@@ -135,7 +255,11 @@ fn the_binary_installs_itself_and_takes_itself_back() {
 
     let out = glyph(&home).args(["--install", "--no-register"]).output().unwrap();
     assert!(out.status.success(), "{}", String::from_utf8_lossy(&out.stderr));
-    assert_eq!(std::fs::read(local.join("glyph.exe")).unwrap(), std::fs::read(env!("CARGO_BIN_EXE_glyph")).unwrap());
+    let mut windowed = std::fs::read(env!("CARGO_BIN_EXE_glyph")).unwrap();
+    let at = subsystem_at(&windowed);
+    assert_eq!(windowed[at], 3, "the binary itself stays a console program, for the CLI");
+    windowed[at] = 2;
+    assert!(std::fs::read(local.join("glyph.exe")).unwrap() == windowed, "the installed copy is the binary, marked as a Windows program");
     assert!(local.join("glyph.ico").is_file() && lnk.is_file(), "the icon and the shortcut");
     let seeded = std::fs::read_to_string(stores.join("templates.json")).unwrap();
     let repo = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../.guidelines/templates.json");
