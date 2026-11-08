@@ -14,9 +14,10 @@
 rust/target/
 
 # .guidelines/.shortcuts/.virtual/ holds the virtual-path index glyph-vpath
-# writes; the regency plugin keeps its own session state beside it (journal,
-# lineage fingerprints), which is local and never project content
+# writes; the regency plugin keeps its own state beside it. Its hooks journal
+# is tracked, as regency's library/hooks.md §4 states; the rest is local
 .guidelines/.shortcuts/.virtual/*
 !.guidelines/.shortcuts/.virtual/index.json
 !.guidelines/.shortcuts/.virtual/ongoing.json
 !.guidelines/.shortcuts/.virtual/README.md
+!.guidelines/.shortcuts/.virtual/checkpoints.jsonl
