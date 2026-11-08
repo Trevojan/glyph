@@ -1,0 +1,16 @@
+{
+  "order": "ORD-0033",
+  "engine": "4.7.10.08",
+  "emitted": "2026-11-08T00:00:04.300Z",
+  "files": [
+    "ORD-0033.pgml",
+    "ORD-0033.xml",
+    "ORD-0033.json",
+    "ORD-0033.hgml"
+  ],
+  "source": "C:\\Users\\Usuario\\.claude\\jobs\\db832cf3\\tmp\\ORD-0033.pgml",
+  "diagnostics": {
+    "fix": 0,
+    "total": 0
+  }
+}

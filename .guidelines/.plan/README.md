@@ -165,6 +165,15 @@ EMS que o usuário conduz está em
 [`INTAKE-PIN-TRAFFIC.md`](../.orders/INTAKE-PIN-TRAFFIC.md), com o que ainda
 espera o Regente no §5 dele.
 
+A [`EMS-002/ORD-0033`](../.orders/EMS-002/README.md), o `[part]` restaurado, está
+aberta e parada no portão do Regente: a proposta medida está no
+[`INTAKE-PART.md`](../.orders/INTAKE-PART.md) §4. O seletor do PIN vem depois dela,
+porque seleciona pelos rótulos do `[part]`. A fila que o Regente pôs em 2026-11-07
+como a que habilita o Explorer de EMS vem na ordem das dependências: o XSD gerado
+pelo motor e o portão que o confere contra o XML, assinados nessa data; a
+`EMS.json` sobre ele; e a coerência entre Ordens, com o `repair` como fila
+([`INTAKE-ORDER-COHERENCE.md`](../.orders/INTAKE-ORDER-COHERENCE.md) §9).
+
 O lote das decididas em 2026-09-27 e 2026-10-25 que movem o emitido está
 construído, da `EMS-002/ORD-0014` à `ORD-0031`, e a versão se moveu uma vez
 quando ele fechou, para 4.7.10.08 (2026-10-30). O mapa da inclusão, posição por
@@ -203,16 +212,6 @@ Não são perguntas: são dívidas que uma decisão assumiu.
 | o braço de comparação do §8 — o mini-repo reduz releitura? — e o terceiro braço, o transporte MCP comprando o que o arquivo não compra | [`INTAKE-VIRTUAL-PATH.md`](../.orders/INTAKE-VIRTUAL-PATH.md) §16 as exigia **em ordem** antes do `resources`; o Regente decidiu por B sem elas, e elas seguem devidas |
 | a medição dos objetos de contexto, antes do desenho — *measure before design* | [`INTAKE-EFFECTS.md`](../.orders/INTAKE-EFFECTS.md) §9, a segunda ordem. Com a fronteira de "item" dada, é só isto que falta antes do desenho, e o instrumento não está escrito |
 
-### Duas propostas de agente, sem assinatura
-
-O Regente pediu confirmação da leitura do XSD, e a confirmação veio com
-condição. Condição que um agente escreveu não é norma até ele assinar:
-
-| proposta | onde |
-|---|---|
-| o XSD vale **gerado pelo motor, nunca escrito à mão**, e falta um portão onde ele confere contra o conteúdo do XML, divergência sendo `fix` e não `note` — sem isso o XSD vira segunda fonte de verdade ao lado do AST | [`INTAKE-EFFECTS.md`](../.orders/INTAKE-EFFECTS.md) §8.1 |
-| a ORD que restaura o `[part]` deve dizer **onde ele se perdeu**: estava nos planos, sumiu sem recusa e sem registro, e nada em `.decisions/`, `.changelog/` ou no sótão o aposenta | [`INTAKE-EFFECTS.md`](../.orders/INTAKE-EFFECTS.md) §8.2 |
-
 ### A E-06, adiada com a direção dada
 
 O caminho é a base verificada de
@@ -242,7 +241,7 @@ nenhum agente pode ratificar:
 |---|---|
 | **estudo de setembro** | oito intakes em [`.orders/`](../.orders/): [`INTAKE-VIRTUAL-PATH`](../.orders/INTAKE-VIRTUAL-PATH.md) (mini-repo, medido: o custo de round-trip é o tamanho de `glyph-parser.js`), [`INTAKE-ORDER-COHERENCE`](../.orders/INTAKE-ORDER-COHERENCE.md) (a aresta declarada, ratificada em 2026-10-15 com `[ref'nem']`, `[ref'EMS']` e a fila do `repair`; não construída), [`INTAKE-BURN-INVARIANCE`](../.orders/INTAKE-BURN-INVARIANCE.md) (fechado), [`INTAKE-FORMAL-ANALYSIS`](../.orders/INTAKE-FORMAL-ANALYSIS.md), [`INTAKE-PARSER-SPLIT`](../.orders/INTAKE-PARSER-SPLIT.md) (o corte, feito: treze módulos), [`INTAKE-RUST`](../.orders/INTAKE-RUST.md) (steelman e defeater; o Regente decidiu migrar), [`INTAKE-RUST-LADDER`](../.orders/INTAKE-RUST-LADDER.md) (a escada auditada; nada nela espera o Regente — as dez perguntas `O` fecharam em 2026-09-24 e 2026-09-27, e o §8 registra quando cada uma fechou), [`INTAKE-FIELD-2026-09`](../.orders/INTAKE-FIELD-2026-09.md) (o kit de cliente; `H-09` fechou por ele, e os dois achados estruturais fecharam em 2026-10-15). |
 | **EMS-001** | fechou em 2026-11-07, com a `ORD-0014`, e as perguntas do [retorno](../.orders/EMS-001/RETURN.md) têm todas resposta. A execução assíncrona da seção `queue` **passou à EMS-002** em 2026-10-15 e saiu desta lista |
-| **EMS-002** | aberta em 2026-10-23, e o [registro da série](../.orders/EMS-002/README.md) guarda o que fechou, da `ORD-0001` à `ORD-0032`; o resto do §5 espera nela, cada peça como proposta medida para o Regente cortar |
+| **EMS-002** | aberta em 2026-10-23, e o [registro da série](../.orders/EMS-002/README.md) guarda o que fechou, da `ORD-0001` à `ORD-0032`; a `ORD-0033`, o `[part]`, está aberta e parada no portão do Regente; o resto do §5 espera nela, cada peça como proposta medida para o Regente cortar |
 | **as stores numa atualização** | o `--install` não sobrescreve as stores, de propósito, e por isso uma versão nova instalada sobre uma antiga segue lendo as que vieram da instalação antiga, mesmo sem edição nenhuma. Medido em 2026-11-07, com as stores de 2026-10-18 e o motor 4.7.10.08: o `.xml` e o `.hgml` das 118 fontes não mudam; o `.json` leva os digests antigos e, no K-04, um diagnóstico diz *preset*; e o `expansions.json` nomeia `skeptic`, sem chegar ao XML delas. Falta o Regente dizer se a instalação passa a atualizar o que não foi editado |
 
 ## Adiado por decisão, não por esquecimento

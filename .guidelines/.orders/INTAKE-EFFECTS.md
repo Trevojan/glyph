@@ -238,10 +238,11 @@ reservation is a condition, not a doubt:
    handmade XSD with a contradiction inside it propagates in silence, and silence
    is the worst failure mode this repository recognises. The handmade part is the
    ORD; the XSD is the engine's answer about it.
-2. **A gate is missing: the XSD checks against the XML's content, and divergence
-   is `fix`, not `note`.** Without it the XSD becomes a second source of truth
-   beside the AST, which is the root cause this repository has already paid for
-   three times. This is an agent's proposal and carries no ratification.
+2. **A gate checks the XSD against the XML's content, and divergence is `fix`,
+   not `note`.** Without it the XSD becomes a second source of truth beside the
+   AST, which is the root cause this repository has already paid for three times.
+   Proposed by an agent and ratified by the Regent on 2026-11-07 (*"i ratify the
+   XSD-GATE"*); no Order builds it yet.
 
 So the expensive half is no longer blocked on a word from the Regent. It is
 blocked on its own measurement — *measure before design*, §9 — and the
@@ -257,8 +258,9 @@ did not saw when it gone missing."*
 > character sequence dropped in silence — the shape `SlashInChain` and
 > `BackslashMood` exist in order not to repeat. Nothing in `.decisions/`,
 > `.changelog/` or the attic retires `PART`: it is absent, not retired. The
-> design below is therefore a restoration, not a new feature, and the ORD that
-> builds it owes a line saying where it was lost.
+> design below is therefore a restoration, not a new feature, and
+> [`EMS-002/ORD-0033`](EMS-002/README.md), the Order that builds it, says where it
+> was lost ([`INTAKE-PART.md`](INTAKE-PART.md) §2).
 
 The design, in his words: `[part]` is a `[cmd]` that **slices `[block]`s, just as
 `[block]`s are slices of `[section]`s**. It serves a `[section]` whose goal may
