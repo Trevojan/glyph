@@ -24,6 +24,14 @@ reconciliação e ao pedido do val.
 | **O projeto se ajusta ao regency 3.3** pelo plano `UPD-94d33032` | *"good. proceed with all recommendations."* O plano só carimba: 1/1, nenhum `.template` novo. Está em `13139ae` |
 | **A linha paralela `ccr-25b46078-6uxsw5`, `plumbing` e `testing` fica como está e não se mescla** | na mesma resposta. Ela saiu de `afed370` e traz outra `ORD-0013`: um `.msi` com node, na versão 3.6.9.07, contra a resposta de 2026-10-16, que deixa o node fora do instalador, e o val de 2026-10-21 sobre o caminho A. Uma mesclagem de teste da `ccr` na `main` conflita em 18 arquivos. O registro está no [`.plan`](../.plan/README.md), *Adiado por decisão* |
 
+Respostas do Regente, na mesma data, à revisão medida do journal dos hooks (pop-up de uma sessão no
+regency). Estão em vigor e confirmam a decisão de 2026-10-16 sobre o journal.
+
+| decisão | razão |
+|---|---|
+| **O journal dos hooks segue versionado; o ciclo de commit o commita por último, sozinho, sem perguntar** | *"Tracked, cycle commits it (a)"*. Desde `f2124a8`, 19 commits o carregam, 4 sozinhos, 2 deles logo antes de um update. O `vp.py trace` e o `migrate.py apply` do regency o nomeiam numa linha, sem contá-lo como trabalho |
+| **Onde o journal mora é regra do `library/hooks.md` §4 do regency; o `.gitignore` daqui aponta para ela** | *"hooks.md §4"*. O `.gitignore` abre exceção ao `checkpoints.jsonl` dentro de `.virtual/*` |
+
 Respostas do Regente, na mesma data, à pergunta de qual é a próxima emissão.
 
 | decisão | razão |
