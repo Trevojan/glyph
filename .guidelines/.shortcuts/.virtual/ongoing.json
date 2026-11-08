@@ -83,16 +83,30 @@
     {
       "id": "EFF-8-PART",
       "title": "restaurar o [part], que estava nos planos e sumiu sem registro",
-      "state": "backlog",
-      "next": "desenho e exemplo dados pelo Regente; a ORD entra o nome e a valência no vocabulário e diz onde o construto se perdeu",
+      "state": "blocked",
+      "who": "DV",
+      "since": "2026-11-07",
+      "blocked_by": "o Regente: as respostas P1 a P5 da proposta medida, no INTAKE-PART.md §4",
+      "where": [
+        "order:EMS-002/ORD-0033",
+        ".guidelines/.orders/INTAKE-PART.md"
+      ],
+      "next": "a ORD-0033 emitida e parada no portão; a proposta medida diz onde o [part] se perdeu e o que cada resposta move: nenhum hash do snapshot, oito sondas da suíte",
       "source": ".orders/INTAKE-EFFECTS.md §8.2"
     },
     {
       "id": "XSD-GATE",
       "title": "o portão do XSD: gerado pelo motor, e conferido contra o XML",
-      "state": "review",
-      "next": "proposta de agente dentro da confirmação que o Regente pediu; sem assinatura dele não é norma",
+      "state": "backlog",
+      "next": "assinado pelo Regente em 2026-11-07; é a primeira peça da fila que habilita o Explorer de EMS, e vira ORD quando a ORD-0033 fechar",
       "source": ".orders/INTAKE-EFFECTS.md §8.1"
+    },
+    {
+      "id": "ORDER-COHERENCE",
+      "title": "a coerência entre Ordens e o repair como fila, o que habilita o Explorer de EMS",
+      "state": "backlog",
+      "next": "ratificada em 2026-10-15, e posta pelo Regente em 2026-11-07 como o que habilita o Explorer de EMS; a verificação lê a EMS.json, que vem depois do XSD gerado",
+      "source": ".orders/INTAKE-ORDER-COHERENCE.md §9"
     },
     {
       "id": "E-06",

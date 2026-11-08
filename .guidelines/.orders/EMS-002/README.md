@@ -8,6 +8,8 @@ pacote que o `--bundle` escreve, e a contagem é desta série.
 
 ## A Ordem aberta
 
+- [`EMS-002/ORD-0033`](ORD-0033/ORD-0033.xml) — o `[part]` restaurado como o Regente o desenhou: fatia um bloco como um bloco fatia uma seção, e o rótulo aponta; abre com a proposta medida do [`INTAKE-PART.md`](../INTAKE-PART.md) e para no portão do Regente; aberta em 2026-11-07
+
 ## Ordens fechadas
 
 | ORD | o que entregou | commit | digest |

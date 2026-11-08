@@ -227,6 +227,12 @@
     [val'the templates','a request carries only the templates that differ, named by their digest, and the page gives the same bytes through the relay as through the JS']
   ]
 
+  [section'ORD-0033-part'
+    [tgt'the part command restored as the Regent designed it on 2026-10-15, a slice of a block whose label points, opening with a measured proposal and stopping at the gate of the Regent']
+    [conf'the answers to the measured proposal, before anything is built'[hmn]]
+    [val'the part','the part command reads as the signed answers say, in both engines, and the vocabulary says where it was lost']
+  ]
+
   [section'limits'
     [nev'a selector that answers an empty slice in silence']
     [dont'open an ORD before the ORD it depends on closes']

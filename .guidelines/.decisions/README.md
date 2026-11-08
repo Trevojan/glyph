@@ -24,6 +24,14 @@ reconciliação e ao pedido do val.
 | **O projeto se ajusta ao regency 3.3** pelo plano `UPD-94d33032` | *"good. proceed with all recommendations."* O plano só carimba: 1/1, nenhum `.template` novo. Está em `13139ae` |
 | **A linha paralela `ccr-25b46078-6uxsw5`, `plumbing` e `testing` fica como está e não se mescla** | na mesma resposta. Ela saiu de `afed370` e traz outra `ORD-0013`: um `.msi` com node, na versão 3.6.9.07, contra a resposta de 2026-10-16, que deixa o node fora do instalador, e o val de 2026-10-21 sobre o caminho A. Uma mesclagem de teste da `ccr` na `main` conflita em 18 arquivos. O registro está no [`.plan`](../.plan/README.md), *Adiado por decisão* |
 
+Respostas do Regente, na mesma data, à pergunta de qual é a próxima emissão.
+
+| decisão | razão |
+|---|---|
+| **A [`EMS-002/ORD-0033`](../.orders/EMS-002/README.md) é emitida: o `[part]` restaurado** | *"i ratify the emit of ORD-0033"*, sobre a recomendação da sessão: o `[part]` vem primeiro porque o seletor do PIN seleciona pelos rótulos dele. A Ordem abre com a proposta medida do [`INTAKE-PART.md`](../.orders/INTAKE-PART.md) e para no portão dele, a forma de 2026-09-27 |
+| **O XSD vale gerado pelo motor, nunca escrito à mão, e um portão o confere contra o conteúdo do XML, divergência sendo `fix`** | *"i ratify the XSD-GATE"*. A proposta de agente do [`INTAKE-EFFECTS.md`](../.orders/INTAKE-EFFECTS.md) §8.1 passa a norma: sem o portão, o XSD seria uma segunda fonte de verdade ao lado do AST. É a base do primeiro campo da `EMS.json` |
+| **A coerência entre Ordens e o `repair` são o que habilita o Explorer de EMS** | *"coherence between Orders and the \"repair\" option is very important to finally enable the explorer of EMS."* A fila depois da `ORD-0033` segue a dependência: o XSD gerado e o portão, a `EMS.json`, e então a aresta declarada com o `repair` como fila ([`INTAKE-ORDER-COHERENCE.md`](../.orders/INTAKE-ORDER-COHERENCE.md) §9) |
+
 ## 2026-11-02
 
 Palavras do Regente trazidas à sessão em 2026-11-02, em resposta às três
