@@ -1,4 +1,20 @@
-# Fontes — o que veio de fora, e o que decidiu
+# Fontes — os fatos: a linguagem, e o que veio de fora e decidiu
+
+## A linguagem
+
+Os 21 arquivos da linguagem moram aqui desde a
+[`EMS-002/ORD-0034`](../.orders/EMS-002/README.md) (o Regente, 2026-11-11, R6 c):
+as treze normas e medições — `GLOSSARY.md`, `XML_REFERENCE.md`,
+`PACKAGE_TARGET.md`, `BUNDLE_TARGET.md`, `OPERATOR_TARGET.md`, `SIGNATURES.md`,
+`HGML_PLAN.md`, `HGML_CONVERGENCE.md`, `PROMOTION_BOUNDARY.md`,
+`PROMOTION_MEASUREMENT.md`, `FORMULA_REVIEW.md`, `FUSIONS_WORKSHEET.md` e
+`DMHP_IMPORTS.md` — e as oito stores e arquivos que o motor lê —
+`templates.json`, `rules.json`, `expansions.txt`, `expansions.json`,
+`targets.json`, `ast-schema.json`, `corpus-snapshot.json` e
+`glyph-grammar.ebnf`. Qual responde qual pergunta está no
+[índice](../.shortcuts/README.md), que aponta para cada um.
+
+## O que veio de fora
 
 > Só entra aqui referência que foi **de fato usada** e que **decidiu alguma
 > coisa**. Uma lista de links que não decidiram nada é bibliografia, não atalho.
@@ -6,7 +22,7 @@
 > Reconstruir uma busca externa é o que mais custa ao retomar um projeto — é
 > por isso que este eixo existe.
 
-## Documentos
+### Documentos
 
 | arquivo | assunto | decidiu |
 |---|---|---|

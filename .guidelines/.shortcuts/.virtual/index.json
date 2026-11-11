@@ -1,7 +1,7 @@
 {
   "note": "written by glyph-vpath build, EMS-002; never edited by hand",
   "depth": 2,
-  "next": 3242,
+  "next": 3246,
   "files": {
     ".guidelines/.changelog/README.md": {
       "nodes": [
@@ -944,7 +944,7 @@
     },
     ".guidelines/.orders/EMS-002/EMS-002.pgml": {
       "nodes": [
-        ["n523", "", 0, 39801, 1, 289, "1209c38097744f00", "", ""]
+        ["n523", "", 0, 40390, 1, 290, "f6179970fe33e980", "", ""]
       ]
     },
     ".guidelines/.orders/EMS-002/ORD-0001/ORD-0001.hgml": {
@@ -2887,10 +2887,10 @@
     },
     ".guidelines/.orders/EMS-002/README.md": {
       "nodes": [
-        ["n598", "", 0, 22419, 1, 49, "f3b538e0e6870000", "", ""],
-        ["n599", "ems-002--o-glyph-100-em-rust", 0, 22419, 1, 49, "f3b538e0e6870000", "3d329220246d6a00", "n598"],
-        ["n600", "a-ordem-aberta", 396, 825, 9, 4, "742011761702bb80", "712bcd3c853e9c00", "n599"],
-        ["n601", "ordens-fechadas", 825, 22419, 13, 37, "0ced719ee3bd2e00", "22a55db28d1fe900", "n599"]
+        ["n598", "", 0, 23222, 1, 49, "0161ad6e6c255200", "", ""],
+        ["n599", "ems-002--o-glyph-100-em-rust", 0, 23222, 1, 49, "0161ad6e6c255200", "09e47b1020aeb000", "n598"],
+        ["n600", "a-ordem-aberta", 396, 416, 9, 3, "bc993850eba11200", "", "n599"],
+        ["n601", "ordens-fechadas", 416, 23222, 12, 38, "8968cd18720d7400", "8a19bbfaecf04800", "n599"]
       ]
     },
     ".guidelines/.orders/HANDOFF-2026-08-30.ast.json": {
@@ -3102,22 +3102,23 @@
     },
     ".guidelines/.orders/INTAKE-RESTRUCTURE.md": {
       "nodes": [
-        ["n3089", "", 0, 13229, 1, 215, "aff8d07095a4e400", "", ""],
-        ["n3090", "intake--the-restructure-mapped", 0, 13229, 1, 215, "aff8d07095a4e400", "6829d7f8fe459100", "n3089"],
-        ["n3091", "1-the-premise-measured", 747, 1279, 13, 9, "0c5bf36c0e8c3580", "5b09d8da65065c00", "n3090"],
-        ["n3092", "2-the-two-layouts-side-by-side", 1279, 2782, 22, 16, "d871b7c450f80c00", "a760df60c63eee80", "n3090"],
-        ["n3093", "3-what-the-order-asked-to-find", 2782, 5679, 38, 57, "eec8643c4233d000", "12aef9e8f8c70800", "n3090"],
-        ["n3094", "31-files-git-does-not-track", 2818, 3226, 40, 8, "2d7eeb021faa2f00", "37513a284a726800", "n3093"],
-        ["n3095", "32-what-the-ladder-asks-that-the-repository-already-holds", 3226, 3684, 48, 8, "6b4feccc0684fc00", "a0af2a082ce2f200", "n3093"],
-        ["n3096", "33-the-rows-the-order-would-have-placed", 3684, 4204, 56, 9, "3a1ef8881d861800", "394a40bef635ce00", "n3093"],
-        ["n3097", "34-what-a-move-breaks", 4204, 5064, 65, 22, "63ace9ec1b84b200", "4bc6b4e862e18d00", "n3093"],
-        ["n3098", "35-what-already-lives-in-two-places", 5064, 5679, 87, 8, "795f2200a2ae4400", "213e54febbf3da00", "n3093"],
-        ["n3099", "4-the-collisions-as-closed-questions", 5679, 8007, 95, 46, "3b4814ac5ade2000", "95c9d8f45cdcb740", "n3090"],
-        ["n3222", "5-the-map", 8007, 10523, 141, 30, "61a924423ef90600", "76021ace5211a780", "n3090"],
-        ["n3223", "51-what-the-answers-move", 8262, 9739, 147, 8, "d12813d4e191bc00", "4c25ed04c326f600", "n3222"],
-        ["n3224", "52-what-the-answers-keep", 9739, 10226, 155, 10, "7c0df4180b5af980", "812a94908b7c1e00", "n3222"],
-        ["n3225", "53-what-group-b-reaches-outside-the-repository", 10226, 10523, 165, 6, "b5af02bcfeb10000", "53febfb23a85a780", "n3222"],
-        ["n3226", "6-what-the-map-leaves-to-the-regent", 10523, 13229, 171, 45, "30207f80d8ef6400", "e189b93550892a60", "n3090"]
+        ["n3089", "", 0, 14235, 1, 230, "5e8236c056149e00", "", ""],
+        ["n3090", "intake--the-restructure-mapped", 0, 14235, 1, 230, "5e8236c056149e00", "93c697f00568ba00", "n3089"],
+        ["n3091", "1-the-premise-measured", 765, 1297, 14, 9, "0c5bf36c0e8c3580", "5b09d8da65065c00", "n3090"],
+        ["n3092", "2-the-two-layouts-side-by-side", 1297, 2800, 23, 16, "d871b7c450f80c00", "a760df60c63eee80", "n3090"],
+        ["n3093", "3-what-the-order-asked-to-find", 2800, 5697, 39, 57, "eec8643c4233d000", "12aef9e8f8c70800", "n3090"],
+        ["n3094", "31-files-git-does-not-track", 2836, 3244, 41, 8, "2d7eeb021faa2f00", "37513a284a726800", "n3093"],
+        ["n3095", "32-what-the-ladder-asks-that-the-repository-already-holds", 3244, 3702, 49, 8, "6b4feccc0684fc00", "a0af2a082ce2f200", "n3093"],
+        ["n3096", "33-the-rows-the-order-would-have-placed", 3702, 4222, 57, 9, "3a1ef8881d861800", "394a40bef635ce00", "n3093"],
+        ["n3097", "34-what-a-move-breaks", 4222, 5082, 66, 22, "63ace9ec1b84b200", "4bc6b4e862e18d00", "n3093"],
+        ["n3098", "35-what-already-lives-in-two-places", 5082, 5697, 88, 8, "795f2200a2ae4400", "213e54febbf3da00", "n3093"],
+        ["n3099", "4-the-collisions-as-closed-questions", 5697, 8025, 96, 46, "3b4814ac5ade2000", "95c9d8f45cdcb740", "n3090"],
+        ["n3222", "5-the-map", 8025, 10541, 142, 30, "61a924423ef90600", "76021ace5211a780", "n3090"],
+        ["n3223", "51-what-the-answers-move", 8280, 9757, 148, 8, "d12813d4e191bc00", "4c25ed04c326f600", "n3222"],
+        ["n3224", "52-what-the-answers-keep", 9757, 10244, 156, 10, "7c0df4180b5af980", "812a94908b7c1e00", "n3222"],
+        ["n3225", "53-what-group-b-reaches-outside-the-repository", 10244, 10541, 166, 6, "b5af02bcfeb10000", "53febfb23a85a780", "n3222"],
+        ["n3226", "6-what-the-map-leaves-to-the-regent", 10541, 13248, 172, 46, "4d28c63e16df2a00", "4ace9e2d9b4d0600", "n3090"],
+        ["n3242", "7-what-the-order-moved", 13248, 14235, 218, 13, "0c3328d6b8684600", "29fe99c65815ef00", "n3090"]
       ]
     },
     ".guidelines/.orders/INTAKE-RUST-LADDER.md": {
@@ -3520,12 +3521,12 @@
     },
     ".guidelines/.orders/README.md": {
       "nodes": [
-        ["n2777", "", 0, 1684, 1, 47, "ae65bbb8d6b9f000", "", ""],
-        ["n2778", "orders--the-contract-that-dispatches-the-work", 0, 1684, 1, 47, "ae65bbb8d6b9f000", "f4758d98c0487800", "n2777"],
-        ["n2779", "numbering", 482, 722, 10, 9, "053b39960b88c200", "e5da64f4c2f90300", "n2778"],
-        ["n2780", "the-open-order", 722, 985, 19, 11, "0ff1b5c025ac5c00", "a49574e627bef800", "n2778"],
-        ["n2781", "closed-orders", 985, 1368, 30, 10, "949e738ebc3e0300", "89908d5012bbfe00", "n2778"],
-        ["n2782", "intake--what-arrived-while-an-order-was-open", 1368, 1684, 40, 8, "58e9c8d4e42fe940", "e7acb538ce205200", "n2778"]
+        ["n2777", "", 0, 3798, 1, 64, "43f18714fe926e00", "", ""],
+        ["n2778", "orders--the-contract-that-dispatches-the-work", 0, 3798, 1, 64, "43f18714fe926e00", "7665f090d3bef554", "n2777"],
+        ["n2779", "numbering", 482, 973, 10, 13, "80df8cc4d8e9d400", "f72b98e42830dec0", "n2778"],
+        ["n2780", "the-open-order", 973, 1159, 23, 7, "d6625e2e14798d80", "0e004c0aa1240b00", "n2778"],
+        ["n2781", "closed-orders", 1159, 1937, 30, 13, "78483278a7faa800", "2116a98822fa6e00", "n2778"],
+        ["n2782", "intake--what-arrived-while-an-order-was-open", 1937, 3798, 43, 22, "a23b1edcf69a3400", "c23c6b6499fc1c00", "n2778"]
       ]
     },
     ".guidelines/.orders/parked/restructure-glyph-repo/ORD-0011.hgml": {
@@ -3647,24 +3648,24 @@
     },
     ".guidelines/.plan/README.md": {
       "nodes": [
-        ["n1142", "", 0, 28215, 1, 367, "1cdacd8e99e04e80", "", ""],
-        ["n1143", "plano--o-que-vem-a-seguir", 0, 28215, 1, 367, "1cdacd8e99e04e80", "3c55fc6c8f288a80", "n1142"],
-        ["n1144", "autorizado-pelo-regente-ainda-não-construído", 217, 18196, 7, 244, "c6c1461a82c97e00", "01a38af6e6dd6900", "n1143"],
+        ["n1142", "", 0, 28085, 1, 367, "668a9d02b5b9a800", "", ""],
+        ["n1143", "plano--o-que-vem-a-seguir", 0, 28085, 1, 367, "668a9d02b5b9a800", "1a824648d2f7b780", "n1142"],
+        ["n1144", "autorizado-pelo-regente-ainda-não-construído", 217, 18196, 7, 244, "d93816909fcd3a00", "2f85b8d084596580", "n1143"],
         ["n1870", "0-caminhos-virtuais--guidelinesshortcutsvirtual--construído-as-sete-camadas-pela-ems-002", 269, 5363, 9, 81, "da71f09e759c7600", "cb44836834464e80", "n1144"],
         ["n1146", "1-section-de-cabeçalho-irmã-do-schema--decidido-faltando-fazer", 5363, 6025, 90, 13, "29a759a8aecd1500", "f13677d632797d00", "n1144"],
         ["n1147", "2-gatilhos-de-re-ferência", 6025, 6930, 103, 19, "20d81a5623895800", "b5f416c6e3cdac00", "n1144"],
         ["n3038", "3-seis-defeitos-medidos-o-que-foi-consertado-nos-dois-motores-e-o-que-o-rust-conserta", 6930, 9365, 122, 11, "940220d4ed538300", "774e05086c25c800", "n1144"],
-        ["n1149", "5-o-glyph-em-rust--a-série-ems-001", 9365, 18196, 133, 118, "2208ea36a5ad1e00", "f304bb4c2b9cb380", "n1144"],
-        ["n3146", "a-trilha-até-o-explorer-final", 12002, 16054, 174, 43, "4a24375c5f217200", "a9d58f3206bd8c00", "n1149"],
+        ["n1149", "5-o-glyph-em-rust--a-série-ems-001", 9365, 18196, 133, 118, "fcd78b209be39b80", "21660be0130b6c00", "n1144"],
+        ["n3146", "a-trilha-até-o-explorer-final", 12002, 16054, 174, 43, "2aeb69b88c44df00", "bb84c9469a63b300", "n1149"],
         ["n3147", "a-fila-de-antes-do-portão", 16054, 18196, 217, 34, "f957f0d8c4f45a00", "588dc16ed7bf8880", "n1149"],
-        ["n1150", "aberto-esperando-o-regente", 18196, 24468, 251, 62, "1b9f5e08046ea400", "0629b56085ec0c20", "n1143"],
+        ["n1150", "aberto-esperando-o-regente", 18196, 24338, 251, 62, "4e09b50c2e162200", "557d9268ce4b8200", "n1143"],
         ["n3039", "os-dois-itens-dos-caminhos-virtuais", 18796, 19109, 264, 7, "474d8a3c28da3600", "98ff00d011200000", "n1150"],
         ["n3040", "duas-medições-devidas-e-nenhuma-tem-instrumento-escrito", 19109, 19863, 271, 9, "22c295843f90ec00", "b59094b4fc299300", "n1150"],
         ["n3177", "a-e-06-ratificada-esperando-o-esquema-de-item", 19863, 20385, 280, 9, "b4a25f6864002a00", "95251e4e0df0ce00", "n1150"],
         ["n3043", "pendências-de-registro-sem-casa-hoje", 20385, 22141, 289, 15, "0132becececa0600", "301ab574723dc900", "n1150"],
-        ["n3044", "o-resto", 22141, 24468, 304, 9, "5bf01458bf2ba000", "941dbd40f256ce00", "n1150"],
-        ["n1151", "adiado-por-decisão-não-por-esquecimento", 24468, 27657, 313, 46, "30a1687e7d96c580", "bfbcde2e1b43a900", "n1143"],
-        ["n3045", "reaberto-por-decisão", 27657, 28215, 359, 9, "b4a3f77e80503400", "079763f80c948a00", "n1143"]
+        ["n3044", "o-resto", 22141, 24338, 304, 9, "a853179831af7600", "36f2591ca79fff00", "n1150"],
+        ["n1151", "adiado-por-decisão-não-por-esquecimento", 24338, 27527, 313, 46, "30a1687e7d96c580", "bfbcde2e1b43a900", "n1143"],
+        ["n3045", "reaberto-por-decisão", 27527, 28085, 359, 9, "b4a3f77e80503400", "079763f80c948a00", "n1143"]
       ]
     },
     ".guidelines/.plan/README.md.template": {
@@ -3724,14 +3725,14 @@
     },
     ".guidelines/.shortcuts/README.md": {
       "nodes": [
-        ["n1153", "", 0, 10075, 1, 85, "59fda9ea56b31e00", "", ""],
-        ["n1154", "atalhos--comece-por-aqui", 0, 10075, 1, 85, "59fda9ea56b31e00", "30a37b90f2686640", "n1153"],
-        ["n1155", "onde-estou", 442, 4444, 11, 12, "5209d2583f13f300", "7f6992504662b200", "n1154"],
-        ["n1156", "os-sete-eixos", 4444, 5626, 23, 12, "225c1c087677fe00", "fb5b0af65af5a800", "n1154"],
-        ["n1157", "o-mapa-do-motor-em-cinco-linhas", 5626, 6571, 35, 12, "fef2a4f026f43a00", "b0d1ba46f3be8000", "n1154"],
-        ["n1158", "os-documentos-que-mais-se-consulta", 6571, 8521, 47, 18, "f3c7a4885e809600", "f616de100c75df00", "n1154"],
-        ["n1159", "os-outros-documentos", 8521, 9727, 65, 15, "63ec2be83dd05100", "e5c8814085afba00", "n1154"],
-        ["n1160", "vocabulário-do-projeto", 9727, 10075, 80, 6, "b895f5b69b891000", "f6cb060882a72600", "n1154"]
+        ["n1153", "", 0, 10134, 1, 85, "33984e8c4b801700", "", ""],
+        ["n1154", "atalhos--comece-por-aqui", 0, 10134, 1, 85, "33984e8c4b801700", "dd4998940d974800", "n1153"],
+        ["n1155", "onde-estou", 442, 4445, 11, 12, "1818288819ecae00", "955530be6d5a4e00", "n1154"],
+        ["n1156", "os-sete-eixos", 4445, 5685, 23, 12, "c7a610b8cc345700", "ea685f36d51a4300", "n1154"],
+        ["n1157", "o-mapa-do-motor-em-cinco-linhas", 5685, 6630, 35, 12, "fef2a4f026f43a00", "b0d1ba46f3be8000", "n1154"],
+        ["n1158", "os-documentos-que-mais-se-consulta", 6630, 8580, 47, 18, "f3c7a4885e809600", "f616de100c75df00", "n1154"],
+        ["n1159", "os-outros-documentos", 8580, 9786, 65, 15, "63ec2be83dd05100", "e5c8814085afba00", "n1154"],
+        ["n1160", "vocabulário-do-projeto", 9786, 10134, 80, 6, "b895f5b69b891000", "f6cb060882a72600", "n1154"]
       ]
     },
     ".guidelines/.shortcuts/regency.json": {
@@ -3986,14 +3987,16 @@
     },
     ".guidelines/.sources/README.md": {
       "nodes": [
-        ["n1171", "", 0, 3825, 1, 43, "fd52ebca438d6c80", "", ""],
-        ["n1172", "fontes--o-que-veio-de-fora-e-o-que-decidiu", 0, 3825, 1, 43, "fd52ebca438d6c80", "727f716ac2276700", "n1171"],
-        ["n1173", "documentos", 329, 1506, 9, 9, "f41e2d1852a36a00", "9c2299e66c28ce00", "n1172"],
-        ["n1174", "referências-externas-por-assunto", 1506, 3504, 18, 20, "c7097ae8d0d35600", "87ecde708bfc0700", "n1172"],
-        ["n1175", "mensagem-de-erro--o-que-funciona", 1545, 2349, 20, 6, "ac34cb8022b8be00", "3aa7f5082c209d80", "n1174"],
-        ["n1176", "erros-reais-medidos", 2349, 2684, 26, 4, "74244be65c0e2600", "9802a0ea25f9b500", "n1174"],
-        ["n1177", "sugestão-did-you-mean--armadilhas-já-pagas", 2684, 3504, 30, 8, "33de117ced6b3800", "b3070348582fda00", "n1174"],
-        ["n1178", "a-fonte-primária-e-ela-é-interna", 3504, 3825, 38, 6, "5f6a41325d30a300", "70774afa3f0e9b80", "n1172"]
+        ["n1171", "", 0, 4618, 1, 59, "5aef7c5ab11e3000", "", ""],
+        ["n3243", "fontes--os-fatos-a-linguagem-e-o-que-veio-de-fora-e-decidiu", 0, 4618, 1, 59, "5aef7c5ab11e3000", "7002c63000db7200", "n1171"],
+        ["n3244", "a-linguagem", 68, 819, 3, 14, "5b6fe45a7cba0710", "0fe9725e64fe9500", "n3243"],
+        ["n3245", "o-que-veio-de-fora", 819, 2299, 17, 17, "a1d150b8a614ee00", "8aed5ed4809d2200", "n3243"],
+        ["n1173", "documentos", 1121, 2299, 25, 9, "46848a9012ea7680", "9c2299e66c28ce00", "n3245"],
+        ["n1174", "referências-externas-por-assunto", 2299, 4297, 34, 20, "c7097ae8d0d35600", "87ecde708bfc0700", "n3243"],
+        ["n1175", "mensagem-de-erro--o-que-funciona", 2338, 3142, 36, 6, "ac34cb8022b8be00", "3aa7f5082c209d80", "n1174"],
+        ["n1176", "erros-reais-medidos", 3142, 3477, 42, 4, "74244be65c0e2600", "9802a0ea25f9b500", "n1174"],
+        ["n1177", "sugestão-did-you-mean--armadilhas-já-pagas", 3477, 4297, 46, 8, "33de117ced6b3800", "b3070348582fda00", "n1174"],
+        ["n1178", "a-fonte-primária-e-ela-é-interna", 4297, 4618, 54, 6, "5f6a41325d30a300", "70774afa3f0e9b80", "n3243"]
       ]
     },
     ".guidelines/.sources/README.md.template": {
@@ -4473,14 +4476,14 @@
     },
     "CLAUDE.md": {
       "nodes": [
-        ["n1767", "", 0, 3833, 1, 78, "0ddc587e0ec59800", "", ""],
-        ["n1768", "glyph", 0, 3833, 1, 78, "0ddc587e0ec59800", "d99fe920c964c400", "n1767"],
-        ["n1769", "comece-por-aqui--sempre", 172, 1109, 6, 17, "710c7e584e152600", "2c8c7f4e9276cf00", "n1768"],
-        ["n1770", "escrever-glyph", 1109, 1432, 23, 7, "d4617a26b07f7600", "3f27155ce9d54400", "n1768"],
-        ["n3143", "entregar-o-plugin", 1432, 2009, 30, 10, "2b8a5a6053339e00", "028ad63a189c7400", "n1768"],
-        ["n1771", "verificar", 2009, 3081, 40, 23, "e55d823654f50ac0", "8e220db64cb17000", "n1768"],
-        ["n1772", "duas-restrições-que-pegam-todo-agente-novo", 3081, 3647, 63, 12, "002419a0c833ea00", "dac8c3285a749000", "n1768"],
-        ["n1773", "vocabulário", 3647, 3833, 75, 4, "3107f3b093ecf800", "377122b0975dd000", "n1768"]
+        ["n1767", "", 0, 3887, 1, 78, "d6a465c83d26a980", "", ""],
+        ["n1768", "glyph", 0, 3887, 1, 78, "d6a465c83d26a980", "84e1be92f78e3e00", "n1767"],
+        ["n1769", "comece-por-aqui--sempre", 172, 1163, 6, 17, "307455383d76f200", "6171e8cea350a000", "n1768"],
+        ["n1770", "escrever-glyph", 1163, 1486, 23, 7, "d4617a26b07f7600", "3f27155ce9d54400", "n1768"],
+        ["n3143", "entregar-o-plugin", 1486, 2063, 30, 10, "2b8a5a6053339e00", "028ad63a189c7400", "n1768"],
+        ["n1771", "verificar", 2063, 3135, 40, 23, "e55d823654f50ac0", "8e220db64cb17000", "n1768"],
+        ["n1772", "duas-restrições-que-pegam-todo-agente-novo", 3135, 3701, 63, 12, "002419a0c833ea00", "dac8c3285a749000", "n1768"],
+        ["n1773", "vocabulário", 3701, 3887, 75, 4, "3107f3b093ecf800", "377122b0975dd000", "n1768"]
       ]
     },
     "README.md": {
@@ -5085,6 +5088,7 @@
   "recovered": [
     [".guidelines/.plan/README.md#0-caminhos-virtuais--guidelinesshortcutsvirtual--camadas-1-2-4-5-6-e-7-construídas-3-a-seguir", "n1830", "n1870", 81],
     [".guidelines/.plan/README.md#0-caminhos-virtuais--guidelinesshortcutsvirtual--camadas-1-2-4-5-e-6-construídas-3-e-7-a-seguir", "n1790", "n1870", 64],
+    [".guidelines/.sources/README.md#fontes--o-que-veio-de-fora-e-o-que-decidiu", "n1172", "n3243", 65],
     [".guidelines/PACKAGE_TARGET.md#3c-two-operands-as-attributes--part-n-and-if-cond", "n2356", "n3178", 71],
     [".guidelines/SIGNATURES.md#3-one-slot-60", "n1368", "n3179", 83],
     [".guidelines/SIGNATURES.md#4-zero-arity-44", "n1370", "n3180", 87]

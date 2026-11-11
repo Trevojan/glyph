@@ -24,7 +24,7 @@
     {
       "id": "ORD-0011-parked",
       "title": "mapear o repositório, sem mover nada, agora que a EMS-001 fechou",
-      "state": "blocked",
+      "state": "review",
       "who": "DV",
       "since": "2026-11-07",
       "source": ".plan/README.md, Adiado por decisão",
@@ -32,8 +32,7 @@
         "order:EMS-002/ORD-0034",
         ".guidelines/.orders/INTAKE-RESTRUCTURE.md"
       ],
-      "blocked_by": "the Regent: the map of INTAKE-RESTRUCTURE.md §5 and the questions M1 to M5 of §6",
-      "next": "ORD-0034 emitted on 2026-11-11 with the measured map; once the gate is answered, move one row group per commit by git mv, both checks green on each; the .orders/README.md scaffold is regency's to fit"
+      "next": "ORD-0034 closed at a5e327b and 01d76e2: the 21 files of the language in .sources, both checks green on each group, the oracle parse.json unchanged, 571 old paths aliases of the index; M3, the entry, was not asked and nothing of it moved; the .orders/README.md scaffold in regency is regency's to fit"
     },
     {
       "id": "EFF-8",
