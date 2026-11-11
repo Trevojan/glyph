@@ -31,7 +31,7 @@
       "where": [
         ".guidelines/.orders/INTAKE-RESTRUCTURE.md"
       ],
-      "next": "R1 b, R2 b, R3 a, R4 a, R5 a, R6 c (2026-11-11); runs right after ORD-0033, by the Regent's word of the same day; the .orders/README.md fix is work in regency"
+      "next": "R1 b, R2 b, R3 a, R4 a, R5 a, R6 c (2026-11-11); the next Order, by the Regent's word of the same day, now that ORD-0033 closed; the .orders/README.md fix is work in regency"
     },
     {
       "id": "EFF-8",
@@ -43,21 +43,21 @@
     {
       "id": "EFF-8-PART",
       "title": "restaurar o [part], que estava nos planos e sumiu sem registro",
-      "state": "backlog",
+      "state": "review",
       "who": "DV",
       "since": "2026-11-07",
       "where": [
         "order:EMS-002/ORD-0033",
         ".guidelines/.orders/INTAKE-PART.md"
       ],
-      "next": "o portão respondido em 2026-11-11: P1 a, P2 a, P3 b, P4 a, P5 a, e os blocos do exemplo irmãos; construir a ORD-0033 pelo INTAKE-PART.md §5",
+      "next": "ORD-0033 closed at 4a0cde4 and 59af450: the PA bucket and OC-16, nine checks seen failing on 1008c2a, four JS and four Rust mutants seen failing, npm run check and npm run check:rust green; four readings of the session wait for the Regent in .decisions and in INTAKE-PART.md §6",
       "source": ".orders/INTAKE-EFFECTS.md §8.2"
     },
     {
       "id": "XSD-GATE",
       "title": "o portão do XSD: gerado pelo motor, e conferido contra o XML",
       "state": "backlog",
-      "next": "assinado pelo Regente em 2026-11-07; é a primeira peça da fila que habilita o Explorer de EMS, e vira ORD quando a ORD-0033 fechar",
+      "next": "assinado pelo Regente em 2026-11-07; é a primeira peça da fila que habilita o Explorer de EMS; a ORD-0033 fechou em 2026-11-11, e ele vira ORD depois da reestruturação",
       "source": ".orders/INTAKE-EFFECTS.md §8.1"
     },
     {

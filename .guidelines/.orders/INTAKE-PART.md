@@ -1,10 +1,10 @@
 # Intake — `[part]`, restored: the measured proposal
 
-> **The proposal [`EMS-002/ORD-0033`](EMS-002/README.md) opens with.** The design is
+> **The proposal [`EMS-002/ORD-0033`](EMS-002/README.md) opened with.** The design is
 > the Regent's, given on 2026-10-15 and kept in [`INTAKE-EFFECTS.md`](INTAKE-EFFECTS.md)
 > §8.2; this file measures it against the engine and asks what the design leaves to
-> decide. The Regent answered §4 on 2026-11-11, and §5 holds the answers the Order
-> builds. Measured at `5203859`.
+> decide. The Regent answered §4 on 2026-11-11, §5 holds the answers, and §6 what the
+> Order built from them. §1 to §3 are measured at `5203859`, before the Order.
 
 ## 1. What the engine reads today
 
@@ -25,7 +25,9 @@ the tier is `instr`, not `struct` beside `BLOCK` and `SECTION`; the label lands 
 **What any answer costs.** No declared source of the snapshot, no case of
 `conformance/`, no generic of the Regent's in `.scope/` and no Order writes `[pt` or
 `[part`. Eight probes of the suite do — RO-06 to RO-09, from `ORD-0017` — with the
-oracle lines they write. No hash of the snapshot moves under any answer below.
+oracle lines they write. No `xml` and no `hgml` hash of the snapshot moves under any
+answer below; P1 a rewrites the gloss of `PT`, which moves the checksum of the
+expansions store, and every `ast` envelope carries it.
 
 ## 2. Where it was lost
 
@@ -95,3 +97,26 @@ P4 a, P5 a**, and the example of §3 reads as sibling blocks.
 | P5 a | the label travels as written; resolving it waits for the Order that builds the item scheme |
 
 The session had recommended P3 a, the labels comma-separated in one literal.
+
+## 6. What the Order built
+
+Closed on 2026-11-11, at `4a0cde4` (the vocabulary and the JS) and `59af450` (the
+Rust, byte for byte); the row is in the [series register](EMS-002/README.md).
+
+| written | read as | emitted |
+|---|---|---|
+| `[block'b'[part'core'[ask'…']]]` | `PT`, a `struct` | `<part name="core" binds="core">` inside `<block name="b">` |
+| `[block'b'[part'h0','h1','h2']]` | the name, then one level per literal | `<part name="h0">` holding `<user-input>h1</user-input>` and `<user-input>h2</user-input>` |
+| `[part'dish-cutlery']`, no `[block` around it | as written, and `ask` `PartOutsideBlock` | `<part name="dish-cutlery">` holding `<needs>the block it slices</needs>` |
+| `[block'b'[part[ask'…']]]` | `fix` `MissingStructName` | `<part>` with no `name` |
+| `<part n="1.1"/>`, an older document | `fromXML` | `[pt'1.1']` |
+
+Four readings are the session's, where the answers of §5 did not reach, and each
+waits for the Regent in [`.decisions/`](../.decisions/README.md):
+
+| | the reading |
+|---|---|
+| the levels past the name | each travels as a `<user-input>` child of the `<part>`, in the order written, since P5 a keeps the label as written until the item scheme resolves it |
+| what holds a part | a `[block` command anywhere above it; a `[section` alone does not, and neither does the segment wrapper |
+| a part with no name | `fix`, as on a block and a section: `PT` joins `NAMED_STRUCT` |
+| the palette, and the older `n` | `PT` sits in the *Frame* category, beside `SECTION` and `BLOCK`; `fromXML` reads the `n` of an older `<part>` back as a literal |
