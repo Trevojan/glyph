@@ -23,3 +23,6 @@ rust/target/
 !.guidelines/.shortcuts/.virtual/ongoing.json
 !.guidelines/.shortcuts/.virtual/README.md
 !.guidelines/.shortcuts/.virtual/checkpoints.jsonl
+
+# Codex's per-machine configuration: it carries this machine's absolute paths
+.codex/config.toml
