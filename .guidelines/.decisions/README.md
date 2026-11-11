@@ -45,6 +45,19 @@ que esperavam de antes.
 | **A `ORD-0032` fica como foi construída: uma Ordem para as duas respostas, e o motor sem estado** | *"a"* |
 | **A extensão VS Code espera o Explorer funcionando** | *"later, later. no problem if this get somewhat outdated. this is a test - and it passed very well - but not the ideal we're looking for. the extension will be more useful after the Explorer is running and all-functional."* |
 
+The Regent's answers, the same day, to the session's view on the desktop route and to
+the six questions that closed the round. In force.
+
+| decision | reason |
+|---|---|
+| **The Explorer's shell goes by a webview crate, Tauri first, so it stops depending on Windows and Edge** | *"guess we'll need to take the webview crate (i heard Tauri is a good choice) if aiming to improve the Explorer over Windows, which will not far in the future become a nuisance. let's do this!"* It takes the place of the `msedge --app` window of `EMS-001/ORD-0014` once built. The crate rule of 2026-09-27 (O7) grades Tauri and `wry` + `tao` as `fix`, and `crate-weight.js` refuses them in `check:rust`; so the Order that brings the crate opens with the measurement and the ADR that amends O7 for the shell, drafted in `INTAKE-EXPLORER.md` for his signature, as the norm of 2026-09-24 on signed ADRs asks |
+| **`.history/study.md` becomes the study register** | *"your suggestion for study.md is ratified by me."* One row per question worth measuring before anyone designs: the question, what would decide it, the instrument, the status, and the intake it became. It leaves the attic for the facts axis, and the owed measurements of the [`.plan`](../.plan/README.md) point at it |
+| **The Codex files: `AGENTS.md` points at `CLAUDE.md`, `.codex/config.toml` is ignored, and the two unchecked skill copies are deleted** | *"a"*. `skills/` and `.agents/skills/` were byte copies of `.claude/skills/glyph-markup` that no check held |
+| **A grant given to the Judge — for a session, as a behaviour rule or as a repository rule — survives the hooks for destructive acts** | *"the power i gave to the Judge for a session, a behaviour rule or a repository rule must survive the hooks for destructive actions. this way, building autonomous workflows will be no more headache and human reviewing (or "yes"-ing every bash command)."* The hooks are regency's, so the rule is checked there; this repository holds no grant today |
+| **The restructure runs right after the `ORD-0033`** | *"right after ORD-0033."* |
+| **The E-06 is ratified as written** | *"i ratify."* Measured the same day on engine 4.7.10.08: the source emits with no diagnostic, and carries no `origin="item"`, in the XML or in the AST, because the item scheme is decided and not built. It enters `conformance/` with the Order that builds the scheme, which is what gives it the node it exists to prove |
+| **The nine items in review are accepted** | *"aok. accept it all."* They leave the work ledger |
+
 ---
 
 ## 2026-11-07

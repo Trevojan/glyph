@@ -93,14 +93,13 @@ do corpus inteiro.
 A base é ponto de partida, não a resposta: o conteúdo é seu. Só mantenha o
 `[tgt`, a cadeia nua de dois membros, e nenhum `]` dentro de literal.
 
-**Estado, 2026-10-15: a direção é a base verificada, e a E-06 não está ratificada
-como feita.** O Regente respondeu *"D"* — a sessão emite a E-06 com a base como
-está, e ele reescreve o conteúdo quando quiser — e, na mesma frase, recusou dar o
-caso por fechado: *"i won't ratify this as done, as this needs a closer
-inspection."* Então a E-06 **não entra** no `conformance/` por esta resposta: ela
-espera a inspeção dele. Até lá o `K1` não alcança a regra de posição do
-`PACKAGE_TARGET.md` §3.2, as garantias **G2 e G3** seguem sem cobertura, e o
-`origin` do `EFF-9` — resolvido em desenho, `root-x` e `x-item-##` — ainda não
-tem o nó do corpus que o prova
+**Estado, 2026-11-11: a fonte está ratificada como escrita** — *"i ratify."* No
+motor 4.7.10.08 ela emite `<review><chain><compare/><evaluate/></chain>…`, sem
+diagnóstico, e **nenhum `origin="item"`**, nem no XML nem no AST: o `origin` do
+`EFF-9` — resolvido em desenho, `root-x` e `x-item-##` — está decidido e não
+construído. Então a E-06 entra no `conformance/` com a Ordem que constrói o
+esquema de item, que é o que lhe dá o nó que ela existe para provar. Até lá o `K1`
+não alcança a regra de posição do `PACKAGE_TARGET.md` §3.2, e as garantias **G2 e
+G3** seguem sem cobertura
 ([`.decisions/`](../.guidelines/.decisions/README.md);
 [`INTAKE-EFFECTS.md`](../.guidelines/.orders/INTAKE-EFFECTS.md) §9.1).

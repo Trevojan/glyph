@@ -4,29 +4,6 @@
   "updated": "2026-11-11",
   "items": [
     {
-      "id": "REGENCY-NORM",
-      "title": "normalizar nas convenções da Regency",
-      "state": "review",
-      "where": [
-        ".guidelines/.shortcuts/.virtual/ongoing.json",
-        ".guidelines/.constraints/README.md"
-      ],
-      "next": "o registro entrou; o manifesto e os nomes banidos foram pulados pela norma de 2026-10-16, com a razão no .plan",
-      "source": ".plan/README.md, Aberto: propostas de 2026-10-16"
-    },
-    {
-      "id": "LADDER-STATUS",
-      "title": "os status do ladder.toml no estado que a EMS-001 entregou",
-      "state": "review",
-      "who": "DV",
-      "since": "2026-11-07",
-      "source": ".decisions/README.md, 2026-10-21",
-      "where": [
-        ".guidelines/.plan/ladder.toml"
-      ],
-      "next": "M01 e M02b done; os crates que a EMS-001 construiu started, cada linha nomeando a ORD, porque o ladder.js recusa done sobre a M06, que segue started sem fmt e clippy no check:rust; 2 done, 19 started, 17 open, 0 breach"
-    },
-    {
       "id": "PLAN-1",
       "title": "a <section> de cabeçalho, irmã do <schema/>",
       "state": "backlog",
@@ -54,7 +31,7 @@
       "where": [
         ".guidelines/.orders/INTAKE-RESTRUCTURE.md"
       ],
-      "next": "as seis colisões respondidas em 2026-11-11: R1 b, R2 b, R3 a, R4 a, R5 a, R6 c; espera a posição na fila, que é do Regente, e o ajuste do .orders/README.md é trabalho no regency"
+      "next": "R1 b, R2 b, R3 a, R4 a, R5 a, R6 c (2026-11-11); runs right after ORD-0033, by the Regent's word of the same day; the .orders/README.md fix is work in regency"
     },
     {
       "id": "EFF-8",
@@ -93,9 +70,9 @@
     {
       "id": "E-06",
       "title": "a base verificada da E-06",
-      "state": "blocked",
-      "blocked_by": "o Regente: a inspeção mais de perto que ele pediu",
-      "source": ".plan/README.md, Aberto: a E-06"
+      "state": "backlog",
+      "source": ".plan/README.md, Aberto: a E-06",
+      "next": "the Regent ratified the source on 2026-11-11; on engine 4.7.10.08 it emits no origin=\"item\", so it enters conformance/ with the item-scheme Order (step 5 of the trail), which gives it that node"
     },
     {
       "id": "VP-16-MEASURES",
@@ -119,65 +96,6 @@
       "next": "o Regente, 2026-11-11: espera o Explorer funcionando, e pode ficar defasada até lá"
     },
     {
-      "id": "EMS-002-INCLUSION",
-      "title": "um comando conhecido nunca some: as 14 posições medidas",
-      "state": "review",
-      "who": "DV",
-      "since": "2026-10-25",
-      "source": ".guidelines/.decisions/README.md#2026-10-25",
-      "next": "as ORDs 0022 a 0031 construídas; as três leituras confirmadas pelo Regente em 2026-10-31",
-      "where": [
-        "order:EMS-002/ORD-0031"
-      ]
-    },
-    {
-      "id": "EMS-002-MOOD-TEMPLATE",
-      "title": "um humor dentro de um template, só no Rust",
-      "state": "review",
-      "who": "DV",
-      "since": "2026-10-25",
-      "source": ".guidelines/.decisions/README.md#2026-10-25",
-      "where": [
-        "order:EMS-002/ORD-0023"
-      ],
-      "next": "construída na ORD-0023"
-    },
-    {
-      "id": "VERSION-BATCH",
-      "title": "a versão se move uma vez quando o lote das que movem o emitido fecha",
-      "state": "review",
-      "who": "DV",
-      "since": "2026-10-25",
-      "source": ".guidelines/.decisions/README.md#2026-10-25",
-      "next": "4.7.10.08, o lote fechado",
-      "where": [
-        "CHANGELOG.md"
-      ]
-    },
-    {
-      "id": "REGENCY-UPDATE-3.0",
-      "title": "regency update unstamped -> 3.0",
-      "state": "review",
-      "who": "DV",
-      "since": "2026-10-30",
-      "where": [
-        ".guidelines/.shortcuts/regency.json",
-        ".guidelines/.constraints/README.md"
-      ],
-      "next": "plano UPD-74c1741d aplicado; os seis .template ficam ao lado dos READMEs editados, como o regency os guarda; só o .constraints trazia o que faltava (O mais simples suficiente), fundido"
-    },
-    {
-      "id": "REGENCY-UPDATE-3.3",
-      "title": "regency update 3.0 -> 3.3",
-      "state": "review",
-      "who": "DV",
-      "since": "2026-11-07",
-      "where": [
-        ".guidelines/.shortcuts/regency.json"
-      ],
-      "next": "plano UPD-94d33032 aplicado, 1/1 (stamp), nenhum .template novo"
-    },
-    {
       "id": "PARALLEL-LINE-CCR",
       "title": "a linha paralela ccr-25b46078-6uxsw5, plumbing e testing: superada, não se mescla",
       "state": "backlog",
@@ -192,14 +110,14 @@
       "title": "a trilha até o Explorer final: a superfície de EMS no app e a saída do JS, a página incluída",
       "state": "backlog",
       "source": ".plan/README.md §5, A trilha até o Explorer final",
-      "next": "os passos 1 a 13, cada um uma Ordem com proposta medida, depois da ORD-0033"
+      "next": "steps 1 to 13, each an Order with a measured proposal; the restructure runs first, right after ORD-0033; the shell goes by a webview crate, Tauri first, with the ADR drafted in INTAKE-EXPLORER.md"
     },
     {
       "id": "PRE-GATE",
       "title": "a fila de antes do portão: os intakes que faltam, as medições que são entregáveis, o fmt e o clippy no check:rust, e o .history/study.md",
       "state": "backlog",
       "source": ".plan/README.md §5, A fila de antes do portão",
-      "next": "cinco itens que não abrem Ordem; o proceed os toma enquanto um portão espera"
+      "next": "five items that open no Order; the study register is ratified as the form of study.md"
     },
     {
       "id": "STORES-UPDATE",
@@ -207,21 +125,6 @@
       "state": "backlog",
       "source": ".decisions/README.md, 2026-11-11",
       "next": "decidido; falta a Ordem, e a posição dela na fila é do Regente"
-    },
-    {
-      "id": "PLUGIN-PACKAGE",
-      "title": "o plugin glyph-markup como um .plugin instalável, e o pacote da skill para o Codex",
-      "state": "review",
-      "who": "DV",
-      "since": "2026-11-11",
-      "source": ".decisions/README.md, 2026-11-11",
-      "where": [
-        "scripts/build-plugin.js",
-        "scripts/build-skill.js",
-        "plugins/glyph-markup/",
-        ".agents/plugins/marketplace.json"
-      ],
-      "next": "adotado e commitado por decisão; o AGENTS.md, o .codex/config.toml e as cópias skills/ e .agents/skills/ ficaram fora do commit, cada um com a razão na resposta da sessão, esperando o Regente"
     }
   ]
 }
