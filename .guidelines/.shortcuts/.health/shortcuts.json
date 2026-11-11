@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "part": "shortcuts",
+  "topics": [
+    {
+      "id": "shortcuts",
+      "check": "shortcuts",
+      "args": {},
+      "why": "lineage and index resolve",
+      "ratified": "2026-11-11"
+    },
+    {
+      "id": "queues",
+      "check": "queues",
+      "args": {
+        "wip": 3
+      },
+      "why": "WIP limit (P-14)",
+      "ratified": "2026-11-11"
+    },
+    {
+      "id": "hooks",
+      "check": "hooks",
+      "args": {},
+      "why": "a hook that never fires fails open",
+      "ratified": "2026-11-11"
+    }
+  ]
+}

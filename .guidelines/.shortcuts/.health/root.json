@@ -1,0 +1,71 @@
+{
+  "schema": 1,
+  "part": "root",
+  "topics": [
+    {
+      "id": "version",
+      "check": "version",
+      "args": {},
+      "why": "the project fits the installed regency",
+      "ratified": "2026-11-11"
+    },
+    {
+      "id": "names",
+      "check": "names",
+      "args": {
+        "upload_set": true
+      },
+      "why": "one record per subject",
+      "ratified": "2026-11-11"
+    },
+    {
+      "id": "underuse",
+      "check": "underuse",
+      "args": {},
+      "why": "specific parts over common-sense folders",
+      "ratified": "2026-11-11"
+    },
+    {
+      "id": "distributable",
+      "check": "distributable",
+      "args": {},
+      "why": "generated files are rebuilt, never edited (F4)",
+      "ratified": "2026-11-11"
+    },
+    {
+      "id": "pipeline",
+      "check": "pipeline",
+      "args": {},
+      "why": "every message reaches the Regent; no silent error",
+      "ratified": "2026-11-11"
+    },
+    {
+      "id": "check",
+      "check": "command",
+      "args": {
+        "run": [
+          "npm",
+          "run",
+          "check"
+        ],
+        "exit": 0
+      },
+      "why": "one step per commit, green at each one (CLAUDE.md)",
+      "ratified": "2026-11-11"
+    },
+    {
+      "id": "check-rust",
+      "check": "command",
+      "args": {
+        "run": [
+          "npm",
+          "run",
+          "check:rust"
+        ],
+        "exit": 0
+      },
+      "why": "the oracle is written at the commit under test and the Rust answers it",
+      "ratified": "2026-11-11"
+    }
+  ]
+}

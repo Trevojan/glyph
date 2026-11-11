@@ -1,0 +1,95 @@
+{
+  "cases": [
+    {
+      "id": "cli-xml-js",
+      "run": [
+        "node",
+        "scripts/glyph-cli.js",
+        "--xml",
+        "[block'probe'[ctx'a'][ins'b']]"
+      ],
+      "stdin": null,
+      "cwd": ".",
+      "timeout": 300,
+      "expect": {
+        "exit": 0,
+        "stdout": "<glyph-package",
+        "stable": true,
+        "reach": [
+          "stdout"
+        ]
+      }
+    },
+    {
+      "id": "cli-xml-rust",
+      "run": [
+        "cargo",
+        "run",
+        "-q",
+        "--manifest-path",
+        "rust/Cargo.toml",
+        "-p",
+        "glyph-cli",
+        "--bin",
+        "glyph",
+        "--",
+        "--xml",
+        "[block'probe'[ctx'a'][ins'b']]"
+      ],
+      "stdin": null,
+      "cwd": ".",
+      "timeout": 300,
+      "expect": {
+        "exit": 0,
+        "stdout": "<glyph-package",
+        "stable": true,
+        "reach": [
+          "stdout"
+        ]
+      }
+    },
+    {
+      "id": "relay-js",
+      "run": [
+        "node",
+        "scripts/glyph-protocol.js"
+      ],
+      "stdin": "{\"call\": \"toXML\", \"src\": \"[block'probe'[ctx'a'][ins'b']]\"}\n",
+      "cwd": ".",
+      "timeout": 300,
+      "expect": {
+        "exit": 0,
+        "stdout": "\"ok\"",
+        "stable": true,
+        "reach": [
+          "stdout"
+        ]
+      }
+    },
+    {
+      "id": "relay-rust",
+      "run": [
+        "cargo",
+        "run",
+        "-q",
+        "--manifest-path",
+        "rust/Cargo.toml",
+        "-p",
+        "glyph-cli",
+        "--bin",
+        "glyph-engine"
+      ],
+      "stdin": "{\"call\": \"toXML\", \"src\": \"[block'probe'[ctx'a'][ins'b']]\"}\n",
+      "cwd": ".",
+      "timeout": 300,
+      "expect": {
+        "exit": 0,
+        "stdout": "\"ok\"",
+        "stable": true,
+        "reach": [
+          "stdout"
+        ]
+      }
+    }
+  ]
+}
