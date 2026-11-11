@@ -656,6 +656,29 @@ pub fn deep_inference<X: Clone>(tree: &Tree<X>, id: Id, ctx: &Context) -> Option
     Some(depth)
 }
 
+/// `partOutsideBlock`: a part slices a block as a block slices a section
+/// (decided 2026-11-11). One that no `[block` holds emits as written and asks
+/// which block it slices. The body of a template definition is read where a
+/// call expands it, and a chain link holds no operand of its own.
+pub fn part_outside_block<X: Clone>(tree: &Tree<X>, id: Id) -> bool {
+    let nd = &tree.nodes[id];
+    if nd.canonical.as_deref() != Some("PT") || nd.chain_element == Some(true) || nd.slot_name == Some(true) {
+        return false;
+    }
+    let mut p = nd.parent;
+    while let Some(pid) = p {
+        let up = &tree.nodes[pid];
+        if up.canonical.as_deref() == Some("BLOCK") && up.chain_element != Some(true) {
+            return false;
+        }
+        if up.is_template() && up.is_def == Some(true) {
+            return false;
+        }
+        p = up.parent;
+    }
+    true
+}
+
 /// `unboundRefs`: the names a REF's literals write and nothing binds — a
 /// reference is written `[ref'nome']`, and prose under REF is not a name
 /// (decided 2026-09-27).
@@ -805,7 +828,7 @@ pub fn parse(src: &str, o: &Opts) -> Result<Parse, Thrown> {
                                       with <code>,</code>.")));
     }
 
-    /* a SECTION or a BLOCK is named by a literal first */
+    /* a SECTION, a BLOCK or a PT is named by a literal first */
     for id in tree.segments.iter().flat_map(|sg| tree.walk(&sg.children)).collect::<Vec<_>>() {
         let nd = n(&tree, id);
         if !has_num(NAMED_STRUCT, &js_str(&nd.canonical)) {
@@ -820,6 +843,17 @@ pub fn parse(src: &str, o: &Opts) -> Result<Parse, Thrown> {
                         format!("<code>[{c}</code> exige um nome literal como primeiro slot. Ex.: <code>[{c}'nome',…</code>."), "MissingStructName")
                 .en("no name", format!("<code>[{c}</code> needs a literal name as its first slot. E.g. <code>[{c}'name',…</code>.")));
         }
+    }
+
+    /* a part outside a block */
+    for id in tree.segments.iter().flat_map(|sg| tree.walk(&sg.children)).collect::<Vec<_>>() {
+        if !part_outside_block(&tree, id) {
+            continue;
+        }
+        g(Diag::new("ask", "parte solta",
+                    "<code>[pt</code> fatia um bloco, e nenhum <code>[block</code> a contém: <strong>the block it slices</strong>?".to_string(),
+                    "PartOutsideBlock")
+            .en("loose part", "<code>[pt</code> slices a block, and no <code>[block</code> holds it: <strong>the block it slices</strong>?".to_string()));
     }
 
     /* valency */
