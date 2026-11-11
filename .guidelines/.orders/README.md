@@ -9,23 +9,23 @@
 
 ## Numbering
 
-Flat and sequential, like an ADR: the next one is the largest that already exists here, plus one. No
-branching by subject, no reusing the number of a cancelled Order.
+Per series (the Regent, 2026-09-25, kept on 2026-11-11): an Order lives in
+`EMS-###/ORD-####/`, a folder holding the four projections and the manifest that
+`--bundle` writes, and the count restarts in each series — the next one is the
+largest `ORD-####/` of that series, plus one. A loose Order, emitted in no
+series, lives in `NEM/`. No branching by subject, no reusing the number of a
+cancelled Order.
 
 ```
-ORD-####          ⟨or this project's scheme⟩
+EMS-###/ORD-####/ORD-####.{pgml,xml,json,hgml,manifest.json}
 ```
 
 ## The open Order
 
-> One line, or none. If there are two, one of them is wrong.
+> One, or none. If there are two, one of them is wrong.
 
-| | |
-|---|---|
-| id | ⟨ORD-####⟩ |
-| commissions | ⟨what, in one line⟩ |
-| open since | ⟨YYYY-MM-DD⟩ |
-| version | ⟨v#⟩ — ⟨what the latest version changed⟩ |
+It is named in the register of its series, under *A Ordem aberta*:
+[`EMS-002/README.md`](EMS-002/README.md).
 
 ## Closed Orders
 
@@ -33,9 +33,12 @@ ORD-####          ⟨or this project's scheme⟩
 > way?" gets answered — so it does **not** leave this folder when it closes, unlike what is in
 > [`.plan/`](../.plan/).
 
-| id | commissioned | where the result is |
+| series | what it is | the register |
 |---|---|---|
-| ⟨ORD-####⟩ | ⟨…⟩ | ⟨the release, the document, the commit⟩ |
+| `EMS-001` | the Rust engine behind the app, closed on 2026-11-07 | [`EMS-001/README.md`](EMS-001/README.md) |
+| `EMS-002` | Glyph 100% in Rust, open | [`EMS-002/README.md`](EMS-002/README.md) |
+| before the series | `ORD-2026-08-30-01`, the order of August, and the handoffs `HANDOFF-*.pgml` | this folder |
+| parked | `ORD-0011`, `restructure-glyph-repo`, carried out by `EMS-002/ORD-0034` | [`parked/restructure-glyph-repo/`](parked/restructure-glyph-repo/ORD-0011.pgml) |
 
 ## Intake — what arrived while an Order was open
 
@@ -44,4 +47,18 @@ ORD-####          ⟨or this project's scheme⟩
 
 | | |
 |---|---|
-| ⟨`INTAKE-*.md`⟩ | ⟨what arrived, and why it did not fit the open Order⟩ |
+| [`INTAKE-BURN-INVARIANCE.md`](INTAKE-BURN-INVARIANCE.md) | Preliminary intake — is the burn a canonical form? |
+| [`INTAKE-EFFECTS.md`](INTAKE-EFFECTS.md) | Preliminary intake — effects |
+| [`INTAKE-FIELD-2026-09.md`](INTAKE-FIELD-2026-09.md) | Field intake — the engine used on a client project |
+| [`INTAKE-FORMAL-ANALYSIS.md`](INTAKE-FORMAL-ANALYSIS.md) | Formal analysis — intakes A, B and C |
+| [`INTAKE-INCLUSION.md`](INTAKE-INCLUSION.md) | Inclusion — a known command never vanishes |
+| [`INTAKE-ORDER-COHERENCE.md`](INTAKE-ORDER-COHERENCE.md) | Preliminary intake — coherence between emitted Orders |
+| [`INTAKE-PARSER-SPLIT.md`](INTAKE-PARSER-SPLIT.md) | Preliminary intake — splitting `glyph-parser.js` into a directory |
+| [`INTAKE-PART.md`](INTAKE-PART.md) | Intake — `[part]`, restored: the measured proposal |
+| [`INTAKE-PIN-TRAFFIC.md`](INTAKE-PIN-TRAFFIC.md) | Preliminary intake — PIN, traffic and the EMS the user drives |
+| [`INTAKE-RESTRUCTURE.md`](INTAKE-RESTRUCTURE.md) | Intake — the restructure, mapped |
+| [`INTAKE-RUST-LADDER.md`](INTAKE-RUST-LADDER.md) | Preliminary intake — the Rust ladder, audited against the engine it ports |
+| [`INTAKE-RUST.md`](INTAKE-RUST.md) | Preliminary intake — migrating the engine to Rust |
+| [`INTAKE-VARIABLES.md`](INTAKE-VARIABLES.md) | Preliminary intake — variables, and the bracket a literal cannot hold |
+| [`INTAKE-VIRTUAL-PATH.md`](INTAKE-VIRTUAL-PATH.md) | Preliminary intake — the computed context (mini-repo) and Virtual Path |
+| [`INTAKE-VSCODE-AUTHORING.md`](INTAKE-VSCODE-AUTHORING.md) | VS Code authoring support for Glyph |

@@ -8,7 +8,8 @@
 > Regent's machine, by its folder and file names only. The Regent answered the
 > collisions of §4 on 2026-11-11 and ratified the emit of the Order that moves,
 > [`EMS-002/ORD-0034`](EMS-002/README.md), the same day; §5 is the map it opens with,
-> measured at `3d0ee4d`, and §6 what the map left to the Regent, with his answers.
+> measured at `3d0ee4d`, §6 what the map left to the Regent, with his answers, and §7
+> what moved.
 
 ## 1. The premise, measured
 
@@ -213,3 +214,17 @@ The Regent answered four on 2026-11-11 ([`.decisions/`](../.decisions/README.md)
 so the entry stays `.shortcuts/README.md` and no file of it moves in this Order.
 The Order moves groups A, B and C of §5.1, and the path index carries each old
 path as an alias.
+
+## 7. What the Order moved
+
+Closed on 2026-11-11; the row is in the [series register](EMS-002/README.md).
+
+| group | commit | moved | rewritten |
+|---|---|---|---|
+| A | `a5e327b` | the 13 documents, into `.sources/` | 84 links and 14 literal paths in 22 files; the builders of the skill and of the templates, and `glyph-stores/build.rs` |
+| B | `01d76e2` | the 8 stores, into `.sources/` | 1 link and 82 literal paths in 23 files; `build-templates.js`, `dag.js`, the oracle export of the suite, the VS Code extension, `glyph-stores/build.rs`, the testkit, and the tests and examples of `glyph-cli` |
+| C | the closing commit | no path | [`.orders/README.md`](README.md) says the series rule, names the registers and lists the intakes |
+
+The installed app reads the stores of the machine by file name, and no path of it
+changed. The attic, `.history/`, keeps the pointers it had, as the acts do. The spec
+[`EMS-002.pgml`](EMS-002/EMS-002.pgml) is no act, and its one path was rewritten.
