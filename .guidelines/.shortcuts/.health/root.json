@@ -44,11 +44,14 @@
       "check": "command",
       "args": {
         "run": [
+          "cmd",
+          "/c",
           "npm",
           "run",
           "check"
         ],
-        "exit": 0
+        "exit": 0,
+        "timeout": 1200
       },
       "why": "one step per commit, green at each one (CLAUDE.md)",
       "ratified": "2026-11-11"
@@ -58,11 +61,14 @@
       "check": "command",
       "args": {
         "run": [
+          "cmd",
+          "/c",
           "npm",
           "run",
           "check:rust"
         ],
-        "exit": 0
+        "exit": 0,
+        "timeout": 1200
       },
       "why": "the oracle is written at the commit under test and the Rust answers it",
       "ratified": "2026-11-11"
