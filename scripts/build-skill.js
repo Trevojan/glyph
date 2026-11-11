@@ -1,13 +1,12 @@
 /**
- * Builds the glyph-markup skill from the repository, into `.claude/skills/`.
+ * Builds the Glyph resources for Claude Code and the Codex plugin.
  *
  *   node build-skill.js            write it
  *   node build-skill.js --check    verify it matches, write nothing
  *
- * `.claude/skills/glyph-markup` is where Claude Code loads a project skill from,
- * so the folder that gets published and the folder the harness reads are one
- * folder. There is no second copy to keep in step — which is the whole of the
- * defect this script is named after.
+ * Both packages derive their references and engine from the same sources.
+ * Each host has its own authored SKILL.md and Codex also bundles the CLI and
+ * its stores so the installed skill can compile outside a Glyph checkout.
  *
  * The Regent's layout: SKILL.md at the root, the engine beside it, the
  * normative material in `references/`, and the examples NESTED below that
@@ -48,6 +47,7 @@ const HERE = __dirname;
 const ROOT = path.join(__dirname, "..");
 const GUIDE = path.join(ROOT, ".guidelines");
 const SKILL = path.join(ROOT, ".claude", "skills", "glyph-markup");
+const CODEX_SKILL = path.join(ROOT, "plugins", "glyph-markup", "skills", "glyph-markup");
 
 const CHECK = process.argv.indexOf("--check") !== -1;
 const STALE = [];
@@ -86,14 +86,15 @@ function commitWrites() {
   });
 }
 
-function emit(rel, content) {
+function emitTo(dir, rel, content) {
   /* Normalise CRLF for the same reason build-templates.js does: the sources
      carry system line endings on Windows, the generated file then comes out
      mixed, and `git status` starts lying about a file nobody is supposed to
      edit. A --check that fails because git rewrote the line endings is a check
      people learn to ignore. */
   content = content.replace(/\r\n/g, "\n");
-  const full = path.join(SKILL, rel);
+  const full = path.join(dir, rel);
+  rel = path.relative(ROOT, full);
   if (!CHECK) {
     /* D-01: staged, not written. A published skill half of one version and
        half of another is worse than one that failed to publish, because the
@@ -109,6 +110,11 @@ function emit(rel, content) {
       ? ": differs from a fresh build (same length — an edit in place)"
       : ": differs (" + disk.length + " on disk, " + content.length + " fresh)"));
   else console.log("  ✓ " + rel);
+}
+
+function emit(rel, content) {
+  emitTo(SKILL, rel, content);
+  emitTo(CODEX_SKILL, rel, content);
 }
 
 /* the engine itself: the skill can then prove behaviour instead of describing
@@ -149,6 +155,16 @@ ex.cases.forEach(c => {
 });
 emit(path.join("references", "examples", "EXAMPLES.md"), md);
 
+const signatures = ".guidelines/SIGNATURES.md";
+emitTo(CODEX_SKILL, "references/SIGNATURES.md",
+       banner(signatures, "md") + fs.readFileSync(path.join(ROOT, signatures), "utf8"));
+
+for (const rel of ["scripts/glyph-cli.js", "scripts/glyph-zip.js",
+                   ".guidelines/templates.json", ".guidelines/rules.json", ".guidelines/expansions.json"]) {
+  emitTo(CODEX_SKILL, rel, fs.readFileSync(path.join(ROOT, rel), "utf8"));
+}
+emitTo(CODEX_SKILL, "package.json", '{\n  "type": "module"\n}\n');
+
 /* SKILL.md is authored, not generated. Only its version is enforced — the one
    fact whose staleness is what made the installed copy actively misleading. */
 const skillMd = fs.readFileSync(path.join(SKILL, "SKILL.md"), "utf8");
@@ -174,15 +190,14 @@ else console.log("  ✓ SKILL.md declares v" + VERSION);
 
 if (CHECK) {
   if (STALE.length) {
-    console.error("\nFAILED: the published skill does not match this repository.");
+    console.error("\nFAILED: the skill packages do not match this repository.");
     STALE.forEach(s => console.error("  ✗ " + s));
     console.error("\nRun: node scripts/build-skill.js");
     process.exit(1);
   }
-  console.log("\nThe skill matches a fresh build.");
+  console.log("\nThe skill packages match a fresh build.");
 } else {
   commitWrites();
-  console.log("\n.claude/skills/glyph-markup is built at " + VERSION + " (" + WRITES.length +
-              " file(s) committed together). A new session in this repository reads\n" +
-              "it from there; an account-level copy has to be re-uploaded from it.");
+  console.log("\nThe Claude and Codex skill packages are built at " + VERSION + " (" +
+              WRITES.length + " generated files).");
 }
