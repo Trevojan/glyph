@@ -1,7 +1,7 @@
 {
   "_about": "Registro do trabalho dos agentes: o primeiro relance ao voltar a este repositório. Aponta, nunca copia. O modelo é o do toolkit Regency, library/virtualpath.md §3; o detalhe de cada item mora no source.",
   "schema": 1,
-  "updated": "2026-11-07",
+  "updated": "2026-11-11",
   "items": [
     {
       "id": "REGENCY-NORM",
@@ -13,23 +13,6 @@
       ],
       "next": "o registro entrou; o manifesto e os nomes banidos foram pulados pela norma de 2026-10-16, com a razão no .plan",
       "source": ".plan/README.md, Aberto: propostas de 2026-10-16"
-    },
-    {
-      "id": "EMS-002-SPEC",
-      "title": "a próxima frente da EMS-002: a opção c da pergunta 11 e as tabelas vindas do motor",
-      "state": "review",
-      "who": "DV",
-      "since": "2026-11-07",
-      "source": ".decisions/README.md, 2026-10-21",
-      "where": [
-        "order:EMS-002/ORD-0032",
-        ".guidelines/.orders/EMS-002/EMS-002.pgml",
-        "scripts/glyph-transport.js",
-        "scripts/glyph-protocol.js",
-        "rust/crates/glyph-protocol/src/lib.rs",
-        "rust/crates/glyph-cli/examples/app_stores.mjs"
-      ],
-      "next": "a ORD-0032 fechada em b936569, b150bbc, 458752c e 418e18a: RL-16 a RL-22, 7 824 linhas do protocol.json nos dois motores, 12 mutantes do JS e 5 do Rust vistos falhando, e o app_stores.mjs no Edge com todo painel igual; a leitura de uma ORD só para as duas respostas, e do motor sem estado, espera o Regente em .decisions"
     },
     {
       "id": "LADDER-STATUS",
@@ -64,14 +47,14 @@
     {
       "id": "ORD-0011-parked",
       "title": "mapear o repositório, sem mover nada, agora que a EMS-001 fechou",
-      "state": "review",
+      "state": "backlog",
       "who": "DV",
       "since": "2026-11-07",
       "source": ".plan/README.md, Adiado por decisão",
       "where": [
         ".guidelines/.orders/INTAKE-RESTRUCTURE.md"
       ],
-      "next": "o mapa está feito e nada se moveu; as seis colisões, R1 a R6, esperam o Regente, e a R1 decide se há mapa: o Glyph já está no layout que o regency chama de padrão corrente"
+      "next": "as seis colisões respondidas em 2026-11-11: R1 b, R2 b, R3 a, R4 a, R5 a, R6 c; espera a posição na fila, que é do Regente, e o ajuste do .orders/README.md é trabalho no regency"
     },
     {
       "id": "EFF-8",
@@ -83,15 +66,14 @@
     {
       "id": "EFF-8-PART",
       "title": "restaurar o [part], que estava nos planos e sumiu sem registro",
-      "state": "blocked",
+      "state": "backlog",
       "who": "DV",
       "since": "2026-11-07",
-      "blocked_by": "o Regente: as respostas P1 a P5 da proposta medida, no INTAKE-PART.md §4",
       "where": [
         "order:EMS-002/ORD-0033",
         ".guidelines/.orders/INTAKE-PART.md"
       ],
-      "next": "a ORD-0033 emitida e parada no portão; a proposta medida diz onde o [part] se perdeu e o que cada resposta move: nenhum hash do snapshot, oito sondas da suíte",
+      "next": "o portão respondido em 2026-11-11: P1 a, P2 a, P3 b, P4 a, P5 a, e os blocos do exemplo irmãos; construir a ORD-0033 pelo INTAKE-PART.md §5",
       "source": ".orders/INTAKE-EFFECTS.md §8.2"
     },
     {
@@ -125,7 +107,7 @@
     {
       "id": "VSCODE-EXT",
       "title": "a extensão VS Code para .pgml e .hgml, escrita pelo Regente com o Copilot e absorvida como feature oficial",
-      "state": "review",
+      "state": "backlog",
       "source": ".orders/INTAKE-VSCODE-AUTHORING.md",
       "who": "DV",
       "since": "2026-11-02",
@@ -134,7 +116,7 @@
         "vscode-extension/",
         ".scope/generics/production.pgml"
       ],
-      "next": "o layout foi ratificado em 2026-11-02; o Regente vê a extensão no Extension Development Host e põe em .scope/generics/ a production.pgml da versão corrente que a sessão escreveu"
+      "next": "o Regente, 2026-11-11: espera o Explorer funcionando, e pode ficar defasada até lá"
     },
     {
       "id": "EMS-002-INCLUSION",
@@ -204,6 +186,42 @@
         "branch:ccr-25b46078-6uxsw5"
       ],
       "next": "o Regente decidiu em 2026-11-07 manter as branches sem mesclar; nada a fazer até ele dizer"
+    },
+    {
+      "id": "EXPLORER-TRAIL",
+      "title": "a trilha até o Explorer final: a superfície de EMS no app e a saída do JS, a página incluída",
+      "state": "backlog",
+      "source": ".plan/README.md §5, A trilha até o Explorer final",
+      "next": "os passos 1 a 13, cada um uma Ordem com proposta medida, depois da ORD-0033"
+    },
+    {
+      "id": "PRE-GATE",
+      "title": "a fila de antes do portão: os intakes que faltam, as medições que são entregáveis, o fmt e o clippy no check:rust, e o .history/study.md",
+      "state": "backlog",
+      "source": ".plan/README.md §5, A fila de antes do portão",
+      "next": "cinco itens que não abrem Ordem; o proceed os toma enquanto um portão espera"
+    },
+    {
+      "id": "STORES-UPDATE",
+      "title": "as stores numa atualização: o --install atualiza, e a store editada pede um de três atos",
+      "state": "backlog",
+      "source": ".decisions/README.md, 2026-11-11",
+      "next": "decidido; falta a Ordem, e a posição dela na fila é do Regente"
+    },
+    {
+      "id": "PLUGIN-PACKAGE",
+      "title": "o plugin glyph-markup como um .plugin instalável, e o pacote da skill para o Codex",
+      "state": "review",
+      "who": "DV",
+      "since": "2026-11-11",
+      "source": ".decisions/README.md, 2026-11-11",
+      "where": [
+        "scripts/build-plugin.js",
+        "scripts/build-skill.js",
+        "plugins/glyph-markup/",
+        ".agents/plugins/marketplace.json"
+      ],
+      "next": "adotado e commitado por decisão; o AGENTS.md, o .codex/config.toml e as cópias skills/ e .agents/skills/ ficaram fora do commit, cada um com a razão na resposta da sessão, esperando o Regente"
     }
   ]
 }

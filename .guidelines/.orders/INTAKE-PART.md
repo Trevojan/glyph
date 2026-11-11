@@ -3,8 +3,8 @@
 > **The proposal [`EMS-002/ORD-0033`](EMS-002/README.md) opens with.** The design is
 > the Regent's, given on 2026-10-15 and kept in [`INTAKE-EFFECTS.md`](INTAKE-EFFECTS.md)
 > §8.2; this file measures it against the engine and asks what the design leaves to
-> decide. The Order builds nothing before the Regent answers §4, as he ratified on
-> 2026-09-27 for the pieces that are settled when built. Measured at `5203859`.
+> decide. The Regent answered §4 on 2026-11-11, and §5 holds the answers the Order
+> builds. Measured at `5203859`.
 
 ## 1. What the engine reads today
 
@@ -81,7 +81,17 @@ order of the effects).
   builds the item scheme, together with `[item-…]`
 - b. this Order builds the item scheme too: the `xml` hashes move, and it grows
 
-**The session's recommendation:** P1 a, P2 a, P3 a, P4 a, P5 a. They keep one word for
-one thing, make a part declarable and referable like the structures it lives among,
-leave nothing to vanish, and keep this Order small. P2 a reverses a signed reading, so
-it is the Regent's alone.
+## 5. The Regent's answers
+
+Given on 2026-11-11 ([`.decisions/`](../.decisions/README.md)): **P1 a, P2 a, P3 b,
+P4 a, P5 a**, and the example of §3 reads as sibling blocks.
+
+| | what the Order builds |
+|---|---|
+| P1 a | one command: `PT` is the `struct` that slices a block, its gloss rewritten in `GLOSSARY.md` |
+| P2 a | the first literal is the part's name, `name` and `binds`; the `n` of `<part>` signed on 2026-09-27 retires |
+| P3 b | one literal per level, `[part'h0','h1','h2']` |
+| P4 a | a part outside a block emits as written and asks which block it slices: `ask`, a `<needs>` |
+| P5 a | the label travels as written; resolving it waits for the Order that builds the item scheme |
+
+The session had recommended P3 a, the labels comma-separated in one literal.

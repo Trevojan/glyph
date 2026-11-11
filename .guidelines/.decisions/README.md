@@ -13,6 +13,40 @@
 
 ---
 
+## 2026-11-11
+
+Respostas do Regente, escritas na sessão, às vinte e três perguntas numeradas do
+checkup de 2026-11-10: o portão da `ORD-0033`, a trilha até o Explorer final, e as
+que esperavam de antes.
+
+| decisão | razão |
+|---|---|
+| **O `[part]` é um comando só: `PT` passa a ser o `struct` que fatia um bloco** (P1) | *"a"*, sobre a proposta medida do [`INTAKE-PART.md`](../.orders/INTAKE-PART.md) §4. O gloss de `PT` se reescreve no `GLOSSARY.md`, e o elemento segue `<part>` |
+| **O primeiro literal é o nome da parte: `name` e `binds`** (P2) — o `n` de `<part>` assinado em 2026-09-27 se aposenta | *"a"*. Uma referência resolve para a parte e o `<schema>` a declara, ao lado das seções e dos blocos. Substitui a leitura da `ORD-0017` para o `<part>`; o `cond` do `<if>` fica |
+| **Um literal por nível: `[part'h0','h1','h2']`** (P3) | *"b"*, contra a recomendação da sessão, que era os rótulos separados por vírgula num literal só |
+| **Uma parte fora de um bloco emite como escrita e pergunta qual bloco ela fatia** (P4) | *"a"*: `ask`, um `<needs>` |
+| **A `ORD-0033` carrega o rótulo como escrito; resolvê-lo como ponteiro espera a Ordem do esquema de item** (P5) | *"a"*. Nenhum hash de `xml` se move por esta Ordem |
+| **No exemplo do desenho, `[block'prepare'` é irmão de `[block'ingredients'`** | *"a"*: faltava um `]` no exemplo, e as verificações da Ordem tomam a leitura de irmãos |
+| **A trilha até o Explorer final e a fila de antes do portão entram no [`.plan`](../.plan/README.md) §5 e no registro de trabalho** | *"a"*. Uma proposta medida é um intake, não uma Ordem: a sessão as escreve enquanto um portão espera, e o Regente responde os portões em lote |
+| **A versão final do Glyph Explorer é a superfície de EMS no app instalado mais a saída do JS** | *"b"*. A linha do LSP e do VS Code fica fora do corte, como série própria |
+| **A página também sai do JS; a rota fica aberta, e um app de desktop em Rust é admitido** | *"b (i might change my mind about how to port the Explorer efficiently. if needed, more useful for people and better for distribution and later releases, we may rely on Rust to deal with a desktop app solution. i want your pov about it also, if there is an alternative away from Node and yet in Rust.)"* A rota se mede num intake antes de qualquer Ordem; a régua das crates de 2026-09-27 (O7) segue em vigor até ele dizer outra coisa, e ela gradua `wry` + `tao` como `fix` |
+| **O `fmt` e o `clippy` entram no `check:rust` sem Ordem** | *"a"*: é arrumação, e o `proceed` pode fazer. É o que segura a M06 em `started` |
+| **O trabalho do plugin que estava fora do registro é adotado e commitado** | *"a"* |
+| **O conjunto de checagens de saúde vale como proposto, ratificado inteiro** | *"a"* e *"a"*: `.shortcuts/.health/`, onze tópicos ratificados em 2026-11-11 |
+| **A saúde vigia os dois pipelines: a CLI e a relay, cada um pelos dois motores** | *"c (both.)"* |
+| **O `.history/study.md` se retrabalha** | *"a (if new features are expected. also would be great providing your suggestion. may ignite some intakes in the future. very useful indeed.)"* A sugestão da sessão vai na resposta, e a forma é dele |
+| **O layout alvo é o Orbital clássico** (R1) | *"b"*, sobre as colisões do [`INTAKE-RESTRUCTURE.md`](../.orders/INTAKE-RESTRUCTURE.md) §4. A `ORD-0011` chapada deixa de estar estacionada por falta de resposta |
+| **O ponto antes do nome fica, e os arquivos de dentro seguem o `_ORBITAL`** (R2) | *"b (if Rust don't support uppercase, aok to not do it. even so, must follow _ORBITAL architecture - along a naming exception for this case.)"* |
+| **As decisões ficam num arquivo de rodadas datadas, e o `.constraints/` à parte** (R3) | *"a"* |
+| **A numeração das Ordens segue por série, e o regency se ajusta a ela** (R4) | *"a (Regency must be used to update and make it fit this decision. some points may also need alignment. the numbering stays *per-series*.)"* O `.orders/README.md` que o regency montou diz *flat and sequential*; o ajuste é trabalho no regency |
+| **As specs de papel não ganham casa no projeto** (R5) | *"a (no need to do so.)"*: a resposta é a do plugin |
+| **Os 21 documentos e stores da linguagem vão para o eixo dos fatos** (R6) | *"c"*. Move as 318 menções e os caminhos que nove scripts leem, medidos no §3.4 do intake |
+| **Uma atualização traz as stores novas, e nunca em silêncio: o usuário escolhe entre três atos** | *"a (and push the user's edited ones with a prefix while restoring the originals, now updated with the latest version. always notify the user this will happen, so they can choose to "push and prefix", "overwrite with incoming changes" or "push and prefix the incoming changes (preserve edits)".)"* A store que ninguém editou se atualiza; a editada pede a escolha. Muda o `--install`, então entra como Ordem |
+| **A `ORD-0032` fica como foi construída: uma Ordem para as duas respostas, e o motor sem estado** | *"a"* |
+| **A extensão VS Code espera o Explorer funcionando** | *"later, later. no problem if this get somewhat outdated. this is a test - and it passed very well - but not the ideal we're looking for. the extension will be more useful after the Explorer is running and all-functional."* |
+
+---
+
 ## 2026-11-07
 
 Palavras do Regente trazidas à sessão nesta data, em resposta às seis recomendações da

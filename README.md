@@ -264,6 +264,7 @@ built.
 | `scripts/glyph-cli.js` · `glyph-zip.js` | the command line, and the zip its `--bundle` writes |
 | `scripts/glyph-protocol.js` · `glyph-transport.js` | the engine as a process, one JSON request a line, and the app's switch to it (`?engine=relay`) |
 | `scripts/glyph-plugin.js` · `commands/` · `.claude-plugin/` | the engine as slash commands |
+| `scripts/build-plugin.js` | the plugin as one installable `.plugin` (`npm run plugin`), every file derived |
 | `rust/` | the Rust engine, one crate per core module; `node scripts/crate-graph.js` prints the arrows |
 | `.guidelines/rules.json` · `templates.json` | data stores, hand-editable |
 | `.guidelines/expansions.txt` | composition table: atoms and formulas |

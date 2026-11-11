@@ -92,7 +92,12 @@ rewritten, so a move leaves those pointers dead for good.
 
 ## 4. The collisions, as closed questions
 
-None answered. Each option is one a measurement above supports.
+Each option is one a measurement above supports. The Regent answered the six on
+2026-11-11 ([`.decisions/`](../.decisions/README.md)): **R1 b, R2 b, R3 a, R4 a, R5 a,
+R6 c**. The target is the classic Orbital with the dot kept before each folder name —
+a naming exception, the inner files following `_ORBITAL`; decisions stay in one file of
+dated rounds; the numbering stays per series, and regency is updated to fit it; and the
+language documents move into the facts axis.
 
 **R1. Which layout is the target?**
 - a. the dotted one, which Glyph holds and regency calls the current standard: the map
