@@ -165,10 +165,11 @@ EMS que o usuário conduz está em
 [`INTAKE-PIN-TRAFFIC.md`](../.orders/INTAKE-PIN-TRAFFIC.md), com o que ainda
 espera o Regente no §5 dele.
 
-A [`EMS-002/ORD-0033`](../.orders/EMS-002/README.md), o `[part]` restaurado, está
-aberta e com o portão respondido em 2026-11-11: o que ela constrói está no
-[`INTAKE-PART.md`](../.orders/INTAKE-PART.md) §5. O seletor do PIN vem depois dela,
-porque seleciona pelos rótulos do `[part]`.
+A [`EMS-002/ORD-0033`](../.orders/EMS-002/README.md), o `[part]` restaurado, fechou
+em 2026-11-11: `PT` é o `struct` que fatia um bloco, o primeiro literal é o nome, um
+literal por nível, e a parte que nenhum `[block` contém pergunta qual bloco ela fatia
+([`INTAKE-PART.md`](../.orders/INTAKE-PART.md) §5 e §6). O seletor do PIN vem depois
+dela, porque seleciona pelos rótulos do `[part]`.
 
 #### A trilha até o Explorer final
 
@@ -180,7 +181,7 @@ passo abre como Ordem com a proposta medida do intake, e para no portão dele.
 
 | # | a Ordem | depende de | o intake |
 |---|---|---|---|
-| 0 | o `[part]`, a `ORD-0033` | — | [`INTAKE-PART`](../.orders/INTAKE-PART.md) §5, respondido |
+| 0 | o `[part]`, a `ORD-0033`, fechada em 2026-11-11 | — | [`INTAKE-PART`](../.orders/INTAKE-PART.md) §5 e §6 |
 | 1 | o XSD gerado pelo motor e o portão que o confere contra o XML | 0 | a escrever: `INTAKE-XSD.md` (a norma está assinada, 2026-11-07) |
 | 2 | a `EMS.json`: a lista de campos, o XSD primeiro, e a configuração dentro do `<glyph-package>` | 1 | a escrever: `INTAKE-EMS-JSON.md`, sobre o [`INTAKE-PIN-TRAFFIC`](../.orders/INTAKE-PIN-TRAFFIC.md) §4 e §5 |
 | 3 | a coerência: `[ref'nem']`, `[ref'EMS']`, o `relates[]`, a verificação pela `EMS.json`, a NEM, e o portão do `FIELD-3b` | 2 | [`INTAKE-ORDER-COHERENCE`](../.orders/INTAKE-ORDER-COHERENCE.md) §9, ratificado e sem proposta medida |
@@ -304,7 +305,7 @@ nenhum agente pode ratificar:
 |---|---|
 | **estudo de setembro** | oito intakes em [`.orders/`](../.orders/): [`INTAKE-VIRTUAL-PATH`](../.orders/INTAKE-VIRTUAL-PATH.md) (mini-repo, medido: o custo de round-trip é o tamanho de `glyph-parser.js`), [`INTAKE-ORDER-COHERENCE`](../.orders/INTAKE-ORDER-COHERENCE.md) (a aresta declarada, ratificada em 2026-10-15 com `[ref'nem']`, `[ref'EMS']` e a fila do `repair`; não construída), [`INTAKE-BURN-INVARIANCE`](../.orders/INTAKE-BURN-INVARIANCE.md) (fechado), [`INTAKE-FORMAL-ANALYSIS`](../.orders/INTAKE-FORMAL-ANALYSIS.md), [`INTAKE-PARSER-SPLIT`](../.orders/INTAKE-PARSER-SPLIT.md) (o corte, feito: treze módulos), [`INTAKE-RUST`](../.orders/INTAKE-RUST.md) (steelman e defeater; o Regente decidiu migrar), [`INTAKE-RUST-LADDER`](../.orders/INTAKE-RUST-LADDER.md) (a escada auditada; nada nela espera o Regente — as dez perguntas `O` fecharam em 2026-09-24 e 2026-09-27, e o §8 registra quando cada uma fechou), [`INTAKE-FIELD-2026-09`](../.orders/INTAKE-FIELD-2026-09.md) (o kit de cliente; `H-09` fechou por ele, e os dois achados estruturais fecharam em 2026-10-15). |
 | **EMS-001** | fechou em 2026-11-07, com a `ORD-0014`, e as perguntas do [retorno](../.orders/EMS-001/RETURN.md) têm todas resposta. A execução assíncrona da seção `queue` **passou à EMS-002** em 2026-10-15 e saiu desta lista |
-| **EMS-002** | aberta em 2026-10-23, e o [registro da série](../.orders/EMS-002/README.md) guarda o que fechou, da `ORD-0001` à `ORD-0032`; a `ORD-0033`, o `[part]`, está aberta com o portão respondido em 2026-11-11; o resto do §5 segue pela trilha, cada peça como proposta medida para o Regente cortar |
+| **EMS-002** | aberta em 2026-10-23, e o [registro da série](../.orders/EMS-002/README.md) guarda o que fechou, da `ORD-0001` à `ORD-0033`; nenhuma Ordem está aberta na série; o resto do §5 segue pela trilha, cada peça como proposta medida para o Regente cortar |
 | **as stores numa atualização** | o `--install` não sobrescreve as stores, e por isso uma versão nova instalada sobre uma antiga segue lendo as que vieram da instalação antiga, mesmo sem edição nenhuma. Medido em 2026-11-07, com as stores de 2026-10-18 e o motor 4.7.10.08: o `.xml` e o `.hgml` das 118 fontes não mudam; o `.json` leva os digests antigos e, no K-04, um diagnóstico diz *preset*; e o `expansions.json` nomeia `skeptic`, sem chegar ao XML delas. O Regente decidiu em 2026-11-11 que a instalação atualiza, com os três atos do §5; falta a Ordem |
 
 ## Adiado por decisão, não por esquecimento

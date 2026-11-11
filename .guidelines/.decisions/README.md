@@ -345,11 +345,16 @@ Respostas do Regente à auditoria da escada Rust
 
 ## Decisões que um agente tomou e o Regente ainda não ratificou
 
-Tomadas na rodada de 2026-11-07, ao construir o que a de 2026-10-21 decidiu. Cada uma
-vale até o Regente dizer outra coisa.
+Tomadas ao construir o que o Regente decidiu: as quatro do `[part]` em 2026-11-11, na
+[`EMS-002/ORD-0033`](../.orders/EMS-002/README.md), e as outras na rodada de 2026-11-07.
+Cada uma vale até o Regente dizer outra coisa.
 
 | decisão | razão |
 |---|---|
+| **Os níveis do `[part]` depois do nome viajam como `<user-input>`, um por literal, na ordem escrita** | o P3 b dá um literal por nível e o P5 a mantém o rótulo como escrito até a Ordem do esquema de item; um atributo ou um elemento novo para o nível moveria o emitido sem decisão |
+| **Quem contém uma parte é um `[block` em qualquer altura acima dela; um `[section` sozinho não contém, nem o `<block once>` do segmento** | o desenho diz que a parte fatia um bloco, e o P4 a pergunta qual bloco quando nenhum a contém; o invólucro do segmento não é um bloco que o autor escreveu |
+| **Uma parte sem nome é `fix`, `MissingStructName`: o `PT` entra em `NAMED_STRUCT`** | o P2 a faz do primeiro literal o nome, *como num bloco ou numa seção*, e nesses dois a falta do nome é estrutura quebrada |
+| **O `PT` fica na categoria *Frame* da paleta, e o `n` de um `<part>` antigo volta pelo `fromXML` como literal** | o `PT` é peça de estrutura ao lado de `SECTION` e `BLOCK`; e um documento emitido entre 2026-10-25 e 2026-11-11 leva `n`, que sumiria em silêncio na volta |
 | **As tabelas do motor e a opção c da pergunta 11 são uma ORD só, a [`EMS-002/ORD-0032`](../.orders/EMS-002/README.md)** | o que difere só se diz contra os templates do motor, e são as tabelas que os trazem à página; duas ORDs pediriam um commit entre elas, e a segunda esperaria a primeira fechar |
 | **O motor não guarda o que uma requisição traz, nem por digest** | medido pelo `app_stores.mjs`, uma `toXML` pequena no motor Rust leva 0,068 ms sozinha e 0,188 ms trazendo 9,9 KB de templates; nada medido pede um cache, e sem estado nenhuma requisição responde por outra. O digest confere o que veio, e o que não bate é recusado |
 | **Um módulo do [`ladder.toml`](../.plan/ladder.toml) construído antes de uma dependência terminar fica `started`, e a linha dele nomeia a ORD que o construiu** | o `ladder.js --check` recusa `done` sobre uma dependência que não está `done`, e a M06 segue `started`: o `check:rust` não roda `fmt` nem `clippy`. Mudar o portão ou as dependências da auditoria é do Regente |
