@@ -58,7 +58,7 @@ SWITCH = BASE
 GO = BASE
 
 # ====================================================================
-# 2. HIEROGLYPH PRIMITIVES — atoms that stand on their own (38)
+# 2. HIEROGLYPH PRIMITIVES — atoms that stand on their own (37)
 # ====================================================================
 
 ERROR = BASE
@@ -66,7 +66,6 @@ MAND = BASE
 OPT = BASE
 ALW = BASE
 NEV = BASE
-PT = BASE
 VAR = BASE
 PARAM = BASE
 PH = BASE
@@ -102,12 +101,13 @@ FIN = BASE
 
 # ====================================================================
 # 3. ENGINE AND MODES — not instruction vocabulary, but they appear in
-#    formulas (IF, SKL, NONE) and must resolve in the dag. (11)
+#    formulas (IF, SKL, NONE) and must resolve in the dag. (12)
 # ====================================================================
 
 IF = BASE
 SECTION = BASE
 BLOCK = BASE
+PT = BASE
 SKL = BASE
 NONE = BASE
 TOBLOCK = BASE

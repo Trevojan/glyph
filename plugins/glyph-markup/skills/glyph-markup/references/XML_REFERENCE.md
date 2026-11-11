@@ -83,7 +83,7 @@ Session shortcuts are the exception — they serialise as the shortcut itself
 |---|---|---|---|
 | `once` | `<block>` | — | the segment wrapper; always `"true"` |
 | `continues` | `<block>` | `[=` | segment continues the previous one |
-| `name` | `<block>` `<section>` | `[block'name'` | the name: the first literal, when it carries no slot, no reference and some text; otherwise it stays `<user-input>` |
+| `name` | `<block>` `<section>` `<part>` | `[block'name'` / `[part'name'` | the name: the first literal, when it carries no slot, no reference and some text; otherwise it stays `<user-input>` |
 | `name` | `<template>` `<logic>` | `[--name` / `[logic'name']` … `[/logic]` | the template's name; the logic fence's, its first literal |
 | `define` | `<template>` | `[--name=` | declares rather than invokes |
 | `expanded` | `<template>` | — | the body was written out, from the store or from a definition in the source |
@@ -101,17 +101,18 @@ Session shortcuts are the exception — they serialise as the shortcut itself
 | `imperative` | any primitive | a primitive that received a bracketed command | it stands alone by the legend, and here it is commanding an operand |
 | `ref` | `<user-input>` | a literal whose text is a bound name | the binding it refers to, resolved across the whole package |
 | `role` | `<user-input>` | position | `result` when the literal follows a bracketed nest; absent means operand |
-| `n` | `<part>` | `[pt'1.1'` | the part's number: the operand literal, when it carries no slot, no reference and some text; otherwise it stays `<user-input>` |
-| `cond` | `<if>` | `[if'x'` | the condition, under the same rule |
+| `cond` | `<if>` | `[if'x'` | the condition: the operand literal, when it carries no slot, no reference and some text; otherwise it stays `<user-input>` |
 | `means` `made-of` | any element | — | only under `toXML(src,{describe:true})` |
 
-An attribute carries no instruction content but three operands the Regent
-named: the number of a `<part>` (`n`) and the condition of an `<if>` (`cond`) on
-2026-09-27, and the name of a `<block>` or a `<section>` (`name`) on 2026-10-26.
-All other content goes in element text or in children, and `fromXML()` reads
-`n`, `cond` and `name` back as the literal they were. Which command takes which
-attribute is `OPERAND_ATTR` in `vocabulary.js`; a name exists on those two, on
-the `[logic]` fence and on a template, and on no other element. A `name` that
+An attribute carries no instruction content but the operands the Regent
+named: the condition of an `<if>` (`cond`) on 2026-09-27, the name of a
+`<block>` or a `<section>` (`name`) on 2026-10-26, and the name of a `<part>`
+(`name`) on 2026-11-11. All other content goes in element text or in children,
+and `fromXML()` reads `cond` and `name` back as the literal they were. Which
+command takes which attribute is `OPERAND_ATTR` in `vocabulary.js`; a name
+exists on those three, on the `[logic]` fence and on a template, and on no
+other element. The `n` a `<part>` carried from 2026-09-27 to 2026-11-11 comes
+back as a literal, after the name (`FORMER_OPERAND_ATTR`). A `name` that
 an older or a hand-written document puts on any other element comes back as an
 operand literal.
 
@@ -242,16 +243,17 @@ definition of the same name is refused with `TemplateDefinedTwice`, and the
 first holds. A definition declares: a result its body names is named where a
 call expands it.
 
-`<needs>` is written in four shapes and only the first is source:
+`<needs>` is written in five shapes and only the first is source:
 
 | Shape | From | Read back as |
 |---|---|---|
 | `<needs slot="alpha">` | a real `[ph-name` hole | `[ph-name` |
 | `<needs>` (no slot) | `FRAMES` — the command wants an operand; or the deep-inference alarm — a composite of depth 5 or more with no operand, where no frame or slot asks, asks for *the subject* (`DeepInference`) | nothing; regenerated |
+| `<needs>the block it slices</needs>` | a `[part` that no `[block` holds: it emits as written, and the parse asks `PartOutsideBlock` | nothing; regenerated |
 | `<needs slot="2">` (number) | `SLOTS` — an ordered position is empty | nothing; regenerated |
 | `<needs var="name">` | a `[logic]` name used and never defined, or a `[ref'name']` no command binds — beside the literal, which stays; the parse asks `UndefinedVariable` or `UnboundReference` | nothing; regenerated |
 
-The last three are the engine asking a question, not the human answering one.
+The last four are the engine asking a question, not the human answering one.
 Writing them back would turn a prompt into an answer, so `fromXML()` drops them
 and lets the next pass ask again.
 

@@ -214,13 +214,13 @@ bracketed ones.
 
 ---
 
-## 3c. Two operands as attributes — `<part n>` and `<if cond>`
+## 3c. Two operands as attributes — `<part name>` and `<if cond>`
 
 > **Added 2026-10-25**, by the Regent's answer of 2026-09-27 to the two
 > proposals the draft of 1.4.4 got right and left for a decision.
 
-`[pt'1.1'` emits `<part n="1.1">` and `[if'x'` emits `<if cond="x">`: the
-number of a part and the condition of an if are what the element *is about*, so
+`[part'core'` emits `<part name="core">` and `[if'x'` emits `<if cond="x">`: the
+name of a part and the condition of an if are what the element *is about*, so
 they travel on it instead of arriving as a `<user-input>` a reader has to know
 to look at first. The operand is the literal a binding takes — the first that
 is neither raw nor a result — and it moves only when it carries nothing else:

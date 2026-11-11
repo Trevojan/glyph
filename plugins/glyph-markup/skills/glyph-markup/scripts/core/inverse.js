@@ -15,7 +15,7 @@
  */
 
 import { esc } from "./util.js";
-import { SESSION, GLOSS_REVERSE, EMO_REVERSE, FORMER_ELEMENT, OPERAND_ATTR, knownWord } from "./vocabulary.js";
+import { SESSION, GLOSS_REVERSE, EMO_REVERSE, FORMER_ELEMENT, OPERAND_ATTR, FORMER_OPERAND_ATTR, knownWord } from "./vocabulary.js";
 import { VERSION } from "./version.js";
 
 /* ======================================================
@@ -352,14 +352,17 @@ export function fromXmlNode(el, diag) {
   var lead = el.attrs.join === "item" ? "," : "";
   if (name === "ph") return lead + fromXmlPlaceholder(el, diag);
   var head = lead + "[" + name;
-  /* the number of a part, the condition of an if and the name of a block or
-     a section come back as the literal they were; a `name` on any other
-     element, which an older document or a hand carries, is an operand
-     literal all the same, written where the name stood */
+  /* the condition of an if and the name of a block, a section or a part come
+     back as the literal they were; a `name` on any other element, which an
+     older document or a hand carries, is an operand literal all the same,
+     written where the name stood, and so is the `n` an older <part> carries
+     (FORMER_OPERAND_ATTR), written after the name */
   var canon = name.toUpperCase();
   var oa = Object.prototype.hasOwnProperty.call(OPERAND_ATTR, canon) ? OPERAND_ATTR[canon] : null;
+  var was = Object.prototype.hasOwnProperty.call(FORMER_OPERAND_ATTR, canon) ? FORMER_OPERAND_ATTR[canon] : null;
   if (oa !== "name" && el.attrs.name) head += asLiteral(el.attrs.name);
   if (oa && el.attrs[oa] != null) head += asLiteral(el.attrs[oa]);
+  if (was && el.attrs[was] != null) head += asLiteral(el.attrs[was]);
   /* a literal ends at its quote, so a link written after it is the link it is */
   return lead + notSwitch(head.slice(lead.length) + xmlKids(el, diag) + "]");
 }

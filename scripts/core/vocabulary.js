@@ -49,7 +49,7 @@ export var CATS = [
   ]},
   { id:"enquadre", label:"Enquadre", note:"situar a coisa no mundo", items:[
     ["CTX","contexto"],["REF","referência"],["SEEAL","veja também"],["CORE","fundamento, ponto de partida"],
-    ["DRVF","derivar de"],["EX","exemplo"],["FOREX","por exemplo"],["NT","nota"],["PT","parte n"]
+    ["DRVF","derivar de"],["EX","exemplo"],["FOREX","por exemplo"],["NT","nota"]
   ]},
   /* Operating ON the context, not merely sitting in it. Splitting this from
      "enquadre" is what separates declaring a scope from reading, writing and
@@ -86,7 +86,7 @@ export var CATS = [
   ]},
   { id:"frame", label:"Frame", note:"peças de estrutura e template", items:[
     ["TPL","template"],["PH","casa a preencher"],["VAR","variável"],["PARAM","parâmetro"],
-    ["DEF","define"],["SECTION","seção"],["BLOCK","bloco"],["LOGIC","bloco de conta"],["SKL","skill"]
+    ["DEF","define"],["SECTION","seção"],["BLOCK","bloco"],["PT","parte"],["LOGIC","bloco de conta"],["SKL","skill"]
   ]},
   { id:"marca", label:"Marca", note:"aviso e memória", items:[
     ["WARN","aviso"],["RMBR","lembre"],["FRGT","esqueça"],["LRN","aprender"],
@@ -102,7 +102,7 @@ export var INSTR = {
   VAR:"Variable", PARAM:"Parameter", FMT:"Format", TPL:"Template", SUM:"Summary",
   CLAR:"Clarification", CONF:"Confirmation", RESTR:"Restriction", ONLYIF:"Only If",
   UNLS:"Unless", INSTOF:"Instead Of", FOREX:"For Example", SEEAL:"See Also", DONT:"Do Not",
-  PT:"Part", RSN:"Reason", TGT:"Target", QST:"Question", TRYFR:"Try For Result", PROB:"Problem",
+  RSN:"Reason", TGT:"Target", QST:"Question", TRYFR:"Try For Result", PROB:"Problem",
   SKEP:"Sceptic", IMAG:"Imagine", RMBR:"Remember", FRGT:"Forget",
   ITR:"Iterate", CMP:"Compare", CTRD:"Contradict", SIMP:"Simplify", ELAB:"Elaborate",
   HYP:"Hypothesis", EVAL:"Evaluate", BRST:"Brainstorm", RTNL:"Rationale", ALT:"Alternative",
@@ -148,7 +148,7 @@ export var ALIAS_OF = {};
 Object.keys(ALIAS).forEach(function (a) { (ALIAS_OF[ALIAS[a]] = ALIAS_OF[ALIAS[a]] || []).push(a); });
 
 export var STRUCT = {
-  SECTION:"Section", BLOCK:"Block", IF:"If", UNLS:"Unless", SKL:"Skill",
+  SECTION:"Section", BLOCK:"Block", PT:"Part", IF:"If", UNLS:"Unless", SKL:"Skill",
   DEF:"Define", PH:"Placeholder", TPL:"Template", LOGIC:"Logic"
 };
 /* META and STRUCT are PARSING buckets, not the species taxonomy of
@@ -247,7 +247,7 @@ export var FRAMES = {
   NT:["the observation"], WARN:["the risk"], LIM:["the limit"],
   EVAL:["what to evaluate"], CNCL:["about what"], ITR:["what to iterate"],
   GEN:["what to generalise"], SPEC:["what to specify"], INSTOF:["what takes its place"],
-  SECTION:["the section name"], BLOCK:["the block name"],
+  SECTION:["the section name"], BLOCK:["the block name"], PT:["the part name"],
   /* Only operators belong here. WHR, HGH, LOW, BOLD and LIGHT are primitives
      in the glossary ("stand alone"), so they require no operand and never
      produce <needs>. */
@@ -259,7 +259,7 @@ export var FRAMES = {
 
 
 /* structural commands whose first child must be a literal (the name) */
-export var NAMED_STRUCT = { SECTION:1, BLOCK:1 };
+export var NAMED_STRUCT = { SECTION:1, BLOCK:1, PT:1 };
 
 /* Mandatory ordered slots — SIGNATURES.md §3 (prefix comparison) and the
    arity-2 signatures. FRAMES only models the first slot; here each missing
@@ -361,11 +361,20 @@ Object.keys(FORMER_ELEMENT).forEach(function (old) {
 });
 
 /* OPERAND_ATTR — the commands whose operand travels as an attribute of the
-   element instead of a <user-input>: the number of a part and the condition
-   of an if (decided 2026-09-27), and the name of a section and of a block,
-   their first literal (decided 2026-10-26). No other command carries a name. */
+   element instead of a <user-input>: the condition of an if (decided
+   2026-09-27), and the name of a section, of a block and of a part, their
+   first literal (decided 2026-10-26, and 2026-11-11 for the part). No other
+   command carries a name. */
 export var OPERAND_ATTR = {
-  PT:"n", IF:"cond", SECTION:"name", BLOCK:"name"
+  IF:"cond", SECTION:"name", BLOCK:"name", PT:"name"
+};
+
+/* FORMER_OPERAND_ATTR — an operand attribute a command carried and carries no
+   more: the `n` of a part, signed on 2026-09-27 and retired on 2026-11-11,
+   when the first literal of a part became its name. fromXML reads it back as
+   the literal it was, so a document written before keeps what it carried. */
+export var FORMER_OPERAND_ATTR = {
+  PT:"n"
 };
 
 /* the element a retired spelling names now, or null */
