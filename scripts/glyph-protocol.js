@@ -59,9 +59,9 @@ import G from "./glyph-parser.js";
 const require = createRequire(import.meta.url);
 
 export const STORES = {
-  templates: require("../.guidelines/templates.json").templates,
-  rules: require("../.guidelines/rules.json"),
-  expansions: require("../.guidelines/expansions.json")
+  templates: require("../.guidelines/.sources/templates.json").templates,
+  rules: require("../.guidelines/.sources/rules.json"),
+  expansions: require("../.guidelines/.sources/expansions.json")
 };
 
 export const CALLS = ["tables", "tokenize", "classify", "suggest", "elName", "parseLogic", "expandExpr", "freeVars",

@@ -55,9 +55,9 @@ Editou um arquivo de `.guidelines/`, o `README.md` ou este? Rode
 todos eles, e o `check` recusa o que mudou sem ele. Uma fatia se lê com
 `npm run vpath -- resolve 'arquivo#seletor' --text`, ou pelo `NodeID` do nó.
 
-Editou `.guidelines/rules.json`, `templates.json`, `expansions.txt` ou
+Editou `.guidelines/.sources/rules.json`, `templates.json`, `expansions.txt` ou
 `GLOSSARY.md`? Rode `node scripts/build-templates.js` antes de verificar: essas
-são as fontes, e `scripts/glyph-data.js` e `.guidelines/expansions.json` são as
+são as fontes, e `scripts/glyph-data.js` e `.guidelines/.sources/expansions.json` são as
 cópias que o motor carrega.
 
 ## Duas restrições que pegam todo agente novo

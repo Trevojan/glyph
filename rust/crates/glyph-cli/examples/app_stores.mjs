@@ -39,8 +39,8 @@ const SAVED = [["mine", "[nt'of the page'][tgt[ph-thing'which thing']]"], ["germ
 const CALLS = ["[--mine]", "[--mine`the parser`]", "[--germinate'a']", "[--mine][--germinate][crit'x']", "[nt'no template']"]
   .map((src, i) => ({ id: "saved-" + (i + 1), src }));
 const sources = declared.concat(CALLS);
-const REPO = { templates: require("../../../../.guidelines/templates.json").templates,
-               rules: require("../../../../.guidelines/rules.json"), expansions: require("../../../../.guidelines/expansions.json") };
+const REPO = { templates: require("../../../../.guidelines/.sources/templates.json").templates,
+               rules: require("../../../../.guidelines/.sources/rules.json"), expansions: require("../../../../.guidelines/.sources/expansions.json") };
 
 const lineOf = (stream, pattern) => new Promise(ok => readline.createInterface({ input: stream })
   .on("line", l => { const m = l.match(pattern); if (m) ok(m); }));
@@ -165,7 +165,7 @@ const home = path.join(dir, "home"), stores = path.join(home, "Roaming", "Glyph"
 fs.mkdirSync(stores, { recursive: true });
 const MACHINE = { machine: { gloss: "of this machine", body: "[nt'of the machine']" } };
 fs.writeFileSync(path.join(stores, "templates.json"), JSON.stringify({ templates: MACHINE }));
-for (const f of ["rules.json", "expansions.json"]) fs.copyFileSync(path.join(ROOT, ".guidelines", f), path.join(stores, f));
+for (const f of ["rules.json", "expansions.json"]) fs.copyFileSync(path.join(ROOT, ".guidelines", ".sources", f), path.join(stores, f));
 const app = spawn(GLYPH, ["--serve", "--port", "0", "--no-open"], { stdio: ["ignore", "pipe", "inherit"],
   env: { ...process.env, APPDATA: path.join(home, "Roaming"), LOCALAPPDATA: path.join(home, "Local") } });
 const appOrigin = "http://127.0.0.1:" + (await lineOf(app.stdout, /127\.0\.0\.1:(\d+)\//))[1];

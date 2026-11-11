@@ -26,8 +26,8 @@ if (!process.env.CHROME) { console.error("CHROME names no browser"); process.exi
 const sources = fs.readdirSync(ORACLE).filter(f => f.endsWith(".json")).sort()
   .map(f => JSON.parse(fs.readFileSync(path.join(ORACLE, f), "utf8"))).map(c => ({ id: c.id, src: c.src }))
   .filter(c => !process.env.ONLY || new RegExp(process.env.ONLY).test(c.id));
-const REPO = { templates: require("../../../../.guidelines/templates.json").templates,
-               rules: require("../../../../.guidelines/rules.json"), expansions: require("../../../../.guidelines/expansions.json") };
+const REPO = { templates: require("../../../../.guidelines/.sources/templates.json").templates,
+               rules: require("../../../../.guidelines/.sources/rules.json"), expansions: require("../../../../.guidelines/.sources/expansions.json") };
 
 const server = spawn(process.execPath, [path.join(ROOT, "scripts/serve-dev.js"), "0", "--no-open", "--engine", "rust"],
                      { stdio: ["ignore", "pipe", "inherit"] });

@@ -22,9 +22,9 @@ const ORACLE = path.join(ROOT, "rust/target/oracle");
 const BIN = path.join(ROOT, "rust/target/release/examples");
 const ROUNDS = Number(process.argv[2]) || 5;
 const CALLS = ["toXML", "toAST", "toHGML"];
-const OPTS = { templates: require("../../../../.guidelines/templates.json").templates,
-               rules: require("../../../../.guidelines/rules.json"),
-               expansions: require("../../../../.guidelines/expansions.json") };
+const OPTS = { templates: require("../../../../.guidelines/.sources/templates.json").templates,
+               rules: require("../../../../.guidelines/.sources/rules.json"),
+               expansions: require("../../../../.guidelines/.sources/expansions.json") };
 
 const need = (p, cmd) => {
   if (fs.existsSync(p)) return;

@@ -102,7 +102,7 @@ fn the_engine_answers_with_the_stores_of_the_machine() {
     let home = scratch("stores-same");
     let stores = home.join("Roaming").join("Glyph").join("stores");
     std::fs::create_dir_all(&stores).unwrap();
-    let repo = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../.guidelines");
+    let repo = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../.guidelines/.sources");
     for f in ["templates.json", "rules.json", "expansions.json"] {
         std::fs::copy(repo.join(f), stores.join(f)).unwrap();
     }
@@ -289,7 +289,7 @@ fn the_binary_installs_itself_and_takes_itself_back() {
     assert!(std::fs::read(local.join("glyph.exe")).unwrap() == windowed, "the installed copy is the binary, marked as a Windows program");
     assert!(local.join("glyph.ico").is_file() && lnk.is_file(), "the icon and the shortcut");
     let seeded = std::fs::read_to_string(stores.join("templates.json")).unwrap();
-    let repo = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../.guidelines/templates.json");
+    let repo = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../.guidelines/.sources/templates.json");
     assert_eq!(seeded, std::fs::read_to_string(repo).unwrap(), "seeded with the basic templates");
 
     /* what the user keeps is never overwritten */
