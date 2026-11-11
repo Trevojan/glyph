@@ -1,6 +1,6 @@
 # Intake — the restructure, mapped
 
-> **Nothing moved.** The mapping half of the parked
+> The mapping half of the parked
 > [`ORD-0011`](parked/restructure-glyph-repo/ORD-0011.pgml), `restructure-glyph-repo`:
 > its `[find]` and `[nt]`, reopened when EMS-001 closed, as the Regent decided on
 > 2026-10-15 (*"B now, C when EMS-001 closes"*, [`.decisions/`](../.decisions/README.md)).
@@ -8,7 +8,7 @@
 > Regent's machine, by its folder and file names only. The Regent answered the
 > collisions of §4 on 2026-11-11 and ratified the emit of the Order that moves,
 > [`EMS-002/ORD-0034`](EMS-002/README.md), the same day; §5 is the map it opens with,
-> measured at `3d0ee4d`, and §6 what the map leaves to the Regent before a file moves.
+> measured at `3d0ee4d`, and §6 what the map left to the Regent, with his answers.
 
 ## 1. The premise, measured
 
@@ -208,6 +208,8 @@ path group A or B moves, and an act is never rewritten.
 - b. `glyph-vpath` records each old path as an alias of the new one, so an old
   pointer still resolves by `npm run vpath -- resolve`, and the acts stay as emitted
 
-The session recommends **M1 a, M2 a, M3 a, M4 a and M5 b**: the renames of M1 to M3
-buy no reader anything the measurements show, R6 c already decided M4, and the index
-holds one alias today, so M5 b is a mechanism the repository has.
+The Regent answered four on 2026-11-11 ([`.decisions/`](../.decisions/README.md)):
+**M1 a, M2 a, M4 a, M5 b**, each as the session recommended. M3 was not put to him,
+so the entry stays `.shortcuts/README.md` and no file of it moves in this Order.
+The Order moves groups A, B and C of §5.1, and the path index carries each old
+path as an alias.
