@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "part": "plan",
+  "topics": [
+    {
+      "id": "ladder",
+      "check": "command",
+      "args": {
+        "run": [
+          "node",
+          "scripts/ladder.js",
+          "--check"
+        ],
+        "exit": 0
+      },
+      "why": "no module done over a dependency that is not",
+      "ratified": "2026-11-11"
+    }
+  ]
+}
