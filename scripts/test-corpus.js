@@ -444,7 +444,59 @@ const ORACLE_COVERAGE = [
   /* the inclusion of 2026-10-25, on fills and source definitions: a fill no
      hole names, and a template defined twice in one package */
   { id:"OC-14", src:"[--reinforce'a''b'[ph-zzz'v']]", code:"TemplateUnknownParam" },
-  { id:"OC-15", src:"[--t=[ctx'x']][--t=[ctx'y']][--t]", code:"TemplateDefinedTwice" }
+  { id:"OC-15", src:"[--t=[ctx'x']][--t=[ctx'y']][--t]", code:"TemplateDefinedTwice" },
+  /* the part, restored (2026-11-11, EMS-002 ORD-0033): one that no block holds */
+  { id:"OC-16", src:"[part'dish-cutlery']", code:"PartOutsideBlock" }
+];
+
+/* ------------------------------------------------------------------ *
+ * PA — the part, restored (EMS-002 ORD-0033)
+ *
+ * The Regent's design of 2026-10-15 (INTAKE-EFFECTS.md §8.2) as he answered
+ * INTAKE-PART.md §4 on 2026-11-11: `[part]` is PT, the struct that slices a
+ * block as a block slices a section (P1 a); its first literal is its name,
+ * `name` and `binds` (P2 a); each further literal is one level of its label
+ * (P3 b); a part no block holds emits as written and asks which block it
+ * slices (P4 a); and the label travels as written (P5 a). The example of the
+ * design reads as sibling blocks. Each case was seen failing on 1008c2a
+ * before it counted, and both ways back must give the same document again.
+ *
+ * Declared in the snapshot by OC-16 alone; the Rust is held by the parse
+ * probes, which take every source below.
+ * ------------------------------------------------------------------ */
+const PART = [
+  { id:"PA-01", name:"the example of the design reads as sibling blocks, each part named inside its block",
+    src:"[section'dish'\n[block'ingredients'\n[nt'salt'][nt'butter']\n[part'sa or bu'[ask'needs salt or butter?'\n]]]\n" +
+        "[block'prepare'\n[nt'boil'][nt'oven']\n[part'bo or ov'[ask'send to boil or to oven?']\n]]];\n" +
+        "r-[nt'recipe: \"le Fishe au Chocolat\". sa or bu, bo or ov'];",
+    clean:true, segments:2,
+    xml:[/<block name="ingredients" binds="ingredients">[\s\S]*?<part name="sa or bu">\n\s*<ask>[\s\S]*?<\/block>\n\s*<block name="prepare" binds="prepare">/,
+         /<part name="bo or ov">\n\s*<ask>/],
+    xmlAbsent:[' n="', "imperative", "the block it slices"] },
+  { id:"PA-02", name:"the first literal is the name, it binds, and a reference resolves to the part",
+    src:"[block'dish'[part'core'[ask'x']]][ref'core']", clean:true,
+    xml:['<part name="core" binds="core">', '<user-input ref="core">core</user-input>'], xmlAbsent:[' n="', "<needs"] },
+  { id:"PA-03", name:"one literal per level: the first names the part, and each of the others is one level",
+    src:"[block'b'[part'h0','h1','h2']]", codeAbsent:"PartOutsideBlock",
+    xml:[/<part name="h0">\n\s*<user-input>h1<\/user-input>\n\s*<user-input>h2<\/user-input>\n\s*<\/part>/] },
+  { id:"PA-04", name:"a comma inside a literal is the text of that one level",
+    src:"[block'b'[part'h0','h1,h2']]",
+    xml:[/<part name="h0">\n\s*<user-input>h1,h2<\/user-input>\n\s*<\/part>/] },
+  { id:"PA-05", name:"a part no block holds emits as written and asks which block it slices",
+    src:"[section'dish'[part'dish-cutlery']]", code:"PartOutsideBlock",
+    xml:[/<part name="dish-cutlery">\n\s*<needs>the block it slices<\/needs>\n\s*<\/part>/] },
+  { id:"PA-06", name:"the label travels as written, and nothing resolves it",
+    src:"[block'b'[part'house-kitchen-pantry-item-salt']]", codeAbsent:"PartOutsideBlock",
+    xml:['<part name="house-kitchen-pantry-item-salt"/>'], xmlAbsent:["ref="] },
+  { id:"PA-07", name:"a part with no name is broken structure",
+    src:"[block'b'[part[ask'x']]]", code:"MissingStructName", noFix:false, requireFix:true, xmlAbsent:[" name=\"\""] },
+  { id:"PA-08", name:"the body of a definition asks nothing, and a call inside a block neither",
+    src:"[--t=[part'q'[ask'x']]][block'k'[--t]]", codeAbsent:"PartOutsideBlock", xmlAbsent:["the block it slices"] },
+  { id:"PA-09", name:"a call no block holds asks, where the body occurs",
+    src:"[--t=[part'q'[ask'x']]][--t]", code:"PartOutsideBlock",
+    xml:[/<template name="t" expanded="true">\n\s*<part name="q" binds="q">\n\s*<needs>the block it slices<\/needs>/] },
+  { id:"PA-10", name:"a part written as a chain link holds no operand, and is not asked for a block",
+    src:"[nt-part'x']", codeAbsent:"PartOutsideBlock", noFix:false, xmlAbsent:["the block it slices"] }
 ];
 
 /* ------------------------------------------------------------------ *
@@ -710,6 +762,33 @@ function runPlaceholder() {
   return n + (trips === PLACEHOLDER.length ? 1 : 0);
 }
 const rPH = runPlaceholder();
+
+/* The part bucket: the vocabulary first, then each case's document, then both
+   ways back. */
+function runPart() {
+  const n = runGroup("Part — the slice of a block, restored", PART, { noFix:true });
+  const pt = G.classify("pt"), part = G.classify("part");
+  const tierWhy = pt.tier !== "struct" || pt.canonical !== "PT" ? "[pt is " + pt.tier + " " + pt.canonical
+    : part.tier !== "struct" || part.canonical !== "PT" ? "[part is " + part.tier + " " + part.canonical
+    : G.INSTR.PT ? "PT is still an instruction"
+    : !G.NAMED_STRUCT.PT || !G.FRAMES.PT ? "PT asks for no name"
+    : G.elName("PT", pt.tier, pt.gloss) !== "part" ? "the element is " + G.elName("PT", pt.tier, pt.gloss) : null;
+  console.log("  " + (tierWhy ? "\u2717" : "\u2713") + " PA-tier: PT is the struct beside BLOCK and SECTION, [part and [pt read as it, and the element is <part>");
+  if (tierWhy) { console.log("      " + tierWhy); failures.push("PA-tier"); }
+  let trips = 0;
+  PART.forEach(tc => {
+    const o = tc.opts || {};
+    const xml = G.toXML(tc.src, o);
+    const viaXml = G.toXML(G.fromXML(xml, o).src, o), viaAst = G.toXML(G.fromAST(G.toAST(tc.src, o), o).src, o);
+    if (viaXml === xml && viaAst === xml) { trips++; return; }
+    console.log("  \u2717 " + tc.id + ".trip: " + (viaXml !== xml ? "fromXML" : "fromAST") + " gives another document");
+    failures.push(tc.id + ".trip");
+  });
+  console.log("  " + (trips === PART.length ? "\u2713" : "\u2717") + " PA-trip: " + trips + "/" + PART.length +
+              " come back as the same document by both ways");
+  return n + (tierWhy ? 0 : 1) + (trips === PART.length ? 1 : 0);
+}
+const rPA = runPart();
 
 /* ------------------------------------------------------------------ *
  * X — composition table (v1.1.0.0)
@@ -2537,7 +2616,8 @@ function runSnapshotChecks() {
       parseRuns.push(run);
     };
     CORPUS.forEach(c => { if (c && c.id && typeof c.src === "string") runParse(c.id, c.src, caseOpts(c)); });
-    PARSE_PROBES.forEach((src, k) => runParse("probe-" + (k + 1), src, SNAP_OPTS));
+    /* the part bucket's sources travel with the probes (EMS-002 ORD-0033) */
+    PARSE_PROBES.concat(PART.map(c => c.src)).forEach((src, k) => runParse("probe-" + (k + 1), src, SNAP_OPTS));
     NO_SESSION.forEach((src, k) => runParse("nosession-" + (k + 1), src, { ...SNAP_OPTS, session: false }));
     NO_VALENCY.forEach((src, k) => runParse("novalency-" + (k + 1), src, { ...SNAP_OPTS, valency: false }));
     /* the template probes parsed whole: the expander handed the real parse,
@@ -3065,11 +3145,12 @@ function runLiteralRoleChecks() {
      lit && lit.role === "result" ? null
        : "the envelope literal carries role=" + JSON.stringify(lit && lit.role));
 
-  /* the operand of a PT and of an IF travels as an attribute (decided
-     2026-09-27), and only when it carries nothing else */
-  const part = G.toXML("[pt'1.1']", opts), cond = G.toXML("[if'a > b'[ctx'x']]", opts);
-  ok("RO-06", "the number of a part is n, the condition of an if is cond, and neither repeats as a child",
-     !/<part n="1\.1"\/>/.test(part) ? "the part: " + JSON.stringify(part)
+  /* the operand of an IF travels as an attribute (decided 2026-09-27), and
+     the first literal of a PT is its name (decided 2026-11-11, which retires
+     the `n` of 2026-09-27), each only when it carries nothing else */
+  const part = G.toXML("[block'b'[pt'1.1']]", opts), cond = G.toXML("[if'a > b'[ctx'x']]", opts);
+  ok("RO-06", "the name of a part is name, the condition of an if is cond, and neither repeats as a child",
+     !/<part name="1\.1"\/>/.test(part) ? "the part: " + JSON.stringify(part)
        : !/<if cond="a &gt; b">/.test(cond) || /<user-input>a &gt; b<\/user-input>/.test(cond) ? "the if: " + JSON.stringify(cond)
        : null);
 
@@ -3081,7 +3162,7 @@ function runLiteralRoleChecks() {
      !G.parse("[if'x']", opts).gaps.some(g => g.code === "UnfilledSlot") ? null : "[if'x'] asked for the condition");
 
   const back = ["[pt'1.1']", "[if'a > b'[ctx'x']]"].map(s => [s, G.fromXML(G.toXML(s, opts), opts).src]).filter(([s, b]) => b !== s);
-  ok("RO-09", "fromXML reads n and cond back as the literal",
+  ok("RO-09", "fromXML reads name and cond back as the literal",
      back.length ? back.map(([s, b]) => s + " came back as " + b).join("; ") : null);
 
   return D.length;
@@ -3710,19 +3791,21 @@ function runColonChecks() {
        : askedOrder.length ? "AmbiguousSlotOrder: " + askedOrder.join(", ")
        : named.length ? "Command.name escrito: " + named.join(", ") : null);
 
-  /* o name e o primeiro literal do block e da section, e so deles */
+  /* o name e o primeiro literal do block, da section e da part, e so deles */
   const blk = X("[block'review'[ctx'x']][ref'review']");
   const sec = X("[section'intro'[ctx'x']]");
-  const others = ["[ctx'review'[ctx'x']]", "[crit'review']", "[pt'1.1'[ctx'x']]", "[if'ready'[ctx'x']]", "[tpl'x']",
+  const prt = X("[block'b'[pt'1.1'[ctx'x']]]");
+  const others = ["[ctx'review'[ctx'x']]", "[crit'review']", "[if'ready'[ctx'x']]", "[tpl'x']",
                   "[sum'review'[ctx'x']][block'review']", "[block'']", "[block[ctx'x']'late']"]
     .map(X).join("\n");
-  const nameOn = [...new Set((blk + sec + others).match(/<[a-z-]+ [^>]*\bname="/g) || [])].map(t => t.slice(1, t.indexOf(" ")));
-  ok("CO-05", "o name sai do primeiro literal do block e da section, e de nenhum outro elemento",
+  const nameOn = [...new Set((blk + sec + prt + others).match(/<[a-z-]+ [^>]*\bname="/g) || [])].map(t => t.slice(1, t.indexOf(" ")));
+  ok("CO-05", "o name sai do primeiro literal do block, da section e da part, e de nenhum outro elemento",
      !/<block name="review" binds="review">\n\s*<context>/.test(blk) ? "block: " + JSON.stringify(blk)
        : !/<user-input ref="review">review<\/user-input>/.test(blk) || codes("[block'review'[ctx'x']][ref'review']").includes("UnboundReference")
          ? "a referencia ao block nao resolve"
        : !/<section name="intro" binds="intro">\n\s*<context>/.test(sec) ? "section: " + JSON.stringify(sec)
-       : nameOn.some(t => t !== "block" && t !== "section") ? "name em " + nameOn.join(", ")
+       : !/<part name="1\.1">\n\s*<context>/.test(prt) ? "part: " + JSON.stringify(prt)
+       : nameOn.some(t => t !== "block" && t !== "section" && t !== "part") ? "name em " + nameOn.join(", ")
        : !/<block>\n\s*<user-input ref="review">review<\/user-input>/.test(X("[sum'review'[ctx'x']][block'review']"))
          ? "um literal que e referencia virou name"
        : !/<block>\n\s*<user-input><\/user-input>/.test(X("[block'']")) ? "um literal vazio virou name" : null);
@@ -3749,7 +3832,7 @@ function runColonChecks() {
   const PKG = b => '<glyph-package engine="' + G.VERSION + '">\n  <schema/>\n  <block once="true">\n' + b + '\n  </block>\n</glyph-package>';
   const legacy = [[PKG('<context name="a, b"/>'), "[ctx'a, b']"], [PKG('<block name="review"><context/></block>'), "[block'review'[ctx]]"],
                   [PKG('<logic name="q"><rule kind="let"><source>a = 1</source></rule></logic>'), "[logic'q']\na = 1\n[/logic]"],
-                  [PKG('<part name="intro" n="1.1"/>'), "[pt'intro''1.1']"], [PKG('<template><user-input>x</user-input></template>'), "[tpl'x']"]]
+                  [PKG('<part name="intro" n="1.1"/>'), "[pt'intro''1.1']"], [PKG('<part n="1.1"/>'), "[pt'1.1']"], [PKG('<template><user-input>x</user-input></template>'), "[tpl'x']"]]
     .filter(([x, want]) => G.fromXML(x, opts).src !== want);
   const env = { type: "GlyphAST", schema: 2, projection: "full", segments: [{ body: [
     { type: "Command", raw: "ctx", canonical: "CTX", name: "a, b", body: [] },
@@ -4298,6 +4381,7 @@ console.log(" Rules        " + rC + "/" + RULE_CASES.length);
 console.log(" Constraints  " + rK + "/" + CONSTRAINTS.length);
 console.log(" Guard        " + rG + "/" + POSITIVE_WITH_RULES.length);
 console.log(" Placeholder  " + rPH + "/" + (PLACEHOLDER.length + 1));
+console.log(" Part         " + rPA + "/" + (PART.length + 2));
 console.log(" Composition  " + rX + "/17");
 console.log(" .hgml burn   " + rH + "/15");
 console.log(" fromXML      " + rF + "/26");

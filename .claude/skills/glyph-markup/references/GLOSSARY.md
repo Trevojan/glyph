@@ -206,7 +206,6 @@ Atoms that stand on their own, with no operand.
 `OPT` — Option. Optional element, may be omitted.
 `ALW` — Always. Permanent behaviour, no exceptions.
 `NEV` — Never. Permanence modifier applied to another rule (e.g. `NEV DONT X` = never do X).
-`PT` — Part, part of. Membership relation of an object within a context.
 `VAR` — Variable. Mutable element, ready to be defined or reused.
 `PARAM` — Parameter. Configurable input to a command.
 `PH` — Placeholder. A reserved position in an object, awaiting a value.
@@ -274,6 +273,7 @@ explains each.
 `IF` — If. Logical conditional; execution gate.
 `SECTION` — Named structural division grouping related commands.
 `BLOCK` — Atomic unit of execution; groups commands read as a single step.
+`PT` — Part. Named slice of a `BLOCK`, as a `BLOCK` is a slice of a `SECTION`: it handles one situation of the block down to the user's input, boolean by boolean or word by word, over the objects and values the block declares. Written `[part'name'`, one literal per level of its label, and the label points.
 `SKL` — Marks an installed skill, invocable inside the Glyph document.
 `NONE` — None. Absence of value; the empty return of engine operations.
 `TOBLOCK` — Converts a section or a loose set of commands into a `BLOCK`.
@@ -474,5 +474,6 @@ Portuguese interface, spelt en-EU (lock T13) — see
 | **mould** | the app's forms: phases Alvo · Partida · Percurso, slots `{id, tag, q}` (`scripts/glyph-moulds.js`) | a template | as **template** |
 | **sample** | a ready-made example source in the app (`SAMPLES`) | a preset — the word is retired; a conformance example | as **template** |
 | **snippet** | an editor completion of a whole shape | a template | as **template** |
-| **frame** | the vocabulary category of the structure and template pieces — `TPL`, `PH`, `VAR`, `PARAM`, `DEF`, `SECTION`, `BLOCK`, `LOGIC`, `SKL` — labelled *Frame* in both languages | a mould; a template | [`.decisions/`](.decisions/README.md), 2026-09-27 (O9) |
+| **frame** | the vocabulary category of the structure and template pieces — `TPL`, `PH`, `VAR`, `PARAM`, `DEF`, `SECTION`, `BLOCK`, `PT`, `LOGIC`, `SKL` — labelled *Frame* in both languages | a mould; a template | [`.decisions/`](.decisions/README.md), 2026-09-27 (O9) |
+| **part** | `PT`, written `[part'name'`: the `struct` that slices a block as a block slices a section, the Regent's design of 2026-10-15; its first literal is its name, and each further literal is one level of its label | the membership relation, the gloss `PT` carried while the design went unbuilt: release 3.4.7.05 read `[part` as that `PT`, the word stopped failing on 2026-09-05, and nothing refused or recorded the meaning the plans gave it ([`INTAKE-PART.md`](.orders/INTAKE-PART.md) §2) | [`.decisions/`](.decisions/README.md), 2026-11-11 (P1 to P5) |
 | **virtual path** | `[file][delimiter][selector]`, resolving to one exact slice with offsets, over a structural identity that survives a move | a text search | [`.plan`](.plan/README.md) §0 |

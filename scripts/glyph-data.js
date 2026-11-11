@@ -716,12 +716,6 @@
       "def": "Permanence modifier applied to another rule (e.g. NEV DONT X = never do X).",
       "element": "never"
     },
-    "PT": {
-      "species": "atom",
-      "depth": 0,
-      "def": "Membership relation of an object within a context.",
-      "element": "part"
-    },
     "VAR": {
       "species": "atom",
       "depth": 0,
@@ -931,6 +925,12 @@
       "depth": 0,
       "def": "Atomic unit of execution; groups commands read as a single step.",
       "element": "block"
+    },
+    "PT": {
+      "species": "atom",
+      "depth": 0,
+      "def": "Named slice of a BLOCK, as a BLOCK is a slice of a SECTION: it handles one situation of the block down to the user's input, boolean by boolean or word by word, over the objects and values the block declares. Written [part'name', one literal per level of its label, and the label points.",
+      "element": "part"
     },
     "SKL": {
       "species": "atom",

@@ -15,7 +15,7 @@
 import { xesc, pad, walk, valueChildren } from "./util.js";
 import { FRAMES, SLOTS, elName, GLOSS_REVERSE, OPERAND_ATTR } from "./vocabulary.js";
 import { speciesOf, depthOf, formulaOf, defOf, atomsOf, standsAlone } from "./stores.js";
-import { parse, collectBindings, bindingOf, unboundRefs, deepInference } from "./parser.js";
+import { parse, collectBindings, bindingOf, unboundRefs, deepInference, partOutsideBlock } from "./parser.js";
 import { VERSION } from "./version.js";
 
 /* ======================================================
@@ -181,10 +181,10 @@ export function collect(list, acc, bad) {
   });
 }
 
-/* The operand of a PT or an IF travels as an attribute: `[pt'1.1'` is
-   <part n="1.1"> and `[if'x'` is <if cond="x"> (decided 2026-09-27), and the
-   first literal of a BLOCK or a SECTION is its name, `[block'review'` is
-   <block name="review"> (decided 2026-10-26). The
+/* The operand of an IF travels as an attribute: `[if'x'` is <if cond="x">
+   (decided 2026-09-27), and the first literal of a BLOCK, a SECTION or a PT
+   is its name, `[block'review'` is <block name="review"> (decided 2026-10-26)
+   and `[part'core'` is <part name="core"> (decided 2026-11-11). The
    operand is the literal a binding takes, and it moves only when it carries
    nothing else — no template slot, no reference, some text — so nothing it
    carried is lost; otherwise it stays <user-input>. Answers the attribute's
@@ -378,10 +378,14 @@ export function emit(root, startDepth, L, opts) {
        follows in the order it was written */
     if (hole) allKids = hole.kids;
 
-    if (!allKids.length && !needs && !slotNeeds.length) { L.push(pad(d) + open + "/>"); continue; }
+    /* a part no block holds asks which block it slices */
+    var slices = partOutsideBlock(nd) ? "the block it slices" : null;
+
+    if (!allKids.length && !needs && !slices && !slotNeeds.length) { L.push(pad(d) + open + "/>"); continue; }
 
     L.push(pad(d) + open + ">");
     if (needs) L.push(pad(d + 1) + "<needs>" + xesc(needs) + "</needs>");
+    if (slices) L.push(pad(d + 1) + "<needs>" + xesc(slices) + "</needs>");
 
     var tail = [];
     slotNeeds.forEach(function (s) {

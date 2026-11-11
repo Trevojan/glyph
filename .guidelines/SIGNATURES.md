@@ -52,14 +52,14 @@ They ask for at least one operand (`ask` at zero) and **warn** with `note` when
 given exactly one, because a list of one item is almost always a mistake. There
 is no ceiling.
 
-## 3. One slot (60)
+## 3. One slot (61)
 
 One operand; without it, `ask` and a `<needs>` carrying the slot's question.
 
 `ADD` `ASK` `ASSM` `AVD` `BLOCK` `BRST` `BYP` `CLAR` `CNCL` `CNST` `COND`
 `CRIT` `CTX` `DENY` `DONT` `DRVF` `ELAB` `EVAL` `EX` `EXC` `FIND` `FMT`
 `FOREX` `GEN` `GET` `GO` `HYP` `IF` `IMAG` `IMPR` `INS` `INSTOF` `ITR` `JUST`
-`LIM` `NT` `ONLYIF` `ONLYW` `PROP` `QST` `REF` `REQ` `RESTR` `REV` `RSN`
+`LIM` `NT` `ONLYIF` `ONLYW` `PROP` `PT` `QST` `REF` `REQ` `RESTR` `REV` `RSN`
 `RTNL` `RWK` `SCRU` `SECTION` `SEEAL` `SIMP` `SKEP` `SPEC` `SUB` `SUM` `TGT`
 `TRYFR` `UNLS` `VRFY` `WARN`
 
@@ -69,14 +69,14 @@ One operand; without it, `ask` and a `<needs>` carrying the slot's question.
 version or temporal condition. Only the first is required; the other two are a
 reading convention, not an enforced arity.
 
-## 4. Zero arity (44)
+## 4. Zero arity (43)
 
 They stand on their own. They never produce `<needs>` for a missing operand,
 which does not stop them from receiving one.
 
 `ALW` `ATC` `BOLD` `CONF` `CORE` `CTRD` `DEF` `DEPR` `ERROR` `EXT` `FBK` `FIN`
 `FLS` `FRGT` `HGH` `HMN` `INTN` `LIGHT` `LOGIC` `LOW` `LRN` `MAND` `NEV` `NGT`
-`NONE` `OPT` `OVR` `PARAM` `PH` `POS` `PRIO` `PROB` `PT` `QUICK` `RDY` `REAL`
+`NONE` `OPT` `OVR` `PARAM` `PH` `POS` `PRIO` `PROB` `QUICK` `RDY` `REAL`
 `RMBR` `SKL` `TOBLOCK` `TOSECTION` `TPL` `TRUE` `VAR` `WHR`
 
 This includes the four intensity primitives — `HGH` `LOW` `BOLD` `LIGHT` — and
@@ -91,9 +91,9 @@ engine is what runs. `RSN` and `FIN`, for instance, are hieroglyph primitives in
 §2 of the glossary yet `RSN` carries a `FRAMES` entry, so it asks for an operand
 in practice. Worth reviewing, not worth silently "fixing" in either direction.
 
-## 5. Mandatory name (2)
+## 5. Mandatory name (3)
 
-`SECTION` and `BLOCK` require their **first** child to be a literal — the name.
+`SECTION`, `BLOCK` and `PT` require their **first** child to be a literal — the name.
 Without it the severity is `fix`, not `ask`: an anonymous block is not missing
 information, it is broken structure.
 
@@ -101,9 +101,17 @@ information, it is broken structure.
 [section'validation',[crit],[ask]]
 ```
 
-The name is the `name` of `<section>` and `<block>` (`XML_REFERENCE.md` §3),
+The name is the `name` of `<section>`, `<block>` and `<part>` (`XML_REFERENCE.md` §3),
 and the same first literal names a `[logic]` fence: `[logic'calc']…[/logic]`
 is `<logic name="calc">`. No other command takes a name.
+
+### `[part]` — one literal per level
+
+`[part'h0','h1','h2']`: the first literal is the part's name, and each further
+literal is one level of its label, in the order written. A comma inside a
+literal is the text of that level. Only the name is required. A part slices a
+block, so one that no `[block` holds emits as written and asks which block it
+slices — `ask`, `PartOutsideBlock`, and a `<needs>` inside the `<part>`.
 
 ## 6. Polarity and modality
 
