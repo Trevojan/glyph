@@ -48,7 +48,7 @@ it waits on is ADR-001's signature.
 | M02.T04: resolve SCRU, QST, H-09 | closed; all 120 commands burn and re-parse with no `fix` | task removed |
 | `ems.js`, `audit_corpus.py`, `audit/baseline.json`, `scripts/ladder.py` | not on this machine | `ladder.py` is `scripts/ladder.js`; P11 names its prototype as absent |
 | M10.T04 PGML formatter | `fromAST` is the canonical printer | one module, M10d |
-| the grammar: M02 writes `SPEC.md` | `.guidelines/glyph-grammar.ebnf` exists and stopped at v1.3.0.0: no `[raw]` fence, no `[off]`/`[on]`, no `R:`/`r-`, no closed form `[x[/x]`, no comma between elements, `]` mandatory where the engine auto-closes | M02 brings the existing file up to the engine |
+| the grammar: M02 writes `SPEC.md` | `.guidelines/.sources/glyph-grammar.ebnf` exists and stopped at v1.3.0.0: no `[raw]` fence, no `[off]`/`[on]`, no `R:`/`r-`, no closed form `[x[/x]`, no comma between elements, `]` mandatory where the engine auto-closes | M02 brings the existing file up to the engine |
 
 ## 4. Redundancy and duplication
 

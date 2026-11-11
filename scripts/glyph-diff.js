@@ -136,9 +136,9 @@ export { diff, generality, strip };
 if (isMain(import.meta.url)) {
   let opts = {};
   try {
-    opts = { templates: require("../.guidelines/templates.json").templates,
-             rules: require("../.guidelines/rules.json"),
-             expansions: require("../.guidelines/expansions.json") };
+    opts = { templates: require("../.guidelines/.sources/templates.json").templates,
+             rules: require("../.guidelines/.sources/rules.json"),
+             expansions: require("../.guidelines/.sources/expansions.json") };
   } catch (e) { /* optional */ }
 
   const argv = process.argv.slice(2);

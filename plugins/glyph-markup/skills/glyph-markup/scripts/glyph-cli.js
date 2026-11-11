@@ -32,9 +32,9 @@ const LOOKS_LIKE_PATH = /^[^[\]]+(\.(pgml|glyph|gly|txt|md|hgml|xml|json)|[\/\\]
 
 export function main() {
   // optional stores: if absent, the engine still runs, just without expansion/contradiction checks
-  [["../.guidelines/templates.json", G.useTemplates],
-   ["../.guidelines/rules.json", G.useRules],
-   ["../.guidelines/expansions.json", G.useExpansions]].forEach(function (pair) {
+  [["../.guidelines/.sources/templates.json", G.useTemplates],
+   ["../.guidelines/.sources/rules.json", G.useRules],
+   ["../.guidelines/.sources/expansions.json", G.useExpansions]].forEach(function (pair) {
     try {
       pair[1](require(require("path").resolve(__dirname, pair[0])));
     } catch (e) { /* missing store is a valid situation */ }

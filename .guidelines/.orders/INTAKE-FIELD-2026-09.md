@@ -66,12 +66,12 @@ atom nor composite), and re-reading a burn had no way to know it.
 
 | where | change |
 |---|---|
-| `.guidelines/rules.json` | `emit: "heavyreview"` (+ `emitNote`); `id` keeps `heavy-review` — it is not lexed |
+| `.guidelines/.sources/rules.json` | `emit: "heavyreview"` (+ `emitNote`); `id` keeps `heavy-review` — it is not lexed |
 | `scripts/glyph-parser.js` `classify` | last resort before `unknown`: `blendOf(name)` — a name equal to a blend's `emit` in the rules store is `tier: "blend"`, gloss = its `means` |
 | `scripts/glyph-parser.js` `elName` | a blend's element is its emit, lowercase |
 | `scripts/test-corpus.js` | `H-10b`: the burn of `[rev'x'],[dist'y']` re-parses with zero `fix` and `heavyreview` classifies as `blend`; `H-10`/`H-11` regexes follow the token |
 | `.guidelines/.sources/GLOSSARY.md` "What remains" | names the emit and why it is one lexable name |
-| `.guidelines/corpus-snapshot.json` | 102 `ast` hashes moved — the envelope carries the stores' checksum; no `xml`/`hgml` moved |
+| `.guidelines/.sources/corpus-snapshot.json` | 102 `ast` hashes moved — the envelope carries the stores' checksum; no `xml`/`hgml` moved |
 
 Field corpus after the fix: **12 → 4 dirty**, the 4 being `QST` (`H-09`).
 

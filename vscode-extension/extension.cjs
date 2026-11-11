@@ -13,7 +13,7 @@ const SEVERITY_NAMES = Object.freeze({
 const INDENT = "  ";
 
 function readStore(root, filename, useStore) {
-  const fullPath = path.join(root, ".guidelines", filename);
+  const fullPath = path.join(root, ".guidelines", ".sources", filename);
   const store = JSON.parse(fs.readFileSync(fullPath, "utf8"));
   useStore(store);
 }

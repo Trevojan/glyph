@@ -67,7 +67,7 @@ fn read(path: &Path) -> Json {
 }
 
 /// Every case of the oracle, sorted by file name, held to
-/// `.guidelines/corpus-snapshot.json`: as many cases as it counts, each with the
+/// `.guidelines/.sources/corpus-snapshot.json`: as many cases as it counts, each with the
 /// digest it records. An oracle written at another commit fails here instead of
 /// answering for this one.
 pub fn cases() -> &'static [Json] {
@@ -81,7 +81,7 @@ pub fn cases() -> &'static [Json] {
             .collect();
         files.sort();
         assert!(!files.is_empty(), "the oracle at {} is empty — write it: {WRITE_IT}", dir.display());
-        let snap = read(&repo().join(".guidelines").join("corpus-snapshot.json"));
+        let snap = read(&repo().join(".guidelines/.sources").join("corpus-snapshot.json"));
         let count = snap.get("count").and_then(Json::num).expect("the snapshot has no count") as usize;
         assert_eq!(files.len(), count,
                    "the oracle holds {} cases and the snapshot counts {count} — write it again: {WRITE_IT}",
@@ -427,7 +427,7 @@ pub fn sha256(data: &[u8]) -> String {
 
 /// The digest `corpus-snapshot.json` records for a case's projection.
 pub fn snapshot_digest(id: &str, projection: &str) -> String {
-    let snap = read(&repo().join(".guidelines").join("corpus-snapshot.json"));
+    let snap = read(&repo().join(".guidelines/.sources").join("corpus-snapshot.json"));
     snap.get("cases").and_then(|c| c.get(id)).and_then(|c| c.get(projection)).and_then(Json::str)
         .unwrap_or_else(|| panic!("the snapshot has no {projection} digest for {id}")).to_string()
 }

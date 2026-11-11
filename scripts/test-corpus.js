@@ -39,8 +39,8 @@ import { checkRules, compileRules } from "./core/rules.js";
 
 /* Stores travel through opts in the cases that need them, so the suite
    doesn't depend on the module's global state or on test order. */
-const TPL = require("../.guidelines/templates.json");
-const RULESTORE = require("../.guidelines/rules.json");
+const TPL = require("../.guidelines/.sources/templates.json");
+const RULESTORE = require("../.guidelines/.sources/rules.json");
 const WITH_TPL = { templates: TPL.templates };
 const WITH_RULES = { rules: RULESTORE };
 /* Template constraints naming a class ("@coarsen") resolve it through the
@@ -55,7 +55,7 @@ const WITH_BOTH = { templates: TPL.templates, rules: RULESTORE };
 const EXPORT_ORACLE = process.argv.includes("--export-oracle");
 const TRIPS = [];
 if (EXPORT_ORACLE) {
-  const EXP = require("../.guidelines/expansions.json");
+  const EXP = require("../.guidelines/.sources/expansions.json");
   /* the stores the call ran with, as stores.js resolves them — a bucket
      after the registry guard runs on what `useRules` and the rest registered */
   const storeOf = (s, repo) => !s || (typeof s === "object" && !Object.keys(s).length) ? "none" : s === repo ? "repo" : "other";
@@ -809,7 +809,7 @@ function runExpansionChecks() {
     else { console.log("  ✓ " + id + ": " + name); X.push(id); }
   };
 
-  const store = require("../.guidelines/expansions.json");
+  const store = require("../.guidelines/.sources/expansions.json");
   const opts = { expansions: store };
 
   // every command the parser knows, from every bucket that yields a canonical
@@ -933,7 +933,7 @@ function runHgmlChecks() {
     else { console.log("  ✓ " + id + ": " + name); H.push(id); }
   };
 
-  const store = require("../.guidelines/expansions.json");
+  const store = require("../.guidelines/.sources/expansions.json");
   const opts = { expansions: store };
 
   /** re-parses .hgml and reports what survived */
@@ -1008,7 +1008,7 @@ function runHgmlChecks() {
      commands here are about one thing, and SCRU reaches DIST through its
      formula. */
   const blendSrc = "[in[rev`o fluxo`][scru`o fluxo`]]";
-  const BLEND_OPTS = { expansions: require("../.guidelines/expansions.json"), rules: RULESTORE };
+  const BLEND_OPTS = { expansions: require("../.guidelines/.sources/expansions.json"), rules: RULESTORE };
   const blended = G.toHGML(blendSrc, BLEND_OPTS);
   ok("H-10", "a blend folds co-occurring atoms into one element",
      /\[heavyreview/.test(blended) && /'o fluxo'/.test(blended)
@@ -1049,7 +1049,7 @@ function runHgmlChecks() {
      (function () {
        const store = JSON.parse(JSON.stringify(RULESTORE));
        store.rules.push({ id:"no-means", kind:"blend", when:["REV","DIST"], emit:"x" });
-       const out = G.toHGML(blendSrc, { expansions:require("../.guidelines/expansions.json"), rules:store });
+       const out = G.toHGML(blendSrc, { expansions:require("../.guidelines/.sources/expansions.json"), rules:store });
        return /\[x/.test(out) ? "it emitted an element that cannot say what it means" : null;
      })());
 
@@ -1100,7 +1100,7 @@ function runFromXmlChecks() {
     else { console.log("  ✓ " + id + ": " + name); F.push(id); }
   };
 
-  const opts = { expansions: require("../.guidelines/expansions.json") };
+  const opts = { expansions: require("../.guidelines/.sources/expansions.json") };
 
   /** src → xml → src → xml, and the two XMLs must agree */
   const trip = src => {
@@ -1504,7 +1504,7 @@ function runReferenceChecks() {
        That is finding G13, one store reached by two paths. */
     const real = G.toXML("[crit-ctx,ex'X']",
       { templates: TPL.templates, rules: RULESTORE,
-        expansions: require("../.guidelines/expansions.json") }).trim();
+        expansions: require("../.guidelines/.sources/expansions.json") }).trim();
     ok("D-11", "the worked document in the skill is what the engine emits",
        !shown ? "no worked <glyph-package> example found in SKILL.md"
               : shown === real ? null
@@ -1518,7 +1518,7 @@ function runReferenceChecks() {
   const s10src = (s10.match(/```\n([^\n]+)\n```/) || [])[1];
   const s10xml = (s10.match(/```xml\n([\s\S]*?)\n```/) || [])[1];
   const s10real = s10src && G.toXML(s10src, { templates: TPL.templates, rules: RULESTORE,
-    expansions: require("../.guidelines/expansions.json") }).trim();
+    expansions: require("../.guidelines/.sources/expansions.json") }).trim();
   ok("D-12", "the §10 round trip shows what the engine emits",
      !s10src || !s10xml ? "no source and xml pair found in §10"
        : s10xml.trim() !== s10real ? "§10 shows a document the engine does not emit for " + JSON.stringify(s10src)
@@ -1565,7 +1565,7 @@ function runAstInvariant() {
   };
 
   const opts = { templates: TPL.templates, rules: RULESTORE,
-                 expansions: require("../.guidelines/expansions.json") };
+                 expansions: require("../.guidelines/.sources/expansions.json") };
   /* Fields that record HOW the source was written, not what it says. An alias
      and its canonical are the same command; a backtick and a quote hold the
      same literal; and `autoClosed` records that the author omitted a closing
@@ -1735,7 +1735,7 @@ const rRT = runAstInvariant();
 /* ------------------------------------------------------------------ *
  * the AST schema — the two directions that hold each other
  *
- * `.guidelines/ast-schema.json` is hand-authored, deliberately: a schema
+ * `.guidelines/.sources/ast-schema.json` is hand-authored, deliberately: a schema
  * generated from the engine would agree with it by construction and catch
  * nothing. So glyph-check validates envelopes against the declaration, and
  * this bucket asserts the other direction — that what the engine emits
@@ -1757,7 +1757,7 @@ function runSchemaChecks() {
   const check = CHECK_MOD;
 
   const opts = { templates: TPL.templates, rules: RULESTORE,
-                 expansions: require("../.guidelines/expansions.json") };
+                 expansions: require("../.guidelines/.sources/expansions.json") };
   const CORPUS = [].concat(POSITIVE, INCOMPLETE, INVALID, REGRESSION, LONG,
                            TEMPLATES, CONSTRAINTS, RULE_CASES, ORACLE_COVERAGE, INCLUSION);
 
@@ -1938,7 +1938,7 @@ function runExampleChecks() {
   catch (e) { ok("E-00", "the examples exist", "conformance/examples.json not found"); return D.length; }
 
   const opts = { templates: TPL.templates, rules: RULESTORE,
-                 expansions: require("../.guidelines/expansions.json") };
+                 expansions: require("../.guidelines/.sources/expansions.json") };
 
   store.cases.forEach(c => {
     const got = G.toXML(c.src, opts).trim();
@@ -2005,9 +2005,9 @@ function runSnapshotChecks() {
   const fs = require("fs");
   const path = require("path");
   const crypto = require("crypto");
-  const SNAP = path.resolve(__dirname, "../.guidelines/corpus-snapshot.json");
+  const SNAP = path.resolve(__dirname, "../.guidelines/.sources/corpus-snapshot.json");
   const SNAP_OPTS = { templates: TPL.templates, rules: RULESTORE,
-                      expansions: require("../.guidelines/expansions.json") };
+                      expansions: require("../.guidelines/.sources/expansions.json") };
 
   /* a case is projected with its own stores laid over these (O5, EMS-002
      ORD-0011): the stores it names replace the repository's, the rest stay */
@@ -2177,7 +2177,7 @@ function runSnapshotChecks() {
        read from disk, which is what the envelope's `stores.rules` hashes: the
        compiled rules live beside the store (rules.js), never on it */
     const EXP = SNAP_OPTS.expansions;
-    const fresh = f => JSON.parse(fs.readFileSync(path.resolve(__dirname, "../.guidelines/" + f), "utf8"));
+    const fresh = f => JSON.parse(fs.readFileSync(path.resolve(__dirname, "../.guidelines/.sources/" + f), "utf8"));
     const names = [...new Set([...Object.keys(EXP.commands),
       ...["MODE", "STRUCT", "META", "INSTR", "ALIAS", "SESSION"].flatMap(t => Object.keys(VOCAB[t])),
       "crit", "", "XYZ"])];
@@ -2767,7 +2767,7 @@ function runSnapshotChecks() {
   try { stored = JSON.parse(fs.readFileSync(SNAP, "utf8")); }
   catch (e) {
     ok("SN-02", "the snapshot exists",
-       "no .guidelines/corpus-snapshot.json — run: node scripts/test-corpus.js --update-snapshot");
+       "no .guidelines/.sources/corpus-snapshot.json — run: node scripts/test-corpus.js --update-snapshot");
     return D.length;
   }
   ok("SN-02", "the snapshot exists", null);
@@ -2966,7 +2966,7 @@ function runDiagWordingChecks() {
   };
   const bare = s => String(s).replace(/<[^>]+>/g, "");
   const opts = { templates: TPL.templates, rules: RULESTORE,
-                 expansions: require("../.guidelines/expansions.json") };
+                 expansions: require("../.guidelines/.sources/expansions.json") };
 
   const g = G.parse("[nt`a ] b`]", opts).gaps.filter(d => d.code === "TruncatedLiteral");
   ok("DG-01", "TruncatedLiteral is raised for a bracket inside a literal",
@@ -3003,7 +3003,7 @@ function runSpellingChecks() {
     else { console.log("  ✓ " + id + ": " + name); D.push(id); }
   };
   const opts = { templates: TPL.templates, rules: RULESTORE,
-                 expansions: require("../.guidelines/expansions.json") };
+                 expansions: require("../.guidelines/.sources/expansions.json") };
   const rev = G.elementCanonicalMap || {};
 
   /* SP-01 — every element the inverse emits is a spelling the parser takes */
@@ -3064,7 +3064,7 @@ function runRawFenceChecks() {
     else { console.log("  \u2713 " + id + ": " + name); D.push(id); }
   };
   const opts = { templates: TPL.templates, rules: RULESTORE,
-                 expansions: require("../.guidelines/expansions.json") };
+                 expansions: require("../.guidelines/.sources/expansions.json") };
 
   const quoted = "[sum`organized`[itr-core[ctx]]]";
   const src = "[raw]" + quoted + "[/raw]";
@@ -3113,7 +3113,7 @@ function runLiteralRoleChecks() {
     else { console.log("  \u2713 " + id + ": " + name); D.push(id); }
   };
   const opts = { templates: TPL.templates, rules: RULESTORE,
-                 expansions: require("../.guidelines/expansions.json") };
+                 expansions: require("../.guidelines/.sources/expansions.json") };
 
   const before = G.toXML("[alw`X`[get[ctx]]]", opts);
   const after  = G.toXML("[alw[get[ctx]]`X`]", opts);
@@ -3187,7 +3187,7 @@ function runBindingChecks() {
     else { console.log("  \u2713 " + id + ": " + name); D.push(id); }
   };
   const opts = { templates: TPL.templates, rules: RULESTORE,
-                 expansions: require("../.guidelines/expansions.json") };
+                 expansions: require("../.guidelines/.sources/expansions.json") };
 
   const named = G.toXML("[sum`organized`[itr-core[ctx]]]", opts);
   ok("BD-01", "an operand plus a nest names the command's result",
@@ -3315,7 +3315,7 @@ function runQuoteChecks() {
     else { console.log("  \u2713 " + id + ": " + name); D.push(id); }
   };
   const opts = { templates: TPL.templates, rules: RULESTORE,
-                 expansions: require("../.guidelines/expansions.json") };
+                 expansions: require("../.guidelines/.sources/expansions.json") };
   const clean = src => G.parse(src, opts).gaps.filter(g => g.sev === "fix").length === 0;
   const text = src => (G.toXML(src, opts).match(/<user-input>([^<]*)</) || [])[1];
 
@@ -3358,7 +3358,7 @@ function runTemplateParamChecks() {
     else { console.log("  \u2713 " + id + ": " + name); D.push(id); }
   };
   const opts = { templates: TPL.templates, rules: RULESTORE,
-                 expansions: require("../.guidelines/expansions.json") };
+                 expansions: require("../.guidelines/.sources/expansions.json") };
   const codes = src => G.parse(src, opts).gaps.map(g => g.code);
   const msg = src => (G.parse(src, opts).gaps.find(g => g.code === "TemplateParamNotLiteral") || {}).plain
                      || (G.parse(src, opts).gaps.find(g => g.code === "TemplateParamNotLiteral") || {}).msg || "";
@@ -3414,7 +3414,7 @@ function runImperativeChecks() {
     else { console.log("  \u2713 " + id + ": " + name); D.push(id); }
   };
   const opts = { templates: TPL.templates, rules: RULESTORE,
-                 expansions: require("../.guidelines/expansions.json") };
+                 expansions: require("../.guidelines/.sources/expansions.json") };
   const marked = src => G.toXML(src, opts).indexOf('imperative="true"') !== -1;
 
   ok("IM-01", "um primitivo que recebe comando e imperativo",
@@ -3485,7 +3485,7 @@ function runModeWordChecks() {
     else { console.log("  ✓ " + id + ": " + name); D.push(id); }
   };
   const opts = { templates: TPL.templates, rules: RULESTORE,
-                 expansions: require("../.guidelines/expansions.json") };
+                 expansions: require("../.guidelines/.sources/expansions.json") };
   const codes = src => G.parse(src, opts).gaps.map(g => g.code);
   const count = (s, sub) => s.split(sub).length - 1;
   const back = src => { const x = G.toXML(src, opts); return [x, G.fromXML(x, opts).src]; };
@@ -3560,7 +3560,7 @@ function runChainLinkChecks() {
     else { console.log("  ✓ " + id + ": " + name); D.push(id); }
   };
   const opts = { templates: TPL.templates, rules: RULESTORE,
-                 expansions: require("../.guidelines/expansions.json") };
+                 expansions: require("../.guidelines/.sources/expansions.json") };
   const X = src => G.toXML(src, opts);
   const links = src => G.tokenize(src).filter(t => t.k === "extend").length;
   const quiet = src => G.parse(src, opts).gaps.length === 0;
@@ -3738,7 +3738,7 @@ function runColonChecks() {
     else { console.log("  ✓ " + id + ": " + name); D.push(id); }
   };
   const opts = { templates: TPL.templates, rules: RULESTORE,
-                 expansions: require("../.guidelines/expansions.json") };
+                 expansions: require("../.guidelines/.sources/expansions.json") };
   const X = src => G.toXML(src, opts);
   const codes = (src, o) => G.parse(src, o || opts).gaps.map(g => g.code);
   /* a forma com dois-pontos e a forma que a pergunta nomeia */
@@ -4102,7 +4102,7 @@ function runRegistryGuard() {
     else { console.log("  ✓ " + id + ": " + name); D.push(id); }
   };
 
-  const EXPSTORE = require("../.guidelines/expansions.json");
+  const EXPSTORE = require("../.guidelines/.sources/expansions.json");
 
   /* each probe reads a different store, so a half-registered engine cannot
      pass by accident: species comes from expansions, the diagnostic from
@@ -4155,7 +4155,7 @@ function runContextGuard() {
     else { console.log("  ✓ " + id + ": " + name); D.push(id); }
   };
 
-  const loose = { templates: TPL.templates, rules: RULESTORE, expansions: require("../.guidelines/expansions.json") };
+  const loose = { templates: TPL.templates, rules: RULESTORE, expansions: require("../.guidelines/.sources/expansions.json") };
   const ctx = G.createContext(loose);
   const CORPUS = [].concat(POSITIVE, INCOMPLETE, INVALID, REGRESSION, LONG,
                            TEMPLATES, CONSTRAINTS, RULE_CASES, ORACLE_COVERAGE, INCLUSION);
@@ -4196,7 +4196,7 @@ function runOracleCoverage() {
   console.log("\n--- oracle coverage — every declared code fires ---");
   const D = [];
   const opts = { templates: TPL.templates, rules: RULESTORE,
-                 expansions: require("../.guidelines/expansions.json") };
+                 expansions: require("../.guidelines/.sources/expansions.json") };
   ORACLE_COVERAGE.forEach(c => {
     const codes = (G.parse(c.src, opts).gaps || []).map(g => g.code);
     if (codes.indexOf(c.code) === -1) {
@@ -4336,7 +4336,7 @@ async function runRelay() {
      JS path gives for the store the page merges */
   const merged = { ...TPL.templates, ...mine, ...over };
   const differ = { mine: mine.mine, germinate: over.germinate };
-  const repo = { rules: RULESTORE, expansions: require("../.guidelines/expansions.json") };
+  const repo = { rules: RULESTORE, expansions: require("../.guidelines/.sources/expansions.json") };
   const named2 = { digest: G.ck(JSON.stringify(differ)), templates: differ };
   const USE = "[--mine][--germinate'a']";
   const through = [["toXML", s => G.toXML(s, { templates: merged, ...repo })], ["toHGML", s => G.toHGML(s, { templates: merged, ...repo })],
@@ -4572,7 +4572,7 @@ if (EXPORT_ORACLE) {
       ["--file", "src.pgml", "--diag"], ["--file", "src.pgml", "--hgml"], ["--file", "src.xml", "--from-xml"]]);
   });
   /* every name of the composition table, and names it does not hold */
-  const EXP = require("../.guidelines/expansions.json");
+  const EXP = require("../.guidelines/.sources/expansions.json");
   kase({}, Object.keys(EXP.commands || EXP).concat(["zzz", "crit", "[crit']", " ctx "]).map(n => [n, "--expand"]));
   /* the source on argv, the forms of --file, the refusals */
   kase({ files: { "x.pgml": "[nt'on disk']", "bom.pgml": "﻿[crit'x']", "src.pgml": "[crit'the parser']" } }, [

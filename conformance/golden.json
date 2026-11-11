@@ -4,7 +4,7 @@
   "derived_from": [
     ".guidelines/.sources/PACKAGE_TARGET.md",
     "conformance/examples.json",
-    ".guidelines/expansions.json (for `reads`, per clause 9)"
+    ".guidelines/.sources/expansions.json (for `reads`, per clause 9)"
   ],
   "authored": "2026-08-31",
   "engine_at_derivation": "2.4.6.04",

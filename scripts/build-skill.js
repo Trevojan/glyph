@@ -160,7 +160,7 @@ emitTo(CODEX_SKILL, "references/SIGNATURES.md",
        banner(signatures, "md") + fs.readFileSync(path.join(ROOT, signatures), "utf8"));
 
 for (const rel of ["scripts/glyph-cli.js", "scripts/glyph-zip.js",
-                   ".guidelines/templates.json", ".guidelines/rules.json", ".guidelines/expansions.json"]) {
+                   ".guidelines/.sources/templates.json", ".guidelines/.sources/rules.json", ".guidelines/.sources/expansions.json"]) {
   emitTo(CODEX_SKILL, rel, fs.readFileSync(path.join(ROOT, rel), "utf8"));
 }
 emitTo(CODEX_SKILL, "package.json", '{\n  "type": "module"\n}\n');

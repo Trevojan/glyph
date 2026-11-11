@@ -192,7 +192,7 @@ least nine. Zero catches means the validator is decorative.
 
 1. **Minimum layers.** L0 + L3, or something else?
 2. **Failure transitions** — L3 or L5? (§4)
-3. **Role roster.** `.guidelines/targets.json` currently lists `dv/qa/po/da/custom`,
+3. **Role roster.** `.guidelines/.sources/targets.json` currently lists `dv/qa/po/da/custom`,
    taken from `_ORBITAL/Docs/.guidelines/TEAM/`. Is that the roster, or does the
    bundle target something narrower first?
 4. **What "production level" means for `_ORBITAL`.** This is the P0 gate itself
