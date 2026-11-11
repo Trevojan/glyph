@@ -24,8 +24,9 @@ EMS-###/ORD-####/ORD-####.{pgml,xml,json,hgml,manifest.json}
 
 > One, or none. If there are two, one of them is wrong.
 
-It is named in the register of its series, under *A Ordem aberta*:
-[`EMS-002/README.md`](EMS-002/README.md).
+It is named in the register of its series: [`EMS-003/README.md`](EMS-003/README.md),
+*The open Order*. An Order emitted and waiting its turn sits in the `queued/` folder
+of its series, out of the open slot.
 
 ## Closed Orders
 
@@ -37,6 +38,7 @@ It is named in the register of its series, under *A Ordem aberta*:
 |---|---|---|
 | `EMS-001` | the Rust engine behind the app, closed on 2026-11-07 | [`EMS-001/README.md`](EMS-001/README.md) |
 | `EMS-002` | Glyph 100% in Rust, open | [`EMS-002/README.md`](EMS-002/README.md) |
+| `EMS-003` | the 2D view: a package as icons on a plane, edited by its links; open | [`EMS-003/README.md`](EMS-003/README.md) |
 | before the series | `ORD-2026-08-30-01`, the order of August, and the handoffs `HANDOFF-*.pgml` | this folder |
 | parked | `ORD-0011`, `restructure-glyph-repo`, carried out by `EMS-002/ORD-0034` | [`parked/restructure-glyph-repo/`](parked/restructure-glyph-repo/ORD-0011.pgml) |
 
@@ -47,6 +49,7 @@ It is named in the register of its series, under *A Ordem aberta*:
 
 | | |
 |---|---|
+| [`INTAKE-2D-VIEW.md`](INTAKE-2D-VIEW.md) | Intake — the 2D view: the measured proposal |
 | [`INTAKE-BURN-INVARIANCE.md`](INTAKE-BURN-INVARIANCE.md) | Preliminary intake — is the burn a canonical form? |
 | [`INTAKE-EFFECTS.md`](INTAKE-EFFECTS.md) | Preliminary intake — effects |
 | [`INTAKE-FIELD-2026-09.md`](INTAKE-FIELD-2026-09.md) | Field intake — the engine used on a client project |

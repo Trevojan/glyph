@@ -1,0 +1,69 @@
+[block'glyph-2d-view'
+  [ctx'the 2D view of Glyph: a package drawn as icons on a plane and edited by its visible links; this is the spec of EMS-003, the third series of orders Glyph emits, and it commissions the series and implements nothing','the repository root','engine 4.7.10.08']
+  [skl'glyph-markup'[ins'hear this spec, ground before building, and stop at the gate of the Regent']]
+
+  [section'species'
+    [dfn'plane','the 2D surface the view draws a package on']
+    [dfn'node','a command or a literal of the tree, drawn as an icon tile or as its text']
+    [dfn'container','a section, a block, a part or a segment, drawn as a frame that holds its nodes']
+    [dfn'connector','a visible link between two nodes, of one type, drawn from one fact of the tree']
+    [dfn'operation','one edit of the tree made on the plane, written as source by the way back']
+    [dfn'icon table','the generated table that names, for each command, its icon or its fallback']
+    [nt'the ORD count resets in each series: EMS-003 counts from ORD-0001']
+    [nt'the vocabulary of the project lives in .guidelines/.sources/GLOSSARY.md section 8']
+  ]
+
+  [section'direction'
+    [intn'whoever writes Glyph sees what is under what and what follows what without reading brackets, and changes it by moving a link']
+    [cnst'the AST is the source of truth: the view derives from it and an edit is an edit of the tree']
+    [cnst'Glyph describes and nothing executes: a connector says a relation and runs nothing']
+    [cnst'zero dependencies on the JS side, and in Rust every crate passes the graded filter of .constraints']
+    [cnst'nothing vanishes in silence, and an edit the tree cannot hold is refused by name']
+    [cnst'the interface is a black background with cyan, purple, dark green and light blue, its text terse']
+  ]
+
+  [section'queue'
+    [cnst'one ORD of the series is open at a time; the others are emitted and wait in queued, out of the open slot, by the word of the Regent of 2026-11-11']
+    [cnst'a queued ORD opens when the ORD it depends on closes, and is emitted again as a new version first if the signed model changed what it says']
+    [nt'the order is ORD-0001 the model, ORD-0002 the icons, ORD-0003 the graph, ORD-0004 the view, ORD-0005 the editing, ORD-0006 the Explorer; 0002 and 0003 depend on 0001, 0004 on both, 0005 on 0004, and 0006 on 0005 and on steps 3 and 11 of the trail of EMS-002']
+  ]
+
+  [section'ORD-0001-model'
+    [tgt'the model of the 2D view, decided before a line of it is drawn, opening with a measured proposal and stopping at the gate of the Regent']
+    [conf'the answers to the measured proposal, before anything is built'[hmn]]
+    [val'the model','the signed table of node kinds, container kinds and connector types, each connector with the operator it writes']
+  ]
+
+  [section'ORD-0002-icons'
+    [tgt'the icons enter the app as one set a generated table names, every command answering an icon or a declared fallback, in the colours of the interface']
+    [val'the table','the check refuses an icon no command names, a command left out and a normalised file that differs from a fresh build']
+  ]
+
+  [section'ORD-0003-graph'
+    [tgt'the graph of a package derived from the tree and from nothing else: nodes, containers and typed connectors, the same for the same source every time']
+    [val'the derivation','the graph is derived to the same bytes twice, and the tree is rebuilt from it to the same envelope']
+  ]
+
+  [section'ORD-0004-view'
+    [tgt'the 2D view, read only, beside the four projections of the page: icons, frames and links told apart by type, tied to the source and carrying the diagnostics']
+    [val'the picture','every node, container and connector of the graph is on the plane, counted against it, and the plane is walked whole from the keyboard']
+  ]
+
+  [section'ORD-0005-edit'
+    [tgt'editing by the links: each operation one edit of the tree, the source written by the way back and read again before the picture changes']
+    [val'the operations','each operation writes the source a hand would write, each refusal leaves the bytes untouched, and a connector cut and connected again gives the source back']
+  ]
+
+  [section'ORD-0006-explorer'
+    [tgt'the 2D view in the Glyph Explorer: an Order opened, edited and emitted from the plane, and a series drawn as a plane of its Orders']
+    [val'the surface','the bundle emitted from the plane is the bundle the command line writes for the same source']
+  ]
+
+  [section'limits'
+    [nev'a picture that shows a relation the tree does not hold']
+    [nev'the snapshot regenerated to make the suite green']
+    [dont'open an ORD before the ORD it depends on closes']
+    [cnst'prose declares the state, never the correction']
+    [cnst'no worktrees']
+  ]
+];

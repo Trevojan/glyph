@@ -1,0 +1,57 @@
+<glyph-package engine="4.7.10.08">
+  <schema/>
+  <block once="true">
+    <block name="ORD-0005-edit" binds="ORD-0005-edit">
+      <context>
+        <user-input>the spec of EMS-003</user-input>
+        <user-input>.guidelines/.orders/EMS-003/EMS-003.pgml</user-input>
+      </context>
+      <context>
+        <user-input>the signed model</user-input>
+        <user-input>.guidelines/.orders/INTAKE-2D-VIEW.md, section 6</user-input>
+      </context>
+      <target>
+        <user-input>editing by the links: each operation on the plane is one edit of the tree, the way back writes the source, and the engine reads it again before the picture changes</user-input>
+      </target>
+      <instruction>
+        <user-input>build the operations of the signed table, each as one edit of the tree: connect two nodes by a connector of a chosen type, change the type of a connector, move the end of a connector to another node, cut a connector, place a command from the palette of icons, remove a node, change the order of siblings, write the operand of a node, and wrap nodes in a section, a block or a part</user-input>
+      </instruction>
+      <instruction>
+        <user-input>offer on each connector the types the two ends admit, and name the operator each one writes: nest, chain, item, sequence, reference and result</user-input>
+      </instruction>
+      <requirement>
+        <user-input>an edit the tree cannot hold is refused by name before it is applied, and the plane and the source stay as they were</user-input>
+      </requirement>
+      <requirement>
+        <user-input>every edit is undone and redone, and the source after undo is the bytes it was</user-input>
+      </requirement>
+      <requirement>
+        <user-input>what an edit raises is shown where it lands: a new fix, ask or note appears on its node as soon as the engine has read the source again</user-input>
+      </requirement>
+      <constraint>
+        <user-input>the plane never writes source by itself: it edits the tree, the way back writes, and the parse of what was written is what the plane shows next</user-input>
+      </constraint>
+      <constraint>
+        <user-input>nothing vanishes in silence: a node cut from its only connector stays in the package as a root command, and removing a node that holds others asks first what happens to them</user-input>
+      </constraint>
+      <never force="editorial">
+        <user-input>an edit that changes the meaning of a command the user did not touch</user-input>
+      </never>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the operations</user-input>
+        <user-input>each operation of the signed table has a case: the source it writes is the source a hand would write for that tree, the engine reads it with no new fix, and the tree read back is the edited tree</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the refusals</user-input>
+        <user-input>each edit the table refuses is refused by its name and leaves the bytes of the source untouched, each seen failing before it counts</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the round trip</user-input>
+        <user-input>over the declared sources, every connector cut and connected again by the same type gives the source back byte for byte</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>

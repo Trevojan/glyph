@@ -1,0 +1,107 @@
+[block
+  'ORD-0003-graph'
+  [ctx
+    'the spec of EMS-003'
+    '.guidelines/.orders/EMS-003/EMS-003.pgml'
+  [/ctx]
+  [ctx
+    'the signed model'
+    '.guidelines/.orders/INTAKE-2D-VIEW.md, section 6'
+  [/ctx]
+  [tgt
+    'the graph of a package, derived from the tree and from nothing else: its nodes, its containers and its typed connectors, the same for the same source every time'
+  [/tgt]
+  [ins
+    'derive a node from each Command and each Literal, a container from each section, block, part and segment, and a connector from each edge of the tree, typed by the operator that wrote it'
+  [/ins]
+  [ins
+    'derive the connectors the tree holds outside its edges: the sequence between siblings, the reference from a literal to the command that binds its name, the result a literal names after a nest, and the call of a template to its definition'
+  [/ins]
+  [req
+    'every node carries the source span of the command it is, so the view and the source point at each other'
+  [/req]
+  [req
+    'a diagnostic lands on the node it is about: fix, ask and note, and an empty slot shows as a socket that asks, as needs does in the XML'
+  [/req]
+  [cnst
+    'the graph is a function of the tree: it holds no fact the tree does not hold, and where the signed model puts binds and ref in the envelope, they enter the envelope first'
+  [/cnst]
+  [cnst
+    'what moves an emitted projection moves by decision, written in .decisions, and enters the batch the version moves once for'
+  [/cnst]
+  [cmp
+    'the derivation'
+    'for every declared source of the snapshot the graph is derived twice to the same bytes, and the tree is rebuilt from the graph to the same envelope'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+  [cmp
+    'the types'
+    'each connector type of the signed table has a case that shows it, and a tree edge of a kind the table does not name is refused by name, each seen failing before it counts'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+  [cmp
+    'the engines'
+    'where the signed model computes the graph in the engine, the Rust answers the same bytes as the JS over the oracle'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+[/block]

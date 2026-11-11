@@ -1,0 +1,51 @@
+<glyph-package engine="4.7.10.08">
+  <schema/>
+  <block once="true">
+    <block name="ORD-0003-graph" binds="ORD-0003-graph">
+      <context>
+        <user-input>the spec of EMS-003</user-input>
+        <user-input>.guidelines/.orders/EMS-003/EMS-003.pgml</user-input>
+      </context>
+      <context>
+        <user-input>the signed model</user-input>
+        <user-input>.guidelines/.orders/INTAKE-2D-VIEW.md, section 6</user-input>
+      </context>
+      <target>
+        <user-input>the graph of a package, derived from the tree and from nothing else: its nodes, its containers and its typed connectors, the same for the same source every time</user-input>
+      </target>
+      <instruction>
+        <user-input>derive a node from each Command and each Literal, a container from each section, block, part and segment, and a connector from each edge of the tree, typed by the operator that wrote it</user-input>
+      </instruction>
+      <instruction>
+        <user-input>derive the connectors the tree holds outside its edges: the sequence between siblings, the reference from a literal to the command that binds its name, the result a literal names after a nest, and the call of a template to its definition</user-input>
+      </instruction>
+      <requirement>
+        <user-input>every node carries the source span of the command it is, so the view and the source point at each other</user-input>
+      </requirement>
+      <requirement>
+        <user-input>a diagnostic lands on the node it is about: fix, ask and note, and an empty slot shows as a socket that asks, as needs does in the XML</user-input>
+      </requirement>
+      <constraint>
+        <user-input>the graph is a function of the tree: it holds no fact the tree does not hold, and where the signed model puts binds and ref in the envelope, they enter the envelope first</user-input>
+      </constraint>
+      <constraint>
+        <user-input>what moves an emitted projection moves by decision, written in .decisions, and enters the batch the version moves once for</user-input>
+      </constraint>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the derivation</user-input>
+        <user-input>for every declared source of the snapshot the graph is derived twice to the same bytes, and the tree is rebuilt from the graph to the same envelope</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the types</user-input>
+        <user-input>each connector type of the signed table has a case that shows it, and a tree edge of a kind the table does not name is refused by name, each seen failing before it counts</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the engines</user-input>
+        <user-input>where the signed model computes the graph in the engine, the Rust answers the same bytes as the JS over the oracle</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>

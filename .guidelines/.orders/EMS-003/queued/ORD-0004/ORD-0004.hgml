@@ -1,0 +1,116 @@
+[block
+  'ORD-0004-view'
+  [ctx
+    'the spec of EMS-003'
+    '.guidelines/.orders/EMS-003/EMS-003.pgml'
+  [/ctx]
+  [ctx
+    'the signed model'
+    '.guidelines/.orders/INTAKE-2D-VIEW.md, section 6'
+  [/ctx]
+  [tgt
+    'the 2D view, read only: the package drawn as icons on a plane, its containers as frames, its connectors as visible links told apart by type, beside the four projections the page already shows'
+  [/tgt]
+  [ctx
+    'measured at c078f2c: the page shows four tabs, .pgml, .xml, .json and .hgml, over one source field, in 1 792 lines of interface script and 372 of style, with no library'
+  [/ctx]
+  [ins
+    'draw each node as its icon tile with the name of the command and its operand, each container as a frame that holds its nodes, and each connector as a line whose stroke and end mark say its type, with a legend that names every type'
+  [/ins]
+  [ins
+    'lay the plane out from the graph alone: the same source gives the same picture, and where the signed model stores a position, the stored one wins'
+  [/ins]
+  [ins
+    'tie the view to the source: choosing a node selects its span in the source field, and placing the caret in the source marks its node'
+  [/ins]
+  [ins
+    'show the diagnostics on the plane: a node at fix, at ask or at note is marked by its severity, and an empty slot is a visible socket'
+  [/ins]
+  [req
+    'the plane pans and zooms, and a package of the size of the largest declared source stays readable and answers within the time the page takes today to redraw its tabs, both measured'
+  [/req]
+  [req
+    'every node and every connector is reachable from the keyboard and has a text a screen reader says: accessibility is never the unnecessary part'
+  [/req]
+  [cnst
+    'the screen text stays terse, and the reasoning lives in the annotations of the code'
+  [/cnst]
+  [cnst
+    'the view is a reading of the tree and writes nothing in this ORD'
+  [/cnst]
+  [cmp
+    'the picture'
+    'for the declared sources the view shows every node, container and connector of the graph, counted against it in the browser of the repository, and a second render of the same source is the same picture'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+  [cmp
+    'the tie'
+    'a node chosen selects its exact span, and a caret in the source marks its node, on every command of a source that holds each connector type'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+  [cmp
+    'the reach'
+    'the plane is walked whole from the keyboard, and each mark of severity and each connector type has a text alternative'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+[/block]

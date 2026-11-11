@@ -1,0 +1,16 @@
+{
+  "order": "ORD-0002",
+  "engine": "4.7.10.08",
+  "emitted": "2026-11-11T19:13:41.566Z",
+  "files": [
+    "ORD-0002.pgml",
+    "ORD-0002.xml",
+    "ORD-0002.json",
+    "ORD-0002.hgml"
+  ],
+  "source": "/tmp/claude-0/-home-user-glyph/581d0c97-806b-58a2-9db6-7ac1833b0135/scratchpad/ems3/ORD-0002.pgml",
+  "diagnostics": {
+    "fix": 0,
+    "total": 0
+  }
+}
