@@ -14,7 +14,7 @@ use glyph_json::{number, Json};
 use glyph_util::tree::Thrown;
 use glyph_util::{esc, inherited, inherited_text, js_space, js_trim};
 use glyph_version::VERSION;
-use glyph_vocab::{derived, get, known_word, FORMER_ELEMENT, OPERAND_ATTR, SESSION};
+use glyph_vocab::{derived, get, known_word, FORMER_ELEMENT, FORMER_OPERAND_ATTR, OPERAND_ATTR, SESSION};
 
 /// Where the port stops as the JS stops when V8's stack gives out: past this
 /// many levels of the document. V8's own limit is not a number — measured on
@@ -519,16 +519,18 @@ fn from_xml_node(el: &El, diag: &mut Vec<Diag>, depth: usize) -> Result<String, 
     if name == "ph" {
         return Ok(format!("{lead}{}", from_xml_placeholder(el, diag, depth)?));
     }
-    /* the number of a part, the condition of an if and the name of a block or
-       a section come back as the literal they were; a `name` on any other
-       element, which an older document or a hand carries, is an operand
-       literal all the same, written where the name stood */
+    /* the condition of an if and the name of a block, a section or a part
+       come back as the literal they were; a `name` on any other element,
+       which an older document or a hand carries, is an operand literal all
+       the same, written where the name stood, and so is the `n` an older
+       <part> carries (FORMER_OPERAND_ATTR), written after the name */
     let oa = get(OPERAND_ATTR, &name.to_uppercase());
+    let was = get(FORMER_OPERAND_ATTR, &name.to_uppercase()).and_then(|a| el.attr(a)).map_or(String::new(), as_literal);
     let named = if oa == Some("name") { String::new() }
                 else { el.attr("name").filter(|n| !n.is_empty()).map_or(String::new(), as_literal) };
     let operand = oa.and_then(|a| el.attr(a)).map_or(String::new(), as_literal);
     /* a literal ends at its quote, so a link written after it is the link it is */
-    Ok(format!("{lead}{}", not_switch(format!("[{name}{named}{operand}{}]", xml_kids(el, diag, depth)?))))
+    Ok(format!("{lead}{}", not_switch(format!("[{name}{named}{operand}{was}{}]", xml_kids(el, diag, depth)?))))
 }
 
 /// What the emitter writes in the `<needs>` of a hole with no question: the

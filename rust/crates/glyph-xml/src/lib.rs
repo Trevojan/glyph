@@ -14,7 +14,7 @@
 //! pt-BR words of the empty document, of an unanswered hole and of a
 //! variable no line defines.
 
-use glyph_parse::{collect_bindings, binding_of, deep_inference, parse, unbound_refs, Extra, Opts};
+use glyph_parse::{collect_bindings, binding_of, deep_inference, parse, part_outside_block, unbound_refs, Extra, Opts};
 use glyph_stores::{atoms_of, def_of, depth_of, formula_of, species_of, stands_alone, Context};
 use glyph_json::Json;
 use glyph_json::number;
@@ -174,10 +174,11 @@ fn hole_of(tree: &Tree<Extra>, id: Id) -> Hole {
 
 /// `emit`: one node and everything under it, iteratively — a tail frame holds
 /// the lines that close a node, pushed before its children so they come after.
-/// `operandAttr`: the operand of a PT or an IF travels as an attribute —
-/// `[pt'1.1'` is `<part n="1.1">`, `[if'x'` is `<if cond="x">` (decided
-/// 2026-09-27) — and the first literal of a BLOCK or a SECTION is its name,
-/// `[block'review'` is `<block name="review">` (decided 2026-10-26), when it
+/// `operandAttr`: the operand of an IF travels as an attribute — `[if'x'` is
+/// `<if cond="x">` (decided 2026-09-27) — and the first literal of a BLOCK, a
+/// SECTION or a PT is its name, `[block'review'` is `<block name="review">`
+/// (decided 2026-10-26) and `[part'core'` is `<part name="core">` (decided
+/// 2026-11-11), when it
 /// carries nothing else: no template slot, no reference, some text. The
 /// attribute's name and the literal.
 fn operand_attr(tree: &Tree<Extra>, id: Id, binds: &[String]) -> Option<(&'static str, Id)> {
@@ -372,13 +373,18 @@ pub fn emit(tree: &mut Tree<Extra>, root: Id, start: usize, l: &mut Vec<String>,
         /* the frame counts the operand where it was written; the element does not repeat it */
         let all: Vec<Id> = nd.children.iter().copied().filter(|&c| moved.is_none_or(|(_, lit)| c != lit)).collect();
         let empty = hole.as_ref().and_then(|h| h.kids.as_ref()).map_or(all.is_empty(), |k| k.is_empty());
-        if empty && needs.is_none() && slot_needs.is_empty() {
+        /* a part no block holds asks which block it slices */
+        let slices = part_outside_block(tree, id);
+        if empty && needs.is_none() && !slices && slot_needs.is_empty() {
             l.push(format!("{}{open}/>", pad(d)));
             continue;
         }
         l.push(format!("{}{open}>", pad(d)));
         if let Some(n) = needs {
             l.push(format!("{}<needs>{}</needs>", pad(d + 1), xesc(&n)));
+        }
+        if slices {
+            l.push(format!("{}<needs>the block it slices</needs>", pad(d + 1)));
         }
         let mut tail: Vec<String> = slot_needs.iter()
             .map(|(pos, want)| format!("{}<needs slot=\"{pos}\">{}</needs>", pad(d + 1), xesc(want))).collect();
