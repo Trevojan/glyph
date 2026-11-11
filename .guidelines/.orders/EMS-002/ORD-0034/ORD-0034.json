@@ -1,0 +1,703 @@
+{
+  "type": "GlyphAST",
+  "schema": 2,
+  "version": "4.7.10.08",
+  "source": {
+    "length": 2367,
+    "checksum": "64a2db907e343a00",
+    "encoding": "utf-8",
+    "newline": "lf",
+    "uri": null
+  },
+  "stores": {
+    "templates": "7356ea9b88319980",
+    "rules": "767e5432cdc6d400",
+    "expansions": "125235203224e180"
+  },
+  "projection": "full",
+  "segments": [
+    {
+      "type": "Segment",
+      "mood": [],
+      "isReturn": false,
+      "continues": false,
+      "breaks": 0,
+      "autoClosedCount": 0,
+      "body": [
+        {
+          "type": "Command",
+          "raw": "block",
+          "canonical": "BLOCK",
+          "tier": "struct",
+          "gloss": "Block",
+          "element": "block",
+          "isAlias": false,
+          "chainElement": false,
+          "origin": "root",
+          "slotName": false,
+          "editorial": false,
+          "name": null,
+          "depth": 0,
+          "autoClosed": false,
+          "suggestion": null,
+          "emotions": [],
+          "species": "atom",
+          "compositionDepth": 0,
+          "at": {
+            "s": 0,
+            "e": 6
+          },
+          "body": [
+            {
+              "type": "Literal",
+              "value": "ORD-0034-restructure",
+              "form": "quote",
+              "slot": null,
+              "role": "operand",
+              "at": {
+                "s": 6,
+                "e": 28
+              }
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 31,
+                "e": 35
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the spec of EMS-002",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 35,
+                    "e": 56
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": ".guidelines/.orders/EMS-002/EMS-002.pgml",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 57,
+                    "e": 99
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 103,
+                "e": 107
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the parked order this one carries out, emitted on 2026-09-24 and parked the same day",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 107,
+                    "e": 193
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": ".guidelines/.orders/parked/restructure-glyph-repo/ORD-0011.pgml",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 194,
+                    "e": 259
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 263,
+                "e": 267
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the mapping, the answers of the Regent and the measured map",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 267,
+                    "e": 328
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": ".guidelines/.orders/INTAKE-RESTRUCTURE.md",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 329,
+                    "e": 372
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "tgt",
+              "canonical": "TGT",
+              "tier": "instr",
+              "gloss": "Target",
+              "element": "target",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 376,
+                "e": 380
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the Glyph guidelines restructured to the classic Orbital layout with the dot kept before each folder name, as the Regent answered on 2026-11-11, every pointer the move breaks rewritten in the commit that breaks it",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 380,
+                    "e": 595
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 599,
+                "e": 603
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the Regent, 2026-11-11: i ratify the emit of the restructure Order",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 603,
+                    "e": 671
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 675,
+                "e": 679
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the answers of 2026-11-11 to INTAKE-RESTRUCTURE.md section 4: R1 b, the classic Orbital is the target; R2 b, the dot stays and the inner files follow _ORBITAL; R3 a, decisions in one file of dated rounds and constraints apart; R4 a, the numbering stays per series; R5 a, no home for the role specs; R6 c, the language into the facts axis",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 679,
+                    "e": 1018
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 1022,
+                "e": 1026
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "measured at 3d0ee4d: the 21 documents and stores of the language at the root of .guidelines are named 423 times in documents, 254 times in 42 files of code, 118 times in the generated skill and plugin, and 101 times in the acts; the 8 stores hold 189 of the 254 mentions in code; 251 files are acts, which are never rewritten",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1026,
+                    "e": 1353
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 1357,
+                "e": 1361
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the files of _ORBITAL are on the machine of the Regent and on no other: the map reads their names from INTAKE-RESTRUCTURE.md section 2, measured on 2026-11-07",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1361,
+                    "e": 1521
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "conf",
+              "canonical": "CONF",
+              "tier": "instr",
+              "gloss": "Confirmation",
+              "element": "confirmation",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 1525,
+                "e": 1530
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the map of INTAKE-RESTRUCTURE.md section 5 and the answers to section 6, before any file moves",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1530,
+                    "e": 1626
+                  }
+                },
+                {
+                  "type": "Command",
+                  "raw": "hmn",
+                  "canonical": "HMN",
+                  "tier": "meta",
+                  "gloss": "Human",
+                  "element": "human",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 1626,
+                    "e": 1630
+                  },
+                  "body": []
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 1635,
+                "e": 1640
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "git mv for every move, one row group per commit, npm run check and npm run check:rust green on each, and each broken pointer rewritten in the commit of the move that broke it",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1640,
+                    "e": 1816
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 1820,
+                "e": 1825
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "an act is never rewritten: a closed ORD, the parked order and a handoff keep the pointers they were emitted with",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1825,
+                    "e": 1939
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "nev",
+              "canonical": "NEV",
+              "tier": "instr",
+              "gloss": "Never",
+              "element": "never",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": true,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 1943,
+                "e": 1947
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the snapshot is regenerated to make the suite green",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1947,
+                    "e": 2000
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "dont",
+              "canonical": "DONT",
+              "tier": "instr",
+              "gloss": "Do Not",
+              "element": "do-not",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 2004,
+                "e": 2009
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "invent a structure that neither repository already shows",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 2009,
+                    "e": 2067
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "val",
+              "canonical": "VAL",
+              "tier": "instr",
+              "gloss": "Validate",
+              "element": "validate",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "composite",
+              "compositionDepth": 5,
+              "at": {
+                "s": 2071,
+                "e": 2075
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the map",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 2075,
+                    "e": 2084
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": "every path the ratified map names lives where the map says, moved by git mv, and nothing the map does not name has moved",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 2085,
+                    "e": 2207
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "val",
+              "canonical": "VAL",
+              "tier": "instr",
+              "gloss": "Validate",
+              "element": "validate",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "composite",
+              "compositionDepth": 5,
+              "at": {
+                "s": 2211,
+                "e": 2215
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the links",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 2215,
+                    "e": 2226
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": "every relative link outside the acts resolves, the path index covers the moved files, and both checks are green at the closing commit",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 2227,
+                    "e": 2362
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "diagnostics": []
+}

@@ -1,12 +1,14 @@
 # Intake — the restructure, mapped
 
-> **Not an order, and nothing moved.** The mapping half of the parked
+> **Nothing moved.** The mapping half of the parked
 > [`ORD-0011`](parked/restructure-glyph-repo/ORD-0011.pgml), `restructure-glyph-repo`:
 > its `[find]` and `[nt]`, reopened when EMS-001 closed, as the Regent decided on
 > 2026-10-15 (*"B now, C when EMS-001 closes"*, [`.decisions/`](../.decisions/README.md)).
-> Measured on 2026-11-07 against `_ORBITAL/Docs/.guidelines/` on this machine, by its
-> folder and file names only. The collisions in §4 are closed questions with no answer;
-> the order's `[conf]` is the Regent's.
+> §1 to §3 are measured on 2026-11-07 against `_ORBITAL/Docs/.guidelines/` on the
+> Regent's machine, by its folder and file names only. The Regent answered the
+> collisions of §4 on 2026-11-11 and ratified the emit of the Order that moves,
+> [`EMS-002/ORD-0034`](EMS-002/README.md), the same day; §5 is the map it opens with,
+> measured at `3d0ee4d`, and §6 what the map leaves to the Regent before a file moves.
 
 ## 1. The premise, measured
 
@@ -135,3 +137,77 @@ scripts read.
 - a. the root of `.guidelines/`, as today
 - b. the norms, `GLOSSARY.md` and the `*_TARGET.md` among them, into the decisions axis
 - c. into the facts axis
+
+## 5. The map
+
+One row group per commit, `git mv` for every move, each broken pointer rewritten
+in the commit of the move that broke it. A count is the number of times the name
+is written in the tracked files, the attic, the packs and `.virtual/` aside.
+
+### 5.1 What the answers move
+
+| group | current path | target path | by | pointers the move breaks |
+|---|---|---|---|---|
+| A | the 13 documents of the language at the root of `.guidelines/`: `GLOSSARY.md`, `XML_REFERENCE.md`, `PACKAGE_TARGET.md`, `BUNDLE_TARGET.md`, `OPERATOR_TARGET.md`, `SIGNATURES.md`, `HGML_PLAN.md`, `HGML_CONVERGENCE.md`, `PROMOTION_BOUNDARY.md`, `PROMOTION_MEASUREMENT.md`, `FORMULA_REVIEW.md`, `FUSIONS_WORKSHEET.md`, `DMHP_IMPORTS.md` | `.guidelines/.sources/`, same names | R6 c | 269 mentions in documents and 65 in code, `scripts/build-skill.js` and `scripts/build-templates.js` among them; 56 in the generated skill and plugin, rebuilt by `npm run build`; 63 in the acts, which stay as emitted |
+| B | the 8 stores and machine-read files at the same root: `templates.json`, `rules.json`, `expansions.txt`, `expansions.json`, `targets.json`, `ast-schema.json`, `corpus-snapshot.json`, `glyph-grammar.ebnf` | `.guidelines/.sources/`, same names | R6 c | 154 mentions in documents and 189 in code: the core, the CLI, the suite, `glyph-stores/build.rs`, `glyph-vocab/build.rs`, `glyph-cli/src/app.rs` and the VS Code extension; 62 in the generated skill and plugin; 38 in the acts |
+| C | the text of [`.orders/README.md`](README.md) | the same file, saying the series rule: `EMS-###/ORD-####/`, the count restarting in each series, the loose ones in `NEM/` | R4 a | none: no path moves. The scaffold regency wrote is its own to fit, in regency |
+
+### 5.2 What the answers keep
+
+| path | by |
+|---|---|
+| `.decisions/README.md`, one file of dated rounds, and `.constraints/README.md` apart | R3 a |
+| `.orders/`, its series, the parked order, the handoffs and the intakes | R4 a; `_ORBITAL` keeps no orders |
+| no folder for the role specs | R5 a |
+| `.history/` and `.packs/` | `_ORBITAL` has no row for either, and the order forbids inventing one |
+| `.shortcuts/` and `.shortcuts/.virtual/` | `_ORBITAL` keeps them dotted itself |
+
+### 5.3 What group B reaches outside the repository
+
+The installed engine reads the stores of the machine, which `--install` wrote from
+these paths, and `glyph-cli/src/app.rs` names them. Group B changes where the
+repository keeps them, and the path the installed app reads moves or stays by M4.
+
+## 6. What the map leaves to the Regent
+
+R2 b says the inner files follow `_ORBITAL`. Where a Glyph file and an `_ORBITAL`
+file answer the same question under two names, the rename is a decision, and no
+answer of §4 names it. The session reads `_ORBITAL` by the names of §2 alone.
+
+**M1. The plan's inner files.** `.plan/` holds `README.md`, `PERGUNTAS-ABERTAS.md`
+(12 lines in 7 files point at it) and `ladder.toml` (28 lines in 12 files, and
+`scripts/ladder.js` reads it). `_ORBITAL` holds `BACKLOG`, `CHECKLIST`, `GRAND_PLAN`,
+`LADDER_PLAN_M_1`, `MINIMUM_PLAN`, `PHASES`, `PLANNING`, `README`, `ROADMAP`, `TRACE`.
+- a. the three names stay: no `_ORBITAL` file is the same document
+- b. `PERGUNTAS-ABERTAS.md` becomes `BACKLOG.md`, and `ladder.toml` stays, being code-read
+- c. the Regent names the pairs
+
+**M2. The changelog axis.** `.changelog/README.md` holds the version rule and points at
+the root `CHANGELOG.md`; 26 lines in 13 files point into the axis. `_ORBITAL` keeps
+`SOURCES/CHANGELOG.md` and no changelog folder.
+- a. the axis stays, as the seven axes stand
+- b. it becomes `.sources/CHANGELOG.md`, and the folder goes
+- c. b, and the root `CHANGELOG.md` moves there too, one record in one place
+
+**M3. The entry.** `_ORBITAL` enters by `AGENTS.md`; Glyph enters by
+`.shortcuts/README.md`, which `CLAUDE.md` and `AGENTS.md` point at (15 lines in 13
+files). `AGENTS.md` and `CLAUDE.md` are tracked here, and gitignored in `_ORBITAL`.
+- a. `.shortcuts/README.md` stays the entry, and the two root files keep pointing
+- b. `AGENTS.md` becomes the entry and the index folds into it
+
+**M4. The stores.** Group B is 189 of the 254 mentions in code, and the only group
+the installed app feels (§5.3).
+- a. the 21 move together, as R6 c reads: groups A and B
+- b. the documents move and the 8 machine-read files stay at the root of
+  `.guidelines/`: group A alone, and no code path of a store changes
+- c. a, with the installed app reading the stores where it reads them today
+
+**M5. The pointers of the acts.** 101 mentions in the 251 files of the acts name a
+path group A or B moves, and an act is never rewritten.
+- a. they stay dead, and the series register says from which commit
+- b. `glyph-vpath` records each old path as an alias of the new one, so an old
+  pointer still resolves by `npm run vpath -- resolve`, and the acts stay as emitted
+
+The session recommends **M1 a, M2 a, M3 a, M4 a and M5 b**: the renames of M1 to M3
+buy no reader anything the measurements show, R6 c already decided M4, and the index
+holds one alias today, so M5 b is a mechanism the repository has.

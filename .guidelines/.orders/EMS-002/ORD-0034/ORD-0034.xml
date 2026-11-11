@@ -1,0 +1,60 @@
+<glyph-package engine="4.7.10.08">
+  <schema/>
+  <block once="true">
+    <block name="ORD-0034-restructure" binds="ORD-0034-restructure">
+      <context>
+        <user-input>the spec of EMS-002</user-input>
+        <user-input>.guidelines/.orders/EMS-002/EMS-002.pgml</user-input>
+      </context>
+      <context>
+        <user-input>the parked order this one carries out, emitted on 2026-09-24 and parked the same day</user-input>
+        <user-input>.guidelines/.orders/parked/restructure-glyph-repo/ORD-0011.pgml</user-input>
+      </context>
+      <context>
+        <user-input>the mapping, the answers of the Regent and the measured map</user-input>
+        <user-input>.guidelines/.orders/INTAKE-RESTRUCTURE.md</user-input>
+      </context>
+      <target>
+        <user-input>the Glyph guidelines restructured to the classic Orbital layout with the dot kept before each folder name, as the Regent answered on 2026-11-11, every pointer the move breaks rewritten in the commit that breaks it</user-input>
+      </target>
+      <context>
+        <user-input>the Regent, 2026-11-11: i ratify the emit of the restructure Order</user-input>
+      </context>
+      <context>
+        <user-input>the answers of 2026-11-11 to INTAKE-RESTRUCTURE.md section 4: R1 b, the classic Orbital is the target; R2 b, the dot stays and the inner files follow _ORBITAL; R3 a, decisions in one file of dated rounds and constraints apart; R4 a, the numbering stays per series; R5 a, no home for the role specs; R6 c, the language into the facts axis</user-input>
+      </context>
+      <context>
+        <user-input>measured at 3d0ee4d: the 21 documents and stores of the language at the root of .guidelines are named 423 times in documents, 254 times in 42 files of code, 118 times in the generated skill and plugin, and 101 times in the acts; the 8 stores hold 189 of the 254 mentions in code; 251 files are acts, which are never rewritten</user-input>
+      </context>
+      <context>
+        <user-input>the files of _ORBITAL are on the machine of the Regent and on no other: the map reads their names from INTAKE-RESTRUCTURE.md section 2, measured on 2026-11-07</user-input>
+      </context>
+      <confirmation imperative="true">
+        <user-input>the map of INTAKE-RESTRUCTURE.md section 5 and the answers to section 6, before any file moves</user-input>
+        <human/>
+      </confirmation>
+      <constraint>
+        <user-input>git mv for every move, one row group per commit, npm run check and npm run check:rust green on each, and each broken pointer rewritten in the commit of the move that broke it</user-input>
+      </constraint>
+      <constraint>
+        <user-input>an act is never rewritten: a closed ORD, the parked order and a handoff keep the pointers they were emitted with</user-input>
+      </constraint>
+      <never force="editorial">
+        <user-input>the snapshot is regenerated to make the suite green</user-input>
+      </never>
+      <do-not>
+        <user-input>invent a structure that neither repository already shows</user-input>
+      </do-not>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the map</user-input>
+        <user-input>every path the ratified map names lives where the map says, moved by git mv, and nothing the map does not name has moved</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the links</user-input>
+        <user-input>every relative link outside the acts resolves, the path index covers the moved files, and both checks are green at the closing commit</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>

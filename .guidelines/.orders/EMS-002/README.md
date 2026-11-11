@@ -8,6 +8,7 @@ pacote que o `--bundle` escreve, e a contagem é desta série.
 
 ## A Ordem aberta
 
+- [`EMS-002/ORD-0034`](ORD-0034/ORD-0034.xml) — the restructure: the guidelines to the classic Orbital layout with the dot kept, as the Regent answered on 2026-11-11, carrying out the parked [`ORD-0011`](../parked/restructure-glyph-repo/ORD-0011.pgml); it opens with the measured map of [`INTAKE-RESTRUCTURE.md`](../INTAKE-RESTRUCTURE.md) §5 and stops at the gate of the Regent, §6; open since 2026-11-11
 
 ## Ordens fechadas
 
