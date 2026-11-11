@@ -38,27 +38,27 @@
 2. A fonte `.pgml` vira **AST** (fonte de verdade), e dela saem três projeções:
    `glyph-package` (XML), o envelope `GlyphAST`, e a queima `.hgml`.
 3. **O `.hgml` é derivado da árvore, não anterior a ela** — e por isso não pode
-   ser a fonte de verdade. Medido em [`HGML_CONVERGENCE.md`](../HGML_CONVERGENCE.md) §6.
+   ser a fonte de verdade. Medido em [`HGML_CONVERGENCE.md`](../.sources/HGML_CONVERGENCE.md) §6.
 4. Casa vazia **não é erro**: vira `<needs>`. Severidades: `fix` recusa,
    `ask` pergunta, `note` observa.
-5. Toda mudança de formato passa por [`PACKAGE_TARGET.md`](../PACKAGE_TARGET.md)
+5. Toda mudança de formato passa por [`PACKAGE_TARGET.md`](../.sources/PACKAGE_TARGET.md)
    e é medida contra `conformance/`.
 
 ## Os documentos que mais se consulta
 
 | quando a pergunta é | abra |
 |---|---|
-| "que elemento esse comando emite?" | [`XML_REFERENCE.md`](../XML_REFERENCE.md) |
+| "que elemento esse comando emite?" | [`XML_REFERENCE.md`](../.sources/XML_REFERENCE.md) |
 | "qual trecho de qual arquivo?" | `npm run vpath -- resolve 'arquivo#seletor' --text` (ou um `NodeID`, `n42`), `npm run vpath -- up` para os pais, `before`, `above` e `between` para a ordem, `npm run vpath -- list arquivo` para os seletores, e `npm run vpath -- misses` para as falhas do índice — o índice está em `.virtual/` |
-| "o que essa notação significa?" | [`GLOSSARY.md`](../GLOSSARY.md) §0.1, §0.3 |
-| "o documento emitido pode fazer isso?" | [`PACKAGE_TARGET.md`](../PACKAGE_TARGET.md) |
-| "isto é domínio ou síntese?" | [`PROMOTION_BOUNDARY.md`](../PROMOTION_BOUNDARY.md) §2 |
+| "o que essa notação significa?" | [`GLOSSARY.md`](../.sources/GLOSSARY.md) §0.1, §0.3 |
+| "o documento emitido pode fazer isso?" | [`PACKAGE_TARGET.md`](../.sources/PACKAGE_TARGET.md) |
+| "isto é domínio ou síntese?" | [`PROMOTION_BOUNDARY.md`](../.sources/PROMOTION_BOUNDARY.md) §2 |
 | "o que o motor promete e não cumpre?" | [`.orders/INTAKE-VARIABLES.md`](../.orders/INTAKE-VARIABLES.md) |
 | "o que o estudo de setembro mediu e decidiu?" | [`.orders/INTAKE-FIELD-2026-09.md`](../.orders/INTAKE-FIELD-2026-09.md) §5 aponta os outros sete |
 | "Rust?" | [`.orders/INTAKE-RUST.md`](../.orders/INTAKE-RUST.md) — os dois lados, pesados; o Regente decidiu migrar ([`.decisions/`](../.decisions/README.md), 2026-09-24) |
 | "a escada de migração perde alguma coisa?" | [`.orders/INTAKE-RUST-LADDER.md`](../.orders/INTAKE-RUST-LADDER.md) — a escada medida contra o motor, e o que o vendoring compra (§9); §8 é o que espera o Regente |
 | "o que se constrói em Rust, e em que ordem?" | [`.plan/`](../.plan/README.md) §5, as séries EMS-001 e [EMS-002](../.orders/EMS-002/README.md) |
-| "duas fontes, uma intenção?" | [`HGML_CONVERGENCE.md`](../HGML_CONVERGENCE.md) |
+| "duas fontes, uma intenção?" | [`HGML_CONVERGENCE.md`](../.sources/HGML_CONVERGENCE.md) |
 | "como escrever um exemplo de conformidade?" | [`conformance/README.md`](../../conformance/README.md) |
 | "como escrevo Glyph?" | a skill em [`.claude/skills/glyph-markup/`](../../.claude/skills/glyph-markup/) — gerada, e provada contra o motor |
 
@@ -66,20 +66,20 @@
 
 | documento | o que guarda |
 |---|---|
-| [`BUNDLE_TARGET.md`](../BUNDLE_TARGET.md) | o que é saída de nível de produção aqui |
-| [`OPERATOR_TARGET.md`](../OPERATOR_TARGET.md) | `-` e `,` da árvore até o XML e de volta |
-| [`SIGNATURES.md`](../SIGNATURES.md) | assinaturas e aridades, tabela normativa |
-| [`HGML_PLAN.md`](../HGML_PLAN.md) | o `.hgml`: plano e estado |
-| [`FORMULA_REVIEW.md`](../FORMULA_REVIEW.md) | o que mudou entre as duas passadas das fórmulas |
-| [`PROMOTION_MEASUREMENT.md`](../PROMOTION_MEASUREMENT.md) | a medição de onde o `PROMOTION_BOUNDARY.md` saiu |
-| [`DMHP_IMPORTS.md`](../DMHP_IMPORTS.md) | o que vale trazer do DMHP, e o que não |
-| [`FUSIONS_WORKSHEET.md`](../FUSIONS_WORKSHEET.md) | as fusões da v1.7, documento histórico |
+| [`BUNDLE_TARGET.md`](../.sources/BUNDLE_TARGET.md) | o que é saída de nível de produção aqui |
+| [`OPERATOR_TARGET.md`](../.sources/OPERATOR_TARGET.md) | `-` e `,` da árvore até o XML e de volta |
+| [`SIGNATURES.md`](../.sources/SIGNATURES.md) | assinaturas e aridades, tabela normativa |
+| [`HGML_PLAN.md`](../.sources/HGML_PLAN.md) | o `.hgml`: plano e estado |
+| [`FORMULA_REVIEW.md`](../.sources/FORMULA_REVIEW.md) | o que mudou entre as duas passadas das fórmulas |
+| [`PROMOTION_MEASUREMENT.md`](../.sources/PROMOTION_MEASUREMENT.md) | a medição de onde o `PROMOTION_BOUNDARY.md` saiu |
+| [`DMHP_IMPORTS.md`](../.sources/DMHP_IMPORTS.md) | o que vale trazer do DMHP, e o que não |
+| [`FUSIONS_WORKSHEET.md`](../.sources/FUSIONS_WORKSHEET.md) | as fusões da v1.7, documento histórico |
 | [`E0b-ARCHITECT-RETURN.md`](../.orders/E0b-ARCHITECT-RETURN.md), [`E2-PLAN.md`](../.orders/E2-PLAN.md) | o retorno do arquiteto e o plano de rederivação da ordem de agosto, `ORD-2026-08-30-01` |
 | [`.orders/INTAKE-VSCODE-AUTHORING.md`](../.orders/INTAKE-VSCODE-AUTHORING.md) | escopo e estado da extensão VS Code para PGML/HGML |
 
 ## Vocabulário do projeto
 
-Em [`GLOSSARY.md`](../GLOSSARY.md) §8: quem decide (Regente, Autor da Ordem,
+Em [`GLOSSARY.md`](../.sources/GLOSSARY.md) §8: quem decide (Regente, Autor da Ordem,
 ADR, DC), como o trabalho se ordena (EMS, ORD, val, bank, o retorno, handoff,
 intake), o app Rust (motor, visual, Glyph Explorer, oráculo) e os nomes que o
 Regente ratificou (template, mould, sample, Order Matrix, snippet, layout).

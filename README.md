@@ -276,12 +276,12 @@ built.
 
 | document | answers |
 |---|---|
-| [`GLOSSARY.md`](.guidelines/GLOSSARY.md) | **what** each command is — the normative reference |
-| [`SIGNATURES.md`](.guidelines/SIGNATURES.md) | **how many** operands each one asks for |
+| [`GLOSSARY.md`](.guidelines/.sources/GLOSSARY.md) | **what** each command is — the normative reference |
+| [`SIGNATURES.md`](.guidelines/.sources/SIGNATURES.md) | **how many** operands each one asks for |
 | [`glyph-grammar.ebnf`](.guidelines/glyph-grammar.ebnf) | the syntax, formally |
 | [`CHANGELOG.md`](CHANGELOG.md) | what changed and why |
-| [`XML_REFERENCE.md`](.guidelines/XML_REFERENCE.md) | **bracket → XML**, element by element — checked by the suite |
-| [`HGML_PLAN.md`](.guidelines/HGML_PLAN.md) | where this is going — the `.hgml` format |
+| [`XML_REFERENCE.md`](.guidelines/.sources/XML_REFERENCE.md) | **bracket → XML**, element by element — checked by the suite |
+| [`HGML_PLAN.md`](.guidelines/.sources/HGML_PLAN.md) | where this is going — the `.hgml` format |
 
 The engine derives from `GLOSSARY.md`, not the other way round, and the suite
 has checks (`X-01`, `X-14`) that fail if the two ever drift apart.

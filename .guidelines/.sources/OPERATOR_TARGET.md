@@ -649,7 +649,7 @@ emitter is touched.
    already solid structure. double gain."* It gives `serializeAST` one more key,
    so the **114 `ast` hashes move by decision**, the way `TPL` moved them on
    2026-09-27 — the snapshot is regenerated because a decision was taken, and the
-   decision is written ([`.decisions/`](.decisions/README.md)). The work enters as
+   decision is written ([`.decisions/`](../.decisions/README.md)). The work enters as
    an ORD.
 
 Three items that were open in the first draft are closed and are not re-litigated

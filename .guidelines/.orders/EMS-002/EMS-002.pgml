@@ -7,7 +7,7 @@
     [dfn'index','.guidelines/.shortcuts/.virtual/index.json, the durable state the engine writes and a resolver without judgement reads']
     [dfn'sources','the list a document declares in its frontmatter: the slices it is written from, each a virtual path']
     [nt'the ORD count resets in each series: EMS-002 counts from ORD-0001']
-    [nt'the vocabulary of the project lives in .guidelines/GLOSSARY.md section 8']
+    [nt'the vocabulary of the project lives in .guidelines/.sources/GLOSSARY.md section 8']
   ]
 
   [section'direction'

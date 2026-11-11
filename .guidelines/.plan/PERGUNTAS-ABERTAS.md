@@ -359,7 +359,7 @@ organisation and enables future `repair`s.
 
 ### `PT-Q11` — `<invoke>` e a precondição
 
-Enunciado: [`PACKAGE_TARGET.md`](../PACKAGE_TARGET.md) §10. Candidatas A e B.
+Enunciado: [`PACKAGE_TARGET.md`](../.sources/PACKAGE_TARGET.md) §10. Candidatas A e B.
 
 **RESPOSTA:** when `<invoke>` is used, there must be a basis for the model to
 rely on. for example: if the EMS has a configuration that set paths to a SKILL.md
@@ -386,7 +386,7 @@ rework.
 
 ### `OT-9.1` — posição de diagnóstico no AST JSON
 
-Enunciado: [`OPERATOR_TARGET.md`](../OPERATOR_TARGET.md) §9. Candidatas A a C.
+Enunciado: [`OPERATOR_TARGET.md`](../.sources/OPERATOR_TARGET.md) §9. Candidatas A a C.
 
 **RESPOSTA:** A, undoubtly. we must consider a future reality where the AST
 should be read and used as generative context - if considering it
@@ -432,7 +432,7 @@ never do, as `>` needs to press `SHIFT+.` to be typed.
 
 ### `PT-Q12` — o `K8` conta errado
 
-Enunciado: [`PACKAGE_TARGET.md`](../PACKAGE_TARGET.md) §10. Candidatas A e B.
+Enunciado: [`PACKAGE_TARGET.md`](../.sources/PACKAGE_TARGET.md) §10. Candidatas A e B.
 
 **RESPOSTA:** A -> straight to the point. *Mastery spares synthesis.*
 
@@ -451,7 +451,7 @@ item and finally it's position in the logic structure's queue. the generic
 
 > **Desenho, não escolha de letra:** um esquema de nomeação que os dois níveis
 > carregam. **Move os hashes de `xml`**, então passa pelo
-> [`PACKAGE_TARGET.md`](../PACKAGE_TARGET.md) e pelo `conformance/`.
+> [`PACKAGE_TARGET.md`](../.sources/PACKAGE_TARGET.md) e pelo `conformance/`.
 
 ### `FIELD-3b` — o portão da versão nos 51 `[ctx]`
 
@@ -504,7 +504,7 @@ i think you have enough material to go on.
 
 ### `PT-Q9` — o bundle de seis camadas
 
-Enunciado: [`PACKAGE_TARGET.md`](../PACKAGE_TARGET.md) §10. Candidatas A a C; a
+Enunciado: [`PACKAGE_TARGET.md`](../.sources/PACKAGE_TARGET.md) §10. Candidatas A a C; a
 A era a recomendação.
 
 **RESPOSTA:** B.
@@ -645,7 +645,7 @@ rely on what the ORD has to offer as input.
 
 ### `PKG-5` — o conteúdo de `<schema>`
 
-Enunciado: [`PACKAGE_TARGET.md`](../PACKAGE_TARGET.md) §5. Sem candidata
+Enunciado: [`PACKAGE_TARGET.md`](../.sources/PACKAGE_TARGET.md) §5. Sem candidata
 possível para o conteúdo; o barato era confirmar que segue vazio.
 
 **RESPOSTA:** ironic, i just answered something citing it! Glyph's back on

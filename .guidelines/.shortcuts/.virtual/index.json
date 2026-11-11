@@ -19,12 +19,12 @@
     },
     ".guidelines/.constraints/README.md": {
       "nodes": [
-        ["n6", "", 0, 5549, 1, 52, "5092d4186e44f080", "", ""],
-        ["n7", "restrições--o-que-o-projeto-se-proíbe", 0, 5549, 1, 52, "5092d4186e44f080", "eaeb9fd4ff50c600", "n6"],
+        ["n6", "", 0, 5558, 1, 52, "eba2fa8a5902c070", "", ""],
+        ["n7", "restrições--o-que-o-projeto-se-proíbe", 0, 5558, 1, 52, "eba2fa8a5902c070", "0ba9be302b792b00", "n6"],
         ["n8", "do-artefato", 231, 1695, 7, 10, "0ada4070dcbb3700", "ec90cac86dac0e00", "n7"],
-        ["n9", "do-método", 1695, 3336, 17, 14, "2814d498187e6f80", "344237289054bf80", "n7"],
-        ["n10", "da-escrita", 3336, 4871, 31, 13, "4831f6b482f9ea00", "9ebf132856d94380", "n7"],
-        ["n11", "do-processo", 4871, 5549, 44, 9, "3d1c8c28bfd25800", "1593d05075f03a00", "n7"]
+        ["n9", "do-método", 1695, 3345, 17, 14, "5bea152002258400", "155306d886ce4000", "n7"],
+        ["n10", "da-escrita", 3345, 4880, 31, 13, "4831f6b482f9ea00", "9ebf132856d94380", "n7"],
+        ["n11", "do-processo", 4880, 5558, 44, 9, "3d1c8c28bfd25800", "1593d05075f03a00", "n7"]
       ]
     },
     ".guidelines/.constraints/README.md.template": {
@@ -34,8 +34,8 @@
     },
     ".guidelines/.decisions/README.md": {
       "nodes": [
-        ["n12", "", 0, 81899, 1, 362, "de064e02d97f0800", "", ""],
-        ["n13", "decisões--quem-decidiu-e-por-quê", 0, 81899, 1, 362, "de064e02d97f0800", "8db0d5c05da4f400", "n12"],
+        ["n12", "", 0, 81989, 1, 362, "40314e0887241200", "", ""],
+        ["n13", "decisões--quem-decidiu-e-por-quê", 0, 81989, 1, 362, "40314e0887241200", "8f4599b04a53bc00", "n12"],
         ["n14", "formato", 310, 382, 9, 7, "b5f95da43600fc00", "1b119b961fb48400", "n13"],
         ["n3144", "2026-11-11", 382, 9071, 16, 49, "5e4035cc09080600", "14329a18a4d15400", "n13"],
         ["n3051", "2026-11-07", 9071, 12306, 65, 27, "309efad433e14400", "7f8116e6fec83b80", "n13"],
@@ -47,15 +47,15 @@
         ["n15", "2026-10-23", 23294, 25588, 145, 11, "313cabeeaca21800", "bf88c356618a6400", "n13"],
         ["n2917", "2026-10-21", 25588, 26947, 156, 13, "9e1031d87e6a1680", "07db4d6e907a5600", "n13"],
         ["n2918", "2026-10-16", 26947, 30451, 169, 19, "ec2e03204e643500", "c61b01f4d800e980", "n13"],
-        ["n2919", "2026-10-15", 30451, 47936, 188, 37, "9e60c1be27f44f00", "c5e028863d74f000", "n13"],
-        ["n16", "2026-09-27", 47936, 63538, 225, 40, "7011bef07428a350", "ff1299301d0ae200", "n13"],
-        ["n17", "2026-09-26", 63538, 65181, 265, 9, "752c7c50e2663900", "60284c2c68cce000", "n13"],
-        ["n18", "2026-09-25", 65181, 66378, 274, 8, "d890ff866d173200", "802caa2034924400", "n13"],
-        ["n19", "2026-09-24", 66378, 74760, 282, 29, "3277c0c0c74b8c00", "1093cee041691a00", "n13"],
-        ["n20", "2026-09-06", 74760, 76957, 311, 13, "e4bcd520bd70e600", "16aad970e40f7c00", "n13"],
-        ["n21", "2026-09-05", 76957, 78436, 324, 13, "67e05df081ec8a00", "197e689607dbfd00", "n13"],
-        ["n22", "anteriores-ainda-em-vigor", 78436, 79451, 337, 11, "126b256ee8e23600", "da6d5270b387c000", "n13"],
-        ["n23", "decisões-que-um-agente-tomou-e-o-regente-ainda-não-ratificou", 79451, 81899, 348, 15, "cacf8a1293abdf00", "2183ebb813675200", "n13"]
+        ["n2919", "2026-10-15", 30451, 47981, 188, 37, "944bc1e81abefe00", "8341aaa05f06e100", "n13"],
+        ["n16", "2026-09-27", 47981, 63628, 225, 40, "1581275053e10200", "d21194b6aade8140", "n13"],
+        ["n17", "2026-09-26", 63628, 65271, 265, 9, "752c7c50e2663900", "60284c2c68cce000", "n13"],
+        ["n18", "2026-09-25", 65271, 66468, 274, 8, "d890ff866d173200", "802caa2034924400", "n13"],
+        ["n19", "2026-09-24", 66468, 74850, 282, 29, "3277c0c0c74b8c00", "1093cee041691a00", "n13"],
+        ["n20", "2026-09-06", 74850, 77047, 311, 13, "e4bcd520bd70e600", "16aad970e40f7c00", "n13"],
+        ["n21", "2026-09-05", 77047, 78526, 324, 13, "67e05df081ec8a00", "197e689607dbfd00", "n13"],
+        ["n22", "anteriores-ainda-em-vigor", 78526, 79541, 337, 11, "126b256ee8e23600", "da6d5270b387c000", "n13"],
+        ["n23", "decisões-que-um-agente-tomou-e-o-regente-ainda-não-ratificou", 79541, 81989, 348, 15, "cacf8a1293abdf00", "2183ebb813675200", "n13"]
       ]
     },
     ".guidelines/.decisions/README.md.template": {
@@ -944,7 +944,7 @@
     },
     ".guidelines/.orders/EMS-002/EMS-002.pgml": {
       "nodes": [
-        ["n523", "", 0, 39792, 1, 289, "ca62d7b2d460fc00", "", ""]
+        ["n523", "", 0, 39801, 1, 289, "1209c38097744f00", "", ""]
       ]
     },
     ".guidelines/.orders/EMS-002/ORD-0001/ORD-0001.hgml": {
@@ -2981,8 +2981,8 @@
     },
     ".guidelines/.orders/INTAKE-EFFECTS.md": {
       "nodes": [
-        ["n656", "", 0, 16555, 1, 342, "a5402c98419b1400", "", ""],
-        ["n657", "preliminary-intake--effects", 0, 16555, 1, 342, "a5402c98419b1400", "b7d95fc01bcdc200", "n656"],
+        ["n656", "", 0, 16564, 1, 342, "8a4f8450144a0c00", "", ""],
+        ["n657", "preliminary-intake--effects", 0, 16564, 1, 342, "8a4f8450144a0c00", "68ecc58e09b878c0", "n656"],
         ["n658", "1-what-the-regent-wants", 399, 1007, 10, 12, "1ead87263b6b9a00", "39fa0bc057365f00", "n657"],
         ["n659", "2-where-it-does-not-go-and-why", 1007, 1762, 22, 15, "fd77ed9440c06500", "9204e25442821cc0", "n657"],
         ["n660", "3-where-it-does-go--measured", 1762, 3135, 37, 37, "75afb98815c0d800", "157d6a547c012400", "n657"],
@@ -2995,20 +2995,20 @@
         ["n2996", "8-the-two-prerequisites--both-answered-on-2026-10-15", 8879, 14221, 205, 102, "d78281c08d9dde80", "b41a3d6494ce1200", "n657"],
         ["n2997", "81-item--the-frontier-is-the-answer", 9221, 11548, 212, 39, "5059863a40de3870", "70b91f8e799a5200", "n2996"],
         ["n2998", "82-part--it-exists-and-it-was-lost-in-silence", 11548, 14221, 251, 56, "0160cb469b339a00", "5a266e0a0030de00", "n2996"],
-        ["n668", "9-cost-split", 14221, 16006, 307, 27, "052d4e7e286c0300", "fa1b99f83f2a7f80", "n657"],
-        ["n2999", "91-item-and-root--both-under-a-naming-scheme", 14809, 16006, 314, 20, "8b753a00d5434000", "3961ff50617dde00", "n668"],
-        ["n3000", "10-unrelated-finding--closed-with-no-engine-work", 16006, 16555, 334, 9, "5bb8cf1e84ba2500", "660dec508dd5c000", "n657"]
+        ["n668", "9-cost-split", 14221, 16015, 307, 27, "af7222a0dd774d00", "48a605eef1174000", "n657"],
+        ["n2999", "91-item-and-root--both-under-a-naming-scheme", 14809, 16015, 314, 20, "40341510da0c3000", "085b63bc6c82dd00", "n668"],
+        ["n3000", "10-unrelated-finding--closed-with-no-engine-work", 16015, 16564, 334, 9, "5bb8cf1e84ba2500", "660dec508dd5c000", "n657"]
       ]
     },
     ".guidelines/.orders/INTAKE-FIELD-2026-09.md": {
       "nodes": [
-        ["n670", "", 0, 10624, 1, 137, "a8f9afc871a44200", "", ""],
-        ["n671", "field-intake--the-engine-used-on-a-client-project", 0, 10624, 1, 137, "a8f9afc871a44200", "5c93c8d8217b7b40", "n670"],
+        ["n670", "", 0, 10633, 1, 137, "c13cdf70206a2700", "", ""],
+        ["n671", "field-intake--the-engine-used-on-a-client-project", 0, 10633, 1, 137, "c13cdf70206a2700", "586d1fc0c74c8100", "n670"],
         ["n672", "1-finding-1--the-burn-does-not-re-read-clean-h-09-confirmed-in-the-field", 722, 3142, 13, 36, "b0c5107cd67bb400", "e91c9d403076ba80", "n671"],
-        ["n673", "2-finding-2--rev--dist-burn-as-heavy--fixed-in-two-halves", 3142, 5398, 49, 35, "3694d9c0bc4c2800", "222660b498d87e00", "n671"],
-        ["n674", "3-finding-3--four-structural-problems-in-the-kit-not-in-the-engine", 5398, 7533, 84, 12, "6776e790343f9600", "aa2033ae2acbe200", "n671"],
-        ["n675", "4-finding-4--an-fsm-in-front-of-the-model-sized-not-adopted", 7533, 9770, 96, 29, "185d64808bbe4c00", "4b83397031e59400", "n671"],
-        ["n676", "5-what-this-intake-changed-elsewhere", 9770, 10624, 125, 13, "5371e3501923de00", "762276ae5bdd9400", "n671"]
+        ["n673", "2-finding-2--rev--dist-burn-as-heavy--fixed-in-two-halves", 3142, 5407, 49, 35, "04b1c526db2b1e00", "44a95e78db6d1a00", "n671"],
+        ["n674", "3-finding-3--four-structural-problems-in-the-kit-not-in-the-engine", 5407, 7542, 84, 12, "6776e790343f9600", "aa2033ae2acbe200", "n671"],
+        ["n675", "4-finding-4--an-fsm-in-front-of-the-model-sized-not-adopted", 7542, 9779, 96, 29, "185d64808bbe4c00", "4b83397031e59400", "n671"],
+        ["n676", "5-what-this-intake-changed-elsewhere", 9779, 10633, 125, 13, "5371e3501923de00", "762276ae5bdd9400", "n671"]
       ]
     },
     ".guidelines/.orders/INTAKE-FORMAL-ANALYSIS.md": {
@@ -3079,25 +3079,25 @@
     },
     ".guidelines/.orders/INTAKE-PART.md": {
       "nodes": [
-        ["n3137", "", 0, 7206, 1, 122, "98993588f66d4700", "", ""],
-        ["n3138", "intake--part-restored-the-measured-proposal", 0, 7206, 1, 122, "98993588f66d4700", "c60dfb52604f0e00", "n3137"],
-        ["n3139", "1-what-the-engine-reads-today", 487, 1916, 9, 23, "1f407df81f746600", "bbe5195435b7f800", "n3138"],
-        ["n3140", "2-where-it-was-lost", 1916, 2556, 32, 11, "b867ccd8f734be00", "1d826fc829671c00", "n3138"],
-        ["n3141", "3-observed-in-the-designs-example", 2556, 2918, 43, 7, "49b70290a3886900", "3f757bae6d9a3000", "n3138"],
-        ["n3142", "4-the-questions", 2918, 4845, 50, 36, "652175a04067ad00", "6877d5fc429db000", "n3138"],
-        ["n3145", "5-the-regents-answers", 4845, 5619, 86, 15, "e8c0763a26274700", "d58282c4d4f1e400", "n3138"],
-        ["n3184", "6-what-the-order-built", 5619, 7206, 101, 22, "0c2da30683e9fc00", "cb35ee38c30cdc00", "n3138"]
+        ["n3137", "", 0, 7215, 1, 122, "2b00bf281f02fe00", "", ""],
+        ["n3138", "intake--part-restored-the-measured-proposal", 0, 7215, 1, 122, "2b00bf281f02fe00", "f20b9478f75aa300", "n3137"],
+        ["n3139", "1-what-the-engine-reads-today", 487, 1925, 9, 23, "59527e48a96f5800", "5dec6e4807bd3800", "n3138"],
+        ["n3140", "2-where-it-was-lost", 1925, 2565, 32, 11, "b867ccd8f734be00", "1d826fc829671c00", "n3138"],
+        ["n3141", "3-observed-in-the-designs-example", 2565, 2927, 43, 7, "49b70290a3886900", "3f757bae6d9a3000", "n3138"],
+        ["n3142", "4-the-questions", 2927, 4854, 50, 36, "652175a04067ad00", "6877d5fc429db000", "n3138"],
+        ["n3145", "5-the-regents-answers", 4854, 5628, 86, 15, "e8c0763a26274700", "d58282c4d4f1e400", "n3138"],
+        ["n3184", "6-what-the-order-built", 5628, 7215, 101, 22, "0c2da30683e9fc00", "cb35ee38c30cdc00", "n3138"]
       ]
     },
     ".guidelines/.orders/INTAKE-PIN-TRAFFIC.md": {
       "nodes": [
-        ["n720", "", 0, 8509, 1, 107, "5ab1396ec3184480", "", ""],
-        ["n721", "preliminary-intake--pin-traffic-and-the-ems-the-user-drives", 0, 8509, 1, 107, "5ab1396ec3184480", "a9d70bc6be238700", "n720"],
-        ["n722", "1-pin--a-conditional-the-user-writes-in-the-editor", 335, 1700, 8, 25, "de1f97ac431dd600", "33fe2ca8abe06000", "n721"],
-        ["n723", "2-the-ems-and-the-ord-as-the-user-drives-them", 1700, 3189, 33, 24, "ed4a1b901b197600", "89f7548e4debe280", "n721"],
-        ["n724", "3-traffic-and-the-paths", 3189, 4587, 57, 25, "11d075fa64f2d800", "68e6723883f2cd00", "n721"],
-        ["n725", "4-the-ems-configuration-inside-every-ords-package", 4587, 5252, 82, 12, "ccb213602f83d580", "31d0374cc032ba00", "n721"],
-        ["n726", "5-settled-when-built", 5252, 8509, 94, 14, "8e5112e21f9e5c00", "51de7cbaad21a400", "n721"]
+        ["n720", "", 0, 8536, 1, 107, "a657bc1a386c8200", "", ""],
+        ["n721", "preliminary-intake--pin-traffic-and-the-ems-the-user-drives", 0, 8536, 1, 107, "a657bc1a386c8200", "4ea23ac08a3e7600", "n720"],
+        ["n722", "1-pin--a-conditional-the-user-writes-in-the-editor", 344, 1709, 8, 25, "de1f97ac431dd600", "33fe2ca8abe06000", "n721"],
+        ["n723", "2-the-ems-and-the-ord-as-the-user-drives-them", 1709, 3198, 33, 24, "ed4a1b901b197600", "89f7548e4debe280", "n721"],
+        ["n724", "3-traffic-and-the-paths", 3198, 4596, 57, 25, "11d075fa64f2d800", "68e6723883f2cd00", "n721"],
+        ["n725", "4-the-ems-configuration-inside-every-ords-package", 4596, 5270, 82, 12, "f0e8d738edddf200", "e3b3dae43bc6a000", "n721"],
+        ["n726", "5-settled-when-built", 5270, 8536, 94, 14, "45733664ef1a7c00", "49d312f69d62eac0", "n721"]
       ]
     },
     ".guidelines/.orders/INTAKE-RESTRUCTURE.md": {
@@ -3182,8 +3182,8 @@
     },
     ".guidelines/.orders/INTAKE-VIRTUAL-PATH.md": {
       "nodes": [
-        ["n775", "", 0, 51562, 1, 866, "79a5873e73e8c800", "", ""],
-        ["n776", "preliminary-intake--the-computed-context-mini-repo-and-virtual-path", 0, 51562, 1, 866, "79a5873e73e8c800", "6ab9d0b84155f000", "n775"],
+        ["n775", "", 0, 51571, 1, 866, "b63ae3d653216f40", "", ""],
+        ["n776", "preliminary-intake--the-computed-context-mini-repo-and-virtual-path", 0, 51571, 1, 866, "b63ae3d653216f40", "e21b810c95e29000", "n775"],
         ["n777", "1-the-goal-as-the-regent-states-it", 861, 1330, 17, 9, "21adcdb852ab8900", "64260344f1480e00", "n776"],
         ["n778", "2-the-cost-model--corrected-by-cláudio-and-adopted", 1330, 2307, 26, 16, "585ebd60d6d69c00", "bf8c289ca0479400", "n776"],
         ["n779", "3-glyph-reads-and-tracks-guidelines--already-true-three-times", 2307, 3204, 42, 12, "feac6a40458e7e00", "a3cd1f1e676c2000", "n776"],
@@ -3216,14 +3216,14 @@
         ["n3002", "161-the-regent-takes-it-and-names-what-it-costs", 30406, 31961, 524, 21, "6af397d08662d2c0", "12a35aa41f42f600", "n805"],
         ["n806", "17-housekeeping-outside-the-study", 31961, 32231, 545, 6, "84b47532d3c49400", "344fc2b422cf3980", "n776"],
         ["n807", "18-the-october-re-measurement-before-the-code--thresholds", 32231, 35263, 551, 49, "5006a2c836076c00", "86627158eb4a1e00", "n776"],
-        ["n808", "19-the-october-re-measurement--measured", 35263, 38439, 600, 47, "ef8893301cfb4400", "a47243660ef32000", "n776"],
-        ["n809", "20-the-nodeid--what-structure-alone-recovers-threshold", 38439, 40260, 647, 32, "d68be616cc4fc900", "0a7de2ac1722f200", "n776"],
-        ["n810", "21-the-nodeid--measured", 40260, 41977, 679, 27, "1b92115cb4b94200", "4dc7dad64ace2c00", "n776"],
-        ["n1791", "22-the-recovery-index--what-the-path-alone-recovers-threshold", 41977, 43855, 706, 32, "b3f2f01c10012200", "3aeac8743ee7f600", "n776"],
-        ["n1792", "23-the-recovery-index--measured", 43855, 45268, 738, 24, "4e6aeaa68b0b5c00", "9bb8a25614e6cc00", "n776"],
-        ["n1831", "24-order-maintenance--what-an-edit-rewrites-threshold", 45268, 47089, 762, 34, "814c5adce992f800", "5d5cf91c05a36400", "n776"],
-        ["n1832", "25-order-maintenance--measured", 47089, 48533, 796, 24, "237c314acae52430", "ec860a2457c69200", "n776"],
-        ["n3003", "26-re-measured-2026-10-16--the-history-since-7-says-stop", 48533, 51562, 820, 47, "2dbeac20cdb71200", "2570188c5c4b8b00", "n776"]
+        ["n808", "19-the-october-re-measurement--measured", 35263, 38448, 600, 47, "127b6e50d98d4000", "9d3e8ce81a802b00", "n776"],
+        ["n809", "20-the-nodeid--what-structure-alone-recovers-threshold", 38448, 40269, 647, 32, "d68be616cc4fc900", "0a7de2ac1722f200", "n776"],
+        ["n810", "21-the-nodeid--measured", 40269, 41986, 679, 27, "1b92115cb4b94200", "4dc7dad64ace2c00", "n776"],
+        ["n1791", "22-the-recovery-index--what-the-path-alone-recovers-threshold", 41986, 43864, 706, 32, "b3f2f01c10012200", "3aeac8743ee7f600", "n776"],
+        ["n1792", "23-the-recovery-index--measured", 43864, 45277, 738, 24, "4e6aeaa68b0b5c00", "9bb8a25614e6cc00", "n776"],
+        ["n1831", "24-order-maintenance--what-an-edit-rewrites-threshold", 45277, 47098, 762, 34, "814c5adce992f800", "5d5cf91c05a36400", "n776"],
+        ["n1832", "25-order-maintenance--measured", 47098, 48542, 796, 24, "237c314acae52430", "ec860a2457c69200", "n776"],
+        ["n3003", "26-re-measured-2026-10-16--the-history-since-7-says-stop", 48542, 51571, 820, 47, "2dbeac20cdb71200", "2570188c5c4b8b00", "n776"]
       ]
     },
     ".guidelines/.orders/INTAKE-VSCODE-AUTHORING.md": {
@@ -3587,8 +3587,8 @@
     },
     ".guidelines/.plan/PERGUNTAS-ABERTAS.md": {
       "nodes": [
-        ["n1111", "", 0, 37997, 1, 674, "a1cdcdc032013c00", "", ""],
-        ["n1112", "perguntas-abertas--para-o-regente-preencher", 0, 37997, 1, 674, "a1cdcdc032013c00", "e9e01900a17b2000", "n1111"],
+        ["n1111", "", 0, 38051, 1, 674, "a1cfcd20477a5400", "", ""],
+        ["n1112", "perguntas-abertas--para-o-regente-preencher", 0, 38051, 1, 674, "a1cfcd20477a5400", "ab312a283f1e4200", "n1111"],
         ["n1113", "1---consertar-ou-aposentar", 402, 3264, 9, 28, "0d671b481f54a600", "df16fb303b0e5e00", "n1112"],
         ["n1114", "o-que-acontece-hoje-medido", 443, 837, 10, 8, "9c364b90c0179280", "bee767f081fb6e00", "n1113"],
         ["n1115", "opções", 837, 3264, 18, 19, "27b4c3d2770c2e00", "217277e0b72acf00", "n1113"],
@@ -3618,37 +3618,37 @@
         ["n1139", "o-que-medi", 17526, 18114, 264, 15, "41724d9e14feca00", "dee23b823a3e8200", "n1137"],
         ["n1140", "como-segui-sem-você", 18114, 18614, 279, 11, "62fe103c21db0400", "6b201618a4d4fe00", "n1137"],
         ["n1141", "opções-5", 18614, 19728, 290, 26, "67da185c7414f600", "ec9135507cb55c00", "n1137"],
-        ["n3013", "8-o-inventário-de-2026-10-15--vinte-e-três-perguntas-as-palavras-do-regente", 19728, 37997, 316, 359, "63d0025c449e5600", "a0362d7eba49b400", "n1112"],
+        ["n3013", "8-o-inventário-de-2026-10-15--vinte-e-três-perguntas-as-palavras-do-regente", 19728, 38051, 316, 359, "27ae88080f094d00", "ec9e71a6674ff980", "n1112"],
         ["n3014", "coh-relates--a-aresta-entre-ordens", 20422, 22403, 329, 31, "add5e70e03d96200", "67cea744e50cb940", "n3013"],
-        ["n3015", "pt-q11--invoke-e-a-precondição", 22403, 24078, 360, 27, "8d810d3a3054d200", "ec3d6476ed74ba00", "n3013"],
-        ["n3016", "ot-91--posição-de-diagnóstico-no-ast-json", 24078, 24529, 387, 10, "843ccb60d0a96600", "cd5fc4e898f49e00", "n3013"],
-        ["n3017", "vp-16--referências-podem-sair-do-pacote", 24529, 25498, 397, 17, "8f0a6a808ac1f800", "255cd750bdc42c00", "n3013"],
-        ["n3018", "ord-0013--o-instalador", 25498, 25789, 414, 8, "ea23dc9494f9ba80", "8d7bedec05621400", "n3013"],
-        ["n3019", "eff-10--o--", 25789, 26205, 422, 11, "f97b10d0f4e89100", "c619f92e19f17a00", "n3013"],
-        ["n3020", "pt-q12--o-k8-conta-errado", 26205, 26394, 433, 6, "636a3264f9f06e00", "6bc58388743d1180", "n3013"],
-        ["n3021", "eff-9--origin-em-item-vs-root", 26394, 27275, 439, 17, "b21800a6a1c69e00", "6cb6855e2914f000", "n3013"],
-        ["n3022", "field-3b--o-portão-da-versão-nos-51-ctx", 27275, 27539, 456, 7, "9c9418602ccf6a00", "414fff8e55e54980", "n3013"],
-        ["n3023", "ord-0014--aceitar-a-árvore-medida", 27539, 27865, 463, 8, "4bf7857cfc551400", "0d0a9d8c1a936a00", "n3013"],
-        ["n3024", "vp-12--os-caminhos-b-e-c-do-mini-repo", 27865, 28055, 471, 7, "a0a76276c5e01700", "ca410a3483ace000", "n3013"],
-        ["n3025", "field-3c--tabela-de-prefixos-no---check", 28055, 28250, 478, 7, "ab1c546881f4a300", "647353541642c700", "n3013"],
-        ["n3026", "parked--a-ord-0011-chapada", 28250, 28592, 485, 8, "7f89c7a6cd918300", "38dee05a0a474300", "n3013"],
-        ["n3027", "q14-quando--a-e-06", 28592, 29101, 493, 12, "51885a3817c42000", "4701e394ede30800", "n3013"],
-        ["n3028", "pt-q9--o-bundle-de-seis-camadas", 29101, 29267, 505, 7, "f2bd1f687e2b0600", "3b6beebca5c17000", "n3013"],
-        ["n3029", "pin-vocabulary--os-nomes-canónicos-e-a-valência-do-pin", 29267, 29997, 512, 14, "dd3e8838680afc00", "8e22112e364f5c00", "n3013"],
-        ["n3030", "pin-selection--a-gramática-do-seletor-de-tipo", 29997, 30831, 526, 16, "841fc24e4b048e00", "aa91cd606e33bb00", "n3013"],
-        ["n3031", "pin-emsjson--o-esquema-da-emsjson", 30831, 31724, 542, 15, "22c3af348419f240", "b4d3bc8437b95e00", "n3013"],
-        ["n3032", "pin-ems-000--o-conteúdo-inicial-da-ems-genérica", 31724, 32035, 557, 8, "041ed656a0f32b40", "7b8ed60c53042000", "n3013"],
-        ["n3033", "eff-8--part", 32035, 34459, 565, 48, "416166dc9164a900", "551a9ccec5b2d100", "n3013"],
-        ["n3034", "eff-8--item-e-os-objetos-de-contexto", 34459, 36678, 613, 33, "ffc89e46764c4e00", "49c54602cc52fe1c", "n3013"],
-        ["n3035", "pkg-5--o-conteúdo-de-schema", 36678, 37627, 646, 16, "030e55f0113ee800", "6b9e82a6ec62a000", "n3013"],
-        ["n3036", "ems-002--a-série-que-ainda-não-foi-escrita", 37627, 37817, 662, 7, "44dc39443aa04180", "5826aff8cbccec00", "n3013"],
-        ["n3037", "ems-001-queue--a-execução-assíncrona", 37817, 37997, 669, 6, "c6c47396283a9800", "a8cadcd017b29e00", "n3013"]
+        ["n3015", "pt-q11--invoke-e-a-precondição", 22403, 24087, 360, 27, "fc309820d0b2c400", "0713fe164fb97600", "n3013"],
+        ["n3016", "ot-91--posição-de-diagnóstico-no-ast-json", 24087, 24547, 387, 10, "d4f468a04f85c600", "9628a14e8ccf1a00", "n3013"],
+        ["n3017", "vp-16--referências-podem-sair-do-pacote", 24547, 25516, 397, 17, "8f0a6a808ac1f800", "255cd750bdc42c00", "n3013"],
+        ["n3018", "ord-0013--o-instalador", 25516, 25807, 414, 8, "ea23dc9494f9ba80", "8d7bedec05621400", "n3013"],
+        ["n3019", "eff-10--o--", 25807, 26223, 422, 11, "f97b10d0f4e89100", "c619f92e19f17a00", "n3013"],
+        ["n3020", "pt-q12--o-k8-conta-errado", 26223, 26421, 433, 6, "b21f7b50d12e3140", "c0e064588ad52600", "n3013"],
+        ["n3021", "eff-9--origin-em-item-vs-root", 26421, 27311, 439, 17, "fd901e6ef927ec00", "23d04d0479196f80", "n3013"],
+        ["n3022", "field-3b--o-portão-da-versão-nos-51-ctx", 27311, 27575, 456, 7, "9c9418602ccf6a00", "414fff8e55e54980", "n3013"],
+        ["n3023", "ord-0014--aceitar-a-árvore-medida", 27575, 27901, 463, 8, "4bf7857cfc551400", "0d0a9d8c1a936a00", "n3013"],
+        ["n3024", "vp-12--os-caminhos-b-e-c-do-mini-repo", 27901, 28091, 471, 7, "a0a76276c5e01700", "ca410a3483ace000", "n3013"],
+        ["n3025", "field-3c--tabela-de-prefixos-no---check", 28091, 28286, 478, 7, "ab1c546881f4a300", "647353541642c700", "n3013"],
+        ["n3026", "parked--a-ord-0011-chapada", 28286, 28628, 485, 8, "7f89c7a6cd918300", "38dee05a0a474300", "n3013"],
+        ["n3027", "q14-quando--a-e-06", 28628, 29137, 493, 12, "51885a3817c42000", "4701e394ede30800", "n3013"],
+        ["n3028", "pt-q9--o-bundle-de-seis-camadas", 29137, 29312, 505, 7, "e8d6d5ce46127800", "75aa8a36fde30400", "n3013"],
+        ["n3029", "pin-vocabulary--os-nomes-canónicos-e-a-valência-do-pin", 29312, 30042, 512, 14, "dd3e8838680afc00", "8e22112e364f5c00", "n3013"],
+        ["n3030", "pin-selection--a-gramática-do-seletor-de-tipo", 30042, 30876, 526, 16, "841fc24e4b048e00", "aa91cd606e33bb00", "n3013"],
+        ["n3031", "pin-emsjson--o-esquema-da-emsjson", 30876, 31769, 542, 15, "22c3af348419f240", "b4d3bc8437b95e00", "n3013"],
+        ["n3032", "pin-ems-000--o-conteúdo-inicial-da-ems-genérica", 31769, 32080, 557, 8, "041ed656a0f32b40", "7b8ed60c53042000", "n3013"],
+        ["n3033", "eff-8--part", 32080, 34504, 565, 48, "416166dc9164a900", "551a9ccec5b2d100", "n3013"],
+        ["n3034", "eff-8--item-e-os-objetos-de-contexto", 34504, 36723, 613, 33, "ffc89e46764c4e00", "49c54602cc52fe1c", "n3013"],
+        ["n3035", "pkg-5--o-conteúdo-de-schema", 36723, 37681, 646, 16, "c0f7c4681681c800", "c23eb168a016f400", "n3013"],
+        ["n3036", "ems-002--a-série-que-ainda-não-foi-escrita", 37681, 37871, 662, 7, "44dc39443aa04180", "5826aff8cbccec00", "n3013"],
+        ["n3037", "ems-001-queue--a-execução-assíncrona", 37871, 38051, 669, 6, "c6c47396283a9800", "a8cadcd017b29e00", "n3013"]
       ]
     },
     ".guidelines/.plan/README.md": {
       "nodes": [
-        ["n1142", "", 0, 28188, 1, 367, "f1f0e396d7d14000", "", ""],
-        ["n1143", "plano--o-que-vem-a-seguir", 0, 28188, 1, 367, "f1f0e396d7d14000", "177f8fa0a27ebf40", "n1142"],
+        ["n1142", "", 0, 28215, 1, 367, "1cdacd8e99e04e80", "", ""],
+        ["n1143", "plano--o-que-vem-a-seguir", 0, 28215, 1, 367, "1cdacd8e99e04e80", "3c55fc6c8f288a80", "n1142"],
         ["n1144", "autorizado-pelo-regente-ainda-não-construído", 217, 18196, 7, 244, "c6c1461a82c97e00", "01a38af6e6dd6900", "n1143"],
         ["n1870", "0-caminhos-virtuais--guidelinesshortcutsvirtual--construído-as-sete-camadas-pela-ems-002", 269, 5363, 9, 81, "da71f09e759c7600", "cb44836834464e80", "n1144"],
         ["n1146", "1-section-de-cabeçalho-irmã-do-schema--decidido-faltando-fazer", 5363, 6025, 90, 13, "29a759a8aecd1500", "f13677d632797d00", "n1144"],
@@ -3657,14 +3657,14 @@
         ["n1149", "5-o-glyph-em-rust--a-série-ems-001", 9365, 18196, 133, 118, "2208ea36a5ad1e00", "f304bb4c2b9cb380", "n1144"],
         ["n3146", "a-trilha-até-o-explorer-final", 12002, 16054, 174, 43, "4a24375c5f217200", "a9d58f3206bd8c00", "n1149"],
         ["n3147", "a-fila-de-antes-do-portão", 16054, 18196, 217, 34, "f957f0d8c4f45a00", "588dc16ed7bf8880", "n1149"],
-        ["n1150", "aberto-esperando-o-regente", 18196, 24441, 251, 62, "71b8706edf90de00", "99aa62e6337ad600", "n1143"],
+        ["n1150", "aberto-esperando-o-regente", 18196, 24468, 251, 62, "1b9f5e08046ea400", "0629b56085ec0c20", "n1143"],
         ["n3039", "os-dois-itens-dos-caminhos-virtuais", 18796, 19109, 264, 7, "474d8a3c28da3600", "98ff00d011200000", "n1150"],
         ["n3040", "duas-medições-devidas-e-nenhuma-tem-instrumento-escrito", 19109, 19863, 271, 9, "22c295843f90ec00", "b59094b4fc299300", "n1150"],
         ["n3177", "a-e-06-ratificada-esperando-o-esquema-de-item", 19863, 20385, 280, 9, "b4a25f6864002a00", "95251e4e0df0ce00", "n1150"],
-        ["n3043", "pendências-de-registro-sem-casa-hoje", 20385, 22114, 289, 15, "b0c2c222bf72f800", "a39548044b990200", "n1150"],
-        ["n3044", "o-resto", 22114, 24441, 304, 9, "5bf01458bf2ba000", "941dbd40f256ce00", "n1150"],
-        ["n1151", "adiado-por-decisão-não-por-esquecimento", 24441, 27630, 313, 46, "30a1687e7d96c580", "bfbcde2e1b43a900", "n1143"],
-        ["n3045", "reaberto-por-decisão", 27630, 28188, 359, 9, "b4a3f77e80503400", "079763f80c948a00", "n1143"]
+        ["n3043", "pendências-de-registro-sem-casa-hoje", 20385, 22141, 289, 15, "0132becececa0600", "301ab574723dc900", "n1150"],
+        ["n3044", "o-resto", 22141, 24468, 304, 9, "5bf01458bf2ba000", "941dbd40f256ce00", "n1150"],
+        ["n1151", "adiado-por-decisão-não-por-esquecimento", 24468, 27657, 313, 46, "30a1687e7d96c580", "bfbcde2e1b43a900", "n1143"],
+        ["n3045", "reaberto-por-decisão", 27657, 28215, 359, 9, "b4a3f77e80503400", "079763f80c948a00", "n1143"]
       ]
     },
     ".guidelines/.plan/README.md.template": {
@@ -3724,14 +3724,14 @@
     },
     ".guidelines/.shortcuts/README.md": {
       "nodes": [
-        ["n1153", "", 0, 9931, 1, 85, "7f6b5b86d9dac800", "", ""],
-        ["n1154", "atalhos--comece-por-aqui", 0, 9931, 1, 85, "7f6b5b86d9dac800", "7ae0767cdf109d00", "n1153"],
+        ["n1153", "", 0, 10075, 1, 85, "59fda9ea56b31e00", "", ""],
+        ["n1154", "atalhos--comece-por-aqui", 0, 10075, 1, 85, "59fda9ea56b31e00", "30a37b90f2686640", "n1153"],
         ["n1155", "onde-estou", 442, 4444, 11, 12, "5209d2583f13f300", "7f6992504662b200", "n1154"],
         ["n1156", "os-sete-eixos", 4444, 5626, 23, 12, "225c1c087677fe00", "fb5b0af65af5a800", "n1154"],
-        ["n1157", "o-mapa-do-motor-em-cinco-linhas", 5626, 6553, 35, 12, "537763c2149d2400", "2caeb09a05c9d600", "n1154"],
-        ["n1158", "os-documentos-que-mais-se-consulta", 6553, 8458, 47, 18, "b14515f455f59aa0", "99bdc846d8830680", "n1154"],
-        ["n1159", "os-outros-documentos", 8458, 9592, 65, 15, "24fbcb86a7f17500", "7a35e8282b796500", "n1154"],
-        ["n1160", "vocabulário-do-projeto", 9592, 9931, 80, 6, "d5b16db424152200", "0656413c7ac4f500", "n1154"]
+        ["n1157", "o-mapa-do-motor-em-cinco-linhas", 5626, 6571, 35, 12, "fef2a4f026f43a00", "b0d1ba46f3be8000", "n1154"],
+        ["n1158", "os-documentos-que-mais-se-consulta", 6571, 8521, 47, 18, "f3c7a4885e809600", "f616de100c75df00", "n1154"],
+        ["n1159", "os-outros-documentos", 8521, 9727, 65, 15, "63ec2be83dd05100", "e5c8814085afba00", "n1154"],
+        ["n1160", "vocabulário-do-projeto", 9727, 10075, 80, 6, "b895f5b69b891000", "f6cb060882a72600", "n1154"]
       ]
     },
     ".guidelines/.shortcuts/regency.json": {
@@ -3750,55 +3750,7 @@
         ["n3049", "/history/3", 564, 682, 31, 7, "b0fcb6df33018400", "", "n2791"]
       ]
     },
-    ".guidelines/.sources/COMPILER_LESSONS.md": {
-      "nodes": [
-        ["n1161", "", 0, 7555, 1, 161, "e96d86ce8741d600", "", ""],
-        ["n1162", "o-que-os-compiladores-já-pagaram-para-aprender", 0, 7555, 1, 161, "e96d86ce8741d600", "d5521978d989ba00", "n1161"],
-        ["n1163", "0-a-medição-que-vale-mais-que-a-bibliografia", 460, 1428, 11, 26, "a488692482676100", "2a8d709077c1ad00", "n1162"],
-        ["n1164", "1-o-resultado-contra-intuitivo-e-é-o-que-decide-o-desenho", 1428, 2515, 37, 22, "3961770e9a6ba8e0", "4019a80066507a00", "n1162"],
-        ["n1165", "2-o-que-decide-legibilidade-medido", 2515, 3266, 59, 15, "5d5cc9964f3af840", "a6e4bf0c45629000", "n1162"],
-        ["n1166", "3-o-corpus-de-erros-reais", 3266, 4461, 74, 27, "245d252ae5c0b000", "9057b8ea8b2f6200", "n1162"],
-        ["n1167", "4-os-princípios-que-rust-e-elm-convergiram", 4461, 5214, 101, 16, "9320ea0cf1f7ee00", "49fc83707a9e6a00", "n1162"],
-        ["n1168", "5-as-armadilhas-do-did-you-mean-que-já-foram-pagas", 5214, 6326, 117, 19, "40b6e0280f8c5800", "8dc323c0c2ad6f00", "n1162"],
-        ["n1169", "6-onde-a-lógica-de-programação-entra", 6326, 7170, 136, 19, "d6cafddcd0ae0a00", "94dfc9284430b600", "n1162"],
-        ["n1170", "7-o-que-este-documento-não-autoriza", 7170, 7555, 155, 7, "5a847fb89850cc00", "b9173d289c580a00", "n1162"]
-      ]
-    },
-    ".guidelines/.sources/README.md": {
-      "nodes": [
-        ["n1171", "", 0, 3825, 1, 43, "fd52ebca438d6c80", "", ""],
-        ["n1172", "fontes--o-que-veio-de-fora-e-o-que-decidiu", 0, 3825, 1, 43, "fd52ebca438d6c80", "727f716ac2276700", "n1171"],
-        ["n1173", "documentos", 329, 1506, 9, 9, "f41e2d1852a36a00", "9c2299e66c28ce00", "n1172"],
-        ["n1174", "referências-externas-por-assunto", 1506, 3504, 18, 20, "c7097ae8d0d35600", "87ecde708bfc0700", "n1172"],
-        ["n1175", "mensagem-de-erro--o-que-funciona", 1545, 2349, 20, 6, "ac34cb8022b8be00", "3aa7f5082c209d80", "n1174"],
-        ["n1176", "erros-reais-medidos", 2349, 2684, 26, 4, "74244be65c0e2600", "9802a0ea25f9b500", "n1174"],
-        ["n1177", "sugestão-did-you-mean--armadilhas-já-pagas", 2684, 3504, 30, 8, "33de117ced6b3800", "b3070348582fda00", "n1174"],
-        ["n1178", "a-fonte-primária-e-ela-é-interna", 3504, 3825, 38, 6, "5f6a41325d30a300", "70774afa3f0e9b80", "n1172"]
-      ]
-    },
-    ".guidelines/.sources/README.md.template": {
-      "nodes": [
-        ["n2915", "", 0, 1075, 1, 29, "d693aab40ebc7600", "", ""]
-      ]
-    },
-    ".guidelines/.sources/VIRTUAL_PATHS.md": {
-      "nodes": [
-        ["n1179", "", 0, 2165, 1, 17, "989a3c6e39118000", "", ""],
-        ["n1180", "data-flow-for-diagramming", 1414, 2165, 10, 8, "11f1c538ea90ec00", "98b9a9e64fe02e00", "n1179"]
-      ]
-    },
-    ".guidelines/.sources/VIRTUAL_PATHS_CONVERSATION.md": {
-      "nodes": [
-        ["n1181", "", 0, 22424, 1, 186, "4bb132187209f500", "", ""],
-        ["n1182", "component-roles", 1340, 16718, 42, 98, "8acdbfcc469eb400", "82f5277ce319cc00", "n1181"],
-        ["n1183", "status-blocked-na-pergunta-como-posta", 16718, 17802, 140, 10, "4e438c6c24284800", "ffa5964233f04e00", "n1181"],
-        ["n1184", "onde-a-pergunta-se-resolve-sem-dado-nenhum", 17802, 18965, 150, 10, "f14383985ea88400", "24b9e3a89ef38a00", "n1181"],
-        ["n1185", "a-parte-empírica-é-respondível-hoje-e-de-graça", 18965, 20502, 160, 12, "5f62e23c8e220c00", "53bcdc90197d9a00", "n1181"],
-        ["n1186", "sobre-ast-ou-xml", 20502, 21100, 172, 4, "a5814aecbf433000", "6a2556b81d584000", "n1181"],
-        ["n1187", "veredito-limitado", 21100, 22424, 176, 11, "3beb352425b7f800", "059a5932e13a6e00", "n1181"]
-      ]
-    },
-    ".guidelines/BUNDLE_TARGET.md": {
+    ".guidelines/.sources/BUNDLE_TARGET.md": {
       "nodes": [
         ["n1188", "", 0, 9539, 1, 209, "dcb4452e8913f200", "", ""],
         ["n1189", "bundle-target--what-production-level-output-means-here", 0, 9539, 1, 209, "dcb4452e8913f200", "6eda7c9014f4bc00", "n1188"],
@@ -3813,7 +3765,21 @@
         ["n1198", "8-status", 9222, 9539, 204, 6, "8ddcb7681755d400", "d7af7808f7070200", "n1189"]
       ]
     },
-    ".guidelines/DMHP_IMPORTS.md": {
+    ".guidelines/.sources/COMPILER_LESSONS.md": {
+      "nodes": [
+        ["n1161", "", 0, 7555, 1, 161, "e96d86ce8741d600", "", ""],
+        ["n1162", "o-que-os-compiladores-já-pagaram-para-aprender", 0, 7555, 1, 161, "e96d86ce8741d600", "d5521978d989ba00", "n1161"],
+        ["n1163", "0-a-medição-que-vale-mais-que-a-bibliografia", 460, 1428, 11, 26, "a488692482676100", "2a8d709077c1ad00", "n1162"],
+        ["n1164", "1-o-resultado-contra-intuitivo-e-é-o-que-decide-o-desenho", 1428, 2515, 37, 22, "3961770e9a6ba8e0", "4019a80066507a00", "n1162"],
+        ["n1165", "2-o-que-decide-legibilidade-medido", 2515, 3266, 59, 15, "5d5cc9964f3af840", "a6e4bf0c45629000", "n1162"],
+        ["n1166", "3-o-corpus-de-erros-reais", 3266, 4461, 74, 27, "245d252ae5c0b000", "9057b8ea8b2f6200", "n1162"],
+        ["n1167", "4-os-princípios-que-rust-e-elm-convergiram", 4461, 5214, 101, 16, "9320ea0cf1f7ee00", "49fc83707a9e6a00", "n1162"],
+        ["n1168", "5-as-armadilhas-do-did-you-mean-que-já-foram-pagas", 5214, 6326, 117, 19, "40b6e0280f8c5800", "8dc323c0c2ad6f00", "n1162"],
+        ["n1169", "6-onde-a-lógica-de-programação-entra", 6326, 7170, 136, 19, "d6cafddcd0ae0a00", "94dfc9284430b600", "n1162"],
+        ["n1170", "7-o-que-este-documento-não-autoriza", 7170, 7555, 155, 7, "5a847fb89850cc00", "b9173d289c580a00", "n1162"]
+      ]
+    },
+    ".guidelines/.sources/DMHP_IMPORTS.md": {
       "nodes": [
         ["n1199", "", 0, 8312, 1, 184, "655514508c686a00", "", ""],
         ["n1200", "dmhp--what-is-worth-taking-and-what-is-not", 0, 8312, 1, 184, "655514508c686a00", "c6d74c9870ff7a00", "n1199"],
@@ -3828,7 +3794,7 @@
         ["n1209", "3-returned-to-the-regent--a-defect-in-dmhp", 6574, 8312, 147, 38, "8076cd38dd26b000", "71503e28151e2100", "n1200"]
       ]
     },
-    ".guidelines/FORMULA_REVIEW.md": {
+    ".guidelines/.sources/FORMULA_REVIEW.md": {
       "nodes": [
         ["n1210", "", 0, 3145, 1, 61, "8a06719867e60600", "", ""],
         ["n1211", "formula-review--what-changed-between-the-two-passes", 0, 3145, 1, 61, "8a06719867e60600", "6b8ab5f097b0f800", "n1210"],
@@ -3837,7 +3803,7 @@
         ["n1214", "what-the-first-pass-missed", 1929, 3145, 40, 22, "e062ba1647d9f300", "370ac9ca6a4cfa00", "n1211"]
       ]
     },
-    ".guidelines/FUSIONS_WORKSHEET.md": {
+    ".guidelines/.sources/FUSIONS_WORKSHEET.md": {
       "nodes": [
         ["n1215", "", 0, 7984, 1, 160, "dcdb36a0479b2200", "", ""],
         ["n1216", "fusions-worksheet--historical-document-v17", 0, 7984, 1, 160, "dcdb36a0479b2200", "80c5e6ae42b17a00", "n1215"],
@@ -3850,34 +3816,34 @@
         ["n1223", "after-filling-it-in", 7144, 7984, 143, 18, "2f9c2434c3ded480", "09ead80092e05700", "n1216"]
       ]
     },
-    ".guidelines/GLOSSARY.md": {
+    ".guidelines/.sources/GLOSSARY.md": {
       "nodes": [
-        ["n1224", "", 0, 31307, 1, 476, "7857a3a09d602000", "", ""],
-        ["n1225", "glyphs-and-hieroglyphs--normative-glossary-v471008", 0, 31307, 1, 476, "7857a3a09d602000", "3a55aeb042fa6400", "n1224"],
+        ["n1224", "", 0, 31406, 1, 476, "6598ba7a9ba1ed00", "", ""],
+        ["n1225", "glyphs-and-hieroglyphs--normative-glossary-v471008", 0, 31406, 1, 476, "6598ba7a9ba1ed00", "3629a948bdfba500", "n1224"],
         ["n1226", "versioning--appfrontrulescontent", 792, 1171, 17, 13, "cb7751ea4bc99c80", "b2d94cbc891d9000", "n1225"],
         ["n1227", "0-legend--the-species", 1171, 1871, 30, 16, "2d44739296a2f000", "c12b5f2832c21b00", "n1225"],
-        ["n1228", "01-formula-notation--normative", 1871, 3033, 46, 31, "60c7f37ec4caa400", "d62a8d18677b34e0", "n1225"],
-        ["n1229", "why-conjunction-carries-order", 2376, 3033, 60, 17, "040cacb863aa2800", "ff3bdba853bd9500", "n1228"],
-        ["n1230", "02-base-and-core--the-disambiguation", 3033, 3602, 77, 13, "f4dab0409e5f7400", "1853baa0ae2aae00", "n1225"],
-        ["n1231", "03-operand-binding--normative", 3602, 5447, 90, 40, "27261f2c43720a00", "843f13d421f51100", "n1225"],
-        ["n1232", "1-hieroglyph-operators", 5447, 9768, 130, 67, "4c74383cd29a2000", "cb1909ee8539c8c0", "n1225"],
-        ["n1233", "2-hieroglyph-primitives", 9768, 11351, 197, 26, "b081e030d0fefe00", "f004c05c5dd9be00", "n1225"],
-        ["n1234", "3-composite-glyphs", 11351, 14876, 223, 43, "fdf08bd64270ba00", "07689774b096f600", "n1225"],
-        ["n1235", "4-engine-and-modes", 14876, 16132, 266, 22, "63b75e8e67f54000", "4037cc00b644ab80", "n1225"],
-        ["n1236", "5-the-proposed-formulas--the-reason-for-each", 16132, 18250, 288, 42, "9d0f7b08e2283800", "c88fd93edfb29280", "n1225"],
-        ["n1237", "6-the-record-of-what-was-closed", 18250, 18555, 330, 8, "79d36c7c20991400", "0bcd42ca129c6800", "n1225"],
-        ["n1238", "7-where-this-stands", 18555, 21895, 338, 73, "dda4ad081cd41c00", "b1fbe5d0ea35bd00", "n1225"],
-        ["n1239", "the-hgml-emitter", 19079, 20717, 353, 34, "98efa7fe1c0ec400", "1d992a208a6332c0", "n1238"],
-        ["n1240", "self-describing-output", 20717, 21367, 387, 15, "d60030665d962400", "534c3060187aac80", "n1238"],
-        ["n1241", "what-remains", 21367, 21895, 402, 9, "c597c12eb7459900", "d96907f4b5e00200", "n1238"],
-        ["n1242", "8-project-vocabulary--the-terms-outside-the-language", 21895, 31307, 411, 66, "1a59919ec4b4e000", "d693145ec0f4f2f8", "n1225"],
-        ["n1243", "who-decides", 22437, 23481, 422, 10, "351010d60dade340", "9a60363e6e946900", "n1242"],
-        ["n1244", "how-work-is-ordered", 23481, 28241, 432, 22, "f2ad10e620e12e00", "8bc801dea223e700", "n1242"],
-        ["n1245", "the-rust-app", 28241, 29633, 454, 12, "22c531807a7b0400", "becb052c31540680", "n1242"],
-        ["n1246", "the-names-the-regent-ratified", 29633, 31307, 466, 11, "428f3ec864c0e000", "1e69ae621a2f4800", "n1242"]
+        ["n1228", "01-formula-notation--normative", 1871, 3042, 46, 31, "11e7b814caa23ba0", "af58cbd0e65c8700", "n1225"],
+        ["n1229", "why-conjunction-carries-order", 2376, 3042, 60, 17, "c12362ecde37bc00", "c18106e4a23882a0", "n1228"],
+        ["n1230", "02-base-and-core--the-disambiguation", 3042, 3611, 77, 13, "f4dab0409e5f7400", "1853baa0ae2aae00", "n1225"],
+        ["n1231", "03-operand-binding--normative", 3611, 5456, 90, 40, "27261f2c43720a00", "843f13d421f51100", "n1225"],
+        ["n1232", "1-hieroglyph-operators", 5456, 9777, 130, 67, "4c74383cd29a2000", "cb1909ee8539c8c0", "n1225"],
+        ["n1233", "2-hieroglyph-primitives", 9777, 11360, 197, 26, "b081e030d0fefe00", "f004c05c5dd9be00", "n1225"],
+        ["n1234", "3-composite-glyphs", 11360, 14885, 223, 43, "fdf08bd64270ba00", "07689774b096f600", "n1225"],
+        ["n1235", "4-engine-and-modes", 14885, 16141, 266, 22, "63b75e8e67f54000", "4037cc00b644ab80", "n1225"],
+        ["n1236", "5-the-proposed-formulas--the-reason-for-each", 16141, 18259, 288, 42, "9d0f7b08e2283800", "c88fd93edfb29280", "n1225"],
+        ["n1237", "6-the-record-of-what-was-closed", 18259, 18564, 330, 8, "79d36c7c20991400", "0bcd42ca129c6800", "n1225"],
+        ["n1238", "7-where-this-stands", 18564, 21904, 338, 73, "dda4ad081cd41c00", "b1fbe5d0ea35bd00", "n1225"],
+        ["n1239", "the-hgml-emitter", 19088, 20726, 353, 34, "98efa7fe1c0ec400", "1d992a208a6332c0", "n1238"],
+        ["n1240", "self-describing-output", 20726, 21376, 387, 15, "d60030665d962400", "534c3060187aac80", "n1238"],
+        ["n1241", "what-remains", 21376, 21904, 402, 9, "c597c12eb7459900", "d96907f4b5e00200", "n1238"],
+        ["n1242", "8-project-vocabulary--the-terms-outside-the-language", 21904, 31406, 411, 66, "01ee4ad88cb4fa00", "eda1c5e2b28d4280", "n1225"],
+        ["n1243", "who-decides", 22449, 23505, 422, 10, "b083a7f6253f6080", "1c670e7619031600", "n1242"],
+        ["n1244", "how-work-is-ordered", 23505, 28307, 432, 22, "bd9cab40f2d48680", "4afa3ad4bc87f800", "n1242"],
+        ["n1245", "the-rust-app", 28307, 29717, 454, 12, "4545d04674403e00", "092d4c886dd66b80", "n1242"],
+        ["n1246", "the-names-the-regent-ratified", 29717, 31406, 466, 11, "3dadca70f1b7ee00", "ed52496a7bf02a00", "n1242"]
       ]
     },
-    ".guidelines/HGML_CONVERGENCE.md": {
+    ".guidelines/.sources/HGML_CONVERGENCE.md": {
       "nodes": [
         ["n1247", "", 0, 12549, 1, 292, "e3bff9fe97c49a00", "", ""],
         ["n1248", "convergência-do-hgml--várias-fontes-uma-intenção", 203, 12549, 5, 288, "7b6c7230158baf00", "bae1dcd010b1c200", "n1247"],
@@ -3899,22 +3865,22 @@
         ["n1264", "9-o-que-foi-implementado--34705", 11617, 12549, 277, 16, "bbe377443a9a5000", "c2179e10dbef7520", "n1248"]
       ]
     },
-    ".guidelines/HGML_PLAN.md": {
+    ".guidelines/.sources/HGML_PLAN.md": {
       "nodes": [
-        ["n1265", "", 0, 3955, 1, 84, "8cdf5d8e1e781e00", "", ""],
-        ["n1266", "hgml--plan-and-state", 0, 3955, 1, 84, "8cdf5d8e1e781e00", "c0b42d6cb693db00", "n1265"],
+        ["n1265", "", 0, 3958, 1, 84, "f07533c8f9933c00", "", ""],
+        ["n1266", "hgml--plan-and-state", 0, 3958, 1, 84, "f07533c8f9933c00", "0611bd58d1463e00", "n1265"],
         ["n1267", "state", 186, 753, 6, 13, "5244fb86dc6451a0", "f66d8e1832a8fc00", "n1266"],
-        ["n1268", "decisions-taken-along-the-way", 753, 2158, 19, 26, "10156a3e51d77c00", "4f7801f0be9d7c00", "n1266"],
-        ["n1269", "what-is-left", 2158, 3955, 45, 40, "39307a200dac5800", "ba73e5beea5c3600", "n1266"],
-        ["n1270", "every-composite-re-reads-its-own-burn", 2175, 2613, 47, 8, "3d73b6cab69d9e00", "6e6d6d6846c2ac00", "n1269"],
-        ["n1271", "the-pattern-layer", 2613, 3576, 55, 23, "284a266c1503d800", "a91610d630452c00", "n1269"],
-        ["n1272", "separating-interface-data-from-engine-data", 3576, 3955, 78, 7, "89d2600049258980", "cf10fe709ef25c00", "n1269"]
+        ["n1268", "decisions-taken-along-the-way", 753, 2161, 19, 26, "e18a2ad86e1930c0", "58e4640c7c084f80", "n1266"],
+        ["n1269", "what-is-left", 2161, 3958, 45, 40, "39307a200dac5800", "ba73e5beea5c3600", "n1266"],
+        ["n1270", "every-composite-re-reads-its-own-burn", 2178, 2616, 47, 8, "3d73b6cab69d9e00", "6e6d6d6846c2ac00", "n1269"],
+        ["n1271", "the-pattern-layer", 2616, 3579, 55, 23, "284a266c1503d800", "a91610d630452c00", "n1269"],
+        ["n1272", "separating-interface-data-from-engine-data", 3579, 3958, 78, 7, "89d2600049258980", "cf10fe709ef25c00", "n1269"]
       ]
     },
-    ".guidelines/OPERATOR_TARGET.md": {
+    ".guidelines/.sources/OPERATOR_TARGET.md": {
       "nodes": [
-        ["n1273", "", 0, 34659, 1, 677, "1493334864f4ab00", "", ""],
-        ["n1274", "operator-target--carrying---and--from-the-parse-tree-to-the-xml-and-back", 0, 34659, 1, 677, "1493334864f4ab00", "0af7b96edd1aae00", "n1273"],
+        ["n1273", "", 0, 34662, 1, 677, "7f6f1a98c230dc40", "", ""],
+        ["n1274", "operator-target--carrying---and--from-the-parse-tree-to-the-xml-and-back", 0, 34662, 1, 677, "7f6f1a98c230dc40", "33d1f2a853334000", "n1273"],
         ["n1275", "0-the-honest-defeater", 501, 3787, 12, 62, "72834210634a4b00", "ca33d916719d2340", "n1274"],
         ["n1276", "01-where-the-first-draft-of-this-document-diverged", 2841, 3787, 60, 14, "91041df4ec513600", "e4bf606ee3b23000", "n1275"],
         ["n1277", "1-where-the-operator-is-discarded", 3787, 5827, 74, 49, "2b907c6000aab000", "b03071209d8cdc00", "n1274"],
@@ -3952,14 +3918,14 @@
         ["n1309", "82-bucket-n--each-requires-a-fix-diagnostic", 31149, 32206, 614, 11, "2f6bedf8616f0540", "535ff2c8cad2c200", "n1307"],
         ["n1310", "83-bucket-d--the-blind-spot-itself", 32206, 32538, 625, 6, "5cb7df78d6349400", "d3fe7e805922fc00", "n1307"],
         ["n1311", "84-guard", 32538, 32926, 631, 11, "b0c0eb4017326a00", "f1f7b7482fcf4a10", "n1307"],
-        ["n3047", "9-answered--regent", 32926, 33961, 642, 20, "f3f6b26cf621f800", "9c18fb68f9b85e00", "n1274"],
-        ["n1313", "10-status", 33961, 34659, 662, 16, "9535dc60de522200", "8b63c8003eef0600", "n1274"]
+        ["n3047", "9-answered--regent", 32926, 33964, 642, 20, "7c07430cfa413200", "d85580866483a600", "n1274"],
+        ["n1313", "10-status", 33964, 34662, 662, 16, "9535dc60de522200", "8b63c8003eef0600", "n1274"]
       ]
     },
-    ".guidelines/PACKAGE_TARGET.md": {
+    ".guidelines/.sources/PACKAGE_TARGET.md": {
       "nodes": [
-        ["n1314", "", 0, 26850, 1, 568, "ae5ed820ab918d00", "", ""],
-        ["n1315", "package-target--the-glyph-package-document", 0, 26850, 1, 568, "ae5ed820ab918d00", "f7652f14e29bbc00", "n1314"],
+        ["n1314", "", 0, 26868, 1, 568, "cd9a07f0c323db00", "", ""],
+        ["n1315", "package-target--the-glyph-package-document", 0, 26868, 1, 568, "cd9a07f0c323db00", "c5911730019bae00", "n1314"],
         ["n1316", "0-what-this-is-and-what-it-is-not", 332, 1026, 8, 16, "c143baf0bea67800", "fdf8cf6a64449600", "n1315"],
         ["n1317", "1-why-this-is-a-delta-and-not-a-grammar", 1026, 2113, 24, 23, "6e13d21e4c611180", "95fc3354ecfaa300", "n1315"],
         ["n1318", "2-the-root", 2113, 3204, 47, 25, "5d5229de3bdfd600", "9c584e94fdc38080", "n1315"],
@@ -3981,18 +3947,18 @@
         ["n1333", "43-emitted-for-composites-only", 11505, 11976, 287, 10, "bac71d4e33018b00", "40a22b201e7cf400", "n1330"],
         ["n2794", "44-template-is-the-macro-and-slot-follows-what-the-call-wrote", 11976, 13006, 297, 17, "a36a0f803d4c8e00", "c12a0b0601052100", "n1330"],
         ["n1335", "45-divergence-from-operator_targetmd", 13006, 13666, 314, 14, "9097bc582bcafc80", "a780acaeee394700", "n1330"],
-        ["n1336", "5-schema", 13666, 16163, 328, 44, "a0e391943ac2b200", "3efbc21cbe0e6c00", "n1315"],
-        ["n1337", "6-refusals", 16163, 19150, 372, 53, "13688f604a209200", "a37b7e828a268c00", "n1315"],
-        ["n1338", "7-the-four-guarantees", 19150, 20220, 425, 17, "bd7a01617ed94500", "73303b6434f86a00", "n1315"],
-        ["n1339", "8-round-trip", 20220, 21053, 442, 20, "0d8117a09dae1c00", "465e9b082d6ae400", "n1315"],
-        ["n1340", "9-deliberately-not-specified-here", 21053, 21616, 462, 12, "5ed4b788bf128000", "cc59a9a09eccb800", "n1315"],
-        ["n1341", "10-open", 21616, 24196, 474, 43, "5b2ddbe493fbdc00", "952290789e6cbc00", "n1315"],
-        ["n1342", "11-diagnostics-are-not-carried-in-the-document", 24196, 26557, 517, 46, "a4bbe7a4af8d3800", "3d51b728a33f4200", "n1315"],
-        ["n1343", "111-two-findings-this-section-is-built-on", 25348, 26557, 541, 22, "4b3c5deee4cbfa00", "f2a8622494a6b770", "n1342"],
-        ["n1344", "12-status", 26557, 26850, 563, 6, "c937e3cc0b838100", "cd69aa6a7e600500", "n1315"]
+        ["n1336", "5-schema", 13666, 16178, 328, 44, "545eb8a67c435d80", "ae53964c47a48200", "n1315"],
+        ["n1337", "6-refusals", 16178, 19165, 372, 53, "13688f604a209200", "a37b7e828a268c00", "n1315"],
+        ["n1338", "7-the-four-guarantees", 19165, 20235, 425, 17, "bd7a01617ed94500", "73303b6434f86a00", "n1315"],
+        ["n1339", "8-round-trip", 20235, 21068, 442, 20, "0d8117a09dae1c00", "465e9b082d6ae400", "n1315"],
+        ["n1340", "9-deliberately-not-specified-here", 21068, 21631, 462, 12, "5ed4b788bf128000", "cc59a9a09eccb800", "n1315"],
+        ["n1341", "10-open", 21631, 24214, 474, 43, "645536aaadd4ad00", "410f03dca3c2c0e0", "n1315"],
+        ["n1342", "11-diagnostics-are-not-carried-in-the-document", 24214, 26575, 517, 46, "a4bbe7a4af8d3800", "3d51b728a33f4200", "n1315"],
+        ["n1343", "111-two-findings-this-section-is-built-on", 25366, 26575, 541, 22, "4b3c5deee4cbfa00", "f2a8622494a6b770", "n1342"],
+        ["n1344", "12-status", 26575, 26868, 563, 6, "c937e3cc0b838100", "cd69aa6a7e600500", "n1315"]
       ]
     },
-    ".guidelines/PROMOTION_BOUNDARY.md": {
+    ".guidelines/.sources/PROMOTION_BOUNDARY.md": {
       "nodes": [
         ["n1345", "", 0, 5163, 1, 129, "ef8d41b0ecc56400", "", ""],
         ["n1346", "promotion-boundary--where-domain-ends-and-synthesis-begins", 159, 5163, 4, 126, "2411c40081bb5000", "a241abfeef7ee100", "n1345"],
@@ -4007,7 +3973,7 @@
         ["n1355", "5-ratification--the-regents", 4760, 5163, 117, 13, "0e2e7b8072104300", "2cdf8b843feb1a00", "n1346"]
       ]
     },
-    ".guidelines/PROMOTION_MEASUREMENT.md": {
+    ".guidelines/.sources/PROMOTION_MEASUREMENT.md": {
       "nodes": [
         ["n1356", "", 0, 4226, 1, 100, "68f76690d2b74a00", "", ""],
         ["n1357", "promotion--the-measurement-before-the-promoter", 202, 4226, 5, 96, "035379c8d5a18a00", "69f6bc04a6b10a00", "n1356"],
@@ -4018,7 +3984,24 @@
         ["n1362", "the-gap-in-the-sample-stated-rather-than-papered-over", 3462, 4226, 87, 14, "0d13c2a0cf532000", "461a167e5d9dbb00", "n1357"]
       ]
     },
-    ".guidelines/SIGNATURES.md": {
+    ".guidelines/.sources/README.md": {
+      "nodes": [
+        ["n1171", "", 0, 3825, 1, 43, "fd52ebca438d6c80", "", ""],
+        ["n1172", "fontes--o-que-veio-de-fora-e-o-que-decidiu", 0, 3825, 1, 43, "fd52ebca438d6c80", "727f716ac2276700", "n1171"],
+        ["n1173", "documentos", 329, 1506, 9, 9, "f41e2d1852a36a00", "9c2299e66c28ce00", "n1172"],
+        ["n1174", "referências-externas-por-assunto", 1506, 3504, 18, 20, "c7097ae8d0d35600", "87ecde708bfc0700", "n1172"],
+        ["n1175", "mensagem-de-erro--o-que-funciona", 1545, 2349, 20, 6, "ac34cb8022b8be00", "3aa7f5082c209d80", "n1174"],
+        ["n1176", "erros-reais-medidos", 2349, 2684, 26, 4, "74244be65c0e2600", "9802a0ea25f9b500", "n1174"],
+        ["n1177", "sugestão-did-you-mean--armadilhas-já-pagas", 2684, 3504, 30, 8, "33de117ced6b3800", "b3070348582fda00", "n1174"],
+        ["n1178", "a-fonte-primária-e-ela-é-interna", 3504, 3825, 38, 6, "5f6a41325d30a300", "70774afa3f0e9b80", "n1172"]
+      ]
+    },
+    ".guidelines/.sources/README.md.template": {
+      "nodes": [
+        ["n2915", "", 0, 1075, 1, 29, "d693aab40ebc7600", "", ""]
+      ]
+    },
+    ".guidelines/.sources/SIGNATURES.md": {
       "nodes": [
         ["n1363", "", 0, 6937, 1, 153, "e9bea1ccd89fae00", "", ""],
         ["n1364", "signatures-and-arities--normative-table-v1300", 0, 6937, 1, 153, "e9bea1ccd89fae00", "4c0db0ce765a6600", "n1363"],
@@ -4035,7 +4018,24 @@
         ["n1374", "7-auto-closing", 6003, 6937, 137, 17, "cb8516188149e480", "ecec9f10bde5b380", "n1364"]
       ]
     },
-    ".guidelines/XML_REFERENCE.md": {
+    ".guidelines/.sources/VIRTUAL_PATHS.md": {
+      "nodes": [
+        ["n1179", "", 0, 2165, 1, 17, "989a3c6e39118000", "", ""],
+        ["n1180", "data-flow-for-diagramming", 1414, 2165, 10, 8, "11f1c538ea90ec00", "98b9a9e64fe02e00", "n1179"]
+      ]
+    },
+    ".guidelines/.sources/VIRTUAL_PATHS_CONVERSATION.md": {
+      "nodes": [
+        ["n1181", "", 0, 22424, 1, 186, "4bb132187209f500", "", ""],
+        ["n1182", "component-roles", 1340, 16718, 42, 98, "8acdbfcc469eb400", "82f5277ce319cc00", "n1181"],
+        ["n1183", "status-blocked-na-pergunta-como-posta", 16718, 17802, 140, 10, "4e438c6c24284800", "ffa5964233f04e00", "n1181"],
+        ["n1184", "onde-a-pergunta-se-resolve-sem-dado-nenhum", 17802, 18965, 150, 10, "f14383985ea88400", "24b9e3a89ef38a00", "n1181"],
+        ["n1185", "a-parte-empírica-é-respondível-hoje-e-de-graça", 18965, 20502, 160, 12, "5f62e23c8e220c00", "53bcdc90197d9a00", "n1181"],
+        ["n1186", "sobre-ast-ou-xml", 20502, 21100, 172, 4, "a5814aecbf433000", "6a2556b81d584000", "n1181"],
+        ["n1187", "veredito-limitado", 21100, 22424, 176, 11, "3beb352425b7f800", "059a5932e13a6e00", "n1181"]
+      ]
+    },
+    ".guidelines/.sources/XML_REFERENCE.md": {
       "sources": [
         ["scripts/glyph-parser.js", "470370389d040e00"]
       ],
@@ -4473,14 +4473,14 @@
     },
     "CLAUDE.md": {
       "nodes": [
-        ["n1767", "", 0, 3797, 1, 78, "5bfe71681e4f2500", "", ""],
-        ["n1768", "glyph", 0, 3797, 1, 78, "5bfe71681e4f2500", "684a312c9ab1a600", "n1767"],
+        ["n1767", "", 0, 3815, 1, 78, "1bf289b4500fe200", "", ""],
+        ["n1768", "glyph", 0, 3815, 1, 78, "1bf289b4500fe200", "197187feadf7b400", "n1767"],
         ["n1769", "comece-por-aqui--sempre", 172, 1109, 6, 17, "710c7e584e152600", "2c8c7f4e9276cf00", "n1768"],
         ["n1770", "escrever-glyph", 1109, 1432, 23, 7, "d4617a26b07f7600", "3f27155ce9d54400", "n1768"],
         ["n3143", "entregar-o-plugin", 1432, 2009, 30, 10, "2b8a5a6053339e00", "028ad63a189c7400", "n1768"],
         ["n1771", "verificar", 2009, 3063, 40, 23, "71371a9e538ab800", "5134e7ce98905600", "n1768"],
         ["n1772", "duas-restrições-que-pegam-todo-agente-novo", 3063, 3629, 63, 12, "002419a0c833ea00", "dac8c3285a749000", "n1768"],
-        ["n1773", "vocabulário", 3629, 3797, 75, 4, "747e80fce684da00", "a22a95e82dbf7c00", "n1768"]
+        ["n1773", "vocabulário", 3629, 3815, 75, 4, "3107f3b093ecf800", "377122b0975dd000", "n1768"]
       ]
     },
     "README.md": {
@@ -4488,8 +4488,8 @@
         ["scripts/glyph-cli.js#@block:flags", "14f9ad4e10950400"]
       ],
       "nodes": [
-        ["n1774", "", 0, 13112, 1, 300, "8947ed54a8f46600", "", ""],
-        ["n1775", "glyph", 55, 13112, 5, 296, "a1466676b4b6eb00", "ea37a2288a59ed80", "n1774"],
+        ["n1774", "", 0, 13148, 1, 300, "a788689e9cc8a000", "", ""],
+        ["n1775", "glyph", 55, 13148, 5, 296, "59e06e3e1750ac00", "76f72158ebaaf800", "n1774"],
         ["n1776", "run-it", 620, 8508, 21, 192, "8462d0b4a46ab600", "a5014988ebbfbe00", "n1775"],
         ["n1777", "the-app--one-click", 631, 1410, 23, 20, "7fbc128e23598800", "904a908640f185a8", "n1776"],
         ["n1778", "the-command-line--needs-node", 1410, 1926, 43, 17, "51fb86fcdbc3da00", "548f3202b39e6200", "n1776"],
@@ -4503,13 +4503,224 @@
         ["n1785", "after-editing", 8508, 9234, 213, 21, "80106c4edae41900", "a64b1dda83ba7a00", "n1775"],
         ["n1786", "verify", 9234, 9525, 234, 11, "855c56409d0eba00", "c8127ff02d41e100", "n1775"],
         ["n1787", "where-things-live", 9525, 11701, 245, 30, "2e37f6e8c875d800", "b10f8a2874143200", "n1775"],
-        ["n1788", "documentation", 11701, 12649, 275, 17, "d8d559f4fc0dfa00", "6272f92c56c1eb00", "n1775"],
-        ["n1789", "versioning--appfrontrulescontent", 12649, 13112, 292, 9, "c8ddd09cf5d2de00", "41dcbb5e365a4c00", "n1775"]
+        ["n1788", "documentation", 11701, 12685, 275, 17, "aafa5d06a5c2cdc0", "2bc56d58abe2df00", "n1775"],
+        ["n1789", "versioning--appfrontrulescontent", 12685, 13148, 292, 9, "c8ddd09cf5d2de00", "41dcbb5e365a4c00", "n1775"]
       ]
     }
   },
   "aliases": {
-    ".guidelines/GLOSSARY.md#glyphs-and-hieroglyphs--normative-glossary-v36907": "n1225"
+    ".guidelines/BUNDLE_TARGET.md": "n1188",
+    ".guidelines/BUNDLE_TARGET.md#0-why-a-compiler-and-not-a-yaml-file": "n1190",
+    ".guidelines/BUNDLE_TARGET.md#1-the-six-layers": "n1191",
+    ".guidelines/BUNDLE_TARGET.md#2-three-invariants": "n1192",
+    ".guidelines/BUNDLE_TARGET.md#3-how-a-source-declares-a-layer": "n1193",
+    ".guidelines/BUNDLE_TARGET.md#4-worked-example--what-flowpgml-is-missing": "n1194",
+    ".guidelines/BUNDLE_TARGET.md#5-what-the-validator-must-reject": "n1195",
+    ".guidelines/BUNDLE_TARGET.md#6-what-is-deliberately-not-copied": "n1196",
+    ".guidelines/BUNDLE_TARGET.md#7-open--regent": "n1197",
+    ".guidelines/BUNDLE_TARGET.md#8-status": "n1198",
+    ".guidelines/BUNDLE_TARGET.md#bundle-target--what-production-level-output-means-here": "n1189",
+    ".guidelines/DMHP_IMPORTS.md": "n1199",
+    ".guidelines/DMHP_IMPORTS.md#0-the-honest-comparison-first": "n1201",
+    ".guidelines/DMHP_IMPORTS.md#1-what-is-worth-taking": "n1202",
+    ".guidelines/DMHP_IMPORTS.md#2-what-is-not-worth-taking": "n1208",
+    ".guidelines/DMHP_IMPORTS.md#3-returned-to-the-regent--a-defect-in-dmhp": "n1209",
+    ".guidelines/DMHP_IMPORTS.md#d-01--atomic-writes-and-an-all-or-nothing-build": "n1203",
+    ".guidelines/DMHP_IMPORTS.md#d-02--content-addressed-identity-for-conformance-vectors": "n1204",
+    ".guidelines/DMHP_IMPORTS.md#d-03--a-generatedauthored-split-at-field-level-not-only-at-file-level": "n1205",
+    ".guidelines/DMHP_IMPORTS.md#d-04--duplicate-and-conflicting-are-different-words": "n1206",
+    ".guidelines/DMHP_IMPORTS.md#d-05--an-output-diff-across-the-corpus-before-the-emitter-changes": "n1207",
+    ".guidelines/DMHP_IMPORTS.md#dmhp--what-is-worth-taking-and-what-is-not": "n1200",
+    ".guidelines/FORMULA_REVIEW.md": "n1210",
+    ".guidelines/FORMULA_REVIEW.md#formula-review--what-changed-between-the-two-passes": "n1211",
+    ".guidelines/FORMULA_REVIEW.md#mistakes-in-the-first-pass": "n1212",
+    ".guidelines/FORMULA_REVIEW.md#two-formulas-withdrawn": "n1213",
+    ".guidelines/FORMULA_REVIEW.md#what-the-first-pass-missed": "n1214",
+    ".guidelines/FUSIONS_WORKSHEET.md": "n1215",
+    ".guidelines/FUSIONS_WORKSHEET.md#after-filling-it-in": "n1223",
+    ".guidelines/FUSIONS_WORKSHEET.md#fusions-worksheet--historical-document-v17": "n1216",
+    ".guidelines/FUSIONS_WORKSHEET.md#house-1--dir--evaluation-4-commands": "n1218",
+    ".guidelines/FUSIONS_WORKSHEET.md#house-2--ass--background-4-commands": "n1219",
+    ".guidelines/FUSIONS_WORKSHEET.md#house-3--ass--elaboration-3-commands": "n1220",
+    ".guidelines/FUSIONS_WORKSHEET.md#house-4--dir--solutionhood": "n1221",
+    ".guidelines/FUSIONS_WORKSHEET.md#houses-5-to-12--complete-resolutions": "n1222",
+    ".guidelines/FUSIONS_WORKSHEET.md#how-to-fill-it-in": "n1217",
+    ".guidelines/GLOSSARY.md": "n1224",
+    ".guidelines/GLOSSARY.md#0-legend--the-species": "n1227",
+    ".guidelines/GLOSSARY.md#01-formula-notation--normative": "n1228",
+    ".guidelines/GLOSSARY.md#02-base-and-core--the-disambiguation": "n1230",
+    ".guidelines/GLOSSARY.md#03-operand-binding--normative": "n1231",
+    ".guidelines/GLOSSARY.md#1-hieroglyph-operators": "n1232",
+    ".guidelines/GLOSSARY.md#2-hieroglyph-primitives": "n1233",
+    ".guidelines/GLOSSARY.md#3-composite-glyphs": "n1234",
+    ".guidelines/GLOSSARY.md#4-engine-and-modes": "n1235",
+    ".guidelines/GLOSSARY.md#5-the-proposed-formulas--the-reason-for-each": "n1236",
+    ".guidelines/GLOSSARY.md#6-the-record-of-what-was-closed": "n1237",
+    ".guidelines/GLOSSARY.md#7-where-this-stands": "n1238",
+    ".guidelines/GLOSSARY.md#8-project-vocabulary--the-terms-outside-the-language": "n1242",
+    ".guidelines/GLOSSARY.md#glyphs-and-hieroglyphs--normative-glossary-v36907": "n1225",
+    ".guidelines/GLOSSARY.md#glyphs-and-hieroglyphs--normative-glossary-v471008": "n1225",
+    ".guidelines/GLOSSARY.md#how-work-is-ordered": "n1244",
+    ".guidelines/GLOSSARY.md#self-describing-output": "n1240",
+    ".guidelines/GLOSSARY.md#the-hgml-emitter": "n1239",
+    ".guidelines/GLOSSARY.md#the-names-the-regent-ratified": "n1246",
+    ".guidelines/GLOSSARY.md#the-rust-app": "n1245",
+    ".guidelines/GLOSSARY.md#versioning--appfrontrulescontent": "n1226",
+    ".guidelines/GLOSSARY.md#what-remains": "n1241",
+    ".guidelines/GLOSSARY.md#who-decides": "n1243",
+    ".guidelines/GLOSSARY.md#why-conjunction-carries-order": "n1229",
+    ".guidelines/HGML_CONVERGENCE.md": "n1247",
+    ".guidelines/HGML_CONVERGENCE.md#1-a-primeira-surpresa-o-eixo-caro-já-converge": "n1249",
+    ".guidelines/HGML_CONVERGENCE.md#2-onde-quebra--três-classes-todas-mecânicas": "n1252",
+    ".guidelines/HGML_CONVERGENCE.md#21-a-queima-está-invertida-nos-dois-sentidos--e-01-é-que-está-errado": "n1253",
+    ".guidelines/HGML_CONVERGENCE.md#21b-mas-a-queima-perde-a-distinção-que-01-declara-normativa": "n1254",
+    ".guidelines/HGML_CONVERGENCE.md#22-escrever-a-fórmula-dentro-do-próprio-composto-duplica": "n1255",
+    ".guidelines/HGML_CONVERGENCE.md#23-a-posição-do-literal--retificado-não-era-defeito": "n1256",
+    ".guidelines/HGML_CONVERGENCE.md#3-o-precedente-já-está-no-código": "n1257",
+    ".guidelines/HGML_CONVERGENCE.md#4-uma-correção-ao-passo-a-passo-e-ela-deixa-a-obra-mais-barata": "n1258",
+    ".guidelines/HGML_CONVERGENCE.md#5-decidido-pelo-regente": "n1259",
+    ".guidelines/HGML_CONVERGENCE.md#6-hgml-depois-do-ast--esforço-e-ganho": "n1261",
+    ".guidelines/HGML_CONVERGENCE.md#7-a-pergunta-do-alw--preservado-não-coberto": "n1262",
+    ".guidelines/HGML_CONVERGENCE.md#8-método": "n1263",
+    ".guidelines/HGML_CONVERGENCE.md#9-o-que-foi-implementado--34705": "n1264",
+    ".guidelines/HGML_CONVERGENCE.md#convergência-do-hgml--várias-fontes-uma-intenção": "n1248",
+    ".guidelines/HGML_CONVERGENCE.md#objetivo-1--simplifique-x-no-núcleo": "n1250",
+    ".guidelines/HGML_CONVERGENCE.md#objetivo-2--sempre-puxe-o-contexto-sobre-x": "n1251",
+    ".guidelines/HGML_CONVERGENCE.md#raio-de-alcance-medido": "n1260",
+    ".guidelines/HGML_PLAN.md": "n1265",
+    ".guidelines/HGML_PLAN.md#decisions-taken-along-the-way": "n1268",
+    ".guidelines/HGML_PLAN.md#every-composite-re-reads-its-own-burn": "n1270",
+    ".guidelines/HGML_PLAN.md#hgml--plan-and-state": "n1266",
+    ".guidelines/HGML_PLAN.md#separating-interface-data-from-engine-data": "n1272",
+    ".guidelines/HGML_PLAN.md#state": "n1267",
+    ".guidelines/HGML_PLAN.md#the-pattern-layer": "n1271",
+    ".guidelines/HGML_PLAN.md#what-is-left": "n1269",
+    ".guidelines/OPERATOR_TARGET.md": "n1273",
+    ".guidelines/OPERATOR_TARGET.md#0-the-honest-defeater": "n1275",
+    ".guidelines/OPERATOR_TARGET.md#01-where-the-first-draft-of-this-document-diverged": "n1276",
+    ".guidelines/OPERATOR_TARGET.md#1-where-the-operator-is-discarded": "n1277",
+    ".guidelines/OPERATOR_TARGET.md#10-status": "n1313",
+    ".guidelines/OPERATOR_TARGET.md#2-how-the-ast-carries-it": "n1278",
+    ".guidelines/OPERATOR_TARGET.md#21-origin-is-exported-no-new-field-is-added": "n1279",
+    ".guidelines/OPERATOR_TARGET.md#22-chainelement-is-narrowed-and-is-not-derivable-from-origin": "n1280",
+    ".guidelines/OPERATOR_TARGET.md#23-what-follows-inside-the-engine": "n1281",
+    ".guidelines/OPERATOR_TARGET.md#24-astlean-must-drop-the-uninformative-values": "n1282",
+    ".guidelines/OPERATOR_TARGET.md#25-origin-is-suppressed-on-a-placeholder-name": "n1283",
+    ".guidelines/OPERATOR_TARGET.md#3-how-the-xml-carries-it": "n1284",
+    ".guidelines/OPERATOR_TARGET.md#31-one-attribute-on-bare-elements-only": "n1285",
+    ".guidelines/OPERATOR_TARGET.md#32-why-the-attribute-is-not-emitted-on-bracketed-children": "n1286",
+    ".guidelines/OPERATOR_TARGET.md#33-the-four-guarantees-one-at-a-time": "n1287",
+    ".guidelines/OPERATOR_TARGET.md#34-projection-into-chain-later": "n1288",
+    ".guidelines/OPERATOR_TARGET.md#4-how-fromxml-reads-it-back": "n1289",
+    ".guidelines/OPERATOR_TARGET.md#41-two-malformed-inputs-the-reader-must-name-not-repair-silently": "n1290",
+    ".guidelines/OPERATOR_TARGET.md#5-two-removals--finishing-a-deletion-decided-at-v17": "n1291",
+    ".guidelines/OPERATOR_TARGET.md#51-this-is-propagation-not-change": "n1292",
+    ".guidelines/OPERATOR_TARGET.md#52-why-the-two-travel-together": "n1293",
+    ".guidelines/OPERATOR_TARGET.md#53-inventory--the-divide-operator": "n1294",
+    ".guidelines/OPERATOR_TARGET.md#54-inventory--the-backslash-emotion-delimiter": "n1295",
+    ".guidelines/OPERATOR_TARGET.md#55-what-the-deletions-leave-behind-and-why-6-is-mandatory": "n1296",
+    ".guidelines/OPERATOR_TARGET.md#56-why-nothing-caught-this--the-doc-tests-blind-spot": "n1297",
+    ".guidelines/OPERATOR_TARGET.md#57-xml_referencemd": "n1298",
+    ".guidelines/OPERATOR_TARGET.md#6--in-a-chain-position-is-invalid--bucket-n-not-bucket-i": "n1299",
+    ".guidelines/OPERATOR_TARGET.md#61-the-verified-behaviour": "n1300",
+    ".guidelines/OPERATOR_TARGET.md#62-three-defects-three-required-behaviours": "n1301",
+    ".guidelines/OPERATOR_TARGET.md#63-what-the-diagnostics-need-that-does-not-exist-yet": "n1302",
+    ".guidelines/OPERATOR_TARGET.md#7-blast-radius": "n1303",
+    ".guidelines/OPERATOR_TARGET.md#71-the-173-vectors--still-1-with-both-removals-in-place": "n1304",
+    ".guidelines/OPERATOR_TARGET.md#72-xml_referencemd-rows": "n1305",
+    ".guidelines/OPERATOR_TARGET.md#73-not-in-the-blast-radius": "n1306",
+    ".guidelines/OPERATOR_TARGET.md#8-negative-vectors-this-change-requires": "n1307",
+    ".guidelines/OPERATOR_TARGET.md#81-bucket-f--round-trip-is-the-invariant": "n1308",
+    ".guidelines/OPERATOR_TARGET.md#82-bucket-n--each-requires-a-fix-diagnostic": "n1309",
+    ".guidelines/OPERATOR_TARGET.md#83-bucket-d--the-blind-spot-itself": "n1310",
+    ".guidelines/OPERATOR_TARGET.md#84-guard": "n1311",
+    ".guidelines/OPERATOR_TARGET.md#9-answered--regent": "n3047",
+    ".guidelines/OPERATOR_TARGET.md#operator-target--carrying---and--from-the-parse-tree-to-the-xml-and-back": "n1274",
+    ".guidelines/PACKAGE_TARGET.md": "n1314",
+    ".guidelines/PACKAGE_TARGET.md#0-what-this-is-and-what-it-is-not": "n1316",
+    ".guidelines/PACKAGE_TARGET.md#1-why-this-is-a-delta-and-not-a-grammar": "n1317",
+    ".guidelines/PACKAGE_TARGET.md#10-open": "n1341",
+    ".guidelines/PACKAGE_TARGET.md#11-diagnostics-are-not-carried-in-the-document": "n1342",
+    ".guidelines/PACKAGE_TARGET.md#111-two-findings-this-section-is-built-on": "n1343",
+    ".guidelines/PACKAGE_TARGET.md#12-status": "n1344",
+    ".guidelines/PACKAGE_TARGET.md#2-the-root": "n1318",
+    ".guidelines/PACKAGE_TARGET.md#3-chain": "n1319",
+    ".guidelines/PACKAGE_TARGET.md#31-the-grouping-rule": "n1320",
+    ".guidelines/PACKAGE_TARGET.md#32-the-attribute-does-not-survive-the-grouping": "n1321",
+    ".guidelines/PACKAGE_TARGET.md#33-a-run-of-one-is-still-a-run": "n1322",
+    ".guidelines/PACKAGE_TARGET.md#34-consecutive-extends-open-separate-runs": "n1323",
+    ".guidelines/PACKAGE_TARGET.md#35-what-is-not-a-chain": "n1324",
+    ".guidelines/PACKAGE_TARGET.md#3b-holds--conjunction-between-bracketed-siblings": "n1325",
+    ".guidelines/PACKAGE_TARGET.md#3b1-why-it-exists": "n1326",
+    ".guidelines/PACKAGE_TARGET.md#3b2-the-grouping-rule": "n1327",
+    ".guidelines/PACKAGE_TARGET.md#3b3-the-attribute-does-not-survive-the-grouping": "n1328",
+    ".guidelines/PACKAGE_TARGET.md#3b4-what-is-not-a-holds": "n1329",
+    ".guidelines/PACKAGE_TARGET.md#3c-two-operands-as-attributes--part-name-and-if-cond": "n3178",
+    ".guidelines/PACKAGE_TARGET.md#4-invoke--the-command-call": "n1330",
+    ".guidelines/PACKAGE_TARGET.md#41-a-command-is-a-function-and-the-xml-never-said-so": "n1331",
+    ".guidelines/PACKAGE_TARGET.md#42-shape": "n1332",
+    ".guidelines/PACKAGE_TARGET.md#43-emitted-for-composites-only": "n1333",
+    ".guidelines/PACKAGE_TARGET.md#44-template-is-the-macro-and-slot-follows-what-the-call-wrote": "n2794",
+    ".guidelines/PACKAGE_TARGET.md#45-divergence-from-operator_targetmd": "n1335",
+    ".guidelines/PACKAGE_TARGET.md#5-schema": "n1336",
+    ".guidelines/PACKAGE_TARGET.md#6-refusals": "n1337",
+    ".guidelines/PACKAGE_TARGET.md#7-the-four-guarantees": "n1338",
+    ".guidelines/PACKAGE_TARGET.md#8-round-trip": "n1339",
+    ".guidelines/PACKAGE_TARGET.md#9-deliberately-not-specified-here": "n1340",
+    ".guidelines/PACKAGE_TARGET.md#package-target--the-glyph-package-document": "n1315",
+    ".guidelines/PROMOTION_BOUNDARY.md": "n1345",
+    ".guidelines/PROMOTION_BOUNDARY.md#0-what-the-norm-is-for": "n1347",
+    ".guidelines/PROMOTION_BOUNDARY.md#1-the-measurement-this-rests-on": "n1348",
+    ".guidelines/PROMOTION_BOUNDARY.md#2-the-boundary--three-tiers": "n1349",
+    ".guidelines/PROMOTION_BOUNDARY.md#3-the-consequence-already-applied": "n1353",
+    ".guidelines/PROMOTION_BOUNDARY.md#4-the-declared-gap-in-the-sample": "n1354",
+    ".guidelines/PROMOTION_BOUNDARY.md#5-ratification--the-regents": "n1355",
+    ".guidelines/PROMOTION_BOUNDARY.md#promotion-boundary--where-domain-ends-and-synthesis-begins": "n1346",
+    ".guidelines/PROMOTION_BOUNDARY.md#tier-d--domain-mechanical-and-never-inferred": "n1350",
+    ".guidelines/PROMOTION_BOUNDARY.md#tier-p--promotable-only-where-the-table-decides": "n1351",
+    ".guidelines/PROMOTION_BOUNDARY.md#tier-s--synthesis-refused": "n1352",
+    ".guidelines/PROMOTION_MEASUREMENT.md": "n1356",
+    ".guidelines/PROMOTION_MEASUREMENT.md#promotion--the-measurement-before-the-promoter": "n1357",
+    ".guidelines/PROMOTION_MEASUREMENT.md#the-gap-in-the-sample-stated-rather-than-papered-over": "n1362",
+    ".guidelines/PROMOTION_MEASUREMENT.md#the-result-and-it-is-not-the-one-that-was-expected": "n1360",
+    ".guidelines/PROMOTION_MEASUREMENT.md#what-this-changes": "n1361",
+    ".guidelines/PROMOTION_MEASUREMENT.md#what-was-measured": "n1359",
+    ".guidelines/PROMOTION_MEASUREMENT.md#why-it-comes-first": "n1358",
+    ".guidelines/SIGNATURES.md": "n1363",
+    ".guidelines/SIGNATURES.md#1-strict-arity--2-positions-8": "n1366",
+    ".guidelines/SIGNATURES.md#2-n-ary--take-a-list-6": "n1367",
+    ".guidelines/SIGNATURES.md#3-one-slot-61": "n3179",
+    ".guidelines/SIGNATURES.md#4-zero-arity-43": "n3180",
+    ".guidelines/SIGNATURES.md#5-mandatory-name-3": "n3181",
+    ".guidelines/SIGNATURES.md#6-polarity-and-modality": "n1373",
+    ".guidelines/SIGNATURES.md#7-auto-closing": "n1374",
+    ".guidelines/SIGNATURES.md#arity-is-not-an-error--it-is-a-severity": "n1365",
+    ".guidelines/SIGNATURES.md#ctx--three-positions-by-convention": "n1369",
+    ".guidelines/SIGNATURES.md#part--one-literal-per-level": "n3182",
+    ".guidelines/SIGNATURES.md#signatures-and-arities--normative-table-v1300": "n1364",
+    ".guidelines/SIGNATURES.md#where-species-and-arity-disagree": "n1371",
+    ".guidelines/XML_REFERENCE.md": "n1375",
+    ".guidelines/XML_REFERENCE.md#1-document-shape": "n1377",
+    ".guidelines/XML_REFERENCE.md#10-round-trip": "n1390",
+    ".guidelines/XML_REFERENCE.md#11-failure--what-a-malformed-construct-produces": "n1391",
+    ".guidelines/XML_REFERENCE.md#111-missing-is-not-malformed": "n1392",
+    ".guidelines/XML_REFERENCE.md#112-every-refusal-carries-a-position": "n1393",
+    ".guidelines/XML_REFERENCE.md#113-the-refusals": "n1394",
+    ".guidelines/XML_REFERENCE.md#114-what-is-deliberately-not-refused": "n1395",
+    ".guidelines/XML_REFERENCE.md#115-no-placeholder-character-reaches-the-deliverable": "n1396",
+    ".guidelines/XML_REFERENCE.md#2-naming-rule": "n1378",
+    ".guidelines/XML_REFERENCE.md#3-attributes": "n1379",
+    ".guidelines/XML_REFERENCE.md#4-operators-delimiters-modes": "n1380",
+    ".guidelines/XML_REFERENCE.md#5-templates-and-placeholders": "n1381",
+    ".guidelines/XML_REFERENCE.md#6-mood": "n1382",
+    ".guidelines/XML_REFERENCE.md#7-vocabulary": "n1383",
+    ".guidelines/XML_REFERENCE.md#8-coined-elements": "n1388",
+    ".guidelines/XML_REFERENCE.md#9-where-the-draft-reference-diverged": "n1389",
+    ".guidelines/XML_REFERENCE.md#glyph--xml--serialisation-reference": "n1376",
+    ".guidelines/XML_REFERENCE.md#instructions-105": "n1384",
+    ".guidelines/XML_REFERENCE.md#meta-7": "n1386",
+    ".guidelines/XML_REFERENCE.md#session-shortcuts-5": "n1387",
+    ".guidelines/XML_REFERENCE.md#structural-9": "n1385"
   },
   "recovered": [
     [".guidelines/.plan/README.md#0-caminhos-virtuais--guidelinesshortcutsvirtual--camadas-1-2-4-5-6-e-7-construídas-3-a-seguir", "n1830", "n1870", 81],

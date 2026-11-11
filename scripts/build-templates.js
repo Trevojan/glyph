@@ -126,7 +126,7 @@ function stripMd(s) {
 }
 
 function readGlossary() {
-  const src = path.join(GUIDE, "GLOSSARY.md");
+  const src = path.join(GUIDE, ".sources", "GLOSSARY.md");
   if (!fs.existsSync(src)) { console.error("  ! GLOSSARY.md not found."); return {}; }
   const defs = {}, spelled = {};
   fs.readFileSync(src, "utf8").split(/\r?\n/).forEach(ln => {

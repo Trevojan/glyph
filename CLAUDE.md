@@ -74,5 +74,5 @@ você faz na primeira hora:
 
 ## Vocabulário
 
-Em [`.guidelines/GLOSSARY.md`](.guidelines/GLOSSARY.md) §8 — quem decide, como o
+Em [`.guidelines/.sources/GLOSSARY.md`](.guidelines/.sources/GLOSSARY.md) §8 — quem decide, como o
 trabalho se ordena, o app Rust e os nomes que o Regente ratificou.

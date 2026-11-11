@@ -19,7 +19,7 @@
     "snapshot": "node scripts/test-corpus.js --update-snapshot",
     "vpath": "cargo run -q --manifest-path rust/Cargo.toml -p glyph-vpath --"
   },
-  "note": "`type: module` exists so the core can be split into files the browser can load without a bundler — see .guidelines/HGML_PLAN.md D1, open since v1.1. There are no `dependencies` and there never will be: zero-dependency is a property of this repository, not an accident of it. This file adds scripts and a module system, nothing else.",
+  "note": "`type: module` exists so the core can be split into files the browser can load without a bundler — see .guidelines/.sources/HGML_PLAN.md D1, open since v1.1. There are no `dependencies` and there never will be: zero-dependency is a property of this repository, not an accident of it. This file adds scripts and a module system, nothing else.",
   "bin": {
     "glyph": "scripts/glyph-cli.js"
   }
