@@ -1,0 +1,11 @@
+{
+  "name": "glyph-markup",
+  "version": "0.1.0",
+  "description": "Read, write, and validate Glyph notation and continue work from existing Glyph Orders.",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Glyph Markup",
+    "shortDescription": "Read and validate Glyph notation and resume existing Orders.",
+    "defaultPrompt": ["Explain this Glyph source in plain language and report what the Glyph engine finds."]
+  }
+}

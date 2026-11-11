@@ -1,0 +1,12 @@
+{
+  "name": "glyph-local",
+  "interface": { "displayName": "Glyph" },
+  "plugins": [
+    {
+      "name": "glyph-markup",
+      "source": { "source": "local", "path": "./plugins/glyph-markup" },
+      "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+      "category": "Developer Tools"
+    }
+  ]
+}
