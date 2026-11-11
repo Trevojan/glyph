@@ -1,0 +1,16 @@
+[block'ORD-0005-edit'
+  [ctx'the spec of EMS-003','.guidelines/.orders/EMS-003/EMS-003.pgml']
+  [ctx'the signed model','.guidelines/.orders/INTAKE-2D-VIEW.md, section 6']
+  [tgt'editing by the links: each operation on the plane is one edit of the tree, the way back writes the source, and the engine reads it again before the picture changes']
+  [ins'build the operations of the signed table, each as one edit of the tree: connect two nodes by a connector of a chosen type, change the type of a connector, move the end of a connector to another node, cut a connector, place a command from the palette of icons, remove a node, change the order of siblings, write the operand of a node, and wrap nodes in a section, a block or a part']
+  [ins'offer on each connector the types the two ends admit, and name the operator each one writes: nest, chain, item, sequence, reference and result']
+  [req'an edit the tree cannot hold is refused by name before it is applied, and the plane and the source stay as they were']
+  [req'every edit is undone and redone, and the source after undo is the bytes it was']
+  [req'what an edit raises is shown where it lands: a new fix, ask or note appears on its node as soon as the engine has read the source again']
+  [cnst'the plane never writes source by itself: it edits the tree, the way back writes, and the parse of what was written is what the plane shows next']
+  [cnst'nothing vanishes in silence: a node cut from its only connector stays in the package as a root command, and removing a node that holds others asks first what happens to them']
+  [nev'an edit that changes the meaning of a command the user did not touch']
+  [val'the operations','each operation of the signed table has a case: the source it writes is the source a hand would write for that tree, the engine reads it with no new fix, and the tree read back is the edited tree']
+  [val'the refusals','each edit the table refuses is refused by its name and leaves the bytes of the source untouched, each seen failing before it counts']
+  [val'the round trip','over the declared sources, every connector cut and connected again by the same type gives the source back byte for byte']
+];

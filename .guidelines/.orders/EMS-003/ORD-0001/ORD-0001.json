@@ -1,0 +1,629 @@
+{
+  "type": "GlyphAST",
+  "schema": 2,
+  "version": "4.7.10.08",
+  "source": {
+    "length": 2121,
+    "checksum": "9e7792d8cd979600",
+    "encoding": "utf-8",
+    "newline": "lf",
+    "uri": null
+  },
+  "stores": {
+    "templates": "7356ea9b88319980",
+    "rules": "767e5432cdc6d400",
+    "expansions": "125235203224e180"
+  },
+  "projection": "full",
+  "segments": [
+    {
+      "type": "Segment",
+      "mood": [],
+      "isReturn": false,
+      "continues": false,
+      "breaks": 0,
+      "autoClosedCount": 0,
+      "body": [
+        {
+          "type": "Command",
+          "raw": "block",
+          "canonical": "BLOCK",
+          "tier": "struct",
+          "gloss": "Block",
+          "element": "block",
+          "isAlias": false,
+          "chainElement": false,
+          "origin": "root",
+          "slotName": false,
+          "editorial": false,
+          "name": null,
+          "depth": 0,
+          "autoClosed": false,
+          "suggestion": null,
+          "emotions": [],
+          "species": "atom",
+          "compositionDepth": 0,
+          "at": {
+            "s": 0,
+            "e": 6
+          },
+          "body": [
+            {
+              "type": "Literal",
+              "value": "ORD-0001-model",
+              "form": "quote",
+              "slot": null,
+              "role": "operand",
+              "at": {
+                "s": 6,
+                "e": 22
+              }
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 25,
+                "e": 29
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the spec of EMS-003",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 29,
+                    "e": 50
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": ".guidelines/.orders/EMS-003/EMS-003.pgml",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 51,
+                    "e": 93
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 97,
+                "e": 101
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the measured proposal and its questions",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 101,
+                    "e": 142
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": ".guidelines/.orders/INTAKE-2D-VIEW.md",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 143,
+                    "e": 182
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 186,
+                "e": 190
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the icons the Regent delivered on 2026-11-11, as delivered",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 190,
+                    "e": 250
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": ".scope/asset/glyph-icons",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 251,
+                    "e": 277
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "tgt",
+              "canonical": "TGT",
+              "tier": "instr",
+              "gloss": "Target",
+              "element": "target",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 281,
+                "e": 285
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the model of the 2D view, decided before a line of it is drawn: what a node is, what a connector is and which operator each connector writes, what holds what, where a position lives, and what an edit changes",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 285,
+                    "e": 494
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 498,
+                "e": 502
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the Regent, 2026-11-11: the icons must be used to organize a 2D intuitive view and enable editing via visible links with different types of operations and connectors, and there must be XML Orders describing the details of this bigger feature",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 502,
+                    "e": 745
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 749,
+                "e": 753
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "measured at c078f2c: the AST envelope holds three node types, Segment, Command and Literal, and four edge origins, root, nest, extend and item; a Command carries its source span in at; binds and ref are written by the XML emitter and are not in the envelope; fromAST writes source back from the envelope, and the suite holds that way back over every declared source",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 753,
+                    "e": 1120
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 1124,
+                "e": 1128
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "measured at c078f2c: 41 icons, 39 of them named after one of the 120 commands and 2 for the PIN, which the vocabulary does not hold yet; the 14 commands of the reasoning category have none",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1128,
+                    "e": 1318
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "conf",
+              "canonical": "CONF",
+              "tier": "instr",
+              "gloss": "Confirmation",
+              "element": "confirmation",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 1322,
+                "e": 1327
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the answers to the questions of INTAKE-2D-VIEW.md section 5, before anything is built",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1327,
+                    "e": 1414
+                  }
+                },
+                {
+                  "type": "Command",
+                  "raw": "hmn",
+                  "canonical": "HMN",
+                  "tier": "meta",
+                  "gloss": "Human",
+                  "element": "human",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 1414,
+                    "e": 1418
+                  },
+                  "body": []
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 1423,
+                "e": 1428
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the AST is the source of truth: the view is derived from it, and an edit in the view is an edit of the tree that the way back writes as source",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1428,
+                    "e": 1572
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 1576,
+                "e": 1581
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "nothing vanishes in silence: an edit the tree cannot hold is refused by name and changes nothing",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1581,
+                    "e": 1679
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 1683,
+                "e": 1688
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "zero dependencies on the JS side: the view is drawn by the repository, with no library",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1688,
+                    "e": 1776
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "val",
+              "canonical": "VAL",
+              "tier": "instr",
+              "gloss": "Validate",
+              "element": "validate",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "composite",
+              "compositionDepth": 5,
+              "at": {
+                "s": 1780,
+                "e": 1784
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the model",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1784,
+                    "e": 1795
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": "INTAKE-2D-VIEW.md holds the signed table of node kinds, container kinds and connector types, each connector with the operator it writes and the fact of the envelope it is drawn from",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1796,
+                    "e": 1979
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "val",
+              "canonical": "VAL",
+              "tier": "instr",
+              "gloss": "Validate",
+              "element": "validate",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "composite",
+              "compositionDepth": 5,
+              "at": {
+                "s": 1983,
+                "e": 1987
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the queue",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1987,
+                    "e": 1998
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": "each queued ORD of the series reads as the signed answers say, or is emitted again as a new version before it opens",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1999,
+                    "e": 2116
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "diagnostics": []
+}

@@ -1,0 +1,15 @@
+[block'ORD-0001-model'
+  [ctx'the spec of EMS-003','.guidelines/.orders/EMS-003/EMS-003.pgml']
+  [ctx'the measured proposal and its questions','.guidelines/.orders/INTAKE-2D-VIEW.md']
+  [ctx'the icons the Regent delivered on 2026-11-11, as delivered','.scope/asset/glyph-icons']
+  [tgt'the model of the 2D view, decided before a line of it is drawn: what a node is, what a connector is and which operator each connector writes, what holds what, where a position lives, and what an edit changes']
+  [ctx'the Regent, 2026-11-11: the icons must be used to organize a 2D intuitive view and enable editing via visible links with different types of operations and connectors, and there must be XML Orders describing the details of this bigger feature']
+  [ctx'measured at c078f2c: the AST envelope holds three node types, Segment, Command and Literal, and four edge origins, root, nest, extend and item; a Command carries its source span in at; binds and ref are written by the XML emitter and are not in the envelope; fromAST writes source back from the envelope, and the suite holds that way back over every declared source']
+  [ctx'measured at c078f2c: 41 icons, 39 of them named after one of the 120 commands and 2 for the PIN, which the vocabulary does not hold yet; the 14 commands of the reasoning category have none']
+  [conf'the answers to the questions of INTAKE-2D-VIEW.md section 5, before anything is built'[hmn]]
+  [cnst'the AST is the source of truth: the view is derived from it, and an edit in the view is an edit of the tree that the way back writes as source']
+  [cnst'nothing vanishes in silence: an edit the tree cannot hold is refused by name and changes nothing']
+  [cnst'zero dependencies on the JS side: the view is drawn by the repository, with no library']
+  [val'the model','INTAKE-2D-VIEW.md holds the signed table of node kinds, container kinds and connector types, each connector with the operator it writes and the fact of the envelope it is drawn from']
+  [val'the queue','each queued ORD of the series reads as the signed answers say, or is emitted again as a new version before it opens']
+];

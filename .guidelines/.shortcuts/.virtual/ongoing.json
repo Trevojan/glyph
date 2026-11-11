@@ -35,6 +35,22 @@
       "next": "ORD-0034 closed at a5e327b and 01d76e2: the 21 files of the language in .sources, both checks green on each group, the oracle parse.json unchanged, 571 old paths aliases of the index; M3, the entry, was not asked and nothing of it moved; the .orders/README.md scaffold in regency is regency's to fit"
     },
     {
+      "id": "EMS-003-2D-VIEW",
+      "title": "the 2D view: a package as icons on a plane, edited by its visible links",
+      "state": "blocked",
+      "who": "DV",
+      "since": "2026-11-11",
+      "source": ".decisions/README.md, 2026-11-11",
+      "where": [
+        "order:EMS-003/ORD-0001",
+        ".guidelines/.orders/INTAKE-2D-VIEW.md",
+        ".guidelines/.orders/EMS-003/EMS-003.pgml",
+        ".scope/asset/glyph-icons"
+      ],
+      "blocked_by": "the Regent: the questions V1 to V7 of INTAKE-2D-VIEW.md §5",
+      "next": "ORD-0001 emitted and open, ORD-0002 to ORD-0006 emitted and queued; once the gate is answered, write the signed model in the intake §6, re-emit any queued ORD it changes, close ORD-0001 and open ORD-0002"
+    },
+    {
       "id": "EFF-8",
       "title": "os objetos de contexto, segunda ordem dos efeitos",
       "state": "backlog",
