@@ -1316,7 +1316,7 @@ function runReferenceChecks() {
 
   const fs = require("fs");
   const path = require("path");
-  const refPath = path.resolve(__dirname, "../.guidelines/XML_REFERENCE.md");
+  const refPath = path.resolve(__dirname, "../.guidelines/.sources/XML_REFERENCE.md");
   let md = "";
   try { md = fs.readFileSync(refPath, "utf8"); }
   catch (e) { ok("D-01", "the reference exists", "XML_REFERENCE.md not found"); return D.length; }

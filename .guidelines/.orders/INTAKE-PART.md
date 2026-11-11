@@ -16,7 +16,7 @@
 | `[item-salt]` | nothing | two `fix` `UnknownCommand`, `item` and `salt` |
 
 `PT` is *"Part, part of. Membership relation of an object within a context."*
-([`GLOSSARY.md`](../GLOSSARY.md)), an `instr` atom, and since
+([`GLOSSARY.md`](../.sources/GLOSSARY.md)), an `instr` atom, and since
 [`EMS-002/ORD-0017`](EMS-002/README.md) its operand is the `n` of `<part>`. So every
 example of the design parses with no diagnostic, and none means what the design says:
 the tier is `instr`, not `struct` beside `BLOCK` and `SECTION`; the label lands in

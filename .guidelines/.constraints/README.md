@@ -18,7 +18,7 @@
 
 | | |
 |---|---|
-| **Domínio evita síntese** | o que couber em código, esquema ou tabela **nunca** deve ser re-inferido. Onde a tabela não decide, [`PROMOTION_BOUNDARY.md`](../PROMOTION_BOUNDARY.md) §2 manda **recusar** |
+| **Domínio evita síntese** | o que couber em código, esquema ou tabela **nunca** deve ser re-inferido. Onde a tabela não decide, [`PROMOTION_BOUNDARY.md`](../.sources/PROMOTION_BOUNDARY.md) §2 manda **recusar** |
 | **O portão vem antes da coisa que ele guarda** | e todo portão precisa ter sido **observado falhando** antes de contar |
 | **Construto aposentado vira reconhecedor** | nunca é apagado no silêncio |
 | **Perda conhecida é fixada com a razão** | e um pino que deixa de valer é **invertido**, não deletado — uma suíte que descarta pino aposentado perde a memória do que ele guardava |

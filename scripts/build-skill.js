@@ -135,8 +135,8 @@ fs.readdirSync(path.join(HERE, "core")).filter(f => f.endsWith(".js")).sort().fo
    travels without it. */
 ["XML_REFERENCE.md", "GLOSSARY.md"].forEach(f =>
   emit(path.join("references", f),
-       banner(".guidelines/" + f, "md") +
-       fs.readFileSync(path.join(GUIDE, f), "utf8").replace(/\r\n/g, "\n").replace(/^---\n[\s\S]*?\n---\n/, "")));
+       banner(".guidelines/.sources/" + f, "md") +
+       fs.readFileSync(path.join(GUIDE, ".sources", f), "utf8").replace(/\r\n/g, "\n").replace(/^---\n[\s\S]*?\n---\n/, "")));
 
 /* perishable, one level below: bound to one input and one engine version, and
    saying so. Generated from the conformance vectors so the two cannot drift —
@@ -155,7 +155,7 @@ ex.cases.forEach(c => {
 });
 emit(path.join("references", "examples", "EXAMPLES.md"), md);
 
-const signatures = ".guidelines/SIGNATURES.md";
+const signatures = ".guidelines/.sources/SIGNATURES.md";
 emitTo(CODEX_SKILL, "references/SIGNATURES.md",
        banner(signatures, "md") + fs.readFileSync(path.join(ROOT, signatures), "utf8"));
 
@@ -179,13 +179,13 @@ else console.log("  ✓ SKILL.md declares v" + VERSION);
    examples, so three of them sat at 2.4.5.01 across two releases — stale in the
    one place a reader copies from. */
 {
-  const ref = fs.readFileSync(path.join(GUIDE, "XML_REFERENCE.md"), "utf8");
+  const ref = fs.readFileSync(path.join(GUIDE, ".sources", "XML_REFERENCE.md"), "utf8");
   const wrong = [...new Set(ref.match(/engine="[0-9.]+"/g) || [])]
     .filter(m => m !== `engine="${VERSION}"`);
   if (wrong.length)
-    STALE.push(".guidelines/XML_REFERENCE.md: shows " + wrong.join(", ") +
+    STALE.push(".guidelines/.sources/XML_REFERENCE.md: shows " + wrong.join(", ") +
                ", engine is " + VERSION);
-  else console.log("  ✓ .guidelines/XML_REFERENCE.md shows engine " + VERSION);
+  else console.log("  ✓ .guidelines/.sources/XML_REFERENCE.md shows engine " + VERSION);
 }
 
 if (CHECK) {

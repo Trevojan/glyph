@@ -1,8 +1,8 @@
 {
   "schema": 1,
-  "note": "E1 of ORD-2026-08-30-01. The expected glyph-package for each of the five conformance examples, DERIVED BY HAND from `.guidelines/PACKAGE_TARGET.md` applied to `conformance/examples.json`, never from an emitter (locks T4, T5, T31). No glyph-package emitter exists at the time of writing; that is the point. `package` is the claim, and an emitter that disagrees with it is wrong until this file is revised for a stated reason.",
+  "note": "E1 of ORD-2026-08-30-01. The expected glyph-package for each of the five conformance examples, DERIVED BY HAND from `.guidelines/.sources/PACKAGE_TARGET.md` applied to `conformance/examples.json`, never from an emitter (locks T4, T5, T31). No glyph-package emitter exists at the time of writing; that is the point. `package` is the claim, and an emitter that disagrees with it is wrong until this file is revised for a stated reason.",
   "derived_from": [
-    ".guidelines/PACKAGE_TARGET.md",
+    ".guidelines/.sources/PACKAGE_TARGET.md",
     "conformance/examples.json",
     ".guidelines/expansions.json (for `reads`, per clause 9)"
   ],

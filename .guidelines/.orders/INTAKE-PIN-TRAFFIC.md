@@ -3,7 +3,7 @@
 > **Not an order.** The design the Regent gave on 2026-09-27, in answer to
 > *"Design how they fit now"*, with what it still leaves open. His words are in
 > [`.decisions/`](../.decisions/README.md) under that date; the terms in
-> [`GLOSSARY.md`](../GLOSSARY.md) §8.
+> [`GLOSSARY.md`](../.sources/GLOSSARY.md) §8.
 
 ## 1. PIN — a conditional the user writes in the editor
 
@@ -88,7 +88,7 @@ section and block by block; nothing is re-derived, and two Orders cannot be
 confused. This is the contract O3 of
 [`INTAKE-RUST-LADDER.md`](INTAKE-RUST-LADDER.md) named — the Harness consuming
 Glyph's output — held inside Glyph's own format. It changes the deliverable, so
-it passes through [`PACKAGE_TARGET.md`](../PACKAGE_TARGET.md) and is measured
+it passes through [`PACKAGE_TARGET.md`](../.sources/PACKAGE_TARGET.md) and is measured
 against `conformance/`.
 
 ## 5. Settled when built
@@ -103,5 +103,5 @@ Regent gave each of the four its substance; his words are in
 |---|---|
 | vocabulary | **What a PIN means is settled: it declares explicitly an attribute of a `[CMD]`, so the attribute is not left to inference** — *"a pinned attribute on a `[CMD]` is a way to declare it explicitly so it may be handled in many different forms without aching about inference effort"*. Measured example from him: given `[rev'filepath.txt']`, `[pin-rev]` takes the **last input** of that type and fixes it for every PIN call of the same type. The canonical names and the valency of each form still enter `expansions.txt` and `GLOSSARY.md` first, then the JS, then the Rust |
 | selection | **What is PINned is settled: an attribute of a declared *object*, a characteristic of a declared *subject*, or the formula of a specified *value*** — all of it writable in the XML, and still needing inference for the whole meaning. The exact grammar of the type selector comes **along with** the definition of *item* and *part*, by his word: *"this will come along the \"item\" and \"part\" definition"* — and both arrived in the same round: `[part]` with its design and pointer labels, and *item* with its frontier ([`INTAKE-EFFECTS.md`](INTAKE-EFFECTS.md) §8.1 and §8.2). So the grammar is no longer waiting on a word: it is proposed, measured, in the ORD that builds the PIN, together with the `[part]` label form it has to select through |
-| `EMS.json` | **The first field is settled: the EMS carries the basic XSD structure the ORDs follow**, so that when a specific declaration appears inside an Order the Emission answers from its spec rather than from the input XML or from pure inference — *"the EMS configuration will serve as a map and will hold very low cost to be used: just call where it matches the EMS' XSD pattern pointing to the current ORD being read and proceed the reasoning."* The rest of the schema is built **with** the Regent, against what is already ratified and immutable in the current version: *"let's build it together."* **The relation to `<schema>` is not an open question:** the XSD in `EMS.json` is the **pattern the ORDs of a series follow**, part of a configuration the user owns and edits, and `<schema>` is what one ORD **declares**, derived from its own tree and never hand-written — the Harness *"call[s] where it matches the EMS' XSD pattern pointing to the current ORD being read"*, so one is the convention and the other the instance ([`PACKAGE_TARGET.md`](../PACKAGE_TARGET.md) §5). What waits is the field list, which this ORD proposes measured |
+| `EMS.json` | **The first field is settled: the EMS carries the basic XSD structure the ORDs follow**, so that when a specific declaration appears inside an Order the Emission answers from its spec rather than from the input XML or from pure inference — *"the EMS configuration will serve as a map and will hold very low cost to be used: just call where it matches the EMS' XSD pattern pointing to the current ORD being read and proceed the reasoning."* The rest of the schema is built **with** the Regent, against what is already ratified and immutable in the current version: *"let's build it together."* **The relation to `<schema>` is not an open question:** the XSD in `EMS.json` is the **pattern the ORDs of a series follow**, part of a configuration the user owns and edits, and `<schema>` is what one ORD **declares**, derived from its own tree and never hand-written — the Harness *"call[s] where it matches the EMS' XSD pattern pointing to the current ORD being read"*, so one is the convention and the other the instance ([`PACKAGE_TARGET.md`](../.sources/PACKAGE_TARGET.md) §5). What waits is the field list, which this ORD proposes measured |
 | the generic EMS | **Settled: the code session measures `.scope/generics/` and returns the commands and pins by frequency, and the Regent rewrites the `EMS-000` over that list** — *"A, and i rewrite to make it fit. this will be quite an artisan handswork."* The measurement is the deliverable; the contents stay his |

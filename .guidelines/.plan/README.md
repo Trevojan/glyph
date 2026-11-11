@@ -295,11 +295,11 @@ nenhum agente pode ratificar:
 | pendência | estado |
 |---|---|
 | a série `Q` tem seis buracos: `Q1`, `Q2`, `Q3`, `Q5`, `Q6`, `Q13` não são enunciados em lugar nenhum | nada vivo; quem contar `Q1..Q14` procura seis perguntas que não existem |
-| `Q9` nomeia duas perguntas diferentes sobre o mesmo assunto — [`E0b-ARCHITECT-RETURN.md`](../.orders/E0b-ARCHITECT-RETURN.md) e [`PACKAGE_TARGET.md`](../PACKAGE_TARGET.md) §10 | as duas fechadas; a colisão está registrada nos dois |
+| `Q9` nomeia duas perguntas diferentes sobre o mesmo assunto — [`E0b-ARCHITECT-RETURN.md`](../.orders/E0b-ARCHITECT-RETURN.md) e [`PACKAGE_TARGET.md`](../.sources/PACKAGE_TARGET.md) §10 | as duas fechadas; a colisão está registrada nos dois |
 | `O1`, `O2`, `O3` e `O6` são referenciados como resolvidos e nunca enunciados; `O2` e `O6` não têm nem descrição recuperável | todas as dez resolvidas; `O2` e `O6` são identificadores sem conteúdo |
 | em [`PERGUNTAS-ABERTAS.md`](PERGUNTAS-ABERTAS.md), *"O que eu faço sem você"* fecha o documento antes da pergunta 7 | ordem de leitura, não perda |
-| o `note` do `package.json` diz que o D1 do [`HGML_PLAN.md`](../HGML_PLAN.md) está *"open since v1.1"* | o D1 está **feito** — treze módulos; a linha do `package.json` é o mesmo fato defasado em segundo lugar, e não foi tocada nesta rodada |
-| as linhas de [`GLOSSARY.md`](../GLOSSARY.md) §8 que `[ref'nem']`, `[ref'EMS']` e a fila do `repair` pedem | o `GLOSSARY.md` é fonte de uma cópia gerada que a skill carrega, então entram **na ORD que as constrói**, com `node scripts/build-skill.js` no mesmo passo — a ordem que o §5 do [`INTAKE-PIN-TRAFFIC.md`](../.orders/INTAKE-PIN-TRAFFIC.md) já declara: vocabulário primeiro, depois o JS, depois o Rust |
+| o `note` do `package.json` diz que o D1 do [`HGML_PLAN.md`](../.sources/HGML_PLAN.md) está *"open since v1.1"* | o D1 está **feito** — treze módulos; a linha do `package.json` é o mesmo fato defasado em segundo lugar, e não foi tocada nesta rodada |
+| as linhas de [`GLOSSARY.md`](../.sources/GLOSSARY.md) §8 que `[ref'nem']`, `[ref'EMS']` e a fila do `repair` pedem | o `GLOSSARY.md` é fonte de uma cópia gerada que a skill carrega, então entram **na ORD que as constrói**, com `node scripts/build-skill.js` no mesmo passo — a ordem que o §5 do [`INTAKE-PIN-TRAFFIC.md`](../.orders/INTAKE-PIN-TRAFFIC.md) já declara: vocabulário primeiro, depois o JS, depois o Rust |
 
 ### O resto
 

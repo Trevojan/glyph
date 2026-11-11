@@ -72,7 +72,7 @@ Two intentions, not one intention twice. Conjunction does not change the
 
 Conjunction and sequence are distinguished in the emitted document and not only
 in the AST: `<holds>` is the element that carries it, measured in
-`.guidelines/HGML_CONVERGENCE.md` §2.1b.
+`.guidelines/.sources/HGML_CONVERGENCE.md` §2.1b.
 
 ## 0.2 `BASE` and `CORE` — the disambiguation
 
@@ -417,60 +417,60 @@ and none reaches the deliverable. Each row points to where it was decided.
 
 **Norm:** technical and theoretical terms settle in English, also in the
 Portuguese interface, spelt en-EU (lock T13) — see
-[`.constraints/`](.constraints/README.md).
+[`.constraints/`](../.constraints/README.md).
 
 ### Who decides
 
 | term | is | is not | decided in |
 |---|---|---|---|
-| **Regente** | who decides; an agent measures, proposes and refuses, and never ratifies a norm it wrote | an agent | [`.decisions/`](.decisions/README.md) |
-| **Autor da Ordem** | who writes the `.pgml` source; the engine exists to trade that author's inference for re-ference | the Regent, necessarily | [`.decisions/`](.decisions/README.md), 2026-09-05 |
-| **ADR** | a decision record: a `.decisions/` row with its reversibility and what it supersedes; it binds once the Regent signs, and changing a signed one costs one questionnaire session | a rule for a case | [`.constraints/`](.constraints/README.md) |
+| **Regente** | who decides; an agent measures, proposes and refuses, and never ratifies a norm it wrote | an agent | [`.decisions/`](../.decisions/README.md) |
+| **Autor da Ordem** | who writes the `.pgml` source; the engine exists to trade that author's inference for re-ference | the Regent, necessarily | [`.decisions/`](../.decisions/README.md), 2026-09-05 |
+| **ADR** | a decision record: a `.decisions/` row with its reversibility and what it supersedes; it binds once the Regent signs, and changing a signed one costs one questionnaire session | a rule for a case | [`.constraints/`](../.constraints/README.md) |
 | **DC** | case handling, "when this occurs, do this": a `.constraints/` row naming the gate that checks it and the ADR it enforces | a decision's reason | stated in the EMS definition; none written yet |
-| **domínio evita síntese** | what fits in code, schema or table is never re-inferred | a style preference | [`.constraints/`](.constraints/README.md) |
+| **domínio evita síntese** | what fits in code, schema or table is never re-inferred | a style preference | [`.constraints/`](../.constraints/README.md) |
 
 ### How work is ordered
 
 | term | is | is not | decided in |
 |---|---|---|---|
-| **EMS** | a series of Orders kept in one folder, `.orders/EMS-###/`, whose conventions, rules and exceptions live in one file, the **EMS configuration**, so each ORD stays separate and the user does not classify; with a spec that talks to the guidelines: constraints, counters, exceptions, the ADR and DC it modifies, its pins, and how to proceed after it closes; it grows as a queue, and the user loads, edits and emits it, the Explorer showing it by its title | a version | [`.decisions/`](.decisions/README.md), 2026-09-25 and 2026-09-27; [`EMS-001.pgml`](.orders/EMS-001/EMS-001.pgml) |
-| **ORD** (Order, *Ordem*) | one Order: the XML is the Order, and the `.pgml`, `.json`, `.hgml` and manifest beside it let it validate itself; in a series, `.orders/EMS-###/ORD-####/`, carrying the EMS's rules and configuration inside its `<glyph-package>`; a loose ORD numbers itself in **NEM**, and lacks what an EMS gives for free; exactly one open at a time | the parked flat `ORD-0011`, `restructure-glyph-repo`, kept in `.orders/parked/` — not `EMS-001/ORD-0011` | [`.decisions/`](.decisions/README.md), 2026-09-25 and 2026-09-27 |
-| **EMS.json** | the EMS configuration, in JSON: one file per series holding its conventions, rules, exceptions, pins and traffic, so each ORD stays separate; its rules travel inside every ORD's `<glyph-package>` | the spec | [`.decisions/`](.decisions/README.md), 2026-09-27; format open |
+| **EMS** | a series of Orders kept in one folder, `.orders/EMS-###/`, whose conventions, rules and exceptions live in one file, the **EMS configuration**, so each ORD stays separate and the user does not classify; with a spec that talks to the guidelines: constraints, counters, exceptions, the ADR and DC it modifies, its pins, and how to proceed after it closes; it grows as a queue, and the user loads, edits and emits it, the Explorer showing it by its title | a version | [`.decisions/`](../.decisions/README.md), 2026-09-25 and 2026-09-27; [`EMS-001.pgml`](../.orders/EMS-001/EMS-001.pgml) |
+| **ORD** (Order, *Ordem*) | one Order: the XML is the Order, and the `.pgml`, `.json`, `.hgml` and manifest beside it let it validate itself; in a series, `.orders/EMS-###/ORD-####/`, carrying the EMS's rules and configuration inside its `<glyph-package>`; a loose ORD numbers itself in **NEM**, and lacks what an EMS gives for free; exactly one open at a time | the parked flat `ORD-0011`, `restructure-glyph-repo`, kept in `.orders/parked/` — not `EMS-001/ORD-0011` | [`.decisions/`](../.decisions/README.md), 2026-09-25 and 2026-09-27 |
+| **EMS.json** | the EMS configuration, in JSON: one file per series holding its conventions, rules, exceptions, pins and traffic, so each ORD stays separate; its rules travel inside every ORD's `<glyph-package>` | the spec | [`.decisions/`](../.decisions/README.md), 2026-09-27; format open |
 | **NEM** (*Not Emitted*) | the one folder of loose ORDs, `.orders/NEM/` beside the EMS folders, unnumbered, its ORDs numbered `ORD-####` on their own | a series; a group | as **EMS.json** |
 | **generic EMS** | `EMS-000`, titled *Generic*: the series of common ground: its default `EMS.json` carries the commands and pins every Order may want; the Order Matrices of `.scope/generics/` seed it | a loose folder | as **EMS.json** |
-| **spec** | a series' own `EMS-###.pgml` | an Order | [`EMS-001.pgml`](.orders/EMS-001/EMS-001.pgml) |
-| **Degraus** | the ORDs of EMS-001 | the revoked 2026-09-24 ladder | [`.decisions/`](.decisions/README.md), 2026-09-25 |
+| **spec** | a series' own `EMS-###.pgml` | an Order | [`EMS-001.pgml`](../.orders/EMS-001/EMS-001.pgml) |
+| **Degraus** | the ORDs of EMS-001 | the revoked 2026-09-24 ladder | [`.decisions/`](../.decisions/README.md), 2026-09-25 |
 | **val** | the proof of done an ORD names: what is validated, and the external criterion | a test written after the fact | every ORD source |
-| **close an ORD** | its val holds, its work is banked, and its row is written in the spec's track, the series register and `.shortcuts` | merging a branch | [`HANDOFF-2026-09-24.pgml`](.orders/HANDOFF-2026-09-24.pgml) |
-| **bank** | a commit that passes `npm run check` and `npm run check:rust`, pushed, with the return updated in the same commit | a commit alone | [`HANDOFF-2026-09-26.pgml`](.orders/HANDOFF-2026-09-26.pgml) |
-| **the return** | `EMS-###/RETURN.md`: what the sessions built and matched, and what waits for the Regent; its log names every commit and its checks | a changelog | [`HANDOFF-2026-09-26.pgml`](.orders/HANDOFF-2026-09-26.pgml) |
+| **close an ORD** | its val holds, its work is banked, and its row is written in the spec's track, the series register and `.shortcuts` | merging a branch | [`HANDOFF-2026-09-24.pgml`](../.orders/HANDOFF-2026-09-24.pgml) |
+| **bank** | a commit that passes `npm run check` and `npm run check:rust`, pushed, with the return updated in the same commit | a commit alone | [`HANDOFF-2026-09-26.pgml`](../.orders/HANDOFF-2026-09-26.pgml) |
+| **the return** | `EMS-###/RETURN.md`: what the sessions built and matched, and what waits for the Regent; its log names every commit and its checks | a changelog | [`HANDOFF-2026-09-26.pgml`](../.orders/HANDOFF-2026-09-26.pgml) |
 | **handoff** | `HANDOFF-yyyy-mm-dd.pgml`: the Order a new session hears to resume where another stopped | the return | `.orders/` |
-| **intake** | material that arrives while an Order is open; it waits in `.orders/` as `INTAKE-*.md` and never becomes a second Order | an Order | [`.constraints/`](.constraints/README.md) |
-| **Order Matrix** | an Order that assembles a formulary filled by an input pattern, and chains into a "DRAWING" | a generic template | [`.decisions/`](.decisions/README.md), 2026-09-24; `.scope/generics/` |
-| **PIN** | a mark on a line that injects a snippet into the output: a structural command under a user-oriented condition — `[pin-if`reason` …]`, whose first parameter is the alias of the validation, `[pin-else …]` and `[pin-case`value` …]` — selecting by type with an optional id, and giving a *try-catch* or *switch-case* in the editor without a template; when a block fails, the Harness follows to the next, as the last PIN writes it; shared through the EMS | a routing mark on a section — the reading of 2026-09-23; a template | [`.decisions/`](.decisions/README.md), 2026-09-27; [`INTAKE-PIN-TRAFFIC.md`](.orders/INTAKE-PIN-TRAFFIC.md); not built |
+| **intake** | material that arrives while an Order is open; it waits in `.orders/` as `INTAKE-*.md` and never becomes a second Order | an Order | [`.constraints/`](../.constraints/README.md) |
+| **Order Matrix** | an Order that assembles a formulary filled by an input pattern, and chains into a "DRAWING" | a generic template | [`.decisions/`](../.decisions/README.md), 2026-09-24; `.scope/generics/` |
+| **PIN** | a mark on a line that injects a snippet into the output: a structural command under a user-oriented condition — `[pin-if`reason` …]`, whose first parameter is the alias of the validation, `[pin-else …]` and `[pin-case`value` …]` — selecting by type with an optional id, and giving a *try-catch* or *switch-case* in the editor without a template; when a block fails, the Harness follows to the next, as the last PIN writes it; shared through the EMS | a routing mark on a section — the reading of 2026-09-23; a template | [`.decisions/`](../.decisions/README.md), 2026-09-27; [`INTAKE-PIN-TRAFFIC.md`](../.orders/INTAKE-PIN-TRAFFIC.md); not built |
 | **traffic** | the paths an ORD reads and writes, declared in `EMS.json` — files now, virtual paths later; a path that stops resolving warns the user and never blocks the emission, and **repair** rewrites the files under an EMS from these paths when data is corrupted or paths change — any path traffic declares, the source included — showing the diff and asking first | `<invoke reads>` in the XML, which names what a command reads | as **PIN** |
-| **layout** | the render layout of an ORD (`packets.md`) | the repository's folder layout | [`.decisions/`](.decisions/README.md), 2026-09-24 |
+| **layout** | the render layout of an ORD (`packets.md`) | the repository's folder layout | [`.decisions/`](../.decisions/README.md), 2026-09-24 |
 
 ### The Rust app
 
 | term | is | is not | decided in |
 |---|---|---|---|
-| **engine** | the Rust binary `glyph-engine`: it reads Glyph and answers the projections, a process of its own, on stdio (ADR B), relayed by `serve-dev.js` | linked into the page | [`.decisions/`](.decisions/README.md), 2026-09-25 |
-| **visual** | the browser app, `glyph-engine-alias.html` with `scripts/glyph-ui.js`: the MVP; behind `?engine=relay` it talks to the engine | a rewrite | [`EMS-001.pgml`](.orders/EMS-001/EMS-001.pgml) |
-| **Glyph Explorer** | the app installed on each user's machine, where everything personal lives | anything stored in the public repository | [`.decisions/`](.decisions/README.md), 2026-09-27 |
-| **standalone** | the app serving each user individually, as a whole thing of its own | an app without a server process | [`.decisions/`](.decisions/README.md), 2026-09-27 |
-| **oracle** | what the JS engine answers at the same commit, written by `node scripts/test-corpus.js --export-oracle`, never committed; frozen by the tag `conformance-v0` | `conformance/`, which derives from the specification | [`EMS-001.pgml`](.orders/EMS-001/EMS-001.pgml) |
-| **byte-exact** | the Rust answer equals the oracle as bytes, not as meaning | equivalent | [`EMS-001.pgml`](.orders/EMS-001/EMS-001.pgml) |
+| **engine** | the Rust binary `glyph-engine`: it reads Glyph and answers the projections, a process of its own, on stdio (ADR B), relayed by `serve-dev.js` | linked into the page | [`.decisions/`](../.decisions/README.md), 2026-09-25 |
+| **visual** | the browser app, `glyph-engine-alias.html` with `scripts/glyph-ui.js`: the MVP; behind `?engine=relay` it talks to the engine | a rewrite | [`EMS-001.pgml`](../.orders/EMS-001/EMS-001.pgml) |
+| **Glyph Explorer** | the app installed on each user's machine, where everything personal lives | anything stored in the public repository | [`.decisions/`](../.decisions/README.md), 2026-09-27 |
+| **standalone** | the app serving each user individually, as a whole thing of its own | an app without a server process | [`.decisions/`](../.decisions/README.md), 2026-09-27 |
+| **oracle** | what the JS engine answers at the same commit, written by `node scripts/test-corpus.js --export-oracle`, never committed; frozen by the tag `conformance-v0` | `conformance/`, which derives from the specification | [`EMS-001.pgml`](../.orders/EMS-001/EMS-001.pgml) |
+| **byte-exact** | the Rust answer equals the oracle as bytes, not as meaning | equivalent | [`EMS-001.pgml`](../.orders/EMS-001/EMS-001.pgml) |
 | **queima** | the `.hgml`, the reduction to pure hieroglyphs | the source of truth | §0 |
 
 ### The names the Regent ratified
 
 | term | is | is not | decided in |
 |---|---|---|---|
-| **template** | the language's macro: `[--name=` defines, `[--name` invokes, `[ph-x]` are its holes (`TPL`) | a mould | [`.decisions/`](.decisions/README.md), 2026-09-24 |
+| **template** | the language's macro: `[--name=` defines, `[--name` invokes, `[ph-x]` are its holes (`TPL`) | a mould | [`.decisions/`](../.decisions/README.md), 2026-09-24 |
 | **mould** | the app's forms: phases Alvo · Partida · Percurso, slots `{id, tag, q}` (`scripts/glyph-moulds.js`) | a template | as **template** |
 | **sample** | a ready-made example source in the app (`SAMPLES`) | a preset — the word is retired; a conformance example | as **template** |
 | **snippet** | an editor completion of a whole shape | a template | as **template** |
-| **frame** | the vocabulary category of the structure and template pieces — `TPL`, `PH`, `VAR`, `PARAM`, `DEF`, `SECTION`, `BLOCK`, `PT`, `LOGIC`, `SKL` — labelled *Frame* in both languages | a mould; a template | [`.decisions/`](.decisions/README.md), 2026-09-27 (O9) |
-| **part** | `PT`, written `[part'name'`: the `struct` that slices a block as a block slices a section, the Regent's design of 2026-10-15; its first literal is its name, and each further literal is one level of its label | the membership relation, the gloss `PT` carried while the design went unbuilt: release 3.4.7.05 read `[part` as that `PT`, the word stopped failing on 2026-09-05, and nothing refused or recorded the meaning the plans gave it ([`INTAKE-PART.md`](.orders/INTAKE-PART.md) §2) | [`.decisions/`](.decisions/README.md), 2026-11-11 (P1 to P5) |
-| **virtual path** | `[file][delimiter][selector]`, resolving to one exact slice with offsets, over a structural identity that survives a move | a text search | [`.plan`](.plan/README.md) §0 |
+| **frame** | the vocabulary category of the structure and template pieces — `TPL`, `PH`, `VAR`, `PARAM`, `DEF`, `SECTION`, `BLOCK`, `PT`, `LOGIC`, `SKL` — labelled *Frame* in both languages | a mould; a template | [`.decisions/`](../.decisions/README.md), 2026-09-27 (O9) |
+| **part** | `PT`, written `[part'name'`: the `struct` that slices a block as a block slices a section, the Regent's design of 2026-10-15; its first literal is its name, and each further literal is one level of its label | the membership relation, the gloss `PT` carried while the design went unbuilt: release 3.4.7.05 read `[part` as that `PT`, the word stopped failing on 2026-09-05, and nothing refused or recorded the meaning the plans gave it ([`INTAKE-PART.md`](../.orders/INTAKE-PART.md) §2) | [`.decisions/`](../.decisions/README.md), 2026-11-11 (P1 to P5) |
+| **virtual path** | `[file][delimiter][selector]`, resolving to one exact slice with offsets, over a structural identity that survives a move | a text search | [`.plan`](../.plan/README.md) §0 |

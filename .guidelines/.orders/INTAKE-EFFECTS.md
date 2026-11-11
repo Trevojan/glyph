@@ -327,7 +327,7 @@ the `chain` attribute inside a group because position already encodes `-` versus
 the queue**, which position does not give.
 
 It **moves the `xml` hashes**, so it passes through
-[`PACKAGE_TARGET.md`](../PACKAGE_TARGET.md) and `conformance/`, and it is the
+[`PACKAGE_TARGET.md`](../.sources/PACKAGE_TARGET.md) and `conformance/`, and it is the
 emitted consequence that `HGML_CONVERGENCE.md` §7 records as missing on a field
 that already exists. It unblocks the cheap half, the declarative `<effect>`.
 

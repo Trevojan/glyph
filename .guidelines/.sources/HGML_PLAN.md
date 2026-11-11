@@ -26,7 +26,7 @@ browser has no `require`, so CommonJS modules keep Node working and break the
 browser — was answered the way this note predicted: a bundler concatenates the
 modules back into one file, extending a pattern the repository already accepts.
 The cut and its measurements are in
-[`INTAKE-PARSER-SPLIT.md`](.orders/INTAKE-PARSER-SPLIT.md) §6.
+[`INTAKE-PARSER-SPLIT.md`](../.orders/INTAKE-PARSER-SPLIT.md) §6.
 
 **D3 — canonical reprint or full atomic decomposition?** Full atomic. The cost
 was measured before choosing: a composite averages ~15 hieroglyphs, `HYP`

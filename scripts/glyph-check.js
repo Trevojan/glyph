@@ -161,7 +161,7 @@ function validate(env) {
  * glyph-package — the DOCUMENT validator (E3)
  *
  * Written before the emitter it gates (lock T3). It reads
- * `.guidelines/PACKAGE_TARGET.md` §6 and nothing else: twelve clauses, each
+ * `.guidelines/.sources/PACKAGE_TARGET.md` §6 and nothing else: twelve clauses, each
  * carrying a position, because a refusal a reader cannot locate is not
  * verifiable by someone who does not have this engine.
  *
@@ -303,7 +303,7 @@ if (isMain(import.meta.url)) {
     const errs = validatePackage(raw);
     if (errs.length) {
       console.error("FAILED: " + errs.length + " refusal" + (errs.length > 1 ? "s" : "") +
-                    " under .guidelines/PACKAGE_TARGET.md §6");
+                    " under .guidelines/.sources/PACKAGE_TARGET.md §6");
       errs.slice(0, 20).forEach(e => console.error("  ✗ " + e));
       if (errs.length > 20) console.error("  … and " + (errs.length - 20) + " more");
       process.exit(1);

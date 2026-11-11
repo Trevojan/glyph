@@ -348,24 +348,24 @@ it expands from there *"to fit value, subject, object and its attributes and use
 other properties yet to be coded"*. The purpose is stated: today the workflow
 obliges the reader to infer from zero, and *"it's always better to start from
 sketch than start from nowhere"*
-([`.decisions/`](.decisions/README.md);
-[`PERGUNTAS-ABERTAS.md`](.plan/PERGUNTAS-ABERTAS.md) §8).
+([`.decisions/`](../.decisions/README.md);
+[`PERGUNTAS-ABERTAS.md`](../.plan/PERGUNTAS-ABERTAS.md) §8).
 
 So *"empty in this line of releases"* is **not** the state: the element stays
 empty until the ORD that fills it, and the contents are no longer an open
 question. The consumer §9 demands is named — the Harness reading the Order,
 which the `EMS.json` XSD serves from the other side
-([`INTAKE-PIN-TRAFFIC.md`](.orders/INTAKE-PIN-TRAFFIC.md) §5).
+([`INTAKE-PIN-TRAFFIC.md`](../.orders/INTAKE-PIN-TRAFFIC.md) §5).
 
 What it commissions:
 
 | | |
 |---|---|
-| five declarations reach the element | `[section]`, `[block]`, template, `[part]` and variable — four exist in the engine; `[part]` is a restoration and enters the vocabulary in its own ORD ([`INTAKE-EFFECTS.md`](.orders/INTAKE-EFFECTS.md) §8.2) |
+| five declarations reach the element | `[section]`, `[block]`, template, `[part]` and variable — four exist in the engine; `[part]` is a restoration and enters the vocabulary in its own ORD ([`INTAKE-EFFECTS.md`](../.orders/INTAKE-EFFECTS.md) §8.2) |
 | the emitted document moves | every source gains a non-empty `<schema>`, so the `xml` hashes and the five `conformance/` examples move **by decision**, with the reason written |
 | the `fromXML` reads it back | or the round-trip invariant `I_A` breaks on the new content |
 | the expansion is named, not open-ended | value, subject, object and attributes are the declared next step, and *"other properties yet to be coded"* is a direction, not a slot a consumer may invent into |
-| one gate, in its ORD | the `<schema>` is derived from the tree and never hand-written, and it is checked against the content it describes — the same reservation recorded for the XSD ([`INTAKE-EFFECTS.md`](.orders/INTAKE-EFFECTS.md) §8.1) |
+| one gate, in its ORD | the `<schema>` is derived from the tree and never hand-written, and it is checked against the content it describes — the same reservation recorded for the XSD ([`INTAKE-EFFECTS.md`](../.orders/INTAKE-EFFECTS.md) §8.1) |
 
 ---
 
@@ -487,7 +487,7 @@ carries global generic skills of its own, to resolve the invocation dependency
 faster. The norm, which governs every Order and not only this element:
 **no blocking dependency may be present when executing an Order** — *"otherwise
 the Harness may guess or even take blind decisions, leading only to rework."*
-([`.decisions/`](.decisions/README.md))
+([`.decisions/`](../.decisions/README.md))
 
 **Both branches of the output are answered, in the same breath.** The Regent
 raised the question — *"the most important here is the output: will it go on
