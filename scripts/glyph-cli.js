@@ -17,7 +17,7 @@
 "use strict";
 
 import { createRequire } from "node:module";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import path from "node:path";
 import fs from "node:fs";
 import G from "./glyph-parser.js";
@@ -227,8 +227,5 @@ export function main() {
 
 }
 
-/* "was this run, or imported?" — the ESM answer to `require.main === module`.
-   The Windows path needs both a separator swap and a leading slash before the
-   drive letter, or the comparison never matches on this machine. */
-if (process.argv[1] && import.meta.url ===
-    "file://" + process.argv[1].replace(/\\/g, "/").replace(/^([A-Za-z]:)/, "/$1")) main();
+/* Compare file URLs so paths with spaces and special characters work too. */
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) main();
