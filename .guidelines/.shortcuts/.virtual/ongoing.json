@@ -24,14 +24,16 @@
     {
       "id": "ORD-0011-parked",
       "title": "mapear o repositório, sem mover nada, agora que a EMS-001 fechou",
-      "state": "backlog",
+      "state": "blocked",
       "who": "DV",
       "since": "2026-11-07",
       "source": ".plan/README.md, Adiado por decisão",
       "where": [
+        "order:EMS-002/ORD-0034",
         ".guidelines/.orders/INTAKE-RESTRUCTURE.md"
       ],
-      "next": "R1 b, R2 b, R3 a, R4 a, R5 a, R6 c (2026-11-11); the next Order, by the Regent's word of the same day, now that ORD-0033 closed; the .orders/README.md fix is work in regency"
+      "blocked_by": "the Regent: the map of INTAKE-RESTRUCTURE.md §5 and the questions M1 to M5 of §6",
+      "next": "ORD-0034 emitted on 2026-11-11 with the measured map; once the gate is answered, move one row group per commit by git mv, both checks green on each; the .orders/README.md scaffold is regency's to fit"
     },
     {
       "id": "EFF-8",

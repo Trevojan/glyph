@@ -205,7 +205,9 @@ uma na fila é do Regente:
   por série e a linguagem no eixo dos fatos
   ([`INTAKE-RESTRUCTURE.md`](../.orders/INTAKE-RESTRUCTURE.md) §4). Ela move 318
   menções e os caminhos de nove scripts, e corre logo depois da `ORD-0033` (o
-  Regente, 2026-11-11), para que os intakes novos nasçam nos caminhos finais. O `.orders/README.md`
+  Regente, 2026-11-11), para que os intakes novos nasçam nos caminhos finais. É a
+  [`EMS-002/ORD-0034`](../.orders/EMS-002/README.md), emitida em 2026-11-11 com o
+  mapa medido no §5 do intake, e parada nas perguntas M1 a M5 do §6. O `.orders/README.md`
   que o regency montou se ajusta à numeração por série, e isso é trabalho no regency;
 - **as stores numa atualização**: o `--install` traz as stores novas, a que ninguém
   editou se atualiza, e a editada pede ao usuário um de três atos — *push and
@@ -305,7 +307,7 @@ nenhum agente pode ratificar:
 |---|---|
 | **estudo de setembro** | oito intakes em [`.orders/`](../.orders/): [`INTAKE-VIRTUAL-PATH`](../.orders/INTAKE-VIRTUAL-PATH.md) (mini-repo, medido: o custo de round-trip é o tamanho de `glyph-parser.js`), [`INTAKE-ORDER-COHERENCE`](../.orders/INTAKE-ORDER-COHERENCE.md) (a aresta declarada, ratificada em 2026-10-15 com `[ref'nem']`, `[ref'EMS']` e a fila do `repair`; não construída), [`INTAKE-BURN-INVARIANCE`](../.orders/INTAKE-BURN-INVARIANCE.md) (fechado), [`INTAKE-FORMAL-ANALYSIS`](../.orders/INTAKE-FORMAL-ANALYSIS.md), [`INTAKE-PARSER-SPLIT`](../.orders/INTAKE-PARSER-SPLIT.md) (o corte, feito: treze módulos), [`INTAKE-RUST`](../.orders/INTAKE-RUST.md) (steelman e defeater; o Regente decidiu migrar), [`INTAKE-RUST-LADDER`](../.orders/INTAKE-RUST-LADDER.md) (a escada auditada; nada nela espera o Regente — as dez perguntas `O` fecharam em 2026-09-24 e 2026-09-27, e o §8 registra quando cada uma fechou), [`INTAKE-FIELD-2026-09`](../.orders/INTAKE-FIELD-2026-09.md) (o kit de cliente; `H-09` fechou por ele, e os dois achados estruturais fecharam em 2026-10-15). |
 | **EMS-001** | fechou em 2026-11-07, com a `ORD-0014`, e as perguntas do [retorno](../.orders/EMS-001/RETURN.md) têm todas resposta. A execução assíncrona da seção `queue` **passou à EMS-002** em 2026-10-15 e saiu desta lista |
-| **EMS-002** | aberta em 2026-10-23, e o [registro da série](../.orders/EMS-002/README.md) guarda o que fechou, da `ORD-0001` à `ORD-0033`; nenhuma Ordem está aberta na série; o resto do §5 segue pela trilha, cada peça como proposta medida para o Regente cortar |
+| **EMS-002** | aberta em 2026-10-23, e o [registro da série](../.orders/EMS-002/README.md) guarda o que fechou, da `ORD-0001` à `ORD-0033`; a `ORD-0034`, a reestruturação, está aberta e parada no portão do Regente, as perguntas M1 a M5 do [`INTAKE-RESTRUCTURE.md`](../.orders/INTAKE-RESTRUCTURE.md) §6; o resto do §5 segue pela trilha, cada peça como proposta medida para o Regente cortar |
 | **as stores numa atualização** | o `--install` não sobrescreve as stores, e por isso uma versão nova instalada sobre uma antiga segue lendo as que vieram da instalação antiga, mesmo sem edição nenhuma. Medido em 2026-11-07, com as stores de 2026-10-18 e o motor 4.7.10.08: o `.xml` e o `.hgml` das 118 fontes não mudam; o `.json` leva os digests antigos e, no K-04, um diagnóstico diz *preset*; e o `expansions.json` nomeia `skeptic`, sem chegar ao XML delas. O Regente decidiu em 2026-11-11 que a instalação atualiza, com os três atos do §5; falta a Ordem |
 
 ## Adiado por decisão, não por esquecimento

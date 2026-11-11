@@ -233,6 +233,12 @@
     [val'the part','the part command reads as the signed answers say, in both engines, and the vocabulary says where it was lost']
   ]
 
+  [section'ORD-0034-restructure'
+    [tgt'the guidelines restructured to the classic Orbital layout with the dot kept before each folder name, as the Regent answered on 2026-11-11, carrying out the parked order of 2026-09-24, opening with a measured map and stopping at the gate of the Regent']
+    [conf'the map and the answers to what it leaves open, before any file moves'[hmn]]
+    [val'the restructure','every path the ratified map names lives where the map says, every relative link outside the acts resolves, and both checks are green']
+  ]
+
   [section'limits'
     [nev'a selector that answers an empty slice in silence']
     [dont'open an ORD before the ORD it depends on closes']
