@@ -27,6 +27,16 @@ deste repositório por `node scripts/build-skill.js`, e `npm run check` recusa
 quando ela diverge do motor — então é a cópia corrente. Uma cópia instalada na
 conta pode estar atrasada; a desta pasta é a que vale.
 
+## Entregar o plugin
+
+O plugin `glyph-markup` — a skill, os comandos e o motor — sai inteiro de
+`npm run plugin`, que escreve `.scope/dist/glyph-markup.plugin` derivado das
+fontes e recusa quando a versão do manifesto não é a do motor. Nada se monta à
+mão. Pediram o plugin, a skill instalável ou a atualização de um dos dois? Rode
+o script e entregue o `.plugin` pelo card de instalação do app, o que tem o
+botão de instalar — nunca um zip, um `.ps1` ou um `.cmd` para o Regente rodar.
+O pacote se instala; ele não se descompacta dentro deste repositório.
+
 ## Verificar
 
 ```bash
