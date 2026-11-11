@@ -203,8 +203,8 @@ uma na fila é do Regente:
   o Orbital clássico com o ponto mantido, as decisões num arquivo só, a numeração
   por série e a linguagem no eixo dos fatos
   ([`INTAKE-RESTRUCTURE.md`](../.orders/INTAKE-RESTRUCTURE.md) §4). Ela move 318
-  menções e os caminhos de nove scripts; a sessão propõe corrê-la logo depois da
-  `ORD-0033`, para que os intakes novos nasçam nos caminhos finais. O `.orders/README.md`
+  menções e os caminhos de nove scripts, e corre logo depois da `ORD-0033` (o
+  Regente, 2026-11-11), para que os intakes novos nasçam nos caminhos finais. O `.orders/README.md`
   que o regency montou se ajusta à numeração por série, e isso é trabalho no regency;
 - **as stores numa atualização**: o `--install` traz as stores novas, a que ninguém
   editou se atualiza, e a editada pede ao usuário um de três atos — *push and
@@ -219,8 +219,10 @@ portão espera, para o Regente responder os portões em lote:
 
 1. escrever os intakes que faltam, cada um fechando em perguntas numeradas com
    opções medidas: `INTAKE-XSD.md`, `INTAKE-EMS-JSON.md`, `INTAKE-EXPLORER.md` —
-   com a rota da página medida pela régua das crates: a janela do Edge com as
-   vistas rendidas pelo motor, um webview, uma GUI nativa — e `INTAKE-JS-EXIT.md`;
+   a casca vai por uma crate de webview, o Tauri primeiro (o Regente, 2026-11-11),
+   e o intake a mede pela régua das crates e rascunha a ADR que emenda a O7 para a
+   casca, para a assinatura dele; as vistas rendidas pelo motor servem às duas
+   janelas, a do Edge e a do webview — e `INTAKE-JS-EXIT.md`;
 2. dar a proposta medida aos intakes que já existem: o `repair` e a NEM, o esquema
    de item, o vocabulário do PIN, o `<invoke>`;
 3. correr as medições que são entregáveis: a frequência de `.scope/generics/`, o
@@ -228,7 +230,10 @@ portão espera, para o Regente responder os portões em lote:
    [`INTAKE-VIRTUAL-PATH.md`](../.orders/INTAKE-VIRTUAL-PATH.md) §16;
 4. pôr o `fmt` e o `clippy` com avisos negados no `check:rust`, o que a M06 espera
    para os crates construídos passarem de `started` a `done`;
-5. retrabalhar o `.history/study.md`, na forma que o Regente der.
+5. fazer do `.history/study.md` o registro de estudos (o Regente, 2026-11-11): uma
+   linha por pergunta que vale medir antes de desenhar — a pergunta, o que a
+   decide, o instrumento, o estado, e o intake em que virou —, no eixo dos fatos,
+   com as medições devidas deste plano apontando para ele.
 
 O lote das decididas em 2026-09-27 e 2026-10-25 que movem o emitido está
 construído, da `EMS-002/ORD-0014` à `ORD-0031`, e a versão se moveu uma vez
@@ -255,9 +260,9 @@ ORD que a constrói, parando no portão dele — a forma que ele ratificou em
 
 ### Os dois itens dos caminhos virtuais
 
-Nomeados pelo §0: o `.history/study.md`, vazio desde o commit inicial, se
-retrabalha (o Regente, 2026-11-11), e a forma dele espera a resposta à sugestão da
-sessão; e **não existe seletor para `.pgml`**, então um `.pgml` se endereça pelo
+Nomeados pelo §0: o `.history/study.md`, vazio desde o commit inicial, vira o
+registro de estudos (o Regente, 2026-11-11), pela fila de antes do portão do §5;
+e **não existe seletor para `.pgml`**, então um `.pgml` se endereça pelo
 arquivo inteiro ou por `@block`.
 
 ### Duas medições devidas, e nenhuma tem instrumento escrito
@@ -269,13 +274,14 @@ Não são perguntas: são dívidas que uma decisão assumiu.
 | o braço de comparação do §8 — o mini-repo reduz releitura? — e o terceiro braço, o transporte MCP comprando o que o arquivo não compra | [`INTAKE-VIRTUAL-PATH.md`](../.orders/INTAKE-VIRTUAL-PATH.md) §16 as exigia **em ordem** antes do `resources`; o Regente decidiu por B sem elas, e elas seguem devidas |
 | a medição dos objetos de contexto, antes do desenho — *measure before design* | [`INTAKE-EFFECTS.md`](../.orders/INTAKE-EFFECTS.md) §9, a segunda ordem. Com a fronteira de "item" dada, é só isto que falta antes do desenho, e o instrumento não está escrito |
 
-### A E-06, adiada com a direção dada
+### A E-06, ratificada, esperando o esquema de item
 
-O caminho é a base verificada de
-[`conformance/README.md`](../../conformance/README.md) §E-06 — o Regente
-respondeu *"D"* — mas ele **não ratifica como feita**: *"this needs a closer
-inspection"*. Até a inspeção dele, `K1` não alcança a regra de posição do
-`PACKAGE_TARGET.md` §3.2 e as garantias **G2 e G3** seguem sem cobertura.
+A fonte de [`conformance/README.md`](../../conformance/README.md) §E-06 está
+ratificada como escrita (o Regente, 2026-11-11). No motor 4.7.10.08 ela emite sem
+diagnóstico e sem nenhum `origin="item"`, porque o esquema de item está decidido e
+não construído; então ela entra no `conformance/` com a Ordem do passo 5 da trilha
+do §5. Até lá, `K1` não alcança a regra de posição do `PACKAGE_TARGET.md` §3.2 e
+as garantias **G2 e G3** seguem sem cobertura.
 
 ### Pendências de registro, sem casa hoje
 
