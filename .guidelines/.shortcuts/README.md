@@ -76,6 +76,7 @@
 | [`FUSIONS_WORKSHEET.md`](../FUSIONS_WORKSHEET.md) | as fusões da v1.7, documento histórico |
 | [`E0b-ARCHITECT-RETURN.md`](../.orders/E0b-ARCHITECT-RETURN.md), [`E2-PLAN.md`](../.orders/E2-PLAN.md) | o retorno do arquiteto e o plano de rederivação da ordem de agosto, `ORD-2026-08-30-01` |
 | [`.orders/INTAKE-VSCODE-AUTHORING.md`](../.orders/INTAKE-VSCODE-AUTHORING.md) | escopo e estado da extensão VS Code para PGML/HGML |
+| [`.ux/explorer/`](../.ux/explorer/README.md) | as telas do Glyph Explorer que o Regente trouxe do Figma em 2026-11-12, conferidas contra o motor, e os cinco pontos abertos delas |
 
 ## Vocabulário do projeto
 
