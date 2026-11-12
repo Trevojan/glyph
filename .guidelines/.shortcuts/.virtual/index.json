@@ -1,7 +1,7 @@
 {
   "note": "written by glyph-vpath build, EMS-002; never edited by hand",
   "depth": 2,
-  "next": 3178,
+  "next": 3191,
   "files": {
     ".guidelines/.changelog/README.md": {
       "nodes": [
@@ -3616,21 +3616,21 @@
     },
     ".guidelines/.shortcuts/.health/pipeline.json": {
       "nodes": [
-        ["n3148", "", 0, 1913, 1, 95, "10371c389acb5d80", "", ""],
-        ["n3149", "/cases", 14, 1908, 2, 93, "8b320bc77c62dd00", "", "n3148"],
-        ["n3150", "/cases/0", 21, 417, 3, 20, "a37b115073a8eb40", "", "n3149"],
-        ["n3151", "/cases/1", 424, 965, 23, 28, "362b91106eafe000", "", "n3149"],
-        ["n3152", "/cases/2", 972, 1368, 51, 18, "9f67ef603ef9f780", "", "n3149"],
-        ["n3153", "/cases/3", 1375, 1903, 69, 25, "3a159867908f9000", "", "n3149"]
+        ["n3148", "", 0, 1818, 1, 95, "cfe02a406bdb6600", "", ""],
+        ["n3149", "/cases", 13, 1815, 2, 93, "13c76a901db30100", "", "n3148"],
+        ["n3150", "/cases/0", 19, 396, 3, 20, "2a246ff8341bc000", "", "n3149"],
+        ["n3151", "/cases/1", 402, 916, 23, 28, "bf8bba67e93f6000", "", "n3149"],
+        ["n3152", "/cases/2", 922, 1301, 51, 18, "61ddf8a021905400", "", "n3149"],
+        ["n3153", "/cases/3", 1307, 1811, 69, 25, "a49f03cfcafc6a00", "", "n3149"]
       ]
     },
     ".guidelines/.shortcuts/.health/plan.json": {
       "nodes": [
-        ["n3154", "", 0, 367, 1, 20, "c97419b8aeea4800", "", ""],
-        ["n3155", "/schema", 15, 16, 2, 1, "340ca71c160082b8", "", "n3154"],
-        ["n3156", "/part", 29, 35, 3, 1, "4f3342f482b3b400", "", "n3154"],
-        ["n3157", "/topics", 50, 362, 4, 16, "f78388cf04a24b00", "", "n3154"],
-        ["n3158", "/topics/0", 57, 357, 5, 14, "6f4229507d74b700", "", "n3157"]
+        ["n3154", "", 0, 347, 1, 20, "0fdf2436343e2e00", "", ""],
+        ["n3155", "/schema", 14, 15, 2, 1, "340ca71c160082b8", "", "n3154"],
+        ["n3156", "/part", 27, 33, 3, 1, "4f3342f482b3b400", "", "n3154"],
+        ["n3157", "/topics", 47, 344, 4, 16, "d23104b0f487f000", "", "n3154"],
+        ["n3158", "/topics/0", 53, 340, 5, 14, "d11e7058c19dd400", "", "n3157"]
       ]
     },
     ".guidelines/.shortcuts/.health/root.json": {
@@ -3650,25 +3650,25 @@
     },
     ".guidelines/.shortcuts/.health/shortcuts.json": {
       "nodes": [
-        ["n3170", "", 0, 569, 1, 29, "965bd260c1cdd1a0", "", ""],
-        ["n3171", "/schema", 15, 16, 2, 1, "340ca71c160082b8", "", "n3170"],
-        ["n3172", "/part", 29, 40, 3, 1, "b048104ed05c1e00", "", "n3170"],
-        ["n3173", "/topics", 55, 564, 4, 25, "973ede402ae7f200", "", "n3170"],
-        ["n3174", "/topics/0", 62, 219, 5, 7, "a5ed56f83216f400", "", "n3173"],
-        ["n3175", "/topics/1", 226, 394, 12, 9, "a2ba0a5b71a72800", "", "n3173"],
-        ["n3176", "/topics/2", 401, 559, 21, 7, "a36033f0727823e0", "", "n3173"]
+        ["n3170", "", 0, 540, 1, 29, "789e26c84a4e4f00", "", ""],
+        ["n3171", "/schema", 14, 15, 2, 1, "340ca71c160082b8", "", "n3170"],
+        ["n3172", "/part", 27, 38, 3, 1, "b048104ed05c1e00", "", "n3170"],
+        ["n3173", "/topics", 52, 537, 4, 25, "0a0b0058dc271d00", "", "n3170"],
+        ["n3174", "/topics/0", 58, 209, 5, 7, "35f2b83866ab6c00", "", "n3173"],
+        ["n3175", "/topics/1", 215, 375, 12, 9, "56e5a01778b5a200", "", "n3173"],
+        ["n3176", "/topics/2", 381, 533, 21, 7, "034629e00133fe40", "", "n3173"]
       ]
     },
     ".guidelines/.shortcuts/README.md": {
       "nodes": [
-        ["n1153", "", 0, 9529, 1, 85, "216971cc0f3b0c00", "", ""],
-        ["n1154", "atalhos--comece-por-aqui", 0, 9529, 1, 85, "216971cc0f3b0c00", "701b51a0f0a02a80", "n1153"],
+        ["n1153", "", 0, 9711, 1, 86, "504d7578335a4780", "", ""],
+        ["n1154", "atalhos--comece-por-aqui", 0, 9711, 1, 86, "504d7578335a4780", "b74bbff01850b000", "n1153"],
         ["n1155", "onde-estou", 442, 4042, 11, 12, "db0e00e88e60bb00", "be463e66930e8b00", "n1154"],
         ["n1156", "os-sete-eixos", 4042, 5224, 23, 12, "225c1c087677fe00", "fb5b0af65af5a800", "n1154"],
         ["n1157", "o-mapa-do-motor-em-cinco-linhas", 5224, 6151, 35, 12, "537763c2149d2400", "2caeb09a05c9d600", "n1154"],
         ["n1158", "os-documentos-que-mais-se-consulta", 6151, 8056, 47, 18, "b14515f455f59aa0", "99bdc846d8830680", "n1154"],
-        ["n1159", "os-outros-documentos", 8056, 9190, 65, 15, "24fbcb86a7f17500", "7a35e8282b796500", "n1154"],
-        ["n1160", "vocabulário-do-projeto", 9190, 9529, 80, 6, "d5b16db424152200", "0656413c7ac4f500", "n1154"]
+        ["n1159", "os-outros-documentos", 8056, 9372, 65, 16, "5e19d15456341c00", "da1341ac410c8700", "n1154"],
+        ["n1160", "vocabulário-do-projeto", 9372, 9711, 81, 6, "d5b16db424152200", "0656413c7ac4f500", "n1154"]
       ]
     },
     ".guidelines/.shortcuts/regency.json": {
@@ -3733,6 +3733,55 @@
         ["n1185", "a-parte-empírica-é-respondível-hoje-e-de-graça", 18965, 20502, 160, 12, "5f62e23c8e220c00", "53bcdc90197d9a00", "n1181"],
         ["n1186", "sobre-ast-ou-xml", 20502, 21100, 172, 4, "a5814aecbf433000", "6a2556b81d584000", "n1181"],
         ["n1187", "veredito-limitado", 21100, 22424, 176, 11, "3beb352425b7f800", "059a5932e13a6e00", "n1181"]
+      ]
+    },
+    ".guidelines/.ux/explorer/README.md": {
+      "nodes": [
+        ["n3178", "", 0, 4115, 1, 61, "15488bf013058500", "", ""],
+        ["n3179", "glyph-explorer--screens", 0, 4115, 1, 61, "15488bf013058500", "45687fa0d9b60e00", "n3178"],
+        ["n3180", "the-sequence", 781, 2028, 16, 13, "3ff50c8c245a2300", "9e60af246a4d8800", "n3179"],
+        ["n3181", "checked-against-the-engine-471008", 2028, 2765, 29, 11, "15b1ad7ef309ec00", "06e88698a705f200", "n3179"],
+        ["n3182", "open-points-for-the-regent", 2765, 4115, 40, 22, "26915e98984f2b80", "540904006e188000", "n3179"]
+      ]
+    },
+    ".guidelines/.ux/explorer/glyph_explorer.svg": {
+      "nodes": [
+        ["n3183", "", 0, 1081080, 1, 185, "74cd45de960de600", "", ""]
+      ]
+    },
+    ".guidelines/.ux/explorer/visualflow_analyzer.svg": {
+      "nodes": [
+        ["n3184", "", 0, 998555, 1, 154, "a71e173ecf28e600", "", ""]
+      ]
+    },
+    ".guidelines/.ux/explorer/visualflow_edit_format.svg": {
+      "nodes": [
+        ["n3185", "", 0, 973130, 1, 152, "ed2666ac44ad1400", "", ""]
+      ]
+    },
+    ".guidelines/.ux/explorer/visualflow_edit_point.svg": {
+      "nodes": [
+        ["n3186", "", 0, 960705, 1, 156, "14cf76d839ce6600", "", ""]
+      ]
+    },
+    ".guidelines/.ux/explorer/visualflow_ord_update.svg": {
+      "nodes": [
+        ["n3187", "", 0, 995478, 1, 154, "cc74e568da82a800", "", ""]
+      ]
+    },
+    ".guidelines/.ux/explorer/ws_format_saved.svg": {
+      "nodes": [
+        ["n3188", "", 0, 978687, 1, 161, "dd259900f880a140", "", ""]
+      ]
+    },
+    ".guidelines/.ux/explorer/ws_relationship_saved.svg": {
+      "nodes": [
+        ["n3189", "", 0, 978689, 1, 161, "45e2ed785be53c00", "", ""]
+      ]
+    },
+    ".guidelines/.ux/explorer/ws_relationship_updated.svg": {
+      "nodes": [
+        ["n3190", "", 0, 1030254, 1, 154, "d5b37f00e1c3a800", "", ""]
       ]
     },
     ".guidelines/BUNDLE_TARGET.md": {
