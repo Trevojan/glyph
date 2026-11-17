@@ -39,8 +39,8 @@ import { checkRules, compileRules } from "./core/rules.js";
 
 /* Stores travel through opts in the cases that need them, so the suite
    doesn't depend on the module's global state or on test order. */
-const TPL = require("../.guidelines/templates.json");
-const RULESTORE = require("../.guidelines/rules.json");
+const TPL = require("../.guidelines/.sources/templates.json");
+const RULESTORE = require("../.guidelines/.sources/rules.json");
 const WITH_TPL = { templates: TPL.templates };
 const WITH_RULES = { rules: RULESTORE };
 /* Template constraints naming a class ("@coarsen") resolve it through the
@@ -55,7 +55,7 @@ const WITH_BOTH = { templates: TPL.templates, rules: RULESTORE };
 const EXPORT_ORACLE = process.argv.includes("--export-oracle");
 const TRIPS = [];
 if (EXPORT_ORACLE) {
-  const EXP = require("../.guidelines/expansions.json");
+  const EXP = require("../.guidelines/.sources/expansions.json");
   /* the stores the call ran with, as stores.js resolves them — a bucket
      after the registry guard runs on what `useRules` and the rest registered */
   const storeOf = (s, repo) => !s || (typeof s === "object" && !Object.keys(s).length) ? "none" : s === repo ? "repo" : "other";
@@ -444,7 +444,59 @@ const ORACLE_COVERAGE = [
   /* the inclusion of 2026-10-25, on fills and source definitions: a fill no
      hole names, and a template defined twice in one package */
   { id:"OC-14", src:"[--reinforce'a''b'[ph-zzz'v']]", code:"TemplateUnknownParam" },
-  { id:"OC-15", src:"[--t=[ctx'x']][--t=[ctx'y']][--t]", code:"TemplateDefinedTwice" }
+  { id:"OC-15", src:"[--t=[ctx'x']][--t=[ctx'y']][--t]", code:"TemplateDefinedTwice" },
+  /* the part, restored (2026-11-11, EMS-002 ORD-0033): one that no block holds */
+  { id:"OC-16", src:"[part'dish-cutlery']", code:"PartOutsideBlock" }
+];
+
+/* ------------------------------------------------------------------ *
+ * PA — the part, restored (EMS-002 ORD-0033)
+ *
+ * The Regent's design of 2026-10-15 (INTAKE-EFFECTS.md §8.2) as he answered
+ * INTAKE-PART.md §4 on 2026-11-11: `[part]` is PT, the struct that slices a
+ * block as a block slices a section (P1 a); its first literal is its name,
+ * `name` and `binds` (P2 a); each further literal is one level of its label
+ * (P3 b); a part no block holds emits as written and asks which block it
+ * slices (P4 a); and the label travels as written (P5 a). The example of the
+ * design reads as sibling blocks. Each case was seen failing on 1008c2a
+ * before it counted, and both ways back must give the same document again.
+ *
+ * Declared in the snapshot by OC-16 alone; the Rust is held by the parse
+ * probes, which take every source below.
+ * ------------------------------------------------------------------ */
+const PART = [
+  { id:"PA-01", name:"the example of the design reads as sibling blocks, each part named inside its block",
+    src:"[section'dish'\n[block'ingredients'\n[nt'salt'][nt'butter']\n[part'sa or bu'[ask'needs salt or butter?'\n]]]\n" +
+        "[block'prepare'\n[nt'boil'][nt'oven']\n[part'bo or ov'[ask'send to boil or to oven?']\n]]];\n" +
+        "r-[nt'recipe: \"le Fishe au Chocolat\". sa or bu, bo or ov'];",
+    clean:true, segments:2,
+    xml:[/<block name="ingredients" binds="ingredients">[\s\S]*?<part name="sa or bu">\n\s*<ask>[\s\S]*?<\/block>\n\s*<block name="prepare" binds="prepare">/,
+         /<part name="bo or ov">\n\s*<ask>/],
+    xmlAbsent:[' n="', "imperative", "the block it slices"] },
+  { id:"PA-02", name:"the first literal is the name, it binds, and a reference resolves to the part",
+    src:"[block'dish'[part'core'[ask'x']]][ref'core']", clean:true,
+    xml:['<part name="core" binds="core">', '<user-input ref="core">core</user-input>'], xmlAbsent:[' n="', "<needs"] },
+  { id:"PA-03", name:"one literal per level: the first names the part, and each of the others is one level",
+    src:"[block'b'[part'h0','h1','h2']]", codeAbsent:"PartOutsideBlock",
+    xml:[/<part name="h0">\n\s*<user-input>h1<\/user-input>\n\s*<user-input>h2<\/user-input>\n\s*<\/part>/] },
+  { id:"PA-04", name:"a comma inside a literal is the text of that one level",
+    src:"[block'b'[part'h0','h1,h2']]",
+    xml:[/<part name="h0">\n\s*<user-input>h1,h2<\/user-input>\n\s*<\/part>/] },
+  { id:"PA-05", name:"a part no block holds emits as written and asks which block it slices",
+    src:"[section'dish'[part'dish-cutlery']]", code:"PartOutsideBlock",
+    xml:[/<part name="dish-cutlery">\n\s*<needs>the block it slices<\/needs>\n\s*<\/part>/] },
+  { id:"PA-06", name:"the label travels as written, and nothing resolves it",
+    src:"[block'b'[part'house-kitchen-pantry-item-salt']]", codeAbsent:"PartOutsideBlock",
+    xml:['<part name="house-kitchen-pantry-item-salt"/>'], xmlAbsent:["ref="] },
+  { id:"PA-07", name:"a part with no name is broken structure",
+    src:"[block'b'[part[ask'x']]]", code:"MissingStructName", noFix:false, requireFix:true, xmlAbsent:[" name=\"\""] },
+  { id:"PA-08", name:"the body of a definition asks nothing, and a call inside a block neither",
+    src:"[--t=[part'q'[ask'x']]][block'k'[--t]]", codeAbsent:"PartOutsideBlock", xmlAbsent:["the block it slices"] },
+  { id:"PA-09", name:"a call no block holds asks, where the body occurs",
+    src:"[--t=[part'q'[ask'x']]][--t]", code:"PartOutsideBlock",
+    xml:[/<template name="t" expanded="true">\n\s*<part name="q" binds="q">\n\s*<needs>the block it slices<\/needs>/] },
+  { id:"PA-10", name:"a part written as a chain link holds no operand, and is not asked for a block",
+    src:"[nt-part'x']", codeAbsent:"PartOutsideBlock", noFix:false, xmlAbsent:["the block it slices"] }
 ];
 
 /* ------------------------------------------------------------------ *
@@ -711,6 +763,33 @@ function runPlaceholder() {
 }
 const rPH = runPlaceholder();
 
+/* The part bucket: the vocabulary first, then each case's document, then both
+   ways back. */
+function runPart() {
+  const n = runGroup("Part — the slice of a block, restored", PART, { noFix:true });
+  const pt = G.classify("pt"), part = G.classify("part");
+  const tierWhy = pt.tier !== "struct" || pt.canonical !== "PT" ? "[pt is " + pt.tier + " " + pt.canonical
+    : part.tier !== "struct" || part.canonical !== "PT" ? "[part is " + part.tier + " " + part.canonical
+    : G.INSTR.PT ? "PT is still an instruction"
+    : !G.NAMED_STRUCT.PT || !G.FRAMES.PT ? "PT asks for no name"
+    : G.elName("PT", pt.tier, pt.gloss) !== "part" ? "the element is " + G.elName("PT", pt.tier, pt.gloss) : null;
+  console.log("  " + (tierWhy ? "\u2717" : "\u2713") + " PA-tier: PT is the struct beside BLOCK and SECTION, [part and [pt read as it, and the element is <part>");
+  if (tierWhy) { console.log("      " + tierWhy); failures.push("PA-tier"); }
+  let trips = 0;
+  PART.forEach(tc => {
+    const o = tc.opts || {};
+    const xml = G.toXML(tc.src, o);
+    const viaXml = G.toXML(G.fromXML(xml, o).src, o), viaAst = G.toXML(G.fromAST(G.toAST(tc.src, o), o).src, o);
+    if (viaXml === xml && viaAst === xml) { trips++; return; }
+    console.log("  \u2717 " + tc.id + ".trip: " + (viaXml !== xml ? "fromXML" : "fromAST") + " gives another document");
+    failures.push(tc.id + ".trip");
+  });
+  console.log("  " + (trips === PART.length ? "\u2713" : "\u2717") + " PA-trip: " + trips + "/" + PART.length +
+              " come back as the same document by both ways");
+  return n + (tierWhy ? 0 : 1) + (trips === PART.length ? 1 : 0);
+}
+const rPA = runPart();
+
 /* ------------------------------------------------------------------ *
  * X — composition table (v1.1.0.0)
  *
@@ -730,7 +809,7 @@ function runExpansionChecks() {
     else { console.log("  ✓ " + id + ": " + name); X.push(id); }
   };
 
-  const store = require("../.guidelines/expansions.json");
+  const store = require("../.guidelines/.sources/expansions.json");
   const opts = { expansions: store };
 
   // every command the parser knows, from every bucket that yields a canonical
@@ -854,7 +933,7 @@ function runHgmlChecks() {
     else { console.log("  ✓ " + id + ": " + name); H.push(id); }
   };
 
-  const store = require("../.guidelines/expansions.json");
+  const store = require("../.guidelines/.sources/expansions.json");
   const opts = { expansions: store };
 
   /** re-parses .hgml and reports what survived */
@@ -929,7 +1008,7 @@ function runHgmlChecks() {
      commands here are about one thing, and SCRU reaches DIST through its
      formula. */
   const blendSrc = "[in[rev`o fluxo`][scru`o fluxo`]]";
-  const BLEND_OPTS = { expansions: require("../.guidelines/expansions.json"), rules: RULESTORE };
+  const BLEND_OPTS = { expansions: require("../.guidelines/.sources/expansions.json"), rules: RULESTORE };
   const blended = G.toHGML(blendSrc, BLEND_OPTS);
   ok("H-10", "a blend folds co-occurring atoms into one element",
      /\[heavyreview/.test(blended) && /'o fluxo'/.test(blended)
@@ -970,7 +1049,7 @@ function runHgmlChecks() {
      (function () {
        const store = JSON.parse(JSON.stringify(RULESTORE));
        store.rules.push({ id:"no-means", kind:"blend", when:["REV","DIST"], emit:"x" });
-       const out = G.toHGML(blendSrc, { expansions:require("../.guidelines/expansions.json"), rules:store });
+       const out = G.toHGML(blendSrc, { expansions:require("../.guidelines/.sources/expansions.json"), rules:store });
        return /\[x/.test(out) ? "it emitted an element that cannot say what it means" : null;
      })());
 
@@ -1021,7 +1100,7 @@ function runFromXmlChecks() {
     else { console.log("  ✓ " + id + ": " + name); F.push(id); }
   };
 
-  const opts = { expansions: require("../.guidelines/expansions.json") };
+  const opts = { expansions: require("../.guidelines/.sources/expansions.json") };
 
   /** src → xml → src → xml, and the two XMLs must agree */
   const trip = src => {
@@ -1237,7 +1316,7 @@ function runReferenceChecks() {
 
   const fs = require("fs");
   const path = require("path");
-  const refPath = path.resolve(__dirname, "../.guidelines/XML_REFERENCE.md");
+  const refPath = path.resolve(__dirname, "../.guidelines/.sources/XML_REFERENCE.md");
   let md = "";
   try { md = fs.readFileSync(refPath, "utf8"); }
   catch (e) { ok("D-01", "the reference exists", "XML_REFERENCE.md not found"); return D.length; }
@@ -1425,7 +1504,7 @@ function runReferenceChecks() {
        That is finding G13, one store reached by two paths. */
     const real = G.toXML("[crit-ctx,ex'X']",
       { templates: TPL.templates, rules: RULESTORE,
-        expansions: require("../.guidelines/expansions.json") }).trim();
+        expansions: require("../.guidelines/.sources/expansions.json") }).trim();
     ok("D-11", "the worked document in the skill is what the engine emits",
        !shown ? "no worked <glyph-package> example found in SKILL.md"
               : shown === real ? null
@@ -1439,7 +1518,7 @@ function runReferenceChecks() {
   const s10src = (s10.match(/```\n([^\n]+)\n```/) || [])[1];
   const s10xml = (s10.match(/```xml\n([\s\S]*?)\n```/) || [])[1];
   const s10real = s10src && G.toXML(s10src, { templates: TPL.templates, rules: RULESTORE,
-    expansions: require("../.guidelines/expansions.json") }).trim();
+    expansions: require("../.guidelines/.sources/expansions.json") }).trim();
   ok("D-12", "the §10 round trip shows what the engine emits",
      !s10src || !s10xml ? "no source and xml pair found in §10"
        : s10xml.trim() !== s10real ? "§10 shows a document the engine does not emit for " + JSON.stringify(s10src)
@@ -1486,7 +1565,7 @@ function runAstInvariant() {
   };
 
   const opts = { templates: TPL.templates, rules: RULESTORE,
-                 expansions: require("../.guidelines/expansions.json") };
+                 expansions: require("../.guidelines/.sources/expansions.json") };
   /* Fields that record HOW the source was written, not what it says. An alias
      and its canonical are the same command; a backtick and a quote hold the
      same literal; and `autoClosed` records that the author omitted a closing
@@ -1656,7 +1735,7 @@ const rRT = runAstInvariant();
 /* ------------------------------------------------------------------ *
  * the AST schema — the two directions that hold each other
  *
- * `.guidelines/ast-schema.json` is hand-authored, deliberately: a schema
+ * `.guidelines/.sources/ast-schema.json` is hand-authored, deliberately: a schema
  * generated from the engine would agree with it by construction and catch
  * nothing. So glyph-check validates envelopes against the declaration, and
  * this bucket asserts the other direction — that what the engine emits
@@ -1678,7 +1757,7 @@ function runSchemaChecks() {
   const check = CHECK_MOD;
 
   const opts = { templates: TPL.templates, rules: RULESTORE,
-                 expansions: require("../.guidelines/expansions.json") };
+                 expansions: require("../.guidelines/.sources/expansions.json") };
   const CORPUS = [].concat(POSITIVE, INCOMPLETE, INVALID, REGRESSION, LONG,
                            TEMPLATES, CONSTRAINTS, RULE_CASES, ORACLE_COVERAGE, INCLUSION);
 
@@ -1859,7 +1938,7 @@ function runExampleChecks() {
   catch (e) { ok("E-00", "the examples exist", "conformance/examples.json not found"); return D.length; }
 
   const opts = { templates: TPL.templates, rules: RULESTORE,
-                 expansions: require("../.guidelines/expansions.json") };
+                 expansions: require("../.guidelines/.sources/expansions.json") };
 
   store.cases.forEach(c => {
     const got = G.toXML(c.src, opts).trim();
@@ -1926,9 +2005,9 @@ function runSnapshotChecks() {
   const fs = require("fs");
   const path = require("path");
   const crypto = require("crypto");
-  const SNAP = path.resolve(__dirname, "../.guidelines/corpus-snapshot.json");
+  const SNAP = path.resolve(__dirname, "../.guidelines/.sources/corpus-snapshot.json");
   const SNAP_OPTS = { templates: TPL.templates, rules: RULESTORE,
-                      expansions: require("../.guidelines/expansions.json") };
+                      expansions: require("../.guidelines/.sources/expansions.json") };
 
   /* a case is projected with its own stores laid over these (O5, EMS-002
      ORD-0011): the stores it names replace the repository's, the rest stay */
@@ -2098,7 +2177,7 @@ function runSnapshotChecks() {
        read from disk, which is what the envelope's `stores.rules` hashes: the
        compiled rules live beside the store (rules.js), never on it */
     const EXP = SNAP_OPTS.expansions;
-    const fresh = f => JSON.parse(fs.readFileSync(path.resolve(__dirname, "../.guidelines/" + f), "utf8"));
+    const fresh = f => JSON.parse(fs.readFileSync(path.resolve(__dirname, "../.guidelines/.sources/" + f), "utf8"));
     const names = [...new Set([...Object.keys(EXP.commands),
       ...["MODE", "STRUCT", "META", "INSTR", "ALIAS", "SESSION"].flatMap(t => Object.keys(VOCAB[t])),
       "crit", "", "XYZ"])];
@@ -2537,7 +2616,8 @@ function runSnapshotChecks() {
       parseRuns.push(run);
     };
     CORPUS.forEach(c => { if (c && c.id && typeof c.src === "string") runParse(c.id, c.src, caseOpts(c)); });
-    PARSE_PROBES.forEach((src, k) => runParse("probe-" + (k + 1), src, SNAP_OPTS));
+    /* the part bucket's sources travel with the probes (EMS-002 ORD-0033) */
+    PARSE_PROBES.concat(PART.map(c => c.src)).forEach((src, k) => runParse("probe-" + (k + 1), src, SNAP_OPTS));
     NO_SESSION.forEach((src, k) => runParse("nosession-" + (k + 1), src, { ...SNAP_OPTS, session: false }));
     NO_VALENCY.forEach((src, k) => runParse("novalency-" + (k + 1), src, { ...SNAP_OPTS, valency: false }));
     /* the template probes parsed whole: the expander handed the real parse,
@@ -2687,7 +2767,7 @@ function runSnapshotChecks() {
   try { stored = JSON.parse(fs.readFileSync(SNAP, "utf8")); }
   catch (e) {
     ok("SN-02", "the snapshot exists",
-       "no .guidelines/corpus-snapshot.json — run: node scripts/test-corpus.js --update-snapshot");
+       "no .guidelines/.sources/corpus-snapshot.json — run: node scripts/test-corpus.js --update-snapshot");
     return D.length;
   }
   ok("SN-02", "the snapshot exists", null);
@@ -2886,7 +2966,7 @@ function runDiagWordingChecks() {
   };
   const bare = s => String(s).replace(/<[^>]+>/g, "");
   const opts = { templates: TPL.templates, rules: RULESTORE,
-                 expansions: require("../.guidelines/expansions.json") };
+                 expansions: require("../.guidelines/.sources/expansions.json") };
 
   const g = G.parse("[nt`a ] b`]", opts).gaps.filter(d => d.code === "TruncatedLiteral");
   ok("DG-01", "TruncatedLiteral is raised for a bracket inside a literal",
@@ -2923,7 +3003,7 @@ function runSpellingChecks() {
     else { console.log("  ✓ " + id + ": " + name); D.push(id); }
   };
   const opts = { templates: TPL.templates, rules: RULESTORE,
-                 expansions: require("../.guidelines/expansions.json") };
+                 expansions: require("../.guidelines/.sources/expansions.json") };
   const rev = G.elementCanonicalMap || {};
 
   /* SP-01 — every element the inverse emits is a spelling the parser takes */
@@ -2984,7 +3064,7 @@ function runRawFenceChecks() {
     else { console.log("  \u2713 " + id + ": " + name); D.push(id); }
   };
   const opts = { templates: TPL.templates, rules: RULESTORE,
-                 expansions: require("../.guidelines/expansions.json") };
+                 expansions: require("../.guidelines/.sources/expansions.json") };
 
   const quoted = "[sum`organized`[itr-core[ctx]]]";
   const src = "[raw]" + quoted + "[/raw]";
@@ -3033,7 +3113,7 @@ function runLiteralRoleChecks() {
     else { console.log("  \u2713 " + id + ": " + name); D.push(id); }
   };
   const opts = { templates: TPL.templates, rules: RULESTORE,
-                 expansions: require("../.guidelines/expansions.json") };
+                 expansions: require("../.guidelines/.sources/expansions.json") };
 
   const before = G.toXML("[alw`X`[get[ctx]]]", opts);
   const after  = G.toXML("[alw[get[ctx]]`X`]", opts);
@@ -3065,11 +3145,12 @@ function runLiteralRoleChecks() {
      lit && lit.role === "result" ? null
        : "the envelope literal carries role=" + JSON.stringify(lit && lit.role));
 
-  /* the operand of a PT and of an IF travels as an attribute (decided
-     2026-09-27), and only when it carries nothing else */
-  const part = G.toXML("[pt'1.1']", opts), cond = G.toXML("[if'a > b'[ctx'x']]", opts);
-  ok("RO-06", "the number of a part is n, the condition of an if is cond, and neither repeats as a child",
-     !/<part n="1\.1"\/>/.test(part) ? "the part: " + JSON.stringify(part)
+  /* the operand of an IF travels as an attribute (decided 2026-09-27), and
+     the first literal of a PT is its name (decided 2026-11-11, which retires
+     the `n` of 2026-09-27), each only when it carries nothing else */
+  const part = G.toXML("[block'b'[pt'1.1']]", opts), cond = G.toXML("[if'a > b'[ctx'x']]", opts);
+  ok("RO-06", "the name of a part is name, the condition of an if is cond, and neither repeats as a child",
+     !/<part name="1\.1"\/>/.test(part) ? "the part: " + JSON.stringify(part)
        : !/<if cond="a &gt; b">/.test(cond) || /<user-input>a &gt; b<\/user-input>/.test(cond) ? "the if: " + JSON.stringify(cond)
        : null);
 
@@ -3081,7 +3162,7 @@ function runLiteralRoleChecks() {
      !G.parse("[if'x']", opts).gaps.some(g => g.code === "UnfilledSlot") ? null : "[if'x'] asked for the condition");
 
   const back = ["[pt'1.1']", "[if'a > b'[ctx'x']]"].map(s => [s, G.fromXML(G.toXML(s, opts), opts).src]).filter(([s, b]) => b !== s);
-  ok("RO-09", "fromXML reads n and cond back as the literal",
+  ok("RO-09", "fromXML reads name and cond back as the literal",
      back.length ? back.map(([s, b]) => s + " came back as " + b).join("; ") : null);
 
   return D.length;
@@ -3106,7 +3187,7 @@ function runBindingChecks() {
     else { console.log("  \u2713 " + id + ": " + name); D.push(id); }
   };
   const opts = { templates: TPL.templates, rules: RULESTORE,
-                 expansions: require("../.guidelines/expansions.json") };
+                 expansions: require("../.guidelines/.sources/expansions.json") };
 
   const named = G.toXML("[sum`organized`[itr-core[ctx]]]", opts);
   ok("BD-01", "an operand plus a nest names the command's result",
@@ -3234,7 +3315,7 @@ function runQuoteChecks() {
     else { console.log("  \u2713 " + id + ": " + name); D.push(id); }
   };
   const opts = { templates: TPL.templates, rules: RULESTORE,
-                 expansions: require("../.guidelines/expansions.json") };
+                 expansions: require("../.guidelines/.sources/expansions.json") };
   const clean = src => G.parse(src, opts).gaps.filter(g => g.sev === "fix").length === 0;
   const text = src => (G.toXML(src, opts).match(/<user-input>([^<]*)</) || [])[1];
 
@@ -3277,7 +3358,7 @@ function runTemplateParamChecks() {
     else { console.log("  \u2713 " + id + ": " + name); D.push(id); }
   };
   const opts = { templates: TPL.templates, rules: RULESTORE,
-                 expansions: require("../.guidelines/expansions.json") };
+                 expansions: require("../.guidelines/.sources/expansions.json") };
   const codes = src => G.parse(src, opts).gaps.map(g => g.code);
   const msg = src => (G.parse(src, opts).gaps.find(g => g.code === "TemplateParamNotLiteral") || {}).plain
                      || (G.parse(src, opts).gaps.find(g => g.code === "TemplateParamNotLiteral") || {}).msg || "";
@@ -3333,7 +3414,7 @@ function runImperativeChecks() {
     else { console.log("  \u2713 " + id + ": " + name); D.push(id); }
   };
   const opts = { templates: TPL.templates, rules: RULESTORE,
-                 expansions: require("../.guidelines/expansions.json") };
+                 expansions: require("../.guidelines/.sources/expansions.json") };
   const marked = src => G.toXML(src, opts).indexOf('imperative="true"') !== -1;
 
   ok("IM-01", "um primitivo que recebe comando e imperativo",
@@ -3404,7 +3485,7 @@ function runModeWordChecks() {
     else { console.log("  ✓ " + id + ": " + name); D.push(id); }
   };
   const opts = { templates: TPL.templates, rules: RULESTORE,
-                 expansions: require("../.guidelines/expansions.json") };
+                 expansions: require("../.guidelines/.sources/expansions.json") };
   const codes = src => G.parse(src, opts).gaps.map(g => g.code);
   const count = (s, sub) => s.split(sub).length - 1;
   const back = src => { const x = G.toXML(src, opts); return [x, G.fromXML(x, opts).src]; };
@@ -3479,7 +3560,7 @@ function runChainLinkChecks() {
     else { console.log("  ✓ " + id + ": " + name); D.push(id); }
   };
   const opts = { templates: TPL.templates, rules: RULESTORE,
-                 expansions: require("../.guidelines/expansions.json") };
+                 expansions: require("../.guidelines/.sources/expansions.json") };
   const X = src => G.toXML(src, opts);
   const links = src => G.tokenize(src).filter(t => t.k === "extend").length;
   const quiet = src => G.parse(src, opts).gaps.length === 0;
@@ -3657,7 +3738,7 @@ function runColonChecks() {
     else { console.log("  ✓ " + id + ": " + name); D.push(id); }
   };
   const opts = { templates: TPL.templates, rules: RULESTORE,
-                 expansions: require("../.guidelines/expansions.json") };
+                 expansions: require("../.guidelines/.sources/expansions.json") };
   const X = src => G.toXML(src, opts);
   const codes = (src, o) => G.parse(src, o || opts).gaps.map(g => g.code);
   /* a forma com dois-pontos e a forma que a pergunta nomeia */
@@ -3710,19 +3791,21 @@ function runColonChecks() {
        : askedOrder.length ? "AmbiguousSlotOrder: " + askedOrder.join(", ")
        : named.length ? "Command.name escrito: " + named.join(", ") : null);
 
-  /* o name e o primeiro literal do block e da section, e so deles */
+  /* o name e o primeiro literal do block, da section e da part, e so deles */
   const blk = X("[block'review'[ctx'x']][ref'review']");
   const sec = X("[section'intro'[ctx'x']]");
-  const others = ["[ctx'review'[ctx'x']]", "[crit'review']", "[pt'1.1'[ctx'x']]", "[if'ready'[ctx'x']]", "[tpl'x']",
+  const prt = X("[block'b'[pt'1.1'[ctx'x']]]");
+  const others = ["[ctx'review'[ctx'x']]", "[crit'review']", "[if'ready'[ctx'x']]", "[tpl'x']",
                   "[sum'review'[ctx'x']][block'review']", "[block'']", "[block[ctx'x']'late']"]
     .map(X).join("\n");
-  const nameOn = [...new Set((blk + sec + others).match(/<[a-z-]+ [^>]*\bname="/g) || [])].map(t => t.slice(1, t.indexOf(" ")));
-  ok("CO-05", "o name sai do primeiro literal do block e da section, e de nenhum outro elemento",
+  const nameOn = [...new Set((blk + sec + prt + others).match(/<[a-z-]+ [^>]*\bname="/g) || [])].map(t => t.slice(1, t.indexOf(" ")));
+  ok("CO-05", "o name sai do primeiro literal do block, da section e da part, e de nenhum outro elemento",
      !/<block name="review" binds="review">\n\s*<context>/.test(blk) ? "block: " + JSON.stringify(blk)
        : !/<user-input ref="review">review<\/user-input>/.test(blk) || codes("[block'review'[ctx'x']][ref'review']").includes("UnboundReference")
          ? "a referencia ao block nao resolve"
        : !/<section name="intro" binds="intro">\n\s*<context>/.test(sec) ? "section: " + JSON.stringify(sec)
-       : nameOn.some(t => t !== "block" && t !== "section") ? "name em " + nameOn.join(", ")
+       : !/<part name="1\.1">\n\s*<context>/.test(prt) ? "part: " + JSON.stringify(prt)
+       : nameOn.some(t => t !== "block" && t !== "section" && t !== "part") ? "name em " + nameOn.join(", ")
        : !/<block>\n\s*<user-input ref="review">review<\/user-input>/.test(X("[sum'review'[ctx'x']][block'review']"))
          ? "um literal que e referencia virou name"
        : !/<block>\n\s*<user-input><\/user-input>/.test(X("[block'']")) ? "um literal vazio virou name" : null);
@@ -3749,7 +3832,7 @@ function runColonChecks() {
   const PKG = b => '<glyph-package engine="' + G.VERSION + '">\n  <schema/>\n  <block once="true">\n' + b + '\n  </block>\n</glyph-package>';
   const legacy = [[PKG('<context name="a, b"/>'), "[ctx'a, b']"], [PKG('<block name="review"><context/></block>'), "[block'review'[ctx]]"],
                   [PKG('<logic name="q"><rule kind="let"><source>a = 1</source></rule></logic>'), "[logic'q']\na = 1\n[/logic]"],
-                  [PKG('<part name="intro" n="1.1"/>'), "[pt'intro''1.1']"], [PKG('<template><user-input>x</user-input></template>'), "[tpl'x']"]]
+                  [PKG('<part name="intro" n="1.1"/>'), "[pt'intro''1.1']"], [PKG('<part n="1.1"/>'), "[pt'1.1']"], [PKG('<template><user-input>x</user-input></template>'), "[tpl'x']"]]
     .filter(([x, want]) => G.fromXML(x, opts).src !== want);
   const env = { type: "GlyphAST", schema: 2, projection: "full", segments: [{ body: [
     { type: "Command", raw: "ctx", canonical: "CTX", name: "a, b", body: [] },
@@ -4019,7 +4102,7 @@ function runRegistryGuard() {
     else { console.log("  ✓ " + id + ": " + name); D.push(id); }
   };
 
-  const EXPSTORE = require("../.guidelines/expansions.json");
+  const EXPSTORE = require("../.guidelines/.sources/expansions.json");
 
   /* each probe reads a different store, so a half-registered engine cannot
      pass by accident: species comes from expansions, the diagnostic from
@@ -4072,7 +4155,7 @@ function runContextGuard() {
     else { console.log("  ✓ " + id + ": " + name); D.push(id); }
   };
 
-  const loose = { templates: TPL.templates, rules: RULESTORE, expansions: require("../.guidelines/expansions.json") };
+  const loose = { templates: TPL.templates, rules: RULESTORE, expansions: require("../.guidelines/.sources/expansions.json") };
   const ctx = G.createContext(loose);
   const CORPUS = [].concat(POSITIVE, INCOMPLETE, INVALID, REGRESSION, LONG,
                            TEMPLATES, CONSTRAINTS, RULE_CASES, ORACLE_COVERAGE, INCLUSION);
@@ -4113,7 +4196,7 @@ function runOracleCoverage() {
   console.log("\n--- oracle coverage — every declared code fires ---");
   const D = [];
   const opts = { templates: TPL.templates, rules: RULESTORE,
-                 expansions: require("../.guidelines/expansions.json") };
+                 expansions: require("../.guidelines/.sources/expansions.json") };
   ORACLE_COVERAGE.forEach(c => {
     const codes = (G.parse(c.src, opts).gaps || []).map(g => g.code);
     if (codes.indexOf(c.code) === -1) {
@@ -4253,7 +4336,7 @@ async function runRelay() {
      JS path gives for the store the page merges */
   const merged = { ...TPL.templates, ...mine, ...over };
   const differ = { mine: mine.mine, germinate: over.germinate };
-  const repo = { rules: RULESTORE, expansions: require("../.guidelines/expansions.json") };
+  const repo = { rules: RULESTORE, expansions: require("../.guidelines/.sources/expansions.json") };
   const named2 = { digest: G.ck(JSON.stringify(differ)), templates: differ };
   const USE = "[--mine][--germinate'a']";
   const through = [["toXML", s => G.toXML(s, { templates: merged, ...repo })], ["toHGML", s => G.toHGML(s, { templates: merged, ...repo })],
@@ -4298,6 +4381,7 @@ console.log(" Rules        " + rC + "/" + RULE_CASES.length);
 console.log(" Constraints  " + rK + "/" + CONSTRAINTS.length);
 console.log(" Guard        " + rG + "/" + POSITIVE_WITH_RULES.length);
 console.log(" Placeholder  " + rPH + "/" + (PLACEHOLDER.length + 1));
+console.log(" Part         " + rPA + "/" + (PART.length + 2));
 console.log(" Composition  " + rX + "/17");
 console.log(" .hgml burn   " + rH + "/15");
 console.log(" fromXML      " + rF + "/26");
@@ -4488,7 +4572,7 @@ if (EXPORT_ORACLE) {
       ["--file", "src.pgml", "--diag"], ["--file", "src.pgml", "--hgml"], ["--file", "src.xml", "--from-xml"]]);
   });
   /* every name of the composition table, and names it does not hold */
-  const EXP = require("../.guidelines/expansions.json");
+  const EXP = require("../.guidelines/.sources/expansions.json");
   kase({}, Object.keys(EXP.commands || EXP).concat(["zzz", "crit", "[crit']", " ctx "]).map(n => [n, "--expand"]));
   /* the source on argv, the forms of --file, the refusals */
   kase({ files: { "x.pgml": "[nt'on disk']", "bom.pgml": "﻿[crit'x']", "src.pgml": "[crit'the parser']" } }, [

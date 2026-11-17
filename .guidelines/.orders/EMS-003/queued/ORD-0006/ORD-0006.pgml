@@ -1,0 +1,14 @@
+[block'ORD-0006-explorer'
+  [ctx'the spec of EMS-003','.guidelines/.orders/EMS-003/EMS-003.pgml']
+  [ctx'the signed model','.guidelines/.orders/INTAKE-2D-VIEW.md, section 6']
+  [ctx'the trail to the final Explorer','.guidelines/.plan/README.md, section 5, steps 3 and 11']
+  [tgt'the 2D view in the Glyph Explorer: the plane opens an Order of a series, a series shows as a plane of its Orders linked by the edges they declare, and what is personal about a picture stays on the machine of the user']
+  [ins'open, edit and emit an Order from the plane inside the EMS surface of the Explorer, by the title of the Order']
+  [ins'draw a series as a plane of its Orders: each Order a node, and each declared edge between Orders a connector, ref of nem and ref of EMS, as the coherence between Orders declares them']
+  [ins'keep what the signed model stores about a picture where the signed model says, and never in the public repository when it is personal']
+  [onlyif'the coherence between Orders and the EMS surface of EMS-002 are built: steps 3 and 11 of the trail']
+  [cnst'the PIN icons wait for the vocabulary of the PIN, step 6 of the trail: until then the two files stay in the table as icons no command names']
+  [cnst'a path that does not resolve warns on the plane and never blocks the emission']
+  [val'the surface','an Order of a series is opened, edited by its links and emitted from the installed Explorer, and the bundle it writes is the bundle the command line writes for the same source']
+  [val'the series','the plane of a series shows every Order and every declared edge of its register, counted against the register']
+];

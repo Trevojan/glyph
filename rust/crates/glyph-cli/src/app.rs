@@ -79,9 +79,9 @@ pub const PAGE: &[(&str, &[u8])] = page!(
 
 /// The stores the installer seeds: the repository's, the basic ones.
 const SEED: &[(&str, &str)] = &[
-    ("templates.json", include_str!("../../../../.guidelines/templates.json")),
-    ("rules.json", include_str!("../../../../.guidelines/rules.json")),
-    ("expansions.json", include_str!("../../../../.guidelines/expansions.json")),
+    ("templates.json", include_str!("../../../../.guidelines/.sources/templates.json")),
+    ("rules.json", include_str!("../../../../.guidelines/.sources/rules.json")),
+    ("expansions.json", include_str!("../../../../.guidelines/.sources/expansions.json")),
 ];
 
 fn content_type(path: &str) -> &'static str {

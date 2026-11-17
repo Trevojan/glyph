@@ -514,6 +514,16 @@ export function parse(input, opts) {
     });
   });
 
+  // ---- a part outside a block ----
+  segments.forEach(function (sgp) {
+    walk(sgp.children, function (nd2) {
+      if (!partOutsideBlock(nd2)) return;
+      G("ask", "parte solta",
+        "<code>[pt</code> fatia um bloco, e nenhum <code>[block</code> a contém: <strong>the block it slices</strong>?", "PartOutsideBlock",
+        "loose part", "<code>[pt</code> slices a block, and no <code>[block</code> holds it: <strong>the block it slices</strong>?");
+    });
+  });
+
   // ---- valency ----
   if (opts.valency !== false) {
     segments.forEach(function (sg2) {
@@ -677,6 +687,20 @@ export function deepInference(nd, opts) {
   if (!e || e.species !== "composite" || !(e.depth >= DEEP_INFERENCE)) return null;
   if (valueChildren(nd).length) return null;
   return e.depth;
+}
+
+/* A part slices a block as a block slices a section (decided 2026-11-11). One
+   that no `[block` holds emits as written and asks which block it slices:
+   `ask` here, and buildXml writes the <needs> inside the <part>. The body of
+   a template definition is read where a call expands it, and a chain link
+   holds no operand of its own. */
+export function partOutsideBlock(nd) {
+  if (!nd || nd.canonical !== "PT" || nd.chainElement || nd.slotName) return false;
+  for (var p = nd.parent; p; p = p.parent) {
+    if (p.canonical === "BLOCK" && !p.chainElement) return false;
+    if (p.template && p.isDef) return false;
+  }
+  return true;
 }
 
 /* A reference to a name is written `[ref'nome']` (decided 2026-09-27). A

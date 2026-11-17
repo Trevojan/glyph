@@ -1,0 +1,54 @@
+<glyph-package engine="4.7.10.08">
+  <schema/>
+  <block once="true">
+    <block name="ORD-0001-model" binds="ORD-0001-model">
+      <context>
+        <user-input>the spec of EMS-003</user-input>
+        <user-input>.guidelines/.orders/EMS-003/EMS-003.pgml</user-input>
+      </context>
+      <context>
+        <user-input>the measured proposal and its questions</user-input>
+        <user-input>.guidelines/.orders/INTAKE-2D-VIEW.md</user-input>
+      </context>
+      <context>
+        <user-input>the icons the Regent delivered on 2026-11-11, as delivered</user-input>
+        <user-input>.scope/asset/glyph-icons</user-input>
+      </context>
+      <target>
+        <user-input>the model of the 2D view, decided before a line of it is drawn: what a node is, what a connector is and which operator each connector writes, what holds what, where a position lives, and what an edit changes</user-input>
+      </target>
+      <context>
+        <user-input>the Regent, 2026-11-11: the icons must be used to organize a 2D intuitive view and enable editing via visible links with different types of operations and connectors, and there must be XML Orders describing the details of this bigger feature</user-input>
+      </context>
+      <context>
+        <user-input>measured at c078f2c: the AST envelope holds three node types, Segment, Command and Literal, and four edge origins, root, nest, extend and item; a Command carries its source span in at; binds and ref are written by the XML emitter and are not in the envelope; fromAST writes source back from the envelope, and the suite holds that way back over every declared source</user-input>
+      </context>
+      <context>
+        <user-input>measured at c078f2c: 41 icons, 39 of them named after one of the 120 commands and 2 for the PIN, which the vocabulary does not hold yet; the 14 commands of the reasoning category have none</user-input>
+      </context>
+      <confirmation imperative="true">
+        <user-input>the answers to the questions of INTAKE-2D-VIEW.md section 5, before anything is built</user-input>
+        <human/>
+      </confirmation>
+      <constraint>
+        <user-input>the AST is the source of truth: the view is derived from it, and an edit in the view is an edit of the tree that the way back writes as source</user-input>
+      </constraint>
+      <constraint>
+        <user-input>nothing vanishes in silence: an edit the tree cannot hold is refused by name and changes nothing</user-input>
+      </constraint>
+      <constraint>
+        <user-input>zero dependencies on the JS side: the view is drawn by the repository, with no library</user-input>
+      </constraint>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the model</user-input>
+        <user-input>INTAKE-2D-VIEW.md holds the signed table of node kinds, container kinds and connector types, each connector with the operator it writes and the fact of the envelope it is drawn from</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the queue</user-input>
+        <user-input>each queued ORD of the series reads as the signed answers say, or is emitted again as a new version before it opens</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>

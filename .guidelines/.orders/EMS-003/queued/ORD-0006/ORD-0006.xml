@@ -1,0 +1,50 @@
+<glyph-package engine="4.7.10.08">
+  <schema/>
+  <block once="true">
+    <block name="ORD-0006-explorer" binds="ORD-0006-explorer">
+      <context>
+        <user-input>the spec of EMS-003</user-input>
+        <user-input>.guidelines/.orders/EMS-003/EMS-003.pgml</user-input>
+      </context>
+      <context>
+        <user-input>the signed model</user-input>
+        <user-input>.guidelines/.orders/INTAKE-2D-VIEW.md, section 6</user-input>
+      </context>
+      <context>
+        <user-input>the trail to the final Explorer</user-input>
+        <user-input>.guidelines/.plan/README.md, section 5, steps 3 and 11</user-input>
+      </context>
+      <target>
+        <user-input>the 2D view in the Glyph Explorer: the plane opens an Order of a series, a series shows as a plane of its Orders linked by the edges they declare, and what is personal about a picture stays on the machine of the user</user-input>
+      </target>
+      <instruction>
+        <user-input>open, edit and emit an Order from the plane inside the EMS surface of the Explorer, by the title of the Order</user-input>
+      </instruction>
+      <instruction>
+        <user-input>draw a series as a plane of its Orders: each Order a node, and each declared edge between Orders a connector, ref of nem and ref of EMS, as the coherence between Orders declares them</user-input>
+      </instruction>
+      <instruction>
+        <user-input>keep what the signed model stores about a picture where the signed model says, and never in the public repository when it is personal</user-input>
+      </instruction>
+      <only-if>
+        <user-input>the coherence between Orders and the EMS surface of EMS-002 are built: steps 3 and 11 of the trail</user-input>
+      </only-if>
+      <constraint>
+        <user-input>the PIN icons wait for the vocabulary of the PIN, step 6 of the trail: until then the two files stay in the table as icons no command names</user-input>
+      </constraint>
+      <constraint>
+        <user-input>a path that does not resolve warns on the plane and never blocks the emission</user-input>
+      </constraint>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the surface</user-input>
+        <user-input>an Order of a series is opened, edited by its links and emitted from the installed Explorer, and the bundle it writes is the bundle the command line writes for the same source</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the series</user-input>
+        <user-input>the plane of a series shows every Order and every declared edge of its register, counted against the register</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>

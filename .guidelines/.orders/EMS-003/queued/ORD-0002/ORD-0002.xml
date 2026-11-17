@@ -1,0 +1,56 @@
+<glyph-package engine="4.7.10.08">
+  <schema/>
+  <block once="true">
+    <block name="ORD-0002-icons" binds="ORD-0002-icons">
+      <context>
+        <user-input>the spec of EMS-003</user-input>
+        <user-input>.guidelines/.orders/EMS-003/EMS-003.pgml</user-input>
+      </context>
+      <context>
+        <user-input>the signed model</user-input>
+        <user-input>.guidelines/.orders/INTAKE-2D-VIEW.md, section 6</user-input>
+      </context>
+      <context>
+        <user-input>the icons as delivered</user-input>
+        <user-input>.scope/asset/glyph-icons</user-input>
+      </context>
+      <target>
+        <user-input>the icons enter the app as one set a table names: every command of the vocabulary answers an icon or a declared fallback, drawn in the colours of the interface</user-input>
+      </target>
+      <context>
+        <user-input>measured at c078f2c: the 41 files hold the fills black and white written in, and two of them a third colour; four tile sizes, 13 by 17, 13 by 18, 14 by 17 and 15 by 18, and 8 by 8 for the two pins; each tile carries its name drawn as outlines above it, and nt.svg carries the word note</user-input>
+      </context>
+      <context>
+        <user-input>measured at c078f2c: by category the set covers action 4 of 10, judgement 9 of 16, question 2 of 4, framing 1 of 8, context 3 of 5, condition 5 of 9, limit 4 of 12, reasoning 0 of 14, course 2 of 6, intensity 1 of 4, frame 3 of 10 and mark 2 of 6</user-input>
+      </context>
+      <instruction>
+        <user-input>normalise the set into the app: one tile size, the colours taken from the interface and never written in the file, and the name drawn by the page from the vocabulary</user-input>
+      </instruction>
+      <instruction>
+        <user-input>write the icon table from the files, never by hand: each command, its icon or its fallback, and the icons no command names</user-input>
+      </instruction>
+      <requirement>
+        <user-input>a command with no icon shows a fallback tile with its name, and the table says which commands those are</user-input>
+      </requirement>
+      <constraint>
+        <user-input>the delivered files stay as delivered in .scope; the normalised set is generated from them by a script, and a generated file is never edited by hand</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the interface is a black background with cyan, purple, dark green and light blue, and nothing greyish</user-input>
+      </constraint>
+      <constraint>
+        <user-input>no icon is drawn that the Regent did not deliver: the 81 commands with none are listed for the Regent, and the fallback answers until an icon arrives</user-input>
+      </constraint>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the table</user-input>
+        <user-input>npm run check refuses an icon no command names and no exception declares, a command the table leaves out, and a normalised file that differs from a fresh build, each seen failing before it counts</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the set</user-input>
+        <user-input>every tile renders at one size in the colours of the interface, measured on the page in the browser of the repository</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>

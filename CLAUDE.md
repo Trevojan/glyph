@@ -18,7 +18,7 @@ propósito. Não reconstrua por inferência o que está a um atalho de distânci
 | [`.constraints/`](.guidelines/.constraints/) | o que o projeto se proíbe — **leia antes de propor** |
 | [`.changelog/`](.guidelines/.changelog/) | como o número de versão se move |
 | [`.orders/`](.guidelines/.orders/) | as Ordens e os intakes; exatamente uma Ordem aberta por vez |
-| [`.sources/`](.guidelines/.sources/) | as referências externas que decidiram alguma coisa |
+| [`.sources/`](.guidelines/.sources/) | os fatos: a linguagem — as normas e as stores — e as referências externas que decidiram alguma coisa |
 
 ## Escrever Glyph
 
@@ -26,6 +26,16 @@ A skill **`/glyph-markup`** está em `.claude/skills/glyph-markup/`. Ela é gera
 deste repositório por `node scripts/build-skill.js`, e `npm run check` recusa
 quando ela diverge do motor — então é a cópia corrente. Uma cópia instalada na
 conta pode estar atrasada; a desta pasta é a que vale.
+
+## Entregar o plugin
+
+O plugin `glyph-markup` — a skill, os comandos e o motor — sai inteiro de
+`npm run plugin`, que escreve `.scope/dist/glyph-markup.plugin` derivado das
+fontes e recusa quando a versão do manifesto não é a do motor. Nada se monta à
+mão. Pediram o plugin, a skill instalável ou a atualização de um dos dois? Rode
+o script e entregue o `.plugin` pelo card de instalação do app, o que tem o
+botão de instalar — nunca um zip, um `.ps1` ou um `.cmd` para o Regente rodar.
+O pacote se instala; ele não se descompacta dentro deste repositório.
 
 ## Verificar
 
@@ -45,9 +55,9 @@ Editou um arquivo de `.guidelines/`, o `README.md` ou este? Rode
 todos eles, e o `check` recusa o que mudou sem ele. Uma fatia se lê com
 `npm run vpath -- resolve 'arquivo#seletor' --text`, ou pelo `NodeID` do nó.
 
-Editou `.guidelines/rules.json`, `templates.json`, `expansions.txt` ou
+Editou `.guidelines/.sources/rules.json`, `templates.json`, `expansions.txt` ou
 `GLOSSARY.md`? Rode `node scripts/build-templates.js` antes de verificar: essas
-são as fontes, e `scripts/glyph-data.js` e `.guidelines/expansions.json` são as
+são as fontes, e `scripts/glyph-data.js` e `.guidelines/.sources/expansions.json` são as
 cópias que o motor carrega.
 
 ## Duas restrições que pegam todo agente novo
@@ -64,5 +74,5 @@ você faz na primeira hora:
 
 ## Vocabulário
 
-Em [`.guidelines/GLOSSARY.md`](.guidelines/GLOSSARY.md) §8 — quem decide, como o
+Em [`.guidelines/.sources/GLOSSARY.md`](.guidelines/.sources/GLOSSARY.md) §8 — quem decide, como o
 trabalho se ordena, o app Rust e os nomes que o Regente ratificou.

@@ -615,7 +615,7 @@ frontmatter:
 
 | document | sources | support | lift | today |
 |---|---|---|---|---|
-| `.guidelines/XML_REFERENCE.md` | `scripts/glyph-parser.js` | 6 | 2.29 | gated — the suite's `D` bucket |
+| `.guidelines/.sources/XML_REFERENCE.md` | `scripts/glyph-parser.js` | 6 | 2.29 | gated — the suite's `D` bucket |
 | `README.md` | `scripts/glyph-cli.js` | 3 | 8.73 | **ungated**, as in §7: the README names the CLI's modes and nothing checks them |
 | `.guidelines/.orders/EMS-001/RETURN.md` | `rust/testkit/oracle.rs` (6), `rust/crates/glyph-util/src/lib.rs` (4), `glyph-util/src/tree.rs`, `glyph-parse/src/lib.rs`, `glyph-protocol/src/lib.rs`, `scripts/glyph-protocol.js` (3 each) | 3–6 | 3.10 | ungated |
 

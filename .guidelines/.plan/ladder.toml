@@ -109,7 +109,7 @@ title = "Language specification"
 status = "started"  # the grammar is written; no recogniser runs it over the corpus
 depends = ["M01"]
 relies_on = []
-closes_when = ".guidelines/glyph-grammar.ebnf describes the language the engine parses today and a zero-dependency recogniser accepts every declared source; each diagnostic code maps to the rule that raises it"
+closes_when = ".guidelines/.sources/glyph-grammar.ebnf describes the language the engine parses today and a zero-dependency recogniser accepts every declared source; each diagnostic code maps to the rule that raises it"
 tasks = [
   "Table the lexer's 23 token kinds: kind, pattern, examples from the oracle",
   "Bring the EBNF from v1.3.0.0 to the engine: [raw] fence, [off]/[on], return R:/r-, the closed form [x[/x], comma between elements, the optional ]",

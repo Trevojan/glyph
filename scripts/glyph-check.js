@@ -11,7 +11,7 @@
  * receiving end needs a way to say "this is not a Glyph AST" that does not
  * amount to running the emitter and comparing.
  *
- * It validates against `.guidelines/ast-schema.json`, which is HAND-AUTHORED.
+ * It validates against `.guidelines/.sources/ast-schema.json`, which is HAND-AUTHORED.
  * A schema generated from the engine would agree with the engine by
  * construction and catch nothing — the same trap D10 names for conformance
  * vectors. The corpus asserts the other direction, that what the engine emits
@@ -43,7 +43,7 @@ const isMain = (u) => !!process.argv[1] &&
 const fs = require("fs");
 
 const SCHEMA = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, "../.guidelines/ast-schema.json"), "utf8"));
+  fs.readFileSync(path.resolve(__dirname, "../.guidelines/.sources/ast-schema.json"), "utf8"));
 
 function validate(env) {
   const errs = [];
@@ -161,7 +161,7 @@ function validate(env) {
  * glyph-package — the DOCUMENT validator (E3)
  *
  * Written before the emitter it gates (lock T3). It reads
- * `.guidelines/PACKAGE_TARGET.md` §6 and nothing else: twelve clauses, each
+ * `.guidelines/.sources/PACKAGE_TARGET.md` §6 and nothing else: twelve clauses, each
  * carrying a position, because a refusal a reader cannot locate is not
  * verifiable by someone who does not have this engine.
  *
@@ -174,7 +174,7 @@ function validate(env) {
 
 const EXPANSIONS = (() => {
   try { return JSON.parse(fs.readFileSync(
-    path.resolve(__dirname, "../.guidelines/expansions.json"), "utf8")).commands; }
+    path.resolve(__dirname, "../.guidelines/.sources/expansions.json"), "utf8")).commands; }
   catch (e) { return null; }
 })();
 
@@ -303,7 +303,7 @@ if (isMain(import.meta.url)) {
     const errs = validatePackage(raw);
     if (errs.length) {
       console.error("FAILED: " + errs.length + " refusal" + (errs.length > 1 ? "s" : "") +
-                    " under .guidelines/PACKAGE_TARGET.md §6");
+                    " under .guidelines/.sources/PACKAGE_TARGET.md §6");
       errs.slice(0, 20).forEach(e => console.error("  ✗ " + e));
       if (errs.length > 20) console.error("  … and " + (errs.length - 20) + " more");
       process.exit(1);
@@ -318,7 +318,7 @@ if (isMain(import.meta.url)) {
   const errs = validate(env);
   if (errs.length) {
     console.error("FAILED: " + errs.length + " violation" + (errs.length > 1 ? "s" : "") +
-                  " of .guidelines/ast-schema.json");
+                  " of .guidelines/.sources/ast-schema.json");
     errs.slice(0, 20).forEach(e => console.error("  ✗ " + e));
     if (errs.length > 20) console.error("  … and " + (errs.length - 20) + " more");
     process.exit(1);

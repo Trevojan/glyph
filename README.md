@@ -218,7 +218,7 @@ a leftover from the `file://` days and no longer earns a bump.
 
 **Touched anything in `.guidelines/`** — `rules.json`, `templates.json`,
 `expansions.txt` or `GLOSSARY.md`? Run the build. Those are the sources;
-`scripts/glyph-data.js` and `.guidelines/expansions.json` are the copies the
+`scripts/glyph-data.js` and `.guidelines/.sources/expansions.json` are the copies the
 engine loads.
 
 ```bash
@@ -264,23 +264,24 @@ built.
 | `scripts/glyph-cli.js` · `glyph-zip.js` | the command line, and the zip its `--bundle` writes |
 | `scripts/glyph-protocol.js` · `glyph-transport.js` | the engine as a process, one JSON request a line, and the app's switch to it (`?engine=relay`) |
 | `scripts/glyph-plugin.js` · `commands/` · `.claude-plugin/` | the engine as slash commands |
+| `scripts/build-plugin.js` | the plugin as one installable `.plugin` (`npm run plugin`), every file derived |
 | `rust/` | the Rust engine, one crate per core module; `node scripts/crate-graph.js` prints the arrows |
-| `.guidelines/rules.json` · `templates.json` | data stores, hand-editable |
-| `.guidelines/expansions.txt` | composition table: atoms and formulas |
+| `.guidelines/.sources/rules.json` · `templates.json` | data stores, hand-editable |
+| `.guidelines/.sources/expansions.txt` | composition table: atoms and formulas |
 | `.guidelines/.history/` | superseded records, kept for provenance |
 | `.claude/skills/glyph-markup/` | **generated** — the skill, built by `scripts/build-skill.js` |
-| `scripts/glyph-data.js` · `.guidelines/expansions.json` | **generated** — do not edit |
+| `scripts/glyph-data.js` · `.guidelines/.sources/expansions.json` | **generated** — do not edit |
 
 ## Documentation
 
 | document | answers |
 |---|---|
-| [`GLOSSARY.md`](.guidelines/GLOSSARY.md) | **what** each command is — the normative reference |
-| [`SIGNATURES.md`](.guidelines/SIGNATURES.md) | **how many** operands each one asks for |
-| [`glyph-grammar.ebnf`](.guidelines/glyph-grammar.ebnf) | the syntax, formally |
+| [`GLOSSARY.md`](.guidelines/.sources/GLOSSARY.md) | **what** each command is — the normative reference |
+| [`SIGNATURES.md`](.guidelines/.sources/SIGNATURES.md) | **how many** operands each one asks for |
+| [`glyph-grammar.ebnf`](.guidelines/.sources/glyph-grammar.ebnf) | the syntax, formally |
 | [`CHANGELOG.md`](CHANGELOG.md) | what changed and why |
-| [`XML_REFERENCE.md`](.guidelines/XML_REFERENCE.md) | **bracket → XML**, element by element — checked by the suite |
-| [`HGML_PLAN.md`](.guidelines/HGML_PLAN.md) | where this is going — the `.hgml` format |
+| [`XML_REFERENCE.md`](.guidelines/.sources/XML_REFERENCE.md) | **bracket → XML**, element by element — checked by the suite |
+| [`HGML_PLAN.md`](.guidelines/.sources/HGML_PLAN.md) | where this is going — the `.hgml` format |
 
 The engine derives from `GLOSSARY.md`, not the other way round, and the suite
 has checks (`X-01`, `X-14`) that fail if the two ever drift apart.

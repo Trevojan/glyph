@@ -1,0 +1,567 @@
+{
+  "type": "GlyphAST",
+  "schema": 2,
+  "version": "4.7.10.08",
+  "source": {
+    "length": 1862,
+    "checksum": "d6d9a038b55b4600",
+    "encoding": "utf-8",
+    "newline": "lf",
+    "uri": null
+  },
+  "stores": {
+    "templates": "7356ea9b88319980",
+    "rules": "767e5432cdc6d400",
+    "expansions": "125235203224e180"
+  },
+  "projection": "full",
+  "segments": [
+    {
+      "type": "Segment",
+      "mood": [],
+      "isReturn": false,
+      "continues": false,
+      "breaks": 0,
+      "autoClosedCount": 0,
+      "body": [
+        {
+          "type": "Command",
+          "raw": "block",
+          "canonical": "BLOCK",
+          "tier": "struct",
+          "gloss": "Block",
+          "element": "block",
+          "isAlias": false,
+          "chainElement": false,
+          "origin": "root",
+          "slotName": false,
+          "editorial": false,
+          "name": null,
+          "depth": 0,
+          "autoClosed": false,
+          "suggestion": null,
+          "emotions": [],
+          "species": "atom",
+          "compositionDepth": 0,
+          "at": {
+            "s": 0,
+            "e": 6
+          },
+          "body": [
+            {
+              "type": "Literal",
+              "value": "ORD-0003-graph",
+              "form": "quote",
+              "slot": null,
+              "role": "operand",
+              "at": {
+                "s": 6,
+                "e": 22
+              }
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 25,
+                "e": 29
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the spec of EMS-003",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 29,
+                    "e": 50
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": ".guidelines/.orders/EMS-003/EMS-003.pgml",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 51,
+                    "e": 93
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 97,
+                "e": 101
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the signed model",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 101,
+                    "e": 119
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": ".guidelines/.orders/INTAKE-2D-VIEW.md, section 6",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 120,
+                    "e": 170
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "tgt",
+              "canonical": "TGT",
+              "tier": "instr",
+              "gloss": "Target",
+              "element": "target",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 174,
+                "e": 178
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the graph of a package, derived from the tree and from nothing else: its nodes, its containers and its typed connectors, the same for the same source every time",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 178,
+                    "e": 340
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 344,
+                "e": 348
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "derive a node from each Command and each Literal, a container from each section, block, part and segment, and a connector from each edge of the tree, typed by the operator that wrote it",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 348,
+                    "e": 535
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 539,
+                "e": 543
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "derive the connectors the tree holds outside its edges: the sequence between siblings, the reference from a literal to the command that binds its name, the result a literal names after a nest, and the call of a template to its definition",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 543,
+                    "e": 782
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "req",
+              "canonical": "REQ",
+              "tier": "instr",
+              "gloss": "Requirement",
+              "element": "requirement",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 786,
+                "e": 790
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "every node carries the source span of the command it is, so the view and the source point at each other",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 790,
+                    "e": 895
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "req",
+              "canonical": "REQ",
+              "tier": "instr",
+              "gloss": "Requirement",
+              "element": "requirement",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 899,
+                "e": 903
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "a diagnostic lands on the node it is about: fix, ask and note, and an empty slot shows as a socket that asks, as needs does in the XML",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 903,
+                    "e": 1039
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 1043,
+                "e": 1048
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the graph is a function of the tree: it holds no fact the tree does not hold, and where the signed model puts binds and ref in the envelope, they enter the envelope first",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1048,
+                    "e": 1220
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 1224,
+                "e": 1229
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "what moves an emitted projection moves by decision, written in .decisions, and enters the batch the version moves once for",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1229,
+                    "e": 1353
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "val",
+              "canonical": "VAL",
+              "tier": "instr",
+              "gloss": "Validate",
+              "element": "validate",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "composite",
+              "compositionDepth": 5,
+              "at": {
+                "s": 1357,
+                "e": 1361
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the derivation",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1361,
+                    "e": 1377
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": "for every declared source of the snapshot the graph is derived twice to the same bytes, and the tree is rebuilt from the graph to the same envelope",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1378,
+                    "e": 1527
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "val",
+              "canonical": "VAL",
+              "tier": "instr",
+              "gloss": "Validate",
+              "element": "validate",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "composite",
+              "compositionDepth": 5,
+              "at": {
+                "s": 1531,
+                "e": 1535
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the types",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1535,
+                    "e": 1546
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": "each connector type of the signed table has a case that shows it, and a tree edge of a kind the table does not name is refused by name, each seen failing before it counts",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1547,
+                    "e": 1719
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "val",
+              "canonical": "VAL",
+              "tier": "instr",
+              "gloss": "Validate",
+              "element": "validate",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "composite",
+              "compositionDepth": 5,
+              "at": {
+                "s": 1723,
+                "e": 1727
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the engines",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1727,
+                    "e": 1740
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": "where the signed model computes the graph in the engine, the Rust answers the same bytes as the JS over the oracle",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1741,
+                    "e": 1857
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "diagnostics": []
+}

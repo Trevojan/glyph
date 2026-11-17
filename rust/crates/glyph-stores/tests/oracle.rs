@@ -71,7 +71,7 @@ fn the_envelope_hashes_the_rules_store_alone() {
 
 #[test]
 fn the_composition_store_is_the_one_build_templates_writes() {
-    let path = concat!(env!("CARGO_MANIFEST_DIR"), "/../../../.guidelines/expansions.json");
+    let path = concat!(env!("CARGO_MANIFEST_DIR"), "/../../../.guidelines/.sources/expansions.json");
     let written = std::fs::read_to_string(path).expect(path);
     let at = EXPANSIONS_JSON.bytes().zip(written.bytes()).take_while(|(a, b)| a == b).count();
     assert!(EXPANSIONS_JSON == written, "compiled from expansions.txt and GLOSSARY.md, it differs from expansions.json at byte {at}: {:?}",

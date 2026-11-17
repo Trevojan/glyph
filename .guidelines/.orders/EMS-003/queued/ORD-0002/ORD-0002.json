@@ -1,0 +1,641 @@
+{
+  "type": "GlyphAST",
+  "schema": 2,
+  "version": "4.7.10.08",
+  "source": {
+    "length": 2159,
+    "checksum": "878d70e0808b4200",
+    "encoding": "utf-8",
+    "newline": "lf",
+    "uri": null
+  },
+  "stores": {
+    "templates": "7356ea9b88319980",
+    "rules": "767e5432cdc6d400",
+    "expansions": "125235203224e180"
+  },
+  "projection": "full",
+  "segments": [
+    {
+      "type": "Segment",
+      "mood": [],
+      "isReturn": false,
+      "continues": false,
+      "breaks": 0,
+      "autoClosedCount": 0,
+      "body": [
+        {
+          "type": "Command",
+          "raw": "block",
+          "canonical": "BLOCK",
+          "tier": "struct",
+          "gloss": "Block",
+          "element": "block",
+          "isAlias": false,
+          "chainElement": false,
+          "origin": "root",
+          "slotName": false,
+          "editorial": false,
+          "name": null,
+          "depth": 0,
+          "autoClosed": false,
+          "suggestion": null,
+          "emotions": [],
+          "species": "atom",
+          "compositionDepth": 0,
+          "at": {
+            "s": 0,
+            "e": 6
+          },
+          "body": [
+            {
+              "type": "Literal",
+              "value": "ORD-0002-icons",
+              "form": "quote",
+              "slot": null,
+              "role": "operand",
+              "at": {
+                "s": 6,
+                "e": 22
+              }
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 25,
+                "e": 29
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the spec of EMS-003",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 29,
+                    "e": 50
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": ".guidelines/.orders/EMS-003/EMS-003.pgml",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 51,
+                    "e": 93
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 97,
+                "e": 101
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the signed model",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 101,
+                    "e": 119
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": ".guidelines/.orders/INTAKE-2D-VIEW.md, section 6",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 120,
+                    "e": 170
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 174,
+                "e": 178
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the icons as delivered",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 178,
+                    "e": 202
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": ".scope/asset/glyph-icons",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 203,
+                    "e": 229
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "tgt",
+              "canonical": "TGT",
+              "tier": "instr",
+              "gloss": "Target",
+              "element": "target",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 233,
+                "e": 237
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the icons enter the app as one set a table names: every command of the vocabulary answers an icon or a declared fallback, drawn in the colours of the interface",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 237,
+                    "e": 398
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 402,
+                "e": 406
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "measured at c078f2c: the 41 files hold the fills black and white written in, and two of them a third colour; four tile sizes, 13 by 17, 13 by 18, 14 by 17 and 15 by 18, and 8 by 8 for the two pins; each tile carries its name drawn as outlines above it, and nt.svg carries the word note",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 406,
+                    "e": 693
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 697,
+                "e": 701
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "measured at c078f2c: by category the set covers action 4 of 10, judgement 9 of 16, question 2 of 4, framing 1 of 8, context 3 of 5, condition 5 of 9, limit 4 of 12, reasoning 0 of 14, course 2 of 6, intensity 1 of 4, frame 3 of 10 and mark 2 of 6",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 701,
+                    "e": 949
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 953,
+                "e": 957
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "normalise the set into the app: one tile size, the colours taken from the interface and never written in the file, and the name drawn by the page from the vocabulary",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 957,
+                    "e": 1124
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 1128,
+                "e": 1132
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "write the icon table from the files, never by hand: each command, its icon or its fallback, and the icons no command names",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1132,
+                    "e": 1256
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "req",
+              "canonical": "REQ",
+              "tier": "instr",
+              "gloss": "Requirement",
+              "element": "requirement",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 1260,
+                "e": 1264
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "a command with no icon shows a fallback tile with its name, and the table says which commands those are",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1264,
+                    "e": 1369
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 1373,
+                "e": 1378
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the delivered files stay as delivered in .scope; the normalised set is generated from them by a script, and a generated file is never edited by hand",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1378,
+                    "e": 1528
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 1532,
+                "e": 1537
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the interface is a black background with cyan, purple, dark green and light blue, and nothing greyish",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1537,
+                    "e": 1640
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 1644,
+                "e": 1649
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "no icon is drawn that the Regent did not deliver: the 81 commands with none are listed for the Regent, and the fallback answers until an icon arrives",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1649,
+                    "e": 1800
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "val",
+              "canonical": "VAL",
+              "tier": "instr",
+              "gloss": "Validate",
+              "element": "validate",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "composite",
+              "compositionDepth": 5,
+              "at": {
+                "s": 1804,
+                "e": 1808
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the table",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1808,
+                    "e": 1819
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": "npm run check refuses an icon no command names and no exception declares, a command the table leaves out, and a normalised file that differs from a fresh build, each seen failing before it counts",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1820,
+                    "e": 2017
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "val",
+              "canonical": "VAL",
+              "tier": "instr",
+              "gloss": "Validate",
+              "element": "validate",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "composite",
+              "compositionDepth": 5,
+              "at": {
+                "s": 2021,
+                "e": 2025
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the set",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 2025,
+                    "e": 2034
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": "every tile renders at one size in the colours of the interface, measured on the page in the browser of the repository",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 2035,
+                    "e": 2154
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "diagnostics": []
+}

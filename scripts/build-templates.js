@@ -23,14 +23,15 @@ import X from "./read-expansions.js";
 import G from "./glyph-parser.js";
 
 /* Three roots since v1.3.4.01. `/scripts` holds JavaScript, `.guidelines`
-   holds everything normative a human edits (the docs and the .json/.txt
-   stores), and the repository root keeps only the entry points: README,
+   holds everything normative a human edits, the docs and the .json/.txt
+   stores in its facts axis, `.sources/` (GUIDE here, since EMS-002 ORD-0034),
+   and the repository root keeps only the entry points: README,
    CHANGELOG and the app itself. The rule is still the file's kind, not who
    wrote it — which is why the generated glyph-data.js is JavaScript and lands
    in HERE, while the generated expansions.json is data and lands in GUIDE
    beside expansions.txt, the source it is compiled from. */
 const HERE = __dirname;
-const GUIDE = path.join(__dirname, "..", ".guidelines");
+const GUIDE = path.join(__dirname, "..", ".guidelines", ".sources");
 
 /* --check: build everything in memory and compare, write nothing.
  *

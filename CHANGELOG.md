@@ -10,7 +10,7 @@ All notable changes to Glyph are documented here, most recent first.
 
 > **Versioning.** From `1.2.3.00` onward the number is
 > `release.frontend.rules.minor` — the 1st digit the release line, the 2nd the
-> frontend (HTML/CSS/UI), the 3rd the rules (`.guidelines/rules.json`, constraints,
+> frontend (HTML/CSS/UI), the 3rd the rules (`.guidelines/.sources/rules.json`, constraints,
 > valency, vocabulary), and the 4th a two-digit counter (`00`, `11`, `24`, `42`)
 > for everything small. **No digit resets any other.**
 >
@@ -569,7 +569,7 @@ lived only in a plan document. They are now three selects above the output card,
 showing the exact path (`.claude/agents/dv.md`) and the header the bundle will
 carry, before anything is emitted.
 
-The roster is data — `.guidelines/targets.json`, the same pattern as `rules.json`
+The roster is data — `.guidelines/.sources/targets.json`, the same pattern as `rules.json`
 and `templates.json`. Model ids change on someone else's schedule, so they are
 not compiled into the engine. A harness marked `available:false` is listed and
 disabled: **a listed-and-off harness informs, an invented one lies.**

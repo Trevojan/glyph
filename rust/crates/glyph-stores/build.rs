@@ -111,7 +111,7 @@ fn rust(v: &Json, out: &mut String) {
 }
 
 fn main() {
-    let guide = Path::new(&env::var("CARGO_MANIFEST_DIR").unwrap()).join("../../../.guidelines");
+    let guide = Path::new(&env::var("CARGO_MANIFEST_DIR").unwrap()).join("../../../.guidelines/.sources");
     let read = |name: &str| {
         let f = guide.join(name);
         println!("cargo:rerun-if-changed={}", f.display());
