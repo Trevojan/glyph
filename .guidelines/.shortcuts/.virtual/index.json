@@ -1,7 +1,7 @@
 {
   "note": "written by glyph-vpath build, EMS-002; never edited by hand",
   "depth": 2,
-  "next": 3482,
+  "next": 3495,
   "files": {
     ".guidelines/.changelog/README.md": {
       "nodes": [
@@ -4093,14 +4093,14 @@
     },
     ".guidelines/.shortcuts/README.md": {
       "nodes": [
-        ["n1153", "", 0, 10588, 1, 86, "6f4c64f6b2ea2c00", "", ""],
-        ["n1154", "atalhos--comece-por-aqui", 0, 10588, 1, 86, "6f4c64f6b2ea2c00", "836017809117c400", "n1153"],
+        ["n1153", "", 0, 10770, 1, 87, "dc686d3cb773b200", "", ""],
+        ["n1154", "atalhos--comece-por-aqui", 0, 10770, 1, 87, "dc686d3cb773b200", "73d0b208138c9400", "n1153"],
         ["n1155", "onde-estou", 442, 4899, 11, 13, "ad2faf846e960000", "d380787405fa7d40", "n1154"],
         ["n1156", "os-sete-eixos", 4899, 6139, 24, 12, "c7a610b8cc345700", "ea685f36d51a4300", "n1154"],
         ["n1157", "o-mapa-do-motor-em-cinco-linhas", 6139, 7084, 36, 12, "fef2a4f026f43a00", "b0d1ba46f3be8000", "n1154"],
         ["n1158", "os-documentos-que-mais-se-consulta", 7084, 9034, 48, 18, "f3c7a4885e809600", "f616de100c75df00", "n1154"],
-        ["n1159", "os-outros-documentos", 9034, 10240, 66, 15, "63ec2be83dd05100", "e5c8814085afba00", "n1154"],
-        ["n1160", "vocabulário-do-projeto", 10240, 10588, 81, 6, "b895f5b69b891000", "f6cb060882a72600", "n1154"]
+        ["n1159", "os-outros-documentos", 9034, 10422, 66, 16, "64d35eac63761200", "35cfc74863da0e40", "n1154"],
+        ["n1160", "vocabulário-do-projeto", 10422, 10770, 82, 6, "b895f5b69b891000", "f6cb060882a72600", "n1154"]
       ]
     },
     ".guidelines/.shortcuts/regency.json": {
@@ -4840,6 +4840,55 @@
         ["n1764", "/templates/best-of", 4919, 5852, 50, 11, "08c9132021cb7800", "", "n1758"],
         ["n1765", "/templates/loop", 5867, 7477, 62, 17, "856a01f8612ee900", "", "n1758"],
         ["n1766", "/templates/track", 7493, 8055, 80, 8, "5ba258880c39ae00", "", "n1758"]
+      ]
+    },
+    ".guidelines/.ux/explorer/README.md": {
+      "nodes": [
+        ["n3482", "", 0, 4115, 1, 61, "15488bf013058500", "", ""],
+        ["n3483", "glyph-explorer--screens", 0, 4115, 1, 61, "15488bf013058500", "45687fa0d9b60e00", "n3482"],
+        ["n3484", "the-sequence", 781, 2028, 16, 13, "3ff50c8c245a2300", "9e60af246a4d8800", "n3483"],
+        ["n3485", "checked-against-the-engine-471008", 2028, 2765, 29, 11, "15b1ad7ef309ec00", "06e88698a705f200", "n3483"],
+        ["n3486", "open-points-for-the-regent", 2765, 4115, 40, 22, "26915e98984f2b80", "540904006e188000", "n3483"]
+      ]
+    },
+    ".guidelines/.ux/explorer/glyph_explorer.svg": {
+      "nodes": [
+        ["n3487", "", 0, 1080895, 1, 185, "b9fa8660e210a000", "", ""]
+      ]
+    },
+    ".guidelines/.ux/explorer/visualflow_analyzer.svg": {
+      "nodes": [
+        ["n3488", "", 0, 998401, 1, 154, "a75e45341e5ea000", "", ""]
+      ]
+    },
+    ".guidelines/.ux/explorer/visualflow_edit_format.svg": {
+      "nodes": [
+        ["n3489", "", 0, 972978, 1, 152, "b193bdc897255a00", "", ""]
+      ]
+    },
+    ".guidelines/.ux/explorer/visualflow_edit_point.svg": {
+      "nodes": [
+        ["n3490", "", 0, 960549, 1, 156, "1e64cfec5a108100", "", ""]
+      ]
+    },
+    ".guidelines/.ux/explorer/visualflow_ord_update.svg": {
+      "nodes": [
+        ["n3491", "", 0, 995324, 1, 154, "c00af10864e5d800", "", ""]
+      ]
+    },
+    ".guidelines/.ux/explorer/ws_format_saved.svg": {
+      "nodes": [
+        ["n3492", "", 0, 978526, 1, 161, "c9969f1ed8549200", "", ""]
+      ]
+    },
+    ".guidelines/.ux/explorer/ws_relationship_saved.svg": {
+      "nodes": [
+        ["n3493", "", 0, 978528, 1, 161, "d6bb05c65507d500", "", ""]
+      ]
+    },
+    ".guidelines/.ux/explorer/ws_relationship_updated.svg": {
+      "nodes": [
+        ["n3494", "", 0, 1030100, 1, 154, "b54b474002e09200", "", ""]
       ]
     },
     "CLAUDE.md": {
