@@ -15,9 +15,9 @@
 //! lower-case name the prototype holds never expands; and a param written as a
 //! string is a repeat param, because `"x".repeat` is `String.prototype.repeat`.
 
-use glyph_stores::Context;
 use glyph_json::Json;
 use glyph_json::number;
+use glyph_stores::Context;
 use glyph_util::tree::{Diag, Id, Node, Thrown, Tree};
 use glyph_util::{esc, inherited, inherited_text, js_trim};
 use std::sync::Arc;
@@ -30,10 +30,14 @@ fn js_string(v: Option<&Json>) -> String {
         Some(Json::Bool(b)) => b.to_string(),
         Some(Json::Num(n)) => number(*n),
         Some(Json::Str(s)) => s.clone(),
-        Some(Json::Arr(a)) => a.iter().map(|x| match x {
-            Json::Null => String::new(),
-            x => js_string(Some(x)),
-        }).collect::<Vec<_>>().join(","),
+        Some(Json::Arr(a)) => a
+            .iter()
+            .map(|x| match x {
+                Json::Null => String::new(),
+                x => js_string(Some(x)),
+            })
+            .collect::<Vec<_>>()
+            .join(","),
         Some(Json::Obj(_)) => "[object Object]".into(),
     }
 }
@@ -74,7 +78,11 @@ pub struct Param {
 impl Param {
     fn of(p: &Json) -> Param {
         let v = p.get("name").filter(|n| n.truthy()).unwrap_or(p);
-        Param { text: js_string(Some(v)), is_str: matches!(v, Json::Str(_)), truthy: v.truthy() }
+        Param {
+            text: js_string(Some(v)),
+            is_str: matches!(v, Json::Str(_)),
+            truthy: v.truthy(),
+        }
     }
 }
 
@@ -167,8 +175,16 @@ impl Fills {
 
 /// `phName`: the raw name of the hole's slot-name child.
 pub fn ph_name<X>(tree: &Tree<X>, id: Id) -> Option<String> {
-    tree.nodes[id].children.iter().find(|&&c| tree.nodes[c].slot_name == Some(true))
-        .map(|&c| tree.nodes[c].raw.clone().unwrap_or_else(|| "undefined".into()))
+    tree.nodes[id]
+        .children
+        .iter()
+        .find(|&&c| tree.nodes[c].slot_name == Some(true))
+        .map(|&c| {
+            tree.nodes[c]
+                .raw
+                .clone()
+                .unwrap_or_else(|| "undefined".into())
+        })
 }
 
 fn is_ph<X>(tree: &Tree<X>, id: Id) -> bool {
@@ -188,7 +204,12 @@ pub fn collect_fills<X>(tree: &Tree<X>, inv: Id, repeat: Option<&Param>) -> Resu
             if let Some(nm) = ph_name(tree, c).filter(|n| !n.is_empty()) {
                 let key = nm.to_lowercase();
                 /* what the bracket holds past its `-name` binder */
-                let kids: Vec<Id> = tree.nodes[c].children.iter().copied().filter(|&k| tree.nodes[k].slot_name != Some(true)).collect();
+                let kids: Vec<Id> = tree.nodes[c]
+                    .children
+                    .iter()
+                    .copied()
+                    .filter(|&k| tree.nodes[k].slot_name != Some(true))
+                    .collect();
                 if repeat_key.as_deref() == Some(key.as_str()) {
                     let lit = kids.iter().copied().find(|&k| tree.nodes[k].is_literal());
                     let val = match lit {
@@ -200,25 +221,44 @@ pub fn collect_fills<X>(tree: &Tree<X>, inv: Id, repeat: Option<&Param>) -> Resu
                             vals.push(val);
                             vals.len() - 1
                         }
-                        Some((_, Fill::One(Some(v)))) if !v.is_empty() =>
-                            return Err(Thrown("named[key].push is not a function".into())),
+                        Some((_, Fill::One(Some(v)))) if !v.is_empty() => {
+                            return Err(Thrown("named[key].push is not a function".into()));
+                        }
                         Some((_, one)) => {
                             *one = Fill::Many(vec![val]);
                             0
                         }
-                        None if inherited(&key) => return Err(Thrown("named[key].push is not a function".into())),
+                        None if inherited(&key) => {
+                            return Err(Thrown("named[key].push is not a function".into()));
+                        }
                         None => {
                             f.named.push((key.clone(), Fill::Many(vec![val])));
                             0
                         }
                     };
                     let carried = kids.iter().copied().filter(|&k| Some(k) != lit).collect();
-                    f.entries.push(NamedFill { key, name: nm, lit, carried, idx: Some(idx), ..Default::default() });
+                    f.entries.push(NamedFill {
+                        key,
+                        name: nm,
+                        lit,
+                        carried,
+                        idx: Some(idx),
+                        ..Default::default()
+                    });
                     f.items.push(Item::Fill(f.entries.len() - 1));
-                } else if let Some(same) = f.entries.iter_mut().find(|e| e.key == key && e.idx.is_none()) {
+                } else if let Some(same) = f
+                    .entries
+                    .iter_mut()
+                    .find(|e| e.key == key && e.idx.is_none())
+                {
                     same.kids.extend(kids);
                 } else {
-                    f.entries.push(NamedFill { key, name: nm, kids, ..Default::default() });
+                    f.entries.push(NamedFill {
+                        key,
+                        name: nm,
+                        kids,
+                        ..Default::default()
+                    });
                     f.items.push(Item::Fill(f.entries.len() - 1));
                 }
                 continue;
@@ -230,7 +270,9 @@ pub fn collect_fills<X>(tree: &Tree<X>, inv: Id, repeat: Option<&Param>) -> Resu
             written += 1;
             continue;
         }
-        if tree.nodes[c].text == Some(true) && !js_trim(tree.nodes[c].v.as_deref().unwrap_or("")).is_empty() {
+        if tree.nodes[c].text == Some(true)
+            && !js_trim(tree.nodes[c].v.as_deref().unwrap_or("")).is_empty()
+        {
             written += 1;
             f.bare.push((c, written));
         }
@@ -240,7 +282,12 @@ pub fn collect_fills<X>(tree: &Tree<X>, inv: Id, repeat: Option<&Param>) -> Resu
     }
     for e in f.entries.iter_mut().filter(|e| e.idx.is_none()) {
         e.lit = e.kids.iter().copied().find(|&k| tree.nodes[k].is_literal());
-        e.carried = e.kids.iter().copied().filter(|&k| Some(k) != e.lit).collect();
+        e.carried = e
+            .kids
+            .iter()
+            .copied()
+            .filter(|&k| Some(k) != e.lit)
+            .collect();
         let val = match e.lit {
             Some(k) => tree.nodes[k].v.clone(),
             None => Some(String::new()),
@@ -254,7 +301,10 @@ pub fn collect_fills<X>(tree: &Tree<X>, inv: Id, repeat: Option<&Param>) -> Resu
         }
     }
     /* only what has a literal after it slid: the rest is surplus content */
-    f.slid = slid.into_iter().filter(|&(_, at)| at <= f.positional.len()).collect();
+    f.slid = slid
+        .into_iter()
+        .filter(|&(_, at)| at <= f.positional.len())
+        .collect();
     Ok(f)
 }
 
@@ -306,7 +356,8 @@ fn carried_of<X>(tree: &mut Tree<X>, fills: &Fills, entry: Option<usize>, slot: 
 /// <placeholder> glyph-xml's `hole_of` writes.
 fn holds_more<X>(tree: &Tree<X>, kids: &[Id]) -> bool {
     let q = kids.iter().copied().find(|&c| tree.nodes[c].is_literal());
-    kids.iter().any(|&c| tree.nodes[c].slot_name != Some(true) && Some(c) != q)
+    kids.iter()
+        .any(|&c| tree.nodes[c].slot_name != Some(true) && Some(c) != q)
 }
 
 /// `carryInto`: in an unfilled hole that holds more, what the fill carried
@@ -315,7 +366,10 @@ fn holds_more<X>(tree: &Tree<X>, kids: &[Id]) -> bool {
 fn carry_into<X>(tree: &Tree<X>, kids: Vec<Id>, carried: Vec<Id>) -> Vec<Id> {
     let at = match kids.iter().position(|&c| tree.nodes[c].is_literal()) {
         Some(q) => q + 1,
-        None => match kids.iter().position(|&c| tree.nodes[c].slot_name == Some(true)) {
+        None => match kids
+            .iter()
+            .position(|&c| tree.nodes[c].slot_name == Some(true))
+        {
             Some(n) => {
                 let mut at = n + 1;
                 while at < kids.len() && tree.nodes[kids[at]].chain_element == Some(true) {
@@ -333,7 +387,13 @@ fn carry_into<X>(tree: &Tree<X>, kids: Vec<Id>, carried: Vec<Id>) -> Vec<Id> {
 }
 
 fn bound<X: Clone + Default>(tree: &mut Tree<X>, v: String, slot: String) -> Id {
-    tree.add(Node { literal: Some(true), v: Some(v), form: Some("quote".into()), bound_slot: Some(slot), ..Default::default() })
+    tree.add(Node {
+        literal: Some(true),
+        v: Some(v),
+        form: Some("quote".into()),
+        bound_slot: Some(slot),
+        ..Default::default()
+    })
 }
 
 /// `bindHoles(nodes, fills, params, repeatName)`: each hole replaced by what
@@ -342,14 +402,21 @@ fn bound<X: Clone + Default>(tree: &mut Tree<X>, v: String, slot: String) -> Id 
 /// follows the hole when the fill gave no value. In a hole that holds more (a
 /// <placeholder>) it stays inside: [answer, …carried, …held]. Iterative, since
 /// a body is as deep as its author wrote it.
-pub fn bind_holes<X: Clone + Default>(tree: &mut Tree<X>, nodes: &[Id], fills: &mut Fills, params: &[Param],
-                                      repeat: Option<&Param>) -> Result<Vec<Id>, Thrown> {
-    let order: Vec<&Param> = params.iter()
-        .filter(|p| repeat.is_none_or(|r| *p != r) && !fills.has(&p.text.to_lowercase())).collect();
+pub fn bind_holes<X: Clone + Default>(
+    tree: &mut Tree<X>,
+    nodes: &[Id],
+    fills: &mut Fills,
+    params: &[Param],
+    repeat: Option<&Param>,
+) -> Result<Vec<Id>, Thrown> {
+    let order: Vec<&Param> = params
+        .iter()
+        .filter(|p| repeat.is_none_or(|r| *p != r) && !fills.has(&p.text.to_lowercase()))
+        .collect();
     let repeat_low = repeat.filter(|r| r.truthy).map(|r| r.text.to_lowercase());
     fills.used_pos.clear();
     /* `carry` is the fill an unfilled hole is waiting to place: inside it
-       when, rebuilt, it still holds more, after it when it does not */
+    when, rebuilt, it still holds more, after it when it does not */
     struct Frame {
         list: Vec<Id>,
         at: usize,
@@ -357,18 +424,33 @@ pub fn bind_holes<X: Clone + Default>(tree: &mut Tree<X>, nodes: &[Id], fills: &
         owner: Option<Id>,
         carry: Option<(usize, String)>,
     }
-    let mut stack = vec![Frame { list: nodes.to_vec(), at: 0, out: Vec::new(), owner: None, carry: None }];
+    let mut stack = vec![Frame {
+        list: nodes.to_vec(),
+        at: 0,
+        out: Vec::new(),
+        owner: None,
+        carry: None,
+    }];
     loop {
         let top = stack.last_mut().expect("the frame of the body");
         if top.at == top.list.len() {
             let done = stack.pop().expect("the frame just read");
             /* a frame with an owner always has one above it; the body's has neither */
-            let Some(owner) = done.owner else { return Ok(done.out) };
+            let Some(owner) = done.owner else {
+                return Ok(done.out);
+            };
             let (kids, after) = match &done.carry {
                 Some((i, slot)) => {
                     let carried = carried_of(tree, fills, Some(*i), slot);
                     if holds_more(tree, &done.out) {
-                        (if carried.is_empty() { done.out } else { carry_into(tree, done.out, carried) }, Vec::new())
+                        (
+                            if carried.is_empty() {
+                                done.out
+                            } else {
+                                carry_into(tree, done.out, carried)
+                            },
+                            Vec::new(),
+                        )
                     } else {
                         (done.out, carried)
                     }
@@ -392,18 +474,31 @@ pub fn bind_holes<X: Clone + Default>(tree: &mut Tree<X>, nodes: &[Id], fills: &
                         Got::Own(Fill::Many(vals)) => vals.clone(),
                         Got::Own(Fill::One(None)) | Got::Absent => Vec::new(),
                         Got::Own(Fill::One(Some(v))) if v.is_empty() => Vec::new(),
-                        Got::Own(Fill::One(Some(_))) | Got::Inherited(_) =>
-                            return Err(Thrown("vals.forEach is not a function".into())),
+                        Got::Own(Fill::One(Some(_))) | Got::Inherited(_) => {
+                            return Err(Thrown("vals.forEach is not a function".into()));
+                        }
                     };
                     let each = take_fills(fills, rk);
                     for (idx, v) in vals.into_iter().enumerate() {
-                        let slot = if idx > 0 { format!("{nm}{}", idx + 1) } else { nm.clone() };
+                        let slot = if idx > 0 {
+                            format!("{nm}{}", idx + 1)
+                        } else {
+                            nm.clone()
+                        };
                         if let Some(v) = v.filter(|v| !v.is_empty()) {
                             let lit = bound(tree, v, slot.clone());
-                            stack.last_mut().expect("the frame being read").out.push(lit);
+                            stack
+                                .last_mut()
+                                .expect("the frame being read")
+                                .out
+                                .push(lit);
                         }
                         let carried = carried_of(tree, fills, each.get(idx).copied(), &slot);
-                        stack.last_mut().expect("the frame being read").out.extend(carried);
+                        stack
+                            .last_mut()
+                            .expect("the frame being read")
+                            .out
+                            .extend(carried);
                     }
                     continue;
                 }
@@ -415,11 +510,14 @@ pub fn bind_holes<X: Clone + Default>(tree: &mut Tree<X>, nodes: &[Id], fills: &
                     let lit = bound(tree, v, nm.clone());
                     let carried = carried_of(tree, fills, mine, &nm);
                     /* a hole that held more keeps it when it is filled: the
-                       answer takes the question's place, what the fill
-                       carried follows it, and what the hole held stays */
+                    answer takes the question's place, what the fill
+                    carried follows it, and what the hole held stays */
                     let kids = tree.nodes[nd].children.clone();
                     let q = kids.iter().copied().find(|&c| tree.nodes[c].is_literal());
-                    let held: Vec<Id> = kids.into_iter().filter(|&c| tree.nodes[c].slot_name != Some(true) && Some(c) != q).collect();
+                    let held: Vec<Id> = kids
+                        .into_iter()
+                        .filter(|&c| tree.nodes[c].slot_name != Some(true) && Some(c) != q)
+                        .collect();
                     if held.is_empty() {
                         let out = &mut stack.last_mut().expect("the frame being read").out;
                         out.push(lit);
@@ -427,7 +525,13 @@ pub fn bind_holes<X: Clone + Default>(tree: &mut Tree<X>, nodes: &[Id], fills: &
                     } else {
                         let mut out = vec![lit];
                         out.extend(carried);
-                        stack.push(Frame { list: held, at: 0, out, owner: Some(nd), carry: None });
+                        stack.push(Frame {
+                            list: held,
+                            at: 0,
+                            out,
+                            owner: Some(nd),
+                            carry: None,
+                        });
                     }
                     continue;
                 }
@@ -444,7 +548,13 @@ pub fn bind_holes<X: Clone + Default>(tree: &mut Tree<X>, nodes: &[Id], fills: &
             out.extend(after);
         } else {
             let list = tree.nodes[nd].children.clone();
-            stack.push(Frame { list, at: 0, out: Vec::new(), owner: Some(nd), carry });
+            stack.push(Frame {
+                list,
+                at: 0,
+                out: Vec::new(),
+                owner: Some(nd),
+                carry,
+            });
         }
     }
 }
@@ -492,7 +602,11 @@ pub fn holes_of<X: Clone>(tree: &Tree<X>, list: &[Id]) -> Vec<Param> {
             if let Some(nm) = ph_name(tree, id).filter(|n| !n.is_empty()) {
                 let low = nm.to_lowercase();
                 if low == "__proto__" || !out.iter().any(|p| p.text.to_lowercase() == low) {
-                    out.push(Param { text: nm, is_str: true, truthy: true });
+                    out.push(Param {
+                        text: nm,
+                        is_str: true,
+                        truthy: true,
+                    });
                 }
             }
             continue;
@@ -565,9 +679,15 @@ impl<X: Clone + Default> Expander<'_, '_, X> {
     /// definitions, as trees of their own, and the inherited ones they do not
     /// write over.
     fn hand_down(&self, tree: &Tree<X>) -> Vec<Inherited<X>> {
-        let mut out: Vec<Inherited<X>> = self.sources.iter().map(|d| Inherited {
-            key: d.key.clone(), tree: tree.extract(&tree.nodes[d.node].children), params: d.params.clone(),
-        }).collect();
+        let mut out: Vec<Inherited<X>> = self
+            .sources
+            .iter()
+            .map(|d| Inherited {
+                key: d.key.clone(),
+                tree: tree.extract(&tree.nodes[d.node].children),
+                params: d.params.clone(),
+            })
+            .collect();
         for h in self.inherited {
             if !out.iter().any(|o| o.key == h.key) {
                 out.push(h.clone());
@@ -578,11 +698,20 @@ impl<X: Clone + Default> Expander<'_, '_, X> {
 
     /// A call the copy of a source definition holds expands here, inside this
     /// one's chain.
-    fn expand_inside(&mut self, tree: &mut Tree<X>, body: &[Id], chain: &[String]) -> Result<(), Thrown> {
-        let inner: Vec<Id> = tree.walk(body).into_iter().filter(|&id| {
-            let n = &tree.nodes[id];
-            n.is_template() && n.is_def != Some(true) && n.expanded != Some(true)
-        }).collect();
+    fn expand_inside(
+        &mut self,
+        tree: &mut Tree<X>,
+        body: &[Id],
+        chain: &[String],
+    ) -> Result<(), Thrown> {
+        let inner: Vec<Id> = tree
+            .walk(body)
+            .into_iter()
+            .filter(|&id| {
+                let n = &tree.nodes[id];
+                n.is_template() && n.is_def != Some(true) && n.expanded != Some(true)
+            })
+            .collect();
         for x in inner {
             self.expand_one(tree, x, chain)?;
         }
@@ -601,8 +730,12 @@ impl<X: Clone + Default> Expander<'_, '_, X> {
         } else if let Some(i) = self.inherited.iter().position(|d| d.key == key) {
             Def::Inherited(i)
         } else {
-            let Some(def) = definition(registry, &name) else { return Ok(()) };
-            let Some(body) = truthy(def.get("body")) else { return Ok(()) };
+            let Some(def) = definition(registry, &name) else {
+                return Ok(());
+            };
+            let Some(body) = truthy(def.get("body")) else {
+                return Ok(());
+            };
             Def::Store(def, body)
         };
         let tpl = esc(&name);
@@ -618,7 +751,7 @@ impl<X: Clone + Default> Expander<'_, '_, X> {
 
         let (body, params, repeat, gloss) = match def {
             /* the copy is already parsed: what the definition raised, it
-               raised once, where it was written */
+            raised once, where it was written */
             Def::Own(i) => {
                 let list = tree.nodes[self.sources[i].node].children.clone();
                 let body = tree.copy_nodes(&list);
@@ -633,44 +766,80 @@ impl<X: Clone + Default> Expander<'_, '_, X> {
             Def::Store(def, body) => {
                 let inherited = self.hand_down(tree);
                 /* a body that is not a string holds no tokens: the JS hands it to
-                   `parse`, which reads anything but a string as its token list */
-                let sub = (self.parse)(body.str().unwrap_or(""), SubParse {
-                    session: self.session, valency: false, templates: registry, expanding: next, inherited,
-                })?;
+                `parse`, which reads anything but a string as its token list */
+                let sub = (self.parse)(
+                    body.str().unwrap_or(""),
+                    SubParse {
+                        session: self.session,
+                        valency: false,
+                        templates: registry,
+                        expanding: next,
+                        inherited,
+                    },
+                )?;
                 /* the body's own syntax errors bubble up: the outer passes run
-                   over the expanded tree and do not raise them again; `ask`
-                   and `note` do */
+                over the expanded tree and do not raise them again; `ask`
+                and `note` do */
                 for d in sub.gaps.iter().filter(|d| d.sev == "fix") {
-                    (self.g)(Diag::new(&d.sev, &d.lab, format!("no corpo de <code>[--{tpl}</code>: {}", d.msg), &d.code));
+                    (self.g)(Diag::new(
+                        &d.sev,
+                        &d.lab,
+                        format!("no corpo de <code>[--{tpl}</code>: {}", d.msg),
+                        &d.code,
+                    ));
                 }
                 let body = tree.graft(sub.tree);
                 let raw_params = def.get("params").and_then(Json::arr).unwrap_or(&[]);
                 let params: Vec<Param> = raw_params.iter().map(Param::of).collect();
                 let repeat = raw_params.iter().find(|p| repeats(p)).map(Param::of);
-                (body, params, repeat, truthy(def.get("gloss")).map_or(String::new(), |g| js_string(Some(g))))
+                (
+                    body,
+                    params,
+                    repeat,
+                    truthy(def.get("gloss")).map_or(String::new(), |g| js_string(Some(g))),
+                )
             }
         };
         let source = !matches!(def, Def::Store(..));
 
         let mut fills = collect_fills(tree, inv, repeat.as_ref())?;
-        let shown = esc(&params.iter().map(|p| format!("`{}`", p.text)).collect::<Vec<_>>().join(","));
+        let shown = esc(&params
+            .iter()
+            .map(|p| format!("`{}`", p.text))
+            .collect::<Vec<_>>()
+            .join(","));
         /* A bare word where a parameter goes is refused by name, with the
-           arguments as the author wrote them, quoted (O4, decided 2026-10-25,
-           in the Rust only: the JS lets a bare word with no literal after it
-           fall as prose in silence, and names a displaced one `[?`). Where a
-           parameter goes: a position still open, or one a literal after it
-           takes. */
-        let refused: Vec<(Id, usize)> = fills.bare.iter().copied()
-            .filter(|&(node, at)| at <= params.len() || fills.slid.iter().any(|&(s, _)| s == node)).collect();
-        let written: Vec<String> = tree.nodes[inv].children.iter().filter_map(|&c| {
-            let k = &tree.nodes[c];
-            if k.is_literal() {
-                Some(k.v.clone().unwrap_or_default())
-            } else {
-                refused.iter().any(|&(r, _)| r == c).then(|| js_trim(k.v.as_deref().unwrap_or("")))
-            }
-        }).collect();
-        let form = esc(&written.iter().map(|w| format!("`{w}`")).collect::<Vec<_>>().join(","));
+        arguments as the author wrote them, quoted (O4, decided 2026-10-25,
+        in the Rust only: the JS lets a bare word with no literal after it
+        fall as prose in silence, and names a displaced one `[?`). Where a
+        parameter goes: a position still open, or one a literal after it
+        takes. */
+        let refused: Vec<(Id, usize)> = fills
+            .bare
+            .iter()
+            .copied()
+            .filter(|&(node, at)| at <= params.len() || fills.slid.iter().any(|&(s, _)| s == node))
+            .collect();
+        let written: Vec<String> = tree.nodes[inv]
+            .children
+            .iter()
+            .filter_map(|&c| {
+                let k = &tree.nodes[c];
+                if k.is_literal() {
+                    Some(k.v.clone().unwrap_or_default())
+                } else {
+                    refused
+                        .iter()
+                        .any(|&(r, _)| r == c)
+                        .then(|| js_trim(k.v.as_deref().unwrap_or("")))
+                }
+            })
+            .collect();
+        let form = esc(&written
+            .iter()
+            .map(|w| format!("`{w}`"))
+            .collect::<Vec<_>>()
+            .join(","));
         for &(node, at) in &refused {
             let word = esc(&js_trim(tree.nodes[node].v.as_deref().unwrap_or("")));
             (self.g)(Diag::new("fix", "parâmetro não é literal",
@@ -680,9 +849,16 @@ impl<X: Clone + Default> Expander<'_, '_, X> {
                     format!("argument {at} of <code>[--{tpl}</code> got <code>{word}</code>. \
                              A template parameter is always a literal: <code>[--{tpl}{form}]</code>.")));
         }
-        for &(node, at) in fills.slid.iter().filter(|&&(s, _)| !fills.bare.iter().any(|&(b, _)| b == s)) {
+        for &(node, at) in fills
+            .slid
+            .iter()
+            .filter(|&&(s, _)| !fills.bare.iter().any(|&(b, _)| b == s))
+        {
             let nd = &tree.nodes[node];
-            let what = esc(&[&nd.canonical, &nd.template].into_iter().flatten().find(|s| !s.is_empty())
+            let what = esc(&[&nd.canonical, &nd.template]
+                .into_iter()
+                .flatten()
+                .find(|s| !s.is_empty())
                 .map_or("?".to_string(), |s| s.to_lowercase()));
             (self.g)(Diag::new("fix", "parâmetro não é literal",
                                format!("o {at}º parâmetro de <code>[--{tpl}</code> recebeu <code>[{what}</code>. \
@@ -695,7 +871,7 @@ impl<X: Clone + Default> Expander<'_, '_, X> {
         let mut children = bind_holes(tree, &body, &mut fills, &params, repeat.as_ref())?;
         children.extend(leftovers(tree, &fills));
         /* a named fill no hole takes is refused by name, once, and what it
-           holds follows the body */
+        holds follows the body */
         let mut named: Vec<&str> = Vec::new();
         for f in fills.entries.iter().filter(|f| !f.used) {
             if named.contains(&f.key.as_str()) {
@@ -731,13 +907,25 @@ impl<X: Clone + Default> Expander<'_, '_, X> {
 /// it expands it, over the store's of the same name. Two of one name leave a
 /// call unable to say which, and the first holds.
 pub fn expand_invocations<X: Clone + Default>(
-    tree: &mut Tree<X>, ctx: &Context, session: bool, expanding: &[String], inherited: &[Inherited<X>],
-    g: &mut dyn FnMut(Diag), parse: &mut dyn FnMut(&str, SubParse<X>) -> Result<Parsed<X>, Thrown>,
+    tree: &mut Tree<X>,
+    ctx: &Context,
+    session: bool,
+    expanding: &[String],
+    inherited: &[Inherited<X>],
+    g: &mut dyn FnMut(Diag),
+    parse: &mut dyn FnMut(&str, SubParse<X>) -> Result<Parsed<X>, Thrown>,
 ) -> Result<(), Thrown> {
-    let all: Vec<Id> = tree.segments.iter().flat_map(|sg| tree.walk(&sg.children))
-        .filter(|&id| tree.nodes[id].is_template()).collect();
+    let all: Vec<Id> = tree
+        .segments
+        .iter()
+        .flat_map(|sg| tree.walk(&sg.children))
+        .filter(|&id| tree.nodes[id].is_template())
+        .collect();
     let mut sources: Vec<SourceDef> = Vec::new();
-    for &d in all.iter().filter(|&&id| tree.nodes[id].is_def == Some(true)) {
+    for &d in all
+        .iter()
+        .filter(|&&id| tree.nodes[id].is_def == Some(true))
+    {
         if tree.nodes[d].children.is_empty() {
             continue;
         }
@@ -753,10 +941,24 @@ pub fn expand_invocations<X: Clone + Default>(
             continue;
         }
         let params = holes_of(tree, &tree.nodes[d].children);
-        sources.push(SourceDef { key, node: d, params });
+        sources.push(SourceDef {
+            key,
+            node: d,
+            params,
+        });
     }
-    let invocations: Vec<Id> = all.into_iter().filter(|&id| tree.nodes[id].is_def != Some(true)).collect();
-    let mut x = Expander { ctx, session, inherited, sources, g, parse };
+    let invocations: Vec<Id> = all
+        .into_iter()
+        .filter(|&id| tree.nodes[id].is_def != Some(true))
+        .collect();
+    let mut x = Expander {
+        ctx,
+        session,
+        inherited,
+        sources,
+        g,
+        parse,
+    };
     for inv in invocations {
         x.expand_one(tree, inv, expanding)?;
     }
@@ -790,19 +992,31 @@ pub fn constraint_names(rules: Option<&Json>, spec: &Json) -> Result<Vec<String>
 }
 
 /// `checkTemplateConstraints(segments, opts, G)`.
-pub fn check_template_constraints<X: Clone>(tree: &Tree<X>, ctx: &Context, g: &mut dyn FnMut(Diag)) -> Result<(), Thrown> {
+pub fn check_template_constraints<X: Clone>(
+    tree: &Tree<X>,
+    ctx: &Context,
+    g: &mut dyn FnMut(Diag),
+) -> Result<(), Thrown> {
     let registry = &ctx.templates;
     let rules = ctx.rules.as_deref();
-    let exempt: Vec<String> = match rules.and_then(|r| truthy(r.get("scope"))).and_then(|s| truthy(s.get("exemptUnder"))) {
+    let exempt: Vec<String> = match rules
+        .and_then(|r| truthy(r.get("scope")))
+        .and_then(|s| truthy(s.get("exemptUnder")))
+    {
         Some(Json::Arr(a)) => a.iter().map(|x| js_string(Some(x))).collect(),
         Some(_) => Vec::new(),
         None => vec!["OVR".into(), "BYP".into()],
     };
     let n = |id: Id| &tree.nodes[id];
-    let canon = |id: Id| n(id).canonical.clone().unwrap_or_else(|| "undefined".into());
+    let canon = |id: Id| {
+        n(id)
+            .canonical
+            .clone()
+            .unwrap_or_else(|| "undefined".into())
+    };
 
     /* the walk of checkRules' underExempt, stopping at the template node: an
-       [ovr] around the whole invocation says nothing about its inside */
+    [ovr] around the whole invocation says nothing about its inside */
     let exempt_within = |id: Id, stop: Id| {
         let (mut p, mut hops) = (n(id).parent, 0);
         while let Some(pid) = p {
@@ -824,29 +1038,54 @@ pub fn check_template_constraints<X: Clone>(tree: &Tree<X>, ctx: &Context, g: &m
     for sg in &tree.segments {
         for inv in tree.walk(&sg.children) {
             /* a definition written in the source declares no constraints, and
-               the store's entry of the same name is not the one it expanded */
-            if !n(inv).is_template() || n(inv).expanded != Some(true) || n(inv).from_source == Some(true) {
+            the store's entry of the same name is not the one it expanded */
+            if !n(inv).is_template()
+                || n(inv).expanded != Some(true)
+                || n(inv).from_source == Some(true)
+            {
                 continue;
             }
             let def = definition(registry, n(inv).template.as_deref().unwrap_or_default());
-            let Some(cons) = def.and_then(|d| truthy(d.get("constraints"))).and_then(Json::arr) else { continue };
+            let Some(cons) = def
+                .and_then(|d| truthy(d.get("constraints")))
+                .and_then(Json::arr)
+            else {
+                continue;
+            };
             if cons.is_empty() {
                 continue;
             }
-            let inside: Vec<Id> = tree.walk(&n(inv).children).into_iter().filter(|&id| n(id).is_canonical()).collect();
+            let inside: Vec<Id> = tree
+                .walk(&n(inv).children)
+                .into_iter()
+                .filter(|&id| n(id).is_canonical())
+                .collect();
             for c in cons {
-                let Some(forbid) = truthy(c.get("forbid")) else { continue };
+                let Some(forbid) = truthy(c.get("forbid")) else {
+                    continue;
+                };
                 let names = constraint_names(rules, forbid)?;
                 let Some(&nd) = inside.iter().find(|&&nd| {
                     (names.contains(&canon(nd)) || inherited(&canon(nd))) && !exempt_within(nd, inv)
-                }) else { continue };
-                let why = truthy(c.get("why")).map_or(String::new(), |w| format!(" — {}", esc_v(Some(w))));
-                let suggest = truthy(c.get("suggest")).map_or(String::new(), |s| format!(" <em>Sugestão: {}.</em>", esc_v(Some(s))));
-                g(Diag::new(&truthy(c.get("severity")).map_or("ask".into(), |s| js_string(Some(s))),
-                            &truthy(c.get("label")).map_or("fora do trilho".into(), |l| js_string(Some(l))),
-                            format!("<code>[{}</code> dentro de <code>[--{}</code>{why}.{suggest} Se a saída for proposital, \
-                                     marque com <code>[ovr</code>.", esc(&canon(nd).to_lowercase()), esc(n(inv).template.as_deref().unwrap_or_default())),
-                            &format!("TemplateConstraint:{}", js_string(c.get("id")))));
+                }) else {
+                    continue;
+                };
+                let why = truthy(c.get("why"))
+                    .map_or(String::new(), |w| format!(" — {}", esc_v(Some(w))));
+                let suggest = truthy(c.get("suggest")).map_or(String::new(), |s| {
+                    format!(" <em>Sugestão: {}.</em>", esc_v(Some(s)))
+                });
+                g(Diag::new(
+                    &truthy(c.get("severity")).map_or("ask".into(), |s| js_string(Some(s))),
+                    &truthy(c.get("label")).map_or("fora do trilho".into(), |l| js_string(Some(l))),
+                    format!(
+                        "<code>[{}</code> dentro de <code>[--{}</code>{why}.{suggest} Se a saída for proposital, \
+                                     marque com <code>[ovr</code>.",
+                        esc(&canon(nd).to_lowercase()),
+                        esc(n(inv).template.as_deref().unwrap_or_default())
+                    ),
+                    &format!("TemplateConstraint:{}", js_string(c.get("id"))),
+                ));
             }
         }
     }

@@ -56,7 +56,11 @@ impl Order {
             ends.sort_by_key(|&n| (e.nodes[n].end, e.nodes[n].start, n));
             by_end.push(ends);
         }
-        let rank = seq.iter().enumerate().map(|(r, &(f, n))| (index.files[f].nodes[n].id.clone(), r)).collect();
+        let rank = seq
+            .iter()
+            .enumerate()
+            .map(|(r, &(f, n))| (index.files[f].nodes[n].id.clone(), r))
+            .collect();
         Order { seq, rank, by_end }
     }
 
@@ -79,7 +83,8 @@ impl Order {
         }
         let (fa, fb) = (self.seq[ra].0, self.seq[rb].0);
         let (na, nb) = (self.node(index, ra), self.node(index, rb));
-        let holds = |outer: &Indexed, inner: &Indexed| outer.start <= inner.start && inner.end <= outer.end;
+        let holds =
+            |outer: &Indexed, inner: &Indexed| outer.start <= inner.start && inner.end <= outer.end;
         Some(match (fa == fb, ra < rb) {
             (true, true) if holds(na, nb) => Relation::Holds,
             (true, false) if holds(nb, na) => Relation::Inside,
@@ -96,15 +101,28 @@ impl Order {
         let start = e.nodes[n].start;
         let ends = &self.by_end[f];
         let upto = ends.partition_point(|&m| e.nodes[m].end <= start);
-        Some(ends[..upto].iter().rev().take(count).map(|&m| e.nodes[m].id.clone()).collect())
+        Some(
+            ends[..upto]
+                .iter()
+                .rev()
+                .take(count)
+                .map(|&m| e.nodes[m].id.clone())
+                .collect(),
+        )
     }
 
     /// Every node from `a` to `b`, both included, in order.
     pub fn between(&self, a: &str, b: &str) -> Result<&[(usize, usize)], String> {
-        let ra = self.rank(a).ok_or_else(|| format!("`{a}` is no NodeID of the index"))?;
-        let rb = self.rank(b).ok_or_else(|| format!("`{b}` is no NodeID of the index"))?;
+        let ra = self
+            .rank(a)
+            .ok_or_else(|| format!("`{a}` is no NodeID of the index"))?;
+        let rb = self
+            .rank(b)
+            .ok_or_else(|| format!("`{b}` is no NodeID of the index"))?;
         if rb < ra {
-            return Err(format!("`{b}` comes before `{a}`: between reads from the first to the second"));
+            return Err(format!(
+                "`{b}` comes before `{a}`: between reads from the first to the second"
+            ));
         }
         Ok(&self.seq[ra..=rb])
     }

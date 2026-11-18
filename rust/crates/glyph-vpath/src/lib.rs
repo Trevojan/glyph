@@ -39,7 +39,12 @@ pub struct Node {
 
 impl Node {
     pub fn whole(text: &str) -> Node {
-        Node { selector: String::new(), start: 0, end: text.len(), depth: 0 }
+        Node {
+            selector: String::new(),
+            start: 0,
+            end: text.len(),
+            depth: 0,
+        }
     }
 }
 
@@ -55,7 +60,11 @@ pub enum Format {
 impl Format {
     pub fn of(path: &str) -> Format {
         let name = path.rsplit('/').next().unwrap_or(path);
-        match name.rsplit_once('.').map(|(_, ext)| ext.to_ascii_lowercase()).as_deref() {
+        match name
+            .rsplit_once('.')
+            .map(|(_, ext)| ext.to_ascii_lowercase())
+            .as_deref()
+        {
             Some("md") => Format::Markdown,
             Some("json") => Format::Json,
             Some("xml") => Format::Xml,
@@ -103,7 +112,11 @@ pub fn split(vpath: &str) -> (&str, &str) {
 
 /// `file#selector`, the selector left off when it is the whole file.
 pub fn join(file: &str, selector: &str) -> String {
-    if selector.is_empty() { file.to_string() } else { format!("{file}#{selector}") }
+    if selector.is_empty() {
+        file.to_string()
+    } else {
+        format!("{file}#{selector}")
+    }
 }
 
 /// The fingerprint of a slice: `ck`, the engine's declared 64-bit checksum.

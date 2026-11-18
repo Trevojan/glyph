@@ -30,16 +30,32 @@ impl Json {
         }
     }
     pub fn str(&self) -> Option<&str> {
-        if let Json::Str(s) = self { Some(s) } else { None }
+        if let Json::Str(s) = self {
+            Some(s)
+        } else {
+            None
+        }
     }
     pub fn arr(&self) -> Option<&[Json]> {
-        if let Json::Arr(a) = self { Some(a) } else { None }
+        if let Json::Arr(a) = self {
+            Some(a)
+        } else {
+            None
+        }
     }
     pub fn obj(&self) -> Option<&[(String, Json)]> {
-        if let Json::Obj(kv) = self { Some(kv) } else { None }
+        if let Json::Obj(kv) = self {
+            Some(kv)
+        } else {
+            None
+        }
     }
     pub fn num(&self) -> Option<f64> {
-        if let Json::Num(n) = self { Some(*n) } else { None }
+        if let Json::Num(n) = self {
+            Some(*n)
+        } else {
+            None
+        }
     }
     /// JS truthiness: `null`, `false`, `0`, `NaN` and `""` are false.
     pub fn truthy(&self) -> bool {
@@ -63,7 +79,10 @@ pub fn set(kv: &mut Vec<(String, Json)>, key: String, value: Json) {
     }
     match index_of(&key) {
         Some(n) => {
-            let at = kv.iter().position(|(k, _)| index_of(k).is_none_or(|m| m > n)).unwrap_or(kv.len());
+            let at = kv
+                .iter()
+                .position(|(k, _)| index_of(k).is_none_or(|m| m > n))
+                .unwrap_or(kv.len());
             kv.insert(at, (key, value));
         }
         None => kv.push((key, value)),
@@ -72,7 +91,9 @@ pub fn set(kv: &mut Vec<(String, Json)>, key: String, value: Json) {
 
 /// The key as an array index, `0` to `2³² − 2`, written canonically.
 fn index_of(key: &str) -> Option<u32> {
-    if key != "0" && (key.starts_with('0') || key.is_empty() || !key.bytes().all(|b| b.is_ascii_digit())) {
+    if key != "0"
+        && (key.starts_with('0') || key.is_empty() || !key.bytes().all(|b| b.is_ascii_digit()))
+    {
         return None;
     }
     key.parse::<u32>().ok().filter(|&n| n != u32::MAX)
@@ -81,10 +102,17 @@ fn index_of(key: &str) -> Option<u32> {
 /// `JSON.parse`. A lone surrogate is refused rather than replaced: a Rust
 /// string cannot hold one, and nothing disappears in silence.
 pub fn parse(text: &str) -> Result<Json, String> {
-    let mut r = Reader { b: text.as_bytes(), i: 0 };
+    let mut r = Reader {
+        b: text.as_bytes(),
+        i: 0,
+    };
     let v = r.value()?;
     r.ws();
-    if r.i == r.b.len() { Ok(v) } else { r.fail("text after the value") }
+    if r.i == r.b.len() {
+        Ok(v)
+    } else {
+        r.fail("text after the value")
+    }
 }
 
 struct Reader<'a> {
@@ -160,10 +188,14 @@ impl Reader<'_> {
             Some(b'n') => self.word("null", Json::Null),
             Some(b'-' | b'0'..=b'9') => {
                 let start = self.i;
-                while let Some(b'-' | b'+' | b'.' | b'e' | b'E' | b'0'..=b'9') = self.b.get(self.i) {
+                while let Some(b'-' | b'+' | b'.' | b'e' | b'E' | b'0'..=b'9') = self.b.get(self.i)
+                {
                     self.i += 1;
                 }
-                match std::str::from_utf8(&self.b[start..self.i]).ok().and_then(|t| t.parse().ok()) {
+                match std::str::from_utf8(&self.b[start..self.i])
+                    .ok()
+                    .and_then(|t| t.parse().ok())
+                {
                     Some(n) => Ok(Json::Num(n)),
                     None => self.fail("a malformed number"),
                 }
@@ -180,7 +212,9 @@ impl Reader<'_> {
         }
     }
     fn hex4(&mut self) -> Result<u32, String> {
-        let h = self.b.get(self.i..self.i + 4)
+        let h = self
+            .b
+            .get(self.i..self.i + 4)
             .and_then(|h| std::str::from_utf8(h).ok())
             .and_then(|h| u32::from_str_radix(h, 16).ok());
         match h {
@@ -210,7 +244,9 @@ impl Reader<'_> {
                     return Ok(out);
                 }
                 Some(b'\\') => {
-                    let Some(&c) = self.b.get(self.i + 1) else { return self.fail("an unterminated escape") };
+                    let Some(&c) = self.b.get(self.i + 1) else {
+                        return self.fail("an unterminated escape");
+                    };
                     self.i += 2;
                     match c {
                         b'"' => out.push('"'),
@@ -363,7 +399,11 @@ pub fn number(n: f64) -> String {
     let body = if k <= point && point <= 21 {
         format!("{digits}{}", "0".repeat((point - k) as usize))
     } else if 0 < point && point <= 21 {
-        format!("{}.{}", &digits[..point as usize], &digits[point as usize..])
+        format!(
+            "{}.{}",
+            &digits[..point as usize],
+            &digits[point as usize..]
+        )
     } else if -6 < point && point <= 0 {
         format!("0.{}{digits}", "0".repeat((-point) as usize))
     } else {

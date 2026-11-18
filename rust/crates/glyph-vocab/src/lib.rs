@@ -23,13 +23,19 @@ include!(concat!(env!("OUT_DIR"), "/vocab.rs"));
 /// A name's letters and digits, upper-cased: how an element name is matched
 /// as an input spelling.
 fn squash(name: &str) -> String {
-    name.to_uppercase().chars().filter(|c| c.is_ascii_uppercase() || c.is_ascii_digit()).collect()
+    name.to_uppercase()
+        .chars()
+        .filter(|c| c.is_ascii_uppercase() || c.is_ascii_digit())
+        .collect()
 }
 
 /// `formerElement(name)`: the element a retired spelling names now.
 pub fn former_element(name: &str) -> Option<&'static str> {
     let key = squash(name);
-    FORMER_ELEMENT.iter().find(|(old, _)| squash(old) == key).map(|&(_, now)| now)
+    FORMER_ELEMENT
+        .iter()
+        .find(|(old, _)| squash(old) == key)
+        .map(|&(_, now)| now)
 }
 
 /// `knownWord(w)`: a word the static tables know — MODE, STRUCT, META, ALIAS,
@@ -38,7 +44,10 @@ pub fn former_element(name: &str) -> Option<&'static str> {
 /// that holds one.
 pub fn known_word(w: &str) -> bool {
     let (up, low) = (w.to_uppercase(), w.to_lowercase());
-    [MODE, STRUCT, META, ALIAS, INSTR].iter().any(|t| get(t, &up).is_some()) || get(SESSION, &low).is_some()
+    [MODE, STRUCT, META, ALIAS, INSTR]
+        .iter()
+        .any(|t| get(t, &up).is_some())
+        || get(SESSION, &low).is_some()
 }
 
 /// `table[key]`, as a JS object answers it.
@@ -54,7 +63,10 @@ pub fn el_name(canonical: &str, tier: &str, gloss: Option<&str>) -> String {
     if tier == "blend" {
         return canonical.to_lowercase();
     }
-    let g = gloss.filter(|g| !g.is_empty()).unwrap_or(canonical).to_lowercase();
+    let g = gloss
+        .filter(|g| !g.is_empty())
+        .unwrap_or(canonical)
+        .to_lowercase();
     let mut out = String::new();
     let mut run = false;
     for c in g.chars() {
@@ -68,7 +80,11 @@ pub fn el_name(canonical: &str, tier: &str, gloss: Option<&str>) -> String {
     }
     let out = out.strip_prefix('-').unwrap_or(&out);
     let out = out.strip_suffix('-').unwrap_or(out);
-    if out.is_empty() { canonical.to_lowercase() } else { out.to_string() }
+    if out.is_empty() {
+        canonical.to_lowercase()
+    } else {
+        out.to_string()
+    }
 }
 
 /// What an element name, or a spelling of one, resolves to.
@@ -125,35 +141,66 @@ pub fn derived() -> &'static Derived {
         }
 
         /* classify() probes MODE → STRUCT → META → ALIAS → INSTR; the reverse
-           map is built in that order with the first writer winning */
-        let (mut gloss_reverse, mut gloss_collisions): (Vec<(String, Named)>, Vec<Collision>) = (Vec::new(), Vec::new());
-        for (tier, table) in [("mode", MODE), ("struct", STRUCT), ("meta", META), ("instr", INSTR)] {
+        map is built in that order with the first writer winning */
+        let (mut gloss_reverse, mut gloss_collisions): (Vec<(String, Named)>, Vec<Collision>) =
+            (Vec::new(), Vec::new());
+        for (tier, table) in [
+            ("mode", MODE),
+            ("struct", STRUCT),
+            ("meta", META),
+            ("instr", INSTR),
+        ] {
             for &(canon, gloss) in table {
                 let el = el_name(canon, tier, Some(gloss));
                 match gloss_reverse.iter().find(|(k, _)| *k == el) {
                     Some((_, kept)) => {
                         if kept.canonical != canon {
-                            gloss_collisions.push(Collision { key: el, kept: kept.canonical, dropped: canon });
+                            gloss_collisions.push(Collision {
+                                key: el,
+                                kept: kept.canonical,
+                                dropped: canon,
+                            });
                         }
                     }
-                    None => gloss_reverse.push((el, Named { canonical: canon, tier })),
+                    None => gloss_reverse.push((
+                        el,
+                        Named {
+                            canonical: canon,
+                            tier,
+                        },
+                    )),
                 }
             }
         }
 
         /* the element's own name, separators squashed, as an input spelling —
-           unless a table already claims it or two elements would share it */
-        let claimed = |k: &str| [MODE, STRUCT, META, ALIAS, INSTR].iter().any(|t| get(t, k).is_some());
-        let (mut element_input, mut element_input_collisions): (Vec<(String, Named)>, Vec<Collision>) = (Vec::new(), Vec::new());
+        unless a table already claims it or two elements would share it */
+        let claimed = |k: &str| {
+            [MODE, STRUCT, META, ALIAS, INSTR]
+                .iter()
+                .any(|t| get(t, k).is_some())
+        };
+        let (mut element_input, mut element_input_collisions): (
+            Vec<(String, Named)>,
+            Vec<Collision>,
+        ) = (Vec::new(), Vec::new());
         for (el, hit) in &gloss_reverse {
-            let key: String = el.to_uppercase().chars().filter(|c| c.is_ascii_uppercase() || c.is_ascii_digit()).collect();
+            let key: String = el
+                .to_uppercase()
+                .chars()
+                .filter(|c| c.is_ascii_uppercase() || c.is_ascii_digit())
+                .collect();
             if key.is_empty() || key == hit.canonical || claimed(&key) {
                 continue;
             }
             match element_input.iter().find(|(k, _)| *k == key) {
                 Some((_, kept)) => {
                     if kept.canonical != hit.canonical {
-                        element_input_collisions.push(Collision { key, kept: kept.canonical, dropped: hit.canonical });
+                        element_input_collisions.push(Collision {
+                            key,
+                            kept: kept.canonical,
+                            dropped: hit.canonical,
+                        });
                     }
                 }
                 None => element_input.push((key, *hit)),
@@ -163,7 +210,9 @@ pub fn derived() -> &'static Derived {
         /* a retired element name reads as the element it became (O10) */
         for &(old, now) in FORMER_ELEMENT {
             let key = squash(old);
-            let Some(&(_, hit)) = gloss_reverse.iter().find(|(k, _)| k == now) else { continue };
+            let Some(&(_, hit)) = gloss_reverse.iter().find(|(k, _)| k == now) else {
+                continue;
+            };
             if element_input.iter().any(|(k, _)| *k == key) || claimed(&key) {
                 continue;
             }
@@ -174,6 +223,15 @@ pub fn derived() -> &'static Derived {
         for &(code, gloss) in EMO {
             put(&mut emo_reverse, gloss.to_lowercase(), code);
         }
-        Derived { ptbr, cat_of, alias_of, gloss_reverse, gloss_collisions, element_input, element_input_collisions, emo_reverse }
+        Derived {
+            ptbr,
+            cat_of,
+            alias_of,
+            gloss_reverse,
+            gloss_collisions,
+            element_input,
+            element_input_collisions,
+            emo_reverse,
+        }
     })
 }

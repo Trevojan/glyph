@@ -15,7 +15,7 @@
 //! the same object on (EMS-002 ORD-0013).
 
 use glyph_json::Json;
-use glyph_vocab::{get, FRAMES, NAMED_STRUCT, SLOTS};
+use glyph_vocab::{FRAMES, NAMED_STRUCT, SLOTS, get};
 use std::sync::{Arc, OnceLock};
 
 include!(concat!(env!("OUT_DIR"), "/stores.rs"));
@@ -32,12 +32,20 @@ impl Context {
     /// `createContext`: `templates.json` whole or the map inside it, the rules
     /// or none, `expansions.json` whole or its bare `commands` map.
     pub fn new(templates: Option<Json>, rules: Option<Json>, expansions: Option<Json>) -> Context {
-        Context::shared(templates.map(Arc::new), rules.map(Arc::new), expansions.map(Arc::new))
+        Context::shared(
+            templates.map(Arc::new),
+            rules.map(Arc::new),
+            expansions.map(Arc::new),
+        )
     }
 
     /// `createContext` over stores already loaded: a store that needs no
     /// unwrapping is held as it is.
-    pub fn shared(templates: Option<Arc<Json>>, rules: Option<Arc<Json>>, expansions: Option<Arc<Json>>) -> Context {
+    pub fn shared(
+        templates: Option<Arc<Json>>,
+        rules: Option<Arc<Json>>,
+        expansions: Option<Arc<Json>>,
+    ) -> Context {
         let templates = match templates {
             Some(t) => match t.get("templates").filter(|m| m.truthy()) {
                 Some(m) => Arc::new(m.clone()),
@@ -48,15 +56,32 @@ impl Context {
         };
         let rules = rules.filter(|r| r.truthy());
         let expansions = expansions.filter(|e| e.truthy()).map(|e| {
-            if e.get("commands").is_some_and(Json::truthy) { e } else { Arc::new(Json::Obj(vec![("commands".into(), Arc::unwrap_or_clone(e))])) }
+            if e.get("commands").is_some_and(Json::truthy) {
+                e
+            } else {
+                Arc::new(Json::Obj(vec![(
+                    "commands".into(),
+                    Arc::unwrap_or_clone(e),
+                )]))
+            }
         });
-        Context { templates, rules, expansions }
+        Context {
+            templates,
+            rules,
+            expansions,
+        }
     }
 
     /// The stores this repository loads, made at build time.
     pub fn repository() -> &'static Context {
         static REPO: OnceLock<Context> = OnceLock::new();
-        REPO.get_or_init(|| Context::new(Some(templates_json()), Some(rules_json()), Some(expansions_store())))
+        REPO.get_or_init(|| {
+            Context::new(
+                Some(templates_json()),
+                Some(rules_json()),
+                Some(expansions_store()),
+            )
+        })
     }
 
     /// These stores with the ones `over` names laid on top, as the JS spreads
@@ -65,7 +90,10 @@ impl Context {
     /// `over` does not name stays. How a declared case brings its own stores
     /// (O5, EMS-002 ORD-0011).
     pub fn with(&self, over: &Json) -> Context {
-        let named = |k: &str| over.get(k).map(|v| (!matches!(v, Json::Null)).then(|| Arc::new(v.clone())));
+        let named = |k: &str| {
+            over.get(k)
+                .map(|v| (!matches!(v, Json::Null)).then(|| Arc::new(v.clone())))
+        };
         Context::shared(
             named("templates").unwrap_or_else(|| Some(Arc::clone(&self.templates))),
             named("rules").unwrap_or_else(|| self.rules.clone()),
@@ -92,7 +120,10 @@ impl Registered {
         NONE.get_or_init(Registered::default)
     }
     pub fn of(c: &Context) -> Registered {
-        Registered { rules: c.rules.clone(), expansions: c.expansions.clone() }
+        Registered {
+            rules: c.rules.clone(),
+            expansions: c.expansions.clone(),
+        }
     }
     pub fn repository() -> &'static Registered {
         static REPO: OnceLock<Registered> = OnceLock::new();
@@ -110,11 +141,16 @@ pub fn template_registry(ctx: &Context) -> &Json {
 
 /// The composition store, when it carries a `commands` table.
 pub fn expansion_registry(ctx: &Context) -> Option<&Json> {
-    ctx.expansions.as_deref().filter(|s| s.get("commands").is_some_and(Json::truthy))
+    ctx.expansions
+        .as_deref()
+        .filter(|s| s.get("commands").is_some_and(Json::truthy))
 }
 
 pub fn entry_of<'a>(name: &str, ctx: &'a Context) -> Option<&'a Json> {
-    expansion_registry(ctx)?.get("commands")?.get(&name.to_uppercase()).filter(|e| e.truthy())
+    expansion_registry(ctx)?
+        .get("commands")?
+        .get(&name.to_uppercase())
+        .filter(|e| e.truthy())
 }
 
 /// `"atom"`, `"composite"`, or none: no store, or outside the table.
@@ -154,7 +190,11 @@ pub fn atoms_of(name: &str, ctx: &Context) -> Option<Vec<String>> {
         }
         let mut next = seen.to_vec();
         next.push(u);
-        for d in e.and_then(|e| e.get("deps")).and_then(Json::arr).unwrap_or(&[]) {
+        for d in e
+            .and_then(|e| e.get("deps"))
+            .and_then(Json::arr)
+            .unwrap_or(&[])
+        {
             down(&js_string(d), commands, &next, hops + 1, out);
         }
     }
@@ -178,7 +218,11 @@ fn js_string(v: &Json) -> String {
 /// Derived, never transcribed.
 pub fn stands_alone(canonical: &str, ctx: &Context) -> bool {
     let u = canonical.to_uppercase();
-    if u.is_empty() || get(FRAMES, &u).is_some() || get(SLOTS, &u).is_some() || get(NAMED_STRUCT, &u).is_some() {
+    if u.is_empty()
+        || get(FRAMES, &u).is_some()
+        || get(SLOTS, &u).is_some()
+        || get(NAMED_STRUCT, &u).is_some()
+    {
         return false;
     }
     species_of(&u, ctx) == Some("atom")

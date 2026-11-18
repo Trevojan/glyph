@@ -14,13 +14,19 @@ pub fn crc32(bytes: &[u8]) -> u32 {
         for (n, slot) in t.iter_mut().enumerate() {
             let mut c = n as u32;
             for _ in 0..8 {
-                c = if c & 1 != 0 { 0xEDB8_8320 ^ (c >> 1) } else { c >> 1 };
+                c = if c & 1 != 0 {
+                    0xEDB8_8320 ^ (c >> 1)
+                } else {
+                    c >> 1
+                };
             }
             *slot = c;
         }
         t
     });
-    !bytes.iter().fold(!0u32, |c, &b| t[((c ^ b as u32) & 0xFF) as usize] ^ (c >> 8))
+    !bytes.iter().fold(!0u32, |c, &b| {
+        t[((c ^ b as u32) & 0xFF) as usize] ^ (c >> 8)
+    })
 }
 
 /// A moment's fields in UTC, as `getUTC*` answers them.
@@ -162,15 +168,27 @@ mod tests {
     #[test]
     fn the_moment_reads_as_a_js_date_reads_it() {
         assert_eq!(iso(0).as_deref(), Some("1970-01-01T00:00:00.000Z"));
-        assert_eq!(iso(1_790_386_200_000).as_deref(), Some("2026-09-26T01:30:00.000Z"));
-        assert_eq!(iso(951_782_400_123).as_deref(), Some("2000-02-29T00:00:00.123Z"));
+        assert_eq!(
+            iso(1_790_386_200_000).as_deref(),
+            Some("2026-09-26T01:30:00.000Z")
+        );
+        assert_eq!(
+            iso(951_782_400_123).as_deref(),
+            Some("2000-02-29T00:00:00.123Z")
+        );
         assert_eq!(iso(-1).as_deref(), Some("1969-12-31T23:59:59.999Z"));
-        assert_eq!(iso(253_402_300_800_000).as_deref(), Some("+010000-01-01T00:00:00.000Z"));
+        assert_eq!(
+            iso(253_402_300_800_000).as_deref(),
+            Some("+010000-01-01T00:00:00.000Z")
+        );
         assert_eq!(iso(MAX_MS + 1), None);
     }
 
     #[test]
     fn the_zip_time_is_utc() {
-        assert_eq!(dos(1_790_386_200_000), ((1 << 11) | (30 << 5), ((2026 - 1980) << 9) | (9 << 5) | 26));
+        assert_eq!(
+            dos(1_790_386_200_000),
+            ((1 << 11) | (30 << 5), ((2026 - 1980) << 9) | (9 << 5) | 26)
+        );
     }
 }

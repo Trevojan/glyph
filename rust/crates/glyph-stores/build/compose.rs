@@ -11,8 +11,17 @@
  * ---------------------------------------------------------------- */
 
 pub fn js_space(c: char) -> bool {
-    matches!(c, '\t' | '\n' | '\u{b}' | '\u{c}' | '\r' | ' ' | '\u{a0}' | '\u{1680}' | '\u{2000}'..='\u{200a}'
-        | '\u{2028}' | '\u{2029}' | '\u{202f}' | '\u{205f}' | '\u{3000}' | '\u{feff}')
+    matches!(
+        c,
+        '\t' | '\n' | '\u{b}' | '\u{c}' | '\r' | ' ' | '\u{a0}' | '\u{1680}' | '\u{2000}'
+            ..='\u{200a}'
+                | '\u{2028}'
+                | '\u{2029}'
+                | '\u{202f}'
+                | '\u{205f}'
+                | '\u{3000}'
+                | '\u{feff}'
+    )
 }
 pub fn js_trim(s: &str) -> &str {
     s.trim_matches(js_space)
@@ -110,13 +119,18 @@ pub struct Parsed {
 }
 
 pub fn read(text: &str) -> Parsed {
-    let mut p = Parsed { atoms: Vec::new(), composites: Vec::new() };
+    let mut p = Parsed {
+        atoms: Vec::new(),
+        composites: Vec::new(),
+    };
     for ln in text.split('\n') {
         let s = js_trim(ln.strip_suffix('\r').unwrap_or(ln));
         if s.is_empty() || s.starts_with('#') {
             continue;
         }
-        let Some((name, rhs)) = entry(s) else { continue };
+        let Some((name, rhs)) = entry(s) else {
+            continue;
+        };
         let (name, rhs) = (name.to_uppercase(), js_trim(&rhs).to_string());
         if rhs.eq_ignore_ascii_case("BASE") {
             p.atoms.push(name);
@@ -134,28 +148,50 @@ pub fn read(text: &str) -> Parsed {
 /// `analyse`, the part the store needs: the layer of every name, refusing a
 /// table with an undefined dependency or a cycle, as `build-templates.js` does.
 pub fn layers(p: &Parsed) -> Vec<(String, i64)> {
-    let mut def: Vec<(String, Vec<String>)> = p.atoms.iter().map(|a| (a.clone(), Vec::new())).collect();
+    let mut def: Vec<(String, Vec<String>)> =
+        p.atoms.iter().map(|a| (a.clone(), Vec::new())).collect();
     for (c, (_, deps)) in &p.composites {
         match def.iter_mut().find(|(k, _)| k == c) {
             Some(slot) => slot.1 = deps.clone(),
             None => def.push((c.clone(), deps.clone())),
         }
     }
-    let mut names: Vec<String> = def.iter().map(|(k, _)| k.clone())
-        .chain(def.iter().flat_map(|(_, d)| d.iter().cloned())).collect();
+    let mut names: Vec<String> = def
+        .iter()
+        .map(|(k, _)| k.clone())
+        .chain(def.iter().flat_map(|(_, d)| d.iter().cloned()))
+        .collect();
     names.sort_by(|a, b| a.encode_utf16().cmp(b.encode_utf16()));
     names.dedup();
-    let undefined: Vec<&String> = names.iter().filter(|n| !def.iter().any(|(k, _)| k == *n)).collect();
-    assert!(undefined.is_empty(), "expansions.txt does not close — undefined: {undefined:?}");
+    let undefined: Vec<&String> = names
+        .iter()
+        .filter(|n| !def.iter().any(|(k, _)| k == *n))
+        .collect();
+    assert!(
+        undefined.is_empty(),
+        "expansions.txt does not close — undefined: {undefined:?}"
+    );
 
-    fn layer(n: &str, def: &[(String, Vec<String>)], depth: &mut Vec<(String, i64)>, path: &mut Vec<String>) -> i64 {
+    fn layer(
+        n: &str,
+        def: &[(String, Vec<String>)],
+        depth: &mut Vec<(String, i64)>,
+        path: &mut Vec<String>,
+    ) -> i64 {
         if let Some((_, d)) = depth.iter().find(|(k, _)| k == n) {
             return *d;
         }
-        assert!(!path.iter().any(|p| p == n), "expansions.txt does not close — a cycle through {n}");
+        assert!(
+            !path.iter().any(|p| p == n),
+            "expansions.txt does not close — a cycle through {n}"
+        );
         path.push(n.to_string());
         let ds = &def.iter().find(|(k, _)| k == n).unwrap().1;
-        let d = if ds.is_empty() { 0 } else { 1 + ds.iter().map(|x| layer(x, def, depth, path)).max().unwrap() };
+        let d = if ds.is_empty() {
+            0
+        } else {
+            1 + ds.iter().map(|x| layer(x, def, depth, path)).max().unwrap()
+        };
         path.pop();
         depth.push((n.to_string(), d));
         d
@@ -177,7 +213,9 @@ pub fn gloss_line(line: &str) -> Option<(String, Option<String>, String)> {
     let close = rest.find('`')?;
     let name = &rest[..close];
     let mut ch = name.chars();
-    if !ch.next().is_some_and(|c| c.is_ascii_uppercase()) || !ch.all(|c| c.is_ascii_uppercase() || c.is_ascii_digit() || c == '_') {
+    if !ch.next().is_some_and(|c| c.is_ascii_uppercase())
+        || !ch.all(|c| c.is_ascii_uppercase() || c.is_ascii_digit() || c == '_')
+    {
         return None;
     }
     let mut rest = rest[close + 1..].trim_start_matches(js_space);
@@ -202,7 +240,11 @@ pub fn strip_md(s: &str) -> String {
     let mut s = s.to_string();
     let tail = s.trim_end_matches(js_space).len();
     if s[..tail].ends_with(")*") {
-        if let Some(p) = s.match_indices("*(").map(|(p, _)| p).find(|&p| p + 2 <= tail - 2) {
+        if let Some(p) = s
+            .match_indices("*(")
+            .map(|(p, _)| p)
+            .find(|&p| p + 2 <= tail - 2)
+        {
             s.truncate(p);
         }
     }
@@ -215,20 +257,34 @@ pub struct Glossary {
 }
 
 pub fn read_glossary(text: &str) -> Glossary {
-    let mut g = Glossary { defs: Vec::new(), spelled: Vec::new() };
-    let put = |m: &mut Vec<(String, String)>, k: String, v: String| match m.iter_mut().find(|(x, _)| *x == k) {
+    let mut g = Glossary {
+        defs: Vec::new(),
+        spelled: Vec::new(),
+    };
+    let put = |m: &mut Vec<(String, String)>, k: String, v: String| match m
+        .iter_mut()
+        .find(|(x, _)| *x == k)
+    {
         Some(slot) => slot.1 = v,
         None => m.push((k, v)),
     };
     for ln in text.split('\n') {
-        let Some((name, spelled, body)) = gloss_line(js_trim(ln.strip_suffix('\r').unwrap_or(ln))) else { continue };
+        let Some((name, spelled, body)) = gloss_line(js_trim(ln.strip_suffix('\r').unwrap_or(ln)))
+        else {
+            continue;
+        };
         if let Some(f) = spelled.filter(|f| !f.is_empty()) {
-            put(&mut g.spelled, name.clone(), f.chars().filter(|c| !js_space(*c)).collect());
+            put(
+                &mut g.spelled,
+                name.clone(),
+                f.chars().filter(|c| !js_space(*c)).collect(),
+            );
         }
         let body = strip_md(&body);
         let dot = body.find(". ");
         let head = dot.filter(|&d| d > 0).map(|d| &body[..d]).unwrap_or("");
-        let is_label = !head.is_empty() && head.split(js_space).filter(|w| !w.is_empty()).count() <= 3;
+        let is_label =
+            !head.is_empty() && head.split(js_space).filter(|w| !w.is_empty()).count() <= 3;
         let def = if is_label {
             js_trim(&body[dot.unwrap() + 2..]).to_string()
         } else {
@@ -238,4 +294,3 @@ pub fn read_glossary(text: &str) -> Glossary {
     }
     g
 }
-

@@ -5,8 +5,8 @@
 #[path = "../../../testkit/oracle.rs"]
 mod oracle;
 
-use glyph_lex::{tokenize, Token};
 use glyph_json::{self as json, Json};
+use glyph_lex::{Token, tokenize};
 use oracle::Must;
 
 pub fn token_json(t: &Token) -> Json {
@@ -42,8 +42,12 @@ fn the_tokens_equal_the_oracle_on_every_source() {
         if &got != want {
             let (g, w) = (json::stringify(&got), json::stringify(want));
             let at = g.bytes().zip(w.bytes()).take_while(|(a, b)| a == b).count();
-            panic!("{}: differs at byte {at}\n  rust: {}\n  js:   {}", case.s("id"),
-                   &g[at.saturating_sub(80)..(at + 80).min(g.len())], &w[at.saturating_sub(80)..(at + 80).min(w.len())]);
+            panic!(
+                "{}: differs at byte {at}\n  rust: {}\n  js:   {}",
+                case.s("id"),
+                &g[at.saturating_sub(80)..(at + 80).min(g.len())],
+                &w[at.saturating_sub(80)..(at + 80).min(w.len())]
+            );
         }
         tokens += want.arr().map_or(0, |a| a.len());
     }
@@ -52,9 +56,9 @@ fn the_tokens_equal_the_oracle_on_every_source() {
 }
 
 /* The 114 sources leave most of the lexer unread — seven mutations lived
-   through them — so `lexer.json` holds the JS's tokens for every string of up
-   to 4096 units the case files hold, and for probes written one per branch,
-   characters outside the BMP among them. */
+through them — so `lexer.json` holds the JS's tokens for every string of up
+to 4096 units the case files hold, and for probes written one per branch,
+characters outside the BMP among them. */
 #[test]
 fn the_tokens_equal_the_js_on_every_string_and_probe() {
     let sources = oracle::module("lexer").a("tokenize");
@@ -65,10 +69,13 @@ fn the_tokens_equal_the_js_on_every_string_and_probe() {
         let src = s[0].str().unwrap();
         let got = Json::Arr(tokenize(src).iter().map(token_json).collect());
         /* a source O4's second residual reaches takes the tokens the decision
-           gives it, and the JS's answer there must differ from them */
+        gives it, and the JS's answer there must differ from them */
         let want = match oracle::known::quotes(src) {
             Some(decided) => {
-                assert_ne!(decided, s[1], "{src:?}: named as a known difference, and the JS already answers it");
+                assert_ne!(
+                    decided, s[1],
+                    "{src:?}: named as a known difference, and the JS already answers it"
+                );
                 named += 1;
                 decided
             }
@@ -77,15 +84,26 @@ fn the_tokens_equal_the_js_on_every_string_and_probe() {
         if got != want {
             let (g, w) = (json::stringify(&got), json::stringify(&want));
             let at = g.bytes().zip(w.bytes()).take_while(|(a, b)| a == b).count();
-            panic!("{:?}: differs at byte {at}\n  rust: {}\n  js:   {}", src.chars().take(60).collect::<String>(),
-                   &g[at.saturating_sub(80)..(at + 80).min(g.len())], &w[at.saturating_sub(80)..(at + 80).min(w.len())]);
+            panic!(
+                "{:?}: differs at byte {at}\n  rust: {}\n  js:   {}",
+                src.chars().take(60).collect::<String>(),
+                &g[at.saturating_sub(80)..(at + 80).min(g.len())],
+                &w[at.saturating_sub(80)..(at + 80).min(w.len())]
+            );
         }
     }
-    assert_eq!(named, oracle::known::QUOTES.len(), "a source named for O4's second residual is not in lexer.json");
+    assert_eq!(
+        named,
+        oracle::known::QUOTES.len(),
+        "a source named for O4's second residual is not in lexer.json"
+    );
 }
 
 fn class_json(c: &glyph_lex::Class) -> Json {
-    let mut kv: Vec<(String, Json)> = vec![("tier".into(), Json::Str(c.tier.into())), ("canonical".into(), Json::Str(c.canonical.clone()))];
+    let mut kv: Vec<(String, Json)> = vec![
+        ("tier".into(), Json::Str(c.tier.into())),
+        ("canonical".into(), Json::Str(c.canonical.clone())),
+    ];
     if let Some(a) = c.alias {
         kv.push(("alias".into(), Json::Bool(a)));
     }
@@ -114,14 +132,27 @@ fn classify_and_suggest_equal_the_js() {
     for c in calls {
         let c = c.arr().unwrap();
         let name = c[0].str().unwrap();
-        assert_eq!(class_json(&glyph_lex::classify(name, ctx, true)), c[1], "classify({name:?})");
-        assert_eq!(class_json(&glyph_lex::classify(name, ctx, false)), c[2], "classify({name:?}, session: false)");
+        assert_eq!(
+            class_json(&glyph_lex::classify(name, ctx, true)),
+            c[1],
+            "classify({name:?})"
+        );
+        assert_eq!(
+            class_json(&glyph_lex::classify(name, ctx, false)),
+            c[2],
+            "classify({name:?}, session: false)"
+        );
     }
     for c in oracle::module("lexer").a("suggest") {
         let c = c.arr().unwrap();
         let name = c[0].str().unwrap();
-        let got = glyph_lex::suggest(name).map_or(Json::Null, |s| Json::Obj(vec![
-            ("name".into(), Json::Str(s.name.into())), ("dist".into(), Json::Num(0.0)), ("how".into(), Json::Str(s.how.into()))]));
+        let got = glyph_lex::suggest(name).map_or(Json::Null, |s| {
+            Json::Obj(vec![
+                ("name".into(), Json::Str(s.name.into())),
+                ("dist".into(), Json::Num(0.0)),
+                ("how".into(), Json::Str(s.how.into())),
+            ])
+        });
         assert_eq!(got, c[1], "suggest({name:?})");
     }
 }

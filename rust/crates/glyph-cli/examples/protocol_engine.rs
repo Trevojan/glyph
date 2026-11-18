@@ -9,7 +9,10 @@ use std::io::{BufRead, Write};
 use std::time::Instant;
 
 fn main() {
-    let rounds: usize = std::env::args().nth(1).and_then(|r| r.parse().ok()).unwrap_or(5);
+    let rounds: usize = std::env::args()
+        .nth(1)
+        .and_then(|r| r.parse().ok())
+        .unwrap_or(5);
     let mut out = std::io::stdout().lock();
     for line in std::io::stdin().lock().lines() {
         let Ok(line) = line else { break };
@@ -22,7 +25,10 @@ fn main() {
             })
             .collect();
         ns.sort_unstable();
-        if writeln!(out, "{}", ns[ns.len() / 2]).and_then(|_| out.flush()).is_err() {
+        if writeln!(out, "{}", ns[ns.len() / 2])
+            .and_then(|_| out.flush())
+            .is_err()
+        {
             break;
         }
     }

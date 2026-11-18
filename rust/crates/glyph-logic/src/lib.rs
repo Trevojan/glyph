@@ -49,8 +49,17 @@ pub struct Gap {
  * ---------------------------------------------------------------- */
 
 fn space(c: char) -> bool {
-    matches!(c, '\t' | '\n' | '\u{b}' | '\u{c}' | '\r' | ' ' | '\u{a0}' | '\u{1680}' | '\u{2000}'..='\u{200a}'
-        | '\u{2028}' | '\u{2029}' | '\u{202f}' | '\u{205f}' | '\u{3000}' | '\u{feff}')
+    matches!(
+        c,
+        '\t' | '\n' | '\u{b}' | '\u{c}' | '\r' | ' ' | '\u{a0}' | '\u{1680}' | '\u{2000}'
+            ..='\u{200a}'
+                | '\u{2028}'
+                | '\u{2029}'
+                | '\u{202f}'
+                | '\u{205f}'
+                | '\u{3000}'
+                | '\u{feff}'
+    )
 }
 fn word(c: char) -> bool {
     c.is_ascii_alphanumeric() || c == '_'
@@ -83,7 +92,11 @@ fn digits(s: &[char], mut i: usize) -> usize {
 /// `word` at `i`, ASCII case-insensitive (the `/i` of a regex without `u`).
 fn ci(s: &[char], i: usize, word: &str) -> Option<usize> {
     let w: Vec<char> = word.chars().collect();
-    (i + w.len() <= s.len() && w.iter().enumerate().all(|(k, c)| s[i + k].eq_ignore_ascii_case(c))).then_some(i + w.len())
+    (i + w.len() <= s.len()
+        && w.iter()
+            .enumerate()
+            .all(|(k, c)| s[i + k].eq_ignore_ascii_case(c)))
+    .then_some(i + w.len())
 }
 /// `[A-Za-z_][\w.]*` at `i`: its end.
 fn ident_dot(s: &[char], i: usize) -> Option<usize> {
@@ -100,7 +113,11 @@ fn ident_dot(s: &[char], i: usize) -> Option<usize> {
 /// `(^|[^\w])`, then `rest` at the position after it: the alternatives in the
 /// JS's order — `^` only at 0, then one non-word character — and the first that
 /// lets `rest` match. Answers the character taken, the end, and `rest`'s answer.
-fn lead<T>(s: &[char], i: usize, rest: impl Fn(usize) -> Option<(usize, T)>) -> Option<(Option<char>, usize, T)> {
+fn lead<T>(
+    s: &[char],
+    i: usize,
+    rest: impl Fn(usize) -> Option<(usize, T)>,
+) -> Option<(Option<char>, usize, T)> {
     if i == 0 {
         if let Some((end, t)) = rest(0) {
             return Some((None, end, t));
@@ -155,7 +172,11 @@ fn keep(s: &[char], i: usize) -> Option<(usize, String)> {
 
 /// `name\s*\[([^\]]*)\]` at `i`, `name` case-insensitive or exact.
 fn bracketed(s: &[char], i: usize, name: &str, insensitive: bool) -> Option<(usize, String)> {
-    let j = if insensitive { ci(s, i, name)? } else { (s.get(i) == name.chars().next().as_ref()).then_some(i + 1)? };
+    let j = if insensitive {
+        ci(s, i, name)?
+    } else {
+        (s.get(i) == name.chars().next().as_ref()).then_some(i + 1)?
+    };
     let o = ws(s, j);
     if s.get(o) != Some(&'[') {
         return None;
@@ -165,8 +186,18 @@ fn bracketed(s: &[char], i: usize, name: &str, insensitive: bool) -> Option<(usi
 }
 
 /// `name\s+([A-Za-z_][\w.]*)` (`plus`) or `name\s*(…)` at `i`.
-fn named(s: &[char], i: usize, name: &str, insensitive: bool, plus: bool) -> Option<(usize, String)> {
-    let j = if insensitive { ci(s, i, name)? } else { (s.get(i) == name.chars().next().as_ref()).then_some(i + 1)? };
+fn named(
+    s: &[char],
+    i: usize,
+    name: &str,
+    insensitive: bool,
+    plus: bool,
+) -> Option<(usize, String)> {
+    let j = if insensitive {
+        ci(s, i, name)?
+    } else {
+        (s.get(i) == name.chars().next().as_ref()).then_some(i + 1)?
+    };
     let k = ws(s, j);
     if plus && k == j {
         return None;
@@ -198,10 +229,21 @@ pub fn expand_expr(raw: &str) -> String {
             let m0 = ws(s, e);
             let m = digits(s, m0);
             Some((m, (nd, fc, kk, st(&s[m0..m]))))
-        }).map(|(c, end, (nd, fc, kk, mm))| {
+        })
+        .map(|(c, end, (nd, fc, kk, mm))| {
             let keep = if mm.is_empty() { "1".to_string() } else { mm };
-            let side = if kk.eq_ignore_ascii_case("kh") { " maior(es)" } else { " menor(es)" };
-            (end, format!("{}rola {nd} dado(s) de {fc} faces, mantém o(s) {keep}{side}", p(c)))
+            let side = if kk.eq_ignore_ascii_case("kh") {
+                " maior(es)"
+            } else {
+                " menor(es)"
+            };
+            (
+                end,
+                format!(
+                    "{}rola {nd} dado(s) de {fc} faces, mantém o(s) {keep}{side}",
+                    p(c)
+                ),
+            )
         })
     });
     s = replace_all(&s, |s, i| {
@@ -209,16 +251,28 @@ pub fn expand_expr(raw: &str) -> String {
             .map(|(c, end, (nd, fc))| (end, format!("{}rola {nd} dado(s) de {fc} faces", p(c))))
     });
     for (name, f) in [("pb", "floor"), ("pc", "ceil"), ("ar", "round")] {
-        s = replace_all(&s, |s, i| lead(s, i, |q| bracketed(s, q, name, true)).map(|(c, end, x)| (end, format!("{}{f}({x})", p(c)))));
+        s = replace_all(&s, |s, i| {
+            lead(s, i, |q| bracketed(s, q, name, true))
+                .map(|(c, end, x)| (end, format!("{}{f}({x})", p(c))))
+        });
     }
     for (name, f) in [("pb", "floor"), ("pc", "ceil"), ("ar", "round")] {
-        s = replace_all(&s, |s, i| lead(s, i, |q| named(s, q, name, true, true)).map(|(c, end, x)| (end, format!("{}{f}({x})", p(c)))));
+        s = replace_all(&s, |s, i| {
+            lead(s, i, |q| named(s, q, name, true, true))
+                .map(|(c, end, x)| (end, format!("{}{f}({x})", p(c))))
+        });
     }
     for (name, f) in [("^", "ceil"), ("_", "floor"), ("~", "round")] {
-        s = replace_all(&s, |s, i| lead(s, i, |q| bracketed(s, q, name, false)).map(|(c, end, x)| (end, format!("{}{f}({x})", p(c)))));
+        s = replace_all(&s, |s, i| {
+            lead(s, i, |q| bracketed(s, q, name, false))
+                .map(|(c, end, x)| (end, format!("{}{f}({x})", p(c))))
+        });
     }
     for (name, f) in [("^", "ceil"), ("_", "floor"), ("~", "round")] {
-        s = replace_all(&s, |s, i| lead(s, i, |q| named(s, q, name, false, false)).map(|(c, end, x)| (end, format!("{}{f}({x})", p(c)))));
+        s = replace_all(&s, |s, i| {
+            lead(s, i, |q| named(s, q, name, false, false))
+                .map(|(c, end, x)| (end, format!("{}{f}({x})", p(c))))
+        });
     }
     for (sign, word) in [('<', "máximo"), ('>', "mínimo")] {
         if let Some((at, n)) = postfix(&s, sign) {
@@ -233,10 +287,18 @@ pub fn expand_expr(raw: &str) -> String {
     });
     s = replace_all(&s, |s, i| {
         let bang = |q: usize| (s.get(q) == Some(&'!')).then(|| (ws(s, q + 1), ()));
-        let first = if i == 0 { bang(0).map(|(e, _)| (None, e)) } else { None };
-        first.or_else(|| {
-            (i < s.len() && !word(s[i]) && !"!<>=".contains(s[i])).then(|| bang(i + 1).map(|(e, _)| (Some(s[i]), e))).flatten()
-        }).map(|(c, end)| (end, format!("{}não ", p(c))))
+        let first = if i == 0 {
+            bang(0).map(|(e, _)| (None, e))
+        } else {
+            None
+        };
+        first
+            .or_else(|| {
+                (i < s.len() && !word(s[i]) && !"!<>=".contains(s[i]))
+                    .then(|| bang(i + 1).map(|(e, _)| (Some(s[i]), e)))
+                    .flatten()
+            })
+            .map(|(c, end)| (end, format!("{}não ", p(c))))
     });
     let t = trim(&st(&s));
     let mut out = String::new();
@@ -255,8 +317,11 @@ pub fn expand_expr(raw: &str) -> String {
     out
 }
 
-const RESERVED: [&str; 30] = ["and", "or", "not", "if", "then", "else", "true", "false", "min", "max", "abs", "sum",
-    "floor", "ceil", "round", "sem", "se", "senao", "entao", "no", "de", "do", "da", "pb", "pc", "ar", "kh", "kl", "e", "ou"];
+const RESERVED: [&str; 30] = [
+    "and", "or", "not", "if", "then", "else", "true", "false", "min", "max", "abs", "sum", "floor",
+    "ceil", "round", "sem", "se", "senao", "entao", "no", "de", "do", "da", "pb", "pc", "ar", "kh",
+    "kl", "e", "ou",
+];
 
 /// `freeVars`: the names a rule needs from outside, in the order they appear.
 pub fn free_vars(raw: &str) -> Vec<String> {
@@ -266,11 +331,15 @@ pub fn free_vars(raw: &str) -> Vec<String> {
             let (e, _, _) = dice(s, q)?;
             let e = ws(s, e);
             Some((keep(s, e).map_or(e, |(k, _)| digits(s, ws(s, k))), ()))
-        }).map(|(_, end, _)| (end, " ".to_string()))
+        })
+        .map(|(_, end, _)| (end, " ".to_string()))
     });
     for q in ['`', '\''] {
         s = replace_all(&s, |s, i| {
-            (s[i] == q).then(|| (i + 1..s.len()).find(|&k| s[k] == q)).flatten().map(|c| (c + 1, " ".to_string()))
+            (s[i] == q)
+                .then(|| (i + 1..s.len()).find(|&k| s[k] == q))
+                .flatten()
+                .map(|c| (c + 1, " ".to_string()))
         });
     }
     s = replace_all(&s, |s, i| {
@@ -281,9 +350,23 @@ pub fn free_vars(raw: &str) -> Vec<String> {
         (s[i] == '.' && j > i + 1).then(|| (j, " ".to_string()))
     });
     s = replace_all(&s, |s, i| {
-        let mark = |q: usize| (q < s.len() && "_^~".contains(s[q]) && s.get(q + 1).is_some_and(|c| *c == '[' || space(*c))).then_some(q + 1);
-        let first = if i == 0 { mark(0).map(|e| (None, e)) } else { None };
-        first.or_else(|| (i < s.len() && !word(s[i])).then(|| mark(i + 1).map(|e| (Some(s[i]), e))).flatten())
+        let mark = |q: usize| {
+            (q < s.len()
+                && "_^~".contains(s[q])
+                && s.get(q + 1).is_some_and(|c| *c == '[' || space(*c)))
+            .then_some(q + 1)
+        };
+        let first = if i == 0 {
+            mark(0).map(|e| (None, e))
+        } else {
+            None
+        };
+        first
+            .or_else(|| {
+                (i < s.len() && !word(s[i]))
+                    .then(|| mark(i + 1).map(|e| (Some(s[i]), e)))
+                    .flatten()
+            })
             .map(|(c, end)| (end, format!("{} ", p(c))))
     });
     s = replace_all(&s, |s, i| {
@@ -292,12 +375,15 @@ pub fn free_vars(raw: &str) -> Vec<String> {
         }
         let a = digits(s, i);
         let boundary = |e: usize| e == s.len() || !word(s[e]);
-        let frac = (s.get(a) == Some(&'.')).then(|| digits(s, a + 1)).filter(|&b| b > a + 1);
+        let frac = (s.get(a) == Some(&'.'))
+            .then(|| digits(s, a + 1))
+            .filter(|&b| b > a + 1);
         match frac {
             Some(b) if boundary(b) => Some(b),
             _ if boundary(a) => Some(a),
             _ => None,
-        }.map(|e| (e, " ".to_string()))
+        }
+        .map(|e| (e, " ".to_string()))
     });
     let (mut out, mut seen): (Vec<String>, Vec<String>) = (Vec::new(), Vec::new());
     let mut i = 0;
@@ -313,7 +399,12 @@ pub fn free_vars(raw: &str) -> Vec<String> {
         let w = st(&s[a..i]);
         let low = w.to_ascii_lowercase();
         /* `seen` is a plain object: Object.prototype has these two already */
-        if w == "_" || RESERVED.contains(&low.as_str()) || seen.contains(&low) || low == "constructor" || low == "__proto__" {
+        if w == "_"
+            || RESERVED.contains(&low.as_str())
+            || seen.contains(&low)
+            || low == "constructor"
+            || low == "__proto__"
+        {
             continue;
         }
         seen.push(low);
@@ -379,7 +470,8 @@ pub fn parse_logic(name: &str, body: &str) -> Logic {
     let mut defined: Vec<String> = Vec::new();
     let mut cap_noted = false;
     /* `defined` is a plain object: Object.prototype has these two already */
-    let is_defined = |d: &[String], n: &str| d.iter().any(|x| x == n) || n == "constructor" || n == "__proto__";
+    let is_defined =
+        |d: &[String], n: &str| d.iter().any(|x| x == n) || n == "constructor" || n == "__proto__";
     for (ln, raw) in body.split('\n').enumerate() {
         let raw = raw.strip_suffix('\r').unwrap_or(raw);
         let line = trim(raw);
@@ -387,14 +479,27 @@ pub fn parse_logic(name: &str, body: &str) -> Logic {
             continue;
         }
         let l: Vec<char> = line.chars().collect();
-        let mut rule = Rule { line: ln + 1, source: line.clone(), kind: "expr", name: None, cond: None, then: None,
-                              expr: String::new(), reads: String::new(), uses: Vec::new() };
+        let mut rule = Rule {
+            line: ln + 1,
+            source: line.clone(),
+            kind: "expr",
+            name: None,
+            cond: None,
+            then: None,
+            expr: String::new(),
+            reads: String::new(),
+            uses: Vec::new(),
+        };
         if let Some((n, expr)) = let_rule(&l) {
             rule.kind = "let";
             rule.expr = trim(&expr);
             if is_defined(&defined, &n) {
-                gaps.push(Gap { sev: "ask", lab: "conflito", code: "DuplicateBinding",
-                                msg: format!("<code>{}</code> definido 2x. Qual vale?", esc(&n)) });
+                gaps.push(Gap {
+                    sev: "ask",
+                    lab: "conflito",
+                    code: "DuplicateBinding",
+                    msg: format!("<code>{}</code> definido 2x. Qual vale?", esc(&n)),
+                });
             }
             defined.push(n.clone());
             rule.name = Some(n);
@@ -404,21 +509,41 @@ pub fn parse_logic(name: &str, body: &str) -> Logic {
             rule.then = Some(trim(&then));
             rule.expr = trim(&cond);
         } else if line.starts_with('!') || line.starts_with('?') {
-            rule.kind = if line.starts_with('!') { "unless" } else { "when" };
+            rule.kind = if line.starts_with('!') {
+                "unless"
+            } else {
+                "when"
+            };
             let cond = trim(&st(&l[1..]));
             rule.cond = Some(cond.clone());
             rule.expr = cond;
-            gaps.push(Gap { sev: "ask", lab: "sem então", code: "MissingConsequent",
-                            msg: format!("<code>{}</code>: consequência? Use <code>-&gt;</code>.", esc(&line)) });
+            gaps.push(Gap {
+                sev: "ask",
+                lab: "sem então",
+                code: "MissingConsequent",
+                msg: format!(
+                    "<code>{}</code>: consequência? Use <code>-&gt;</code>.",
+                    esc(&line)
+                ),
+            });
         } else {
             rule.expr = line.clone();
         }
         if rule.expr.is_empty() {
-            gaps.push(Gap { sev: "fix", lab: "vazio", code: "EmptyLogicLine", msg: format!("linha {} sem expressão.", rule.line) });
+            gaps.push(Gap {
+                sev: "fix",
+                lab: "vazio",
+                code: "EmptyLogicLine",
+                msg: format!("linha {} sem expressão.", rule.line),
+            });
             continue;
         }
         let then = rule.then.clone().filter(|t| !t.is_empty());
-        rule.reads = expand_expr(&rule.expr) + &then.as_ref().map(|t| format!(" → então {}", expand_expr(t))).unwrap_or_default();
+        rule.reads = expand_expr(&rule.expr)
+            + &then
+                .as_ref()
+                .map(|t| format!(" → então {}", expand_expr(t)))
+                .unwrap_or_default();
         rule.uses = free_vars(&rule.expr);
         if let Some(t) = then.filter(|t| t.contains('=')) {
             rule.uses.extend(free_vars(&t));
@@ -439,9 +564,24 @@ pub fn parse_logic(name: &str, body: &str) -> Logic {
         }
     }
     if !missing.is_empty() {
-        let names: Vec<String> = missing.iter().map(|v| format!("<code>{}</code>", esc(v))).collect();
-        gaps.push(Gap { sev: "ask", lab: "undefined", code: "UndefinedVariable",
-                        msg: format!("{} used and never defined. External input, or a missing line?", names.join(", ")) });
+        let names: Vec<String> = missing
+            .iter()
+            .map(|v| format!("<code>{}</code>", esc(v)))
+            .collect();
+        gaps.push(Gap {
+            sev: "ask",
+            lab: "undefined",
+            code: "UndefinedVariable",
+            msg: format!(
+                "{} used and never defined. External input, or a missing line?",
+                names.join(", ")
+            ),
+        });
     }
-    Logic { name: name.to_string(), rules, gaps, missing }
+    Logic {
+        name: name.to_string(),
+        rules,
+        gaps,
+        missing,
+    }
 }

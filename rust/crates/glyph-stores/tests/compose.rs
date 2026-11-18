@@ -2,10 +2,10 @@
 //! repository's own formulas: `depsOf` over every string of up to 256 units the
 //! case files hold (`stores.json`), since no formula carries a return token now.
 
-#[path = "../../../testkit/oracle.rs"]
-mod oracle;
 #[path = "../build/compose.rs"]
 mod compose;
+#[path = "../../../testkit/oracle.rs"]
+mod oracle;
 
 use oracle::Must;
 
@@ -15,7 +15,17 @@ fn deps_of_equals_the_js() {
     assert!(!calls.is_empty(), "stores.json: no depsOf calls");
     for c in calls {
         let c = c.arr().unwrap();
-        let want: Vec<&str> = c[1].arr().unwrap().iter().map(|d| d.str().unwrap()).collect();
-        assert_eq!(compose::deps_of(c[0].str().unwrap()), want, "depsOf({:?})", c[0].str().unwrap());
+        let want: Vec<&str> = c[1]
+            .arr()
+            .unwrap()
+            .iter()
+            .map(|d| d.str().unwrap())
+            .collect();
+        assert_eq!(
+            compose::deps_of(c[0].str().unwrap()),
+            want,
+            "depsOf({:?})",
+            c[0].str().unwrap()
+        );
     }
 }
