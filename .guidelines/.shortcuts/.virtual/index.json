@@ -4147,14 +4147,14 @@
     },
     ".guidelines/.shortcuts/README.md": {
       "nodes": [
-        ["n1153", "", 0, 11237, 1, 88, "d9fba4f4f99345b0", "", ""],
-        ["n1154", "atalhos--comece-por-aqui", 0, 11237, 1, 88, "d9fba4f4f99345b0", "d3dc4a28f81e6800", "n1153"],
-        ["n1155", "onde-estou", 442, 5231, 11, 13, "bb33c076f30c2a00", "9b31464061d1fc00", "n1154"],
-        ["n1156", "os-sete-eixos", 5231, 6471, 24, 12, "c7a610b8cc345700", "ea685f36d51a4300", "n1154"],
-        ["n1157", "o-mapa-do-motor-em-cinco-linhas", 6471, 7416, 36, 12, "fef2a4f026f43a00", "b0d1ba46f3be8000", "n1154"],
-        ["n1158", "os-documentos-que-mais-se-consulta", 7416, 9501, 48, 19, "8f437238ec9aa800", "1d1dc5788fc11000", "n1154"],
-        ["n1159", "os-outros-documentos", 9501, 10889, 67, 16, "64d35eac63761200", "35cfc74863da0e40", "n1154"],
-        ["n1160", "vocabulário-do-projeto", 10889, 11237, 83, 6, "b895f5b69b891000", "f6cb060882a72600", "n1154"]
+        ["n1153", "", 0, 11928, 1, 88, "650e9f58af1dc200", "", ""],
+        ["n1154", "atalhos--comece-por-aqui", 0, 11928, 1, 88, "650e9f58af1dc200", "979f938876b76400", "n1153"],
+        ["n1155", "onde-estou", 442, 5922, 11, 13, "0bd0629094a26200", "8f8bb08ef4da6000", "n1154"],
+        ["n1156", "os-sete-eixos", 5922, 7162, 24, 12, "c7a610b8cc345700", "ea685f36d51a4300", "n1154"],
+        ["n1157", "o-mapa-do-motor-em-cinco-linhas", 7162, 8107, 36, 12, "fef2a4f026f43a00", "b0d1ba46f3be8000", "n1154"],
+        ["n1158", "os-documentos-que-mais-se-consulta", 8107, 10192, 48, 19, "8f437238ec9aa800", "1d1dc5788fc11000", "n1154"],
+        ["n1159", "os-outros-documentos", 10192, 11580, 67, 16, "64d35eac63761200", "35cfc74863da0e40", "n1154"],
+        ["n1160", "vocabulário-do-projeto", 11580, 11928, 83, 6, "b895f5b69b891000", "f6cb060882a72600", "n1154"]
       ]
     },
     ".guidelines/.shortcuts/regency.json": {
