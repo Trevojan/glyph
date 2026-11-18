@@ -4070,8 +4070,8 @@
     },
     ".guidelines/.plan/README.md": {
       "nodes": [
-        ["n1142", "", 0, 30217, 1, 377, "4e0006fe5bc76e00", "", ""],
-        ["n1143", "plano--o-que-vem-a-seguir", 0, 30217, 1, 377, "4e0006fe5bc76e00", "69dde9a011bccb00", "n1142"],
+        ["n1142", "", 0, 29958, 1, 376, "a0e8897055675c00", "", ""],
+        ["n1143", "plano--o-que-vem-a-seguir", 0, 29958, 1, 376, "a0e8897055675c00", "51db533caa567000", "n1142"],
         ["n1144", "autorizado-pelo-regente-ainda-não-construído", 217, 19312, 7, 252, "330a65d6a1a0ec80", "36272a30179e7440", "n1143"],
         ["n1870", "0-caminhos-virtuais--guidelinesshortcutsvirtual--construído-as-sete-camadas-pela-ems-002", 269, 5363, 9, 81, "da71f09e759c7600", "cb44836834464e80", "n1144"],
         ["n1146", "1-section-de-cabeçalho-irmã-do-schema--decidido-faltando-fazer", 5363, 6025, 90, 13, "29a759a8aecd1500", "f13677d632797d00", "n1144"],
@@ -4080,14 +4080,14 @@
         ["n1149", "5-o-glyph-em-rust--a-série-ems-001", 9365, 19312, 133, 126, "3fa936706f3b9200", "8a8dafe845ce8080", "n1144"],
         ["n3146", "a-trilha-até-o-explorer-final", 12002, 16492, 174, 43, "d2912240c77ff800", "ca3293089ba26000", "n1149"],
         ["n3147", "a-fila-de-antes-do-portão", 16492, 19312, 217, 42, "999bd07c03897800", "e948f71604943200", "n1149"],
-        ["n1150", "aberto-esperando-o-regente", 19312, 26470, 259, 64, "b7766a5e06ce1c00", "4159d326e425cc80", "n1143"],
+        ["n1150", "aberto-esperando-o-regente", 19312, 26211, 259, 63, "5fabad184b56a800", "79e0f3fec2df3800", "n1143"],
         ["n3039", "os-dois-itens-dos-caminhos-virtuais", 19912, 20208, 272, 7, "af5baff8e545a880", "2661b508a96ce000", "n1150"],
         ["n3040", "duas-medições-devidas-e-nenhuma-tem-instrumento-escrito", 20208, 21560, 279, 10, "4da84a305b4b3400", "dec23cd845112e00", "n1150"],
         ["n3177", "a-e-06-ratificada-esperando-o-esquema-de-item", 21560, 22082, 289, 9, "b4a25f6864002a00", "95251e4e0df0ce00", "n1150"],
-        ["n3043", "pendências-de-registro-sem-casa-hoje", 22082, 23838, 298, 15, "0132becececa0600", "301ab574723dc900", "n1150"],
-        ["n3044", "o-resto", 23838, 26470, 313, 10, "eeae19180759b400", "d8188b009a941d00", "n1150"],
-        ["n1151", "adiado-por-decisão-não-por-esquecimento", 26470, 29659, 323, 46, "30a1687e7d96c580", "bfbcde2e1b43a900", "n1143"],
-        ["n3045", "reaberto-por-decisão", 29659, 30217, 369, 9, "b4a3f77e80503400", "079763f80c948a00", "n1143"]
+        ["n3043", "pendências-de-registro-sem-casa-hoje", 22082, 23579, 298, 14, "ccb8acc8d8572260", "6403d496a7efa800", "n1150"],
+        ["n3044", "o-resto", 23579, 26211, 312, 10, "eeae19180759b400", "d8188b009a941d00", "n1150"],
+        ["n1151", "adiado-por-decisão-não-por-esquecimento", 26211, 29400, 322, 46, "30a1687e7d96c580", "bfbcde2e1b43a900", "n1143"],
+        ["n3045", "reaberto-por-decisão", 29400, 29958, 368, 9, "b4a3f77e80503400", "079763f80c948a00", "n1143"]
       ]
     },
     ".guidelines/.plan/README.md.template": {
