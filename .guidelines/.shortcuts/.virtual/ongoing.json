@@ -1,7 +1,7 @@
 {
   "_about": "Registro do trabalho dos agentes: o primeiro relance ao voltar a este repositório. Aponta, nunca copia. O modelo é o do toolkit Regency, library/virtualpath.md §3; o detalhe de cada item mora no source.",
   "schema": 1,
-  "updated": "2026-11-11",
+  "updated": "2026-11-18",
   "items": [
     {
       "id": "PLAN-1",
@@ -22,19 +22,6 @@
       "source": ".plan/README.md §5"
     },
     {
-      "id": "ORD-0011-parked",
-      "title": "mapear o repositório, sem mover nada, agora que a EMS-001 fechou",
-      "state": "review",
-      "who": "DV",
-      "since": "2026-11-07",
-      "source": ".plan/README.md, Adiado por decisão",
-      "where": [
-        "order:EMS-002/ORD-0034",
-        ".guidelines/.orders/INTAKE-RESTRUCTURE.md"
-      ],
-      "next": "ORD-0034 closed at a5e327b and 01d76e2: the 21 files of the language in .sources, both checks green on each group, the oracle parse.json unchanged, 571 old paths aliases of the index; M3, the entry, was not asked and nothing of it moved; the .orders/README.md scaffold in regency is regency's to fit"
-    },
-    {
       "id": "EMS-003-2D-VIEW",
       "title": "the 2D view: a package as icons on a plane, edited by its visible links",
       "state": "blocked",
@@ -53,36 +40,30 @@
     {
       "id": "EFF-8",
       "title": "os objetos de contexto, segunda ordem dos efeitos",
-      "state": "backlog",
+      "state": "blocked",
       "next": "a fronteira de item está dada pelo Regente (o XSD gerado aplicado ao conteúdo do XML); falta a medição que a segunda ordem exige antes do desenho, e nenhum instrumento está escrito",
-      "source": ".orders/INTAKE-EFFECTS.md §8.1 e §9"
-    },
-    {
-      "id": "EFF-8-PART",
-      "title": "restaurar o [part], que estava nos planos e sumiu sem registro",
-      "state": "review",
-      "who": "DV",
-      "since": "2026-11-07",
-      "where": [
-        "order:EMS-002/ORD-0033",
-        ".guidelines/.orders/INTAKE-PART.md"
-      ],
-      "next": "ORD-0033 closed at 4a0cde4 and 59af450: the PA bucket and OC-16, nine checks seen failing on 1008c2a, four JS and four Rust mutants seen failing, npm run check and npm run check:rust green; four readings of the session wait for the Regent in .decisions and in INTAKE-PART.md §6",
-      "source": ".orders/INTAKE-EFFECTS.md §8.2"
+      "source": ".orders/INTAKE-EFFECTS.md §8.1 e §9",
+      "blocked_by": "XSD-GATE: the instrument measures against what the engine's generated XSD declares, once step 1 of the trail builds it (the Regent, 2026-11-18)"
     },
     {
       "id": "XSD-GATE",
       "title": "o portão do XSD: gerado pelo motor, e conferido contra o XML",
       "state": "backlog",
-      "next": "assinado pelo Regente em 2026-11-07; é a primeira peça da fila que habilita o Explorer de EMS; a ORD-0033 fechou em 2026-11-11, e ele vira ORD depois da reestruturação",
-      "source": ".orders/INTAKE-EFFECTS.md §8.1"
+      "next": "the measured proposal is INTAKE-XSD.md §4, X1 to X6, waiting for the Regent; the Order opens with the answers once the open slot is free",
+      "source": ".orders/INTAKE-EFFECTS.md §8.1",
+      "where": [
+        ".guidelines/.orders/INTAKE-XSD.md"
+      ]
     },
     {
       "id": "ORDER-COHERENCE",
       "title": "a coerência entre Ordens e o repair como fila, o que habilita o Explorer de EMS",
       "state": "backlog",
-      "next": "ratificada em 2026-10-15, e posta pelo Regente em 2026-11-07 como o que habilita o Explorer de EMS; a verificação lê a EMS.json, que vem depois do XSD gerado",
-      "source": ".orders/INTAKE-ORDER-COHERENCE.md §9"
+      "next": "the measured proposal is INTAKE-ORDER-COHERENCE.md §10, C1 to C5, waiting for the Regent; the Order follows steps 1 and 2 of the trail",
+      "source": ".orders/INTAKE-ORDER-COHERENCE.md §9",
+      "where": [
+        ".guidelines/.orders/INTAKE-ORDER-COHERENCE.md"
+      ]
     },
     {
       "id": "E-06",
@@ -94,9 +75,10 @@
     {
       "id": "VP-16-MEASURES",
       "title": "as duas medições que o cross-package devia",
-      "state": "backlog",
+      "state": "blocked",
       "next": "o braço de comparação do §8 e o terceiro braço do transporte MCP; a decisão por B foi tomada sem elas e elas seguem devidas",
-      "source": ".orders/INTAKE-VIRTUAL-PATH.md §16.1"
+      "source": ".orders/INTAKE-VIRTUAL-PATH.md §16.1",
+      "blocked_by": "the comparison arm counts the transcripts of the sessions after 2026-10-23, which live in ~/.claude/projects/ on the Regent's machine; the third arm needs an MCP transport that does not exist; kept owed by the Regent, 2026-11-18"
     },
     {
       "id": "VSCODE-EXT",
@@ -106,7 +88,6 @@
       "who": "DV",
       "since": "2026-11-02",
       "where": [
-        "branch:rust-port",
         "vscode-extension/",
         ".scope/generics/production.pgml"
       ],
@@ -127,14 +108,32 @@
       "title": "a trilha até o Explorer final: a superfície de EMS no app e a saída do JS, a página incluída",
       "state": "backlog",
       "source": ".plan/README.md §5, A trilha até o Explorer final",
-      "next": "steps 1 to 13, each an Order with a measured proposal; the restructure runs first, right after ORD-0033; the shell goes by a webview crate, Tauri first, with the ADR drafted in INTAKE-EXPLORER.md"
+      "next": "the intakes of steps 1, 2, 11 and 12 are written and wait for the Regent (INTAKE-XSD, INTAKE-EMS-JSON, INTAKE-EXPLORER with the ADR draft amending O7 for the shell, INTAKE-JS-EXIT); each step opens as an Order with its answers"
     },
     {
       "id": "PRE-GATE",
-      "title": "a fila de antes do portão: os intakes que faltam, as medições que são entregáveis, o fmt e o clippy no check:rust, e o .history/study.md",
-      "state": "backlog",
+      "title": "a fila de antes do portão: os intakes que faltam, as medições que são entregáveis, o fmt e o clippy no check:rust, e o registro de estudos",
+      "state": "review",
       "source": ".plan/README.md §5, A fila de antes do portão",
-      "next": "five items that open no Order; the study register is ratified as the form of study.md"
+      "next": "worked by /regency:proceed on 2026-11-17: five intakes written (XSD, EMS-JSON, EXPLORER with the ADR draft amending O7, JS-EXIT, INVOKE), measured proposals for coherence (§10), the item scheme (§11) and the PIN vocabulary (§6), the generics measured (PIN-TRAFFIC §7), fmt and clippy -D warnings in check:rust on the pinned 1.97.0, and the study register in .sources/STUDY.md; held: the context-objects instrument and the two VP §16 arms (EFF-8, VP-16-MEASURES), and M06 done waits on M02 and M04; every intake waits for the Regent in one batch",
+      "who": "DV",
+      "since": "2026-11-17",
+      "where": [
+        ".guidelines/.orders/INTAKE-XSD.md",
+        ".guidelines/.orders/INTAKE-EMS-JSON.md",
+        ".guidelines/.orders/INTAKE-EXPLORER.md",
+        ".guidelines/.orders/INTAKE-JS-EXIT.md",
+        ".guidelines/.orders/INTAKE-ORDER-COHERENCE.md",
+        ".guidelines/.orders/INTAKE-EFFECTS.md",
+        ".guidelines/.orders/INTAKE-PIN-TRAFFIC.md",
+        ".guidelines/.orders/INTAKE-INVOKE.md",
+        ".guidelines/.orders/INTAKE-PIN-TRAFFIC.md#7-the-generics-measured--the-list-the-ems-000-is-rewritten-over",
+        "rust-toolchain.toml",
+        "package.json#/scripts/check:rust",
+        "rust/",
+        ".guidelines/.plan/ladder.toml",
+        ".guidelines/.sources/STUDY.md"
+      ]
     },
     {
       "id": "STORES-UPDATE",

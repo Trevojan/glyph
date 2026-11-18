@@ -105,3 +105,88 @@ Regent gave each of the four its substance; his words are in
 | selection | **What is PINned is settled: an attribute of a declared *object*, a characteristic of a declared *subject*, or the formula of a specified *value*** — all of it writable in the XML, and still needing inference for the whole meaning. The exact grammar of the type selector comes **along with** the definition of *item* and *part*, by his word: *"this will come along the \"item\" and \"part\" definition"* — and both arrived in the same round: `[part]` with its design and pointer labels, and *item* with its frontier ([`INTAKE-EFFECTS.md`](INTAKE-EFFECTS.md) §8.1 and §8.2). So the grammar is no longer waiting on a word: it is proposed, measured, in the ORD that builds the PIN, together with the `[part]` label form it has to select through |
 | `EMS.json` | **The first field is settled: the EMS carries the basic XSD structure the ORDs follow**, so that when a specific declaration appears inside an Order the Emission answers from its spec rather than from the input XML or from pure inference — *"the EMS configuration will serve as a map and will hold very low cost to be used: just call where it matches the EMS' XSD pattern pointing to the current ORD being read and proceed the reasoning."* The rest of the schema is built **with** the Regent, against what is already ratified and immutable in the current version: *"let's build it together."* **The relation to `<schema>` is not an open question:** the XSD in `EMS.json` is the **pattern the ORDs of a series follow**, part of a configuration the user owns and edits, and `<schema>` is what one ORD **declares**, derived from its own tree and never hand-written — the Harness *"call[s] where it matches the EMS' XSD pattern pointing to the current ORD being read"*, so one is the convention and the other the instance ([`PACKAGE_TARGET.md`](../.sources/PACKAGE_TARGET.md) §5). What waits is the field list, which this ORD proposes measured |
 | the generic EMS | **Settled: the code session measures `.scope/generics/` and returns the commands and pins by frequency, and the Regent rewrites the `EMS-000` over that list** — *"A, and i rewrite to make it fit. this will be quite an artisan handswork."* The measurement is the deliverable; the contents stay his |
+
+## 6. The PIN vocabulary, the measured proposal
+
+The proposal for step 6 of the trail to the final Explorer
+([`.plan`](../.plan/README.md) §5): the vocabulary only. The type selector's grammar — the
+optional id, the `[part]` labels it selects through — waits for steps 5 and 7, as §5 says.
+Measured at `5685486`:
+
+| | |
+|---|---|
+| `[pin-rev]`, `[pin]` | `fix` `UnknownCommand`: PIN is not in the vocabulary |
+| `IF` | a command since `EMS-002/ORD-0017`: `[if'ok'…]` emits `<if cond="ok" binds="ok">` |
+| `else`, `case` | not in the vocabulary: `[else` and `[case` are `UnknownCommand` |
+| the two readings this file settles | the conditional of §1 — `[pin-if`…`]`, `[pin-else …]`, `[pin-case`…`]` — and the pinned attribute of §5, `[pin-rev]` fixing the last `[rev'…']` input for every PIN of that type |
+
+Both readings write PIN chained to one command, so one grammar can carry them.
+
+**N1. How many commands.**
+- a. one, `PIN`, whose chained operand chooses the form: `if`, `else` and `case` are its
+  three conditional forms, and any other command is the type whose attribute it pins
+- b. two: `PIN` for the pinned attribute, and the conditional forms as commands of their
+  own
+
+**N2. `else` and `case`.**
+- a. words of `PIN`'s own, valid only chained to it, the way a slot's name is valid only
+  in its placeholder
+- b. commands of the vocabulary, valid anywhere
+
+**N3. The element.**
+- a. one `<pin>`, its form an attribute: `<pin form="if" alias="…">`,
+  `<pin form="case" value="…">`, `<pin form="else">`, `<pin type="rev">`
+- b. one element per form
+
+**N4. Its place in the palette.**
+- a. *Frame*, beside `SECTION`, `BLOCK` and `PT`: structure under a condition
+- b. a category of its own
+
+**The session's recommendation:** N1 a, N2 a, N3 a, N4 a. One word for one idea; no
+command that means nothing outside a PIN; one element a reader learns once; and the
+structure palette where `PT` already sits. Each form enters `expansions.txt` and
+`GLOSSARY.md` first, then the JS, then the Rust.
+
+## 7. The generics, measured — the list the `EMS-000` is rewritten over
+
+The deliverable of the generic EMS (§5, *"A, and i rewrite to make it fit"*), for step 9
+of the trail to the final Explorer ([`.plan`](../.plan/README.md) §5). Measured at
+`5685486`: the six `.pgml` of `.scope/generics/`, each read through the engine's AST
+with the repository's stores, every command counted once per occurrence; *files* is how
+many of the six use it.
+
+| file | commands | diagnostics |
+|---|---|---|
+| `germinate-glyph-package.pgml` | 22 | 12 |
+| `glyph-variable-naming-system.pgml` | 31 | 35 |
+| `handoff-generic.pgml` | 59 | 13 |
+| `order-generic.pgml` | 32 | 10 |
+| `production.pgml` | 47 | 18 |
+| `resume-generic.pgml` | 55 | 4 |
+
+**Commands, by frequency** — 35 distinct, 177 uses, written *uses/files*:
+`PH` 53/5 · `SECTION` 17/4 · `DFN` 13/3 · `NT` 13/3 · `WHR` 11/5 · `DONT` 5/3 · `EX` 5/2 ·
+`GET` 5/5 · `GO` 5/3 · `INS` 5/4 · `BLOCK` 4/4 · `CNST` 4/2 · `CTX` 4/4 · `SKL` 4/4 ·
+`VAR` 4/1 · `REF` 3/3 · `HMN` 2/2 · `LIM` 2/2 · `TGT` 2/1 · and once each, in one file:
+`ASK`, `ASSM`, `COND`, `CORE`, `EQ`, `EXT`, `FIN`, `FIND`, `LRN`, `NEQ`, `NEV`, `ONLYIF`,
+`PROB`, `QST`, `RDY`, `WARN`.
+
+**Pins:** none. No generic writes `[pin`, and PIN is not in the vocabulary (§6).
+
+**Words outside the vocabulary** — 16 uses, all in `glyph-variable-naming-system.pgml`:
+`sec` 4, `rule` 3, `desc` 2, `doc` 2, `cmd`, `cmd2`, `result`, `scope`, `syntax`.
+
+**Placeholder names** — 39 distinct, 53 uses: `ramo` 5, `suposicao` 3, `alvo`, `branch`,
+`criterio`, `esforco`, `fruto`, `limite`, `proximo`, `trava` 2 each; and once each
+`aberto`, `author`, `caso`, `causa`, `criteria`, `deadline`, `effort`, `estado`,
+`fechado`, `fruit`, `goal`, `licao`, `limit`, `livre`, `lock`, `marco`, `medida`,
+`metodo`, `name`, `plano`, `porta`, `position`, `repo`, `step`, `suite`, `suposition`,
+`target`, `valor`, `versao`.
+
+**For the rewrite.** Eight concepts are named in both languages across the generics:
+`ramo` and `branch`, `criterio` and `criteria`, `esforco` and `effort`, `fruto` and
+`fruit`, `limite` and `limit`, `trava` and `lock`, `suposicao` and `suposition`, `alvo`
+and `target` or `goal`. One `EMS-000` holds one name for each. The burn of every generic
+that uses a placeholder rereads with an `UnknownCommand` per placeholder name until the
+defect of [`.plan`](../.plan/README.md) §3 is fixed — 27 across four of them, measured
+on 2026-11-17.

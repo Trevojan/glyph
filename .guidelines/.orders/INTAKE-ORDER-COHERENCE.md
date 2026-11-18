@@ -167,3 +167,54 @@ It changes the manifest and what `--bundle` refuses, so it enters as an ORD. The
 gate of `FIELD-3b` — all `[ctx]` versions in a series equal the series'
 declared one — lands on the same destination and follows it
 ([`INTAKE-FIELD-2026-09.md`](INTAKE-FIELD-2026-09.md) §3).
+
+## 10. The measured proposal
+
+The proposal for steps 3 and 4 of the trail to the final Explorer
+([`.plan`](../.plan/README.md) §5): the coherence, and `repair` as a queue. Measured at
+`5685486` over the 54 Orders of `EMS-001` to `EMS-003`, their `.pgml` and their
+`.manifest.json`, the queued ones included:
+
+| | |
+|---|---|
+| Orders that write a `[ref'…']` of any kind | 0 |
+| manifests that carry `relates`, `supersedes` or `overrides` | 0 |
+| `.orders/NEM/` | does not exist |
+| the cycle check §4 step 3 reuses | `dag.js`, 68 lines, over the composition table |
+
+So every Order owes the claim of §5, and none makes it yet. The 54 are acts, and acts
+stay as emitted.
+
+**C1. The 54 closed Orders, which make no claim.**
+- a. the check reads them as emitted and asks nothing of them: it holds the Orders
+  bundled after the Order that builds it
+- b. `repair` asks where each one stands, once per Order, and writes the answer in its
+  manifest, never in its source: 54 questions
+- c. the series' `EMS.json` lists them, a fact the spec already holds
+  ([`INTAKE-EMS-JSON.md`](INTAKE-EMS-JSON.md) E1 b)
+
+**C2. Where an Order writes its claim.**
+- a. anywhere in its source, read from the AST as `binds` and `ref` are (§7)
+- b. as its first statement, so a reader finds it without the tree
+
+**C3. Where the `repair` queue lives.**
+- a. one file for the repository, `.orders/repair.json`: each finding names the Order,
+  what did not match, and the move it proposes, and `repair` asks through it one Order
+  at a time
+- b. one per series, beside its `EMS.json`
+- c. nowhere: the queue is the output of the `--check`, asked through when it runs
+
+**C4. When `.orders/NEM/` is made.**
+- a. by the first loose Order emitted into it
+- b. now, empty, with a README that states its numbering
+
+**C5. Which engine extracts `relates[]` and runs the check.**
+- a. both, the JS first, as every Order since `EMS-002/ORD-0001`
+- b. the Rust only
+
+**The session's recommendation:** C1 a, C2 a, C3 a, C4 a, C5 a.
+- **C1 a** holds the rule forward and the acts as emitted.
+- **C2 a** reads the claim the way every other relation is read.
+- **C3 a** gives `repair` one place to resume from, one question per Order, as ratified.
+- **C4 a** makes nothing nobody asked for.
+- **C5 a** follows the oracle.

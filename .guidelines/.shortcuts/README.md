@@ -55,6 +55,7 @@
 | "o documento emitido pode fazer isso?" | [`PACKAGE_TARGET.md`](../.sources/PACKAGE_TARGET.md) |
 | "isto é domínio ou síntese?" | [`PROMOTION_BOUNDARY.md`](../.sources/PROMOTION_BOUNDARY.md) §2 |
 | "o que o motor promete e não cumpre?" | [`.orders/INTAKE-VARIABLES.md`](../.orders/INTAKE-VARIABLES.md) |
+| "o que vale medir antes de desenhar, e o que já foi medido?" | [`.sources/STUDY.md`](../.sources/STUDY.md), o registro de estudos |
 | "o que o estudo de setembro mediu e decidiu?" | [`.orders/INTAKE-FIELD-2026-09.md`](../.orders/INTAKE-FIELD-2026-09.md) §5 aponta os outros sete |
 | "Rust?" | [`.orders/INTAKE-RUST.md`](../.orders/INTAKE-RUST.md) — os dois lados, pesados; o Regente decidiu migrar ([`.decisions/`](../.decisions/README.md), 2026-09-24) |
 | "a escada de migração perde alguma coisa?" | [`.orders/INTAKE-RUST-LADDER.md`](../.orders/INTAKE-RUST-LADDER.md) — a escada medida contra o motor, e o que o vendoring compra (§9); §8 é o que espera o Regente |

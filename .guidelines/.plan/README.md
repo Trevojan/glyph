@@ -182,18 +182,18 @@ passo abre como Ordem com a proposta medida do intake, e para no portão dele.
 | # | a Ordem | depende de | o intake |
 |---|---|---|---|
 | 0 | o `[part]`, a `ORD-0033`, fechada em 2026-11-11 | — | [`INTAKE-PART`](../.orders/INTAKE-PART.md) §5 e §6 |
-| 1 | o XSD gerado pelo motor e o portão que o confere contra o XML | 0 | a escrever: `INTAKE-XSD.md` (a norma está assinada, 2026-11-07) |
-| 2 | a `EMS.json`: a lista de campos, o XSD primeiro, e a configuração dentro do `<glyph-package>` | 1 | a escrever: `INTAKE-EMS-JSON.md`, sobre o [`INTAKE-PIN-TRAFFIC`](../.orders/INTAKE-PIN-TRAFFIC.md) §4 e §5 |
-| 3 | a coerência: `[ref'nem']`, `[ref'EMS']`, o `relates[]`, a verificação pela `EMS.json`, a NEM, e o portão do `FIELD-3b` | 2 | [`INTAKE-ORDER-COHERENCE`](../.orders/INTAKE-ORDER-COHERENCE.md) §9, ratificado e sem proposta medida |
-| 4 | o `repair`: mostra a diferença e pergunta, a fila, e o mover | 3 | o mesmo, e o [`INTAKE-PIN-TRAFFIC`](../.orders/INTAKE-PIN-TRAFFIC.md) §3 |
-| 5 | o esquema de item, `root-x` e `x-item-##`, que move os hashes de `xml` | 0 | [`INTAKE-EFFECTS`](../.orders/INTAKE-EFFECTS.md) §8 e §9 |
-| 6 | o vocabulário do PIN: o glossário, depois o JS, depois o Rust | 0 | [`INTAKE-PIN-TRAFFIC`](../.orders/INTAKE-PIN-TRAFFIC.md) §5 |
+| 1 | o XSD gerado pelo motor e o portão que o confere contra o XML | 0 | [`INTAKE-XSD`](../.orders/INTAKE-XSD.md) §4, X1 a X6, esperando o Regente (a norma está assinada, 2026-11-07) |
+| 2 | a `EMS.json`: a lista de campos, o XSD primeiro, e a configuração dentro do `<glyph-package>` | 1 | [`INTAKE-EMS-JSON`](../.orders/INTAKE-EMS-JSON.md) §4, E1 a E7, esperando o Regente |
+| 3 | a coerência: `[ref'nem']`, `[ref'EMS']`, o `relates[]`, a verificação pela `EMS.json`, a NEM, e o portão do `FIELD-3b` | 2 | [`INTAKE-ORDER-COHERENCE`](../.orders/INTAKE-ORDER-COHERENCE.md) §9, ratificado; a proposta medida no §10, C1 a C5, esperando o Regente |
+| 4 | o `repair`: mostra a diferença e pergunta, a fila, e o mover | 3 | o mesmo §10, e o [`INTAKE-PIN-TRAFFIC`](../.orders/INTAKE-PIN-TRAFFIC.md) §3 |
+| 5 | o esquema de item, `root-x` e `x-item-##`, que move os hashes de `xml` | 0 | [`INTAKE-EFFECTS`](../.orders/INTAKE-EFFECTS.md) §8 e §9; a proposta medida no §11, I1 a I4, esperando o Regente |
+| 6 | o vocabulário do PIN: o glossário, depois o JS, depois o Rust | 0 | [`INTAKE-PIN-TRAFFIC`](../.orders/INTAKE-PIN-TRAFFIC.md) §5; a proposta medida no §6, N1 a N4, esperando o Regente |
 | 7 | o seletor do PIN pelos rótulos do `[part]`, e o tooltip | 5, 6 | o mesmo |
 | 8 | o tráfego na `EMS.json`; o caminho que não resolve avisa e nunca bloqueia | 2 | [`INTAKE-PIN-TRAFFIC`](../.orders/INTAKE-PIN-TRAFFIC.md) §3 |
 | 9 | a `EMS-000`, *Generic*: a medição de `.scope/generics/` por frequência, que o Regente reescreve | 2, 6 | o mesmo, §5; a medição é o entregável |
-| 10 | o `<invoke>` validado pela configuração da EMS, e as skills genéricas do Explorer | 2 | só o [`.decisions/`](../.decisions/README.md) de 2026-10-15; intake a escrever |
-| 11 | a superfície de EMS no app: começar, carregar, editar e emitir uma EMS ou uma ORD, mostrada pelo título; a NEM; o `repair` e o aviso de caminho na tela | 2 a 4, 8 | a escrever: `INTAKE-EXPLORER.md` |
-| 12 | a saída do JS: `glyph-schema`, `glyph-diff` e `glyph-trace`, a skill sobre o binário Rust, e a página | o oráculo, peça por peça | a escrever: `INTAKE-JS-EXIT.md`; a rota da página se mede no `INTAKE-EXPLORER.md` |
+| 10 | o `<invoke>` validado pela configuração da EMS, e as skills genéricas do Explorer | 2 | [`INTAKE-INVOKE`](../.orders/INTAKE-INVOKE.md), K1 a K4, esperando o Regente, sobre o [`.decisions/`](../.decisions/README.md) de 2026-10-15 |
+| 11 | a superfície de EMS no app: começar, carregar, editar e emitir uma EMS ou uma ORD, mostrada pelo título; a NEM; o `repair` e o aviso de caminho na tela | 2 a 4, 8 | [`INTAKE-EXPLORER`](../.orders/INTAKE-EXPLORER.md): a casca, a página e a superfície; S1 a S4 esperando o Regente, com a ADR que emenda a O7 rascunhada no §3 |
+| 12 | a saída do JS: `glyph-schema`, `glyph-diff` e `glyph-trace`, a skill sobre o binário Rust, e a página | o oráculo, peça por peça | [`INTAKE-JS-EXIT`](../.orders/INTAKE-JS-EXIT.md), J1 a J4 esperando o Regente; a rota da página, no [`INTAKE-EXPLORER`](../.orders/INTAKE-EXPLORER.md) §4 |
 | 13 | a referência entre pacotes, `<needs ref="glyph://…">`, e os escopos aninhados | as duas medições devidas | [`INTAKE-VIRTUAL-PATH`](../.orders/INTAKE-VIRTUAL-PATH.md) §16 |
 
 Duas Ordens decididas em 2026-11-11 correm fora dessa cadeia, e a posição de cada
@@ -220,23 +220,31 @@ Só uma Ordem fica aberta por vez, e uma proposta medida é um intake, não uma
 Ordem. O que segue não abre Ordem nenhuma, e é o que uma sessão faz enquanto um
 portão espera, para o Regente responder os portões em lote:
 
-1. escrever os intakes que faltam, cada um fechando em perguntas numeradas com
-   opções medidas: `INTAKE-XSD.md`, `INTAKE-EMS-JSON.md`, `INTAKE-EXPLORER.md` —
-   a casca vai por uma crate de webview, o Tauri primeiro (o Regente, 2026-11-11),
-   e o intake a mede pela régua das crates e rascunha a ADR que emenda a O7 para a
-   casca, para a assinatura dele; as vistas rendidas pelo motor servem às duas
-   janelas, a do Edge e a do webview — e `INTAKE-JS-EXIT.md`;
-2. dar a proposta medida aos intakes que já existem: o `repair` e a NEM, o esquema
-   de item, o vocabulário do PIN, o `<invoke>`;
-3. correr as medições que são entregáveis: a frequência de `.scope/generics/`, o
-   instrumento dos objetos de contexto, e os dois braços devidos do
-   [`INTAKE-VIRTUAL-PATH.md`](../.orders/INTAKE-VIRTUAL-PATH.md) §16;
-4. pôr o `fmt` e o `clippy` com avisos negados no `check:rust`, o que a M06 espera
-   para os crates construídos passarem de `started` a `done`;
-5. fazer do `.history/study.md` o registro de estudos (o Regente, 2026-11-11): uma
-   linha por pergunta que vale medir antes de desenhar — a pergunta, o que a
-   decide, o instrumento, o estado, e o intake em que virou —, no eixo dos fatos,
-   com as medições devidas deste plano apontando para ele.
+1. os intakes que faltavam estão escritos, cada um fechando em perguntas numeradas
+   com opções medidas, e esperam o Regente: [`INTAKE-XSD.md`](../.orders/INTAKE-XSD.md),
+   [`INTAKE-EMS-JSON.md`](../.orders/INTAKE-EMS-JSON.md),
+   [`INTAKE-EXPLORER.md`](../.orders/INTAKE-EXPLORER.md) — o Tauri, o `wry` com o
+   `tao` e o `eframe` medidos pela régua das crates, todos `fix`, e a ADR que emenda a
+   O7 para a casca rascunhada para a assinatura dele — e
+   [`INTAKE-JS-EXIT.md`](../.orders/INTAKE-JS-EXIT.md);
+2. as propostas medidas estão dadas e esperam o Regente: o `repair` e a NEM no
+   [`INTAKE-ORDER-COHERENCE.md`](../.orders/INTAKE-ORDER-COHERENCE.md) §10, o
+   esquema de item no [`INTAKE-EFFECTS.md`](../.orders/INTAKE-EFFECTS.md) §11, o
+   vocabulário do PIN no [`INTAKE-PIN-TRAFFIC.md`](../.orders/INTAKE-PIN-TRAFFIC.md) §6,
+   e o `<invoke>` no [`INTAKE-INVOKE.md`](../.orders/INTAKE-INVOKE.md);
+3. as medições que são entregáveis: a frequência de `.scope/generics/` está medida,
+   no [`INTAKE-PIN-TRAFFIC.md`](../.orders/INTAKE-PIN-TRAFFIC.md) §7, para o Regente
+   reescrever a `EMS-000`; o instrumento dos objetos de contexto e os dois braços
+   devidos do [`INTAKE-VIRTUAL-PATH.md`](../.orders/INTAKE-VIRTUAL-PATH.md) §16 esperam
+   o que os segura, em *Duas medições devidas*, abaixo;
+4. o `fmt` e o `clippy` com avisos negados estão no `check:rust`, no Rust 1.97.0 que
+   o `rust-toolchain.toml` fixa (o Regente, 2026-11-17), e o `closes_when` da M06 vale;
+   ela segue `started` porque a M02 e a M04 não estão `done`, e os crates construídos
+   seguem com ela, como o [`ladder.toml`](ladder.toml) diz em cada linha;
+5. o registro de estudos é o [`.sources/STUDY.md`](../.sources/STUDY.md) (o Regente,
+   2026-11-11): uma linha por pergunta que vale medir antes de desenhar — a pergunta,
+   o que a decide, o instrumento, o estado, e o intake em que virou —, e as medições
+   devidas deste plano estão nele.
 
 O lote das decididas em 2026-09-27 e 2026-10-25 que movem o emitido está
 construído, da `EMS-002/ORD-0014` à `ORD-0031`, e a versão se moveu uma vez
@@ -263,19 +271,20 @@ ORD que a constrói, parando no portão dele — a forma que ele ratificou em
 
 ### Os dois itens dos caminhos virtuais
 
-Nomeados pelo §0: o `.history/study.md`, vazio desde o commit inicial, vira o
-registro de estudos (o Regente, 2026-11-11), pela fila de antes do portão do §5;
-e **não existe seletor para `.pgml`**, então um `.pgml` se endereça pelo
-arquivo inteiro ou por `@block`.
+Nomeados pelo §0: o `study.md` saiu do sótão e é o registro de estudos,
+[`.sources/STUDY.md`](../.sources/STUDY.md) (o Regente, 2026-11-11); e **não existe
+seletor para `.pgml`**, então um `.pgml` se endereça pelo arquivo inteiro ou por
+`@block`.
 
 ### Duas medições devidas, e nenhuma tem instrumento escrito
 
-Não são perguntas: são dívidas que uma decisão assumiu.
+Não são perguntas: são dívidas que uma decisão assumiu. As duas são linhas do
+[registro de estudos](../.sources/STUDY.md), com o que segura cada uma.
 
-| medição | quem a devia |
-|---|---|
-| o braço de comparação do §8 — o mini-repo reduz releitura? — e o terceiro braço, o transporte MCP comprando o que o arquivo não compra | [`INTAKE-VIRTUAL-PATH.md`](../.orders/INTAKE-VIRTUAL-PATH.md) §16 as exigia **em ordem** antes do `resources`; o Regente decidiu por B sem elas, e elas seguem devidas |
-| a medição dos objetos de contexto, antes do desenho — *measure before design* | [`INTAKE-EFFECTS.md`](../.orders/INTAKE-EFFECTS.md) §9, a segunda ordem. Com a fronteira de "item" dada, é só isto que falta antes do desenho, e o instrumento não está escrito |
+| medição | quem a devia | o que a segura |
+|---|---|---|
+| o braço de comparação do §8 — o mini-repo reduz releitura? — e o terceiro braço, o transporte MCP comprando o que o arquivo não compra | [`INTAKE-VIRTUAL-PATH.md`](../.orders/INTAKE-VIRTUAL-PATH.md) §16 as exigia **em ordem** antes do `resources`; o Regente decidiu por B sem elas, e elas seguem devidas | o braço de comparação conta os transcripts das sessões feitas depois dos caminhos virtuais (2026-10-23), e eles moram em `~/.claude/projects/` na máquina do Regente, que uma sessão na nuvem não alcança; o terceiro braço pede um transporte MCP que não existe; as duas seguem devidas (o Regente, 2026-11-18) |
+| a medição dos objetos de contexto, antes do desenho — *measure before design* | [`INTAKE-EFFECTS.md`](../.orders/INTAKE-EFFECTS.md) §9, a segunda ordem. Com a fronteira de "item" dada, é só isto que falta antes do desenho, e o instrumento não está escrito | nenhum documento diz a pergunta que o instrumento espera o XSD do passo 1 da trilha: o instrumento mede contra o que o XSD gerado declara (o Regente, 2026-11-18) |
 
 ### A E-06, ratificada, esperando o esquema de item
 
