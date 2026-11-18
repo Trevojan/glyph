@@ -967,16 +967,16 @@ pub fn from_ast(env: &Json) -> Back {
             diag,
         };
     }
-    if let Some(p) = env.get("projection").filter(|p| truthy(Some(p))) {
-        if p.str() != Some("full") {
-            diag.push(Diag { sev: "fix", code: "ThinnedAST",
+    if let Some(p) = env.get("projection").filter(|p| truthy(Some(p)))
+        && p.str() != Some("full")
+    {
+        diag.push(Diag { sev: "fix", code: "ThinnedAST",
                 msg: format!("projection <code>{}</code> — only the projection <code>full</code> pode ser reconstruída. Na \
                               projeção de painel a ausência de um campo não distingue vazio de descartado.", esc(&joined(Some(p)))) });
-            return Back {
-                src: String::new(),
-                diag,
-            };
-        }
+        return Back {
+            src: String::new(),
+            diag,
+        };
     }
     let lit = |v: Option<&Json>, form: Option<&Json>| {
         let t = text_of(v);

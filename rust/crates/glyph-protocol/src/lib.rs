@@ -347,7 +347,7 @@ fn run(stores: &Context, req: &Json) -> Result<Json, String> {
         }
         "classify" => {
             let name = str_field(req, "name");
-            Ok(class_json(&classify(&name, &ctx, session)))
+            Ok(class_json(&classify(&name, ctx, session)))
         }
         "suggest" => {
             let name = str_field(req, "name");
@@ -376,7 +376,7 @@ fn run(stores: &Context, req: &Json) -> Result<Json, String> {
         "freeVars" => {
             let raw = str_field(req, "raw");
             Ok(Json::Arr(
-                free_vars(&raw).into_iter().map(|v| Json::Str(v)).collect(),
+                free_vars(&raw).into_iter().map(Json::Str).collect(),
             ))
         }
         "parse" => {
@@ -403,7 +403,7 @@ fn run(stores: &Context, req: &Json) -> Result<Json, String> {
                             tree.nodes[id]
                                 .canonical
                                 .as_deref()
-                                .map_or(false, |c| !c.is_empty())
+                                .is_some_and(|c| !c.is_empty())
                         })
                         .count()
                 })

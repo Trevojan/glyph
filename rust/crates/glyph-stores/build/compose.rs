@@ -239,14 +239,13 @@ pub fn gloss_line(line: &str) -> Option<(String, Option<String>, String)> {
 pub fn strip_md(s: &str) -> String {
     let mut s = s.to_string();
     let tail = s.trim_end_matches(js_space).len();
-    if s[..tail].ends_with(")*") {
-        if let Some(p) = s
+    if s[..tail].ends_with(")*")
+        && let Some(p) = s
             .match_indices("*(")
             .map(|(p, _)| p)
             .find(|&p| p + 2 <= tail - 2)
-        {
-            s.truncate(p);
-        }
+    {
+        s.truncate(p);
     }
     js_trim(&collapse(&s.replace("**", "").replace('`', ""))).to_string()
 }

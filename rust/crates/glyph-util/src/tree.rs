@@ -308,13 +308,12 @@ pub fn strip_tags(s: &str) -> String {
     let mut out = String::new();
     let mut i = 0;
     while i < c.len() {
-        if c[i] == '<' {
-            if let Some(close) = (i + 1..c.len()).find(|&k| c[k] == '>') {
-                if close > i + 1 {
-                    i = close + 1;
-                    continue;
-                }
-            }
+        if c[i] == '<'
+            && let Some(close) = (i + 1..c.len()).find(|&k| c[k] == '>')
+            && close > i + 1
+        {
+            i = close + 1;
+            continue;
         }
         out.push(c[i]);
         i += 1;

@@ -281,7 +281,7 @@ pub fn burn_list(
         }
         let key = canonical.to_uppercase();
         if chain.contains(&key) || chain.len() >= BURN_LIMIT {
-            let via = [chain, &[key.clone()]].concat().join(" → ");
+            let via = [chain, std::slice::from_ref(&key)].concat().join(" → ");
             out.push(Burnt::Atom {
                 canonical: key,
                 children: operands,

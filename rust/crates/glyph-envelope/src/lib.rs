@@ -397,10 +397,10 @@ pub fn ast_node(tree: &Tree<Extra>, root: Id, truncated: &mut usize, panel: bool
     let mut done: Vec<Option<Json>> = vec![None; built.len()];
     for i in (0..built.len()).rev() {
         let (mut o, kids) = std::mem::replace(&mut built[i], (Json::Null, Vec::new()));
-        if let Json::Obj(kv) = &mut o {
-            if let Some((_, Json::Arr(body))) = kv.iter_mut().find(|(k, _)| k == "body") {
-                body.extend(kids.iter().map(|&k| done[k].take().expect("a child built")));
-            }
+        if let Json::Obj(kv) = &mut o
+            && let Some((_, Json::Arr(body))) = kv.iter_mut().find(|(k, _)| k == "body")
+        {
+            body.extend(kids.iter().map(|&k| done[k].take().expect("a child built")));
         }
         done[i] = Some(o);
     }

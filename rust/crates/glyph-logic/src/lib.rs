@@ -118,15 +118,16 @@ fn lead<T>(
     i: usize,
     rest: impl Fn(usize) -> Option<(usize, T)>,
 ) -> Option<(Option<char>, usize, T)> {
-    if i == 0 {
-        if let Some((end, t)) = rest(0) {
-            return Some((None, end, t));
-        }
+    if i == 0
+        && let Some((end, t)) = rest(0)
+    {
+        return Some((None, end, t));
     }
-    if i < s.len() && !word(s[i]) {
-        if let Some((end, t)) = rest(i + 1) {
-            return Some((Some(s[i]), end, t));
-        }
+    if i < s.len()
+        && !word(s[i])
+        && let Some((end, t)) = rest(i + 1)
+    {
+        return Some((Some(s[i]), end, t));
     }
     None
 }

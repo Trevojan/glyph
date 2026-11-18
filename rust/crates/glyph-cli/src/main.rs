@@ -313,10 +313,10 @@ fn cli(argv: Vec<String>) {
                 for e in entries.flatten() {
                     let name = e.file_name().to_string_lossy().into_owned();
                     let dir_entry = e.file_type().map(|t| t.is_dir()).unwrap_or(false);
-                    if let Some(n) = ord_number(&name) {
-                        if !series || dir_entry {
-                            next = next.max(n + 1);
-                        }
+                    if let Some(n) = ord_number(&name)
+                        && (!series || dir_entry)
+                    {
+                        next = next.max(n + 1);
                     }
                 }
             }

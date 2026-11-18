@@ -534,10 +534,10 @@ pub fn install(register: bool) -> Result<Places, String> {
 
 pub fn uninstall(register: bool) -> Result<Places, String> {
     let p = places()?;
-    if let Some(lnk) = &p.shortcut {
-        if lnk.exists() {
-            std::fs::remove_file(lnk).map_err(|e| format!("{}: {e}", lnk.display()))?;
-        }
+    if let Some(lnk) = &p.shortcut
+        && lnk.exists()
+    {
+        std::fs::remove_file(lnk).map_err(|e| format!("{}: {e}", lnk.display()))?;
     }
     if register {
         let _ = run_quiet(Command::new("reg").args(["delete", UNINSTALL_KEY, "/f"]));

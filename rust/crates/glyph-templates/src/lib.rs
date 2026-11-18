@@ -200,69 +200,69 @@ pub fn collect_fills<X>(tree: &Tree<X>, inv: Id, repeat: Option<&Param>) -> Resu
     let mut written = 0;
     let repeat_key = repeat.filter(|r| r.truthy).map(|r| r.text.to_lowercase());
     for &c in &tree.nodes[inv].children {
-        if is_ph(tree, c) {
-            if let Some(nm) = ph_name(tree, c).filter(|n| !n.is_empty()) {
-                let key = nm.to_lowercase();
-                /* what the bracket holds past its `-name` binder */
-                let kids: Vec<Id> = tree.nodes[c]
-                    .children
-                    .iter()
-                    .copied()
-                    .filter(|&k| tree.nodes[k].slot_name != Some(true))
-                    .collect();
-                if repeat_key.as_deref() == Some(key.as_str()) {
-                    let lit = kids.iter().copied().find(|&k| tree.nodes[k].is_literal());
-                    let val = match lit {
-                        Some(k) => tree.nodes[k].v.clone(),
-                        None => Some(String::new()),
-                    };
-                    let idx = match f.named.iter_mut().find(|(k, _)| *k == key) {
-                        Some((_, Fill::Many(vals))) => {
-                            vals.push(val);
-                            vals.len() - 1
-                        }
-                        Some((_, Fill::One(Some(v)))) if !v.is_empty() => {
-                            return Err(Thrown("named[key].push is not a function".into()));
-                        }
-                        Some((_, one)) => {
-                            *one = Fill::Many(vec![val]);
-                            0
-                        }
-                        None if inherited(&key) => {
-                            return Err(Thrown("named[key].push is not a function".into()));
-                        }
-                        None => {
-                            f.named.push((key.clone(), Fill::Many(vec![val])));
-                            0
-                        }
-                    };
-                    let carried = kids.iter().copied().filter(|&k| Some(k) != lit).collect();
-                    f.entries.push(NamedFill {
-                        key,
-                        name: nm,
-                        lit,
-                        carried,
-                        idx: Some(idx),
-                        ..Default::default()
-                    });
-                    f.items.push(Item::Fill(f.entries.len() - 1));
-                } else if let Some(same) = f
-                    .entries
-                    .iter_mut()
-                    .find(|e| e.key == key && e.idx.is_none())
-                {
-                    same.kids.extend(kids);
-                } else {
-                    f.entries.push(NamedFill {
-                        key,
-                        name: nm,
-                        kids,
-                        ..Default::default()
-                    });
-                    f.items.push(Item::Fill(f.entries.len() - 1));
-                }
-                continue;
+        if is_ph(tree, c)
+            && let Some(nm) = ph_name(tree, c).filter(|n| !n.is_empty())
+        {
+            let key = nm.to_lowercase();
+            /* what the bracket holds past its `-name` binder */
+            let kids: Vec<Id> = tree.nodes[c]
+                .children
+                .iter()
+                .copied()
+                .filter(|&k| tree.nodes[k].slot_name != Some(true))
+                .collect();
+            if repeat_key.as_deref() == Some(key.as_str()) {
+                let lit = kids.iter().copied().find(|&k| tree.nodes[k].is_literal());
+                let val = match lit {
+                    Some(k) => tree.nodes[k].v.clone(),
+                    None => Some(String::new()),
+                };
+                let idx = match f.named.iter_mut().find(|(k, _)| *k == key) {
+                    Some((_, Fill::Many(vals))) => {
+                        vals.push(val);
+                        vals.len() - 1
+                    }
+                    Some((_, Fill::One(Some(v)))) if !v.is_empty() => {
+                        return Err(Thrown("named[key].push is not a function".into()));
+                    }
+                    Some((_, one)) => {
+                        *one = Fill::Many(vec![val]);
+                        0
+                    }
+                    None if inherited(&key) => {
+                        return Err(Thrown("named[key].push is not a function".into()));
+                    }
+                    None => {
+                        f.named.push((key.clone(), Fill::Many(vec![val])));
+                        0
+                    }
+                };
+                let carried = kids.iter().copied().filter(|&k| Some(k) != lit).collect();
+                f.entries.push(NamedFill {
+                    key,
+                    name: nm,
+                    lit,
+                    carried,
+                    idx: Some(idx),
+                    ..Default::default()
+                });
+                f.items.push(Item::Fill(f.entries.len() - 1));
+            } else if let Some(same) = f
+                .entries
+                .iter_mut()
+                .find(|e| e.key == key && e.idx.is_none())
+            {
+                same.kids.extend(kids);
+            } else {
+                f.entries.push(NamedFill {
+                    key,
+                    name: nm,
+                    kids,
+                    ..Default::default()
+                });
+                f.items.push(Item::Fill(f.entries.len() - 1));
             }
+            continue;
         }
         if tree.nodes[c].is_literal() {
             f.positional.push(tree.nodes[c].v.clone());
@@ -468,40 +468,40 @@ pub fn bind_holes<X: Clone + Default>(
         let mut carry: Option<(usize, String)> = None;
         if is_ph(tree, nd) {
             let nm = ph_name(tree, nd).filter(|n| !n.is_empty());
-            if let (Some(nm), Some(rk)) = (&nm, &repeat_low) {
-                if nm.to_lowercase() == *rk {
-                    let vals = match fills.get(rk) {
-                        Got::Own(Fill::Many(vals)) => vals.clone(),
-                        Got::Own(Fill::One(None)) | Got::Absent => Vec::new(),
-                        Got::Own(Fill::One(Some(v))) if v.is_empty() => Vec::new(),
-                        Got::Own(Fill::One(Some(_))) | Got::Inherited(_) => {
-                            return Err(Thrown("vals.forEach is not a function".into()));
-                        }
+            if let (Some(nm), Some(rk)) = (&nm, &repeat_low)
+                && nm.to_lowercase() == *rk
+            {
+                let vals = match fills.get(rk) {
+                    Got::Own(Fill::Many(vals)) => vals.clone(),
+                    Got::Own(Fill::One(None)) | Got::Absent => Vec::new(),
+                    Got::Own(Fill::One(Some(v))) if v.is_empty() => Vec::new(),
+                    Got::Own(Fill::One(Some(_))) | Got::Inherited(_) => {
+                        return Err(Thrown("vals.forEach is not a function".into()));
+                    }
+                };
+                let each = take_fills(fills, rk);
+                for (idx, v) in vals.into_iter().enumerate() {
+                    let slot = if idx > 0 {
+                        format!("{nm}{}", idx + 1)
+                    } else {
+                        nm.clone()
                     };
-                    let each = take_fills(fills, rk);
-                    for (idx, v) in vals.into_iter().enumerate() {
-                        let slot = if idx > 0 {
-                            format!("{nm}{}", idx + 1)
-                        } else {
-                            nm.clone()
-                        };
-                        if let Some(v) = v.filter(|v| !v.is_empty()) {
-                            let lit = bound(tree, v, slot.clone());
-                            stack
-                                .last_mut()
-                                .expect("the frame being read")
-                                .out
-                                .push(lit);
-                        }
-                        let carried = carried_of(tree, fills, each.get(idx).copied(), &slot);
+                    if let Some(v) = v.filter(|v| !v.is_empty()) {
+                        let lit = bound(tree, v, slot.clone());
                         stack
                             .last_mut()
                             .expect("the frame being read")
                             .out
-                            .extend(carried);
+                            .push(lit);
                     }
-                    continue;
+                    let carried = carried_of(tree, fills, each.get(idx).copied(), &slot);
+                    stack
+                        .last_mut()
+                        .expect("the frame being read")
+                        .out
+                        .extend(carried);
                 }
+                continue;
             }
             if let Some(nm) = nm {
                 let value = value_for(fills, &order, &nm).filter(|v| !v.is_empty());
@@ -898,6 +898,10 @@ impl<X: Clone + Default> Expander<'_, '_, X> {
     }
 }
 
+/// The `parseFn` a template body goes through: the caller's own parse, so a
+/// body reads as a source does.
+pub type BodyParse<'a, X> = dyn FnMut(&str, SubParse<X>) -> Result<Parsed<X>, Thrown> + 'a;
+
 /// `expandInvocations(segments, opts, G, parseFn)`. `session` and `expanding`
 /// are what the JS reads off `opts`: `opts.session` passed on, and
 /// `opts._expanding`, the templates being expanded around this parse.
@@ -913,7 +917,7 @@ pub fn expand_invocations<X: Clone + Default>(
     expanding: &[String],
     inherited: &[Inherited<X>],
     g: &mut dyn FnMut(Diag),
-    parse: &mut dyn FnMut(&str, SubParse<X>) -> Result<Parsed<X>, Thrown>,
+    parse: &mut BodyParse<'_, X>,
 ) -> Result<(), Thrown> {
     let all: Vec<Id> = tree
         .segments
