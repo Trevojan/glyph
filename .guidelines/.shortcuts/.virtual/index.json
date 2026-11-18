@@ -4043,7 +4043,7 @@
     },
     ".guidelines/.plan/ladder.toml": {
       "nodes": [
-        ["n1152", "", 0, 24955, 1, 631, "eb8dba3a4dbe8800", "", ""]
+        ["n1152", "", 0, 25039, 1, 631, "28897b78a0419000", "", ""]
       ]
     },
     ".guidelines/.shortcuts/.health/pipeline.json": {
@@ -4093,14 +4093,14 @@
     },
     ".guidelines/.shortcuts/README.md": {
       "nodes": [
-        ["n1153", "", 0, 10770, 1, 87, "dc686d3cb773b200", "", ""],
-        ["n1154", "atalhos--comece-por-aqui", 0, 10770, 1, 87, "dc686d3cb773b200", "73d0b208138c9400", "n1153"],
-        ["n1155", "onde-estou", 442, 4899, 11, 13, "ad2faf846e960000", "d380787405fa7d40", "n1154"],
-        ["n1156", "os-sete-eixos", 4899, 6139, 24, 12, "c7a610b8cc345700", "ea685f36d51a4300", "n1154"],
-        ["n1157", "o-mapa-do-motor-em-cinco-linhas", 6139, 7084, 36, 12, "fef2a4f026f43a00", "b0d1ba46f3be8000", "n1154"],
-        ["n1158", "os-documentos-que-mais-se-consulta", 7084, 9034, 48, 18, "f3c7a4885e809600", "f616de100c75df00", "n1154"],
-        ["n1159", "os-outros-documentos", 9034, 10422, 66, 16, "64d35eac63761200", "35cfc74863da0e40", "n1154"],
-        ["n1160", "vocabulário-do-projeto", 10422, 10770, 82, 6, "b895f5b69b891000", "f6cb060882a72600", "n1154"]
+        ["n1153", "", 0, 10870, 1, 87, "00038248c7897a00", "", ""],
+        ["n1154", "atalhos--comece-por-aqui", 0, 10870, 1, 87, "00038248c7897a00", "8d8f4778bb7b0800", "n1153"],
+        ["n1155", "onde-estou", 442, 4999, 11, 13, "b40a5e22bd0f6b00", "9b91e1301f9d1e00", "n1154"],
+        ["n1156", "os-sete-eixos", 4999, 6239, 24, 12, "c7a610b8cc345700", "ea685f36d51a4300", "n1154"],
+        ["n1157", "o-mapa-do-motor-em-cinco-linhas", 6239, 7184, 36, 12, "fef2a4f026f43a00", "b0d1ba46f3be8000", "n1154"],
+        ["n1158", "os-documentos-que-mais-se-consulta", 7184, 9134, 48, 18, "f3c7a4885e809600", "f616de100c75df00", "n1154"],
+        ["n1159", "os-outros-documentos", 9134, 10522, 66, 16, "64d35eac63761200", "35cfc74863da0e40", "n1154"],
+        ["n1160", "vocabulário-do-projeto", 10522, 10870, 82, 6, "b895f5b69b891000", "f6cb060882a72600", "n1154"]
       ]
     },
     ".guidelines/.shortcuts/regency.json": {
@@ -4893,14 +4893,14 @@
     },
     "CLAUDE.md": {
       "nodes": [
-        ["n1767", "", 0, 3887, 1, 78, "d6a465c83d26a980", "", ""],
-        ["n1768", "glyph", 0, 3887, 1, 78, "d6a465c83d26a980", "84e1be92f78e3e00", "n1767"],
+        ["n1767", "", 0, 3980, 1, 79, "a62979d0a244d200", "", ""],
+        ["n1768", "glyph", 0, 3980, 1, 79, "a62979d0a244d200", "a405ee6456197000", "n1767"],
         ["n1769", "comece-por-aqui--sempre", 172, 1163, 6, 17, "307455383d76f200", "6171e8cea350a000", "n1768"],
         ["n1770", "escrever-glyph", 1163, 1486, 23, 7, "d4617a26b07f7600", "3f27155ce9d54400", "n1768"],
         ["n3143", "entregar-o-plugin", 1486, 2063, 30, 10, "2b8a5a6053339e00", "028ad63a189c7400", "n1768"],
-        ["n1771", "verificar", 2063, 3135, 40, 23, "e55d823654f50ac0", "8e220db64cb17000", "n1768"],
-        ["n1772", "duas-restrições-que-pegam-todo-agente-novo", 3135, 3701, 63, 12, "002419a0c833ea00", "dac8c3285a749000", "n1768"],
-        ["n1773", "vocabulário", 3701, 3887, 75, 4, "3107f3b093ecf800", "377122b0975dd000", "n1768"]
+        ["n1771", "verificar", 2063, 3228, 40, 24, "ea932be0ac7f4680", "2f5960c483cf1a40", "n1768"],
+        ["n1772", "duas-restrições-que-pegam-todo-agente-novo", 3228, 3794, 64, 12, "002419a0c833ea00", "dac8c3285a749000", "n1768"],
+        ["n1773", "vocabulário", 3794, 3980, 76, 4, "3107f3b093ecf800", "377122b0975dd000", "n1768"]
       ]
     },
     "README.md": {
@@ -4908,8 +4908,8 @@
         ["scripts/glyph-cli.js#@block:flags", "14f9ad4e10950400"]
       ],
       "nodes": [
-        ["n1774", "", 0, 13193, 1, 300, "3b1fa268b152b800", "", ""],
-        ["n1775", "glyph", 55, 13193, 5, 296, "1763413078ad3400", "ae8c99dc2b1ff400", "n1774"],
+        ["n1774", "", 0, 13225, 1, 300, "5fafaa6ca2cb1a00", "", ""],
+        ["n1775", "glyph", 55, 13225, 5, 296, "b42f2878d78aaa00", "16b4b6306cf20ce0", "n1774"],
         ["n1776", "run-it", 620, 8508, 21, 192, "8462d0b4a46ab600", "a5014988ebbfbe00", "n1775"],
         ["n1777", "the-app--one-click", 631, 1410, 23, 20, "7fbc128e23598800", "904a908640f185a8", "n1776"],
         ["n1778", "the-command-line--needs-node", 1410, 1926, 43, 17, "51fb86fcdbc3da00", "548f3202b39e6200", "n1776"],
@@ -4921,10 +4921,10 @@
         ["n1784", "the-rust-engine--needs-cargo", 6674, 7254, 177, 13, "f21f8d90be255f40", "d0e20ac04d3b2800", "n1776"],
         ["n3048", "the-app-with-no-node--one-file", 7254, 8508, 190, 23, "959db4842f42ee00", "f3b7dd3ef8ed9a00", "n1776"],
         ["n1785", "after-editing", 8508, 9243, 213, 21, "5f0a7cf0e4afcd80", "269c71c4434f5800", "n1775"],
-        ["n1786", "verify", 9243, 9534, 234, 11, "855c56409d0eba00", "c8127ff02d41e100", "n1775"],
-        ["n1787", "where-things-live", 9534, 11737, 245, 30, "a819aab0eb035000", "f02fb9a096531c00", "n1775"],
-        ["n1788", "documentation", 11737, 12730, 275, 17, "95deeb565d7226f0", "35f46c0c866ab600", "n1775"],
-        ["n1789", "versioning--appfrontrulescontent", 12730, 13193, 292, 9, "c8ddd09cf5d2de00", "41dcbb5e365a4c00", "n1775"]
+        ["n1786", "verify", 9243, 9566, 234, 11, "c4a73f707673dc00", "f1c441eee7e68c00", "n1775"],
+        ["n1787", "where-things-live", 9566, 11769, 245, 30, "a819aab0eb035000", "f02fb9a096531c00", "n1775"],
+        ["n1788", "documentation", 11769, 12762, 275, 17, "95deeb565d7226f0", "35f46c0c866ab600", "n1775"],
+        ["n1789", "versioning--appfrontrulescontent", 12762, 13225, 292, 9, "c8ddd09cf5d2de00", "41dcbb5e365a4c00", "n1775"]
       ]
     }
   },

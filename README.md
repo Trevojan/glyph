@@ -235,7 +235,7 @@ opaque command is how drift gets in.
 
 ```bash
 npm run check        # the generation checks, globals, the DAG, the seam and crate graphs, the ladder, and the suite
-npm run check:rust   # the crate arrows, the oracle at the commit under test, and cargo test
+npm run check:rust   # the crate arrows and weights, rustfmt and clippy, the oracle at the commit under test, and cargo test
 ```
 
 Both exit non-zero on failure, so they work in CI.
