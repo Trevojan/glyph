@@ -13,6 +13,38 @@
 
 ---
 
+## 2026-11-18
+
+The Regent's answers, given in the session to the four questions `/regency:proceed`
+asked when it stopped. In force.
+
+| decision | reason |
+|---|---|
+| **The measurement of the context objects waits for the XSD: its instrument measures against what the engine's generated XSD declares, once step 1 of the trail builds it** | *"Wait for the XSD"*, the session's recommendation. The frontier of *item* is that XSD applied to the XML's content (2026-10-15), so the question the instrument answers is read from it ([`INTAKE-XSD.md`](../.orders/INTAKE-XSD.md)) |
+| **The two measurements the virtual paths owe stay owed** | *"Keep them owed"*. The comparison arm counts the transcripts on the Regent's machine, and the third arm needs an MCP transport that does not exist; the [study register](../.sources/STUDY.md) holds both |
+| **The work of `/regency:proceed` of 2026-11-17 is committed, and the session line pushed** | *"Commit and push now"*, the session's recommendation: split commits, green at each, the hooks journal last and alone; `ccr-04390c85-f2px0y` only, never `main` |
+| **The `note` of `package.json` states the present: the core lives in the thirteen modules of `scripts/core/`** | *"Rewrite to the present"*. The registry pendency of the [`.plan`](../.plan/README.md) that named it leaves |
+
+---
+
+## 2026-11-17
+
+The Regent's answers, given in the session to the four questions `/regency:proceed`
+asked before working the queue before the gate. In force.
+
+| decision | reason |
+|---|---|
+| **The session line takes the newest work: `main`, `claude/inspiring-mendel-vt8atd` and `explorer-screens` are merged into `ccr-04390c85-f2px0y`** | *"Merge both here"*, the session's recommendation, asked because `/regency:proceed` does not merge on its own. The queue before the gate runs on top of them; `main` stays the Regent's to push |
+| **The [`EMS-002/ORD-0033`](../.orders/EMS-002/README.md) and the `ORD-0034` are accepted** | *"Accept both"*. The two items in review, `EFF-8-PART` and `ORD-0011-parked`, leave the work ledger |
+| **The Rust toolchain is pinned: `rust-toolchain.toml` names 1.97.0, with `rustfmt` and `clippy`** | *"Pin 1.97.0"*, the session's recommendation. With `cargo fmt --check` and `clippy -D warnings` in `check:rust`, an unpinned toolchain turns the gate red on a machine whose stable moved, with no code changed |
+| **A module of the [`ladder.toml`](../.plan/ladder.toml) built before a dependency is done stays `started`, and its line names the ORD that built it** | *"Ratify all five"*, over the session's decision of 2026-11-07: `ladder.js --check` refuses `done` over a dependency that is not `done` |
+| **The levels of a `[part]` after its name travel as `<user-input>`, one per literal, in the order written** | the same answer, over the session's decision in the `ORD-0033`: P3 b gives one literal per level and P5 a keeps the label as written until the Order of the item scheme, so a new attribute or element for the level would move the emitted output without a decision |
+| **What holds a part is a `[block` at any height above it; a `[section` alone does not, nor the segment's `<block once>`** | the same answer, over the session's decision in the `ORD-0033`: the design says the part slices a block, P4 a asks which block when none holds it, and the segment's wrapper is not a block the author wrote |
+| **A part with no name is `fix`, `MissingStructName`: `PT` enters `NAMED_STRUCT`** | the same answer, over the session's decision in the `ORD-0033`: P2 a makes the first literal the name, as in a block or a section, where a missing name is broken structure |
+| **`PT` sits in the *Frame* category of the palette, and the `n` of an older `<part>` reads back through `fromXML` as a literal** | the same answer, over the session's decision in the `ORD-0033`: `PT` is a structure piece beside `SECTION` and `BLOCK`, and a document emitted between 2026-10-25 and 2026-11-11 carries `n`, which would otherwise vanish on the way back |
+
+---
+
 ## 2026-11-11
 
 Respostas do Regente, escritas na sessão, às vinte e três perguntas numeradas do
@@ -349,16 +381,4 @@ Respostas do Regente à auditoria da escada Rust
 
 ## Decisões que um agente tomou e o Regente ainda não ratificou
 
-Tomadas ao construir o que o Regente decidiu: as quatro do `[part]` em 2026-11-11, na
-[`EMS-002/ORD-0033`](../.orders/EMS-002/README.md), e as outras na rodada de 2026-11-07.
-Cada uma vale até o Regente dizer outra coisa.
-
-| decisão | razão |
-|---|---|
-| **Os níveis do `[part]` depois do nome viajam como `<user-input>`, um por literal, na ordem escrita** | o P3 b dá um literal por nível e o P5 a mantém o rótulo como escrito até a Ordem do esquema de item; um atributo ou um elemento novo para o nível moveria o emitido sem decisão |
-| **Quem contém uma parte é um `[block` em qualquer altura acima dela; um `[section` sozinho não contém, nem o `<block once>` do segmento** | o desenho diz que a parte fatia um bloco, e o P4 a pergunta qual bloco quando nenhum a contém; o invólucro do segmento não é um bloco que o autor escreveu |
-| **Uma parte sem nome é `fix`, `MissingStructName`: o `PT` entra em `NAMED_STRUCT`** | o P2 a faz do primeiro literal o nome, *como num bloco ou numa seção*, e nesses dois a falta do nome é estrutura quebrada |
-| **O `PT` fica na categoria *Frame* da paleta, e o `n` de um `<part>` antigo volta pelo `fromXML` como literal** | o `PT` é peça de estrutura ao lado de `SECTION` e `BLOCK`; e um documento emitido entre 2026-10-25 e 2026-11-11 leva `n`, que sumiria em silêncio na volta |
-| **As tabelas do motor e a opção c da pergunta 11 são uma ORD só, a [`EMS-002/ORD-0032`](../.orders/EMS-002/README.md)** | o que difere só se diz contra os templates do motor, e são as tabelas que os trazem à página; duas ORDs pediriam um commit entre elas, e a segunda esperaria a primeira fechar |
-| **O motor não guarda o que uma requisição traz, nem por digest** | medido pelo `app_stores.mjs`, uma `toXML` pequena no motor Rust leva 0,068 ms sozinha e 0,188 ms trazendo 9,9 KB de templates; nada medido pede um cache, e sem estado nenhuma requisição responde por outra. O digest confere o que veio, e o que não bate é recusado |
-| **Um módulo do [`ladder.toml`](../.plan/ladder.toml) construído antes de uma dependência terminar fica `started`, e a linha dele nomeia a ORD que o construiu** | o `ladder.js --check` recusa `done` sobre uma dependência que não está `done`, e a M06 segue `started`: o `check:rust` não roda `fmt` nem `clippy`. Mudar o portão ou as dependências da auditoria é do Regente |
+Nenhuma espera o Regente.
