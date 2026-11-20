@@ -13,6 +13,20 @@
 
 ---
 
+## 2026-11-20
+
+The Regent's answers, given in the session, to B1–B4 of
+[`INTAKE-BURN-PLACEHOLDER.md`](../.orders/INTAKE-BURN-PLACEHOLDER.md) §5 (issue #12). In force.
+
+| decision | reason |
+|---|---|
+| **The hole's name is fixed in both engines, in one Order** (B1) | *"both. this will take some time... maybe some weeks pure coding. not a problem, but a true challenge. hope we keep it on track with quality, safety and efficiency."* The skill and the plugin run the JS engine |
+| **The engine writes a hole's name in lowercase, and reads it in any case** (B2) | *"it must be all lowercase, but accept any. i'm aware of the mistake."* Lowercase everywhere the engine writes the name, so the burn and the XML `slot` agree, and the reread changes nothing. The template binding already reads any case. Measured: no declared source and no Order source has an uppercase hole name, so no digest moves beyond the three of the intake's §3 |
+| **The Order moves the `minor` digit** (B3) | *"minor, to be calculated by each issue."* Each issue's Order works out its own count when it closes |
+| **The suite pins the reread: an `H` case for the hole, and a count over every declared burn, with `OC-12` and `R-04` named as known** (B4 a) | *"in accord."* |
+
+---
+
 ## 2026-11-18
 
 The Regent's answers, given in the session to the four questions `/regency:proceed`

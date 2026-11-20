@@ -1,10 +1,11 @@
 # Intake — a placeholder's name, through the burn
 
 > **The measured proposal for issue #12** and the [`.plan`](../.plan/README.md) §3 row
-> *o nome de um placeholder queima como comando*. It opens no Order: the Order opens with
-> the answers to §5, once the open slot is free (`EMS-003/ORD-0001` holds it). Measured at
-> `1e58eef`, engine 4.7.10.08, with an experimental patch applied to
-> `scripts/core/burn.js` and taken back out; nothing of it is committed.
+> *o nome de um placeholder queima como comando*. The Regent answered §5 on 2026-11-20,
+> and §6 holds the answers. The Order opens with them once the open slot is free
+> (`EMS-003/ORD-0001` holds it). Measured at `1e58eef`, engine 4.7.10.08, with an
+> experimental patch applied to `scripts/core/burn.js` and taken back out; nothing of it
+> is committed.
 
 ## 1. The defect
 
@@ -137,3 +138,18 @@ not (§3).
 - **B3 a.** Nothing a reader of the XML or the envelope sees moves.
 - **B4 a.** The defect lived because the reread was checked on 32 composites and never on
   the corpus. The count closes that gap, and names `OC-12` and `R-04` while they remain.
+
+## 6. The answers — 2026-11-20
+
+In [`.decisions/`](../.decisions/README.md), round of 2026-11-20.
+
+| | answer | what the Order builds |
+|---|---|---|
+| B1 | both engines, one Order | `burn.js` and `glyph-burn`; the three `hgml` digests of §3 move, and `rust/testkit/known` gains nothing |
+| B2 | all lowercase, any case accepted | the engine writes a hole's name lowercase, in the burn and in the XML `slot`, and reads it in any case. `[ph-MyName'q']` emits `<needs slot="myname">` and burns as `[ph-myname`. The template binding already reads `[ph-CRITERIO` as `criterio`. No declared source and no Order source has an uppercase hole name, so no digest moves beyond §3 |
+| B3 | `minor`, worked out by each issue | the Order counts its own move when it closes |
+| B4 | a | an `H` case for `` [ph-x`q`] ``, and the count over every declared burn, 114 of 116, `KNOWN = ["OC-12", "R-04"]` |
+
+**Size.** Measured, the change is one flag carried and one head line written in each
+engine, seven lines in the JS patch of §3. Around it sit the two `H` cases, the snapshot
+update, the regenerated skill and the plugin. That is days of work, not weeks.
