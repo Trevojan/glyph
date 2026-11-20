@@ -39,9 +39,9 @@ All notable changes to Glyph are documented here, most recent first.
 
 ## [4.7.10.09] — a hole keeps its name through the burn
 
-`minor` moves, by the Regent's answer of 2026-11-20: the Order works out its own
-move, and nothing a reader of the XML or the envelope sees changes form. No digit
-resets any other.
+`minor` moves, by the Regent's answers of 2026-11-20: each Order works out its own
+move, and this number accounts for the four that closed since 4.7.10.08, EMS-002
+`ORD-0032` to `ORD-0035`. No digit resets any other.
 
 ### What moved in the emitted documents
 
@@ -57,6 +57,22 @@ resets any other.
   it in any case. Three `hgml` hashes move, `T-03`, `T-04` and `OC-10`. `H-15`
   pins the hole, and `H-16` counts every declared burn that re-reads with no
   `fix` its source lacks: 114 of 116, with `OC-12` and `R-04` named as known.
+- **EMS-002 ORD-0033** — `[part]` restored as the Regent designed it: `PT` is
+  the `struct` that slices a block, its first literal the name, each further
+  literal one level of the label as a `<user-input>`; a part no `[block` holds
+  asks which block, `PartOutsideBlock`; a part with no name is `fix`
+  `MissingStructName`; the `n` of `<part>` retires, and `fromXML` reads it back
+  from an older document. `OC-16` is the 119th declared source.
+
+### What moved around the engine
+
+- **EMS-002 ORD-0032** — behind the relay the page keeps no store of its own:
+  the `tables` call gives it, once, what it and `classify` read, and a request
+  carries only the templates that differ from the engine's, named by their
+  digest. No hash of the snapshot moved.
+- **EMS-002 ORD-0034** — the restructure: the 21 files of the language live in
+  `.guidelines/.sources/`, and the path index answers every old path as an
+  alias. No hash of the snapshot moved.
 
 ## [4.7.10.08] — a known command never vanishes, and the colon retires
 

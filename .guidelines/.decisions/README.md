@@ -25,6 +25,7 @@ The Regent's answers, given in the session, to B1–B4 of
 | **The Order moves the `minor` digit** (B3) | *"minor, to be calculated by each issue."* Each issue's Order works out its own count when it closes |
 | **The suite pins the reread: an `H` case for the hole, and a count over every declared burn, with `OC-12` and `R-04` named as known** (B4 a) | *"in accord."* |
 | **[`EMS-003/ORD-0001`](../.orders/EMS-003/README.md) is set aside, and the fix opens as [`EMS-002/ORD-0035`](../.orders/EMS-002/README.md)** | *"1a"*, the session's recommendation, after `/regency:proceed` found the open slot taken. This follows the precedent of `ORD-0011` on 2026-09-24: the Order stays issued, leaves the slot, and takes it back when the `ORD-0035` closes, still waiting on V1 to V7. `EMS-002` is the engine's series, and it holds the burn fixes `ORD-0019` to `0021` |
+| **4.7.10.09 accounts for every Order closed since 4.7.10.08, EMS-002 `ORD-0032` to `ORD-0035`** | *"it should account."* `ORD-0032` to `0034` closed without moving the number; the changelog entry of 4.7.10.09 names all four |
 | **The stash `Teleport auto-stash` of 2026-11-20 joins the hooks journal and is dropped** | *"2a"*. Its one line, a `SubagentStop` of 11:33, goes into the journal in timestamp order, so neither side loses a line |
 
 ---
