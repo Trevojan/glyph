@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "description": "A shorthand command notation that compiles to structured XML. The AST is the source of truth; the XML is a projection of it.",
-  "license": "SEE LICENSE IN README.md",
+  "license": "Apache-2.0",
   "engines": {
     "node": ">=18"
   },

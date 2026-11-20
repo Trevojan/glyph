@@ -34,4 +34,4 @@ members = [
 # (release.frontend.rules.minor) before it produces the engine's bytes.
 version = "0.0.0"
 edition = "2024"
-license-file = "../README.md"
+license = "Apache-2.0"
