@@ -1,7 +1,7 @@
 {
   "note": "written by glyph-vpath build, EMS-002; never edited by hand",
   "depth": 2,
-  "next": 3582,
+  "next": 3594,
   "files": {
     ".guidelines/.changelog/README.md": {
       "nodes": [
@@ -3394,6 +3394,16 @@
         ["n3481", "6-the-regents-answers", 7059, 7125, 130, 3, "0a29e3e27bbfbe00", "301dfbdca6f8b200", "n3475"]
       ]
     },
+    ".guidelines/.orders/INTAKE-BURN-FENCES.md": {
+      "nodes": [
+        ["n3582", "", 0, 4351, 1, 84, "d59a63649a5f5200", "", ""],
+        ["n3583", "intake--the-raw-fence-and-the-logic-block-through-the-burn", 0, 4351, 1, 84, "d59a63649a5f5200", "979e9048316a5c00", "n3582"],
+        ["n3584", "1-the-defect-wider-than-the-corpus-shows", 510, 1754, 10, 23, "7cb31f90829fe300", "e31b39962c2e1e00", "n3583"],
+        ["n3585", "2-measured", 1754, 2656, 33, 14, "1f8f44f06144be00", "72f77d102b25b780", "n3583"],
+        ["n3586", "3-what-this-leaves-alone", 2656, 3062, 47, 8, "30569148af235200", "2a1ed164b0737380", "n3583"],
+        ["n3587", "4-what-the-order-would-decide", 3062, 4351, 55, 30, "2be3b074b6b01600", "acfa9a4698bf6200", "n3583"]
+      ]
+    },
     ".guidelines/.orders/INTAKE-BURN-INVARIANCE.md": {
       "nodes": [
         ["n647", "", 0, 6996, 1, 139, "7f5d89a0ed0e5a00", "", ""],
@@ -3417,6 +3427,16 @@
         ["n3539", "4-what-this-leaves-alone", 3869, 4836, 87, 15, "b0fbee46632f0200", "6df75664906b9400", "n3535"],
         ["n3540", "5-what-the-order-would-decide", 4836, 6906, 102, 40, "2f5ed734322b5400", "6831a926d48de200", "n3535"],
         ["n3542", "6-the-answers--2026-11-20", 6906, 8053, 142, 14, "db008db463b67600", "b3e5edf0d5c50e00", "n3535"]
+      ]
+    },
+    ".guidelines/.orders/INTAKE-DIAG-SPANS.md": {
+      "nodes": [
+        ["n3588", "", 0, 5293, 1, 89, "bc586d2c8dda0720", "", ""],
+        ["n3589", "intake--a-source-span-on-every-diagnostic", 0, 5293, 1, 89, "bc586d2c8dda0720", "5e925cc898ec9200", "n3588"],
+        ["n3590", "1-what-carries-a-span-today", 477, 1362, 10, 19, "795c95ce7d2e4800", "e373ade8b57b1a00", "n3589"],
+        ["n3591", "2-what-each-emitter-has-in-scope", 1362, 3295, 29, 16, "dbfd930a17bed680", "07fd50ac2ad36100", "n3589"],
+        ["n3592", "3-what-this-leaves-alone", 3295, 3687, 45, 8, "f7d8b95ebaad6600", "8874b102944a9200", "n3589"],
+        ["n3593", "4-what-the-order-would-decide", 3687, 5293, 53, 37, "a36d3dc2fe0a0800", "105f921c1efab600", "n3589"]
       ]
     },
     ".guidelines/.orders/INTAKE-EFFECTS.md": {
@@ -4013,12 +4033,12 @@
     },
     ".guidelines/.orders/README.md": {
       "nodes": [
-        ["n2777", "", 0, 4256, 1, 68, "51a76824ded84400", "", ""],
-        ["n2778", "orders--the-contract-that-dispatches-the-work", 0, 4256, 1, 68, "51a76824ded84400", "759f6844bf95ba00", "n2777"],
+        ["n2777", "", 0, 4518, 1, 70, "8a140a04934f5e00", "", ""],
+        ["n2778", "orders--the-contract-that-dispatches-the-work", 0, 4518, 1, 70, "8a140a04934f5e00", "4d9d2110ec747500", "n2777"],
         ["n2779", "numbering", 482, 973, 10, 13, "80df8cc4d8e9d400", "f72b98e42830dec0", "n2778"],
         ["n2780", "the-open-order", 973, 1257, 23, 8, "80993b4aef980e00", "ccbd83266c0f44f0", "n2778"],
         ["n2781", "closed-orders", 1257, 2164, 31, 14, "bfa7eb9809fea800", "8d0f8730e67e2c00", "n2778"],
-        ["n2782", "intake--what-arrived-while-an-order-was-open", 2164, 4256, 45, 24, "1fb2e5e04ae15400", "76d36f94334b4500", "n2778"]
+        ["n2782", "intake--what-arrived-while-an-order-was-open", 2164, 4518, 45, 26, "b64c2d5092807800", "e6f6cac8955a4f00", "n2778"]
       ]
     },
     ".guidelines/.orders/parked/restructure-glyph-repo/ORD-0011.hgml": {
@@ -4217,14 +4237,14 @@
     },
     ".guidelines/.shortcuts/README.md": {
       "nodes": [
-        ["n1153", "", 0, 12223, 1, 88, "abec5f962edf6680", "", ""],
-        ["n1154", "atalhos--comece-por-aqui", 0, 12223, 1, 88, "abec5f962edf6680", "b5f5651807599600", "n1153"],
-        ["n1155", "onde-estou", 442, 6217, 11, 13, "11842b78143c2580", "2c919a8412989a00", "n1154"],
-        ["n1156", "os-sete-eixos", 6217, 7457, 24, 12, "c7a610b8cc345700", "ea685f36d51a4300", "n1154"],
-        ["n1157", "o-mapa-do-motor-em-cinco-linhas", 7457, 8402, 36, 12, "fef2a4f026f43a00", "b0d1ba46f3be8000", "n1154"],
-        ["n1158", "os-documentos-que-mais-se-consulta", 8402, 10487, 48, 19, "8f437238ec9aa800", "1d1dc5788fc11000", "n1154"],
-        ["n1159", "os-outros-documentos", 10487, 11875, 67, 16, "64d35eac63761200", "35cfc74863da0e40", "n1154"],
-        ["n1160", "vocabulário-do-projeto", 11875, 12223, 83, 6, "b895f5b69b891000", "f6cb060882a72600", "n1154"]
+        ["n1153", "", 0, 12365, 1, 88, "594aeaf0706a5400", "", ""],
+        ["n1154", "atalhos--comece-por-aqui", 0, 12365, 1, 88, "594aeaf0706a5400", "16232da028d6c200", "n1153"],
+        ["n1155", "onde-estou", 442, 6359, 11, 13, "850000d8190aaf00", "503184347319bb00", "n1154"],
+        ["n1156", "os-sete-eixos", 6359, 7599, 24, 12, "c7a610b8cc345700", "ea685f36d51a4300", "n1154"],
+        ["n1157", "o-mapa-do-motor-em-cinco-linhas", 7599, 8544, 36, 12, "fef2a4f026f43a00", "b0d1ba46f3be8000", "n1154"],
+        ["n1158", "os-documentos-que-mais-se-consulta", 8544, 10629, 48, 19, "8f437238ec9aa800", "1d1dc5788fc11000", "n1154"],
+        ["n1159", "os-outros-documentos", 10629, 12017, 67, 16, "64d35eac63761200", "35cfc74863da0e40", "n1154"],
+        ["n1160", "vocabulário-do-projeto", 12017, 12365, 83, 6, "b895f5b69b891000", "f6cb060882a72600", "n1154"]
       ]
     },
     ".guidelines/.shortcuts/regency.json": {

@@ -71,6 +71,30 @@
       "since": "2026-11-20"
     },
     {
+      "id": "BURN-FENCES",
+      "title": "a cerca [raw] e o bloco [logic na queima: a forma aberta, carregando o corpo, e a queima relida sem fix",
+      "state": "backlog",
+      "next": "the measured proposal is INTAKE-BURN-FENCES.md §4, F1 to F4, waiting for the Regent; the Order opens with the answers once the open slot is free",
+      "source": "INTAKE-BURN-PLACEHOLDER.md §4, H-16's KNOWN list",
+      "where": [
+        ".guidelines/.orders/INTAKE-BURN-FENCES.md",
+        "scripts/core/burn.js",
+        "rust/crates/glyph-burn/src/lib.rs"
+      ]
+    },
+    {
+      "id": "DIAG-SPANS",
+      "title": "um intervalo de fonte em todo diagnóstico, para o editor sublinhar onde o problema está",
+      "state": "backlog",
+      "next": "the measured proposal is INTAKE-DIAG-SPANS.md §4, D1 to D5, waiting for the Regent; the Order opens with the answers once the open slot is free",
+      "source": "issue #13, INTAKE-VSCODE-AUTHORING.md §7",
+      "where": [
+        ".guidelines/.orders/INTAKE-DIAG-SPANS.md",
+        "scripts/core/parser.js",
+        "rust/crates/glyph-parse/src/lib.rs"
+      ]
+    },
+    {
       "id": "ORDER-COHERENCE",
       "title": "a coerência entre Ordens e o repair como fila, o que habilita o Explorer de EMS",
       "state": "backlog",
