@@ -351,12 +351,12 @@
     "T-03": {
       "xml": "a0910f6deddf35cf",
       "ast": "d7b5899dc9e554e1",
-      "hgml": "7cbdb0d3a9f69288"
+      "hgml": "556dd94ed0f9d896"
     },
     "T-04": {
       "xml": "96d491dc9d7798fb",
       "ast": "e8d3d2230fa3de9a",
-      "hgml": "e5473fa34387f91a"
+      "hgml": "6c7be594da67896c"
     },
     "T-05": {
       "xml": "02fe1834cdb12015",
@@ -566,7 +566,7 @@
     "OC-10": {
       "xml": "afd8f42cc67e49b3",
       "ast": "815f9d25682d8162",
-      "hgml": "f1cb5dd5c28cf8fa"
+      "hgml": "111c2252e3b5e59b"
     },
     "OC-11": {
       "xml": "f0a53c687c21e80c",

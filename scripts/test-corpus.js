@@ -1074,6 +1074,55 @@ function runHgmlChecks() {
      G.toHGML("[rmbr`X`]", opts) !== G.toHGML("[rmbr[get[ctx]]`X`]", opts) ? null
        : "the two orders now burn the same, which trades a duplication for a different lie");
 
+  /* H-15 -- a hole's name burnt as a command (EMS-002 ORD-0035, issue #12).
+     `[ph-x`q`]` burnt to `[ph [x[/x] 'q' [/ph]`, and the reread read `x` as
+     an unknown command, so the burn of an Order Matrix never re-read clean.
+     The head line carries the name, lowercase as the engine writes it
+     everywhere (the Regent, 2026-11-20), and the reread asks what the
+     source asks. */
+  {
+    const src = "[ph-MyName`q`]";
+    const h = G.toHGML(src, opts);
+    const needs = s => (G.toXML(s, opts).match(/<needs[^>]*>[^<]*<\/needs>/g) || []).join(" ");
+    const re = reburn(src);
+    ok("H-15", "a hole keeps its name through the burn, on the head line",
+       /^\[ph-myname$/m.test(h) && !re.fix.length && needs(h) === needs(src) &&
+       needs(src) === '<needs slot="myname">q</needs>' ? null
+         : "burnt " + JSON.stringify(h) + ", reread fix " + re.fix.join(",") +
+           ", needs " + needs(src) + " -> " + needs(h));
+  }
+
+  /* H-16 -- what H-02 asks of one composite, asked of every declared source:
+     its burn re-reads with no `fix` the source itself does not carry. H-09
+     checked the 32 composites and nothing else, which is how a hole's name
+     burnt as a command lived through every check. KNOWN are the burns that
+     still do not re-read clean, each for its own reason: the raw fence and
+     the logic block burn without what they hold. A burn that breaks moves
+     the list, and so does one that is fixed. */
+  {
+    const KNOWN = ["OC-12", "R-04"];
+    const DECLARED = [].concat(POSITIVE, INCOMPLETE, INVALID, REGRESSION, LONG,
+                               TEMPLATES, CONSTRAINTS, RULE_CASES, ORACLE_COVERAGE);
+    const REPO_OPTS = { templates: TPL.templates, rules: RULESTORE, expansions: store };
+    let burns = 0;
+    const failing = [];
+    DECLARED.forEach(c => {
+      if (!c || !c.id || typeof c.src !== "string") return;
+      const O = c.opts ? { ...REPO_OPTS, ...c.opts } : REPO_OPTS;
+      let h;
+      try { h = G.toHGML(c.src, O); } catch (e) { return; }
+      if (/^#/.test(h)) return;
+      burns++;
+      const own = new Set(G.parse(c.src, O).gaps.filter(g => g.sev === "fix").map(g => g.code));
+      if (G.parse(h, O).gaps.some(g => g.sev === "fix" && !own.has(g.code))) failing.push(c.id);
+    });
+    failing.sort();
+    ok("H-16", "every declared burn re-reads with no `fix` its source lacks — " +
+               (burns - KNOWN.length) + " of " + burns,
+       JSON.stringify(failing) === JSON.stringify(KNOWN) ? null
+         : "expected " + JSON.stringify(KNOWN) + ", got " + JSON.stringify(failing));
+  }
+
   return H.length;
 }
 const rH = runHgmlChecks();

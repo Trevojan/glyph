@@ -173,7 +173,9 @@ impl Fills {
     }
 }
 
-/// `phName`: the raw name of the hole's slot-name child.
+/// `phName`: the name of the hole's slot-name child, lowercase, as the engine
+/// writes a hole's name everywhere, so any case the author typed reads as the
+/// same hole (the Regent, 2026-11-20).
 pub fn ph_name<X>(tree: &Tree<X>, id: Id) -> Option<String> {
     tree.nodes[id]
         .children
@@ -182,8 +184,9 @@ pub fn ph_name<X>(tree: &Tree<X>, id: Id) -> Option<String> {
         .map(|&c| {
             tree.nodes[c]
                 .raw
-                .clone()
-                .unwrap_or_else(|| "undefined".into())
+                .as_deref()
+                .unwrap_or("undefined")
+                .to_lowercase()
         })
 }
 

@@ -39,9 +39,11 @@ import { templateRegistry, rulesOf } from "./stores.js";
    named one keeps its name as its `slot`.
    ====================================================== */
 
+/* lowercase, as the engine writes a hole's name everywhere, so any case the
+   author typed reads as the same hole (the Regent, 2026-11-20) */
 export function phName(nd) {
   var n = (nd.children || []).filter(function (c) { return c.slotName; })[0];
-  return n ? String(n.raw) : null;
+  return n ? String(n.raw).toLowerCase() : null;
 }
 
 /* what a fill's bracket holds past its `-name` binder, in written order */

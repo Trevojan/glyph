@@ -22,7 +22,9 @@ pub const BURN_LIMIT: usize = 24;
 /// keeps as the parse wrote it.
 #[derive(Debug, Clone, PartialEq)]
 pub enum Burnt {
-    /// `subject` is what the atom works on, as `subjectKey` writes it.
+    /// `subject` is what the atom works on, as `subjectKey` writes it;
+    /// `slot_name` is a hole's name, lowercase, which `hgml_lines` writes
+    /// on the head line of its `[ph`.
     Atom {
         canonical: String,
         children: Vec<Burnt>,
@@ -30,6 +32,7 @@ pub enum Burnt {
         via: Option<String>,
         blended: bool,
         subject: String,
+        slot_name: Option<String>,
     },
     Literal(Option<String>),
     Text(Option<String>),
@@ -189,6 +192,7 @@ pub fn apply_blends(list: Vec<Burnt>, compiled: Option<&Compiled>, st: &mut Burn
                 via: None,
                 blended: true,
                 subject: s,
+                slot_name: None,
             });
             out = kept;
         }
@@ -268,6 +272,21 @@ pub fn burn_list(
         passed to, so it must not inherit that formula's chain */
         let operands = burn_list(tree, &nd.children, o, compiled, chain, depth + 1, None, st)?;
         let own = subject.map_or_else(|| subject_key(&operands), str::to_string);
+        /* a hole's name is not vocabulary: it travels to the head line of its
+        `[ph`, lowercase, where the `-` makes it a name again on the reread
+        (EMS-002 ORD-0035; the Regent, 2026-11-20) */
+        if nd.slot_name == Some(true) {
+            out.push(Burnt::Atom {
+                canonical,
+                children: Vec::new(),
+                unburned: false,
+                via: None,
+                blended: false,
+                subject: own,
+                slot_name: Some(nd.raw.as_deref().unwrap_or("").to_lowercase()),
+            });
+            continue;
+        }
         if e.is_none_or(|e| e.get("species").and_then(Json::str) == Some("atom")) {
             out.push(Burnt::Atom {
                 canonical,
@@ -276,6 +295,7 @@ pub fn burn_list(
                 via: None,
                 blended: false,
                 subject: own,
+                slot_name: None,
             });
             continue;
         }
@@ -289,6 +309,7 @@ pub fn burn_list(
                 via: Some(via),
                 blended: false,
                 subject: own,
+                slot_name: None,
             });
             continue;
         }
@@ -385,10 +406,21 @@ pub fn hgml_lit(v: Option<&str>) -> String {
     js_trim(&out)
 }
 
+/// A hole's name, which its `[ph` writes on its head line and nowhere else.
+fn is_slot_name(n: &Burnt) -> bool {
+    matches!(
+        n,
+        Burnt::Atom {
+            slot_name: Some(_),
+            ..
+        }
+    )
+}
+
 /// `hgmlLines`: every tag opens without `]` and closes with `[/name]`.
 pub fn hgml_lines(list: &[Burnt], d: usize, l: &mut Vec<String>) {
     let pad = |d: usize| "  ".repeat(d.min(LIMITS.indent));
-    for nd in list {
+    for nd in list.iter().filter(|n| !is_slot_name(n)) {
         match nd {
             Burnt::Literal(v) | Burnt::Text(v) => {
                 l.push(format!("{}'{}'", pad(d), hgml_lit(v.as_deref())))
@@ -413,10 +445,17 @@ pub fn hgml_lines(list: &[Burnt], d: usize, l: &mut Vec<String>) {
                 } else {
                     canonical.to_lowercase()
                 };
-                if children.is_empty() {
-                    l.push(format!("{}[{name}[/{name}]", pad(d)));
+                let slot = children.iter().find_map(|k| match k {
+                    Burnt::Atom {
+                        slot_name: Some(s), ..
+                    } => Some(s.as_str()),
+                    _ => None,
+                });
+                let head = slot.map_or_else(|| format!("[{name}"), |s| format!("[{name}-{s}"));
+                if children.iter().all(is_slot_name) {
+                    l.push(format!("{}{head}[/{name}]", pad(d)));
                 } else {
-                    l.push(format!("{}[{name}", pad(d)));
+                    l.push(format!("{}{head}", pad(d)));
                     hgml_lines(children, d + 1, l);
                     l.push(format!("{}[/{name}]", pad(d)));
                 }

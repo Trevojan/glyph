@@ -186,10 +186,11 @@ fn hole_of(tree: &Tree<Extra>, id: Id) -> Hole {
         .copied()
         .find(|&c| tree.nodes[c].slot_name == Some(true));
     let q = kids.iter().copied().find(|&c| tree.nodes[c].is_literal());
+    /* the name lowercase, read in any case (the Regent, 2026-11-20) */
     let slot = name.map_or(String::new(), |c| {
         format!(
             " slot=\"{}\"",
-            xesc(tree.nodes[c].raw.as_deref().unwrap_or(""))
+            xesc(&tree.nodes[c].raw.as_deref().unwrap_or("").to_lowercase())
         )
     });
     let text = q.map_or("sem resposta".to_string(), |c| {

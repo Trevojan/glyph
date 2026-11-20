@@ -421,7 +421,8 @@ export function holeOf(nd) {
   var kids = nd.children || [];
   var nameNode = kids.filter(function (c) { return c.slotName; })[0];
   var qNode = kids.filter(function (c) { return c.literal; })[0];
-  var needs = "<needs" + (nameNode ? ' slot="' + xesc(nameNode.raw) + '"' : "") + ">" +
+  /* the name lowercase, read in any case (the Regent, 2026-11-20) */
+  var needs = "<needs" + (nameNode ? ' slot="' + xesc(String(nameNode.raw).toLowerCase()) + '"' : "") + ">" +
               xesc(qNode ? qNode.v : "sem resposta") + "</needs>";
   var filled = !!(qNode && qNode.boundSlot);
   var held = kids.filter(function (c) { return c !== nameNode && c !== qNode; });

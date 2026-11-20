@@ -1120,7 +1120,7 @@ pub fn parse(src: &str, o: &Opts) -> Result<Parse, Thrown> {
             .map(|&c| {
                 format!(
                     "<code>{}</code> ",
-                    esc(tree.nodes[c].raw.as_deref().unwrap_or(""))
+                    esc(&tree.nodes[c].raw.as_deref().unwrap_or("").to_lowercase())
                 )
             });
         let q_id = kids.iter().copied().find(|&c| tree.nodes[c].is_literal());

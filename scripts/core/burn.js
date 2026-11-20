@@ -177,6 +177,16 @@ export function burnList(list, opts, chain, depth, subject) {
     var operands = burnList(nd.children || [], opts, chain, depth + 1);
     var own = subject !== undefined ? subject : subjectKey(operands);
 
+    /* A hole's name is not vocabulary: it travels to the head line of its
+       `[ph`, where the `-` that touches the head makes it a name again on the
+       reread. Written as an atom on a line of its own, it re-read as an
+       unknown command (EMS-002 ORD-0035). Lowercase, as the engine writes a
+       hole's name everywhere (the Regent, 2026-11-20). */
+    if (nd.slotName) {
+      out.push({ canonical: nd.canonical, slotName: String(nd.raw).toLowerCase(), children: [], subject: own });
+      return;
+    }
+
     if (!e || e.species === "atom") {
       out.push({ canonical: nd.canonical, children: operands, subject: own });
       return;
@@ -232,8 +242,11 @@ export function hgmlLines(list, d, L) {
     if (nd.logic)   { L.push(pad(d) + "[logic" + (nd.logic.name ? "-" + nd.logic.name : "") + "[/logic]"); return; }
     var name = String(nd.canonical || "?").toLowerCase();
     var kids = nd.children || [];
-    if (!kids.length) { L.push(pad(d) + "[" + name + "[/" + name + "]"); return; }
-    L.push(pad(d) + "[" + name);
+    var slot = kids.filter(function (k) { return k.slotName; })[0];
+    var head = "[" + name + (slot ? "-" + slot.slotName : "");
+    if (slot) kids = kids.filter(function (k) { return k !== slot; });
+    if (!kids.length) { L.push(pad(d) + head + "[/" + name + "]"); return; }
+    L.push(pad(d) + head);
     hgmlLines(kids, d + 1, L);
     L.push(pad(d) + "[/" + name + "]");
   });

@@ -471,10 +471,10 @@ export function parse(input, opts) {
       var q = (nd2.children || []).filter(function (c) { return c.literal; })[0];
       /* a hole a template call filled kept what it held, and asks nothing */
       if (q && q.boundSlot) return;
+      var holeName = nameNode ? "<code>" + esc(String(nameNode.raw).toLowerCase()) + "</code> " : "";
       G("ask", "casa vazia",
-        (nameNode ? "<code>" + esc(nameNode.raw) + "</code> " : "") +
-        (q ? esc(q.v) : "sem resposta"), "PlaceholderPending",
-          "empty field", (nameNode ? "<code>" + esc(nameNode.raw) + "</code> " : "") + (q ? esc(q.v) : "no answer"));
+        holeName + (q ? esc(q.v) : "sem resposta"), "PlaceholderPending",
+          "empty field", holeName + (q ? esc(q.v) : "no answer"));
     });
   });
 
