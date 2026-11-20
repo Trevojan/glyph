@@ -35,7 +35,7 @@
         ".scope/asset/glyph-icons"
       ],
       "blocked_by": "the Regent: the questions V1 to V7 of INTAKE-2D-VIEW.md §5",
-      "next": "ORD-0001 set aside on 2026-11-20 while EMS-002/ORD-0035 holds the slot; it takes the slot back when that closes. Once the gate is answered, write the signed model in the intake §6, re-emit any queued ORD it changes, close ORD-0001 and open ORD-0002"
+      "next": "ORD-0001 holds the open slot again since EMS-002/ORD-0035 closed on 2026-11-20; once the gate is answered, write the signed model in the intake §6, re-emit any queued ORD it changes, close ORD-0001 and open ORD-0002"
     },
     {
       "id": "EFF-8",
@@ -58,8 +58,8 @@
     {
       "id": "BURN-PH",
       "title": "o nome de um placeholder na queima: a linha de cabeça do [ph o carrega, e a queima relida não dá UnknownCommand",
-      "state": "ongoing",
-      "next": "EMS-002/ORD-0035 issued and open on 2026-11-20; next: both engines, the H case and the count pin, the snapshot and the skill, and the minor digit at close",
+      "state": "review",
+      "next": "EMS-002/ORD-0035 built and closed on 2026-11-20 (e388e80, 6a3bb0a, engine 4.7.10.09): both engines, H-15 and H-16, snapshot three hgml, the skill and the plugin; waits for the Regent's acceptance, and issue #12 closes once main is pushed",
       "source": ".plan/README.md §3, issue #12",
       "where": [
         ".guidelines/.orders/EMS-002/ORD-0035/ORD-0035.xml",

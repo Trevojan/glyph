@@ -8,14 +8,6 @@ visible links. The spec is [`EMS-003.pgml`](EMS-003.pgml), the measured proposal
 
 ## The open Order
 
-None in this series. The slot belongs to
-[`EMS-002/ORD-0035`](../EMS-002/README.md) until it closes, by the Regent's word of
-2026-11-20 ([`.decisions/`](../../.decisions/README.md)).
-
-## Set aside
-
-The Order stays issued and in place. It takes the open slot back when `EMS-002/ORD-0035` closes.
-
 - [`EMS-003/ORD-0001`](ORD-0001/ORD-0001.xml) — the model of the 2D view: what a node, a container and a connector are, which operator each connector writes, where a position lives and what an edit changes; it opens with the measured proposal of [`INTAKE-2D-VIEW.md`](../INTAKE-2D-VIEW.md) and stops at the gate of the Regent, the questions V1 to V7 of its §5; open since 2026-11-11
 
 ## The queue

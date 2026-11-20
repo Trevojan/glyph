@@ -2,8 +2,8 @@
 
 > **The measured proposal for issue #12** and the [`.plan`](../.plan/README.md) §3 row
 > *o nome de um placeholder queima como comando*. The Regent answered §5 on 2026-11-20,
-> and §6 holds the answers. The Order opens with them once the open slot is free
-> (`EMS-003/ORD-0001` holds it). Measured at `1e58eef`, engine 4.7.10.08, with an
+> and §6 holds the answers. [`EMS-002/ORD-0035`](EMS-002/README.md) built them and closed
+> on 2026-11-20, at engine 4.7.10.09. Measured at `1e58eef`, engine 4.7.10.08, with an
 > experimental patch applied to `scripts/core/burn.js` and taken back out; nothing of it
 > is committed.
 
