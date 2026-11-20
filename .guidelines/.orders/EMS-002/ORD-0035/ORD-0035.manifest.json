@@ -1,0 +1,16 @@
+{
+  "order": "ORD-0035",
+  "engine": "4.7.10.08",
+  "emitted": "2026-11-20T22:47:33.484Z",
+  "files": [
+    "ORD-0035.pgml",
+    "ORD-0035.xml",
+    "ORD-0035.json",
+    "ORD-0035.hgml"
+  ],
+  "source": "C:/Users/Usuario/.claude/jobs/ed91e832/tmp/ORD-0035.pgml",
+  "diagnostics": {
+    "fix": 0,
+    "total": 0
+  }
+}

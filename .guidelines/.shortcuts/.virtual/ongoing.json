@@ -59,9 +59,10 @@
       "id": "BURN-PH",
       "title": "o nome de um placeholder na queima: a linha de cabeça do [ph o carrega, e a queima relida não dá UnknownCommand",
       "state": "ongoing",
-      "next": "EMS-002/ORD-0035 is being issued from INTAKE-BURN-PLACEHOLDER.md §6; then both engines, the H case and the count pin, the snapshot and the skill, and the minor digit at close",
+      "next": "EMS-002/ORD-0035 issued and open on 2026-11-20; next: both engines, the H case and the count pin, the snapshot and the skill, and the minor digit at close",
       "source": ".plan/README.md §3, issue #12",
       "where": [
+        ".guidelines/.orders/EMS-002/ORD-0035/ORD-0035.xml",
         ".guidelines/.orders/INTAKE-BURN-PLACEHOLDER.md",
         "scripts/core/burn.js",
         "rust/crates/glyph-burn/src/lib.rs"

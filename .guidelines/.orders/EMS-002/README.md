@@ -8,6 +8,7 @@ pacote que o `--bundle` escreve, e a contagem é desta série.
 
 ## A Ordem aberta
 
+- [`EMS-002/ORD-0035`](ORD-0035/ORD-0035.xml) — a hole keeps its name through the burn, in both engines: the head line of a `[ph` carries the name, in lowercase, the XML `slot` too, and the reread has no `UnknownCommand` (issue #12). It opens with the answers of 2026-11-20 to [`INTAKE-BURN-PLACEHOLDER.md`](../INTAKE-BURN-PLACEHOLDER.md) §5, and holds the slot that [`EMS-003/ORD-0001`](../EMS-003/README.md) takes back when it closes. Open since 2026-11-20
 
 ## Ordens fechadas
 

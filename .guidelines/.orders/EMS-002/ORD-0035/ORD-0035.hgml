@@ -1,0 +1,88 @@
+[block
+  'ORD-0035-burn-placeholder'
+  [ctx
+    'the spec of EMS-002'
+    '.guidelines/.orders/EMS-002/EMS-002.pgml'
+  [/ctx]
+  [ctx
+    'the measured proposal and the answers of the Regent'
+    '.guidelines/.orders/INTAKE-BURN-PLACEHOLDER.md'
+  [/ctx]
+  [tgt
+    'a hole keeps its name through the burn in both engines: the head line of the placeholder carries the name, and the burn rereads with no UnknownCommand, issue 12'
+  [/tgt]
+  [ctx
+    'the answers of 2026-11-20 to section 5 of the intake: B1 both engines in one order; B2 the name in lowercase wherever the engine writes it, read in any case; B3 the minor digit, worked out by the order; B4 a, the reread pinned'
+  [/ctx]
+  [ctx
+    'the Regent, 2026-11-20: EMS-003 ORD-0001 is set aside and this order takes the open slot until it closes'
+  [/ctx]
+  [ctx
+    'measured at 1e58eef: the burn drops the slot name flag and writes the name as a command; with the name on the head line, three hgml digests move, T-03, T-04 and OC-10, no xml and no ast; 114 of the 116 declared burns reread with no fix their source lacks, against 111 today'
+  [/ctx]
+  [cnst
+    'only the head line of a placeholder changes in the burn, and every tag keeps the closed form'
+  [/cnst]
+  [cnst
+    'the name is lowercase in the burn and in the slot of the xml, and the reader takes any case'
+  [/cnst]
+  [cnst
+    'npm run check and npm run check:rust green at every commit, the snapshot moved only where the intake names it'
+  [/cnst]
+  [nev
+    'the snapshot is regenerated to make the suite green'
+  [/nev]
+  [dont
+    'touch the raw fence or the logic block, which the intake names as other defects'
+  [/dont]
+  [cmp
+    'the burn'
+    'in both engines a placeholder burns with its name on the head line, lowercase, and the reread has the same needs slot and no fix'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+  [cmp
+    'the pin'
+    'an H case for the hole, and a count over every declared burn with OC-12 and R-04 named as known, seen failing before the fix'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+[/block]

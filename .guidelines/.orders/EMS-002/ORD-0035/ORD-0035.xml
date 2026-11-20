@@ -1,0 +1,52 @@
+<glyph-package engine="4.7.10.08">
+  <schema/>
+  <block once="true">
+    <block name="ORD-0035-burn-placeholder" binds="ORD-0035-burn-placeholder">
+      <context>
+        <user-input>the spec of EMS-002</user-input>
+        <user-input>.guidelines/.orders/EMS-002/EMS-002.pgml</user-input>
+      </context>
+      <context>
+        <user-input>the measured proposal and the answers of the Regent</user-input>
+        <user-input>.guidelines/.orders/INTAKE-BURN-PLACEHOLDER.md</user-input>
+      </context>
+      <target>
+        <user-input>a hole keeps its name through the burn in both engines: the head line of the placeholder carries the name, and the burn rereads with no UnknownCommand, issue 12</user-input>
+      </target>
+      <context>
+        <user-input>the answers of 2026-11-20 to section 5 of the intake: B1 both engines in one order; B2 the name in lowercase wherever the engine writes it, read in any case; B3 the minor digit, worked out by the order; B4 a, the reread pinned</user-input>
+      </context>
+      <context>
+        <user-input>the Regent, 2026-11-20: EMS-003 ORD-0001 is set aside and this order takes the open slot until it closes</user-input>
+      </context>
+      <context>
+        <user-input>measured at 1e58eef: the burn drops the slot name flag and writes the name as a command; with the name on the head line, three hgml digests move, T-03, T-04 and OC-10, no xml and no ast; 114 of the 116 declared burns reread with no fix their source lacks, against 111 today</user-input>
+      </context>
+      <constraint>
+        <user-input>only the head line of a placeholder changes in the burn, and every tag keeps the closed form</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the name is lowercase in the burn and in the slot of the xml, and the reader takes any case</user-input>
+      </constraint>
+      <constraint>
+        <user-input>npm run check and npm run check:rust green at every commit, the snapshot moved only where the intake names it</user-input>
+      </constraint>
+      <never force="editorial">
+        <user-input>the snapshot is regenerated to make the suite green</user-input>
+      </never>
+      <do-not>
+        <user-input>touch the raw fence or the logic block, which the intake names as other defects</user-input>
+      </do-not>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the burn</user-input>
+        <user-input>in both engines a placeholder burns with its name on the head line, lowercase, and the reread has the same needs slot and no fix</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the pin</user-input>
+        <user-input>an H case for the hole, and a count over every declared burn with OC-12 and R-04 named as known, seen failing before the fix</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>
