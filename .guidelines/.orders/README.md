@@ -51,6 +51,7 @@ of its series, out of the open slot.
 |---|---|
 | [`INTAKE-2D-VIEW.md`](INTAKE-2D-VIEW.md) | Intake — the 2D view: the measured proposal |
 | [`INTAKE-BURN-INVARIANCE.md`](INTAKE-BURN-INVARIANCE.md) | Preliminary intake — is the burn a canonical form? |
+| [`INTAKE-BURN-PLACEHOLDER.md`](INTAKE-BURN-PLACEHOLDER.md) | Intake — a placeholder's name, through the burn: the measured proposal |
 | [`INTAKE-EFFECTS.md`](INTAKE-EFFECTS.md) | Preliminary intake — effects |
 | [`INTAKE-FIELD-2026-09.md`](INTAKE-FIELD-2026-09.md) | Field intake — the engine used on a client project |
 | [`INTAKE-FORMAL-ANALYSIS.md`](INTAKE-FORMAL-ANALYSIS.md) | Formal analysis — intakes A, B and C |

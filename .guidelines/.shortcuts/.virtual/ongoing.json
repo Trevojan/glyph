@@ -1,7 +1,7 @@
 {
   "_about": "Registro do trabalho dos agentes: o primeiro relance ao voltar a este repositório. Aponta, nunca copia. O modelo é o do toolkit Regency, library/virtualpath.md §3; o detalhe de cada item mora no source.",
   "schema": 1,
-  "updated": "2026-11-18",
+  "updated": "2026-11-20",
   "items": [
     {
       "id": "PLAN-1",
@@ -53,6 +53,18 @@
       "source": ".orders/INTAKE-EFFECTS.md §8.1",
       "where": [
         ".guidelines/.orders/INTAKE-XSD.md"
+      ]
+    },
+    {
+      "id": "BURN-PH",
+      "title": "o nome de um placeholder na queima: a linha de cabeça do [ph o carrega, e a queima relida não dá UnknownCommand",
+      "state": "backlog",
+      "next": "the measured proposal is INTAKE-BURN-PLACEHOLDER.md §5, B1 to B4, waiting for the Regent; the Order opens with the answers once the open slot is free",
+      "source": ".plan/README.md §3, issue #12",
+      "where": [
+        ".guidelines/.orders/INTAKE-BURN-PLACEHOLDER.md",
+        "scripts/core/burn.js",
+        "rust/crates/glyph-burn/src/lib.rs"
       ]
     },
     {
