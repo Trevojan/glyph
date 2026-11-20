@@ -35,7 +35,7 @@
         ".scope/asset/glyph-icons"
       ],
       "blocked_by": "the Regent: the questions V1 to V7 of INTAKE-2D-VIEW.md §5",
-      "next": "ORD-0001 emitted and open, ORD-0002 to ORD-0006 emitted and queued; once the gate is answered, write the signed model in the intake §6, re-emit any queued ORD it changes, close ORD-0001 and open ORD-0002"
+      "next": "ORD-0001 set aside on 2026-11-20 while EMS-002/ORD-0035 holds the slot; it takes the slot back when that closes. Once the gate is answered, write the signed model in the intake §6, re-emit any queued ORD it changes, close ORD-0001 and open ORD-0002"
     },
     {
       "id": "EFF-8",
@@ -58,14 +58,16 @@
     {
       "id": "BURN-PH",
       "title": "o nome de um placeholder na queima: a linha de cabeça do [ph o carrega, e a queima relida não dá UnknownCommand",
-      "state": "backlog",
-      "next": "the Regent answered B1 to B4 on 2026-11-20 (INTAKE-BURN-PLACEHOLDER.md §6): both engines, the name lowercase and read in any case, minor, and the reread pinned; the Order opens once the open slot is free",
+      "state": "ongoing",
+      "next": "EMS-002/ORD-0035 is being issued from INTAKE-BURN-PLACEHOLDER.md §6; then both engines, the H case and the count pin, the snapshot and the skill, and the minor digit at close",
       "source": ".plan/README.md §3, issue #12",
       "where": [
         ".guidelines/.orders/INTAKE-BURN-PLACEHOLDER.md",
         "scripts/core/burn.js",
         "rust/crates/glyph-burn/src/lib.rs"
-      ]
+      ],
+      "who": "DV",
+      "since": "2026-11-20"
     },
     {
       "id": "ORDER-COHERENCE",
