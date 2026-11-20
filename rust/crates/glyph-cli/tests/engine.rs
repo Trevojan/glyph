@@ -5,7 +5,7 @@
 #[path = "../../../testkit/oracle.rs"]
 mod oracle;
 
-use oracle::{module, Json, Must};
+use oracle::{Json, Must, module};
 use std::io::Write;
 use std::process::{Command, Stdio};
 
@@ -14,18 +14,44 @@ fn the_engine_answers_every_recorded_request_in_order() {
     let lines = module("protocol").a("lines");
     let input: String = lines.iter().map(|l| format!("{}\n", l.s("q"))).collect();
     let mut child = Command::new(env!("CARGO_BIN_EXE_glyph-engine"))
-        .stdin(Stdio::piped()).stdout(Stdio::piped()).stderr(Stdio::piped()).spawn().expect("the engine runs");
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()
+        .expect("the engine runs");
     let mut stdin = child.stdin.take().expect("stdin");
-    let writer = std::thread::spawn(move || stdin.write_all(input.as_bytes()).expect("stdin takes the requests"));
-    let out = child.wait_with_output().expect("the engine ends at the end of its input");
+    let writer = std::thread::spawn(move || {
+        stdin
+            .write_all(input.as_bytes())
+            .expect("stdin takes the requests")
+    });
+    let out = child
+        .wait_with_output()
+        .expect("the engine ends at the end of its input");
     writer.join().expect("the writer");
-    assert!(out.status.success() && out.stderr.is_empty(), "{:?}", String::from_utf8_lossy(&out.stderr));
+    assert!(
+        out.status.success() && out.stderr.is_empty(),
+        "{:?}",
+        String::from_utf8_lossy(&out.stderr)
+    );
     let text = String::from_utf8(out.stdout).expect("UTF-8");
     let answers: Vec<&str> = text.split_terminator('\n').collect();
     assert_eq!(answers.len(), lines.len(), "one answer a request");
     for (l, got) in lines.iter().zip(&answers) {
-        let burn = oracle::parse(l.s("q")).ok().and_then(|q| q.get("call").and_then(Json::str).map(|c| c == "toHGML")) == Some(true);
-        let got = if burn { oracle::known::semicolons_json(got) } else { got.to_string() };
-        assert_eq!(got, l.s("a"), "{}", l.s("q").get(..l.s("q").len().min(90)).unwrap_or(l.s("q")));
+        let burn = oracle::parse(l.s("q"))
+            .ok()
+            .and_then(|q| q.get("call").and_then(Json::str).map(|c| c == "toHGML"))
+            == Some(true);
+        let got = if burn {
+            oracle::known::semicolons_json(got)
+        } else {
+            got.to_string()
+        };
+        assert_eq!(
+            got,
+            l.s("a"),
+            "{}",
+            l.s("q").get(..l.s("q").len().min(90)).unwrap_or(l.s("q"))
+        );
     }
 }

@@ -11,7 +11,10 @@ fn main() {
     let mut out = std::io::stdout().lock();
     for line in std::io::stdin().lock().lines() {
         let Ok(line) = line else { break };
-        if writeln!(out, "{}", common::answer(&line)).and_then(|_| out.flush()).is_err() {
+        if writeln!(out, "{}", common::answer(&line))
+            .and_then(|_| out.flush())
+            .is_err()
+        {
             break;
         }
     }

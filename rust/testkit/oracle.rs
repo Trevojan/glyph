@@ -21,7 +21,7 @@ use std::sync::{Mutex, OnceLock};
 /// The command that writes the oracle, named by every failure to find it.
 pub const WRITE_IT: &str = "node scripts/test-corpus.js --export-oracle";
 
-pub use glyph_json::{parse, Json};
+pub use glyph_json::{Json, parse};
 
 /// What a test asks of a value it trusts: the answer, or a failure naming
 /// the key.
@@ -37,10 +37,14 @@ pub trait Must {
 
 impl Must for Json {
     fn s(&self, key: &str) -> &str {
-        self.get(key).and_then(Json::str).unwrap_or_else(|| panic!("no string at {key:?}"))
+        self.get(key)
+            .and_then(Json::str)
+            .unwrap_or_else(|| panic!("no string at {key:?}"))
     }
     fn a(&self, key: &str) -> &[Json] {
-        self.get(key).and_then(Json::arr).unwrap_or_else(|| panic!("no array at {key:?}"))
+        self.get(key)
+            .and_then(Json::arr)
+            .unwrap_or_else(|| panic!("no array at {key:?}"))
     }
     fn strings<'a>(&'a self, out: &mut Vec<&'a str>) {
         match self {
@@ -57,12 +61,19 @@ impl Must for Json {
 
 /// The repository, from the crate whose test includes this file.
 fn repo() -> PathBuf {
-    Path::new(env!("CARGO_MANIFEST_DIR")).join("..").join("..").join("..")
+    Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("..")
+        .join("..")
+        .join("..")
 }
 
 fn read(path: &Path) -> Json {
-    let text = fs::read_to_string(path)
-        .unwrap_or_else(|e| panic!("no oracle at {}: {e} — write it: {WRITE_IT}", path.display()));
+    let text = fs::read_to_string(path).unwrap_or_else(|e| {
+        panic!(
+            "no oracle at {}: {e} — write it: {WRITE_IT}",
+            path.display()
+        )
+    });
     parse(&text).unwrap_or_else(|e| panic!("{}: {e}", path.display()))
 }
 
@@ -103,9 +114,16 @@ pub fn cases() -> &'static [Json] {
 /// The answers of one JS module: `rust/target/oracle-modules/<name>.json`.
 pub fn module(name: &str) -> &'static Json {
     static MODULES: OnceLock<Mutex<HashMap<String, &'static Json>>> = OnceLock::new();
-    let mut held = MODULES.get_or_init(Default::default).lock().unwrap_or_else(|e| e.into_inner());
+    let mut held = MODULES
+        .get_or_init(Default::default)
+        .lock()
+        .unwrap_or_else(|e| e.into_inner());
     held.entry(name.to_string()).or_insert_with(|| {
-        let file = repo().join("rust").join("target").join("oracle-modules").join(format!("{name}.json"));
+        let file = repo()
+            .join("rust")
+            .join("target")
+            .join("oracle-modules")
+            .join(format!("{name}.json"));
         Box::leak(Box::new(read(&file)))
     })
 }
@@ -117,12 +135,18 @@ pub fn files() -> Vec<(PathBuf, String)> {
     for dir in ["oracle", "oracle-modules"] {
         let dir = repo().join("rust").join("target").join(dir);
         let mut names: Vec<PathBuf> = fs::read_dir(&dir)
-            .unwrap_or_else(|e| panic!("no oracle at {}: {e} — write it: {WRITE_IT}", dir.display()))
+            .unwrap_or_else(|e| {
+                panic!("no oracle at {}: {e} — write it: {WRITE_IT}", dir.display())
+            })
             .filter_map(|e| e.ok().map(|e| e.path()))
             .filter(|p| p.extension().is_some_and(|x| x == "json"))
             .collect();
         names.sort();
-        assert!(!names.is_empty(), "the oracle at {} is empty — write it: {WRITE_IT}", dir.display());
+        assert!(
+            !names.is_empty(),
+            "the oracle at {} is empty — write it: {WRITE_IT}",
+            dir.display()
+        );
         for f in names {
             let text = fs::read_to_string(&f).unwrap_or_else(|e| panic!("{}: {e}", f.display()));
             out.push((f, text));
@@ -151,19 +175,23 @@ pub fn ck(s: &str) -> String {
 }
 
 /* ---- the parser's tree, as the export writes it (trees.json from ORD-0006,
-   parse.json from ORD-0007) ----
-   A tree is `{ nodes, segments }`: every node reachable from the segments,
-   once, in the order a pre-order walk first meets it, each with its fields in
-   the order `fieldsOf` names them, then `children` and `parent` as indices.
-   A segment is its children, or — in a full dump — an object with its own
-   fields too. A function where a value should be is `{ "function": name }`. */
+parse.json from ORD-0007) ----
+A tree is `{ nodes, segments }`: every node reachable from the segments,
+once, in the order a pre-order walk first meets it, each with its fields in
+the order `fieldsOf` names them, then `children` and `parent` as indices.
+A segment is its children, or — in a full dump — an object with its own
+fields too. A function where a value should be is `{ "function": name }`. */
 
 use glyph_util::tree::{Diag, Emotion, Gloss, Id, Node, Segment, Span, Suggestion, Tree};
 
 fn gloss_of(v: &Json) -> Gloss {
     match v {
         Json::Obj(kv) if kv.is_empty() => Gloss::Prototype,
-        Json::Obj(kv) if kv.len() == 1 && kv[0].0 == "function" && kv[0].1 == Json::Str("Object".into()) => Gloss::Object,
+        Json::Obj(kv)
+            if kv.len() == 1 && kv[0].0 == "function" && kv[0].1 == Json::Str("Object".into()) =>
+        {
+            Gloss::Object
+        }
         Json::Str(t) => Gloss::Text(t.clone()),
         v => panic!("not a gloss: {v:?}"),
     }
@@ -176,94 +204,186 @@ fn gloss_json(g: &Gloss) -> Json {
     }
 }
 fn mood_of(e: &Json) -> Emotion {
-    Emotion { name: e.s("name").to_string(), gloss: gloss_of(e.get("gloss").expect("a mood's gloss")),
-              order: e.get("order").map(index) }
+    Emotion {
+        name: e.s("name").to_string(),
+        gloss: gloss_of(e.get("gloss").expect("a mood's gloss")),
+        order: e.get("order").map(index),
+    }
 }
 fn mood_json(e: &Emotion) -> Json {
-    let mut kv = vec![("name".to_string(), Json::Str(e.name.clone())), ("gloss".to_string(), gloss_json(&e.gloss))];
+    let mut kv = vec![
+        ("name".to_string(), Json::Str(e.name.clone())),
+        ("gloss".to_string(), gloss_json(&e.gloss)),
+    ];
     if let Some(o) = e.order {
         kv.push(("order".into(), Json::Num(o as f64)));
     }
     Json::Obj(kv)
 }
 
-const FIELDS: [&str; 29] = ["id", "raw", "tier", "canonical", "gloss", "alias", "autoClosed", "editorial",
-    "origin", "chainElement", "slotName", "depth", "literal", "v", "form", "role", "text", "rawFence", "template",
-    "isDef", "mode", "isDefinition", "expanded", "boundSlot", "fromSource", "species", "compositionDepth", "isBinder",
-    "suggestion"];
+const FIELDS: [&str; 29] = [
+    "id",
+    "raw",
+    "tier",
+    "canonical",
+    "gloss",
+    "alias",
+    "autoClosed",
+    "editorial",
+    "origin",
+    "chainElement",
+    "slotName",
+    "depth",
+    "literal",
+    "v",
+    "form",
+    "role",
+    "text",
+    "rawFence",
+    "template",
+    "isDef",
+    "mode",
+    "isDefinition",
+    "expanded",
+    "boundSlot",
+    "fromSource",
+    "species",
+    "compositionDepth",
+    "isBinder",
+    "suggestion",
+];
 
 fn index(v: &Json) -> usize {
-    v.num().filter(|n| *n >= 0.0).unwrap_or_else(|| panic!("not an index: {v:?}")) as usize
+    v.num()
+        .filter(|n| *n >= 0.0)
+        .unwrap_or_else(|| panic!("not an index: {v:?}")) as usize
 }
 
 /// The tree a dump describes; node `i` is the dump's node `i`.
 pub fn tree_of(dump: &Json) -> Tree<()> {
-    let text = |v: &Json| v.str().unwrap_or_else(|| panic!("not a string: {v:?}")).to_string();
+    let text = |v: &Json| {
+        v.str()
+            .unwrap_or_else(|| panic!("not a string: {v:?}"))
+            .to_string()
+    };
     let flag = |v: &Json| match v {
         Json::Bool(b) => *b,
         v => panic!("not a boolean: {v:?}"),
     };
-    let maybe = |v: &Json| if *v == Json::Null { None } else { Some(text(v)) };
-    let nodes = dump.a("nodes").iter().map(|n| {
-        let mut nd: Node<()> = Node::default();
-        for (k, v) in n.obj().expect("a node is an object") {
-            match k.as_str() {
-                "id" => nd.id = Some(index(v) as u64),
-                "raw" => nd.raw = Some(text(v)),
-                "tier" => nd.tier = Some(text(v)),
-                "canonical" => nd.canonical = Some(text(v)),
-                "gloss" => nd.gloss = Some(gloss_of(v)),
-                "alias" => nd.alias = Some(flag(v)),
-                "autoClosed" => nd.auto_closed = Some(flag(v)),
-                "editorial" => nd.editorial = Some(flag(v)),
-                "origin" => nd.origin = Some(maybe(v)),
-                "chainElement" => nd.chain_element = Some(flag(v)),
-                "slotName" => nd.slot_name = Some(flag(v)),
-                "depth" => nd.depth = Some(index(v)),
-                "literal" => nd.literal = Some(flag(v)),
-                "v" => nd.v = Some(text(v)),
-                "form" => nd.form = Some(text(v)),
-                "role" => nd.role = Some(text(v)),
-                "text" => nd.text = Some(flag(v)),
-                "rawFence" => nd.raw_fence = Some(flag(v)),
-                "template" => nd.template = Some(text(v)),
-                "isDef" => nd.is_def = Some(flag(v)),
-                "mode" => nd.mode = Some(text(v)),
-                "isDefinition" => nd.is_definition = Some(flag(v)),
-                "expanded" => nd.expanded = Some(flag(v)),
-                "boundSlot" => nd.bound_slot = Some(text(v)),
-                "fromSource" => nd.from_source = Some(flag(v)),
-                "species" => nd.species = Some(text(v)),
-                "compositionDepth" => nd.composition_depth = Some(v.num()),
-                "isBinder" => nd.is_binder = Some(flag(v)),
-                "suggestion" => nd.suggestion = Some(match v {
-                    Json::Null => None,
-                    v => Some(Suggestion { name: v.s("name").to_string(), how: v.s("how").to_string() }),
-                }),
-                "logic" => nd.logic = Some(text(v)),
-                "emotions" => nd.emotions = v.arr().expect("emotions are a list").iter().map(mood_of).collect(),
-                "tok" => nd.tok = Some(Span { k: text(v.get("k").expect("tok.k")), s: index(v.get("s").expect("tok.s")),
-                                              e: index(v.get("e").expect("tok.e")) }),
-                "children" => nd.children = v.arr().expect("children are a list").iter().map(index).collect(),
-                "parent" => nd.parent = if *v == Json::Null { None } else { Some(index(v)) },
-                k => panic!("a field the tree does not know: {k}"),
-            }
+    let maybe = |v: &Json| {
+        if *v == Json::Null {
+            None
+        } else {
+            Some(text(v))
         }
-        nd
-    }).collect();
-    let segments = dump.a("segments").iter().map(|s| match s {
-        Json::Arr(kids) => Segment { children: kids.iter().map(index).collect(), ..Default::default() },
-        s => Segment {
-            children: s.a("children").iter().map(index).collect(),
-            mood: s.a("mood").iter().map(mood_of).collect(),
-            auto_closed: index(s.get("autoClosed").expect("autoClosed")),
-            breaks: index(s.get("breaks").expect("breaks")),
-            cause: s.get("cause").and_then(Json::str).map(str::to_string),
-            continues: s.get("continues") == Some(&Json::Bool(true)),
-            is_return: s.get("isReturn") == Some(&Json::Bool(true)),
-            pending_mode: s.get("pendingMode").map(|p| if *p == Json::Null { None } else { Some(index(p)) }),
-        },
-    }).collect();
+    };
+    let nodes = dump
+        .a("nodes")
+        .iter()
+        .map(|n| {
+            let mut nd: Node<()> = Node::default();
+            for (k, v) in n.obj().expect("a node is an object") {
+                match k.as_str() {
+                    "id" => nd.id = Some(index(v) as u64),
+                    "raw" => nd.raw = Some(text(v)),
+                    "tier" => nd.tier = Some(text(v)),
+                    "canonical" => nd.canonical = Some(text(v)),
+                    "gloss" => nd.gloss = Some(gloss_of(v)),
+                    "alias" => nd.alias = Some(flag(v)),
+                    "autoClosed" => nd.auto_closed = Some(flag(v)),
+                    "editorial" => nd.editorial = Some(flag(v)),
+                    "origin" => nd.origin = Some(maybe(v)),
+                    "chainElement" => nd.chain_element = Some(flag(v)),
+                    "slotName" => nd.slot_name = Some(flag(v)),
+                    "depth" => nd.depth = Some(index(v)),
+                    "literal" => nd.literal = Some(flag(v)),
+                    "v" => nd.v = Some(text(v)),
+                    "form" => nd.form = Some(text(v)),
+                    "role" => nd.role = Some(text(v)),
+                    "text" => nd.text = Some(flag(v)),
+                    "rawFence" => nd.raw_fence = Some(flag(v)),
+                    "template" => nd.template = Some(text(v)),
+                    "isDef" => nd.is_def = Some(flag(v)),
+                    "mode" => nd.mode = Some(text(v)),
+                    "isDefinition" => nd.is_definition = Some(flag(v)),
+                    "expanded" => nd.expanded = Some(flag(v)),
+                    "boundSlot" => nd.bound_slot = Some(text(v)),
+                    "fromSource" => nd.from_source = Some(flag(v)),
+                    "species" => nd.species = Some(text(v)),
+                    "compositionDepth" => nd.composition_depth = Some(v.num()),
+                    "isBinder" => nd.is_binder = Some(flag(v)),
+                    "suggestion" => {
+                        nd.suggestion = Some(match v {
+                            Json::Null => None,
+                            v => Some(Suggestion {
+                                name: v.s("name").to_string(),
+                                how: v.s("how").to_string(),
+                            }),
+                        })
+                    }
+                    "logic" => nd.logic = Some(text(v)),
+                    "emotions" => {
+                        nd.emotions = v
+                            .arr()
+                            .expect("emotions are a list")
+                            .iter()
+                            .map(mood_of)
+                            .collect()
+                    }
+                    "tok" => {
+                        nd.tok = Some(Span {
+                            k: text(v.get("k").expect("tok.k")),
+                            s: index(v.get("s").expect("tok.s")),
+                            e: index(v.get("e").expect("tok.e")),
+                        })
+                    }
+                    "children" => {
+                        nd.children = v
+                            .arr()
+                            .expect("children are a list")
+                            .iter()
+                            .map(index)
+                            .collect()
+                    }
+                    "parent" => {
+                        nd.parent = if *v == Json::Null {
+                            None
+                        } else {
+                            Some(index(v))
+                        }
+                    }
+                    k => panic!("a field the tree does not know: {k}"),
+                }
+            }
+            nd
+        })
+        .collect();
+    let segments = dump
+        .a("segments")
+        .iter()
+        .map(|s| match s {
+            Json::Arr(kids) => Segment {
+                children: kids.iter().map(index).collect(),
+                ..Default::default()
+            },
+            s => Segment {
+                children: s.a("children").iter().map(index).collect(),
+                mood: s.a("mood").iter().map(mood_of).collect(),
+                auto_closed: index(s.get("autoClosed").expect("autoClosed")),
+                breaks: index(s.get("breaks").expect("breaks")),
+                cause: s.get("cause").and_then(Json::str).map(str::to_string),
+                continues: s.get("continues") == Some(&Json::Bool(true)),
+                is_return: s.get("isReturn") == Some(&Json::Bool(true)),
+                pending_mode: s.get("pendingMode").map(|p| {
+                    if *p == Json::Null {
+                        None
+                    } else {
+                        Some(index(p))
+                    }
+                }),
+            },
+        })
+        .collect();
     Tree { nodes, segments }
 }
 
@@ -285,80 +405,128 @@ pub fn dump_of<X: Clone>(tree: &Tree<X>, full: bool) -> Json {
     }
     let s = |v: &str| Json::Str(v.to_string());
     let num = |n: usize| Json::Num(n as f64);
-    let nodes = order.iter().map(|&id| {
-        let nd = &tree.nodes[id];
-        let mut kv: Vec<(String, Json)> = Vec::new();
-        for f in FIELDS {
-            let v = match f {
-                "id" => nd.id.map(|i| Json::Num(i as f64)),
-                "raw" => nd.raw.as_deref().map(s),
-                "tier" => nd.tier.as_deref().map(s),
-                "canonical" => nd.canonical.as_deref().map(s),
-                "gloss" => nd.gloss.as_ref().map(gloss_json),
-                "alias" => nd.alias.map(Json::Bool),
-                "autoClosed" => nd.auto_closed.map(Json::Bool),
-                "editorial" => nd.editorial.map(Json::Bool),
-                "origin" => nd.origin.as_ref().map(|o| o.as_deref().map_or(Json::Null, s)),
-                "chainElement" => nd.chain_element.map(Json::Bool),
-                "slotName" => nd.slot_name.map(Json::Bool),
-                "depth" => nd.depth.map(num),
-                "literal" => nd.literal.map(Json::Bool),
-                "v" => nd.v.as_deref().map(s),
-                "form" => nd.form.as_deref().map(s),
-                "role" => nd.role.as_deref().map(s),
-                "text" => nd.text.map(Json::Bool),
-                "rawFence" => nd.raw_fence.map(Json::Bool),
-                "template" => nd.template.as_deref().map(s),
-                "isDef" => nd.is_def.map(Json::Bool),
-                "mode" => nd.mode.as_deref().map(s),
-                "isDefinition" => nd.is_definition.map(Json::Bool),
-                "expanded" => nd.expanded.map(Json::Bool),
-                "boundSlot" => nd.bound_slot.as_deref().map(s),
-                "fromSource" => nd.from_source.map(Json::Bool),
-                "species" => nd.species.as_deref().map(s),
-                "compositionDepth" => nd.composition_depth.map(|d| d.map_or(Json::Null, Json::Num)),
-                "isBinder" => nd.is_binder.map(Json::Bool),
-                "suggestion" => nd.suggestion.as_ref().map(|g| g.as_ref().map_or(Json::Null, |g| Json::Obj(vec![
-                    ("name".into(), s(&g.name)), ("how".into(), s(&g.how))]))),
-                _ => unreachable!(),
-            };
-            if let Some(v) = v {
-                kv.push((f.to_string(), v));
+    let nodes = order
+        .iter()
+        .map(|&id| {
+            let nd = &tree.nodes[id];
+            let mut kv: Vec<(String, Json)> = Vec::new();
+            for f in FIELDS {
+                let v = match f {
+                    "id" => nd.id.map(|i| Json::Num(i as f64)),
+                    "raw" => nd.raw.as_deref().map(s),
+                    "tier" => nd.tier.as_deref().map(s),
+                    "canonical" => nd.canonical.as_deref().map(s),
+                    "gloss" => nd.gloss.as_ref().map(gloss_json),
+                    "alias" => nd.alias.map(Json::Bool),
+                    "autoClosed" => nd.auto_closed.map(Json::Bool),
+                    "editorial" => nd.editorial.map(Json::Bool),
+                    "origin" => nd
+                        .origin
+                        .as_ref()
+                        .map(|o| o.as_deref().map_or(Json::Null, s)),
+                    "chainElement" => nd.chain_element.map(Json::Bool),
+                    "slotName" => nd.slot_name.map(Json::Bool),
+                    "depth" => nd.depth.map(num),
+                    "literal" => nd.literal.map(Json::Bool),
+                    "v" => nd.v.as_deref().map(s),
+                    "form" => nd.form.as_deref().map(s),
+                    "role" => nd.role.as_deref().map(s),
+                    "text" => nd.text.map(Json::Bool),
+                    "rawFence" => nd.raw_fence.map(Json::Bool),
+                    "template" => nd.template.as_deref().map(s),
+                    "isDef" => nd.is_def.map(Json::Bool),
+                    "mode" => nd.mode.as_deref().map(s),
+                    "isDefinition" => nd.is_definition.map(Json::Bool),
+                    "expanded" => nd.expanded.map(Json::Bool),
+                    "boundSlot" => nd.bound_slot.as_deref().map(s),
+                    "fromSource" => nd.from_source.map(Json::Bool),
+                    "species" => nd.species.as_deref().map(s),
+                    "compositionDepth" => nd
+                        .composition_depth
+                        .map(|d| d.map_or(Json::Null, Json::Num)),
+                    "isBinder" => nd.is_binder.map(Json::Bool),
+                    "suggestion" => nd.suggestion.as_ref().map(|g| {
+                        g.as_ref().map_or(Json::Null, |g| {
+                            Json::Obj(vec![("name".into(), s(&g.name)), ("how".into(), s(&g.how))])
+                        })
+                    }),
+                    _ => unreachable!(),
+                };
+                if let Some(v) = v {
+                    kv.push((f.to_string(), v));
+                }
             }
-        }
-        if let Some(l) = &nd.logic {
-            kv.push(("logic".into(), s(l)));
-        }
-        if !nd.emotions.is_empty() {
-            kv.push(("emotions".into(), Json::Arr(nd.emotions.iter().map(mood_json).collect())));
-        }
-        if let Some(t) = &nd.tok {
-            kv.push(("tok".into(), Json::Obj(vec![("k".into(), s(&t.k)), ("s".into(), num(t.s)), ("e".into(), num(t.e))])));
-        }
-        kv.push(("children".into(), Json::Arr(nd.children.iter().map(|c| num(at[c])).collect())));
-        kv.push(("parent".into(), nd.parent.map_or(Json::Null, |p| at.get(&p).map_or(Json::Num(-1.0), |&i| num(i)))));
-        Json::Obj(kv)
-    }).collect();
-    let segments = tree.segments.iter().map(|sg| {
-        let kids = Json::Arr(sg.children.iter().map(|c| num(at[c])).collect());
-        if !full {
-            return kids;
-        }
-        let mut kv = vec![("children".to_string(), kids), ("mood".into(), Json::Arr(sg.mood.iter().map(mood_json).collect())),
-                          ("autoClosed".into(), num(sg.auto_closed)), ("breaks".into(), num(sg.breaks)),
-                          ("cause".into(), sg.cause.as_deref().map_or(Json::Null, s))];
-        if sg.continues {
-            kv.push(("continues".into(), Json::Bool(true)));
-        }
-        if sg.is_return {
-            kv.push(("isReturn".into(), Json::Bool(true)));
-        }
-        if let Some(p) = sg.pending_mode {
-            kv.push(("pendingMode".into(), p.map_or(Json::Null, |p| at.get(&p).map_or(Json::Num(-1.0), |&i| num(i)))));
-        }
-        Json::Obj(kv)
-    }).collect();
-    Json::Obj(vec![("nodes".into(), Json::Arr(nodes)), ("segments".into(), Json::Arr(segments))])
+            if let Some(l) = &nd.logic {
+                kv.push(("logic".into(), s(l)));
+            }
+            if !nd.emotions.is_empty() {
+                kv.push((
+                    "emotions".into(),
+                    Json::Arr(nd.emotions.iter().map(mood_json).collect()),
+                ));
+            }
+            if let Some(t) = &nd.tok {
+                kv.push((
+                    "tok".into(),
+                    Json::Obj(vec![
+                        ("k".into(), s(&t.k)),
+                        ("s".into(), num(t.s)),
+                        ("e".into(), num(t.e)),
+                    ]),
+                ));
+            }
+            kv.push((
+                "children".into(),
+                Json::Arr(nd.children.iter().map(|c| num(at[c])).collect()),
+            ));
+            kv.push((
+                "parent".into(),
+                nd.parent.map_or(Json::Null, |p| {
+                    at.get(&p).map_or(Json::Num(-1.0), |&i| num(i))
+                }),
+            ));
+            Json::Obj(kv)
+        })
+        .collect();
+    let segments = tree
+        .segments
+        .iter()
+        .map(|sg| {
+            let kids = Json::Arr(sg.children.iter().map(|c| num(at[c])).collect());
+            if !full {
+                return kids;
+            }
+            let mut kv = vec![
+                ("children".to_string(), kids),
+                (
+                    "mood".into(),
+                    Json::Arr(sg.mood.iter().map(mood_json).collect()),
+                ),
+                ("autoClosed".into(), num(sg.auto_closed)),
+                ("breaks".into(), num(sg.breaks)),
+                ("cause".into(), sg.cause.as_deref().map_or(Json::Null, s)),
+            ];
+            if sg.continues {
+                kv.push(("continues".into(), Json::Bool(true)));
+            }
+            if sg.is_return {
+                kv.push(("isReturn".into(), Json::Bool(true)));
+            }
+            if let Some(p) = sg.pending_mode {
+                kv.push((
+                    "pendingMode".into(),
+                    p.map_or(Json::Null, |p| {
+                        at.get(&p).map_or(Json::Num(-1.0), |&i| num(i))
+                    }),
+                ));
+            }
+            Json::Obj(kv)
+        })
+        .collect();
+    Json::Obj(vec![
+        ("nodes".into(), Json::Arr(nodes)),
+        ("segments".into(), Json::Arr(segments)),
+    ])
 }
 
 /// A diagnostic as the export records what a pass raised: the pt-BR pair,
@@ -366,8 +534,14 @@ pub fn dump_of<X: Clone>(tree: &Tree<X>, full: bool) -> Json {
 pub fn diag_json(d: &Diag) -> Json {
     let s = |v: &str| Json::Str(v.to_string());
     let or_null = |v: &Option<String>| v.as_deref().map_or(Json::Null, s);
-    Json::Obj(vec![("sev".into(), s(&d.sev)), ("lab".into(), s(&d.lab)), ("msg".into(), s(&d.msg)),
-                   ("code".into(), s(&d.code)), ("enLab".into(), or_null(&d.en_lab)), ("enMsg".into(), or_null(&d.en_msg))])
+    Json::Obj(vec![
+        ("sev".into(), s(&d.sev)),
+        ("lab".into(), s(&d.lab)),
+        ("msg".into(), s(&d.msg)),
+        ("code".into(), s(&d.code)),
+        ("enLab".into(), or_null(&d.en_lab)),
+        ("enMsg".into(), or_null(&d.en_msg)),
+    ])
 }
 
 /// A diagnostic of a body's parse, as the export records it: the JS hands the
@@ -381,16 +555,21 @@ pub fn diag_of(v: &Json) -> Diag {
 /// crate enters from outside.
 pub fn sha256(data: &[u8]) -> String {
     const K: [u32; 64] = [
-        0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
-        0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
-        0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
-        0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
-        0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
-        0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
-        0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
-        0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2,
+        0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4,
+        0xab1c5ed5, 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe,
+        0x9bdc06a7, 0xc19bf174, 0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f,
+        0x4a7484aa, 0x5cb0a9dc, 0x76f988da, 0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7,
+        0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc,
+        0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85, 0xa2bfe8a1, 0xa81a664b,
+        0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070, 0x19a4c116,
+        0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+        0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7,
+        0xc67178f2,
     ];
-    let mut h: [u32; 8] = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];
+    let mut h: [u32; 8] = [
+        0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab,
+        0x5be0cd19,
+    ];
     let mut msg = data.to_vec();
     let bits = (data.len() as u64).wrapping_mul(8);
     msg.push(0x80);
@@ -401,22 +580,43 @@ pub fn sha256(data: &[u8]) -> String {
     for chunk in msg.chunks(64) {
         let mut w = [0u32; 64];
         for i in 0..16 {
-            w[i] = u32::from_be_bytes([chunk[4 * i], chunk[4 * i + 1], chunk[4 * i + 2], chunk[4 * i + 3]]);
+            w[i] = u32::from_be_bytes([
+                chunk[4 * i],
+                chunk[4 * i + 1],
+                chunk[4 * i + 2],
+                chunk[4 * i + 3],
+            ]);
         }
         for i in 16..64 {
             let s0 = w[i - 15].rotate_right(7) ^ w[i - 15].rotate_right(18) ^ (w[i - 15] >> 3);
             let s1 = w[i - 2].rotate_right(17) ^ w[i - 2].rotate_right(19) ^ (w[i - 2] >> 10);
-            w[i] = w[i - 16].wrapping_add(s0).wrapping_add(w[i - 7]).wrapping_add(s1);
+            w[i] = w[i - 16]
+                .wrapping_add(s0)
+                .wrapping_add(w[i - 7])
+                .wrapping_add(s1);
         }
         let mut v = h;
         for i in 0..64 {
             let s1 = v[4].rotate_right(6) ^ v[4].rotate_right(11) ^ v[4].rotate_right(25);
             let ch = (v[4] & v[5]) ^ (!v[4] & v[6]);
-            let t1 = v[7].wrapping_add(s1).wrapping_add(ch).wrapping_add(K[i]).wrapping_add(w[i]);
+            let t1 = v[7]
+                .wrapping_add(s1)
+                .wrapping_add(ch)
+                .wrapping_add(K[i])
+                .wrapping_add(w[i]);
             let s0 = v[0].rotate_right(2) ^ v[0].rotate_right(13) ^ v[0].rotate_right(22);
             let maj = (v[0] & v[1]) ^ (v[0] & v[2]) ^ (v[1] & v[2]);
             let t2 = s0.wrapping_add(maj);
-            v = [t1.wrapping_add(t2), v[0], v[1], v[2], v[3].wrapping_add(t1), v[4], v[5], v[6]];
+            v = [
+                t1.wrapping_add(t2),
+                v[0],
+                v[1],
+                v[2],
+                v[3].wrapping_add(t1),
+                v[4],
+                v[5],
+                v[6],
+            ];
         }
         for i in 0..8 {
             h[i] = h[i].wrapping_add(v[i]);
@@ -427,9 +627,17 @@ pub fn sha256(data: &[u8]) -> String {
 
 /// The digest `corpus-snapshot.json` records for a case's projection.
 pub fn snapshot_digest(id: &str, projection: &str) -> String {
-    let snap = read(&repo().join(".guidelines/.sources").join("corpus-snapshot.json"));
-    snap.get("cases").and_then(|c| c.get(id)).and_then(|c| c.get(projection)).and_then(Json::str)
-        .unwrap_or_else(|| panic!("the snapshot has no {projection} digest for {id}")).to_string()
+    let snap = read(
+        &repo()
+            .join(".guidelines/.sources")
+            .join("corpus-snapshot.json"),
+    );
+    snap.get("cases")
+        .and_then(|c| c.get(id))
+        .and_then(|c| c.get(projection))
+        .and_then(Json::str)
+        .unwrap_or_else(|| panic!("the snapshot has no {projection} digest for {id}"))
+        .to_string()
 }
 
 /// The differences the Rust keeps from the JS by decision: the JS keeps its
@@ -445,7 +653,10 @@ pub mod known {
     /// writes the blank line. No other `.hgml` line is `;;` — a literal is
     /// quoted and a comment opens with `#` — so the undo reaches nothing else.
     pub fn semicolons(rust: &str) -> String {
-        rust.split('\n').map(|l| if l == ";;" { "" } else { l }).collect::<Vec<_>>().join("\n")
+        rust.split('\n')
+            .map(|l| if l == ";;" { "" } else { l })
+            .collect::<Vec<_>>()
+            .join("\n")
     }
 
     /// O4, residual 2: inside a literal only the quote that opened it closes
@@ -453,13 +664,17 @@ pub mod known {
     /// Each source of the oracle it reaches, with the tokens the decision
     /// gives it: the JS's for the same source written with backticks, the form
     /// and the closing named for the apostrophe.
-    pub const QUOTES: &[(&str, &str)] = &[
-        ("'a\nb'", r#"[{"k":"literal","v":"a\nb","s":0,"e":5,"form":"quote","closedBy":"quote"}]"#),
-    ];
+    pub const QUOTES: &[(&str, &str)] = &[(
+        "'a\nb'",
+        r#"[{"k":"literal","v":"a\nb","s":0,"e":5,"form":"quote","closedBy":"quote"}]"#,
+    )];
 
     /// The tokens residual 2 gives a named source.
     pub fn quotes(src: &str) -> Option<Json> {
-        QUOTES.iter().find(|(s, _)| *s == src).map(|(_, t)| glyph_json::parse(t).expect("a named source's tokens"))
+        QUOTES
+            .iter()
+            .find(|(s, _)| *s == src)
+            .map(|(_, t)| glyph_json::parse(t).expect("a named source's tokens"))
     }
 
     /// O4, residual 3: a bare word where a template parameter goes is refused
@@ -468,16 +683,25 @@ pub mod known {
     /// both languages: the JS's, with a refusal naming each bare word in place
     /// of the silence or of `[?`.
     pub const BARE: &[(&str, &str)] = &[
-        ("[--germinate a,b]",
-         r#"{"pt":[{"sev":"fix","lab":"parâmetro não é literal","msg":"o 1º parâmetro de <code>[--germinate</code> recebeu <code>a</code>. Parâmetro de template é sempre literal: <code>[--germinate`a`,`b`]</code>.","code":"TemplateParamNotLiteral","at":null,"plain":"o 1º parâmetro de [--germinate recebeu a. Parâmetro de template é sempre literal: [--germinate`a`,`b`]."},{"sev":"fix","lab":"parâmetro não é literal","msg":"o 2º parâmetro de <code>[--germinate</code> recebeu <code>b</code>. Parâmetro de template é sempre literal: <code>[--germinate`a`,`b`]</code>.","code":"TemplateParamNotLiteral","at":null,"plain":"o 2º parâmetro de [--germinate recebeu b. Parâmetro de template é sempre literal: [--germinate`a`,`b`]."},{"sev":"ask","lab":"casa vazia","msg":"<code>alvo</code> over seeds (every aspect of a situation, being it good, bad or neutral)","code":"PlaceholderPending","at":null,"plain":"alvo over seeds (every aspect of a situation, being it good, bad or neutral)"},{"sev":"ask","lab":"casa vazia","msg":"<code>criterio</code> the external criterion to validate against","code":"PlaceholderPending","at":null,"plain":"criterio the external criterion to validate against"}],"en":[{"sev":"fix","lab":"parameter is not a literal","msg":"argument 1 of <code>[--germinate</code> got <code>a</code>. A template parameter is always a literal: <code>[--germinate`a`,`b`]</code>.","code":"TemplateParamNotLiteral","at":null,"plain":"argument 1 of [--germinate got a. A template parameter is always a literal: [--germinate`a`,`b`]."},{"sev":"fix","lab":"parameter is not a literal","msg":"argument 2 of <code>[--germinate</code> got <code>b</code>. A template parameter is always a literal: <code>[--germinate`a`,`b`]</code>.","code":"TemplateParamNotLiteral","at":null,"plain":"argument 2 of [--germinate got b. A template parameter is always a literal: [--germinate`a`,`b`]."},{"sev":"ask","lab":"empty field","msg":"<code>alvo</code> over seeds (every aspect of a situation, being it good, bad or neutral)","code":"PlaceholderPending","at":null,"plain":"alvo over seeds (every aspect of a situation, being it good, bad or neutral)"},{"sev":"ask","lab":"empty field","msg":"<code>criterio</code> the external criterion to validate against","code":"PlaceholderPending","at":null,"plain":"criterio the external criterion to validate against"}]}"#),
-        ("[--reinforce rule,`why`]",
-         r#"{"pt":[{"sev":"fix","lab":"parâmetro não é literal","msg":"o 1º parâmetro de <code>[--reinforce</code> recebeu <code>rule</code>. Parâmetro de template é sempre literal: <code>[--reinforce`rule`,`why`]</code>.","code":"TemplateParamNotLiteral","at":null,"plain":"o 1º parâmetro de [--reinforce recebeu rule. Parâmetro de template é sempre literal: [--reinforce`rule`,`why`]."},{"sev":"ask","lab":"casa vazia","msg":"<code>why</code> why it must hold, so it is not dropped later","code":"PlaceholderPending","at":null,"plain":"why why it must hold, so it is not dropped later"}],"en":[{"sev":"fix","lab":"parameter is not a literal","msg":"argument 1 of <code>[--reinforce</code> got <code>rule</code>. A template parameter is always a literal: <code>[--reinforce`rule`,`why`]</code>.","code":"TemplateParamNotLiteral","at":null,"plain":"argument 1 of [--reinforce got rule. A template parameter is always a literal: [--reinforce`rule`,`why`]."},{"sev":"ask","lab":"empty field","msg":"<code>why</code> why it must hold, so it is not dropped later","code":"PlaceholderPending","at":null,"plain":"why why it must hold, so it is not dropped later"}]}"#),
+        (
+            "[--germinate a,b]",
+            r#"{"pt":[{"sev":"fix","lab":"parâmetro não é literal","msg":"o 1º parâmetro de <code>[--germinate</code> recebeu <code>a</code>. Parâmetro de template é sempre literal: <code>[--germinate`a`,`b`]</code>.","code":"TemplateParamNotLiteral","at":null,"plain":"o 1º parâmetro de [--germinate recebeu a. Parâmetro de template é sempre literal: [--germinate`a`,`b`]."},{"sev":"fix","lab":"parâmetro não é literal","msg":"o 2º parâmetro de <code>[--germinate</code> recebeu <code>b</code>. Parâmetro de template é sempre literal: <code>[--germinate`a`,`b`]</code>.","code":"TemplateParamNotLiteral","at":null,"plain":"o 2º parâmetro de [--germinate recebeu b. Parâmetro de template é sempre literal: [--germinate`a`,`b`]."},{"sev":"ask","lab":"casa vazia","msg":"<code>alvo</code> over seeds (every aspect of a situation, being it good, bad or neutral)","code":"PlaceholderPending","at":null,"plain":"alvo over seeds (every aspect of a situation, being it good, bad or neutral)"},{"sev":"ask","lab":"casa vazia","msg":"<code>criterio</code> the external criterion to validate against","code":"PlaceholderPending","at":null,"plain":"criterio the external criterion to validate against"}],"en":[{"sev":"fix","lab":"parameter is not a literal","msg":"argument 1 of <code>[--germinate</code> got <code>a</code>. A template parameter is always a literal: <code>[--germinate`a`,`b`]</code>.","code":"TemplateParamNotLiteral","at":null,"plain":"argument 1 of [--germinate got a. A template parameter is always a literal: [--germinate`a`,`b`]."},{"sev":"fix","lab":"parameter is not a literal","msg":"argument 2 of <code>[--germinate</code> got <code>b</code>. A template parameter is always a literal: <code>[--germinate`a`,`b`]</code>.","code":"TemplateParamNotLiteral","at":null,"plain":"argument 2 of [--germinate got b. A template parameter is always a literal: [--germinate`a`,`b`]."},{"sev":"ask","lab":"empty field","msg":"<code>alvo</code> over seeds (every aspect of a situation, being it good, bad or neutral)","code":"PlaceholderPending","at":null,"plain":"alvo over seeds (every aspect of a situation, being it good, bad or neutral)"},{"sev":"ask","lab":"empty field","msg":"<code>criterio</code> the external criterion to validate against","code":"PlaceholderPending","at":null,"plain":"criterio the external criterion to validate against"}]}"#,
+        ),
+        (
+            "[--reinforce rule,`why`]",
+            r#"{"pt":[{"sev":"fix","lab":"parâmetro não é literal","msg":"o 1º parâmetro de <code>[--reinforce</code> recebeu <code>rule</code>. Parâmetro de template é sempre literal: <code>[--reinforce`rule`,`why`]</code>.","code":"TemplateParamNotLiteral","at":null,"plain":"o 1º parâmetro de [--reinforce recebeu rule. Parâmetro de template é sempre literal: [--reinforce`rule`,`why`]."},{"sev":"ask","lab":"casa vazia","msg":"<code>why</code> why it must hold, so it is not dropped later","code":"PlaceholderPending","at":null,"plain":"why why it must hold, so it is not dropped later"}],"en":[{"sev":"fix","lab":"parameter is not a literal","msg":"argument 1 of <code>[--reinforce</code> got <code>rule</code>. A template parameter is always a literal: <code>[--reinforce`rule`,`why`]</code>.","code":"TemplateParamNotLiteral","at":null,"plain":"argument 1 of [--reinforce got rule. A template parameter is always a literal: [--reinforce`rule`,`why`]."},{"sev":"ask","lab":"empty field","msg":"<code>why</code> why it must hold, so it is not dropped later","code":"PlaceholderPending","at":null,"plain":"why why it must hold, so it is not dropped later"}]}"#,
+        ),
     ];
 
     /// The diagnostics residual 3 gives a named probe, in `lang`.
     pub fn bare(src: &str, lang: &str) -> Option<Json> {
-        BARE.iter().find(|(s, _)| *s == src)
-            .map(|(_, d)| glyph_json::parse(d).expect("a named probe's diagnostics").get(lang).cloned().expect("both languages"))
+        BARE.iter().find(|(s, _)| *s == src).map(|(_, d)| {
+            glyph_json::parse(d)
+                .expect("a named probe's diagnostics")
+                .get(lang)
+                .cloned()
+                .expect("both languages")
+        })
     }
 
     /// The envelope residual 3 gives a named probe: the JS's, its diagnostics
@@ -486,12 +710,34 @@ pub mod known {
     pub fn bare_envelope(src: &str, lang: &str, js: &Json) -> Option<Json> {
         let decided = bare(src, lang)?;
         let field = |g: &Json, k: &str| g.get(k).cloned().unwrap_or(Json::Null);
-        let diags = Json::Arr(decided.arr()?.iter().map(|g| Json::Obj(vec![
-            ("code".into(), field(g, "code")), ("severity".into(), field(g, "sev")),
-            ("label".into(), field(g, "lab")), ("message".into(), field(g, "plain")),
-        ])).collect());
-        let Json::Obj(kv) = js.clone() else { return None };
-        Some(Json::Obj(kv.into_iter().map(|(k, v)| if k == "diagnostics" { (k, diags.clone()) } else { (k, v) }).collect()))
+        let diags = Json::Arr(
+            decided
+                .arr()?
+                .iter()
+                .map(|g| {
+                    Json::Obj(vec![
+                        ("code".into(), field(g, "code")),
+                        ("severity".into(), field(g, "sev")),
+                        ("label".into(), field(g, "lab")),
+                        ("message".into(), field(g, "plain")),
+                    ])
+                })
+                .collect(),
+        );
+        let Json::Obj(kv) = js.clone() else {
+            return None;
+        };
+        Some(Json::Obj(
+            kv.into_iter()
+                .map(|(k, v)| {
+                    if k == "diagnostics" {
+                        (k, diags.clone())
+                    } else {
+                        (k, v)
+                    }
+                })
+                .collect(),
+        ))
     }
 
     /// A mood whose innermost open command is a template (decided
@@ -501,7 +747,12 @@ pub mod known {
     /// read with the oracle's own engine and repository stores in place of the
     /// ones written there, so neither the version nor a store moving stales them.
     pub fn template_mood(src: &str, module: &str, key: &str) -> Option<Json> {
-        template_moods().get("sources")?.get(src)?.get(module)?.get(key).cloned()
+        template_moods()
+            .get("sources")?
+            .get(src)?
+            .get(module)?
+            .get(key)
+            .cloned()
     }
 
     /// What the JS throws on every named source.
@@ -511,27 +762,52 @@ pub mod known {
 
     /// How many sources are named.
     pub fn template_mood_sources() -> usize {
-        template_moods().get("sources").and_then(Json::obj).map_or(0, |s| s.len())
+        template_moods()
+            .get("sources")
+            .and_then(Json::obj)
+            .map_or(0, |s| s.len())
     }
 
     fn template_moods() -> &'static Json {
         static DATA: OnceLock<Json> = OnceLock::new();
         DATA.get_or_init(|| {
-            let file = super::repo().join("rust").join("testkit").join("known").join("template-moods.json");
-            let text = fs::read_to_string(&file).unwrap_or_else(|e| panic!("{}: {e}", file.display()));
-            let written = glyph_json::parse(&text).unwrap_or_else(|e| panic!("{}: {e}", file.display()));
+            let file = super::repo()
+                .join("rust")
+                .join("testkit")
+                .join("known")
+                .join("template-moods.json");
+            let text =
+                fs::read_to_string(&file).unwrap_or_else(|e| panic!("{}: {e}", file.display()));
+            let written =
+                glyph_json::parse(&text).unwrap_or_else(|e| panic!("{}: {e}", file.display()));
             let engine = super::module("ast").s("engine");
-            let data = glyph_json::parse(&text.replace(written.s("engine"), engine)).expect("the engine replaced");
+            let data = glyph_json::parse(&text.replace(written.s("engine"), engine))
+                .expect("the engine replaced");
             /* the repository's stores, as any plain run of the envelope carries them */
-            let plain = super::module("ast").a("runs").iter()
-                .find(|r| r.get("full").and_then(|f| f.get("stores")).is_some()
-                    && !["probeTemplates", "templates", "withRules", "expansions"].iter().any(|k| r.get(k).is_some()))
+            let plain = super::module("ast")
+                .a("runs")
+                .iter()
+                .find(|r| {
+                    r.get("full").and_then(|f| f.get("stores")).is_some()
+                        && !["probeTemplates", "templates", "withRules", "expansions"]
+                            .iter()
+                            .any(|k| r.get(k).is_some())
+                })
                 .and_then(|r| r.get("full").and_then(|f| f.get("stores")).cloned())
                 .expect("ast.json holds a run with the repository's stores");
             fn stores(v: Json, with: &Json) -> Json {
                 match v {
-                    Json::Obj(kv) => Json::Obj(kv.into_iter()
-                        .map(|(k, v)| if k == "stores" { (k, with.clone()) } else { (k, stores(v, with)) }).collect()),
+                    Json::Obj(kv) => Json::Obj(
+                        kv.into_iter()
+                            .map(|(k, v)| {
+                                if k == "stores" {
+                                    (k, with.clone())
+                                } else {
+                                    (k, stores(v, with))
+                                }
+                            })
+                            .collect(),
+                    ),
                     Json::Arr(a) => Json::Arr(a.into_iter().map(|v| stores(v, with)).collect()),
                     v => v,
                 }
@@ -550,6 +826,7 @@ pub mod known {
                 v => v,
             }
         }
-        glyph_json::parse(rust).map_or_else(|_| rust.to_string(), |v| glyph_json::stringify(&walk(v)))
+        glyph_json::parse(rust)
+            .map_or_else(|_| rust.to_string(), |v| glyph_json::stringify(&walk(v)))
     }
 }

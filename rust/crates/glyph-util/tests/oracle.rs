@@ -6,7 +6,7 @@
 #[path = "../../../testkit/oracle.rs"]
 mod oracle;
 
-use glyph_util::{esc, lev, walk, xesc, Children};
+use glyph_util::{Children, esc, lev, walk, xesc};
 use oracle::{Json, Must};
 use std::collections::{BTreeSet, HashMap};
 
@@ -21,21 +21,36 @@ fn the_answers_cover_every_string_the_case_files_hold() {
     let held: BTreeSet<&str> = held.into_iter().collect();
     let answered: BTreeSet<&str> = util().a("strings").iter().filter_map(Json::str).collect();
     assert!(!held.is_empty(), "the case files hold no string");
-    assert!(held == answered, "{} strings held, {} answered, {} held and not answered",
-            held.len(), answered.len(), held.difference(&answered).count());
+    assert!(
+        held == answered,
+        "{} strings held, {} answered, {} held and not answered",
+        held.len(),
+        answered.len(),
+        held.difference(&answered).count()
+    );
 }
 
 #[test]
 fn esc_and_xesc_equal_the_js() {
     let (strings, answers) = (util().a("strings"), util().a("esc"));
-    assert!(!strings.is_empty() && strings.len() == answers.len(), "util.json: strings and esc disagree");
-    let bad: Vec<&str> = strings.iter().zip(answers)
+    assert!(
+        !strings.is_empty() && strings.len() == answers.len(),
+        "util.json: strings and esc disagree"
+    );
+    let bad: Vec<&str> = strings
+        .iter()
+        .zip(answers)
         .map(|(s, a)| (s.str().unwrap(), a.str().unwrap()))
         .filter(|(s, a)| esc(s) != *a || xesc(s) != *a)
         .map(|(s, _)| s)
         .collect();
-    assert!(bad.is_empty(), "{} of {} strings differ from the JS; the first: {:?}",
-            bad.len(), strings.len(), bad.first().map(|s| s.chars().take(80).collect::<String>()));
+    assert!(
+        bad.is_empty(),
+        "{} of {} strings differ from the JS; the first: {:?}",
+        bad.len(),
+        strings.len(),
+        bad.first().map(|s| s.chars().take(80).collect::<String>())
+    );
 }
 
 #[test]
@@ -67,22 +82,46 @@ impl Children for Shape {
 
 fn shape(nd: &Json, at: String) -> Shape {
     let body = nd.get("body").and_then(Json::arr).unwrap_or(&[]);
-    Shape { children: body.iter().enumerate().map(|(i, ch)| shape(ch, format!("{at}/{i}"))).collect(), at }
+    Shape {
+        children: body
+            .iter()
+            .enumerate()
+            .map(|(i, ch)| shape(ch, format!("{at}/{i}")))
+            .collect(),
+        at,
+    }
 }
 
 #[test]
 fn walk_visits_as_the_js() {
-    let answers: HashMap<&str, Vec<&str>> = util().a("walk").iter()
+    let answers: HashMap<&str, Vec<&str>> = util()
+        .a("walk")
+        .iter()
         .map(|w| w.arr().unwrap())
-        .map(|w| (w[0].str().unwrap(), w[1].arr().unwrap().iter().filter_map(Json::str).collect()))
+        .map(|w| {
+            (
+                w[0].str().unwrap(),
+                w[1].arr().unwrap().iter().filter_map(Json::str).collect(),
+            )
+        })
         .collect();
     assert!(!answers.is_empty(), "util.json: no walks");
     let mut walked = 0;
     for case in oracle::cases() {
-        let Some(segments) = case.get("ast").and_then(|a| a.get("segments")).and_then(Json::arr) else { continue };
+        let Some(segments) = case
+            .get("ast")
+            .and_then(|a| a.get("segments"))
+            .and_then(Json::arr)
+        else {
+            continue;
+        };
         for (k, sg) in segments.iter().enumerate() {
             let body = sg.get("body").and_then(Json::arr).unwrap_or(&[]);
-            let roots: Vec<Shape> = body.iter().enumerate().map(|(i, nd)| shape(nd, i.to_string())).collect();
+            let roots: Vec<Shape> = body
+                .iter()
+                .enumerate()
+                .map(|(i, nd)| shape(nd, i.to_string()))
+                .collect();
             let mut seen = Vec::new();
             walk(&roots, |nd| seen.push(nd.at.as_str()));
             let key = format!("{}#{k}", case.s("id"));
@@ -90,5 +129,9 @@ fn walk_visits_as_the_js() {
             walked += 1;
         }
     }
-    assert_eq!(walked, answers.len(), "trees walked here and trees the JS walked");
+    assert_eq!(
+        walked,
+        answers.len(),
+        "trees walked here and trees the JS walked"
+    );
 }

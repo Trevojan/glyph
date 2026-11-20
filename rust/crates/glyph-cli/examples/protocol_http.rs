@@ -13,9 +13,11 @@ fn main() {
     let listener = TcpListener::bind(format!("127.0.0.1:{port}")).expect("the port");
     println!("listening {port}");
     /* a browser holds up to six connections to one origin; each thread gets
-       the main thread's stack, which the stdio engine runs on */
+    the main thread's stack, which the stdio engine runs on */
     for stream in listener.incoming().flatten() {
-        let _ = std::thread::Builder::new().stack_size(8 << 20).spawn(move || serve(stream));
+        let _ = std::thread::Builder::new()
+            .stack_size(8 << 20)
+            .spawn(move || serve(stream));
     }
 }
 
@@ -34,10 +36,10 @@ fn serve(stream: TcpStream) {
             if reader.read_line(&mut h).unwrap_or(0) == 0 || h.trim_end().is_empty() {
                 break;
             }
-            if let Some((k, v)) = h.split_once(':') {
-                if k.eq_ignore_ascii_case("content-length") {
-                    len = v.trim().parse().unwrap_or(0);
-                }
+            if let Some((k, v)) = h.split_once(':')
+                && k.eq_ignore_ascii_case("content-length")
+            {
+                len = v.trim().parse().unwrap_or(0);
             }
         }
         let mut body = vec![0; len];
@@ -46,9 +48,12 @@ fn serve(stream: TcpStream) {
         }
         let resp = common::answer(&String::from_utf8_lossy(&body));
         /* one write: a head and a body in two would wait on the peer's
-           delayed ACK */
-        let whole = format!("HTTP/1.1 200 OK\r\nContent-Type: application/json; charset=utf-8\r\nContent-Length: {}\r\n\
-                             Access-Control-Allow-Origin: *\r\n\r\n{resp}", resp.len());
+        delayed ACK */
+        let whole = format!(
+            "HTTP/1.1 200 OK\r\nContent-Type: application/json; charset=utf-8\r\nContent-Length: {}\r\n\
+                             Access-Control-Allow-Origin: *\r\n\r\n{resp}",
+            resp.len()
+        );
         if out.write_all(whole.as_bytes()).is_err() {
             break;
         }

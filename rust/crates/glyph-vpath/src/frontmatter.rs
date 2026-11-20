@@ -25,7 +25,9 @@ pub fn span(text: &str) -> Option<(usize, usize)> {
 
 /// The `sources` list, in the order written.
 pub fn sources(text: &str) -> Vec<String> {
-    let Some((_, end)) = span(text) else { return Vec::new() };
+    let Some((_, end)) = span(text) else {
+        return Vec::new();
+    };
     let mut out = Vec::new();
     let mut inside = false;
     for line in text[..end].lines().skip(1) {

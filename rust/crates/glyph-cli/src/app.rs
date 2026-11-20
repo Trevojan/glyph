@@ -79,9 +79,18 @@ pub const PAGE: &[(&str, &[u8])] = page!(
 
 /// The stores the installer seeds: the repository's, the basic ones.
 const SEED: &[(&str, &str)] = &[
-    ("templates.json", include_str!("../../../../.guidelines/.sources/templates.json")),
-    ("rules.json", include_str!("../../../../.guidelines/.sources/rules.json")),
-    ("expansions.json", include_str!("../../../../.guidelines/.sources/expansions.json")),
+    (
+        "templates.json",
+        include_str!("../../../../.guidelines/.sources/templates.json"),
+    ),
+    (
+        "rules.json",
+        include_str!("../../../../.guidelines/.sources/rules.json"),
+    ),
+    (
+        "expansions.json",
+        include_str!("../../../../.guidelines/.sources/expansions.json"),
+    ),
 ];
 
 fn content_type(path: &str) -> &'static str {
@@ -95,12 +104,16 @@ fn content_type(path: &str) -> &'static str {
 }
 
 fn env_dir(name: &str) -> Option<PathBuf> {
-    std::env::var_os(name).filter(|v| !v.is_empty()).map(PathBuf::from)
+    std::env::var_os(name)
+        .filter(|v| !v.is_empty())
+        .map(PathBuf::from)
 }
 
 /// `%APPDATA%\Glyph\stores`, where what a user keeps lives.
 pub fn stores_dir() -> Option<PathBuf> {
-    env_dir("APPDATA").or_else(|| env_dir("XDG_CONFIG_HOME")).map(|d| d.join("Glyph").join("stores"))
+    env_dir("APPDATA")
+        .or_else(|| env_dir("XDG_CONFIG_HOME"))
+        .map(|d| d.join("Glyph").join("stores"))
 }
 
 /// The machine's stores when the folder holds them, else the repository's.
@@ -115,9 +128,15 @@ pub fn machine_context() -> Result<Context, String> {
             return Ok(None);
         }
         let text = std::fs::read_to_string(&p).map_err(|e| format!("{}: {e}", p.display()))?;
-        glyph_json::parse(&text).map(Some).map_err(|e| format!("{}: {e}", p.display()))
+        glyph_json::parse(&text)
+            .map(Some)
+            .map_err(|e| format!("{}: {e}", p.display()))
     };
-    Ok(Context::new(read("templates.json")?, read("rules.json")?, read("expansions.json")?))
+    Ok(Context::new(
+        read("templates.json")?,
+        read("rules.json")?,
+        read("expansions.json")?,
+    ))
 }
 
 fn respond(out: &mut TcpStream, status: &str, ctype: &str, body: &[u8]) -> std::io::Result<()> {
@@ -129,7 +148,9 @@ fn respond(out: &mut TcpStream, status: &str, ctype: &str, body: &[u8]) -> std::
 }
 
 fn connection(stream: TcpStream, ctx: Arc<Context>) {
-    let Ok(read_half) = stream.try_clone() else { return };
+    let Ok(read_half) = stream.try_clone() else {
+        return;
+    };
     let mut reader = BufReader::new(read_half);
     let mut out = stream;
     let _ = out.set_nodelay(true);
@@ -151,7 +172,8 @@ fn connection(stream: TcpStream, ctx: Arc<Context>) {
                 if k.eq_ignore_ascii_case("content-length") {
                     len = v.trim().parse().unwrap_or(0);
                 }
-                closing |= k.eq_ignore_ascii_case("connection") && v.trim().eq_ignore_ascii_case("close");
+                closing |=
+                    k.eq_ignore_ascii_case("connection") && v.trim().eq_ignore_ascii_case("close");
             }
         }
         let mut body = vec![0; len];
@@ -162,17 +184,36 @@ fn connection(stream: TcpStream, ctx: Arc<Context>) {
         let sent = match (method, path) {
             ("POST", "/engine") => {
                 let a = glyph_protocol::answer_in(&ctx, &String::from_utf8_lossy(&body));
-                respond(&mut out, "200 OK", "application/json; charset=utf-8", a.as_bytes())
+                respond(
+                    &mut out,
+                    "200 OK",
+                    "application/json; charset=utf-8",
+                    a.as_bytes(),
+                )
             }
             ("GET", "/") => {
-                let head = format!("HTTP/1.1 302 Found\r\nLocation: {ENTRY}\r\nContent-Length: 0\r\n\r\n");
+                let head =
+                    format!("HTTP/1.1 302 Found\r\nLocation: {ENTRY}\r\nContent-Length: 0\r\n\r\n");
                 out.write_all(head.as_bytes())
             }
-            ("GET", p) => match PAGE.iter().find(|(name, _)| p.strip_prefix('/') == Some(*name)) {
+            ("GET", p) => match PAGE
+                .iter()
+                .find(|(name, _)| p.strip_prefix('/') == Some(*name))
+            {
                 Some((name, bytes)) => respond(&mut out, "200 OK", content_type(name), bytes),
-                None => respond(&mut out, "404 Not Found", "text/plain; charset=utf-8", b"not part of the app"),
+                None => respond(
+                    &mut out,
+                    "404 Not Found",
+                    "text/plain; charset=utf-8",
+                    b"not part of the app",
+                ),
             },
-            _ => respond(&mut out, "405 Method Not Allowed", "text/plain; charset=utf-8", b"GET or POST /engine"),
+            _ => respond(
+                &mut out,
+                "405 Method Not Allowed",
+                "text/plain; charset=utf-8",
+                b"GET or POST /engine",
+            ),
         };
         if sent.is_err() || closing {
             break;
@@ -182,7 +223,9 @@ fn connection(stream: TcpStream, ctx: Arc<Context>) {
 
 fn open_browser(url: &str) {
     let r = if cfg!(windows) {
-        Command::new("rundll32").args(["url.dll,FileProtocolHandler", url]).spawn()
+        Command::new("rundll32")
+            .args(["url.dll,FileProtocolHandler", url])
+            .spawn()
     } else if cfg!(target_os = "macos") {
         Command::new("open").arg(url).spawn()
     } else {
@@ -195,17 +238,28 @@ fn open_browser(url: &str) {
 
 /// Edge where its installer puts it, for the machine or for this user.
 fn edge() -> Option<PathBuf> {
-    ["ProgramFiles(x86)", "ProgramFiles", "LOCALAPPDATA"].iter().filter_map(|v| env_dir(v))
-        .map(|d| d.join("Microsoft").join("Edge").join("Application").join("msedge.exe"))
+    ["ProgramFiles(x86)", "ProgramFiles", "LOCALAPPDATA"]
+        .iter()
+        .filter_map(|v| env_dir(v))
+        .map(|d| {
+            d.join("Microsoft")
+                .join("Edge")
+                .join("Application")
+                .join("msedge.exe")
+        })
         .find(|p| p.is_file())
 }
 
 fn open_window(url: &str) -> Option<Child> {
     let profile = places().ok()?.profile;
     Command::new(edge()?)
-        .args([format!("--app={url}"), format!("--user-data-dir={}", profile.display())])
+        .args([
+            format!("--app={url}"),
+            format!("--user-data-dir={}", profile.display()),
+        ])
         .args(["--no-first-run", "--no-default-browser-check"])
-        .spawn().ok()
+        .spawn()
+        .ok()
 }
 
 /// The app's window, and `None` when the page went to the default browser.
@@ -220,19 +274,28 @@ fn show(url: &str) -> Option<Child> {
 /// The installed copy has no console: where Edge is missing, one opens to say
 /// where the app is and to stop it, as the console of `glyph --serve` does.
 fn console_window(url: &str) -> Option<Child> {
-    let line = format!("title Glyph & echo Glyph is running at {url} - close this window to stop it & pause >nul");
+    let line = format!(
+        "title Glyph & echo Glyph is running at {url} - close this window to stop it & pause >nul"
+    );
     Command::new("cmd").args(["/c", &line]).spawn().ok()
 }
 
 /// An engine of this app already holds the port: it answers a request, and a
 /// program that holds the port and never answers is not waited on.
 fn already_serving(port: u16) -> bool {
-    let Ok(mut s) = TcpStream::connect(("127.0.0.1", port)) else { return false };
+    let Ok(mut s) = TcpStream::connect(("127.0.0.1", port)) else {
+        return false;
+    };
     let _ = s.set_read_timeout(Some(std::time::Duration::from_secs(5)));
     let q = r#"{"call":"freeVars","raw":"x"}"#;
-    let req = format!("POST /engine HTTP/1.1\r\nHost: 127.0.0.1\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{q}", q.len());
+    let req = format!(
+        "POST /engine HTTP/1.1\r\nHost: 127.0.0.1\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{q}",
+        q.len()
+    );
     let mut got = String::new();
-    s.write_all(req.as_bytes()).is_ok() && s.read_to_string(&mut got).is_ok() && got.contains("\"ok\"")
+    s.write_all(req.as_bytes()).is_ok()
+        && s.read_to_string(&mut got).is_ok()
+        && got.contains("\"ok\"")
 }
 
 pub fn serve(port: u16, open: bool) -> i32 {
@@ -259,11 +322,25 @@ pub fn serve(port: u16, open: bool) -> i32 {
     };
     let bound = listener.local_addr().map(|a| a.port()).unwrap_or(port);
     let url = format!("http://127.0.0.1:{bound}/");
-    let window = if open { show(&format!("http://127.0.0.1:{bound}{ENTRY}")) } else { None };
-    let closing = if window.is_some() { "close its window" } else { "close this window" };
+    let window = if open {
+        show(&format!("http://127.0.0.1:{bound}{ENTRY}"))
+    } else {
+        None
+    };
+    let closing = if window.is_some() {
+        "close its window"
+    } else {
+        "close this window"
+    };
     println!("Glyph is running at {url} — {closing} to stop it");
     let _ = std::io::stdout().flush();
-    let stops_the_engine = window.or_else(|| if open && is_installed_copy() { console_window(&url) } else { None });
+    let stops_the_engine = window.or_else(|| {
+        if open && is_installed_copy() {
+            console_window(&url)
+        } else {
+            None
+        }
+    });
     if let Some(mut child) = stops_the_engine {
         let lock = places().ok().map(|p| p.profile.join("lockfile"));
         std::thread::spawn(move || {
@@ -278,8 +355,10 @@ pub fn serve(port: u16, open: bool) -> i32 {
     for stream in listener.incoming().flatten() {
         let ctx = Arc::clone(&ctx);
         /* a browser holds up to six connections to one origin; each thread
-           gets the main thread's stack, which the engine runs on */
-        let _ = std::thread::Builder::new().stack_size(8 << 20).spawn(move || connection(stream, ctx));
+        gets the main thread's stack, which the engine runs on */
+        let _ = std::thread::Builder::new()
+            .stack_size(8 << 20)
+            .spawn(move || connection(stream, ctx));
     }
     0
 }
@@ -301,10 +380,21 @@ pub struct Places {
 pub fn places() -> Result<Places, String> {
     let local = env_dir("LOCALAPPDATA").ok_or("LOCALAPPDATA is not set")?;
     let dir = local.join("Programs").join("Glyph");
-    let shortcut = env_dir("APPDATA").map(|a| a.join("Microsoft").join("Windows").join("Start Menu").join("Programs").join("Glyph.lnk"));
-    Ok(Places { exe: dir.join("glyph.exe"), icon: dir.join("glyph.ico"), shortcut,
-                stores: stores_dir().ok_or("APPDATA is not set")?,
-                profile: local.join("Glyph").join("window"), dir })
+    let shortcut = env_dir("APPDATA").map(|a| {
+        a.join("Microsoft")
+            .join("Windows")
+            .join("Start Menu")
+            .join("Programs")
+            .join("Glyph.lnk")
+    });
+    Ok(Places {
+        exe: dir.join("glyph.exe"),
+        icon: dir.join("glyph.ico"),
+        shortcut,
+        stores: stores_dir().ok_or("APPDATA is not set")?,
+        profile: local.join("Glyph").join("window"),
+        dir,
+    })
 }
 
 const UNINSTALL_KEY: &str = r"HKCU\Software\Microsoft\Windows\CurrentVersion\Uninstall\Glyph";
@@ -323,13 +413,20 @@ fn hidden(cmd: &mut Command) -> &mut Command {
 
 fn run_quiet(cmd: &mut Command) -> Result<(), String> {
     let out = hidden(cmd).output().map_err(|e| e.to_string())?;
-    if out.status.success() { Ok(()) } else { Err(String::from_utf8_lossy(&out.stderr).trim().to_string()) }
+    if out.status.success() {
+        Ok(())
+    } else {
+        Err(String::from_utf8_lossy(&out.stderr).trim().to_string())
+    }
 }
 
 /// The installed copy: the binary marked as a Windows program, the byte
 /// `editbin /subsystem:windows` writes, the optional header's subsystem field.
 fn windowed(mut exe: Vec<u8>) -> Result<Vec<u8>, String> {
-    let at = exe.get(0x3c..0x40).and_then(|b| b.try_into().ok()).map(|b| u32::from_le_bytes(b) as usize + 0x5c);
+    let at = exe
+        .get(0x3c..0x40)
+        .and_then(|b| b.try_into().ok())
+        .map(|b| u32::from_le_bytes(b) as usize + 0x5c);
     match at.and_then(|at| exe.get_mut(at)) {
         Some(field) if matches!(*field, 2 | 3) => *field = 2,
         _ => return Err("this binary has no subsystem field to mark".to_string()),
@@ -357,9 +454,14 @@ pub fn install(register: bool) -> Result<Places, String> {
     let me = std::env::current_exe().map_err(|e| e.to_string())?;
     if !same_file(&me, &p.exe) {
         let bytes = std::fs::read(&me).map_err(|e| format!("{}: {e}", me.display()))?;
-        std::fs::write(&p.exe, windowed(bytes)?).map_err(|e| format!("{}: {e}", p.exe.display()))?;
+        std::fs::write(&p.exe, windowed(bytes)?)
+            .map_err(|e| format!("{}: {e}", p.exe.display()))?;
     }
-    let icon = PAGE.iter().find(|(n, _)| n.ends_with("favicon.ico")).map(|(_, b)| *b).unwrap_or_default();
+    let icon = PAGE
+        .iter()
+        .find(|(n, _)| n.ends_with("favicon.ico"))
+        .map(|(_, b)| *b)
+        .unwrap_or_default();
     std::fs::write(&p.icon, icon).map_err(|e| format!("{}: {e}", p.icon.display()))?;
     std::fs::create_dir_all(&p.stores).map_err(|e| format!("{}: {e}", p.stores.display()))?;
     for (name, text) in SEED {
@@ -375,22 +477,56 @@ pub fn install(register: bool) -> Result<Places, String> {
         let script = format!(
             "$s = (New-Object -ComObject WScript.Shell).CreateShortcut({}); $s.TargetPath = {}; $s.Arguments = '--serve'; \
              $s.WorkingDirectory = {}; $s.IconLocation = {}; $s.Description = 'Glyph'; $s.Save()",
-            ps_quote(lnk), ps_quote(&p.exe), ps_quote(&p.dir), ps_quote(&p.icon));
-        run_quiet(Command::new("powershell").args(["-NoProfile", "-NonInteractive", "-Command", &script]))
-            .map_err(|e| format!("the Start-menu shortcut: {e}"))?;
+            ps_quote(lnk),
+            ps_quote(&p.exe),
+            ps_quote(&p.dir),
+            ps_quote(&p.icon)
+        );
+        run_quiet(Command::new("powershell").args([
+            "-NoProfile",
+            "-NonInteractive",
+            "-Command",
+            &script,
+        ]))
+        .map_err(|e| format!("the Start-menu shortcut: {e}"))?;
     }
     if register {
         let exe = p.exe.display().to_string();
         let uninstall = format!("\"{exe}\" --uninstall");
-        for (name, data) in [("DisplayName", "Glyph"), ("DisplayVersion", glyph_version::VERSION),
-                             ("Publisher", "Glyph"), ("InstallLocation", &p.dir.display().to_string()),
-                             ("DisplayIcon", &p.icon.display().to_string()), ("UninstallString", &uninstall)] {
-            run_quiet(Command::new("reg").args(["add", UNINSTALL_KEY, "/v", name, "/t", "REG_SZ", "/d", data, "/f"]))
-                .map_err(|e| format!("the uninstall entry: {e}"))?;
+        for (name, data) in [
+            ("DisplayName", "Glyph"),
+            ("DisplayVersion", glyph_version::VERSION),
+            ("Publisher", "Glyph"),
+            ("InstallLocation", &p.dir.display().to_string()),
+            ("DisplayIcon", &p.icon.display().to_string()),
+            ("UninstallString", &uninstall),
+        ] {
+            run_quiet(Command::new("reg").args([
+                "add",
+                UNINSTALL_KEY,
+                "/v",
+                name,
+                "/t",
+                "REG_SZ",
+                "/d",
+                data,
+                "/f",
+            ]))
+            .map_err(|e| format!("the uninstall entry: {e}"))?;
         }
         for name in ["NoModify", "NoRepair"] {
-            run_quiet(Command::new("reg").args(["add", UNINSTALL_KEY, "/v", name, "/t", "REG_DWORD", "/d", "1", "/f"]))
-                .map_err(|e| format!("the uninstall entry: {e}"))?;
+            run_quiet(Command::new("reg").args([
+                "add",
+                UNINSTALL_KEY,
+                "/v",
+                name,
+                "/t",
+                "REG_DWORD",
+                "/d",
+                "1",
+                "/f",
+            ]))
+            .map_err(|e| format!("the uninstall entry: {e}"))?;
         }
     }
     Ok(p)
@@ -398,10 +534,10 @@ pub fn install(register: bool) -> Result<Places, String> {
 
 pub fn uninstall(register: bool) -> Result<Places, String> {
     let p = places()?;
-    if let Some(lnk) = &p.shortcut {
-        if lnk.exists() {
-            std::fs::remove_file(lnk).map_err(|e| format!("{}: {e}", lnk.display()))?;
-        }
+    if let Some(lnk) = &p.shortcut
+        && lnk.exists()
+    {
+        std::fs::remove_file(lnk).map_err(|e| format!("{}: {e}", lnk.display()))?;
     }
     if register {
         let _ = run_quiet(Command::new("reg").args(["delete", UNINSTALL_KEY, "/f"]));
@@ -412,8 +548,14 @@ pub fn uninstall(register: bool) -> Result<Places, String> {
     let me = std::env::current_exe().map_err(|e| e.to_string())?;
     if same_file(&me, &p.exe) {
         /* a running binary cannot remove itself: a shell does it once this one has ended */
-        let line = format!("ping -n 3 127.0.0.1 >nul & del /f /q \"{}\" & rmdir \"{}\"", p.exe.display(), p.dir.display());
-        hidden(Command::new("cmd").args(["/c", &line])).spawn().map_err(|e| e.to_string())?;
+        let line = format!(
+            "ping -n 3 127.0.0.1 >nul & del /f /q \"{}\" & rmdir \"{}\"",
+            p.exe.display(),
+            p.dir.display()
+        );
+        hidden(Command::new("cmd").args(["/c", &line]))
+            .spawn()
+            .map_err(|e| e.to_string())?;
     } else {
         if p.exe.exists() {
             std::fs::remove_file(&p.exe).map_err(|e| format!("{}: {e}", p.exe.display()))?;
@@ -426,7 +568,10 @@ pub fn uninstall(register: bool) -> Result<Places, String> {
 /// The app's flags, when the command line opens with one; `None` hands the
 /// command line to the CLI of `glyph-cli.js` unchanged.
 pub fn route(argv: &[String]) -> Option<i32> {
-    if !matches!(argv.first().map(String::as_str), Some("--serve" | "--install" | "--uninstall")) {
+    if !matches!(
+        argv.first().map(String::as_str),
+        Some("--serve" | "--install" | "--uninstall")
+    ) {
         return None;
     }
     let has = |f: &str| argv.iter().any(|a| a == f);
@@ -435,7 +580,11 @@ pub fn route(argv: &[String]) -> Option<i32> {
     if has("--install") {
         return Some(match install(register) {
             Ok(p) => {
-                println!("Glyph is installed in {}, and its stores are in {}", p.dir.display(), p.stores.display());
+                println!(
+                    "Glyph is installed in {}, and its stores are in {}",
+                    p.dir.display(),
+                    p.stores.display()
+                );
                 0
             }
             Err(e) => {
@@ -447,8 +596,11 @@ pub fn route(argv: &[String]) -> Option<i32> {
     if has("--uninstall") {
         return Some(match uninstall(register) {
             Ok(p) => {
-                println!("Glyph is removed; the stores stay in {} and the window's profile in {}, and they are yours",
-                         p.stores.display(), p.profile.display());
+                println!(
+                    "Glyph is removed; the stores stay in {} and the window's profile in {}, and they are yours",
+                    p.stores.display(),
+                    p.profile.display()
+                );
                 0
             }
             Err(e) => {
@@ -458,7 +610,11 @@ pub fn route(argv: &[String]) -> Option<i32> {
         });
     }
     if has("--serve") {
-        let port = match argv.iter().position(|a| a == "--port").map(|i| argv.get(i + 1)) {
+        let port = match argv
+            .iter()
+            .position(|a| a == "--port")
+            .map(|i| argv.get(i + 1))
+        {
             None => PORT,
             Some(Some(n)) => match n.parse() {
                 Ok(n) => n,
@@ -485,7 +641,10 @@ pub fn double_click() -> i32 {
     }
     match install(true) {
         Ok(p) => {
-            println!("Glyph is installed in {}; the Start menu opens it from now on", p.dir.display());
+            println!(
+                "Glyph is installed in {}; the Start menu opens it from now on",
+                p.dir.display()
+            );
             match Command::new(&p.exe).arg("--serve").spawn() {
                 Ok(_) => 0,
                 Err(e) => {

@@ -17,15 +17,22 @@
 //! twice from the start; and `[/undefined]` closes an open template, whose
 //! canonical `String()` reads as `undefined`.
 
-use glyph_lex::{classify, js_trim, suggest, tokenize, Token};
-use glyph_logic::{parse_logic, Logic};
+use glyph_json::{Json, number};
+use glyph_lex::{Token, classify, js_trim, suggest, tokenize};
+use glyph_logic::{Logic, parse_logic};
 use glyph_rules::check_rules;
-use glyph_stores::{entry_of, expansion_registry, Context, Registered};
-use glyph_json::{number, Json};
-use glyph_templates::{check_template_constraints, expand_invocations, Inherited, Parsed, SubParse};
-use glyph_util::tree::{strip_tags, Diag, Emotion, Gloss, Id, Node, Segment, Span, Suggestion, Thrown, Tree, LIMITS};
+use glyph_stores::{Context, Registered, entry_of, expansion_registry};
+use glyph_templates::{
+    Inherited, Parsed, SubParse, check_template_constraints, expand_invocations,
+};
+use glyph_util::tree::{
+    Diag, Emotion, Gloss, Id, LIMITS, Node, Segment, Span, Suggestion, Thrown, Tree, strip_tags,
+};
 use glyph_util::{esc, inherited};
-use glyph_vocab::{derived, former_element, get, ALIAS, EDITORIAL_ONLY, EMO, FRAMES, INSTR, META, MODE, NAMED_STRUCT, SESSION, SLOTS, STRUCT};
+use glyph_vocab::{
+    ALIAS, EDITORIAL_ONLY, EMO, FRAMES, INSTR, META, MODE, NAMED_STRUCT, SESSION, SLOTS, STRUCT,
+    derived, former_element, get,
+};
 use std::sync::Arc;
 
 /// What the parser carries beyond the shared node: the Logic a `[logic]`
@@ -52,7 +59,15 @@ pub struct Opts<'a> {
 
 impl<'a> Opts<'a> {
     pub fn new(ctx: &'a Context) -> Opts<'a> {
-        Opts { ctx, session: true, valency: true, en: false, expanding: Vec::new(), registered: Registered::none(), inherited: &[] }
+        Opts {
+            ctx,
+            session: true,
+            valency: true,
+            en: false,
+            expanding: Vec::new(),
+            registered: Registered::none(),
+            inherited: &[],
+        }
     }
 }
 
@@ -114,7 +129,8 @@ fn js_str(v: &Option<String>) -> String {
 /// `/^[A-Za-z_][A-Za-z0-9_.-]*$/`: a binding is a name, not prose.
 fn bind_name(v: &str) -> bool {
     let mut c = v.chars();
-    c.next().is_some_and(|f| f.is_ascii_alphabetic() || f == '_')
+    c.next()
+        .is_some_and(|f| f.is_ascii_alphabetic() || f == '_')
         && c.all(|x| x.is_ascii_alphanumeric() || matches!(x, '_' | '.' | '-'))
 }
 
@@ -137,7 +153,10 @@ impl State<'_, '_> {
         self.g(Diag::new("fix", lab, msg, code).en(en_lab, en));
     }
     fn at(d: Diag, tk: &Token) -> Diag {
-        Diag { at: Some((tk.s, tk.e)), ..d }
+        Diag {
+            at: Some((tk.s, tk.e)),
+            ..d
+        }
     }
     fn top(&self) -> Option<Id> {
         self.stack.last().copied()
@@ -165,7 +184,11 @@ impl State<'_, '_> {
         }
     }
     fn span(tk: &Token) -> Option<Span> {
-        Some(Span { k: tk.k.to_string(), s: tk.s, e: tk.e })
+        Some(Span {
+            k: tk.k.to_string(),
+            s: tk.s,
+            e: tk.e,
+        })
     }
 
     fn close_seg(&mut self, cause: &str) {
@@ -175,14 +198,21 @@ impl State<'_, '_> {
             nd.auto_closed = Some(true);
             self.seg.auto_closed += 1;
             if names.len() < 4 {
-                let name = [&nd.canonical, &nd.template].into_iter().flatten().find(|s| !s.is_empty())
+                let name = [&nd.canonical, &nd.template]
+                    .into_iter()
+                    .flatten()
+                    .find(|s| !s.is_empty())
                     .map_or("?".to_string(), |s| s.clone());
                 names.push(name.to_lowercase());
             }
         }
         if cause == "semi" && self.seg.auto_closed > LIMITS.auto_close {
             let n = self.seg.auto_closed;
-            let list = names.iter().map(|x| format!("<code>[{}</code>", esc(x))).collect::<Vec<_>>().join(", ");
+            let list = names
+                .iter()
+                .map(|x| format!("<code>[{}</code>", esc(x)))
+                .collect::<Vec<_>>()
+                .join(", ");
             self.g(Diag::new("note", "fecha tudo",
                 format!("<code>;</code> fechou {n} comandos de uma vez ({list}…). Em bloco longo isso costuma fechar mais do \
                          que se pretendia — feche com <code>]</code> o que for parcial."), "MassAutoClose")
@@ -208,34 +238,73 @@ impl State<'_, '_> {
         let in_ph = parent.is_some_and(|p| self.tree.nodes[p].canonical.as_deref() == Some("PH"));
         let bare = tk.k == "bareTag";
         if tk.k == "open" && v.is_empty() {
-            self.fix("sem nome", "<code>[</code> sem nome. Um <code>[</code> = um comando.".into(), "EmptyCommandName",
-                     "no name", "<code>[</code> with no name. One <code>[</code> is one command.".into());
+            self.fix(
+                "sem nome",
+                "<code>[</code> sem nome. Um <code>[</code> = um comando.".into(),
+                "EmptyCommandName",
+                "no name",
+                "<code>[</code> with no name. One <code>[</code> is one command.".into(),
+            );
         }
         /* `[ph-alvo`: the `-` straight after `[ph` binds the hole's one name;
-           any other bare tag in the hole is a chain link (ORD-0026, ORD-0025) */
-        let slot_name = in_ph && bare && parent.is_some_and(|p| {
-            let ph = &self.tree.nodes[p];
-            let (Some(t), Some(b), Some(o)) = (ph.tok.as_ref(), i.checked_sub(1).map(|j| &tokens[j]),
-                                               i.checked_sub(2).map(|j| &tokens[j])) else { return false };
-            ph.children.is_empty() && b.k == "extend" && b.s == t.e && o.k == t.k && o.s == t.s && o.e == t.e
-        });
+        any other bare tag in the hole is a chain link (ORD-0026, ORD-0025) */
+        let slot_name = in_ph
+            && bare
+            && parent.is_some_and(|p| {
+                let ph = &self.tree.nodes[p];
+                let (Some(t), Some(b), Some(o)) = (
+                    ph.tok.as_ref(),
+                    i.checked_sub(1).map(|j| &tokens[j]),
+                    i.checked_sub(2).map(|j| &tokens[j]),
+                ) else {
+                    return false;
+                };
+                ph.children.is_empty()
+                    && b.k == "extend"
+                    && b.s == t.e
+                    && o.k == t.k
+                    && o.s == t.s
+                    && o.e == t.e
+            });
         let gloss = match cl.gloss {
             glyph_lex::Gloss::Text(t) => Some(Gloss::Text(t)),
             glyph_lex::Gloss::Prototype => Some(Gloss::Prototype),
-            glyph_lex::Gloss::Absent if cl.tier == "session" && cl.canonical == "constructor" => Some(Gloss::Object),
+            glyph_lex::Gloss::Absent if cl.tier == "session" && cl.canonical == "constructor" => {
+                Some(Gloss::Object)
+            }
             glyph_lex::Gloss::Absent => None,
         };
         self.uid += 1;
         let origin = if slot_name {
             None
         } else {
-            Some(self.pending.unwrap_or(if bare { "extend" } else if parent.is_some() { "nest" } else { "root" }).to_string())
+            Some(
+                self.pending
+                    .unwrap_or(if bare {
+                        "extend"
+                    } else if parent.is_some() {
+                        "nest"
+                    } else {
+                        "root"
+                    })
+                    .to_string(),
+            )
         };
         let mut nd = Node {
-            id: Some(self.uid), raw: named.map(str::to_string).or_else(|| tk.v.clone()), tier: Some(cl.tier.into()), canonical: Some(cl.canonical.clone()), gloss,
-            alias: Some(cl.alias == Some(true)), auto_closed: Some(false), tok: Self::span(tk),
-            editorial: Some(has_num(EDITORIAL_ONLY, &cl.canonical)), origin: Some(origin), chain_element: Some(bare),
-            slot_name: Some(slot_name), depth: Some(self.stack.len()), ..Default::default()
+            id: Some(self.uid),
+            raw: named.map(str::to_string).or_else(|| tk.v.clone()),
+            tier: Some(cl.tier.into()),
+            canonical: Some(cl.canonical.clone()),
+            gloss,
+            alias: Some(cl.alias == Some(true)),
+            auto_closed: Some(false),
+            tok: Self::span(tk),
+            editorial: Some(has_num(EDITORIAL_ONLY, &cl.canonical)),
+            origin: Some(origin),
+            chain_element: Some(bare),
+            slot_name: Some(slot_name),
+            depth: Some(self.stack.len()),
+            ..Default::default()
         };
         if cl.tier == "unknown" && !slot_name {
             let sg = suggest(v);
@@ -243,18 +312,41 @@ impl State<'_, '_> {
             let (pt, en) = match &sg {
                 Some(s) => {
                     let lower = s.name.to_lowercase();
-                    (format!(" → <code>[{lower}</code>{}?", get(ptbr, s.name).filter(|p| !p.is_empty()).map_or(String::new(), |p| format!(" ({p})"))),
-                     format!(" → <code>[{lower}</code>{}?", get(INSTR, s.name).filter(|g| !g.is_empty()).map_or(String::new(), |p| format!(" ({p})"))))
+                    (
+                        format!(
+                            " → <code>[{lower}</code>{}?",
+                            get(ptbr, s.name)
+                                .filter(|p| !p.is_empty())
+                                .map_or(String::new(), |p| format!(" ({p})"))
+                        ),
+                        format!(
+                            " → <code>[{lower}</code>{}?",
+                            get(INSTR, s.name)
+                                .filter(|g| !g.is_empty())
+                                .map_or(String::new(), |p| format!(" ({p})"))
+                        ),
+                    )
                 }
                 None => (" Veja a tabela.".into(), " See the table.".into()),
             };
-            nd.suggestion = Some(sg.map(|s| Suggestion { name: s.name.into(), how: s.how.into() }));
-            self.fix("não existe", format!("<code>[{}</code> fora do vocabulário.{pt}", esc(v)), "UnknownCommand",
-                     "does not exist", format!("<code>[{}</code> is outside the vocabulary.{en}", esc(v)));
+            nd.suggestion = Some(sg.map(|s| Suggestion {
+                name: s.name.into(),
+                how: s.how.into(),
+            }));
+            self.fix(
+                "não existe",
+                format!("<code>[{}</code> fora do vocabulário.{pt}", esc(v)),
+                "UnknownCommand",
+                "does not exist",
+                format!("<code>[{}</code> is outside the vocabulary.{en}", esc(v)),
+            );
         }
         /* a retired element name is read, and named */
         if let Some(was) = former_element(v)
-            && derived().gloss_reverse.iter().any(|(k, hit)| k == was && hit.canonical == cl.canonical)
+            && derived()
+                .gloss_reverse
+                .iter()
+                .any(|(k, hit)| k == was && hit.canonical == cl.canonical)
         {
             let now = cl.canonical.to_lowercase();
             self.g(Diag::new("note", "grafia antiga",
@@ -280,8 +372,13 @@ impl State<'_, '_> {
             Some(t) if !t.is_empty() => format!("--{t}"),
             _ => js_str(&nd.raw),
         };
-        let Some(k) = nd.tok.as_ref().and_then(|t| self.tokens.iter().position(|x| x.k == t.k && x.s == t.s && x.e == t.e))
-        else { return h };
+        let Some(k) = nd.tok.as_ref().and_then(|t| {
+            self.tokens
+                .iter()
+                .position(|x| x.k == t.k && x.s == t.s && x.e == t.e)
+        }) else {
+            return h;
+        };
         for tm in &self.tokens[k + 1..at.max(k + 1)] {
             match tm.k {
                 "extend" => h.push('-'),
@@ -299,10 +396,18 @@ impl State<'_, '_> {
     /// `retiredColon`: the retired colon, named once per colon with the form
     /// that replaces it — the command as written, and each item as a literal.
     fn retired_colon(&mut self, head: &str, items: &[(String, &str, bool)], at: (usize, usize)) {
-        let now: String = items.iter().enumerate().map(|(k, (v, form, comma))| {
-            let q = if *form == "tick" { format!("`{v}`") } else { format!("'{v}'") };
-            format!("{}{q}", if k > 0 && *comma { "," } else { "" })
-        }).collect();
+        let now: String = items
+            .iter()
+            .enumerate()
+            .map(|(k, (v, form, comma))| {
+                let q = if *form == "tick" {
+                    format!("`{v}`")
+                } else {
+                    format!("'{v}'")
+                };
+                format!("{}{q}", if k > 0 && *comma { "," } else { "" })
+            })
+            .collect();
         let (h, now) = (esc(head), esc(&format!("[{head}{now}")));
         let d = Diag::new("ask", "dois-pontos",
             format!("<code>[{h}:</code> é a forma aposentada do dois-pontos, e o texto fica no documento. Escreva <code>{now}</code>."),
@@ -331,24 +436,44 @@ impl State<'_, '_> {
                 let iv = js_trim(&c.v);
                 if !iv.is_empty() {
                     let form = if iv.contains('\n') { "tick" } else { "quote" };
-                    items.push((Token { k: "literal", v: Some(iv), s: c.s, e: c.e, form: Some(form), closed_by: Some(form),
-                                        ..Token::default() }, c.comma));
+                    items.push((
+                        Token {
+                            k: "literal",
+                            v: Some(iv),
+                            s: c.s,
+                            e: c.e,
+                            form: Some(form),
+                            closed_by: Some(form),
+                            ..Token::default()
+                        },
+                        c.comma,
+                    ));
                 }
             }
         }
         let Some(t2) = self.top() else { return i };
         let tokens = self.tokens;
-        let (mut items, mut cur, mut j, mut comma): (Vec<(Token, bool)>, Option<Cur>, usize, bool) = (Vec::new(), None, i + 1, false);
+        let (mut items, mut cur, mut j, mut comma): (Vec<(Token, bool)>, Option<Cur>, usize, bool) =
+            (Vec::new(), None, i + 1, false);
         while j < tokens.len() {
             let nx = &tokens[j];
             match nx.k {
                 "text" | "equals" => {
-                    let c = cur.get_or_insert_with(|| Cur { v: String::new(), s: nx.s, e: nx.e, comma: std::mem::take(&mut comma) });
+                    let c = cur.get_or_insert_with(|| Cur {
+                        v: String::new(),
+                        s: nx.s,
+                        e: nx.e,
+                        comma: std::mem::take(&mut comma),
+                    });
                     /* whitespace between two tokens is a gap the lexer left out */
                     if nx.s > c.e {
                         c.v.push_str(&" ".repeat(nx.s - c.e));
                     }
-                    c.v.push_str(&if nx.k == "equals" { "=".to_string() } else { js_str(&nx.v) });
+                    c.v.push_str(&if nx.k == "equals" {
+                        "=".to_string()
+                    } else {
+                        js_str(&nx.v)
+                    });
                     c.e = nx.e;
                 }
                 "comma" => {
@@ -365,8 +490,10 @@ impl State<'_, '_> {
         }
         flush(&mut cur, &mut items);
         let head = self.colon_head(t2, i);
-        let named: Vec<(String, &str, bool)> = items.iter()
-            .map(|(t, c)| (js_str(&t.v), t.form.unwrap_or("quote"), *c)).collect();
+        let named: Vec<(String, &str, bool)> = items
+            .iter()
+            .map(|(t, c)| (js_str(&t.v), t.form.unwrap_or("quote"), *c))
+            .collect();
         self.retired_colon(&head, &named, (tokens[i].s, tokens[i].e));
         for (t, _) in &items {
             self.literal(t);
@@ -376,11 +503,18 @@ impl State<'_, '_> {
 
     fn literal(&mut self, tk: &Token) {
         let t3 = self.top();
-        let mut lit = Node { literal: Some(true), v: tk.v.clone(), form: tk.form.map(str::to_string), tok: Self::span(tk), ..Default::default() };
+        let mut lit = Node {
+            literal: Some(true),
+            v: tk.v.clone(),
+            form: tk.form.map(str::to_string),
+            tok: Self::span(tk),
+            ..Default::default()
+        };
         /* a literal written after a bracketed nest names what came back */
         if let Some(t) = t3 {
-            let after_nest = self.tree.nodes[t].children.iter()
-                .any(|&c| self.tree.nodes[c].is_canonical() && self.tree.nodes[c].chain_element != Some(true));
+            let after_nest = self.tree.nodes[t].children.iter().any(|&c| {
+                self.tree.nodes[c].is_canonical() && self.tree.nodes[c].chain_element != Some(true)
+            });
             lit.role = Some(if after_nest { "result" } else { "operand" }.into());
         }
         let id = self.add(lit);
@@ -388,16 +522,34 @@ impl State<'_, '_> {
         match tk.closed_by {
             Some(by @ ("bracket" | "semi")) => {
                 let ch = if by == "bracket" { "]" } else { ";" };
-                self.fix("texto cortado", format!("<code>{ch}</code> encerra o literal aqui, e não há escape para ele. \
-                                                   Reescreva o texto sem esse caractere."), "TruncatedLiteral",
-                         "text cut", format!("<code>{ch}</code> ends the literal here, and there is no escape for it. \
-                                              Rewrite the text without that character."));
+                self.fix(
+                    "texto cortado",
+                    format!(
+                        "<code>{ch}</code> encerra o literal aqui, e não há escape para ele. \
+                                                   Reescreva o texto sem esse caractere."
+                    ),
+                    "TruncatedLiteral",
+                    "text cut",
+                    format!(
+                        "<code>{ch}</code> ends the literal here, and there is no escape for it. \
+                                              Rewrite the text without that character."
+                    ),
+                );
             }
-            Some("eof") => self.fix("texto aberto", "<code>`</code> sem fechar.".into(), "UnterminatedLiteral",
-                                    "text left open", "<code>`</code> never closed.".into()),
-            Some("unterminated") if tk.form == Some("quote") =>
-                self.fix("texto aberto", "<code>'</code> sem fechar.".into(), "UnterminatedLiteral",
-                         "text left open", "<code>'</code> never closed.".into()),
+            Some("eof") => self.fix(
+                "texto aberto",
+                "<code>`</code> sem fechar.".into(),
+                "UnterminatedLiteral",
+                "text left open",
+                "<code>`</code> never closed.".into(),
+            ),
+            Some("unterminated") if tk.form == Some("quote") => self.fix(
+                "texto aberto",
+                "<code>'</code> sem fechar.".into(),
+                "UnterminatedLiteral",
+                "text left open",
+                "<code>'</code> never closed.".into(),
+            ),
             _ => {}
         }
         self.pending = None;
@@ -411,14 +563,31 @@ impl State<'_, '_> {
             _ if key == "__proto__" => Gloss::Prototype,
             _ if inherited(&key) => Gloss::Object,
             _ => {
-                let d = Diag::new("fix", "humor fora da tabela",
-                                  format!("<code>/{}/</code> não está na tabela de emoções. Descartado.", esc(raw)), "UnknownEmotion")
-                    .en("mood off-table", format!("<code>/{}/</code> is not in the emotion table. Discarded.", esc(raw)));
+                let d = Diag::new(
+                    "fix",
+                    "humor fora da tabela",
+                    format!(
+                        "<code>/{}/</code> não está na tabela de emoções. Descartado.",
+                        esc(raw)
+                    ),
+                    "UnknownEmotion",
+                )
+                .en(
+                    "mood off-table",
+                    format!(
+                        "<code>/{}/</code> is not in the emotion table. Discarded.",
+                        esc(raw)
+                    ),
+                );
                 self.g(Self::at(d, tk));
                 return;
             }
         };
-        let rec = Emotion { name: key, gloss, order: tk.order };
+        let rec = Emotion {
+            name: key,
+            gloss,
+            order: tk.order,
+        };
         if let Some(t) = self.top() {
             self.tree.nodes[t].emotions.push(rec.clone());
         }
@@ -430,10 +599,17 @@ impl State<'_, '_> {
         if v.is_empty() {
             return;
         }
-        let txt = Node { text: Some(true), v: Some(v.clone()), tok: Self::span(tk), ..Default::default() };
+        let txt = Node {
+            text: Some(true),
+            v: Some(v.clone()),
+            tok: Self::span(tk),
+            ..Default::default()
+        };
         let id = self.add(txt);
         self.push_loose(id);
-        const KEYWORDS: [&str; 10] = ["if", "or", "else", "and", "then", "unless", "se", "ou", "senao", "entao"];
+        const KEYWORDS: [&str; 10] = [
+            "if", "or", "else", "and", "then", "unless", "se", "ou", "senao", "entao",
+        ];
         let word = |c: char| c.is_ascii_alphanumeric() || c == '_' || c == '.';
         if KEYWORDS.iter().any(|k| k.eq_ignore_ascii_case(&v)) {
             self.g(Diag::new("note", "palavra solta",
@@ -441,7 +617,11 @@ impl State<'_, '_> {
                 .en("loose word", format!("<code>{}</code> on its own. Logic: <code>[if</code> <code>[unls</code> <code>[logic]</code>.", esc(&v))));
         } else if v.chars().next().is_some_and(|c| c.is_ascii_alphabetic()) && v.chars().all(word) {
             let (uw, lw) = (v.to_uppercase(), v.to_lowercase());
-            let known = has_text(INSTR, &uw) || has_text(ALIAS, &uw) || has_text(STRUCT, &uw) || has_text(META, &uw) || has_text(MODE, &uw)
+            let known = has_text(INSTR, &uw)
+                || has_text(ALIAS, &uw)
+                || has_text(STRUCT, &uw)
+                || has_text(META, &uw)
+                || has_text(MODE, &uw)
                 || (self.o.session && has_text(SESSION, &lw));
             if known {
                 self.g(Diag::new("ask", "comando solto",
@@ -465,40 +645,82 @@ impl State<'_, '_> {
             "open" | "bareTag" => self.command(i, None),
             "rawfence" => {
                 let origin = self.pending.unwrap_or("nest").to_string();
-                let id = self.add(Node { raw_fence: Some(true), v: tk.body.clone(), tok: Self::span(tk), origin: Some(Some(origin)),
-                                         ..Default::default() });
+                let id = self.add(Node {
+                    raw_fence: Some(true),
+                    v: tk.body.clone(),
+                    tok: Self::span(tk),
+                    origin: Some(Some(origin)),
+                    ..Default::default()
+                });
                 self.attach(id);
                 if tk.closed != Some(true) {
-                    self.fix("não fechou", "<code>[raw]</code> sem <code>[/raw]</code>.".into(), "UnclosedRaw",
-                             "not closed", "<code>[raw]</code> without <code>[/raw]</code>.".into());
+                    self.fix(
+                        "não fechou",
+                        "<code>[raw]</code> sem <code>[/raw]</code>.".into(),
+                        "UnclosedRaw",
+                        "not closed",
+                        "<code>[raw]</code> without <code>[/raw]</code>.".into(),
+                    );
                 }
                 self.pending = None;
             }
             "logic" => {
-                let lg = parse_logic(tk.v.as_deref().unwrap_or(""), tk.body.as_deref().unwrap_or(""));
+                let lg = parse_logic(
+                    tk.v.as_deref().unwrap_or(""),
+                    tk.body.as_deref().unwrap_or(""),
+                );
                 let origin = self.pending.unwrap_or("nest").to_string();
-                let gaps: Vec<Diag> = lg.gaps.iter().map(|g| Diag { code_first: true, ..Diag::new(g.sev, g.lab, g.msg.clone(), g.code) }).collect();
-                let id = self.add(Node { logic: Some(lg.name.clone()), tok: Self::span(tk), origin: Some(Some(origin)),
-                                         extra: Some(lg), ..Default::default() });
+                let gaps: Vec<Diag> = lg
+                    .gaps
+                    .iter()
+                    .map(|g| Diag {
+                        code_first: true,
+                        ..Diag::new(g.sev, g.lab, g.msg.clone(), g.code)
+                    })
+                    .collect();
+                let id = self.add(Node {
+                    logic: Some(lg.name.clone()),
+                    tok: Self::span(tk),
+                    origin: Some(Some(origin)),
+                    extra: Some(lg),
+                    ..Default::default()
+                });
                 self.attach(id);
                 /* `[logic:calc]` opens the fence it names, and asks for `[logic'calc']` */
                 if let Some(c) = tk.colon {
                     let name = js_str(&tk.v);
                     let form = if name.contains('\'') { "tick" } else { "quote" };
-                    let items = if name.is_empty() { Vec::new() } else { vec![(name, form, false)] };
+                    let items = if name.is_empty() {
+                        Vec::new()
+                    } else {
+                        vec![(name, form, false)]
+                    };
                     self.retired_colon("logic", &items, (c, c + 1));
                 }
                 self.diags.extend(gaps);
                 if tk.closed != Some(true) {
-                    self.fix("não fechou", "<code>[logic]</code> sem <code>[/logic]</code>.".into(), "UnclosedLogic",
-                             "not closed", "<code>[logic]</code> without <code>[/logic]</code>.".into());
+                    self.fix(
+                        "não fechou",
+                        "<code>[logic]</code> sem <code>[/logic]</code>.".into(),
+                        "UnclosedLogic",
+                        "not closed",
+                        "<code>[logic]</code> without <code>[/logic]</code>.".into(),
+                    );
                 }
                 self.pending = None;
             }
             "tpl" => {
-                let origin = self.pending.unwrap_or(if self.top().is_some() { "nest" } else { "root" }).to_string();
-                let id = self.add(Node { template: tk.v.clone(), is_def: Some(tk.def == Some(true)), tok: Self::span(tk),
-                                         origin: Some(Some(origin)), ..Default::default() });
+                let origin = self
+                    .pending
+                    .unwrap_or(if self.top().is_some() { "nest" } else { "root" })
+                    .to_string();
+                let id = self.add(Node {
+                    template: tk.v.clone(),
+                    is_def: Some(tk.def == Some(true)),
+                    tok: Self::span(tk),
+                    origin: Some(Some(origin)),
+                    ..Default::default()
+                });
                 self.attach(id);
                 self.stack.push(id);
                 self.pending = None;
@@ -506,20 +728,33 @@ impl State<'_, '_> {
             "chain" => self.seg.continues = true,
             "close" => {
                 if self.stack.pop().is_none() {
-                    self.fix("sobrando", "<code>]</code> sem comando aberto.".into(), "UnmatchedCloseBracket",
-                             "spare", "<code>]</code> with no command open.".into());
+                    self.fix(
+                        "sobrando",
+                        "<code>]</code> sem comando aberto.".into(),
+                        "UnmatchedCloseBracket",
+                        "spare",
+                        "<code>]</code> with no command open.".into(),
+                    );
                 }
                 self.pending = None;
             }
             "closeTag" => {
                 let want = js_str(&tk.v).to_uppercase();
-                let found = self.stack.iter().rposition(|&s| js_str(&self.tree.nodes[s].canonical).to_uppercase() == want);
+                let found = self
+                    .stack
+                    .iter()
+                    .rposition(|&s| js_str(&self.tree.nodes[s].canonical).to_uppercase() == want);
                 match found {
                     Some(f) => self.stack.truncate(f),
                     None => {
                         let v = esc(tk.v.as_deref().unwrap_or(""));
-                        self.fix("sobrando", format!("<code>[/{v}]</code> fecha comando não aberto."), "UnmatchedCloseTag",
-                                 "spare", format!("<code>[/{v}]</code> closes a command that never opened."));
+                        self.fix(
+                            "sobrando",
+                            format!("<code>[/{v}]</code> fecha comando não aberto."),
+                            "UnmatchedCloseTag",
+                            "spare",
+                            format!("<code>[/{v}]</code> closes a command that never opened."),
+                        );
                     }
                 }
             }
@@ -529,10 +764,18 @@ impl State<'_, '_> {
             "extend" => {
                 self.pending = Some("extend");
                 let next = self.tokens.get(i + 1).map(|t| t.k);
-                let stray_on = self.tokens.get(i + 1).is_some_and(|t| t.k == "mode" && t.stray == Some(true));
+                let stray_on = self
+                    .tokens
+                    .get(i + 1)
+                    .is_some_and(|t| t.k == "mode" && t.stray == Some(true));
                 if !matches!(next, Some("open" | "bareTag" | "literal" | "text")) && !stray_on {
-                    self.fix("pendurado", "<code>-</code> sem cadeia. Ex.: <code>[rw-cr</code>.".into(), "DanglingChain",
-                             "dangling", "<code>-</code> with no chain. E.g. <code>[rw-cr</code>.".into());
+                    self.fix(
+                        "pendurado",
+                        "<code>-</code> sem cadeia. Ex.: <code>[rw-cr</code>.".into(),
+                        "DanglingChain",
+                        "dangling",
+                        "<code>-</code> with no chain. E.g. <code>[rw-cr</code>.".into(),
+                    );
                 }
             }
             "badslash" => {
@@ -544,7 +787,7 @@ impl State<'_, '_> {
                 self.g(Self::at(d, tk));
             }
             /* the JS writes `\emo\` in a string literal, where `\e` and `\<`
-               are escapes of nothing: the message shows `emo` */
+            are escapes of nothing: the message shows `emo` */
             "badmood" => {
                 let d = Diag::new("fix", "grafia abandonada",
                     "<code>emo</code> foi substituída por <code>/emo/</code> em v1.7 (I-19). Escreva <code>/eth/</code>.".into(), "BackslashMood")
@@ -564,12 +807,16 @@ impl State<'_, '_> {
             }
             "mode" => {
                 if tk.v.as_deref() == Some("OFF") {
-                    let id = self.add(Node { mode: Some("off".into()), tok: Self::span(tk), ..Default::default() });
+                    let id = self.add(Node {
+                        mode: Some("off".into()),
+                        tok: Self::span(tk),
+                        ..Default::default()
+                    });
                     self.push_loose(id);
                     self.seg.pending_mode = Some(Some(id));
                 } else if tk.stray == Some(true) {
                     /* `[on]` with no `[off]` open is the command ON written
-                       closed; the note names that nothing was off */
+                    closed; the note names that nothing was off */
                     self.command(i, Some("on"));
                     self.seg.pending_mode = Some(None);
                     let d = Diag::new("note", "modo texto",
@@ -582,12 +829,24 @@ impl State<'_, '_> {
                     self.seg.pending_mode = Some(None);
                 }
             }
-            "modeUnclosed" => self.g(Diag::new("note", "modo texto", "<code>[off]</code> sem <code>[on]</code>. Resto lido como prosa.".into(),
-                                               "UnclosedOffMode")
-                .en("text mode", "<code>[off]</code> without <code>[on]</code>. The rest is read as prose.".into())),
+            "modeUnclosed" => self.g(Diag::new(
+                "note",
+                "modo texto",
+                "<code>[off]</code> sem <code>[on]</code>. Resto lido como prosa.".into(),
+                "UnclosedOffMode",
+            )
+            .en(
+                "text mode",
+                "<code>[off]</code> without <code>[on]</code>. The rest is read as prose.".into(),
+            )),
             "raw" => {
-                let id = self.add(Node { literal: Some(true), v: tk.v.clone(), form: Some("raw".into()), tok: Self::span(tk),
-                                         ..Default::default() });
+                let id = self.add(Node {
+                    literal: Some(true),
+                    v: tk.v.clone(),
+                    form: Some("raw".into()),
+                    tok: Self::span(tk),
+                    ..Default::default()
+                });
                 match self.seg.pending_mode {
                     Some(Some(m)) => self.tree.nodes[m].children.push(id),
                     _ => self.seg.children.push(id),
@@ -612,7 +871,11 @@ pub fn binding_of<X: Clone>(tree: &mut Tree<X>, id: Id) -> Option<String> {
     let (mut lit, mut nest) = (None, false);
     for &c in &nd.children {
         let k = &tree.nodes[c];
-        if k.is_literal() && k.form.as_deref() != Some("raw") && lit.is_none() && k.role.as_deref() != Some("result") {
+        if k.is_literal()
+            && k.form.as_deref() != Some("raw")
+            && lit.is_none()
+            && k.role.as_deref() != Some("result")
+        {
             lit = Some(c);
         } else if k.is_canonical() && k.chain_element != Some(true) {
             nest = true;
@@ -662,7 +925,10 @@ pub fn deep_inference<X: Clone>(tree: &Tree<X>, id: Id, ctx: &Context) -> Option
 /// call expands it, and a chain link holds no operand of its own.
 pub fn part_outside_block<X: Clone>(tree: &Tree<X>, id: Id) -> bool {
     let nd = &tree.nodes[id];
-    if nd.canonical.as_deref() != Some("PT") || nd.chain_element == Some(true) || nd.slot_name == Some(true) {
+    if nd.canonical.as_deref() != Some("PT")
+        || nd.chain_element == Some(true)
+        || nd.slot_name == Some(true)
+    {
         return false;
     }
     let mut p = nd.parent;
@@ -687,7 +953,9 @@ pub fn unbound_refs<X: Clone>(tree: &Tree<X>, id: Id, binds: &[String]) -> Vec<S
     if nd.canonical.as_deref() != Some("REF") {
         return Vec::new();
     }
-    nd.children.iter().map(|&c| &tree.nodes[c])
+    nd.children
+        .iter()
+        .map(|&c| &tree.nodes[c])
         .filter(|c| c.is_literal() && c.form.as_deref() != Some("raw") && c.is_binder != Some(true))
         .map(|c| js_trim(c.v.as_deref().unwrap_or("")))
         /* `binds` is a plain object: a member of the prototype is bound */
@@ -698,7 +966,12 @@ pub fn unbound_refs<X: Clone>(tree: &Tree<X>, id: Id, binds: &[String]) -> Vec<S
 /// `checkReferences`: an unbound name asks, as `UndefinedVariable` does
 /// inside the `[logic]` fence.
 pub fn check_references<X: Clone>(tree: &Tree<X>, binds: &[String], g: &mut dyn FnMut(Diag)) {
-    for id in tree.segments.iter().flat_map(|sg| tree.walk(&sg.children)).collect::<Vec<_>>() {
+    for id in tree
+        .segments
+        .iter()
+        .flat_map(|sg| tree.walk(&sg.children))
+        .collect::<Vec<_>>()
+    {
         for v in unbound_refs(tree, id, binds) {
             g(Diag::new("ask", "referência solta",
                         format!("<code>{}</code> é referenciado e nunca ligado. Entrada externa, ou falta a ligação?", esc(&v)),
@@ -728,12 +1001,18 @@ pub fn inside_definitions<X: Clone>(tree: &Tree<X>) -> Vec<bool> {
 pub fn collect_bindings<X: Clone>(tree: &mut Tree<X>, g: &mut dyn FnMut(Diag)) -> Vec<String> {
     let mut order: Vec<String> = Vec::new();
     let declared = inside_definitions(tree);
-    let ids: Vec<Id> = tree.segments.iter().flat_map(|sg| tree.walk(&sg.children)).collect();
+    let ids: Vec<Id> = tree
+        .segments
+        .iter()
+        .flat_map(|sg| tree.walk(&sg.children))
+        .collect();
     for id in ids {
         if declared[id] {
             continue;
         }
-        let Some(name) = binding_of(tree, id) else { continue };
+        let Some(name) = binding_of(tree, id) else {
+            continue;
+        };
         /* `binds` is a plain object: a member of the prototype is there already */
         if order.contains(&name) || inherited(&name) {
             g(Diag::new("fix", "nome repetido",
@@ -750,56 +1029,134 @@ pub fn collect_bindings<X: Clone>(tree: &mut Tree<X>, g: &mut dyn FnMut(Diag)) -
 /// `parse(input, opts)`.
 pub fn parse(src: &str, o: &Opts) -> Result<Parse, Thrown> {
     let tokens = tokenize(src);
-    let mut st = State { tokens: &tokens, o, tree: Tree { nodes: Vec::new(), segments: Vec::new() }, diags: Vec::new(),
-                         stack: Vec::new(), uid: 0, seg: Segment::default(), pending: None };
+    let mut st = State {
+        tokens: &tokens,
+        o,
+        tree: Tree {
+            nodes: Vec::new(),
+            segments: Vec::new(),
+        },
+        diags: Vec::new(),
+        stack: Vec::new(),
+        uid: 0,
+        seg: Segment::default(),
+        pending: None,
+    };
     let mut i = 0;
     while i < tokens.len() {
         i = st.token(i) + 1;
     }
     st.close_seg("eof");
-    let State { mut tree, mut diags, .. } = st;
+    let State {
+        mut tree,
+        mut diags,
+        ..
+    } = st;
     let ctx = o.ctx;
     let mut g = |d: Diag| diags.push(d);
 
     /* expansion first: every later pass must see the body, not the bare call */
-    expand_invocations(&mut tree, ctx, o.session, &o.expanding, o.inherited, &mut g, &mut |body, sub: SubParse<Extra>| {
-        /* the JS hands parse the registry alone, and the rules and the
-           composition table fall to what the caller registered: the same
-           stores, shared */
-        let reg = o.registered;
-        let sub_ctx = Context::shared(Some(Arc::clone(sub.templates)), reg.rules.clone(), reg.expansions.clone());
-        let r = parse(body, &Opts { ctx: &sub_ctx, session: sub.session, valency: sub.valency, en: false, expanding: sub.expanding,
-                                    registered: reg, inherited: &sub.inherited })?;
-        Ok(Parsed { tree: r.tree, gaps: r.gaps.into_iter().map(|p| Diag { at: p.at, code_first: p.code_first, ..Diag::new(&p.sev, &p.lab, p.msg, &p.code) }).collect() })
-    })?;
+    expand_invocations(
+        &mut tree,
+        ctx,
+        o.session,
+        &o.expanding,
+        o.inherited,
+        &mut g,
+        &mut |body, sub: SubParse<Extra>| {
+            /* the JS hands parse the registry alone, and the rules and the
+            composition table fall to what the caller registered: the same
+            stores, shared */
+            let reg = o.registered;
+            let sub_ctx = Context::shared(
+                Some(Arc::clone(sub.templates)),
+                reg.rules.clone(),
+                reg.expansions.clone(),
+            );
+            let r = parse(
+                body,
+                &Opts {
+                    ctx: &sub_ctx,
+                    session: sub.session,
+                    valency: sub.valency,
+                    en: false,
+                    expanding: sub.expanding,
+                    registered: reg,
+                    inherited: &sub.inherited,
+                },
+            )?;
+            Ok(Parsed {
+                tree: r.tree,
+                gaps: r
+                    .gaps
+                    .into_iter()
+                    .map(|p| Diag {
+                        at: p.at,
+                        code_first: p.code_first,
+                        ..Diag::new(&p.sev, &p.lab, p.msg, &p.code)
+                    })
+                    .collect(),
+            })
+        },
+    )?;
 
     let n = |t: &Tree<Extra>, id: Id| t.nodes[id].clone();
     let lower = |s: &Option<String>| js_str(s).to_lowercase();
 
     /* an empty template slot */
-    for id in tree.segments.iter().flat_map(|sg| tree.walk(&sg.children)).collect::<Vec<_>>() {
+    for id in tree
+        .segments
+        .iter()
+        .flat_map(|sg| tree.walk(&sg.children))
+        .collect::<Vec<_>>()
+    {
         if tree.nodes[id].canonical.as_deref() != Some("PH") {
             continue;
         }
         let kids = &tree.nodes[id].children;
-        let name = kids.iter().find(|&&c| tree.nodes[c].slot_name == Some(true))
-            .map(|&c| format!("<code>{}</code> ", esc(tree.nodes[c].raw.as_deref().unwrap_or(""))));
+        let name = kids
+            .iter()
+            .find(|&&c| tree.nodes[c].slot_name == Some(true))
+            .map(|&c| {
+                format!(
+                    "<code>{}</code> ",
+                    esc(tree.nodes[c].raw.as_deref().unwrap_or(""))
+                )
+            });
         let q_id = kids.iter().copied().find(|&c| tree.nodes[c].is_literal());
         /* a hole a template call filled kept what it held, and asks nothing */
-        if q_id.is_some_and(|c| tree.nodes[c].bound_slot.as_deref().is_some_and(|s| !s.is_empty())) {
+        if q_id.is_some_and(|c| {
+            tree.nodes[c]
+                .bound_slot
+                .as_deref()
+                .is_some_and(|s| !s.is_empty())
+        }) {
             continue;
         }
         let q = q_id.map(|c| esc(tree.nodes[c].v.as_deref().unwrap_or("")));
         let name = name.unwrap_or_default();
-        g(Diag::new("ask", "casa vazia", format!("{name}{}", q.clone().unwrap_or_else(|| "sem resposta".into())), "PlaceholderPending")
-            .en("empty field", format!("{name}{}", q.unwrap_or_else(|| "no answer".into()))));
+        g(Diag::new(
+            "ask",
+            "casa vazia",
+            format!(
+                "{name}{}",
+                q.clone().unwrap_or_else(|| "sem resposta".into())
+            ),
+            "PlaceholderPending",
+        )
+        .en(
+            "empty field",
+            format!("{name}{}", q.unwrap_or_else(|| "no answer".into())),
+        ));
     }
 
     /* deep nesting in a long block */
     for sg in 0..tree.segments.len() {
         let mut deepest: Option<Id> = None;
         for id in tree.walk(&tree.segments[sg].children) {
-            let Some(d) = tree.nodes[id].depth else { continue };
+            let Some(d) = tree.nodes[id].depth else {
+                continue;
+            };
             if deepest.is_none_or(|x| d > tree.nodes[x].depth.unwrap_or(0)) {
                 deepest = Some(id);
             }
@@ -815,10 +1172,20 @@ pub fn parse(src: &str, o: &Opts) -> Result<Parse, Thrown> {
                 break;
             }
             let c = &tree.nodes[pid].canonical;
-            chain.insert(0, c.clone().filter(|c| !c.is_empty()).unwrap_or_else(|| "?".into()).to_lowercase());
+            chain.insert(
+                0,
+                c.clone()
+                    .filter(|c| !c.is_empty())
+                    .unwrap_or_else(|| "?".into())
+                    .to_lowercase(),
+            );
             p = tree.nodes[pid].parent;
         }
-        let path = chain.iter().map(|x| format!("<code>[{}</code>", esc(x))).collect::<Vec<_>>().join(" › ");
+        let path = chain
+            .iter()
+            .map(|x| format!("<code>[{}</code>", esc(x)))
+            .collect::<Vec<_>>()
+            .join(" › ");
         let levels = depth + 1;
         g(Diag::new("note", "muito fundo",
                     format!("{levels} níveis de aninhamento (…{path}). Cada <code>[</code> sem <code>]</code> entra dentro do anterior — \
@@ -829,13 +1196,22 @@ pub fn parse(src: &str, o: &Opts) -> Result<Parse, Thrown> {
     }
 
     /* a SECTION, a BLOCK or a PT is named by a literal first */
-    for id in tree.segments.iter().flat_map(|sg| tree.walk(&sg.children)).collect::<Vec<_>>() {
+    for id in tree
+        .segments
+        .iter()
+        .flat_map(|sg| tree.walk(&sg.children))
+        .collect::<Vec<_>>()
+    {
         let nd = n(&tree, id);
         if !has_num(NAMED_STRUCT, &js_str(&nd.canonical)) {
             continue;
         }
         let first = nd.children.iter().map(|&c| &tree.nodes[c]).find(|c| {
-            c.is_literal() || c.is_canonical() || c.logic.is_some() || c.is_template() || (c.text == Some(true) && c.v.as_deref().is_some_and(|v| !v.is_empty()))
+            c.is_literal()
+                || c.is_canonical()
+                || c.logic.is_some()
+                || c.is_template()
+                || (c.text == Some(true) && c.v.as_deref().is_some_and(|v| !v.is_empty()))
         });
         if first.is_none_or(|f| !f.is_literal()) {
             let c = esc(&lower(&nd.canonical));
@@ -846,7 +1222,12 @@ pub fn parse(src: &str, o: &Opts) -> Result<Parse, Thrown> {
     }
 
     /* a part outside a block */
-    for id in tree.segments.iter().flat_map(|sg| tree.walk(&sg.children)).collect::<Vec<_>>() {
+    for id in tree
+        .segments
+        .iter()
+        .flat_map(|sg| tree.walk(&sg.children))
+        .collect::<Vec<_>>()
+    {
         if !part_outside_block(&tree, id) {
             continue;
         }
@@ -858,7 +1239,12 @@ pub fn parse(src: &str, o: &Opts) -> Result<Parse, Thrown> {
 
     /* valency */
     if o.valency {
-        for id in tree.segments.iter().flat_map(|sg| tree.walk(&sg.children)).collect::<Vec<_>>() {
+        for id in tree
+            .segments
+            .iter()
+            .flat_map(|sg| tree.walk(&sg.children))
+            .collect::<Vec<_>>()
+        {
             let nd = n(&tree, id);
             if !nd.is_canonical() || nd.chain_element == Some(true) || nd.slot_name == Some(true) {
                 continue;
@@ -887,8 +1273,12 @@ pub fn parse(src: &str, o: &Opts) -> Result<Parse, Thrown> {
             }
             let Some(frame) = get(FRAMES, &canonical) else {
                 if let Some(deep) = deep_inference(&tree, id, ctx) {
-                    let pt = get(&derived().ptbr, &canonical).filter(|p| !p.is_empty()).map_or(String::new(), |p| format!(" ({p})"));
-                    let en = get(INSTR, &canonical).filter(|p| !p.is_empty()).map_or(String::new(), |p| format!(" ({p})"));
+                    let pt = get(&derived().ptbr, &canonical)
+                        .filter(|p| !p.is_empty())
+                        .map_or(String::new(), |p| format!(" ({p})"));
+                    let en = get(INSTR, &canonical)
+                        .filter(|p| !p.is_empty())
+                        .map_or(String::new(), |p| format!(" ({p})"));
                     let deep = number(deep);
                     g(Diag::new("ask", "inferência profunda",
                                 format!("<code>[{c}</code>{pt} expande {deep} níveis: <strong>the subject</strong>?"), "DeepInference")
@@ -898,24 +1288,56 @@ pub fn parse(src: &str, o: &Opts) -> Result<Parse, Thrown> {
             };
             let want = frame.first().copied().unwrap_or("");
             if got == 0 {
-                let pt = get(&derived().ptbr, &canonical).filter(|p| !p.is_empty()).map_or(String::new(), |p| format!(" ({p})"));
-                let en = get(INSTR, &canonical).filter(|p| !p.is_empty()).map_or(String::new(), |p| format!(" ({p})"));
+                let pt = get(&derived().ptbr, &canonical)
+                    .filter(|p| !p.is_empty())
+                    .map_or(String::new(), |p| format!(" ({p})"));
+                let en = get(INSTR, &canonical)
+                    .filter(|p| !p.is_empty())
+                    .map_or(String::new(), |p| format!(" ({p})"));
                 let w = esc(&want.replacen('*', "", 1));
-                g(Diag::new("ask", "sem alvo", format!("<code>[{c}</code>{pt}: <strong>{w}</strong>?"), "UnfilledSlot")
-                    .en("no target", format!("<code>[{c}</code>{en}: <strong>{w}</strong>?")));
+                g(Diag::new(
+                    "ask",
+                    "sem alvo",
+                    format!("<code>[{c}</code>{pt}: <strong>{w}</strong>?"),
+                    "UnfilledSlot",
+                )
+                .en(
+                    "no target",
+                    format!("<code>[{c}</code>{en}: <strong>{w}</strong>?"),
+                ));
             } else if want.ends_with('*') && got == 1 {
-                g(Diag::new("note", "lista de um",
-                            format!("<code>[{c}</code> aceita n itens, recebeu 1. Liste com <code>,</code>."), "SingletonList")
-                    .en("list of one", format!("<code>[{c}</code> takes n items, got 1. List them with <code>,</code>.")));
+                g(Diag::new(
+                    "note",
+                    "lista de um",
+                    format!(
+                        "<code>[{c}</code> aceita n itens, recebeu 1. Liste com <code>,</code>."
+                    ),
+                    "SingletonList",
+                )
+                .en(
+                    "list of one",
+                    format!(
+                        "<code>[{c}</code> takes n items, got 1. List them with <code>,</code>."
+                    ),
+                ));
             }
         }
     }
 
     /* composition species: annotation only */
     if expansion_registry(ctx).is_some() {
-        for id in tree.segments.iter().flat_map(|sg| tree.walk(&sg.children)).collect::<Vec<_>>() {
-            let Some(canonical) = tree.nodes[id].canonical.clone().filter(|c| !c.is_empty()) else { continue };
-            let Some(e) = entry_of(&canonical, ctx) else { continue };
+        for id in tree
+            .segments
+            .iter()
+            .flat_map(|sg| tree.walk(&sg.children))
+            .collect::<Vec<_>>()
+        {
+            let Some(canonical) = tree.nodes[id].canonical.clone().filter(|c| !c.is_empty()) else {
+                continue;
+            };
+            let Some(e) = entry_of(&canonical, ctx) else {
+                continue;
+            };
             let nd = &mut tree.nodes[id];
             nd.species = e.get("species").and_then(Json::str).map(str::to_string);
             nd.composition_depth = Some(e.get("depth").and_then(Json::num));
@@ -930,24 +1352,39 @@ pub fn parse(src: &str, o: &Opts) -> Result<Parse, Thrown> {
     /* templates: a definition with no body, an invocation of nothing known */
     let mut defined: Vec<String> = Vec::new();
     let mut invoked: Vec<String> = Vec::new();
-    for id in tree.segments.iter().flat_map(|sg| tree.walk(&sg.children)).collect::<Vec<_>>() {
+    for id in tree
+        .segments
+        .iter()
+        .flat_map(|sg| tree.walk(&sg.children))
+        .collect::<Vec<_>>()
+    {
         let nd = &tree.nodes[id];
-        let Some(name) = nd.template.clone().filter(|t| !t.is_empty()) else { continue };
+        let Some(name) = nd.template.clone().filter(|t| !t.is_empty()) else {
+            continue;
+        };
         if nd.is_def == Some(true) {
             defined.push(name.to_lowercase());
             if nd.children.is_empty() {
                 let t = esc(&name);
-                g(Diag::new("fix", "tpl vazio", format!("<code>[--{t}=</code> sem corpo."), "EmptyTemplateDefinition")
-                    .en("empty tpl", format!("<code>[--{t}=</code> has no body.")));
+                g(Diag::new(
+                    "fix",
+                    "tpl vazio",
+                    format!("<code>[--{t}=</code> sem corpo."),
+                    "EmptyTemplateDefinition",
+                )
+                .en("empty tpl", format!("<code>[--{t}=</code> has no body.")));
             }
         } else {
             invoked.push(name);
         }
     }
     /* the registry of a body holds what the calling source defined */
-    let known = |k: &str| o.inherited.iter().any(|d| d.key == k) || match ctx.templates.get(k) {
-        Some(v) => v.truthy(),
-        None => inherited(k),
+    let known = |k: &str| {
+        o.inherited.iter().any(|d| d.key == k)
+            || match ctx.templates.get(k) {
+                Some(v) => v.truthy(),
+                None => inherited(k),
+            }
     };
     for name in invoked {
         let low = name.to_lowercase();
@@ -961,17 +1398,39 @@ pub fn parse(src: &str, o: &Opts) -> Result<Parse, Thrown> {
                                           Redefine it: <code>[--{t}=…</code>.")));
     }
 
-    let rank = |s: &str| ["fix", "ask", "note"].iter().position(|r| *r == s).unwrap_or(3);
+    let rank = |s: &str| {
+        ["fix", "ask", "note"]
+            .iter()
+            .position(|r| *r == s)
+            .unwrap_or(3)
+    };
     diags.sort_by_key(|d| rank(&d.sev));
-    let gaps = diags.into_iter().map(|d| {
-        let (lab, msg) = match (o.en, d.en_lab, d.en_msg) {
-            (true, Some(l), Some(m)) => (if l.is_empty() { d.lab } else { l }, if m.is_empty() { d.msg } else { m }),
-            (true, Some(l), None) => (if l.is_empty() { d.lab } else { l }, d.msg),
-            (true, None, Some(m)) => (d.lab, if m.is_empty() { d.msg } else { m }),
-            _ => (d.lab, d.msg),
-        };
-        Gap { plain: strip_tags(&msg), sev: d.sev, lab, msg, code: if d.code.is_empty() { "Note".into() } else { d.code }, at: d.at,
-              code_first: d.code_first }
-    }).collect();
+    let gaps = diags
+        .into_iter()
+        .map(|d| {
+            let (lab, msg) = match (o.en, d.en_lab, d.en_msg) {
+                (true, Some(l), Some(m)) => (
+                    if l.is_empty() { d.lab } else { l },
+                    if m.is_empty() { d.msg } else { m },
+                ),
+                (true, Some(l), None) => (if l.is_empty() { d.lab } else { l }, d.msg),
+                (true, None, Some(m)) => (d.lab, if m.is_empty() { d.msg } else { m }),
+                _ => (d.lab, d.msg),
+            };
+            Gap {
+                plain: strip_tags(&msg),
+                sev: d.sev,
+                lab,
+                msg,
+                code: if d.code.is_empty() {
+                    "Note".into()
+                } else {
+                    d.code
+                },
+                at: d.at,
+                code_first: d.code_first,
+            }
+        })
+        .collect();
     Ok(Parse { tree, gaps, tokens })
 }

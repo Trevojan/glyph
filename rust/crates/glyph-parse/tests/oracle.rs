@@ -8,19 +8,31 @@
 #[path = "../../../testkit/oracle.rs"]
 mod oracle;
 
+use glyph_json::Json;
 use glyph_parse::*;
 use glyph_stores::Context;
-use glyph_json::Json;
 use glyph_util::tree::Thrown;
-use oracle::{dump_of, module, Must};
+use oracle::{Must, dump_of, module};
 use std::sync::Arc;
 
 fn gap_json(g: &Gap) -> Json {
     let s = |v: &str| Json::Str(v.to_string());
-    Json::Obj(vec![("sev".into(), s(&g.sev)), ("lab".into(), s(&g.lab)), ("msg".into(), s(&g.msg)), ("code".into(), s(&g.code)),
-                   ("at".into(), g.at.map_or(Json::Null, |(a, b)| Json::Obj(vec![("s".into(), Json::Num(a as f64)),
-                                                                                  ("e".into(), Json::Num(b as f64))]))),
-                   ("plain".into(), s(&g.plain))])
+    Json::Obj(vec![
+        ("sev".into(), s(&g.sev)),
+        ("lab".into(), s(&g.lab)),
+        ("msg".into(), s(&g.msg)),
+        ("code".into(), s(&g.code)),
+        (
+            "at".into(),
+            g.at.map_or(Json::Null, |(a, b)| {
+                Json::Obj(vec![
+                    ("s".into(), Json::Num(a as f64)),
+                    ("e".into(), Json::Num(b as f64)),
+                ])
+            }),
+        ),
+        ("plain".into(), s(&g.plain)),
+    ])
 }
 
 fn value(j: &Json) -> Json {
@@ -45,15 +57,25 @@ fn context(run: &Json) -> Context {
         v => panic!("the repository's templates are not a map: {v:?}"),
     };
     if run.get("probeTemplates") == Some(&Json::Bool(true)) {
-        for (k, v) in module("trees").get("probeTemplates").and_then(Json::obj).expect("the probe templates") {
+        for (k, v) in module("trees")
+            .get("probeTemplates")
+            .and_then(Json::obj)
+            .expect("the probe templates")
+        {
             match map.iter_mut().find(|(x, _)| x == k) {
                 Some(slot) => slot.1 = value(v),
                 None => map.push((k.clone(), value(v))),
             }
         }
     }
-    let rules = if run.get("withRules") == Some(&Json::Bool(false)) { None } else { repo.rules.clone() };
-    let expansions = run.get("expansions").map_or(repo.expansions.clone(), |e| Some(Arc::new(value(e))));
+    let rules = if run.get("withRules") == Some(&Json::Bool(false)) {
+        None
+    } else {
+        repo.rules.clone()
+    };
+    let expansions = run
+        .get("expansions")
+        .map_or(repo.expansions.clone(), |e| Some(Arc::new(value(e))));
     // a case's own templates, whole (O5, EMS-002 ORD-0011)
     if let Some(own) = run.get("templates") {
         return Context::shared(Some(Arc::new(own.clone())), rules, expansions);
@@ -64,7 +86,12 @@ fn context(run: &Json) -> Context {
 #[test]
 fn every_tree_and_diagnostic_equals_the_js() {
     let runs = module("parse").a("runs");
-    assert!(runs.len() > 114, "parse.json holds {} runs — write it again: {}", runs.len(), oracle::WRITE_IT);
+    assert!(
+        runs.len() > 114,
+        "parse.json holds {} runs — write it again: {}",
+        runs.len(),
+        oracle::WRITE_IT
+    );
     let (mut nodes, mut gaps, mut thrown, mut named, mut moods) = (0, 0, 0, 0, 0);
     for run in runs {
         let ctx = context(run);
@@ -73,44 +100,97 @@ fn every_tree_and_diagnostic_equals_the_js() {
         let valency = run.get("valency") != Some(&Json::Bool(false));
         for (lang, en) in [("pt", false), ("en", true)] {
             let want = run.get(lang).unwrap_or_else(|| panic!("{id}: no {lang}"));
-            let got = parse(src, &Opts { ctx: &ctx, session, valency, en, expanding: Vec::new(), registered: glyph_stores::Registered::none(), inherited: &[] });
+            let got = parse(
+                src,
+                &Opts {
+                    ctx: &ctx,
+                    session,
+                    valency,
+                    en,
+                    expanding: Vec::new(),
+                    registered: glyph_stores::Registered::none(),
+                    inherited: &[],
+                },
+            );
             if let Some(t) = want.get("thrown") {
                 /* a mood whose innermost open command is a template: the JS
-                   throws, and the Rust answers the document (2026-10-25) */
+                throws, and the Rust answers the document (2026-10-25) */
                 if let Some(decided) = oracle::known::template_mood(src, "parse", lang) {
-                    assert_eq!(t.str(), Some(oracle::known::template_mood_js()), "{id} {lang}: the JS throws something else");
-                    let p = got.unwrap_or_else(|e| panic!("{id} {lang}: the port throws a named source: {e:?}"));
+                    assert_eq!(
+                        t.str(),
+                        Some(oracle::known::template_mood_js()),
+                        "{id} {lang}: the JS throws something else"
+                    );
+                    let p = got.unwrap_or_else(|e| {
+                        panic!("{id} {lang}: the port throws a named source: {e:?}")
+                    });
                     if !en {
-                        assert_eq!(dump_of(&p.tree, true), oracle::known::template_mood(src, "parse", "tree").expect("tree"), "{id}: the tree");
+                        assert_eq!(
+                            dump_of(&p.tree, true),
+                            oracle::known::template_mood(src, "parse", "tree").expect("tree"),
+                            "{id}: the tree"
+                        );
                     }
-                    assert_eq!(Json::Arr(p.gaps.iter().map(gap_json).collect()), decided, "{id} {lang}: the diagnostics");
+                    assert_eq!(
+                        Json::Arr(p.gaps.iter().map(gap_json).collect()),
+                        decided,
+                        "{id} {lang}: the diagnostics"
+                    );
                     moods += 1;
                     continue;
                 }
-                assert_eq!(got.err(), Some(Thrown(t.str().expect("a message").to_string())), "{id} {lang}: what parse throws");
+                assert_eq!(
+                    got.err(),
+                    Some(Thrown(t.str().expect("a message").to_string())),
+                    "{id} {lang}: what parse throws"
+                );
                 thrown += 1;
                 continue;
             }
-            let p = got.unwrap_or_else(|e| panic!("{id} {lang}: the JS does not throw, the port does: {e:?}"));
+            let p = got.unwrap_or_else(|e| {
+                panic!("{id} {lang}: the JS does not throw, the port does: {e:?}")
+            });
             if !en {
-                assert_eq!(dump_of(&p.tree, true), *run.get("tree").expect("tree"), "{id}: the tree");
+                assert_eq!(
+                    dump_of(&p.tree, true),
+                    *run.get("tree").expect("tree"),
+                    "{id}: the tree"
+                );
                 nodes += run.get("tree").map_or(0, |t| t.a("nodes").len());
             }
             /* a probe O4's third residual reaches takes the diagnostics the
-               decision gives it, and the JS's answer there must differ */
+            decision gives it, and the JS's answer there must differ */
             let want = match oracle::known::bare(src, lang) {
                 Some(decided) => {
-                    assert_ne!(decided, *want, "{id} {lang}: named as a known difference, and the JS already answers it");
+                    assert_ne!(
+                        decided, *want,
+                        "{id} {lang}: named as a known difference, and the JS already answers it"
+                    );
                     named += 1;
                     decided
                 }
                 None => want.clone(),
             };
-            assert_eq!(Json::Arr(p.gaps.iter().map(gap_json).collect()), want, "{id} {lang}: the diagnostics");
+            assert_eq!(
+                Json::Arr(p.gaps.iter().map(gap_json).collect()),
+                want,
+                "{id} {lang}: the diagnostics"
+            );
             gaps += p.gaps.len();
         }
     }
-    assert_eq!(named, 2 * oracle::known::BARE.len(), "a probe named for O4's third residual is not in parse.json");
-    assert_eq!(moods, 2 * oracle::known::template_mood_sources(), "a source named for the template mood is not in parse.json");
-    println!("{} runs, {nodes} nodes, {gaps} diagnostics in both languages, {thrown} throws", runs.len());
+    assert_eq!(
+        named,
+        2 * oracle::known::BARE.len(),
+        "a probe named for O4's third residual is not in parse.json"
+    );
+    assert_eq!(
+        moods,
+        2 * oracle::known::template_mood_sources(),
+        "a source named for the template mood is not in parse.json"
+    );
+    println!(
+        "{} runs, {nodes} nodes, {gaps} diagnostics in both languages, {thrown} throws",
+        runs.len()
+    );
 }

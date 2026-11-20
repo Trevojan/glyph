@@ -19,7 +19,10 @@ pub enum Kind {
 }
 
 pub fn parse(text: &str) -> Result<Value, String> {
-    let mut r = Reader { b: text.as_bytes(), i: 0 };
+    let mut r = Reader {
+        b: text.as_bytes(),
+        i: 0,
+    };
     r.ws();
     let v = r.value()?;
     r.ws();
@@ -35,12 +38,21 @@ pub fn tree(text: &str) -> Result<Vec<Node>, String> {
     fn walk(v: &Value, pointer: &str, depth: usize, out: &mut Vec<Node>) {
         let children: Vec<(String, &Value)> = match &v.kind {
             Kind::Scalar => return,
-            Kind::Arr(a) => a.iter().enumerate().map(|(i, c)| (i.to_string(), c)).collect(),
+            Kind::Arr(a) => a
+                .iter()
+                .enumerate()
+                .map(|(i, c)| (i.to_string(), c))
+                .collect(),
             Kind::Obj(kv) => kv.iter().map(|(k, c)| (escape(k), c)).collect(),
         };
         for (token, c) in children {
             let p = format!("{pointer}/{token}");
-            out.push(Node { selector: p.clone(), start: c.start, end: c.end, depth: depth + 1 });
+            out.push(Node {
+                selector: p.clone(),
+                start: c.start,
+                end: c.end,
+                depth: depth + 1,
+            });
             walk(c, &p, depth + 1, out);
         }
     }
@@ -50,7 +62,9 @@ pub fn tree(text: &str) -> Result<Vec<Node>, String> {
 
 pub fn select(text: &str, pointer: &str) -> Result<Node, String> {
     let Some(rest) = pointer.strip_prefix('/') else {
-        return Err(format!("`{pointer}` is not a JSON Pointer: it starts with `/`"));
+        return Err(format!(
+            "`{pointer}` is not a JSON Pointer: it starts with `/`"
+        ));
     };
     let mut v = &parse(text)?;
     let mut depth = 0;
@@ -62,21 +76,37 @@ pub fn select(text: &str, pointer: &str) -> Result<Node, String> {
                 match (hits.next(), hits.next()) {
                     (Some((_, c)), None) => c,
                     (None, _) => return Err(format!("`{pointer}`: no key `{token}`")),
-                    _ => return Err(format!("`{pointer}`: the key `{token}` appears more than once")),
+                    _ => {
+                        return Err(format!(
+                            "`{pointer}`: the key `{token}` appears more than once"
+                        ));
+                    }
                 }
             }
             Kind::Arr(a) => {
-                let i = token.parse::<usize>().ok().filter(|i| i.to_string() == token);
+                let i = token
+                    .parse::<usize>()
+                    .ok()
+                    .filter(|i| i.to_string() == token);
                 match i.and_then(|i| a.get(i)) {
                     Some(c) => c,
                     None => return Err(format!("`{pointer}`: no index `{token}`")),
                 }
             }
-            Kind::Scalar => return Err(format!("`{pointer}`: `{token}` goes under a value that holds nothing")),
+            Kind::Scalar => {
+                return Err(format!(
+                    "`{pointer}`: `{token}` goes under a value that holds nothing"
+                ));
+            }
         };
         depth += 1;
     }
-    Ok(Node { selector: pointer.to_string(), start: v.start, end: v.end, depth })
+    Ok(Node {
+        selector: pointer.to_string(),
+        start: v.start,
+        end: v.end,
+        depth,
+    })
 }
 
 pub fn escape(key: &str) -> String {
@@ -104,19 +134,31 @@ impl Reader<'_> {
         let kind = match self.b.get(self.i) {
             Some(b'{') => self.object()?,
             Some(b'[') => self.array()?,
-            Some(b'"') => { self.string()?; Kind::Scalar }
+            Some(b'"') => {
+                self.string()?;
+                Kind::Scalar
+            }
             Some(b't') => self.word("true")?,
             Some(b'f') => self.word("false")?,
             Some(b'n') => self.word("null")?,
             Some(b'-' | b'0'..=b'9') => {
-                while self.i < self.b.len() && matches!(self.b[self.i], b'-' | b'+' | b'.' | b'e' | b'E' | b'0'..=b'9') {
+                while self.i < self.b.len()
+                    && matches!(
+                        self.b[self.i],
+                        b'-' | b'+' | b'.' | b'e' | b'E' | b'0'..=b'9'
+                    )
+                {
                     self.i += 1;
                 }
                 Kind::Scalar
             }
             _ => return Err(self.fail("no value")),
         };
-        Ok(Value { start, end: self.i, kind })
+        Ok(Value {
+            start,
+            end: self.i,
+            kind,
+        })
     }
 
     fn word(&mut self, w: &str) -> Result<Kind, String> {
@@ -152,7 +194,10 @@ impl Reader<'_> {
             self.ws();
             match self.b.get(self.i) {
                 Some(b',') => self.i += 1,
-                Some(b'}') => { self.i += 1; return Ok(Kind::Obj(kv)); }
+                Some(b'}') => {
+                    self.i += 1;
+                    return Ok(Kind::Obj(kv));
+                }
                 _ => return Err(self.fail("no `,` or `}`")),
             }
         }
@@ -172,7 +217,10 @@ impl Reader<'_> {
             self.ws();
             match self.b.get(self.i) {
                 Some(b',') => self.i += 1,
-                Some(b']') => { self.i += 1; return Ok(Kind::Arr(items)); }
+                Some(b']') => {
+                    self.i += 1;
+                    return Ok(Kind::Arr(items));
+                }
                 _ => return Err(self.fail("no `,` or `]`")),
             }
         }
@@ -185,13 +233,17 @@ impl Reader<'_> {
         let mut out = String::new();
         let flush = |units: &mut Vec<u16>, out: &mut String| -> Result<(), String> {
             if !units.is_empty() {
-                out.push_str(&String::from_utf16(units).map_err(|_| "JSON: a lone surrogate".to_string())?);
+                out.push_str(
+                    &String::from_utf16(units).map_err(|_| "JSON: a lone surrogate".to_string())?,
+                );
                 units.clear();
             }
             Ok(())
         };
         loop {
-            let Some(&c) = self.b.get(self.i) else { return Err(self.fail("an unclosed string")) };
+            let Some(&c) = self.b.get(self.i) else {
+                return Err(self.fail("an unclosed string"));
+            };
             match c {
                 b'"' => {
                     self.i += 1;
@@ -199,13 +251,20 @@ impl Reader<'_> {
                     return Ok(out);
                 }
                 b'\\' => {
-                    let e = *self.b.get(self.i + 1).ok_or_else(|| self.fail("an unclosed string"))?;
+                    let e = *self
+                        .b
+                        .get(self.i + 1)
+                        .ok_or_else(|| self.fail("an unclosed string"))?;
                     self.i += 2;
                     if e == b'u' {
-                        let hex = std::str::from_utf8(self.b.get(self.i..self.i + 4).ok_or_else(|| self.fail("a short \\u"))?)
-                            .ok()
-                            .and_then(|h| u16::from_str_radix(h, 16).ok())
-                            .ok_or_else(|| self.fail("a bad \\u"))?;
+                        let hex = std::str::from_utf8(
+                            self.b
+                                .get(self.i..self.i + 4)
+                                .ok_or_else(|| self.fail("a short \\u"))?,
+                        )
+                        .ok()
+                        .and_then(|h| u16::from_str_radix(h, 16).ok())
+                        .ok_or_else(|| self.fail("a bad \\u"))?;
                         self.i += 4;
                         units.push(hex);
                         continue;
@@ -224,7 +283,8 @@ impl Reader<'_> {
                 _ => {
                     flush(&mut units, &mut out)?;
                     let len = utf8_len(c);
-                    let s = std::str::from_utf8(&self.b[self.i..self.i + len]).map_err(|_| self.fail("bad UTF-8"))?;
+                    let s = std::str::from_utf8(&self.b[self.i..self.i + len])
+                        .map_err(|_| self.fail("bad UTF-8"))?;
                     out.push_str(s);
                     self.i += len;
                 }

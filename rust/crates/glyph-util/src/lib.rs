@@ -12,8 +12,17 @@ pub mod tree;
 /// The names every plain JS object answers through `Object.prototype`: the
 /// JS writes `obj[key]` and `key in obj` over objects that never set them.
 pub const OBJECT_PROTOTYPE: [&str; 12] = [
-    "constructor", "__defineGetter__", "__defineSetter__", "hasOwnProperty", "__lookupGetter__",
-    "__lookupSetter__", "isPrototypeOf", "propertyIsEnumerable", "toString", "valueOf", "__proto__",
+    "constructor",
+    "__defineGetter__",
+    "__defineSetter__",
+    "hasOwnProperty",
+    "__lookupGetter__",
+    "__lookupSetter__",
+    "isPrototypeOf",
+    "propertyIsEnumerable",
+    "toString",
+    "valueOf",
+    "__proto__",
     "toLocaleString",
 ];
 
@@ -35,8 +44,17 @@ pub fn inherited_text(key: &str) -> String {
 
 /// JS `\s`: WhiteSpace and LineTerminator.
 pub fn js_space(c: char) -> bool {
-    matches!(c, '\t' | '\n' | '\u{b}' | '\u{c}' | '\r' | ' ' | '\u{a0}' | '\u{1680}' | '\u{2000}'..='\u{200a}'
-        | '\u{2028}' | '\u{2029}' | '\u{202f}' | '\u{205f}' | '\u{3000}' | '\u{feff}')
+    matches!(
+        c,
+        '\t' | '\n' | '\u{b}' | '\u{c}' | '\r' | ' ' | '\u{a0}' | '\u{1680}' | '\u{2000}'
+            ..='\u{200a}'
+                | '\u{2028}'
+                | '\u{2029}'
+                | '\u{202f}'
+                | '\u{205f}'
+                | '\u{3000}'
+                | '\u{feff}'
+    )
 }
 
 /// `String.prototype.trim`.
@@ -82,7 +100,9 @@ pub fn lev(a: &str, b: &str) -> usize {
     for i in 1..=m {
         cur[0] = i;
         for j in 1..=q {
-            cur[j] = (prev[j] + 1).min(cur[j - 1] + 1).min(prev[j - 1] + usize::from(a[i - 1] != b[j - 1]));
+            cur[j] = (prev[j] + 1)
+                .min(cur[j - 1] + 1)
+                .min(prev[j - 1] + usize::from(a[i - 1] != b[j - 1]));
         }
         std::mem::swap(&mut prev, &mut cur);
     }

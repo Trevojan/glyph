@@ -4,17 +4,20 @@
 //! is the JS `answer(line)` function: given a request line, return the exact same
 //! bytes it returns.
 
-use glyph_burn::{to_hgml, BurnOpts};
-use glyph_envelope::{ck, to_ast, AstOpts};
+use glyph_burn::{BurnOpts, to_hgml};
+use glyph_envelope::{AstOpts, ck, to_ast};
 use glyph_inverse::from_xml;
-use glyph_lex::{classify, suggest, tokenize, Token};
+use glyph_json::{Json, parse as parse_json, set, stringify};
+use glyph_lex::{Token, classify, suggest, tokenize};
 use glyph_logic::{expand_expr, free_vars, parse_logic};
-use glyph_parse::{parse, Opts};
+use glyph_parse::{Opts, parse};
 use glyph_stores::{Context, Registered};
-use glyph_json::{parse as parse_json, set, stringify, Json};
 use glyph_util::tree::Thrown;
 use glyph_version::VERSION;
-use glyph_vocab::{derived, el_name, Named, ALIAS, CATS, EDITORIAL_ONLY, EMO, FRAMES, INSTR, LOGIC_OPS, META, MODE, PUNCT, SESSION, STRUCT};
+use glyph_vocab::{
+    ALIAS, CATS, EDITORIAL_ONLY, EMO, FRAMES, INSTR, LOGIC_OPS, META, MODE, Named, PUNCT, SESSION,
+    STRUCT, derived, el_name,
+};
 use glyph_xml::to_xml;
 use std::sync::Arc;
 
@@ -95,7 +98,10 @@ fn parse_logic_json(lg: &glyph_logic::Logic) -> Json {
         kv.extend([
             ("expr".into(), Json::Str(r.expr.clone())),
             ("reads".into(), Json::Str(r.reads.clone())),
-            ("uses".into(), Json::Arr(r.uses.iter().map(|u| Json::Str(u.clone())).collect())),
+            (
+                "uses".into(),
+                Json::Arr(r.uses.iter().map(|u| Json::Str(u.clone())).collect()),
+            ),
         ]);
         Json::Obj(kv)
     };
@@ -196,34 +202,89 @@ fn strings(t: &[(&str, &str)]) -> Json {
 }
 
 fn pairs(t: &[(&str, &str)]) -> Json {
-    Json::Arr(t.iter().map(|(a, b)| Json::Arr(vec![text(a), text(b)])).collect())
+    Json::Arr(
+        t.iter()
+            .map(|(a, b)| Json::Arr(vec![text(a), text(b)]))
+            .collect(),
+    )
 }
 
 fn named(t: &[(String, Named)]) -> Json {
-    object(t.iter().map(|(k, n)| (k.clone(), object([("canonical".into(), text(n.canonical)), ("tier".into(), text(n.tier))]))))
+    object(t.iter().map(|(k, n)| {
+        (
+            k.clone(),
+            object([
+                ("canonical".into(), text(n.canonical)),
+                ("tier".into(), text(n.tier)),
+            ]),
+        )
+    }))
 }
 
 /// `tables`: what the page reads off `GlyphCore`, what `classify` reads besides,
 /// and the templates of these stores (EMS-002 ORD-0032).
 fn tables(ctx: &Context) -> Json {
     let d = derived();
-    let blends = ctx.rules.as_deref().and_then(|r| r.get("rules")).and_then(Json::arr).unwrap_or(&[]).iter()
-        .filter(|r| r.get("kind").and_then(Json::str) == Some("blend")).cloned().collect();
+    let blends = ctx
+        .rules
+        .as_deref()
+        .and_then(|r| r.get("rules"))
+        .and_then(Json::arr)
+        .unwrap_or(&[])
+        .iter()
+        .filter(|r| r.get("kind").and_then(Json::str) == Some("blend"))
+        .cloned()
+        .collect();
     Json::Obj(vec![
         ("VERSION".into(), text(VERSION)),
-        ("CATS".into(), Json::Arr(CATS.iter().map(|c| object([
-            ("id".into(), text(c.id)), ("label".into(), text(c.label)), ("note".into(), text(c.note)),
-            ("items".into(), pairs(c.items))])).collect())),
+        (
+            "CATS".into(),
+            Json::Arr(
+                CATS.iter()
+                    .map(|c| {
+                        object([
+                            ("id".into(), text(c.id)),
+                            ("label".into(), text(c.label)),
+                            ("note".into(), text(c.note)),
+                            ("items".into(), pairs(c.items)),
+                        ])
+                    })
+                    .collect(),
+            ),
+        ),
         ("INSTR".into(), strings(INSTR)),
         ("ALIAS".into(), strings(ALIAS)),
-        ("ALIAS_OF".into(), object(d.alias_of.iter().map(|(k, v)| (k.to_string(), Json::Arr(v.iter().map(|a| text(a)).collect()))))),
+        (
+            "ALIAS_OF".into(),
+            object(d.alias_of.iter().map(|(k, v)| {
+                (
+                    k.to_string(),
+                    Json::Arr(v.iter().map(|a| text(a)).collect()),
+                )
+            })),
+        ),
         ("STRUCT".into(), strings(STRUCT)),
         ("META".into(), strings(META)),
         ("MODE".into(), strings(MODE)),
         ("EMO".into(), strings(EMO)),
         ("SESSION".into(), strings(SESSION)),
-        ("FRAMES".into(), object(FRAMES.iter().map(|(k, v)| (k.to_string(), Json::Arr(v.iter().map(|x| text(x)).collect()))))),
-        ("EDITORIAL_ONLY".into(), object(EDITORIAL_ONLY.iter().map(|(k, v)| (k.to_string(), Json::Num(*v))))),
+        (
+            "FRAMES".into(),
+            object(FRAMES.iter().map(|(k, v)| {
+                (
+                    k.to_string(),
+                    Json::Arr(v.iter().map(|x| text(x)).collect()),
+                )
+            })),
+        ),
+        (
+            "EDITORIAL_ONLY".into(),
+            object(
+                EDITORIAL_ONLY
+                    .iter()
+                    .map(|(k, v)| (k.to_string(), Json::Num(*v))),
+            ),
+        ),
         ("PTBR".into(), strings(&d.ptbr)),
         ("CAT_OF".into(), strings(&d.cat_of)),
         ("LOGIC_OPS".into(), pairs(LOGIC_OPS)),
@@ -239,15 +300,23 @@ fn tables(ctx: &Context) -> Json {
 /// Nothing of them stays. The context is made here and not by `Context::shared`, so
 /// a template named `templates` stays a template.
 fn over(ctx: &Context, differ: &Json) -> Result<Context, String> {
-    let (Some(digest), Some(templates @ Json::Obj(kv))) = (differ.get("digest").and_then(Json::str), differ.get("templates")) else {
+    let (Some(digest), Some(templates @ Json::Obj(kv))) = (
+        differ.get("digest").and_then(Json::str),
+        differ.get("templates"),
+    ) else {
         return Err("differ: not a digest and templates".to_string());
     };
     if ck(&stringify(templates)) != digest {
         return Err("differ: the templates do not match their digest".to_string());
     }
     let mut merged = ctx.templates.obj().map(<[_]>::to_vec).unwrap_or_default();
-    kv.iter().for_each(|(k, v)| set(&mut merged, k.clone(), v.clone()));
-    Ok(Context { templates: Arc::new(Json::Obj(merged)), rules: ctx.rules.clone(), expansions: ctx.expansions.clone() })
+    kv.iter()
+        .for_each(|(k, v)| set(&mut merged, k.clone(), v.clone()));
+    Ok(Context {
+        templates: Arc::new(Json::Obj(merged)),
+        rules: ctx.rules.clone(),
+        expansions: ctx.expansions.clone(),
+    })
 }
 
 /// Process a single request and return the response.
@@ -257,7 +326,10 @@ fn run(stores: &Context, req: &Json) -> Result<Json, String> {
     // the engine registers the stores it answers with, as glyph-protocol.js
     // does when it runs as the engine (EMS-002 ORD-0008)
     let registered = Registered::of(ctx);
-    let mut opts = Opts { registered: &registered, ..Opts::new(ctx) };
+    let mut opts = Opts {
+        registered: &registered,
+        ..Opts::new(ctx)
+    };
 
     // Set language if specified in request
     if req.get("lang").and_then(Json::str) == Some("en") {
@@ -271,13 +343,11 @@ fn run(stores: &Context, req: &Json) -> Result<Json, String> {
         "tables" => Ok(tables(stores)),
         "tokenize" => {
             let src = str_field(req, "src");
-            Ok(Json::Arr(
-                tokenize(&src).iter().map(token_json).collect(),
-            ))
+            Ok(Json::Arr(tokenize(&src).iter().map(token_json).collect()))
         }
         "classify" => {
             let name = str_field(req, "name");
-            Ok(class_json(&classify(&name, &ctx, session)))
+            Ok(class_json(&classify(&name, ctx, session)))
         }
         "suggest" => {
             let name = str_field(req, "name");
@@ -287,7 +357,11 @@ fn run(stores: &Context, req: &Json) -> Result<Json, String> {
             let canonical = str_field(req, "canonical");
             let tier = str_field(req, "tier");
             let gloss = str_field(req, "gloss");
-            let gloss_ref = if gloss.is_empty() { None } else { Some(gloss.as_str()) };
+            let gloss_ref = if gloss.is_empty() {
+                None
+            } else {
+                Some(gloss.as_str())
+            };
             Ok(Json::Str(el_name(&canonical, &tier, gloss_ref)))
         }
         "parseLogic" => {
@@ -302,18 +376,19 @@ fn run(stores: &Context, req: &Json) -> Result<Json, String> {
         "freeVars" => {
             let raw = str_field(req, "raw");
             Ok(Json::Arr(
-                free_vars(&raw)
-                    .into_iter()
-                    .map(|v| Json::Str(v))
-                    .collect(),
+                free_vars(&raw).into_iter().map(Json::Str).collect(),
             ))
         }
         "parse" => {
             let src = str_field(req, "src");
             // For toAST, default lang to "en" when not specified (per JS behavior)
-            let ast_opts = Opts { en: req.get("lang").and_then(Json::str) != Some("pt"), session, registered: &registered, ..Opts::new(ctx) };
-            let ast = to_ast(&src, &ast_opts, &AstOpts::default())
-                .map_err(|Thrown(e)| e)?;
+            let ast_opts = Opts {
+                en: req.get("lang").and_then(Json::str) != Some("pt"),
+                session,
+                registered: &registered,
+                ..Opts::new(ctx)
+            };
+            let ast = to_ast(&src, &ast_opts, &AstOpts::default()).map_err(|Thrown(e)| e)?;
             let parse_result = parse(&src, &opts).map_err(|Thrown(e)| e)?;
             // the envelope stops at LIMITS.ast_depth; the count of the tree's
             // commands does not, as the page's status line counts them
@@ -324,7 +399,12 @@ fn run(stores: &Context, req: &Json) -> Result<Json, String> {
                 .map(|sg| {
                     tree.walk(&sg.children)
                         .into_iter()
-                        .filter(|&id| tree.nodes[id].canonical.as_deref().map_or(false, |c| !c.is_empty()))
+                        .filter(|&id| {
+                            tree.nodes[id]
+                                .canonical
+                                .as_deref()
+                                .is_some_and(|c| !c.is_empty())
+                        })
                         .count()
                 })
                 .sum();
@@ -355,13 +435,24 @@ fn run(stores: &Context, req: &Json) -> Result<Json, String> {
                 AstOpts::default()
             };
             // Default to en for toAST when lang not specified
-            let ast_opts_lang = Opts { en: req.get("lang").and_then(Json::str) != Some("pt"), session, registered: &registered, ..Opts::new(ctx) };
+            let ast_opts_lang = Opts {
+                en: req.get("lang").and_then(Json::str) != Some("pt"),
+                session,
+                registered: &registered,
+                ..Opts::new(ctx)
+            };
             to_ast(&src, &ast_opts_lang, &ast_opts).map_err(|Thrown(e)| e)
         }
         "toHGML" => {
             let src = str_field(req, "src");
-            let hgml = to_hgml(&src, &BurnOpts { parse: &opts, keep_text: false })
-                .map_err(|Thrown(e)| e)?;
+            let hgml = to_hgml(
+                &src,
+                &BurnOpts {
+                    parse: &opts,
+                    keep_text: false,
+                },
+            )
+            .map_err(|Thrown(e)| e)?;
             Ok(Json::Str(hgml))
         }
         "fromXML" => {
@@ -383,12 +474,20 @@ pub fn answer(line: &str) -> String {
 pub fn answer_in(ctx: &Context, line: &str) -> String {
     let req = match parse_json(line) {
         Ok(r) => r,
-        Err(_) => return stringify(&Json::Obj(vec![("thrown".into(), Json::Str("bad request".into()))])),
+        Err(_) => {
+            return stringify(&Json::Obj(vec![(
+                "thrown".into(),
+                Json::Str("bad request".into()),
+            )]));
+        }
     };
 
     // Validate that it's a JSON object
     if !matches!(req, Json::Obj(_)) {
-        return stringify(&Json::Obj(vec![("thrown".into(), Json::Str("bad request".into()))]));
+        return stringify(&Json::Obj(vec![(
+            "thrown".into(),
+            Json::Str("bad request".into()),
+        )]));
     }
 
     match run(ctx, &req) {

@@ -14,9 +14,9 @@
 //! through that same lookup (ORD-0004) — makes `checkRules` throw, and the
 //! port stops there with the JS's message.
 
-use glyph_stores::Context;
 use glyph_json::Json;
 use glyph_json::number;
+use glyph_stores::Context;
 use glyph_util::tree::{Diag, Id, Thrown, Tree};
 use glyph_util::{esc, inherited};
 use std::collections::HashSet;
@@ -31,10 +31,14 @@ fn js_string(v: Option<&Json>) -> String {
         Some(Json::Bool(b)) => b.to_string(),
         Some(Json::Num(n)) => number(*n),
         Some(Json::Str(s)) => s.clone(),
-        Some(Json::Arr(a)) => a.iter().map(|x| match x {
-            Json::Null => String::new(),
-            x => js_string(Some(x)),
-        }).collect::<Vec<_>>().join(","),
+        Some(Json::Arr(a)) => a
+            .iter()
+            .map(|x| match x {
+                Json::Null => String::new(),
+                x => js_string(Some(x)),
+            })
+            .collect::<Vec<_>>()
+            .join(","),
         Some(Json::Obj(_)) => "[object Object]".into(),
     }
 }
@@ -51,7 +55,11 @@ fn truthy(v: Option<&Json>) -> Option<&Json> {
 
 /// `pairKey`: the two names in JS string order, joined by `|`.
 pub fn pair_key(a: &str, b: &str) -> String {
-    if a.encode_utf16().lt(b.encode_utf16()) { format!("{a}|{b}") } else { format!("{b}|{a}") }
+    if a.encode_utf16().lt(b.encode_utf16()) {
+        format!("{a}|{b}")
+    } else {
+        format!("{b}|{a}")
+    }
 }
 
 /// `expandNames`: `@class` resolved against the store's classes; a bare name
@@ -60,8 +68,12 @@ pub fn expand_names(store: &Json, name: Option<&Json>) -> Vec<String> {
     let text = js_string(name);
     match text.strip_prefix('@') {
         None => vec![text],
-        Some(class) => store.get("classes").and_then(|c| c.get(class)).and_then(Json::arr)
-            .map(|a| a.iter().map(|x| js_string(Some(x))).collect()).unwrap_or_default(),
+        Some(class) => store
+            .get("classes")
+            .and_then(|c| c.get(class))
+            .and_then(Json::arr)
+            .map(|a| a.iter().map(|x| js_string(Some(x))).collect())
+            .unwrap_or_default(),
     }
 }
 
@@ -104,7 +116,10 @@ pub fn compiled_of(store: &Arc<Json>) -> Arc<Compiled> {
     static TABLE: Mutex<Vec<(Weak<Json>, Arc<Compiled>)>> = Mutex::new(Vec::new());
     let mut table = TABLE.lock().unwrap_or_else(PoisonError::into_inner);
     table.retain(|(w, _)| w.strong_count() > 0);
-    if let Some((_, c)) = table.iter().find(|(w, _)| std::ptr::eq(w.as_ptr(), Arc::as_ptr(store))) {
+    if let Some((_, c)) = table
+        .iter()
+        .find(|(w, _)| std::ptr::eq(w.as_ptr(), Arc::as_ptr(store)))
+    {
         return Arc::clone(c);
     }
     let c = Arc::new(compile_rules(store));
@@ -114,7 +129,12 @@ pub fn compiled_of(store: &Arc<Json>) -> Arc<Compiled> {
 
 pub fn compile_rules(store: &Json) -> Compiled {
     COMPILATIONS.fetch_add(1, Ordering::Relaxed);
-    let mut c = Compiled { pairs: Vec::new(), order: Vec::new(), pre: Vec::new(), blends: Vec::new() };
+    let mut c = Compiled {
+        pairs: Vec::new(),
+        order: Vec::new(),
+        pre: Vec::new(),
+        blends: Vec::new(),
+    };
     for r in store.get("rules").and_then(Json::arr).unwrap_or(&[]) {
         match r.get("kind").and_then(Json::str) {
             Some("pair") => {
@@ -127,27 +147,55 @@ pub fn compile_rules(store: &Json) -> Compiled {
             /* a blend that cannot say what it means is refused here, not warned about */
             Some("blend") => {
                 let when = r.get("when").and_then(Json::arr).unwrap_or(&[]);
-                if truthy(r.get("means")).is_none() || truthy(r.get("emit")).is_none() || when.len() < 2 {
+                if truthy(r.get("means")).is_none()
+                    || truthy(r.get("emit")).is_none()
+                    || when.len() < 2
+                {
                     continue;
                 }
-                let when = when.iter().flat_map(|n| expand_names(store, Some(n))).collect();
-                c.blends.push(Blend { rule: r.clone(), when, emit: js_string(r.get("emit")), means: js_string(r.get("means")) });
+                let when = when
+                    .iter()
+                    .flat_map(|n| expand_names(store, Some(n)))
+                    .collect();
+                c.blends.push(Blend {
+                    rule: r.clone(),
+                    when,
+                    emit: js_string(r.get("emit")),
+                    means: js_string(r.get("means")),
+                });
             }
             /* `first` never matches itself: it is usually one of the class in `then` */
             Some("order") => {
                 let first = js_string(r.get("first"));
-                let then = expand_names(store, r.get("then")).into_iter().filter(|n| *n != first).collect();
-                c.order.push(Order { rule: r.clone(), first, then });
+                let then = expand_names(store, r.get("then"))
+                    .into_iter()
+                    .filter(|n| *n != first)
+                    .collect();
+                c.order.push(Order {
+                    rule: r.clone(),
+                    first,
+                    then,
+                });
             }
             /* a set in the JS: each name once, where it first came */
             Some("precondition") => {
                 let mut accept: Vec<String> = Vec::new();
-                for x in r.get("requiresBefore").and_then(Json::arr).unwrap_or(&[]).iter().flat_map(|n| expand_names(store, Some(n))) {
+                for x in r
+                    .get("requiresBefore")
+                    .and_then(Json::arr)
+                    .unwrap_or(&[])
+                    .iter()
+                    .flat_map(|n| expand_names(store, Some(n)))
+                {
                     if !accept.contains(&x) {
                         accept.push(x);
                     }
                 }
-                c.pre.push(Pre { rule: r.clone(), target: js_string(r.get("target")), accept });
+                c.pre.push(Pre {
+                    rule: r.clone(),
+                    target: js_string(r.get("target")),
+                    accept,
+                });
             }
             _ => {}
         }
@@ -156,11 +204,21 @@ pub fn compile_rules(store: &Json) -> Compiled {
 }
 
 /// `checkRules(segments, opts, G)`.
-pub fn check_rules<X: Clone>(tree: &Tree<X>, ctx: &Context, g: &mut dyn FnMut(Diag)) -> Result<(), Thrown> {
-    let Some(store) = ctx.rules.as_ref() else { return Ok(()) };
+pub fn check_rules<X: Clone>(
+    tree: &Tree<X>,
+    ctx: &Context,
+    g: &mut dyn FnMut(Diag),
+) -> Result<(), Thrown> {
+    let Some(store) = ctx.rules.as_ref() else {
+        return Ok(());
+    };
     let c = compiled_of(store);
-    let exempt: Vec<String> = store.get("scope").and_then(|s| s.get("exemptUnder")).and_then(Json::arr)
-        .map(|a| a.iter().map(|x| js_string(Some(x))).collect()).unwrap_or_default();
+    let exempt: Vec<String> = store
+        .get("scope")
+        .and_then(|s| s.get("exemptUnder"))
+        .and_then(Json::arr)
+        .map(|a| a.iter().map(|x| js_string(Some(x))).collect())
+        .unwrap_or_default();
     let n = |id: Id| &tree.nodes[id];
     let canon = |id: Id| n(id).canonical.clone().unwrap_or_default();
     let low = |s: &str| format!("<code>[{}</code>", esc(&s.to_lowercase()));
@@ -174,7 +232,10 @@ pub fn check_rules<X: Clone>(tree: &Tree<X>, ctx: &Context, g: &mut dyn FnMut(Di
             if hops > 64 {
                 break;
             }
-            let k = n(pid).canonical.clone().unwrap_or_else(|| "undefined".into());
+            let k = n(pid)
+                .canonical
+                .clone()
+                .unwrap_or_else(|| "undefined".into());
             if exempt.contains(&k) || inherited(&k) {
                 return true;
             }
@@ -188,33 +249,56 @@ pub fn check_rules<X: Clone>(tree: &Tree<X>, ctx: &Context, g: &mut dyn FnMut(Di
             return;
         }
         let (pt, us) = match truthy(r.get("suggest")) {
-            Some(s) => (format!(" <em>Sugestão: {}</em>", esc_v(Some(s))), format!(" <em>Suggestion: {}</em>", esc_v(Some(s)))),
+            Some(s) => (
+                format!(" <em>Sugestão: {}</em>", esc_v(Some(s))),
+                format!(" <em>Suggestion: {}</em>", esc_v(Some(s))),
+            ),
             None => (String::new(), String::new()),
         };
         let label = truthy(r.get("label")).map(|l| js_string(Some(l)));
         let sev = truthy(r.get("severity")).map_or("ask".into(), |s| js_string(Some(s)));
-        g(Diag::new(&sev, label.as_deref().unwrap_or("regra"), msg + &pt, &format!("Rule:{}", js_string(r.get("id"))))
-            .en(label.as_deref().unwrap_or("rule"), en + &us));
+        g(Diag::new(
+            &sev,
+            label.as_deref().unwrap_or("regra"),
+            msg + &pt,
+            &format!("Rule:{}", js_string(r.get("id"))),
+        )
+        .en(label.as_deref().unwrap_or("rule"), en + &us));
     };
     let report_pair = |x: Id, y: Id, fire: &mut dyn FnMut(&Json, String, String, String)| {
         let key = pair_key(&canon(x), &canon(y));
-        let Some((_, r)) = c.pairs.iter().find(|(k, _)| *k == key) else { return };
+        let Some((_, r)) = c.pairs.iter().find(|(k, _)| *k == key) else {
+            return;
+        };
         if under_exempt(x) || under_exempt(y) {
             return;
         }
         let (a, b) = (low(&canon(x)), low(&canon(y)));
         let why = esc_v(r.get("why"));
-        fire(r, format!("{}@{}-{}", js_string(r.get("id")), uid(x), uid(y)),
-             format!("{a} com {b} no mesmo alvo — {why}."), format!("{a} with {b} on the same target — {why}."));
+        fire(
+            r,
+            format!("{}@{}-{}", js_string(r.get("id")), uid(x), uid(y)),
+            format!("{a} com {b} no mesmo alvo — {why}."),
+            format!("{a} with {b} on the same target — {why}."),
+        );
     };
 
     for sg in &tree.segments {
         let walked = tree.walk(&sg.children);
-        let flat: Vec<Id> = walked.iter().copied().filter(|&id| n(id).is_canonical()).collect();
+        let flat: Vec<Id> = walked
+            .iter()
+            .copied()
+            .filter(|&id| n(id).is_canonical())
+            .collect();
 
         /* pair: siblings under one parent */
         let mut groups: Vec<&[Id]> = vec![&sg.children];
-        groups.extend(walked.iter().filter(|&&id| !n(id).children.is_empty()).map(|&id| n(id).children.as_slice()));
+        groups.extend(
+            walked
+                .iter()
+                .filter(|&&id| !n(id).children.is_empty())
+                .map(|&id| n(id).children.as_slice()),
+        );
         for kids in groups {
             let mut by_name: Vec<(String, Id)> = Vec::new();
             for &k in kids {
@@ -222,7 +306,7 @@ pub fn check_rules<X: Clone>(tree: &Tree<X>, ctx: &Context, g: &mut dyn FnMut(Di
                     continue;
                 }
                 /* the JS's `(byName[c.canonical] = byName[c.canonical] || []).push(c)`
-                   finds the prototype's member first, and it has no push */
+                finds the prototype's member first, and it has no push */
                 if inherited(&canon(k)) {
                     return Err(Thrown("byName[c.canonical].push is not a function".into()));
                 }
@@ -232,7 +316,9 @@ pub fn check_rules<X: Clone>(tree: &Tree<X>, ctx: &Context, g: &mut dyn FnMut(Di
             }
             for (_, r) in &c.pairs {
                 let first = |nm: &str| by_name.iter().find(|(x, _)| x == nm).map(|(_, id)| *id);
-                if let (Some(a), Some(b)) = (first(&js_string(r.get("a"))), first(&js_string(r.get("b")))) {
+                if let (Some(a), Some(b)) =
+                    (first(&js_string(r.get("a"))), first(&js_string(r.get("b"))))
+                {
                     report_pair(a, b, &mut |r, id, m, e| fire(r, id, m, e, g));
                 }
             }
@@ -271,8 +357,13 @@ pub fn check_rules<X: Clone>(tree: &Tree<X>, ctx: &Context, g: &mut dyn FnMut(Di
                 }
                 let (la, lb) = (low(&canon(id)), low(&o.first));
                 let why = esc_v(o.rule.get("why"));
-                fire(&o.rule, format!("{}@{}", js_string(o.rule.get("id")), uid(id)),
-                     format!("{la} vem antes de {lb} — {why}."), format!("{la} comes before {lb} — {why}."), g);
+                fire(
+                    &o.rule,
+                    format!("{}@{}", js_string(o.rule.get("id")), uid(id)),
+                    format!("{la} vem antes de {lb} — {why}."),
+                    format!("{la} comes before {lb} — {why}."),
+                    g,
+                );
                 break;
             }
         }
@@ -283,13 +374,21 @@ pub fn check_rules<X: Clone>(tree: &Tree<X>, ctx: &Context, g: &mut dyn FnMut(Di
                 if canon(id) != p.target {
                     continue;
                 }
-                if flat[..i].iter().any(|&k| p.accept.contains(&canon(k)) || inherited(&canon(k))) {
+                if flat[..i]
+                    .iter()
+                    .any(|&k| p.accept.contains(&canon(k)) || inherited(&canon(k)))
+                {
                     continue;
                 }
                 let t = low(&p.target);
                 let why = esc_v(p.rule.get("why"));
-                fire(&p.rule, format!("{}@{}", js_string(p.rule.get("id")), uid(id)),
-                     format!("{t} sem enquadramento antes — {why}."), format!("{t} with no framing before it — {why}."), g);
+                fire(
+                    &p.rule,
+                    format!("{}@{}", js_string(p.rule.get("id")), uid(id)),
+                    format!("{t} sem enquadramento antes — {why}."),
+                    format!("{t} with no framing before it — {why}."),
+                    g,
+                );
             }
         }
     }

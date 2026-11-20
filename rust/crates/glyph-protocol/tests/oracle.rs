@@ -7,12 +7,25 @@
 #[path = "../../../testkit/oracle.rs"]
 mod oracle;
 
+use glyph_json::{Json, parse};
 use glyph_protocol::answer;
-use glyph_json::{parse, Json};
-use oracle::{module, Must};
+use oracle::{Must, module};
 
-const CALLS: [&str; 13] = ["tables", "tokenize", "classify", "suggest", "elName", "parseLogic", "expandExpr", "freeVars",
-                           "parse", "toXML", "toAST", "toHGML", "fromXML"];
+const CALLS: [&str; 13] = [
+    "tables",
+    "tokenize",
+    "classify",
+    "suggest",
+    "elName",
+    "parseLogic",
+    "expandExpr",
+    "freeVars",
+    "parse",
+    "toXML",
+    "toAST",
+    "toHGML",
+    "fromXML",
+];
 
 #[test]
 fn every_request_answers_the_bytes_the_js_answered() {
@@ -24,8 +37,13 @@ fn every_request_answers_the_bytes_the_js_answered() {
     for l in lines {
         let (q, a) = (l.s("q"), l.s("a"));
         let request = parse(q).ok();
-        let call = request.as_ref().and_then(|j| j.get("call").and_then(Json::str).map(str::to_string));
-        if let Some(k) = call.as_deref().and_then(|c| CALLS.iter().position(|t| *t == c)) {
+        let call = request
+            .as_ref()
+            .and_then(|j| j.get("call").and_then(Json::str).map(str::to_string));
+        if let Some(k) = call
+            .as_deref()
+            .and_then(|c| CALLS.iter().position(|t| *t == c))
+        {
             per[k] += 1;
         }
         if request.as_ref().is_some_and(|j| j.get("differ").is_some()) {
@@ -33,16 +51,42 @@ fn every_request_answers_the_bytes_the_js_answered() {
             refused += usize::from(a.starts_with("{\"thrown\":\"differ: "));
         }
         let got = answer(q);
-        let got = if call.as_deref() == Some("toHGML") { oracle::known::semicolons_json(&got) } else { got };
+        let got = if call.as_deref() == Some("toHGML") {
+            oracle::known::semicolons_json(&got)
+        } else {
+            got
+        };
         if got != a {
-            let at = got.bytes().zip(a.bytes()).take_while(|(x, y)| x == y).count();
-            let near = |t: &str| t.get(at.saturating_sub(20)..t.len().min(at + 60)).unwrap_or("").to_string();
-            wrong.push(format!("{} — at byte {at}: {:?} against {:?}", q.get(..q.len().min(90)).unwrap_or(q), near(&got), near(a)));
+            let at = got
+                .bytes()
+                .zip(a.bytes())
+                .take_while(|(x, y)| x == y)
+                .count();
+            let near = |t: &str| {
+                t.get(at.saturating_sub(20)..t.len().min(at + 60))
+                    .unwrap_or("")
+                    .to_string()
+            };
+            wrong.push(format!(
+                "{} — at byte {at}: {:?} against {:?}",
+                q.get(..q.len().min(90)).unwrap_or(q),
+                near(&got),
+                near(a)
+            ));
         }
     }
     for (k, n) in per.iter().enumerate() {
         assert!(*n > 0, "no request of `{}` in protocol.json", CALLS[k]);
     }
-    assert!(brought > 0 && refused > 0, "protocol.json brings {brought} sets of templates and refuses {refused}");
-    assert!(wrong.is_empty(), "{} of {} answers differ; the first:\n{}", wrong.len(), lines.len(), wrong[..wrong.len().min(5)].join("\n"));
+    assert!(
+        brought > 0 && refused > 0,
+        "protocol.json brings {brought} sets of templates and refuses {refused}"
+    );
+    assert!(
+        wrong.is_empty(),
+        "{} of {} answers differ; the first:\n{}",
+        wrong.len(),
+        lines.len(),
+        wrong[..wrong.len().min(5)].join("\n")
+    );
 }

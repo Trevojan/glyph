@@ -14,6 +14,12 @@ as treze normas e medições — `GLOSSARY.md`, `XML_REFERENCE.md`,
 `glyph-grammar.ebnf`. Qual responde qual pergunta está no
 [índice](../.shortcuts/README.md), que aponta para cada um.
 
+## O registro de estudos
+
+[`STUDY.md`](STUDY.md): uma linha por pergunta que vale medir antes de desenhar — a
+pergunta, o que a decide, o instrumento, o estado, e o intake em que virou (o
+Regente, 2026-11-11).
+
 ## O que veio de fora
 
 > Só entra aqui referência que foi **de fato usada** e que **decidiu alguma

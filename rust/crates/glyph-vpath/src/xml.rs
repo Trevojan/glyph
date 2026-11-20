@@ -20,7 +20,10 @@ pub fn parse(text: &str) -> Result<Vec<Element>, String> {
     let mut top: Vec<Element> = Vec::new();
     let mut i = 0;
     let skip = |i: usize, close: &str| -> Result<usize, String> {
-        text[i..].find(close).map(|at| i + at + close.len()).ok_or_else(|| format!("XML: `{close}` never comes, from byte {i}"))
+        text[i..]
+            .find(close)
+            .map(|at| i + at + close.len())
+            .ok_or_else(|| format!("XML: `{close}` never comes, from byte {i}"))
     };
     while let Some(at) = text[i..].find('<') {
         i += at;
@@ -34,11 +37,19 @@ pub fn parse(text: &str) -> Result<Vec<Element>, String> {
         } else if rest.starts_with("<!") {
             i = skip(i, ">")?;
         } else if let Some(close) = rest.strip_prefix("</") {
-            let name = close.split(|c: char| c == '>' || c.is_whitespace()).next().unwrap_or("");
+            let name = close
+                .split(|c: char| c == '>' || c.is_whitespace())
+                .next()
+                .unwrap_or("");
             let end = skip(i, ">")?;
-            let mut el = stack.pop().ok_or_else(|| format!("XML: `</{name}>` closes nothing, at byte {i}"))?;
+            let mut el = stack
+                .pop()
+                .ok_or_else(|| format!("XML: `</{name}>` closes nothing, at byte {i}"))?;
             if el.name != name {
-                return Err(format!("XML: `</{name}>` closes `<{}>`, at byte {i}", el.name));
+                return Err(format!(
+                    "XML: `</{name}>` closes `<{}>`, at byte {i}",
+                    el.name
+                ));
             }
             el.end = end;
             match stack.last_mut() {
@@ -47,7 +58,10 @@ pub fn parse(text: &str) -> Result<Vec<Element>, String> {
             }
             i = end;
         } else {
-            let name: String = rest[1..].chars().take_while(|c| !c.is_whitespace() && *c != '>' && *c != '/').collect();
+            let name: String = rest[1..]
+                .chars()
+                .take_while(|c| !c.is_whitespace() && *c != '>' && *c != '/')
+                .collect();
             if name.is_empty() {
                 return Err(format!("XML: a `<` that opens nothing, at byte {i}"));
             }
@@ -65,7 +79,12 @@ pub fn parse(text: &str) -> Result<Vec<Element>, String> {
             if j == b.len() {
                 return Err(format!("XML: `<{name}` never closes, from byte {i}"));
             }
-            let el = Element { name, start: i, end: j + 1, children: Vec::new() };
+            let el = Element {
+                name,
+                start: i,
+                end: j + 1,
+                children: Vec::new(),
+            };
             if b[j - 1] == b'/' {
                 match stack.last_mut() {
                     Some(parent) => parent.children.push(el),
@@ -78,7 +97,10 @@ pub fn parse(text: &str) -> Result<Vec<Element>, String> {
         }
     }
     if let Some(open) = stack.last() {
-        return Err(format!("XML: `<{}>` never closes, from byte {}", open.name, open.start));
+        return Err(format!(
+            "XML: `<{}>` never closes, from byte {}",
+            open.name, open.start
+        ));
     }
     Ok(top)
 }
@@ -90,12 +112,21 @@ pub fn tree(text: &str) -> Result<Vec<Node>, String> {
         for (k, el) in siblings.iter().enumerate() {
             let same = siblings.iter().filter(|s| s.name == el.name).count();
             let step = if same > 1 {
-                format!("{}[{}]", el.name, siblings[..=k].iter().filter(|s| s.name == el.name).count())
+                format!(
+                    "{}[{}]",
+                    el.name,
+                    siblings[..=k].iter().filter(|s| s.name == el.name).count()
+                )
             } else {
                 el.name.clone()
             };
             let p = format!("{path}/{step}");
-            out.push(Node { selector: p.clone(), start: el.start, end: el.end, depth: depth + 1 });
+            out.push(Node {
+                selector: p.clone(),
+                start: el.start,
+                end: el.end,
+                depth: depth + 1,
+            });
             walk(&el.children, &p, depth + 1, out);
         }
     }
@@ -105,7 +136,9 @@ pub fn tree(text: &str) -> Result<Vec<Node>, String> {
 
 pub fn select(text: &str, path: &str) -> Result<Node, String> {
     let Some(rest) = path.strip_prefix('/') else {
-        return Err(format!("`{path}` is not an element path: it starts with `/`"));
+        return Err(format!(
+            "`{path}` is not an element path: it starts with `/`"
+        ));
     };
     let top = parse(text)?;
     let mut siblings = &top;
@@ -113,20 +146,37 @@ pub fn select(text: &str, path: &str) -> Result<Node, String> {
     let mut depth = 0;
     for step in rest.split('/') {
         let (name, nth) = match step.strip_suffix(']').and_then(|s| s.split_once('[')) {
-            Some((name, n)) => (name, Some(n.parse::<usize>().map_err(|_| format!("`{path}`: `[{n}]` is not a position"))?)),
+            Some((name, n)) => (
+                name,
+                Some(
+                    n.parse::<usize>()
+                        .map_err(|_| format!("`{path}`: `[{n}]` is not a position"))?,
+                ),
+            ),
             None => (step, None),
         };
         let named: Vec<&Element> = siblings.iter().filter(|e| e.name == name).collect();
         let el = match (nth, named.len()) {
-            (Some(n), _) => *named.get(n.wrapping_sub(1)).ok_or_else(|| format!("`{path}`: no `{name}[{n}]`"))?,
+            (Some(n), _) => *named
+                .get(n.wrapping_sub(1))
+                .ok_or_else(|| format!("`{path}`: no `{name}[{n}]`"))?,
             (None, 1) => named[0],
             (None, 0) => return Err(format!("`{path}`: no `{name}`")),
-            (None, many) => return Err(format!("`{path}`: `{name}` names {many} elements; pick one with `[n]`")),
+            (None, many) => {
+                return Err(format!(
+                    "`{path}`: `{name}` names {many} elements; pick one with `[n]`"
+                ));
+            }
         };
         siblings = &el.children;
         hit = Some(el);
         depth += 1;
     }
     let el = hit.ok_or_else(|| format!("`{path}` names no element"))?;
-    Ok(Node { selector: path.to_string(), start: el.start, end: el.end, depth })
+    Ok(Node {
+        selector: path.to_string(),
+        start: el.start,
+        end: el.end,
+        depth,
+    })
 }

@@ -10,8 +10,16 @@ use glyph_xml::to_xml;
 #[test]
 fn a_mood_inside_a_template_colours_the_segment() {
     let o = Opts::new(Context::repository());
-    for src in ["[--t=/eth/]", "[--zz/eth/]", "[--reinforce'a''b'/eth/]", "[--t=[ctx'x']/eth/]"] {
+    for src in [
+        "[--t=/eth/]",
+        "[--zz/eth/]",
+        "[--reinforce'a''b'/eth/]",
+        "[--t=[ctx'x']/eth/]",
+    ] {
         let xml = to_xml(src, &o, false).unwrap_or_else(|e| panic!("{src}: {e:?}"));
-        assert!(xml.contains("  <block once=\"true\">\n    <mood dominant=\"enthusiasm\"/>\n"), "{src}: {xml}");
+        assert!(
+            xml.contains("  <block once=\"true\">\n    <mood dominant=\"enthusiasm\"/>\n"),
+            "{src}: {xml}"
+        );
     }
 }

@@ -135,7 +135,12 @@ pub struct Limits {
     pub auto_close: usize,
     pub ast_depth: usize,
 }
-pub const LIMITS: Limits = Limits { indent: 12, nesting: 10, auto_close: 8, ast_depth: 200 };
+pub const LIMITS: Limits = Limits {
+    indent: 12,
+    nesting: 10,
+    auto_close: 8,
+    ast_depth: 200,
+};
 
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct Tree<X> {
@@ -170,7 +175,11 @@ impl<X: Clone> Tree<X> {
             nd.parent = nd.parent.map(|p| p + base);
             self.nodes.push(nd);
         }
-        other.segments.iter().flat_map(|s| s.children.iter().map(|c| c + base)).collect()
+        other
+            .segments
+            .iter()
+            .flat_map(|s| s.children.iter().map(|c| c + base))
+            .collect()
     }
 
     /// `copyNodes`: `list` and everything under it, copied for one call to a
@@ -181,7 +190,12 @@ impl<X: Clone> Tree<X> {
         let roots: Vec<Id> = list.iter().map(|&id| self.copy_one(id)).collect();
         let mut stack = roots.clone();
         while let Some(c) = stack.pop() {
-            let kids: Vec<Id> = self.nodes[c].children.clone().into_iter().map(|k| self.copy_one(k)).collect();
+            let kids: Vec<Id> = self.nodes[c]
+                .children
+                .clone()
+                .into_iter()
+                .map(|k| self.copy_one(k))
+                .collect();
             self.nodes[c].children.clone_from(&kids);
             stack.extend(kids);
         }
@@ -198,23 +212,42 @@ impl<X: Clone> Tree<X> {
     /// arena, where the JS hands the body its registry, which holds it.
     pub fn extract(&self, list: &[Id]) -> Tree<X> {
         let ids = self.walk(list);
-        let at: std::collections::HashMap<Id, Id> = ids.iter().enumerate().map(|(i, &id)| (id, i)).collect();
-        let nodes = ids.iter().map(|&id| {
-            let mut nd = self.nodes[id].clone();
-            nd.parent = None;
-            nd.children = nd.children.iter().map(|k| at[k]).collect();
-            nd
-        }).collect();
-        Tree { nodes, segments: vec![Segment { children: list.iter().map(|k| at[k]).collect(), ..Default::default() }] }
+        let at: std::collections::HashMap<Id, Id> =
+            ids.iter().enumerate().map(|(i, &id)| (id, i)).collect();
+        let nodes = ids
+            .iter()
+            .map(|&id| {
+                let mut nd = self.nodes[id].clone();
+                nd.parent = None;
+                nd.children = nd.children.iter().map(|k| at[k]).collect();
+                nd
+            })
+            .collect();
+        Tree {
+            nodes,
+            segments: vec![Segment {
+                children: list.iter().map(|k| at[k]).collect(),
+                ..Default::default()
+            }],
+        }
     }
 
     /// `valueChildren`: the children that count as a filled slot.
     pub fn value_children(&self, id: Id) -> Vec<Id> {
-        self.nodes[id].children.iter().copied().filter(|&c| {
-            let n = &self.nodes[c];
-            n.is_canonical() || n.is_literal() || n.logic.is_some() || n.is_template()
-                || (n.text == Some(true) && Node::<X>::has(&n.v)) || Node::<X>::has(&n.mode)
-        }).collect()
+        self.nodes[id]
+            .children
+            .iter()
+            .copied()
+            .filter(|&c| {
+                let n = &self.nodes[c];
+                n.is_canonical()
+                    || n.is_literal()
+                    || n.logic.is_some()
+                    || n.is_template()
+                    || (n.text == Some(true) && Node::<X>::has(&n.v))
+                    || Node::<X>::has(&n.mode)
+            })
+            .collect()
     }
 
     /// `reparent`: every node under `list`, at any depth, points to its container.
@@ -245,7 +278,16 @@ pub struct Diag {
 
 impl Diag {
     pub fn new(sev: &str, lab: &str, msg: String, code: &str) -> Diag {
-        Diag { sev: sev.into(), lab: lab.into(), msg, code: code.into(), en_lab: None, en_msg: None, at: None, code_first: false }
+        Diag {
+            sev: sev.into(),
+            lab: lab.into(),
+            msg,
+            code: code.into(),
+            en_lab: None,
+            en_msg: None,
+            at: None,
+            code_first: false,
+        }
     }
     pub fn en(mut self, lab: &str, msg: String) -> Diag {
         self.en_lab = Some(lab.into());
@@ -266,20 +308,34 @@ pub fn strip_tags(s: &str) -> String {
     let mut out = String::new();
     let mut i = 0;
     while i < c.len() {
-        if c[i] == '<' {
-            if let Some(close) = (i + 1..c.len()).find(|&k| c[k] == '>') {
-                if close > i + 1 {
-                    i = close + 1;
-                    continue;
-                }
-            }
+        if c[i] == '<'
+            && let Some(close) = (i + 1..c.len()).find(|&k| c[k] == '>')
+            && close > i + 1
+        {
+            i = close + 1;
+            continue;
         }
         out.push(c[i]);
         i += 1;
     }
-    let out = out.replace("&lt;", "<").replace("&gt;", ">").replace("&quot;", "\"").replace("&amp;", "&");
-    let space = |c: char| matches!(c, '\t' | '\n' | '\u{b}' | '\u{c}' | '\r' | ' ' | '\u{a0}' | '\u{1680}' | '\u{2000}'..='\u{200a}'
-        | '\u{2028}' | '\u{2029}' | '\u{202f}' | '\u{205f}' | '\u{3000}' | '\u{feff}');
+    let out = out
+        .replace("&lt;", "<")
+        .replace("&gt;", ">")
+        .replace("&quot;", "\"")
+        .replace("&amp;", "&");
+    let space = |c: char| {
+        matches!(
+            c,
+            '\t' | '\n' | '\u{b}' | '\u{c}' | '\r' | ' ' | '\u{a0}' | '\u{1680}' | '\u{2000}'
+                ..='\u{200a}'
+                    | '\u{2028}'
+                    | '\u{2029}'
+                    | '\u{202f}'
+                    | '\u{205f}'
+                    | '\u{3000}'
+                    | '\u{feff}'
+        )
+    };
     let mut collapsed = String::new();
     let mut run = false;
     for ch in out.chars() {

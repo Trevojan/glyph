@@ -12,11 +12,11 @@
 //! SOURCE_DATE_EPOCH's when it is set, and the zip's time is UTC (question 16
 //! of the EMS-001 return).
 
-use glyph_burn::{to_hgml, BurnOpts};
-use glyph_envelope::{to_ast, AstOpts};
-use glyph_parse::{parse, Opts};
-use glyph_stores::{atoms_of, depth_of, formula_of, species_of, Context, Registered};
-use glyph_json::{number, stringify_indent, Json};
+use glyph_burn::{BurnOpts, to_hgml};
+use glyph_envelope::{AstOpts, to_ast};
+use glyph_json::{Json, number, stringify_indent};
+use glyph_parse::{Opts, parse};
+use glyph_stores::{Context, Registered, atoms_of, depth_of, formula_of, species_of};
 use glyph_util::tree::Thrown;
 use glyph_xml::to_xml;
 use std::io::{Read, Write};
@@ -55,7 +55,10 @@ impl Out {
 mod app;
 
 fn main() {
-    let argv: Vec<String> = std::env::args_os().skip(1).map(|a| a.to_string_lossy().into_owned()).collect();
+    let argv: Vec<String> = std::env::args_os()
+        .skip(1)
+        .map(|a| a.to_string_lossy().into_owned())
+        .collect();
     if let Some(code) = app::route(&argv) {
         std::process::exit(code);
     }
@@ -79,14 +82,25 @@ fn main() {
 /// before it reads, as `glyph-cli.js` does, so a template's body is parsed with
 /// them (EMS-002 ORD-0008).
 fn registered(ctx: &Context) -> Opts<'_> {
-    Opts { registered: Registered::repository(), ..Opts::new(ctx) }
+    Opts {
+        registered: Registered::repository(),
+        ..Opts::new(ctx)
+    }
 }
 
 /// ORD-0008: the XML of stdin, and nothing after it.
 fn first_binary(src: &str) {
     match to_xml(src, &registered(Context::repository()), false) {
-        Ok(xml) => Out { out: xml.into_bytes(), err: Vec::new() }.exit(0),
-        Err(thrown) => Out { out: Vec::new(), err: Vec::new() }.thrown("TypeError", thrown),
+        Ok(xml) => Out {
+            out: xml.into_bytes(),
+            err: Vec::new(),
+        }
+        .exit(0),
+        Err(thrown) => Out {
+            out: Vec::new(),
+            err: Vec::new(),
+        }
+        .thrown("TypeError", thrown),
     }
 }
 
@@ -111,7 +125,11 @@ fn normalize(p: &str) -> String {
     let is_sep = |c: char| c == '/' || (win && c == '\\');
     let mut rest = p;
     let mut prefix = String::new();
-    if win && rest.len() >= 2 && rest.as_bytes()[1] == b':' && rest.as_bytes()[0].is_ascii_alphabetic() {
+    if win
+        && rest.len() >= 2
+        && rest.as_bytes()[1] == b':'
+        && rest.as_bytes()[0].is_ascii_alphabetic()
+    {
         prefix = rest[..2].to_string();
         rest = &rest[2..];
     }
@@ -143,7 +161,11 @@ fn normalize(p: &str) -> String {
 
 /// `path.join(dir, name)`.
 fn join(dir: &str, name: &str) -> String {
-    normalize(&if dir.is_empty() { name.to_string() } else { format!("{dir}/{name}") })
+    normalize(&if dir.is_empty() {
+        name.to_string()
+    } else {
+        format!("{dir}/{name}")
+    })
 }
 
 /// `path.basename(path.resolve(dir))`: the last name of the folder, read from
@@ -152,11 +174,17 @@ fn resolved_name(dir: &str) -> String {
     let abs = if Path::new(dir).is_absolute() || (cfg!(windows) && dir.starts_with(['/', '\\'])) {
         dir.to_string()
     } else {
-        let cwd = std::env::current_dir().map(|c| c.to_string_lossy().into_owned()).unwrap_or_default();
+        let cwd = std::env::current_dir()
+            .map(|c| c.to_string_lossy().into_owned())
+            .unwrap_or_default();
         format!("{cwd}/{dir}")
     };
     let n = normalize(&abs);
-    n.trim_end_matches(['/', '\\']).rsplit(['/', '\\']).next().unwrap_or("").to_string()
+    n.trim_end_matches(['/', '\\'])
+        .rsplit(['/', '\\'])
+        .next()
+        .unwrap_or("")
+        .to_string()
 }
 
 /// `^EMS-\d{3}$`
@@ -180,7 +208,9 @@ fn ord_number(name: &str) -> Option<u32> {
 /// is digits alone, and now otherwise.
 fn moment() -> f64 {
     match std::env::var("SOURCE_DATE_EPOCH") {
-        Ok(e) if !e.is_empty() && e.bytes().all(|b| b.is_ascii_digit()) => e.parse::<f64>().unwrap_or(f64::INFINITY) * 1000.0,
+        Ok(e) if !e.is_empty() && e.bytes().all(|b| b.is_ascii_digit()) => {
+            e.parse::<f64>().unwrap_or(f64::INFINITY) * 1000.0
+        }
         _ => std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
             .map(|d| d.as_millis() as f64)
@@ -189,18 +219,24 @@ fn moment() -> f64 {
 }
 
 fn cli(argv: Vec<String>) {
-    let mut o = Out { out: Vec::new(), err: Vec::new() };
+    let mut o = Out {
+        out: Vec::new(),
+        err: Vec::new(),
+    };
     let ctx = Context::repository();
     let opts = registered(ctx);
     let mut mode = "xml";
     let mut src: Vec<String> = Vec::new();
-    let (mut file, mut bundle, mut out_dir): (Option<String>, bool, Option<String>) = (None, false, None);
+    let (mut file, mut bundle, mut out_dir): (Option<String>, bool, Option<String>) =
+        (None, false, None);
     let mut zip = false;
     let mut i = 0;
     while i < argv.len() {
         let a = argv[i].as_str();
         match a {
-            "--ast" | "--xml" | "--diag" | "--expand" | "--hgml" | "--from-xml" => mode = &argv[i][2..],
+            "--ast" | "--xml" | "--diag" | "--expand" | "--hgml" | "--from-xml" => {
+                mode = &argv[i][2..]
+            }
             "--file" | "-f" => {
                 i += 1;
                 file = argv.get(i).cloned();
@@ -238,9 +274,17 @@ fn cli(argv: Vec<String>) {
         if input.starts_with('\u{FEFF}') {
             input.drain(..3);
         }
-    } else if mode != "expand" && !input.is_empty() && looks_like_path(&input) && Path::new(&input).exists() {
-        o.error(&format!("{input} é um arquivo que existe, e uma fonte Glyph não se parece com isso."));
-        o.error(&format!("para compilar o arquivo:  node scripts/glyph-cli.js --file {input} --xml"));
+    } else if mode != "expand"
+        && !input.is_empty()
+        && looks_like_path(&input)
+        && Path::new(&input).exists()
+    {
+        o.error(&format!(
+            "{input} é um arquivo que existe, e uma fonte Glyph não se parece com isso."
+        ));
+        o.error(&format!(
+            "para compilar o arquivo:  node scripts/glyph-cli.js --file {input} --xml"
+        ));
         o.exit(2);
     }
 
@@ -253,8 +297,12 @@ fn cli(argv: Vec<String>) {
     }
 
     // toAST with no language answers in en-EU, as the envelope's default
-    let ast_opts = Opts { en: true, ..registered(ctx) };
-    let ast_text = |src: &str| to_ast(src, &ast_opts, &AstOpts::default()).map(|a| stringify_indent(&a, "  "));
+    let ast_opts = Opts {
+        en: true,
+        ..registered(ctx)
+    };
+    let ast_text =
+        |src: &str| to_ast(src, &ast_opts, &AstOpts::default()).map(|a| stringify_indent(&a, "  "));
 
     if bundle {
         let dir = out_dir.clone().unwrap_or_else(|| ".".into());
@@ -265,10 +313,10 @@ fn cli(argv: Vec<String>) {
                 for e in entries.flatten() {
                     let name = e.file_name().to_string_lossy().into_owned();
                     let dir_entry = e.file_type().map(|t| t.is_dir()).unwrap_or(false);
-                    if let Some(n) = ord_number(&name) {
-                        if !series || dir_entry {
-                            next = next.max(n + 1);
-                        }
+                    if let Some(n) = ord_number(&name)
+                        && (!series || dir_entry)
+                    {
+                        next = next.max(n + 1);
                     }
                 }
             }
@@ -278,8 +326,19 @@ fn cli(argv: Vec<String>) {
             }
         }
         let id = format!("ORD-{next:04}");
-        let compiled = to_xml(&input, &opts, false)
-            .and_then(|xml| Ok((xml, ast_text(&input)?, to_hgml(&input, &BurnOpts { parse: &opts, keep_text: false })?)));
+        let compiled = to_xml(&input, &opts, false).and_then(|xml| {
+            Ok((
+                xml,
+                ast_text(&input)?,
+                to_hgml(
+                    &input,
+                    &BurnOpts {
+                        parse: &opts,
+                        keep_text: false,
+                    },
+                )?,
+            ))
+        });
         let (xml, ast, hgml) = match compiled {
             Ok(t) => t,
             Err(Thrown(e)) => {
@@ -303,8 +362,21 @@ fn cli(argv: Vec<String>) {
                 ("order".into(), s(&id)),
                 ("engine".into(), s(glyph_version::VERSION)),
                 ("emitted".into(), s(&emitted)),
-                ("files".into(), Json::Arr(["pgml", "xml", "json", "hgml"].iter().map(|e| s(&format!("{id}.{e}"))).collect())),
-                ("source".into(), file.as_deref().filter(|f| !f.is_empty()).map_or(Json::Null, s)),
+                (
+                    "files".into(),
+                    Json::Arr(
+                        ["pgml", "xml", "json", "hgml"]
+                            .iter()
+                            .map(|e| s(&format!("{id}.{e}")))
+                            .collect(),
+                    ),
+                ),
+                (
+                    "source".into(),
+                    file.as_deref()
+                        .filter(|f| !f.is_empty())
+                        .map_or(Json::Null, s),
+                ),
                 (
                     "diagnostics".into(),
                     Json::Obj(vec![
@@ -340,12 +412,18 @@ fn cli(argv: Vec<String>) {
                 o.error(&format!("nao consegui escrever {dest}: {e}"));
                 o.exit(2);
             }
-            o.log(&format!("{dest}{}  ({bytes} bytes, 5 arquivos)", std::path::MAIN_SEPARATOR));
+            o.log(&format!(
+                "{dest}{}  ({bytes} bytes, 5 arquivos)",
+                std::path::MAIN_SEPARATOR
+            ));
         }
         // outside a series the zip is the bundle; in one, it comes beside the
         // folder only with --zip (EMS-002 ORD-0009)
         if !series || zip {
-            let entries: Vec<(&str, &[u8])> = five.iter().map(|(n, t)| (n.as_str(), t.as_bytes())).collect();
+            let entries: Vec<(&str, &[u8])> = five
+                .iter()
+                .map(|(n, t)| (n.as_str(), t.as_bytes()))
+                .collect();
             let packed = glyph_bundle::zip_store(&entries, ms as i64);
             let dest = join(&dir, &format!("{id}.zip"));
             if let Err(e) = std::fs::write(&dest, &packed) {
@@ -355,13 +433,21 @@ fn cli(argv: Vec<String>) {
         }
         // a refusal does not stop the emission, but the author has to know
         if refused > 0 {
-            o.error(&format!("{refused} diagnostico(s) `fix` nesta Ordem. Rode --diag para ver."));
+            o.error(&format!(
+                "{refused} diagnostico(s) `fix` nesta Ordem. Rode --diag para ver."
+            ));
         }
         o.exit(0);
     }
 
     match mode {
-        "hgml" => match to_hgml(&input, &BurnOpts { parse: &opts, keep_text: false }) {
+        "hgml" => match to_hgml(
+            &input,
+            &BurnOpts {
+                parse: &opts,
+                keep_text: false,
+            },
+        ) {
             Ok(h) => o.log(&h),
             Err(t) => o.thrown("TypeError", t),
         },
@@ -370,7 +456,10 @@ fn cli(argv: Vec<String>) {
                 o.log(&back.src);
                 for d in &back.diag {
                     // the messages carry markup for the panel; the terminal wants them bare
-                    let msg = strip_tags(&d.msg).replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&");
+                    let msg = strip_tags(&d.msg)
+                        .replace("&lt;", "<")
+                        .replace("&gt;", ">")
+                        .replace("&amp;", "&");
                     o.error(&format!("[{}] {} — {msg}", d.sev, d.code));
                 }
             }
@@ -380,13 +469,17 @@ fn cli(argv: Vec<String>) {
             // --expand takes a command's name, not Glyph source
             let nm = input.replace(['[', ']', '\''], "").trim().to_uppercase();
             let Some(sp) = species_of(&nm, ctx) else {
-                o.error(&format!("{nm}: fora da tabela de composição (ou store não carregado)."));
+                o.error(&format!(
+                    "{nm}: fora da tabela de composição (ou store não carregado)."
+                ));
                 o.exit(2);
             };
             let depth = depth_of(&nm, ctx).map_or("undefined".to_string(), number);
             o.log(&format!("{nm}  [{sp}]  nível {depth}"));
             if sp == "composite" {
-                let formula = formula_of(&nm, ctx).and_then(|f| f.str()).unwrap_or("undefined");
+                let formula = formula_of(&nm, ctx)
+                    .and_then(|f| f.str())
+                    .unwrap_or("undefined");
                 o.log(&format!("  fórmula: {formula}"));
                 let at = atoms_of(&nm, ctx).unwrap_or_default();
                 o.log(&format!("  {} hieróglifos: {}", at.len(), at.join(" ")));

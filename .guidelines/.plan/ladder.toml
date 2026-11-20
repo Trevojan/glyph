@@ -188,14 +188,14 @@ tasks = [
 id = "M06"
 stage = "core"
 title = "Cargo workspace on the measured seams"
-status = "started"  # rust/ builds and crate-graph.js holds the seams; check:rust runs no fmt and no clippy
+status = "started"  # closes_when holds since 2026-11-17: check:rust runs fmt and clippy -D warnings on the pinned 1.97.0; done waits on M02 and M04
 depends = ["M02", "M04"]
 relies_on = ["P05"]
 closes_when = "rust/ builds; crate-graph.js refuses an arrow the JS core does not have; npm run check:rust runs fmt, clippy with warnings denied and the differential runner"
 tasks = [
   "rust/: 20 crates, one per JS core module plus the tools — done",
   "scripts/crate-graph.js --check in npm run check, observed failing — done",
-  "npm run check:rust: tests — done; fmt and clippy -D warnings",
+  "npm run check:rust: tests, fmt and clippy -D warnings, on the toolchain rust-toolchain.toml pins — done",
   "Vendoring (the Regente, 2026-09-24): every adopted crate passes the measured filter of INTAKE-RUST-LADDER §9 first, then enters by cargo vendor into rust/vendor/ with rust/.cargo/config.toml replacing crates-io; builds run --offline --locked",
   "crate-graph.js refuses an external crate that is not in rust/vendor/",
   "Differential runner: cargo test reads the oracle and compares bytes",

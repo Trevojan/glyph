@@ -4,7 +4,7 @@
 //! takes `-1`, `-2`, in document order. Headings inside a code fence and in the
 //! frontmatter are not headings.
 
-use crate::{frontmatter, Node};
+use crate::{Node, frontmatter};
 
 pub fn tree(text: &str) -> Vec<Node> {
     let body = frontmatter::span(text).map_or(0, |(_, end)| end);
@@ -25,7 +25,11 @@ pub fn tree(text: &str) -> Vec<Node> {
         if let Some(mark) = fence_mark(trimmed) {
             fence = match fence {
                 None => Some(mark),
-                Some((c, n)) if c == mark.0 && mark.1 >= n && trimmed[mark.1..].trim().is_empty() => None,
+                Some((c, n))
+                    if c == mark.0 && mark.1 >= n && trimmed[mark.1..].trim().is_empty() =>
+                {
+                    None
+                }
                 open => open,
             };
             continue;
@@ -41,14 +45,28 @@ pub fn tree(text: &str) -> Vec<Node> {
     let mut nodes = vec![Node::whole(text)];
     let mut seen: Vec<(String, usize)> = Vec::new();
     for (j, &(level, title, start)) in heads.iter().enumerate() {
-        let end = heads[j + 1..].iter().find(|h| h.0 <= level).map_or(text.len(), |h| h.2);
+        let end = heads[j + 1..]
+            .iter()
+            .find(|h| h.0 <= level)
+            .map_or(text.len(), |h| h.2);
         let base = slug(title);
         let n = match seen.iter_mut().find(|(s, _)| *s == base) {
-            Some((_, n)) => { *n += 1; *n }
-            None => { seen.push((base.clone(), 0)); 0 }
+            Some((_, n)) => {
+                *n += 1;
+                *n
+            }
+            None => {
+                seen.push((base.clone(), 0));
+                0
+            }
         };
         let selector = if n == 0 { base } else { format!("{base}-{n}") };
-        nodes.push(Node { selector, start, end, depth: level });
+        nodes.push(Node {
+            selector,
+            start,
+            end,
+            depth: level,
+        });
     }
     nodes
 }
@@ -73,7 +91,11 @@ fn heading(line: &str) -> Option<(usize, &str)> {
     }
     let title = rest.trim();
     let bare = title.trim_end_matches('#');
-    let title = if bare.len() < title.len() && (bare.is_empty() || bare.ends_with([' ', '\t'])) { bare.trim_end() } else { title };
+    let title = if bare.len() < title.len() && (bare.is_empty() || bare.ends_with([' ', '\t'])) {
+        bare.trim_end()
+    } else {
+        title
+    };
     Some((level, title))
 }
 
@@ -94,7 +116,11 @@ fn unlink(s: &str) -> String {
     let mut rest = s;
     while let Some(open) = rest.find('[') {
         let tail = &rest[open + 1..];
-        let link = tail.find("](").and_then(|close| tail[close + 2..].find(')').map(|end| (close, close + 2 + end)));
+        let link = tail.find("](").and_then(|close| {
+            tail[close + 2..]
+                .find(')')
+                .map(|end| (close, close + 2 + end))
+        });
         match link {
             Some((close, end)) => {
                 out.push_str(rest[..open].strip_suffix('!').unwrap_or(&rest[..open]));

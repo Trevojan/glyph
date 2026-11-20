@@ -5,12 +5,12 @@
 #[path = "../../../testkit/oracle.rs"]
 mod oracle;
 
+use glyph_json::Json;
 use glyph_parse::Opts;
 use glyph_stores::Context;
-use glyph_json::Json;
 use glyph_util::tree::Thrown;
 use glyph_xml::to_xml;
-use oracle::{cases, module, Must};
+use oracle::{Must, cases, module};
 use std::sync::Arc;
 
 fn value(j: &Json) -> Json {
@@ -32,15 +32,25 @@ fn context(run: &Json) -> Context {
         v => panic!("the repository's templates are not a map: {v:?}"),
     };
     if run.get("probeTemplates") == Some(&Json::Bool(true)) {
-        for (k, v) in module("trees").get("probeTemplates").and_then(Json::obj).expect("the probe templates") {
+        for (k, v) in module("trees")
+            .get("probeTemplates")
+            .and_then(Json::obj)
+            .expect("the probe templates")
+        {
             match map.iter_mut().find(|(x, _)| x == k) {
                 Some(slot) => slot.1 = value(v),
                 None => map.push((k.clone(), value(v))),
             }
         }
     }
-    let rules = if run.get("withRules") == Some(&Json::Bool(false)) { None } else { repo.rules.clone() };
-    let expansions = run.get("expansions").map_or(repo.expansions.clone(), |e| Some(Arc::new(value(e))));
+    let rules = if run.get("withRules") == Some(&Json::Bool(false)) {
+        None
+    } else {
+        repo.rules.clone()
+    };
+    let expansions = run
+        .get("expansions")
+        .map_or(repo.expansions.clone(), |e| Some(Arc::new(value(e))));
     // a case's own templates, whole (O5, EMS-002 ORD-0011)
     if let Some(own) = run.get("templates") {
         return Context::shared(Some(Arc::new(own.clone())), rules, expansions);
@@ -53,7 +63,8 @@ fn the_xml_of_every_case_equals_the_oracle() {
     let repo = Context::repository();
     for case in cases() {
         let ctx = repo.with(case.get("stores").unwrap_or(&Json::Null));
-        let got = to_xml(case.s("src"), &Opts::new(&ctx), false).unwrap_or_else(|e| panic!("{}: {e:?}", case.s("id")));
+        let got = to_xml(case.s("src"), &Opts::new(&ctx), false)
+            .unwrap_or_else(|e| panic!("{}: {e:?}", case.s("id")));
         assert_eq!(got, case.s("xml"), "{}: the XML", case.s("id"));
     }
     println!("{} cases", cases().len());
@@ -62,38 +73,67 @@ fn the_xml_of_every_case_equals_the_oracle() {
 #[test]
 fn every_xml_run_equals_the_js() {
     let runs = module("xml").a("runs");
-    assert!(runs.len() > 114, "xml.json holds {} runs — write it again: {}", runs.len(), oracle::WRITE_IT);
+    assert!(
+        runs.len() > 114,
+        "xml.json holds {} runs — write it again: {}",
+        runs.len(),
+        oracle::WRITE_IT
+    );
     let (mut bytes, mut thrown, mut moods) = (0, 0, 0);
     for run in runs {
         let (id, src) = (run.s("id"), run.s("src"));
         let ctx = context(run);
         let o = glyph_parse::Opts {
-            ctx: &ctx, session: run.get("session") != Some(&Json::Bool(false)),
-            valency: run.get("valency") != Some(&Json::Bool(false)), en: false, expanding: Vec::new(), registered: glyph_stores::Registered::none(),
-            inherited: &[]
+            ctx: &ctx,
+            session: run.get("session") != Some(&Json::Bool(false)),
+            valency: run.get("valency") != Some(&Json::Bool(false)),
+            en: false,
+            expanding: Vec::new(),
+            registered: glyph_stores::Registered::none(),
+            inherited: &[],
         };
         for (k, describe) in [("xml", false), ("describe", true)] {
             let got = to_xml(src, &o, describe);
             match run.get(k).unwrap_or_else(|| panic!("{id}: no {k}")) {
                 Json::Str(want) => {
-                    assert_eq!(got.as_deref().map_err(|e| e.clone()), Ok(want.as_str()), "{id} {k}");
+                    assert_eq!(
+                        got.as_deref().map_err(|e| e.clone()),
+                        Ok(want.as_str()),
+                        "{id} {k}"
+                    );
                     bytes += want.len();
                 }
                 want => match oracle::known::template_mood(src, "xml", k) {
                     /* the JS throws, and the Rust answers the document (2026-10-25) */
                     Some(decided) => {
-                        assert_eq!(want.s("thrown"), oracle::known::template_mood_js(), "{id} {k}: the JS throws something else");
-                        assert_eq!(got.map_err(|e| e.clone()), Ok(decided.str().expect("the XML").to_string()), "{id} {k}");
+                        assert_eq!(
+                            want.s("thrown"),
+                            oracle::known::template_mood_js(),
+                            "{id} {k}: the JS throws something else"
+                        );
+                        assert_eq!(
+                            got.map_err(|e| e.clone()),
+                            Ok(decided.str().expect("the XML").to_string()),
+                            "{id} {k}"
+                        );
                         moods += 1;
                     }
                     None => {
-                        assert_eq!(got.err(), Some(Thrown(want.s("thrown").to_string())), "{id} {k}: what toXML throws");
+                        assert_eq!(
+                            got.err(),
+                            Some(Thrown(want.s("thrown").to_string())),
+                            "{id} {k}: what toXML throws"
+                        );
                         thrown += 1;
                     }
                 },
             }
         }
     }
-    assert_eq!(moods, 2 * oracle::known::template_mood_sources(), "a source named for the template mood is not in xml.json");
+    assert_eq!(
+        moods,
+        2 * oracle::known::template_mood_sources(),
+        "a source named for the template mood is not in xml.json"
+    );
     println!("{} runs, {bytes} bytes of XML, {thrown} throws", runs.len());
 }

@@ -340,3 +340,42 @@ existed and will never do, as `>` needs to press `SHIFT+.` to be typed"*
 retirement, and there is nothing here to retire: `[a]->[b]` parses as two root
 commands, which is what two root commands look like. No recogniser is built and
 no diagnostic is added.
+
+## 11. The item scheme, the measured proposal
+
+The proposal for step 5 of the trail to the final Explorer
+([`.plan`](../.plan/README.md) §5), on the scheme of §9.1. Measured at `5685486` over the
+119 declared sources, through the AST the oracle exports:
+
+| `origin` of a command | count | sources |
+|---|---|---|
+| `root` | 163 | 103 |
+| `item` — an operand after a comma, which the XML already marks `join="item"` | 12 | 7 |
+| `nest` · `extend` · none | 695 · 7 · 4 | — |
+| in the XML today | none: what the E-06 measured, and its source enters `conformance/` with this Order | — |
+
+**I1. Which roots carry `root-x`.**
+- a. only a root that has items — *"the root of a series of items"*, the decision's
+  words: the `xml` hash of 7 sources moves
+- b. every root command: 103 sources move
+
+**I2. What `x` is.**
+- a. the root's own name where it has one — a section's, a block's, a part's, the
+  `binds` of a command — and its element name otherwise: `root-section`, then
+  `section-item-01`
+- b. the element name, always
+
+**I3. Where it is written.**
+- a. an attribute `origin`, on the root and on each item, and `join="item"` stays
+- b. the same, and `origin` replaces `join="item"`, which `fromXML` then reads from
+  both, for the documents emitted before
+
+**I4. The number past 99.**
+- a. two digits, three past 99, as the `dd` of the version grows
+- b. as many digits as the count needs, unpadded
+
+**The session's recommendation:** I1 a, I2 a, I3 a, I4 a.
+- **I1 a** is the decision's own reading, and the cheapest by far.
+- **I2 a** names a subject the way the reader names it.
+- **I3 a** removes nothing an older reader relies on.
+- **I4 a** follows a rule the project already keeps.

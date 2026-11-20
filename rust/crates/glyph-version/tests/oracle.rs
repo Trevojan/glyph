@@ -12,5 +12,9 @@ fn version_is_the_engine_the_oracle_names() {
     for case in cases {
         assert_eq!(glyph_version::VERSION, case.s("engine"), "{}", case.s("id"));
     }
-    assert_eq!(glyph_version::VERSION, oracle::module("util").s("engine"), "oracle-modules/util.json");
+    assert_eq!(
+        glyph_version::VERSION,
+        oracle::module("util").s("engine"),
+        "oracle-modules/util.json"
+    );
 }
