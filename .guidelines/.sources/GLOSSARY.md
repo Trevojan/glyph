@@ -1,4 +1,4 @@
-# Glyphs and Hieroglyphs — normative glossary (v4.7.10.08)
+# Glyphs and Hieroglyphs — normative glossary (v4.7.10.09)
 
 The normative reference for the Glyph vocabulary. Organised by **species**
 rather than by theme, because species is what decides whether `.hgml` may treat

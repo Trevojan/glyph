@@ -37,6 +37,27 @@ All notable changes to Glyph are documented here, most recent first.
 
 ---
 
+## [4.7.10.09] — a hole keeps its name through the burn
+
+`minor` moves, by the Regent's answer of 2026-11-20: the Order works out its own
+move, and nothing a reader of the XML or the envelope sees changes form. No digit
+resets any other.
+
+### What moved in the emitted documents
+
+- **`engine=`** reads `4.7.10.09`: every XML the engine emits, the five
+  conformance examples and goldens, and the `xml` hash of every declared source
+  move by that attribute.
+- **EMS-002 ORD-0035** (issue #12) — a hole's name burnt as a command:
+  `` [ph-x`q`] `` burnt to `[ph` with `[x[/x]` on its own line, and the reread read
+  `x` as an unknown command, so the burn of an Order Matrix never re-read
+  clean. The name now rides the head line, `[ph-x`, in both engines. The engine
+  writes a hole's name lowercase everywhere it writes it (the burn, the XML
+  `slot`, the `PlaceholderPending` message and the template binding) and reads
+  it in any case. Three `hgml` hashes move, `T-03`, `T-04` and `OC-10`. `H-15`
+  pins the hole, and `H-16` counts every declared burn that re-reads with no
+  `fix` its source lacks: 114 of 116, with `OC-12` and `R-04` named as known.
+
 ## [4.7.10.08] — a known command never vanishes, and the colon retires
 
 The batch of Orders that move the emitted output closes, and the number moves

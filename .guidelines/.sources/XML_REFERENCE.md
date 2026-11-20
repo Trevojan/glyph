@@ -26,7 +26,7 @@ was reconciled from (see §9).
 ## 1. Document shape
 
 ```xml
-<glyph-package engine="4.7.10.08">
+<glyph-package engine="4.7.10.09">
   <schema/>
   <block once="true">
     <!-- one segment -->
@@ -475,7 +475,7 @@ the deliverable and need `fromXML()` updated in step, so both are open in
 ```
 
 ```xml
-<glyph-package engine="4.7.10.08">
+<glyph-package engine="4.7.10.09">
   <schema/>
   <block once="true">
     <block name="review" binds="review">
@@ -563,7 +563,7 @@ of this section states the intent, and the AST projection names the fields
 | `UnknownEmotion` | a mood code outside the table — `/eth/xyz/` | the code is **discarded**; the valid ones stand | use a code from §6 |
 | `XmlChainHasChildren` | a `<chain>` member with children of its own | children re-attached to the parent | remove them, or take the element out of the `<chain>` |
 | `XmlChainStartsWithItem` | a `<chain>` member still carrying a `chain` attribute | reported, never overwritten | remove the attribute: inside a `<chain>` the position already says the operator |
-| `XmlLegacyRoot` | `<glyph>` as the root, the shape through 2.4.4 | nothing is read | re-emit the document with 4.7.10.08 |
+| `XmlLegacyRoot` | `<glyph>` as the root, the shape through 2.4.4 | nothing is read | re-emit the document with 4.7.10.09 |
 
 Two of the five are reached only through `fromXML`, because the XML panel is
 editable and the reader is handed input this emitter never wrote.
