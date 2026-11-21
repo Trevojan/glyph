@@ -57,6 +57,7 @@ pub const PAGE: &[(&str, &[u8])] = page!(
     "glyph-engine.css",
     ".scope/asset/favicon.ico",
     "scripts/glyph-data.js",
+    "scripts/glyph-icons.js",
     "scripts/glyph-moulds.js",
     "scripts/glyph-parser.js",
     "scripts/glyph-transport.js",

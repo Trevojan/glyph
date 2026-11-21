@@ -1,7 +1,7 @@
 {
   "note": "written by glyph-vpath build, EMS-002; never edited by hand",
   "depth": 2,
-  "next": 3623,
+  "next": 3630,
   "files": {
     ".guidelines/.changelog/README.md": {
       "nodes": [
@@ -4417,6 +4417,16 @@
         ["n1272", "separating-interface-data-from-engine-data", 3579, 3958, 78, 7, "89d2600049258980", "cf10fe709ef25c00", "n1269"]
       ]
     },
+    ".guidelines/.sources/ICONS.md": {
+      "nodes": [
+        ["n3623", "", 0, 4914, 1, 164, "ed1e29e220de8780", "", ""],
+        ["n3624", "the-icons--the-table-generated", 0, 4914, 1, 164, "ed1e29e220de8780", "2d511c6a5f305f00", "n3623"],
+        ["n3625", "by-category", 427, 792, 9, 18, "392087de3e30f600", "34a4e6b0678ad400", "n3624"],
+        ["n3626", "the-commands-with-an-icon", 792, 2416, 27, 44, "0bbb4c58e0bfd800", "4fb675683bff6880", "n3624"],
+        ["n3627", "the-commands-with-no-icon", 2416, 4600, 71, 88, "6de9355c93177400", "afdcca500404d280", "n3624"],
+        ["n3628", "the-icons-no-command-names", 4600, 4914, 159, 6, "1e484648e4d70f00", "a7645dae26df0a00", "n3624"]
+      ]
+    },
     ".guidelines/.sources/OPERATOR_TARGET.md": {
       "nodes": [
         ["n1273", "", 0, 34662, 1, 677, "7f6f1a98c230dc40", "", ""],
@@ -4526,17 +4536,18 @@
     },
     ".guidelines/.sources/README.md": {
       "nodes": [
-        ["n1171", "", 0, 4831, 1, 65, "5e5c39083a399400", "", ""],
-        ["n3243", "fontes--os-fatos-a-linguagem-e-o-que-veio-de-fora-e-decidiu", 0, 4831, 1, 65, "5e5c39083a399400", "f5536d2ea0446e00", "n1171"],
+        ["n1171", "", 0, 5162, 1, 72, "7fcbeb7ec1ca92f0", "", ""],
+        ["n3243", "fontes--os-fatos-a-linguagem-e-o-que-veio-de-fora-e-decidiu", 0, 5162, 1, 72, "7fcbeb7ec1ca92f0", "67b026309cc96f00", "n1171"],
         ["n3244", "a-linguagem", 68, 819, 3, 14, "5b6fe45a7cba0710", "0fe9725e64fe9500", "n3243"],
-        ["n3527", "o-registro-de-estudos", 819, 1032, 17, 6, "f4a14750690dd000", "4ecb67b2b56bd700", "n3243"],
-        ["n3245", "o-que-veio-de-fora", 1032, 2512, 23, 17, "a1d150b8a614ee00", "8aed5ed4809d2200", "n3243"],
-        ["n1173", "documentos", 1334, 2512, 31, 9, "46848a9012ea7680", "9c2299e66c28ce00", "n3245"],
-        ["n1174", "referências-externas-por-assunto", 2512, 4510, 40, 20, "c7097ae8d0d35600", "87ecde708bfc0700", "n3243"],
-        ["n1175", "mensagem-de-erro--o-que-funciona", 2551, 3355, 42, 6, "ac34cb8022b8be00", "3aa7f5082c209d80", "n1174"],
-        ["n1176", "erros-reais-medidos", 3355, 3690, 48, 4, "74244be65c0e2600", "9802a0ea25f9b500", "n1174"],
-        ["n1177", "sugestão-did-you-mean--armadilhas-já-pagas", 3690, 4510, 52, 8, "33de117ced6b3800", "b3070348582fda00", "n1174"],
-        ["n1178", "a-fonte-primária-e-ela-é-interna", 4510, 4831, 60, 6, "5f6a41325d30a300", "70774afa3f0e9b80", "n3243"]
+        ["n3629", "os-ícones", 819, 1150, 17, 7, "0b033d66d91fa000", "0f46483eee32c800", "n3243"],
+        ["n3527", "o-registro-de-estudos", 1150, 1363, 24, 6, "f4a14750690dd000", "4ecb67b2b56bd700", "n3243"],
+        ["n3245", "o-que-veio-de-fora", 1363, 2843, 30, 17, "a1d150b8a614ee00", "8aed5ed4809d2200", "n3243"],
+        ["n1173", "documentos", 1665, 2843, 38, 9, "46848a9012ea7680", "9c2299e66c28ce00", "n3245"],
+        ["n1174", "referências-externas-por-assunto", 2843, 4841, 47, 20, "c7097ae8d0d35600", "87ecde708bfc0700", "n3243"],
+        ["n1175", "mensagem-de-erro--o-que-funciona", 2882, 3686, 49, 6, "ac34cb8022b8be00", "3aa7f5082c209d80", "n1174"],
+        ["n1176", "erros-reais-medidos", 3686, 4021, 55, 4, "74244be65c0e2600", "9802a0ea25f9b500", "n1174"],
+        ["n1177", "sugestão-did-you-mean--armadilhas-já-pagas", 4021, 4841, 59, 8, "33de117ced6b3800", "b3070348582fda00", "n1174"],
+        ["n1178", "a-fonte-primária-e-ela-é-interna", 4841, 5162, 67, 6, "5f6a41325d30a300", "70774afa3f0e9b80", "n3243"]
       ]
     },
     ".guidelines/.sources/README.md.template": {
@@ -5073,14 +5084,14 @@
     },
     "CLAUDE.md": {
       "nodes": [
-        ["n1767", "", 0, 3980, 1, 79, "a62979d0a244d200", "", ""],
-        ["n1768", "glyph", 0, 3980, 1, 79, "a62979d0a244d200", "a405ee6456197000", "n1767"],
+        ["n1767", "", 0, 4000, 1, 79, "84efde0868387000", "", ""],
+        ["n1768", "glyph", 0, 4000, 1, 79, "84efde0868387000", "d76073b0fe145d80", "n1767"],
         ["n1769", "comece-por-aqui--sempre", 172, 1163, 6, 17, "307455383d76f200", "6171e8cea350a000", "n1768"],
         ["n1770", "escrever-glyph", 1163, 1486, 23, 7, "d4617a26b07f7600", "3f27155ce9d54400", "n1768"],
         ["n3143", "entregar-o-plugin", 1486, 2063, 30, 10, "2b8a5a6053339e00", "028ad63a189c7400", "n1768"],
-        ["n1771", "verificar", 2063, 3228, 40, 24, "ea932be0ac7f4680", "2f5960c483cf1a40", "n1768"],
-        ["n1772", "duas-restrições-que-pegam-todo-agente-novo", 3228, 3794, 64, 12, "002419a0c833ea00", "dac8c3285a749000", "n1768"],
-        ["n1773", "vocabulário", 3794, 3980, 76, 4, "3107f3b093ecf800", "377122b0975dd000", "n1768"]
+        ["n1771", "verificar", 2063, 3248, 40, 24, "aba5dc76f3159fa0", "7391bdce57723800", "n1768"],
+        ["n1772", "duas-restrições-que-pegam-todo-agente-novo", 3248, 3814, 64, 12, "002419a0c833ea00", "dac8c3285a749000", "n1768"],
+        ["n1773", "vocabulário", 3814, 4000, 76, 4, "3107f3b093ecf800", "377122b0975dd000", "n1768"]
       ]
     },
     "README.md": {

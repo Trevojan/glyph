@@ -73,7 +73,8 @@ const TOOLS = {
   "glyph-cli":    { oracle: "scripts/glyph-cli.js",
                     tools: ["glyph-schema", "glyph-diff", "glyph-trace", "glyph-bundle", "glyph-protocol"] },
   "glyph-lsp":    { oracle: "— (new capability; M12–M15)", tools: ["glyph-trace"] },
-  "glyph-vpath":  { oracle: "— (new capability; .plan §0, EMS-002 ORD-0001)", tools: [] }
+  "glyph-vpath":  { oracle: "— (new capability; .plan §0, EMS-002 ORD-0001)", tools: [] },
+  "glyph-icons":  { oracle: "— (new capability; the icon set, EMS-003 ORD-0002)", tools: [] }
 };
 
 const errors = [];

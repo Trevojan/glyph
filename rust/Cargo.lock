@@ -55,6 +55,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "glyph-icons"
+version = "0.0.0"
+dependencies = [
+ "glyph-json",
+ "glyph-vocab",
+]
+
+[[package]]
 name = "glyph-inverse"
 version = "0.0.0"
 dependencies = [

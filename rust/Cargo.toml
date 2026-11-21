@@ -27,6 +27,7 @@ members = [
     "crates/glyph-cli",
     "crates/glyph-lsp",
     "crates/glyph-vpath",
+    "crates/glyph-icons",
 ]
 
 [workspace.package]

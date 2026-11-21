@@ -45,8 +45,8 @@ npm run check:rust
 ```
 
 O primeiro roda os dois `--check` de geração, `check-globals`, o DAG, os grafos
-de costura, de crates e de links, a escada, o índice dos caminhos virtuais, a
-suíte e o teste da extensão VS Code ([`vscode-extension/`](vscode-extension/README.md));
+de costura, de crates e de links, a escada, o índice dos caminhos virtuais, os
+ícones gerados, a suíte e o teste da extensão VS Code ([`vscode-extension/`](vscode-extension/README.md));
 o segundo mede e gradua cada crate externa, confere o formato e o `clippy` com
 avisos negados, escreve o oráculo no commit sob teste e roda `cargo test` em
 `rust/`. Os dois pedem `cargo`, no Rust que o `rust-toolchain.toml` fixa. **Um passo por commit, verde em cada um.**

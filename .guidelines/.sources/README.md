@@ -14,6 +14,13 @@ as treze normas e medições — `GLOSSARY.md`, `XML_REFERENCE.md`,
 `glyph-grammar.ebnf`. Qual responde qual pergunta está no
 [índice](../.shortcuts/README.md), que aponta para cada um.
 
+## Os ícones
+
+[`ICONS.md`](ICONS.md): a tabela dos ícones — cada comando, o ícone dele ou o ladrilho
+reserva, e os ícones que nenhum comando nomeia —, gerada pelo `glyph-icons` do conjunto
+que o Regente entregou em `.scope/asset/glyph-icons/`, e nunca editada à mão
+([`EMS-003/ORD-0002`](../.orders/EMS-003/README.md)).
+
 ## O registro de estudos
 
 [`STUDY.md`](STUDY.md): uma linha por pergunta que vale medir antes de desenhar — a

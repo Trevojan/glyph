@@ -31,6 +31,19 @@ import { zipStore } from "./glyph-zip.js";
       SESSION = Core.SESSION, FRAMES = Core.FRAMES, EDITORIAL_ONLY = Core.EDITORIAL_ONLY,
       PTBR = Core.PTBR, CAT_OF = Core.CAT_OF, LOGIC_OPS = Core.LOGIC_OPS, PUNCT = Core.PUNCT;
 
+  /* os ícones (EMS-003 ORD-0002): o sprite e a tabela que o glyph-icons gera
+     do conjunto entregue, postos na página uma vez. Cada comando ganha um
+     ladrilho, o ícone dele ou o reserva; as cores vêm dos tokens --gi-* do
+     glyph-engine.css, nunca do arquivo. Ausentes, a página segue sem eles. */
+  var Icons = (typeof GlyphIcons !== "undefined") ? GlyphIcons : null;
+  if (Icons && !document.getElementById("gi-sprite")) document.body.insertAdjacentHTML("afterbegin", Icons.sprite);
+  function tile(cmd) {
+    if (!Icons) return "";
+    var stem = Icons.icons[cmd];
+    return '<svg class="gi' + (stem ? "" : " gi-none") + '" viewBox="0 0 ' + Icons.tile.join(" ") +
+      '" aria-hidden="true" focusable="false"><use href="#gi-' + (stem || "fallback") + '"/></svg>';
+  }
+
   /* stores de dados (glyph-data.js, gerado dos .json por build-templates.js).
      Ausentes, o motor roda igual — só sem expandir template nem apontar
      contradição. */
@@ -360,7 +373,7 @@ import { zipStore } from "./glyph-zip.js";
         rows.map(function (it) {
           var al = ALIAS_OF[it[0]] ? " · " + ALIAS_OF[it[0]].map(function (a) { return "[" + a.toLowerCase(); }).join(" ") : "";
           return '<tr><td class="c"><button type="button" data-ins="[' + it[0].toLowerCase() +
-            '">[' + esc(it[0].toLowerCase()) + '</button></td><td class="m">' +
+            '">' + tile(it[0]) + '[' + esc(it[0].toLowerCase()) + '</button></td><td class="m">' +
             esc(cmdGloss(it[0]) || it[1]) + '<span style="color:var(--muted);opacity:.7">' + esc(al) + "</span></td></tr>";
         }).join("") + "</tbody></table>");
     });
