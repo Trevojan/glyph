@@ -1,10 +1,10 @@
 {
   "type": "GlyphAST",
-  "schema": 2,
+  "schema": 3,
   "version": "4.7.10.09",
   "source": {
-    "length": 2319,
-    "checksum": "36bfe43e4e01a600",
+    "length": 2592,
+    "checksum": "2dfc94e0c62c7600",
     "encoding": "utf-8",
     "newline": "lf",
     "uri": null
@@ -43,6 +43,7 @@
           "emotions": [],
           "species": "atom",
           "compositionDepth": 0,
+          "binds": "ORD-0006-explorer",
           "at": {
             "s": 0,
             "e": 6
@@ -54,6 +55,7 @@
               "form": "quote",
               "slot": null,
               "role": "operand",
+              "ref": null,
               "at": {
                 "s": 6,
                 "e": 25
@@ -78,6 +80,7 @@
               "emotions": [],
               "species": "atom",
               "compositionDepth": 0,
+              "binds": null,
               "at": {
                 "s": 28,
                 "e": 32
@@ -89,6 +92,7 @@
                   "form": "quote",
                   "slot": null,
                   "role": "operand",
+                  "ref": null,
                   "at": {
                     "s": 32,
                     "e": 53
@@ -100,6 +104,7 @@
                   "form": "quote",
                   "slot": null,
                   "role": "operand",
+                  "ref": null,
                   "at": {
                     "s": 54,
                     "e": 96
@@ -126,6 +131,7 @@
               "emotions": [],
               "species": "atom",
               "compositionDepth": 0,
+              "binds": null,
               "at": {
                 "s": 100,
                 "e": 104
@@ -137,6 +143,7 @@
                   "form": "quote",
                   "slot": null,
                   "role": "operand",
+                  "ref": null,
                   "at": {
                     "s": 104,
                     "e": 122
@@ -148,6 +155,7 @@
                   "form": "quote",
                   "slot": null,
                   "role": "operand",
+                  "ref": null,
                   "at": {
                     "s": 123,
                     "e": 173
@@ -174,6 +182,7 @@
               "emotions": [],
               "species": "atom",
               "compositionDepth": 0,
+              "binds": null,
               "at": {
                 "s": 177,
                 "e": 181
@@ -185,6 +194,7 @@
                   "form": "quote",
                   "slot": null,
                   "role": "operand",
+                  "ref": null,
                   "at": {
                     "s": 181,
                     "e": 214
@@ -196,6 +206,7 @@
                   "form": "quote",
                   "slot": null,
                   "role": "operand",
+                  "ref": null,
                   "at": {
                     "s": 215,
                     "e": 274
@@ -222,6 +233,7 @@
               "emotions": [],
               "species": "atom",
               "compositionDepth": 0,
+              "binds": null,
               "at": {
                 "s": 278,
                 "e": 282
@@ -233,6 +245,7 @@
                   "form": "quote",
                   "slot": null,
                   "role": "operand",
+                  "ref": null,
                   "at": {
                     "s": 282,
                     "e": 482
@@ -259,6 +272,7 @@
               "emotions": [],
               "species": "atom",
               "compositionDepth": 0,
+              "binds": null,
               "at": {
                 "s": 486,
                 "e": 490
@@ -270,6 +284,7 @@
                   "form": "quote",
                   "slot": null,
                   "role": "operand",
+                  "ref": null,
                   "at": {
                     "s": 490,
                     "e": 651
@@ -296,6 +311,7 @@
               "emotions": [],
               "species": "atom",
               "compositionDepth": 0,
+              "binds": null,
               "at": {
                 "s": 655,
                 "e": 659
@@ -307,6 +323,7 @@
                   "form": "quote",
                   "slot": null,
                   "role": "operand",
+                  "ref": null,
                   "at": {
                     "s": 659,
                     "e": 770
@@ -333,6 +350,7 @@
               "emotions": [],
               "species": "atom",
               "compositionDepth": 0,
+              "binds": null,
               "at": {
                 "s": 774,
                 "e": 778
@@ -344,6 +362,7 @@
                   "form": "quote",
                   "slot": null,
                   "role": "operand",
+                  "ref": null,
                   "at": {
                     "s": 778,
                     "e": 962
@@ -370,6 +389,7 @@
               "emotions": [],
               "species": "atom",
               "compositionDepth": 0,
+              "binds": null,
               "at": {
                 "s": 966,
                 "e": 970
@@ -381,9 +401,88 @@
                   "form": "quote",
                   "slot": null,
                   "role": "operand",
+                  "ref": null,
                   "at": {
                     "s": 970,
                     "e": 1194
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 1198,
+                "e": 1202
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "carry the front-matter of a loose Order, with its positions, into what --bundle emits",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1202,
+                    "e": 1289
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 1293,
+                "e": 1297
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the Regent, 2026-11-21: the front-matter of a loose Order enters what --bundle emits",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1297,
+                    "e": 1383
                   }
                 }
               ]
@@ -407,20 +506,22 @@
               "emotions": [],
               "species": "atom",
               "compositionDepth": 0,
+              "binds": null,
               "at": {
-                "s": 1198,
-                "e": 1203
+                "s": 1387,
+                "e": 1392
               },
               "body": [
                 {
                   "type": "Literal",
-                  "value": "the shape of the positions field of EMS.json and of the front-matter of a loose Order, and whether that front-matter enters what --bundle emits, measured before either is written",
+                  "value": "the shape of the positions field of EMS.json and of the front-matter of a loose Order, measured before either is written",
                   "form": "quote",
                   "slot": null,
                   "role": "operand",
+                  "ref": null,
                   "at": {
-                    "s": 1203,
-                    "e": 1383
+                    "s": 1392,
+                    "e": 1514
                   }
                 },
                 {
@@ -442,9 +543,10 @@
                   "emotions": [],
                   "species": "atom",
                   "compositionDepth": 0,
+                  "binds": null,
                   "at": {
-                    "s": 1383,
-                    "e": 1387
+                    "s": 1514,
+                    "e": 1518
                   },
                   "body": []
                 }
@@ -469,9 +571,10 @@
               "emotions": [],
               "species": "atom",
               "compositionDepth": 0,
+              "binds": null,
               "at": {
-                "s": 1392,
-                "e": 1399
+                "s": 1523,
+                "e": 1530
               },
               "body": [
                 {
@@ -480,9 +583,10 @@
                   "form": "quote",
                   "slot": null,
                   "role": "operand",
+                  "ref": null,
                   "at": {
-                    "s": 1399,
-                    "e": 1516
+                    "s": 1530,
+                    "e": 1647
                   }
                 }
               ]
@@ -506,9 +610,10 @@
               "emotions": [],
               "species": "atom",
               "compositionDepth": 0,
+              "binds": null,
               "at": {
-                "s": 1520,
-                "e": 1525
+                "s": 1651,
+                "e": 1656
               },
               "body": [
                 {
@@ -517,9 +622,10 @@
                   "form": "quote",
                   "slot": null,
                   "role": "operand",
+                  "ref": null,
                   "at": {
-                    "s": 1525,
-                    "e": 1666
+                    "s": 1656,
+                    "e": 1797
                   }
                 }
               ]
@@ -543,9 +649,10 @@
               "emotions": [],
               "species": "atom",
               "compositionDepth": 0,
+              "binds": null,
               "at": {
-                "s": 1670,
-                "e": 1675
+                "s": 1801,
+                "e": 1806
               },
               "body": [
                 {
@@ -554,9 +661,10 @@
                   "form": "quote",
                   "slot": null,
                   "role": "operand",
+                  "ref": null,
                   "at": {
-                    "s": 1675,
-                    "e": 1754
+                    "s": 1806,
+                    "e": 1885
                   }
                 }
               ]
@@ -580,9 +688,10 @@
               "emotions": [],
               "species": "composite",
               "compositionDepth": 5,
+              "binds": null,
               "at": {
-                "s": 1758,
-                "e": 1762
+                "s": 1889,
+                "e": 1893
               },
               "body": [
                 {
@@ -591,9 +700,10 @@
                   "form": "quote",
                   "slot": null,
                   "role": "operand",
+                  "ref": null,
                   "at": {
-                    "s": 1762,
-                    "e": 1775
+                    "s": 1893,
+                    "e": 1906
                   }
                 },
                 {
@@ -602,9 +712,10 @@
                   "form": "quote",
                   "slot": null,
                   "role": "operand",
+                  "ref": null,
                   "at": {
-                    "s": 1776,
-                    "e": 1953
+                    "s": 1907,
+                    "e": 2084
                   }
                 }
               ]
@@ -628,9 +739,10 @@
               "emotions": [],
               "species": "composite",
               "compositionDepth": 5,
+              "binds": null,
               "at": {
-                "s": 1957,
-                "e": 1961
+                "s": 2088,
+                "e": 2092
               },
               "body": [
                 {
@@ -639,9 +751,10 @@
                   "form": "quote",
                   "slot": null,
                   "role": "operand",
+                  "ref": null,
                   "at": {
-                    "s": 1961,
-                    "e": 1973
+                    "s": 2092,
+                    "e": 2104
                   }
                 },
                 {
@@ -650,9 +763,10 @@
                   "form": "quote",
                   "slot": null,
                   "role": "operand",
+                  "ref": null,
                   "at": {
-                    "s": 1974,
-                    "e": 2085
+                    "s": 2105,
+                    "e": 2216
                   }
                 }
               ]
@@ -676,9 +790,61 @@
               "emotions": [],
               "species": "composite",
               "compositionDepth": 5,
+              "binds": null,
               "at": {
-                "s": 2089,
-                "e": 2093
+                "s": 2220,
+                "e": 2224
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the bundle",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 2224,
+                    "e": 2236
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": "the bundle of a loose Order carries its front-matter, and the plane read from that bundle shows the positions it stored",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 2237,
+                    "e": 2358
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "val",
+              "canonical": "VAL",
+              "tier": "instr",
+              "gloss": "Validate",
+              "element": "validate",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "composite",
+              "compositionDepth": 5,
+              "binds": null,
+              "at": {
+                "s": 2362,
+                "e": 2366
               },
               "body": [
                 {
@@ -687,9 +853,10 @@
                   "form": "quote",
                   "slot": null,
                   "role": "operand",
+                  "ref": null,
                   "at": {
-                    "s": 2093,
-                    "e": 2108
+                    "s": 2366,
+                    "e": 2381
                   }
                 },
                 {
@@ -698,9 +865,10 @@
                   "form": "quote",
                   "slot": null,
                   "role": "operand",
+                  "ref": null,
                   "at": {
-                    "s": 2109,
-                    "e": 2314
+                    "s": 2382,
+                    "e": 2587
                   }
                 }
               ]

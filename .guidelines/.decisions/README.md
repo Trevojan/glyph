@@ -15,11 +15,10 @@
 
 ## 2026-11-21
 
-The Regent's answers, written on the sheet
-[`PERGUNTAS-2026-11-20.md`](../.plan/PERGUNTAS-2026-11-20.md), to 47 of its 54
-questions. E6 and E7 of [`INTAKE-EMS-JSON.md`](../.orders/INTAKE-EMS-JSON.md) and C1 to
-C5 of [`INTAKE-ORDER-COHERENCE.md`](../.orders/INTAKE-ORDER-COHERENCE.md) are still
-blank. Each intake holds its answers in a section of its own. In force.
+The Regent's answers to the 54 questions of the sheet
+[`PERGUNTAS-2026-11-20.md`](../.plan/PERGUNTAS-2026-11-20.md), returned in two parts on
+the same day, and to the questions the session asked while building `EMS-003`. Each
+intake holds its answers in a section of its own. In force.
 
 | decision | reason |
 |---|---|
@@ -39,6 +38,14 @@ blank. Each intake holds its answers in a section of its own. In force.
 | **The skill calls an installed `glyph`, and refuses by name where none is installed; the install grows to Linux and macOS, and the installer checks for the plugin and asks to install it** (J4 b) | *"b. the installer must check and ask for installation of the plugin."* |
 | **The burn fences: the raw fence carries its body verbatim, every logic block burns as the open fence carrying its rules, the Rust only, and the pin is the empty `KNOWN` with an `H` case** (F1 a, F2 a, F3 b, F4 a) | *"a."*, *"a."*, *"b."*, *"a."* Against the session's F3 a: the JS burn keeps the defect until it leaves, and the oracle names the nine `hgml` differences |
 | **The diagnostic spans: T and N first, R, P, L and D in an Order of their own; a pair takes the second node's span, a template body the invocation's, the document a span of its own; both engines, walking towards Rust only** (D1 b, D2 a, D3 a, D4 a, D5 a) | *"b."*, *"a."*, *"a."*, *"a."*, *"a. treat it to walk towards Rust-only in the following versions."* |
+| **A user's `EMS.json` is checked against a hand-written `ems-schema.json` beside `ast-schema.json`; the `xsd` field is written in the notation of the Order's declaration** (E6 a, E7 a) | *"a."* to each, the session's recommendation |
+| **The coherence check holds only the Orders bundled after the Order that builds it, and reads the 54 closed ones as emitted; an Order writes its claim anywhere in its source, read from the AST; `.orders/NEM/` is made by the first loose Order emitted into it** (C1 a, C2 a, C4 a) | *"a."* to each, the session's recommendation |
+| **The `repair` queue is one file per series, beside its `EMS.json`** (C3 b) | *"b."*, against the session's a (one file for the repository): the queue lives with the configuration that `repair` relies on, as the Regent's word of 2026-10-15 puts the paths there |
+| **The Rust alone extracts `relates[]` and runs the coherence check** (C5 b) | *"b."*, against the session's a: the walk towards Rust only of D5. The JS neither extracts nor checks, and the oracle holds nothing of it |
+| **Under F3 b, `H-16`'s `KNOWN` keeps `OC-12` and `R-04` while the JS burns; a Rust count over every declared burn holds 116 of 116 with none known** (F4 a, read with F3 b) | *"a."*, the session's reading of the two answers, asked after the sheet |
+| **A loose Order's front-matter, with its positions, enters what `--bundle` emits** (V4, the question it left) | *"b."*, asked after the sheet. `EMS-003/ORD-0006` is emitted again as its version 3 to say it; the shape of the field is still that Order's to measure and bring back |
+| **The envelope's `schema` is 3: `binds` and `ref` are required keys of `ast-schema.json`** | *"I ratify"*, over the session's decision while building `EMS-003/ORD-0003` |
+| **The version does not move with `EMS-003/ORD-0002` and `ORD-0003`; the batch moves it once when it closes** | *"I ratify"*, over the session's decision, by the rule of 2026-10-25 |
 | **The icon generator of `EMS-003/ORD-0002` is Rust: a tool crate, `glyph-icons`, run by `npm run check` as `glyph-vpath` is** | *"Rust"*, asked in the session after the close of `ORD-0001`, since J1 b takes the repository's tooling out of the JS too. No new JS script enters to leave later; the page reads what the crate writes |
 | **`EMS-003/ORD-0002` keeps the open slot; the queue may be renumbered where its order needs fixing, and a workaround is welcome so long as each ORD keeps its goal and the detail of its instructions** | *"keep the way it is, renumber if needed to fix the queue. workarounds are welcome, as long as the ORDs maintain their goal and instructions' detail."* The answered engine Orders — the XSD, `BURN-FENCES`, `DIAG-SPANS` — wait for the slot behind it |
 
@@ -429,7 +436,4 @@ Respostas do Regente à auditoria da escada Rust
 
 ## Decisões que um agente tomou e o Regente ainda não ratificou
 
-| data | decisão | quem | razão |
-|---|---|---|---|
-| 2026-11-21 | **O `schema` do envelope vai de 2 a 3**, porque `binds` (no `Command`) e `ref` (no `Literal` e no `Raw`) entram como chaves obrigatórias do [`ast-schema.json`](../.sources/ast-schema.json), nos dois motores | a sessão, construindo a `EMS-003/ORD-0003` | o V6 b manda `binds` e `ref` ao envelope e move os hashes de `ast` por decisão; o envelope recusa um `schema` que não é o declarado (regra 9 do `glyph-check`), e um leitor do `schema` 2 recusaria as chaves novas como não declaradas. Os 119 hashes de `ast` já se movem pelo V6 b, e nenhum de `xml` ou `hgml` |
-| 2026-11-21 | **A versão não se move nas `ORD-0002` e `ORD-0003` da `EMS-003`**: o movimento entra no lote, e o número sobe uma vez quando o lote fecha | a sessão | a regra de 2026-10-25 do [`.changelog/`](../.changelog/README.md) e o `cnst` da `ORD-0003`; a interface (os ícones) e o envelope esperam o mesmo fechamento |
+Nenhuma espera o Regente.

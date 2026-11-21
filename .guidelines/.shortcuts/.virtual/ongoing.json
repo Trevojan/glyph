@@ -97,7 +97,7 @@
       "id": "ORDER-COHERENCE",
       "title": "a coerência entre Ordens e o repair como fila, o que habilita o Explorer de EMS",
       "state": "backlog",
-      "next": "the measured proposal is INTAKE-ORDER-COHERENCE.md §10; C1 to C5 are still blank on the sheet PERGUNTAS-2026-11-20.md; the Order follows steps 1 and 2 of the trail",
+      "next": "the Regent answered C1 to C5 on 2026-11-21 (INTAKE-ORDER-COHERENCE.md §11): the closed Orders read as emitted, the claim anywhere in the source, the repair queue one file per series beside its EMS.json, NEM made by its first Order, relates[] and the check in the Rust only; the Order follows steps 1 and 2 of the trail",
       "source": ".orders/INTAKE-ORDER-COHERENCE.md §9",
       "where": [
         ".guidelines/.orders/INTAKE-ORDER-COHERENCE.md"
@@ -146,14 +146,14 @@
       "title": "a trilha até o Explorer final: a superfície de EMS no app e a saída do JS, a página incluída",
       "state": "backlog",
       "source": ".plan/README.md §5, A trilha até o Explorer final",
-      "next": "the Regent answered the intakes of steps 1, 5, 6, 10, 11 and 12 on 2026-11-21 (the ADR amending O7 signed with tauri); E6 and E7 of step 2 and C1 to C5 of steps 3 and 4 are still blank; each step opens as an Order with its answers"
+      "next": "the Regent answered every intake of the trail on 2026-11-21 (the ADR amending O7 signed with tauri); each step opens as an Order with its answers"
     },
     {
       "id": "PRE-GATE",
       "title": "a fila de antes do portão: os intakes que faltam, as medições que são entregáveis, o fmt e o clippy no check:rust, e o registro de estudos",
       "state": "review",
       "source": ".plan/README.md §5, A fila de antes do portão",
-      "next": "worked by /regency:proceed on 2026-11-17: five intakes written (XSD, EMS-JSON, EXPLORER with the ADR draft amending O7, JS-EXIT, INVOKE), measured proposals for coherence (§10), the item scheme (§11) and the PIN vocabulary (§6), the generics measured (PIN-TRAFFIC §7), fmt and clippy -D warnings in check:rust on the pinned 1.97.0, and the study register in .sources/STUDY.md; held: the context-objects instrument and the two VP §16 arms (EFF-8, VP-16-MEASURES), and M06 done waits on M02 and M04; the Regent answered the batch on 2026-11-21, 47 of 54, and E6, E7 and C1 to C5 wait",
+      "next": "worked by /regency:proceed on 2026-11-17: five intakes written (XSD, EMS-JSON, EXPLORER with the ADR draft amending O7, JS-EXIT, INVOKE), measured proposals for coherence (§10), the item scheme (§11) and the PIN vocabulary (§6), the generics measured (PIN-TRAFFIC §7), fmt and clippy -D warnings in check:rust on the pinned 1.97.0, and the study register in .sources/STUDY.md; held: the context-objects instrument and the two VP §16 arms (EFF-8, VP-16-MEASURES), and M06 done waits on M02 and M04; the Regent answered the whole batch on 2026-11-21",
       "who": "DV",
       "since": "2026-11-17",
       "where": [

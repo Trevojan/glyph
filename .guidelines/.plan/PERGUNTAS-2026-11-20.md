@@ -244,7 +244,7 @@
 
 *Recomendação: a.* checks a user's file with something the engine did not derive.
 
-**RESPOSTA E6:** 
+**RESPOSTA E6:** a.
 
 **E7. The notation of `xsd`.**
 - a. the notation of the ORD's declaration, whatever [`INTAKE-XSD.md`](../.orders/INTAKE-XSD.md) X2
@@ -253,7 +253,7 @@
 
 *Recomendação: a.* keeps one notation.
 
-**RESPOSTA E7:** 
+**RESPOSTA E7:** a.
 
 ---
 
@@ -275,7 +275,7 @@
 
 *Recomendação: a.* holds the rule forward and the acts as emitted.
 
-**RESPOSTA C1:** 
+**RESPOSTA C1:** a.
 
 **C2. Where an Order writes its claim.**
 - a. anywhere in its source, read from the AST as `binds` and `ref` are (§7)
@@ -283,7 +283,7 @@
 
 *Recomendação: a.* reads the claim the way every other relation is read.
 
-**RESPOSTA C2:** 
+**RESPOSTA C2:** a.
 
 **C3. Where the `repair` queue lives.**
 - a. one file for the repository, `.orders/repair.json`: each finding names the Order,
@@ -294,7 +294,7 @@
 
 *Recomendação: a.* gives `repair` one place to resume from, one question per Order, as ratified.
 
-**RESPOSTA C3:** 
+**RESPOSTA C3:** b.
 
 **C4. When `.orders/NEM/` is made.**
 - a. by the first loose Order emitted into it
@@ -302,7 +302,7 @@
 
 *Recomendação: a.* makes nothing nobody asked for.
 
-**RESPOSTA C4:** 
+**RESPOSTA C4:** a.
 
 **C5. Which engine extracts `relates[]` and runs the check.**
 - a. both, the JS first, as every Order since `EMS-002/ORD-0001`
@@ -310,7 +310,7 @@
 
 *Recomendação: a.* follows the oracle.
 
-**RESPOSTA C5:** 
+**RESPOSTA C5:** b.
 
 ---
 

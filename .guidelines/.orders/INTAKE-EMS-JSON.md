@@ -5,8 +5,8 @@
 > holds are ratified (2026-10-15, [`.decisions/`](../.decisions/README.md)); the rest is
 > built *with* the Regent — *"let's build it together"* — so this file lists what is
 > ratified, measures the series as they stand, and asks what is left. The Regent answered
-> E1 to E5 of §4 on 2026-11-21, §5 holds them, and E6 and E7 are open. The Order opens
-> after step 1, the XSD ([`INTAKE-XSD.md`](INTAKE-XSD.md)), once they are answered.
+> §4 on 2026-11-21, and §5 holds the answers. The Order opens after step 1, the XSD
+> ([`INTAKE-XSD.md`](INTAKE-XSD.md)).
 > Measured at `5685486`.
 
 ## 1. What is ratified
@@ -130,8 +130,8 @@ In [`.decisions/`](../.decisions/README.md), round of 2026-11-21, from the sheet
 | E3 | a | `engine` names the version new Orders are bundled with, and the gate compares the manifest's `engine` for Orders bundled after the field exists |
 | E4 | a | the traffic's read half is derived from each Order's `[ctx]` paths; only the write half is typed in |
 | E5 | a | the session drafts the first `EMS.json` of each of the three series, and the Regent reads them |
-| E6 | open | how a user's `EMS.json` is validated at the trust boundary |
-| E7 | open | the notation of `xsd` |
+| E6 | a | a user's `EMS.json` is checked against a hand-written `ems-schema.json` beside [`ast-schema.json`](../.sources/ast-schema.json), as the AST's precedent |
+| E7 | a | `xsd` is written in the notation of the Order's declaration, which X2 c makes the one source, so the gate compares like with like |
 
 **A field the 2D view adds.** The Regent's V4 of 2026-11-21
 ([`INTAKE-2D-VIEW.md`](INTAKE-2D-VIEW.md) §6) puts the positions of a series' plane in

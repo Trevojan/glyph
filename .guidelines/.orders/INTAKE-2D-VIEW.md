@@ -148,11 +148,10 @@ operator in its *written as* column and drawn from the fact in its *drawn from* 
 
 **What V4 leaves for the Order that stores a position.** `EMS.json` does not exist yet
 ([`INTAKE-EMS-JSON.md`](INTAKE-EMS-JSON.md), step 2 of the trail), and no Order source
-has a front-matter: the shape of the positions field, and whether a loose Order's
-front-matter enters what `--bundle` emits, are that Order's to propose. Until then the
-computed layout is the only one.
+has a front-matter. A loose Order's front-matter, with its positions, enters what
+`--bundle` emits (the Regent, 2026-11-21); the shape of the positions field is that
+Order's to measure and bring back. Until then the computed layout is the only one.
 
 **The queue, read against the model.** `ORD-0002` to `ORD-0005` read as signed.
-`ORD-0006` kept what is personal about a picture on the user's machine; under V4 the
-position is the series', so it is emitted again as its version 2, storing positions
-where V4 says and waiting for step 2 as well as steps 3 and 11.
+`ORD-0006` stores the positions where V4 says, carries a loose Order's front-matter into
+the bundle, and waits for step 2 as well as steps 3 and 11: its version 3.

@@ -29,8 +29,14 @@
       <instruction>
         <user-input>keep the positions of a plane where the signed model says: those of an Order of a series in the EMS.json of its series, those of a loose Order of NEM in its own front-matter, and the computed layout wherever none is stored</user-input>
       </instruction>
+      <instruction>
+        <user-input>carry the front-matter of a loose Order, with its positions, into what --bundle emits</user-input>
+      </instruction>
+      <context>
+        <user-input>the Regent, 2026-11-21: the front-matter of a loose Order enters what --bundle emits</user-input>
+      </context>
       <confirmation imperative="true">
-        <user-input>the shape of the positions field of EMS.json and of the front-matter of a loose Order, and whether that front-matter enters what --bundle emits, measured before either is written</user-input>
+        <user-input>the shape of the positions field of EMS.json and of the front-matter of a loose Order, measured before either is written</user-input>
         <human/>
       </confirmation>
       <only-if>
@@ -51,6 +57,11 @@
         <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
         <user-input>the series</user-input>
         <user-input>the plane of a series shows every Order and every declared edge of its register, counted against the register</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the bundle</user-input>
+        <user-input>the bundle of a loose Order carries its front-matter, and the plane read from that bundle shows the positions it stored</user-input>
       </validate>
       <validate>
         <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>

@@ -92,4 +92,4 @@ In [`.decisions/`](../.decisions/README.md), round of 2026-11-21, from the sheet
 | F1 | a | the raw fence carries its body verbatim inside the open fence |
 | F2 | a | every logic block burns as the open fence carrying its rules, named or not |
 | F3 | b | the Rust only: `glyph-burn` changes, `burn.js` keeps the defect until the JS leaves, and the oracle tests name the nine `hgml` differences of §2 in `rust/testkit/known` |
-| F4 | a | the `KNOWN` list empties and an `H` case holds that a fence and a block reread to the same XML. Under F3 b the pin is the Rust's: `H-16` runs the JS burn, so its `KNOWN` keeps `OC-12` and `R-04` until the JS leaves, and a Rust count over every declared burn holds 116 of 116 with none known |
+| F4 | a | the `KNOWN` list empties and an `H` case holds that a fence and a block reread to the same XML. Under F3 b the pin is the Rust's: `H-16` runs the JS burn, so its `KNOWN` keeps `OC-12` and `R-04` until the JS leaves, and a Rust count over every declared burn holds 116 of 116 with none known; the Regent confirmed this reading on 2026-11-21 |

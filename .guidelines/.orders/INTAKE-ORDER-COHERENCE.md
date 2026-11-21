@@ -218,3 +218,15 @@ stay as emitted.
 - **C3 a** gives `repair` one place to resume from, one question per Order, as ratified.
 - **C4 a** makes nothing nobody asked for.
 - **C5 a** follows the oracle.
+
+## 11. The answers to §10 — 2026-11-21
+
+In [`.decisions/`](../.decisions/README.md), round of 2026-11-21, from the sheet [`PERGUNTAS-2026-11-20.md`](../.plan/PERGUNTAS-2026-11-20.md).
+
+| | answer | what the Orders build |
+|---|---|---|
+| C1 | a | the check holds the Orders bundled after the Order that builds it; the 54 closed ones are read as emitted, and nothing is asked of them |
+| C2 | a | an Order writes its claim anywhere in its source, read from the AST as `binds` and `ref` are |
+| C3 | b | the `repair` queue is one file per series, beside its `EMS.json`: each finding names the Order, what did not match and the move it proposes, and `repair` asks through it one Order at a time |
+| C4 | a | `.orders/NEM/` is made by the first loose Order emitted into it |
+| C5 | b | the Rust alone extracts `relates[]` and runs the check; the JS does neither |

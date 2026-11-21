@@ -20,7 +20,7 @@ a new version first if the signed model changed what it says.
 | ORD | what it commissions | depends on |
 |---|---|---|
 | [`ORD-0005`](queued/ORD-0005/ORD-0005.xml) | editing by the links: each operation one edit of the tree, written as source by the way back; refusals by name, undo, and the round trip | 0004 |
-| [`ORD-0006`](queued/ORD-0006/ORD-0006.xml) | the view in the Glyph Explorer: an Order opened, edited and emitted from the plane, a series drawn as a plane of its Orders, and the positions kept in the series' `EMS.json` or a loose Order's front-matter; version 2, emitted on 2026-11-21 under the signed model's V4 | 0005, and steps 2, 3 and 11 of the [trail](../../.plan/README.md) of EMS-002 |
+| [`ORD-0006`](queued/ORD-0006/ORD-0006.xml) | the view in the Glyph Explorer: an Order opened, edited and emitted from the plane, a series drawn as a plane of its Orders, and the positions kept in the series' `EMS.json` or a loose Order's front-matter, which enters the bundle; version 3, emitted on 2026-11-21 under the signed model's V4 and the Regent's answer of the same day | 0005, and steps 2, 3 and 11 of the [trail](../../.plan/README.md) of EMS-002 |
 
 ## Closed Orders
 
