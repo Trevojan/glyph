@@ -258,6 +258,10 @@ auditoria, e `node scripts/ladder.js --check` segue no `npm run check`.
 
 ## Aberto, esperando o Regente
 
+As 54 perguntas dos onze intakes abertos estão numa folha só, para preencher:
+[`PERGUNTAS-2026-11-20.md`](PERGUNTAS-2026-11-20.md), cada uma com a recomendação
+da sessão e a linha `RESPOSTA`.
+
 As perguntas escritas com opções medidas estão em
 [`PERGUNTAS-ABERTAS.md`](PERGUNTAS-ABERTAS.md) — as sete da primeira rodada e as
 vinte e três do inventário de 2026-10-15. **Todas as trinta têm resposta dele**,
