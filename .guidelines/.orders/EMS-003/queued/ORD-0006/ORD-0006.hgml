@@ -10,11 +10,14 @@
   [/ctx]
   [ctx
     'the trail to the final Explorer'
-    '.guidelines/.plan/README.md, section 5, steps 3 and 11'
+    '.guidelines/.plan/README.md, section 5, steps 2, 3 and 11'
   [/ctx]
   [tgt
-    'the 2D view in the Glyph Explorer: the plane opens an Order of a series, a series shows as a plane of its Orders linked by the edges they declare, and what is personal about a picture stays on the machine of the user'
+    'the 2D view in the Glyph Explorer: the plane opens an Order of a series, a series shows as a plane of its Orders linked by the edges they declare, and the positions of a picture live with the series'
   [/tgt]
+  [ctx
+    'the Regent, 2026-11-21, V4: b, per EMS; when the ORD is NEM, then it is in the ORD; the EMS config file handles position; the ORD front-matter handles position'
+  [/ctx]
   [ins
     'open, edit and emit an Order from the plane inside the EMS surface of the Explorer, by the title of the Order'
   [/ins]
@@ -22,10 +25,14 @@
     'draw a series as a plane of its Orders: each Order a node, and each declared edge between Orders a connector, ref of nem and ref of EMS, as the coherence between Orders declares them'
   [/ins]
   [ins
-    'keep what the signed model stores about a picture where the signed model says, and never in the public repository when it is personal'
+    'keep the positions of a plane where the signed model says: those of an Order of a series in the EMS.json of its series, those of a loose Order of NEM in its own front-matter, and the computed layout wherever none is stored'
   [/ins]
+  [conf
+    'the shape of the positions field of EMS.json and of the front-matter of a loose Order, and whether that front-matter enters what --bundle emits, measured before either is written'
+    [hmn[/hmn]
+  [/conf]
   [onlyif
-    'the coherence between Orders and the EMS surface of EMS-002 are built: steps 3 and 11 of the trail'
+    'the EMS.json, the coherence between Orders and the EMS surface of EMS-002 are built: steps 2, 3 and 11 of the trail'
   [/onlyif]
   [cnst
     'the PIN icons wait for the vocabulary of the PIN, step 6 of the trail: until then the two files stay in the table as icons no command names'
@@ -61,6 +68,31 @@
   [cmp
     'the series'
     'the plane of a series shows every Order and every declared edge of its register, counted against the register'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+  [cmp
+    'the positions'
+    'a node moved on the plane is written to the EMS.json of its series, or to the front-matter of a loose Order, and the plane read again shows the same picture; with none stored, the computed layout answers'
     [ctx[/ctx]
     [cnst[/cnst]
   [/cmp]

@@ -29,12 +29,12 @@
       "since": "2026-11-21",
       "source": ".decisions/README.md, 2026-11-11",
       "where": [
-        "order:EMS-003/ORD-0001",
+        "order:EMS-003/ORD-0002",
         ".guidelines/.orders/INTAKE-2D-VIEW.md",
         ".guidelines/.orders/EMS-003/EMS-003.pgml",
         ".scope/asset/glyph-icons"
       ],
-      "next": "the Regent answered V1 to V7 on 2026-11-21 and INTAKE-2D-VIEW.md §6 holds the signed model; re-emit ORD-0006 as version 2 (V4 puts a position in the series' EMS.json, or a loose Order's front-matter, not on the user's machine), close ORD-0001 and open ORD-0002"
+      "next": "ORD-0001 closed on 2026-11-21 with the signed model (INTAKE-2D-VIEW.md §6), and ORD-0006 is re-emitted as version 2; ORD-0002, the icons, holds the open slot: normalise the delivered set into the app and write the icon table from the files"
     },
     {
       "id": "EFF-8",

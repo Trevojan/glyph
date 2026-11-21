@@ -1,14 +1,14 @@
 {
   "order": "ORD-0006",
-  "engine": "4.7.10.08",
-  "emitted": "2026-11-11T19:13:41.824Z",
+  "engine": "4.7.10.09",
+  "emitted": "2026-11-21T15:06:56.111Z",
   "files": [
     "ORD-0006.pgml",
     "ORD-0006.xml",
     "ORD-0006.json",
     "ORD-0006.hgml"
   ],
-  "source": "/tmp/claude-0/-home-user-glyph/581d0c97-806b-58a2-9db6-7ac1833b0135/scratchpad/ems3/ORD-0006.pgml",
+  "source": "C:/Users/Usuario/AppData/Local/Temp/claude/C--Users-Usuario-Documents-GitHub-glyph/326c10ba-5572-44a7-a915-6d58bf3bd86c/scratchpad/ems3v2/ORD-0006.pgml",
   "diagnostics": {
     "fix": 0,
     "total": 0

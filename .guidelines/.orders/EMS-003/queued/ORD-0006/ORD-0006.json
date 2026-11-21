@@ -1,10 +1,10 @@
 {
   "type": "GlyphAST",
   "schema": 2,
-  "version": "4.7.10.08",
+  "version": "4.7.10.09",
   "source": {
-    "length": 1636,
-    "checksum": "ce3b2a8ad9273990",
+    "length": 2319,
+    "checksum": "36bfe43e4e01a600",
     "encoding": "utf-8",
     "newline": "lf",
     "uri": null
@@ -192,13 +192,13 @@
                 },
                 {
                   "type": "Literal",
-                  "value": ".guidelines/.plan/README.md, section 5, steps 3 and 11",
+                  "value": ".guidelines/.plan/README.md, section 5, steps 2, 3 and 11",
                   "form": "quote",
                   "slot": null,
                   "role": "operand",
                   "at": {
                     "s": 215,
-                    "e": 271
+                    "e": 274
                   }
                 }
               ]
@@ -223,19 +223,56 @@
               "species": "atom",
               "compositionDepth": 0,
               "at": {
-                "s": 275,
-                "e": 279
+                "s": 278,
+                "e": 282
               },
               "body": [
                 {
                   "type": "Literal",
-                  "value": "the 2D view in the Glyph Explorer: the plane opens an Order of a series, a series shows as a plane of its Orders linked by the edges they declare, and what is personal about a picture stays on the machine of the user",
+                  "value": "the 2D view in the Glyph Explorer: the plane opens an Order of a series, a series shows as a plane of its Orders linked by the edges they declare, and the positions of a picture live with the series",
                   "form": "quote",
                   "slot": null,
                   "role": "operand",
                   "at": {
-                    "s": 279,
-                    "e": 497
+                    "s": 282,
+                    "e": 482
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 486,
+                "e": 490
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the Regent, 2026-11-21, V4: b, per EMS; when the ORD is NEM, then it is in the ORD; the EMS config file handles position; the ORD front-matter handles position",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 490,
+                    "e": 651
                   }
                 }
               ]
@@ -260,8 +297,8 @@
               "species": "atom",
               "compositionDepth": 0,
               "at": {
-                "s": 501,
-                "e": 505
+                "s": 655,
+                "e": 659
               },
               "body": [
                 {
@@ -271,8 +308,8 @@
                   "slot": null,
                   "role": "operand",
                   "at": {
-                    "s": 505,
-                    "e": 616
+                    "s": 659,
+                    "e": 770
                   }
                 }
               ]
@@ -297,8 +334,8 @@
               "species": "atom",
               "compositionDepth": 0,
               "at": {
-                "s": 620,
-                "e": 624
+                "s": 774,
+                "e": 778
               },
               "body": [
                 {
@@ -308,8 +345,8 @@
                   "slot": null,
                   "role": "operand",
                   "at": {
-                    "s": 624,
-                    "e": 808
+                    "s": 778,
+                    "e": 962
                   }
                 }
               ]
@@ -334,20 +371,82 @@
               "species": "atom",
               "compositionDepth": 0,
               "at": {
-                "s": 812,
-                "e": 816
+                "s": 966,
+                "e": 970
               },
               "body": [
                 {
                   "type": "Literal",
-                  "value": "keep what the signed model stores about a picture where the signed model says, and never in the public repository when it is personal",
+                  "value": "keep the positions of a plane where the signed model says: those of an Order of a series in the EMS.json of its series, those of a loose Order of NEM in its own front-matter, and the computed layout wherever none is stored",
                   "form": "quote",
                   "slot": null,
                   "role": "operand",
                   "at": {
-                    "s": 816,
-                    "e": 951
+                    "s": 970,
+                    "e": 1194
                   }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "conf",
+              "canonical": "CONF",
+              "tier": "instr",
+              "gloss": "Confirmation",
+              "element": "confirmation",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "at": {
+                "s": 1198,
+                "e": 1203
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the shape of the positions field of EMS.json and of the front-matter of a loose Order, and whether that front-matter enters what --bundle emits, measured before either is written",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 1203,
+                    "e": 1383
+                  }
+                },
+                {
+                  "type": "Command",
+                  "raw": "hmn",
+                  "canonical": "HMN",
+                  "tier": "meta",
+                  "gloss": "Human",
+                  "element": "human",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "at": {
+                    "s": 1383,
+                    "e": 1387
+                  },
+                  "body": []
                 }
               ]
             },
@@ -371,19 +470,19 @@
               "species": "atom",
               "compositionDepth": 0,
               "at": {
-                "s": 955,
-                "e": 962
+                "s": 1392,
+                "e": 1399
               },
               "body": [
                 {
                   "type": "Literal",
-                  "value": "the coherence between Orders and the EMS surface of EMS-002 are built: steps 3 and 11 of the trail",
+                  "value": "the EMS.json, the coherence between Orders and the EMS surface of EMS-002 are built: steps 2, 3 and 11 of the trail",
                   "form": "quote",
                   "slot": null,
                   "role": "operand",
                   "at": {
-                    "s": 962,
-                    "e": 1062
+                    "s": 1399,
+                    "e": 1516
                   }
                 }
               ]
@@ -408,8 +507,8 @@
               "species": "atom",
               "compositionDepth": 0,
               "at": {
-                "s": 1066,
-                "e": 1071
+                "s": 1520,
+                "e": 1525
               },
               "body": [
                 {
@@ -419,8 +518,8 @@
                   "slot": null,
                   "role": "operand",
                   "at": {
-                    "s": 1071,
-                    "e": 1212
+                    "s": 1525,
+                    "e": 1666
                   }
                 }
               ]
@@ -445,8 +544,8 @@
               "species": "atom",
               "compositionDepth": 0,
               "at": {
-                "s": 1216,
-                "e": 1221
+                "s": 1670,
+                "e": 1675
               },
               "body": [
                 {
@@ -456,8 +555,8 @@
                   "slot": null,
                   "role": "operand",
                   "at": {
-                    "s": 1221,
-                    "e": 1300
+                    "s": 1675,
+                    "e": 1754
                   }
                 }
               ]
@@ -482,8 +581,8 @@
               "species": "composite",
               "compositionDepth": 5,
               "at": {
-                "s": 1304,
-                "e": 1308
+                "s": 1758,
+                "e": 1762
               },
               "body": [
                 {
@@ -493,8 +592,8 @@
                   "slot": null,
                   "role": "operand",
                   "at": {
-                    "s": 1308,
-                    "e": 1321
+                    "s": 1762,
+                    "e": 1775
                   }
                 },
                 {
@@ -504,8 +603,8 @@
                   "slot": null,
                   "role": "operand",
                   "at": {
-                    "s": 1322,
-                    "e": 1499
+                    "s": 1776,
+                    "e": 1953
                   }
                 }
               ]
@@ -530,8 +629,8 @@
               "species": "composite",
               "compositionDepth": 5,
               "at": {
-                "s": 1503,
-                "e": 1507
+                "s": 1957,
+                "e": 1961
               },
               "body": [
                 {
@@ -541,8 +640,8 @@
                   "slot": null,
                   "role": "operand",
                   "at": {
-                    "s": 1507,
-                    "e": 1519
+                    "s": 1961,
+                    "e": 1973
                   }
                 },
                 {
@@ -552,8 +651,56 @@
                   "slot": null,
                   "role": "operand",
                   "at": {
-                    "s": 1520,
-                    "e": 1631
+                    "s": 1974,
+                    "e": 2085
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "val",
+              "canonical": "VAL",
+              "tier": "instr",
+              "gloss": "Validate",
+              "element": "validate",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "composite",
+              "compositionDepth": 5,
+              "at": {
+                "s": 2089,
+                "e": 2093
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the positions",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 2093,
+                    "e": 2108
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": "a node moved on the plane is written to the EMS.json of its series, or to the front-matter of a loose Order, and the plane read again shows the same picture; with none stored, the computed layout answers",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "at": {
+                    "s": 2109,
+                    "e": 2314
                   }
                 }
               ]
