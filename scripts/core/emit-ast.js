@@ -12,7 +12,7 @@
 import { LIMITS, walk } from "./util.js";
 import { elName } from "./vocabulary.js";
 import { templatesOf, rulesOf, expansionsOf } from "./stores.js";
-import { parse } from "./parser.js";
+import { parse, bindingOf, collectBindings } from "./parser.js";
 import { VERSION } from "./version.js";
 
 /* ======================================================
@@ -34,7 +34,7 @@ import { VERSION } from "./version.js";
    Bumped when a field is added, removed or changes meaning — 2 because the
    `full`/`panel` split, `origin`, `at`, `slot` and `expanded` all landed at
    once and a reader of a v1 envelope must not be told it understands them. */
-export var AST_SCHEMA = 2;
+export var AST_SCHEMA = 3;
 
 /* A store is fingerprinted by its serialised form. Deterministic because the
    stores are parsed from files and JSON.stringify preserves that order; null
@@ -69,7 +69,7 @@ export function ck(str) {
   return ("00000000" + a.toString(16)).slice(-8) + ("00000000" + b.toString(16)).slice(-8);
 }
 
-export function astShallow(nd) {
+export function astShallow(nd, binds) {
   /* `slot` is the template parameter this literal was bound to. It reached
      the XML as `<user-input slot="…">` and never reached the AST, so an
      expanded invocation could not be told from its own expansion — the second
@@ -77,9 +77,18 @@ export function astShallow(nd) {
   /* `role` travels in the envelope too: the AST is the source of truth,
      and a fact the emitted document carries must not be one the envelope
      makes a reader re-derive. */
-  if (nd.literal) return { type: nd.form === "raw" ? "Raw" : "Literal", value: nd.v,
-                           form: nd.form, slot: nd.boundSlot || null,
-                           role: nd.role || null };
+  /* `ref` and `binds` are the names the XML writes (EMS-003 ORD-0003, the
+     signed model's V6 b): a literal whose text a command of the package binds
+     refers to it, and the binding literal declares the name instead. Read
+     here from the same table buildXml reads, so the envelope says what the
+     document says and a reader of the tree need not re-derive it. */
+  if (nd.literal) {
+    var refName = String(nd.v == null ? "" : nd.v).trim();
+    return { type: nd.form === "raw" ? "Raw" : "Literal", value: nd.v,
+             form: nd.form, slot: nd.boundSlot || null,
+             role: nd.role || null,
+             ref: (nd.form !== "raw" && binds && !nd.isBinder && refName && binds[refName]) ? refName : null };
+  }
   /* `slot` on any other node is the template parameter a named fill carried
      it in for, past its value — present only there, so every other node of
      every envelope keeps its shape */
@@ -133,7 +142,8 @@ export function astShallow(nd) {
        how deep this node sits in the USER's text; `compositionDepth` is how
        deep the command sits in the vocabulary. Different axes, both useful. */
     species: nd.species || null,
-    compositionDepth: (nd.compositionDepth === undefined) ? null : nd.compositionDepth
+    compositionDepth: (nd.compositionDepth === undefined) ? null : nd.compositionDepth,
+    binds: bindingOf(nd)
   }, nd);
 }
 
@@ -222,7 +232,7 @@ export function astNode(root, stats, opts) {
       continue;
     }
 
-    var obj = astShallow(f.nd);
+    var obj = astShallow(f.nd, opts && opts.__binds);
     if (projectionOf(opts) === "panel") obj = astLean(obj);
     else {
       /* The span in the source that produced this node. Every token has
@@ -252,6 +262,11 @@ export function astNode(root, stats, opts) {
    `tok`, which close cycles — JSON.stringify straight on them overflows. */
 export function serializeAST(segments, gaps, opts) {
   var stats = { truncated: 0 };
+  /* the whole document's bindings, once, as buildXml reads them */
+  var o2 = {}, ok2;
+  for (ok2 in (opts || {})) if (Object.prototype.hasOwnProperty.call(opts, ok2)) o2[ok2] = opts[ok2];
+  o2.__binds = collectBindings(segments, null);
+  opts = o2;
   var out = {
     type: "GlyphAST",
     /* `schema` is the SHAPE of this envelope; `version` is the engine that

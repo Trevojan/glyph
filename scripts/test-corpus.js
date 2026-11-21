@@ -3296,6 +3296,49 @@ function runBindingChecks() {
      G.fromXML(looseXml, opts).src === "[ref'nada']" ? null
        : "came back as " + JSON.stringify(G.fromXML(looseXml, opts).src));
 
+  /* the envelope carries the names the XML writes (EMS-003 ORD-0003, the
+     signed model's V6 b): a command's `binds`, and a literal's `ref` */
+  const names = (env) => {
+    const binds = [], refs = [];
+    (function walk(ns) {
+      (ns || []).forEach(n => {
+        if (n.type === "Command" && n.binds) binds.push(n.binds);
+        if ((n.type === "Literal" || n.type === "Raw") && n.ref) refs.push(n.ref);
+        walk(n.body);
+      });
+    })([].concat(...env.segments.map(s => s.body)));
+    return { binds, refs };
+  };
+  const pairEnv = names(G.toAST("[var`get_data`[get-find`~/d.json`]];[eval`get_data`]", opts));
+  ok("BD-11", "the envelope carries the binding and the reference, and the binding literal is no reference",
+     JSON.stringify(pairEnv) === JSON.stringify({ binds: ["get_data"], refs: ["get_data"] }) ? null
+       : "the envelope says " + JSON.stringify(pairEnv));
+
+  /* over every declared source, the envelope names what the XML names */
+  {
+    const esc = v => String(v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    const DECLARED = [].concat(POSITIVE, INCOMPLETE, INVALID, REGRESSION, LONG,
+                               TEMPLATES, CONSTRAINTS, RULE_CASES, ORACLE_COVERAGE);
+    let seen = 0, named = 0;
+    const off = [];
+    DECLARED.forEach(c => {
+      if (!c || !c.id || typeof c.src !== "string") return;
+      const O = c.opts ? { ...opts, ...c.opts } : opts;
+      let x, e;
+      try { x = G.toXML(c.src, O); e = G.toAST(c.src, O); } catch (err) { return; }
+      seen++;
+      const n = names(e);
+      const xb = (x.match(/ binds="[^"]*"/g) || []).map(m => m.slice(8, -1)).sort();
+      const xr = (x.match(/<user-input[^>]* ref="[^"]*"/g) || []).map(m => m.replace(/^.* ref="/, "").slice(0, -1)).sort();
+      if (xb.length || xr.length) named++;
+      if (JSON.stringify(n.binds.map(esc).sort()) !== JSON.stringify(xb) ||
+          JSON.stringify(n.refs.map(esc).sort()) !== JSON.stringify(xr)) off.push(c.id);
+    });
+    ok("BD-12", "over every declared source the envelope names what the XML names — " +
+                seen + " sources, " + named + " with a name",
+       off.length ? "the envelope and the XML differ on " + off.join(", ") : null);
+  }
+
   return D.length;
 }
 const rBD = runBindingChecks();
@@ -4446,7 +4489,7 @@ console.log(" diag wording " + String(rDG).padStart(4) + "/3");
 console.log(" spellings    " + String(rSP).padStart(4) + "/4");
 console.log(" raw fence    " + String(rRW).padStart(4) + "/5");
 console.log(" literal role " + String(rRO).padStart(4) + "/9");
-console.log(" bindings     " + String(rBD).padStart(4) + "/10");
+console.log(" bindings     " + String(rBD).padStart(4) + "/12");
 console.log(" suggest      " + String(rSG).padStart(4) + "/4");
 console.log(" aspas        " + String(rQT).padStart(4) + "/3");
 console.log(" param template" + String(rTP).padStart(4) + "/4");

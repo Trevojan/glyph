@@ -429,4 +429,7 @@ Respostas do Regente à auditoria da escada Rust
 
 ## Decisões que um agente tomou e o Regente ainda não ratificou
 
-Nenhuma espera o Regente.
+| data | decisão | quem | razão |
+|---|---|---|---|
+| 2026-11-21 | **O `schema` do envelope vai de 2 a 3**, porque `binds` (no `Command`) e `ref` (no `Literal` e no `Raw`) entram como chaves obrigatórias do [`ast-schema.json`](../.sources/ast-schema.json), nos dois motores | a sessão, construindo a `EMS-003/ORD-0003` | o V6 b manda `binds` e `ref` ao envelope e move os hashes de `ast` por decisão; o envelope recusa um `schema` que não é o declarado (regra 9 do `glyph-check`), e um leitor do `schema` 2 recusaria as chaves novas como não declaradas. Os 119 hashes de `ast` já se movem pelo V6 b, e nenhum de `xml` ou `hgml` |
+| 2026-11-21 | **A versão não se move nas `ORD-0002` e `ORD-0003` da `EMS-003`**: o movimento entra no lote, e o número sobe uma vez quando o lote fecha | a sessão | a regra de 2026-10-25 do [`.changelog/`](../.changelog/README.md) e o `cnst` da `ORD-0003`; a interface (os ícones) e o envelope esperam o mesmo fechamento |

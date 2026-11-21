@@ -9,14 +9,15 @@
 //! its gloss — is dropped here too.
 
 use glyph_json::{Json, stringify};
-use glyph_parse::{Extra, Gap, Opts, parse};
+use glyph_parse::{Extra, Gap, Opts, binding_of, collect_bindings, parse};
 use glyph_stores::Context;
 use glyph_util::tree::{Emotion, Gloss, Id, LIMITS, Node, Segment, Thrown, Tree};
+use glyph_util::{inherited, js_trim};
 use glyph_version::VERSION;
 use glyph_vocab::el_name;
 
 /// The envelope's own shape version, moved apart from the engine's.
-pub const AST_SCHEMA: f64 = 2.0;
+pub const AST_SCHEMA: f64 = 3.0;
 
 /// `ck`: two FNV-1a runs over UTF-16 units, as the JS computes them — the
 /// XOR on signed 32-bit integers and the product in a double, which drops the
@@ -126,8 +127,45 @@ fn with_slot(mut o: Json, nd: &Node<Extra>) -> Json {
     o
 }
 
+/// The names the XML writes, for the envelope to carry them (EMS-003
+/// ORD-0003, the signed model's V6 b): the document's bindings, the name each
+/// command binds, and which literals declare a name. The JS marks a binder as
+/// it serialises, parent before children; every command's `bindingOf` has run
+/// by the time its literals are written, so reading them all first, on a
+/// copy, gives the same marks.
+pub struct Names {
+    binds: Vec<String>,
+    of: Vec<Option<String>>,
+    binder: Vec<bool>,
+}
+
+impl Names {
+    pub fn of(tree: &Tree<Extra>) -> Names {
+        let mut t = tree.clone();
+        let binds = collect_bindings(&mut t, &mut |_| {});
+        let of = (0..t.nodes.len())
+            .map(|id| binding_of(&mut t, id))
+            .collect();
+        let binder = t.nodes.iter().map(|k| k.is_binder == Some(true)).collect();
+        Names { binds, of, binder }
+    }
+
+    /// The name a literal refers to: `binds` is a plain object in the JS, so
+    /// the prototype's names are bound too, as the XML's `ref` reads them.
+    fn refers(&self, tree: &Tree<Extra>, id: Id) -> Json {
+        let nd = &tree.nodes[id];
+        let name = js_trim(nd.v.as_deref().unwrap_or(""));
+        let bound = self.binds.contains(&name) || inherited(&name);
+        if nd.form.as_deref() != Some("raw") && !self.binder[id] && !name.is_empty() && bound {
+            s(&name)
+        } else {
+            Json::Null
+        }
+    }
+}
+
 /// `astShallow`: the node without its body.
-pub fn ast_shallow(tree: &Tree<Extra>, id: Id) -> Json {
+pub fn ast_shallow(tree: &Tree<Extra>, id: Id, names: &Names) -> Json {
     let nd = &tree.nodes[id];
     let or_null = |v: &Option<String>| {
         Some(
@@ -148,6 +186,7 @@ pub fn ast_shallow(tree: &Tree<Extra>, id: Id) -> Json {
             ("form", opt_str(&nd.form)),
             ("slot", or_null(&nd.bound_slot)),
             ("role", or_null(&nd.role)),
+            ("ref", Some(names.refers(tree, id))),
         ]);
     }
     if nd.text == Some(true) {
@@ -293,6 +332,7 @@ pub fn ast_shallow(tree: &Tree<Extra>, id: Id) -> Json {
                     Some(Some(d)) => Json::Num(d),
                 }),
             ),
+            ("binds", Some(names.of[id].as_deref().map_or(Json::Null, s))),
         ]),
         nd,
     )
@@ -338,7 +378,13 @@ pub fn ast_lean(o: Json) -> Json {
 
 /// `astNode`: iterative, and cut at `LIMITS.astDepth` with a marker, since
 /// the tree may be as deep as the author's text.
-pub fn ast_node(tree: &Tree<Extra>, root: Id, truncated: &mut usize, panel: bool) -> Json {
+pub fn ast_node(
+    tree: &Tree<Extra>,
+    root: Id,
+    names: &Names,
+    truncated: &mut usize,
+    panel: bool,
+) -> Json {
     enum Slot {
         Holder,
         Body(usize),
@@ -362,7 +408,7 @@ pub fn ast_node(tree: &Tree<Extra>, root: Id, truncated: &mut usize, panel: bool
                 None,
             )
         } else {
-            let mut o = ast_shallow(tree, id);
+            let mut o = ast_shallow(tree, id, names);
             if panel {
                 o = ast_lean(o);
             } else if let Json::Obj(kv) = &mut o {
@@ -407,7 +453,13 @@ pub fn ast_node(tree: &Tree<Extra>, root: Id, truncated: &mut usize, panel: bool
     done[holder[0]].take().expect("the root built")
 }
 
-fn segment_json(tree: &Tree<Extra>, sg: &Segment, truncated: &mut usize, panel: bool) -> Json {
+fn segment_json(
+    tree: &Tree<Extra>,
+    sg: &Segment,
+    names: &Names,
+    truncated: &mut usize,
+    panel: bool,
+) -> Json {
     let mut seg = Json::Obj(vec![
         ("type".into(), s("Segment")),
         (
@@ -428,7 +480,7 @@ fn segment_json(tree: &Tree<Extra>, sg: &Segment, truncated: &mut usize, panel: 
             Json::Arr(
                 sg.children
                     .iter()
-                    .map(|&c| ast_node(tree, c, truncated, panel))
+                    .map(|&c| ast_node(tree, c, names, truncated, panel))
                     .collect(),
             ),
         ));
@@ -446,10 +498,11 @@ pub fn serialize_ast(
     o: &AstOpts,
 ) -> Json {
     let mut truncated = 0;
+    let names = Names::of(tree);
     let segments: Vec<Json> = tree
         .segments
         .iter()
-        .map(|sg| segment_json(tree, sg, &mut truncated, o.panel))
+        .map(|sg| segment_json(tree, sg, &names, &mut truncated, o.panel))
         .collect();
     let mut diagnostics: Vec<Json> = gaps
         .iter()

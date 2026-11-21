@@ -73,7 +73,7 @@
    "ast": {
     "full": {
      "type": "GlyphAST",
-     "schema": 2,
+     "schema": 3,
      "version": "3.6.9.07",
      "source": {
       "length": 11,
@@ -128,7 +128,7 @@
     },
     "panel": {
      "type": "GlyphAST",
-     "schema": 2,
+     "schema": 3,
      "version": "3.6.9.07",
      "source": {
       "length": 11,
@@ -176,7 +176,7 @@
     },
     "pt": {
      "type": "GlyphAST",
-     "schema": 2,
+     "schema": 3,
      "version": "3.6.9.07",
      "source": {
       "length": 11,
@@ -231,7 +231,7 @@
     },
     "embed": {
      "type": "GlyphAST",
-     "schema": 2,
+     "schema": 3,
      "version": "3.6.9.07",
      "source": {
       "length": 11,
@@ -361,7 +361,7 @@
    "ast": {
     "full": {
      "type": "GlyphAST",
-     "schema": 2,
+     "schema": 3,
      "version": "3.6.9.07",
      "source": {
       "length": 11,
@@ -416,7 +416,7 @@
     },
     "panel": {
      "type": "GlyphAST",
-     "schema": 2,
+     "schema": 3,
      "version": "3.6.9.07",
      "source": {
       "length": 11,
@@ -463,7 +463,7 @@
     },
     "pt": {
      "type": "GlyphAST",
-     "schema": 2,
+     "schema": 3,
      "version": "3.6.9.07",
      "source": {
       "length": 11,
@@ -518,7 +518,7 @@
     },
     "embed": {
      "type": "GlyphAST",
-     "schema": 2,
+     "schema": 3,
      "version": "3.6.9.07",
      "source": {
       "length": 11,
@@ -726,7 +726,7 @@
    "ast": {
     "full": {
      "type": "GlyphAST",
-     "schema": 2,
+     "schema": 3,
      "version": "3.6.9.07",
      "source": {
       "length": 24,
@@ -785,6 +785,7 @@
            "emotions": [],
            "species": "atom",
            "compositionDepth": 0,
+           "binds": null,
            "at": {
             "s": 0,
             "e": 5
@@ -809,6 +810,7 @@
              "emotions": [],
              "species": "atom",
              "compositionDepth": 0,
+             "binds": null,
              "at": {
               "s": 5,
               "e": 10
@@ -820,6 +822,7 @@
                "form": "quote",
                "slot": "rule",
                "role": null,
+               "ref": null,
                "at": null
               }
              ]
@@ -845,6 +848,7 @@
            "emotions": [],
            "species": "atom",
            "compositionDepth": 0,
+           "binds": null,
            "at": {
             "s": 53,
             "e": 57
@@ -856,6 +860,7 @@
              "form": "quote",
              "slot": "why",
              "role": null,
+             "ref": null,
              "at": null
             }
            ]
@@ -869,7 +874,7 @@
     },
     "panel": {
      "type": "GlyphAST",
-     "schema": 2,
+     "schema": 3,
      "version": "3.6.9.07",
      "source": {
       "length": 24,
@@ -956,7 +961,7 @@
     },
     "pt": {
      "type": "GlyphAST",
-     "schema": 2,
+     "schema": 3,
      "version": "3.6.9.07",
      "source": {
       "length": 24,
@@ -1015,6 +1020,7 @@
            "emotions": [],
            "species": "atom",
            "compositionDepth": 0,
+           "binds": null,
            "at": {
             "s": 0,
             "e": 5
@@ -1039,6 +1045,7 @@
              "emotions": [],
              "species": "atom",
              "compositionDepth": 0,
+             "binds": null,
              "at": {
               "s": 5,
               "e": 10
@@ -1050,6 +1057,7 @@
                "form": "quote",
                "slot": "rule",
                "role": null,
+               "ref": null,
                "at": null
               }
              ]
@@ -1075,6 +1083,7 @@
            "emotions": [],
            "species": "atom",
            "compositionDepth": 0,
+           "binds": null,
            "at": {
             "s": 53,
             "e": 57
@@ -1086,6 +1095,7 @@
              "form": "quote",
              "slot": "why",
              "role": null,
+             "ref": null,
              "at": null
             }
            ]
@@ -1099,7 +1109,7 @@
     },
     "embed": {
      "type": "GlyphAST",
-     "schema": 2,
+     "schema": 3,
      "version": "3.6.9.07",
      "source": {
       "length": 24,
@@ -1159,6 +1169,7 @@
            "emotions": [],
            "species": "atom",
            "compositionDepth": 0,
+           "binds": null,
            "at": {
             "s": 0,
             "e": 5
@@ -1183,6 +1194,7 @@
              "emotions": [],
              "species": "atom",
              "compositionDepth": 0,
+             "binds": null,
              "at": {
               "s": 5,
               "e": 10
@@ -1194,6 +1206,7 @@
                "form": "quote",
                "slot": "rule",
                "role": null,
+               "ref": null,
                "at": null
               }
              ]
@@ -1219,6 +1232,7 @@
            "emotions": [],
            "species": "atom",
            "compositionDepth": 0,
+           "binds": null,
            "at": {
             "s": 53,
             "e": 57
@@ -1230,6 +1244,7 @@
              "form": "quote",
              "slot": "why",
              "role": null,
+             "ref": null,
              "at": null
             }
            ]
@@ -1339,7 +1354,7 @@
    "ast": {
     "full": {
      "type": "GlyphAST",
-     "schema": 2,
+     "schema": 3,
      "version": "3.6.9.07",
      "source": {
       "length": 19,
@@ -1398,6 +1413,7 @@
            "emotions": [],
            "species": "atom",
            "compositionDepth": 0,
+           "binds": null,
            "at": {
             "s": 5,
             "e": 9
@@ -1409,6 +1425,7 @@
              "form": "quote",
              "slot": null,
              "role": "operand",
+             "ref": null,
              "at": {
               "s": 9,
               "e": 12
@@ -1425,7 +1442,7 @@
     },
     "panel": {
      "type": "GlyphAST",
-     "schema": 2,
+     "schema": 3,
      "version": "3.6.9.07",
      "source": {
       "length": 19,
@@ -1484,7 +1501,7 @@
     },
     "pt": {
      "type": "GlyphAST",
-     "schema": 2,
+     "schema": 3,
      "version": "3.6.9.07",
      "source": {
       "length": 19,
@@ -1543,6 +1560,7 @@
            "emotions": [],
            "species": "atom",
            "compositionDepth": 0,
+           "binds": null,
            "at": {
             "s": 5,
             "e": 9
@@ -1554,6 +1572,7 @@
              "form": "quote",
              "slot": null,
              "role": "operand",
+             "ref": null,
              "at": {
               "s": 9,
               "e": 12
@@ -1570,7 +1589,7 @@
     },
     "embed": {
      "type": "GlyphAST",
-     "schema": 2,
+     "schema": 3,
      "version": "3.6.9.07",
      "source": {
       "length": 19,
@@ -1630,6 +1649,7 @@
            "emotions": [],
            "species": "atom",
            "compositionDepth": 0,
+           "binds": null,
            "at": {
             "s": 5,
             "e": 9
@@ -1641,6 +1661,7 @@
              "form": "quote",
              "slot": null,
              "role": "operand",
+             "ref": null,
              "at": {
               "s": 9,
               "e": 12

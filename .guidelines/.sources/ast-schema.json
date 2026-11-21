@@ -1,5 +1,5 @@
 {
-  "schema": 2,
+  "schema": 3,
   "note": "The declared shape of a Glyph AST envelope. HAND-AUTHORED, deliberately: a schema derived from the engine cannot catch the engine, and the whole reason the AST was promoted to source of truth is that another machine must be able to read it without this implementation. glyph-check.js validates envelopes against this file, and the corpus asserts that what the engine emits conforms — so a drift in either direction is caught, the same way XML_REFERENCE and D-03 hold each other.",
   "appliesTo": "the `full` projection. The `panel` projection is thinned for the screen and is deliberately NOT validated: absence there is meaningless, which is exactly why it never leaves the browser.",
   "envelope": {
@@ -19,7 +19,7 @@
     "constants": {
       "type": "GlyphAST",
       "projection": "full",
-      "schema": 2
+      "schema": 3
     },
     "note": "`schema` is the shape of this envelope; `version` is the engine that produced it. They were one field, and a reader had to pin an engine build to say it understood the shape. `stores` fingerprints templates, rules and expansions: species, compositionDepth and def are FUNCTIONS of the expansions store, so re-importing against a different one changes meaning silently — the defect class this whole order is named after. `source` is a DESCRIPTOR and not the text (T12), because offsets with no anchor are unresolvable on arrival."
   },
@@ -79,6 +79,7 @@
         "emotions",
         "species",
         "compositionDepth",
+        "binds",
         "body",
         "at"
       ],
@@ -92,7 +93,7 @@
         "item",
         null
       ],
-      "note": "`origin` records which operator produced the edge to the parent and `chainElement` records whether the node was written bare. They are independent: `[in-rwk]` and `[in-[rwk]]` share an origin and differ in bareness. Conflating them is the defect release 2.4.5.01 exists to close."
+      "note": "`origin` records which operator produced the edge to the parent and `chainElement` records whether the node was written bare. They are independent: `[in-rwk]` and `[in-[rwk]]` share an origin and differ in bareness. Conflating them is the defect release 2.4.5.01 exists to close. `binds` is the name the command binds — its first literal, when it is name-shaped and a bracketed command is nested under it — or null; it is the XML's `binds`, read from the same table (EMS-003 ORD-0003, V6 b of 2026-11-21)."
     },
     "Literal": {
       "required": [
@@ -101,6 +102,7 @@
         "form",
         "slot",
         "role",
+        "ref",
         "at"
       ],
       "form": [
@@ -113,7 +115,7 @@
         "result",
         null
       ],
-      "note": "`slot` is the template parameter this literal was bound to, or null. It reached the XML as <user-input slot=\"…\"> long before it reached the AST; writing fromAST is what proved it missing. `role` is decided by position: a literal written before any BRACKETED nested command is what the command operates on (`operand`), one written after such a nest names what came back (`result`). A chain link does not count — §0.1 says `[A-B]` applies both to the same operand. It is null only at the top of a segment, where there is no command to be operand of."
+      "note": "`slot` is the template parameter this literal was bound to, or null. It reached the XML as <user-input slot=\"…\"> long before it reached the AST; writing fromAST is what proved it missing. `role` is decided by position: a literal written before any BRACKETED nested command is what the command operates on (`operand`), one written after such a nest names what came back (`result`). A chain link does not count — §0.1 says `[A-B]` applies both to the same operand. It is null only at the top of a segment, where there is no command to be operand of. `ref` is the name this literal refers to: its trimmed text, when a command of the package binds it and the literal is not the binding one itself; null otherwise. It is the XML's `ref`, so the envelope carries what the document carries (EMS-003 ORD-0003)."
     },
     "Raw": {
       "required": [
@@ -122,6 +124,7 @@
         "form",
         "slot",
         "role",
+        "ref",
         "at"
       ],
       "role": [
@@ -129,7 +132,7 @@
         "result",
         null
       ],
-      "note": "A raw literal is a Literal whose `form` is `raw`, emitted by the same branch, so it carries `role` for the same reason: a fact the document carries is not one the envelope makes a reader re-derive."
+      "note": "A raw literal is a Literal whose `form` is `raw`, emitted by the same branch, so it carries `role` for the same reason: a fact the document carries is not one the envelope makes a reader re-derive. Its `ref` is always null: a raw literal is prose, and the XML writes it as <off>, never as a reference."
     },
     "Verbatim": {
       "required": [
