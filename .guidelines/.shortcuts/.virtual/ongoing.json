@@ -29,12 +29,12 @@
       "since": "2026-11-21",
       "source": ".decisions/README.md, 2026-11-11",
       "where": [
-        "order:EMS-003/ORD-0003",
+        "order:EMS-003/ORD-0004",
         ".guidelines/.orders/INTAKE-2D-VIEW.md",
         ".guidelines/.orders/EMS-003/EMS-003.pgml",
         ".scope/asset/glyph-icons"
       ],
-      "next": "ORD-0001 and ORD-0002 closed on 2026-11-21 (the signed model; the icons by glyph-icons, d5d1789); ORD-0003, the graph, holds the open slot: binds and ref enter the envelope first, in both engines, the ast hashes moved by decision (V6 b), then the graph derived from the tree"
+      "next": "ORD-0001 to ORD-0003 closed on 2026-11-21: the signed model, the icons (glyph-icons), and the graph (binds and ref in the envelope, schema 3; scripts/glyph-graph.js); ORD-0004, the read-only view, holds the open slot: a surface of its own beside the source (V7 b), drawn from graphOf, tied to the source, marks on the plane, walked from the keyboard; the schema move and the version waiting for the batch await the Regent's ratification"
     },
     {
       "id": "EFF-8",
