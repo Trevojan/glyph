@@ -41,7 +41,7 @@
 
 *Recomendação: a.*
 
-**RESPOSTA V1:** 
+**RESPOSTA V1:** a.
 
 **V2. Which connectors the plane draws and edits.**
 - a. the seven of §3
@@ -51,7 +51,7 @@
 
 *Recomendação: a.*
 
-**RESPOSTA V2:** 
+**RESPOSTA V2:** a.
 
 **V3. How a section, a block and a part show.**
 - a. frames that hold their nodes, as §3
@@ -59,7 +59,7 @@
 
 *Recomendação: a.*
 
-**RESPOSTA V3:** 
+**RESPOSTA V3:** a.
 
 **V4. Where a position lives.**
 - a. nowhere: the layout is computed from the graph, and the same source is the same
@@ -70,7 +70,7 @@
 
 *Recomendação: b.*
 
-**RESPOSTA V4:** 
+**RESPOSTA V4:** b, per EMS. when the ORD is NEM, then it's in the ORD. the EMS config file handles position; the ORD front-matter handles position.
 
 **V5. The icons on the plane.**
 - a. a normalised set generated from the delivered files: one size, the colours of
@@ -79,7 +79,7 @@
 
 *Recomendação: a.*
 
-**RESPOSTA V5:** 
+**RESPOSTA V5:** a.
 
 **V6. Where the graph is computed.**
 - a. on the page, from the JSON envelope, `binds` and `ref` recomputed there
@@ -89,7 +89,7 @@
 
 *Recomendação: b.*
 
-**RESPOSTA V6:** 
+**RESPOSTA V6:** b.
 
 **V7. Where the plane shows.**
 - a. a fifth tab of the page, beside `.pgml`, `.xml`, `.json` and `.hgml`
@@ -97,7 +97,7 @@
 
 *Recomendação: b.*
 
-**RESPOSTA V7:** 
+**RESPOSTA V7:** b.
 
 ---
 
@@ -121,7 +121,7 @@
 
 *Recomendação: a.* is the norm's own reading.
 
-**RESPOSTA X1:** 
+**RESPOSTA X1:** a.
 
 **X2. Its notation.**
 - a. **W3C XSD**, only the subset the engine needs: `xs:element`, `xs:complexType`,
@@ -133,7 +133,7 @@
 
 *Recomendação: c.* keeps one source, the declaration, and makes the Regent's *XSD* its projection. That projection is written only when a tool asks for it, since no format enters without a consumer that parses it.
 
-**RESPOSTA X2:** 
+**RESPOSTA X2:** c.
 
 **X3. Where it travels.** The three rows of §3.
 - a. inside the package, in `<schema>`
@@ -142,7 +142,7 @@
 
 *Recomendação: a.* lets the gate read the schema from the document it checks; under it, 30 hashes move and 89 stay.
 
-**RESPOSTA X3:** 
+**RESPOSTA X3:** a.
 
 **X4. What validates the XML against it**, at `fix` as signed.
 - a. **the engine's own validator**, for the subset the engine generates, in both
@@ -153,7 +153,7 @@
 
 *Recomendação: a.* keeps the zero-dependency rule whole.
 
-**RESPOSTA X4:** 
+**RESPOSTA X4:** a. we need to keep caution here. it is needed to build JS and Rust validators, and this may fit two new ORDs.
 
 **X5. Where the gate runs.**
 - a. where an XML enters from outside the engine: `fromXML`, and a bundle read back
@@ -162,7 +162,7 @@
 
 *Recomendação: b.* catches a bundle that drifts while it sits in the repository.
 
-**RESPOSTA X5:** 
+**RESPOSTA X5:** b. logging would also be helpful; may it be inside `.orders/`.
 
 **X6. Which engine builds it.**
 - a. both, the JS first, as the reference, as every Order since `EMS-002/ORD-0001`
@@ -171,7 +171,7 @@
 
 *Recomendação: a.* follows the oracle until the JS leaves.
 
-**RESPOSTA X6:** 
+**RESPOSTA X6:** a. let's confirm JS will leave correctly and Rust will take over.
 
 ---
 
@@ -192,7 +192,7 @@
 
 *Recomendação: a.* keeps every fact in one place.
 
-**RESPOSTA E1:** 
+**RESPOSTA E1:** a.
 
 **E2. How the configuration enters each package.**
 - a. **whole**, as an element beside `<schema>`, with the digest of the `EMS.json` it
@@ -204,7 +204,7 @@
 
 *Recomendação: a.* is the simplest reading of the decision, and the digest says which configuration an Order was bundled under.
 
-**RESPOSTA E2:** 
+**RESPOSTA E2:** a,
 
 **E3. The version a series holds to** (`FIELD-3b`), against §2.
 - a. `engine` names the version new Orders are bundled with, and the gate compares the
@@ -215,7 +215,7 @@
 
 *Recomendação: a.* holds the series forward only and leaves the acts as emitted.
 
-**RESPOSTA E3:** 
+**RESPOSTA E3:** a.
 
 **E4. The traffic's read half.**
 - a. derived from each Order's `[ctx]` paths, so only the write half is typed in
@@ -224,7 +224,7 @@
 
 *Recomendação: a.* keeps what the source already declares out of a second file.
 
-**RESPOSTA E4:** 
+**RESPOSTA E4:** a.
 
 **E5. The first `EMS.json` of the three series.**
 - a. the session drafts one per series from what each already declares — the title from
@@ -235,7 +235,7 @@
 
 *Recomendação: a.* is the "together" of the Regent's word.
 
-**RESPOSTA E5:** 
+**RESPOSTA E5:** a.
 
 **E6. How a user's `EMS.json` is validated**, at the trust boundary.
 - a. against a hand-authored `ems-schema.json` beside
@@ -329,7 +329,7 @@
 
 *Recomendação: a.* is the decision's own reading, and the cheapest by far.
 
-**RESPOSTA I1:** 
+**RESPOSTA I1:** a.
 
 **I2. What `x` is.**
 - a. the root's own name where it has one — a section's, a block's, a part's, the
@@ -339,7 +339,7 @@
 
 *Recomendação: a.* names a subject the way the reader names it.
 
-**RESPOSTA I2:** 
+**RESPOSTA I2:** a.
 
 **I3. Where it is written.**
 - a. an attribute `origin`, on the root and on each item, and `join="item"` stays
@@ -348,7 +348,7 @@
 
 *Recomendação: a.* removes nothing an older reader relies on.
 
-**RESPOSTA I3:** 
+**RESPOSTA I3:** a.
 
 **I4. The number past 99.**
 - a. two digits, three past 99, as the `dd` of the version grows
@@ -356,7 +356,7 @@
 
 *Recomendação: a.* follows a rule the project already keeps.
 
-**RESPOSTA I4:** 
+**RESPOSTA I4:** a.
 
 ---
 
@@ -376,7 +376,7 @@
 
 *Recomendação: a.*
 
-**RESPOSTA N1:** 
+**RESPOSTA N1:** a.
 
 **N2. `else` and `case`.**
 - a. words of `PIN`'s own, valid only chained to it, the way a slot's name is valid only
@@ -385,7 +385,7 @@
 
 *Recomendação: a.*
 
-**RESPOSTA N2:** 
+**RESPOSTA N2:** a.
 
 **N3. The element.**
 - a. one `<pin>`, its form an attribute: `<pin form="if" alias="…">`,
@@ -394,7 +394,7 @@
 
 *Recomendação: a.*
 
-**RESPOSTA N3:** 
+**RESPOSTA N3:** a.
 
 **N4. Its place in the palette.**
 - a. *Frame*, beside `SECTION`, `BLOCK` and `PT`: structure under a condition
@@ -402,7 +402,7 @@
 
 *Recomendação: a.*
 
-**RESPOSTA N4:** 
+**RESPOSTA N4:** a.
 
 ---
 
@@ -421,7 +421,7 @@
 
 *Recomendação: a.* validates what Orders already write.
 
-**RESPOSTA K1:** 
+**RESPOSTA K1:** a.
 
 **K2. What a predefined action is.**
 - a. a named entry of the `invoke` of the `EMS.json` — its name and the path it runs —
@@ -430,7 +430,7 @@
 
 *Recomendação: a.* keeps actions where the rules already live.
 
-**RESPOSTA K2:** 
+**RESPOSTA K2:** a. it may add an attribute `source=""` to `<invoke>` so to solve this problem.
 
 **K3. Where the Explorer's generic skills live.**
 - a. in the `EMS.json` of `EMS-000`, *Generic*, which every Order of a series inherits
@@ -438,7 +438,7 @@
 
 *Recomendação: a.* gives the generic skills the home the decisions gave the generic EMS.
 
-**RESPOSTA K3:** 
+**RESPOSTA K3:** b. needs to be immutable and inaccessible to the Explorer itself. any changes may break the engine, and it could result in the need of a regeneration of EMS-000, which is a concern we don't want the final user to face. also, when emitted, the generic skills must also come with the bundle, so any Harness may read and follow the XML directly on input.
 
 **K4. When the check runs.**
 - a. at `--bundle` only, so an Order with a blocking dependency is never emitted
@@ -447,7 +447,7 @@
 
 *Recomendação: b.* is the decision as worded, with the earlier catch added.
 
-**RESPOSTA K4:** 
+**RESPOSTA K4:** b.
 
 ---
 
@@ -469,7 +469,7 @@
 
 *Recomendação: b.* gives the window the Regent asked for with the part of Tauri that opens it.
 
-**RESPOSTA S1:** 
+**RESPOSTA S1:** a, but not sure. "no dependencies" is proven something nearly impossible to maintain strictly. let's hope `tauri` is the only or kind of dependencies `Glyph's Explorer` will rely on.
 
 **S2. Where the shell lives**, for S1 a or b.
 - a. a binary of its own, `glyph-shell`, in a workspace outside `rust/`, as the ADR of §3
@@ -478,7 +478,7 @@
 
 *Recomendação: a.* keeps the engine's dependency rule exactly where it is.
 
-**RESPOSTA S2:** 
+**RESPOSTA S2:** a.
 
 **S3. The ADR of §3.**
 - a. signed as drafted, naming the crate S1 chose
@@ -488,7 +488,7 @@
 
 *Recomendação: a.* pins the tree without carrying it.
 
-**RESPOSTA S3:** 
+**RESPOSTA S3:** a.
 
 **S4. The page's route.** The four rows of §4.
 - a. the relay only, now; views rendered by the engine next, panel by panel
@@ -498,7 +498,7 @@
 
 *Recomendação: a.* takes 6,130 lines out of the page at the cost of one route, the page opened from disk, which the installed app does not use; it then moves the interface into the engine one panel at a time, each held by the oracle.
 
-**RESPOSTA S4:** 
+**RESPOSTA S4:** a.
 
 ---
 
@@ -519,7 +519,7 @@
 
 *Recomendação: a.* takes node away from the user, which is what the target is for, and leaves the builders alone, since nothing measured asks for them to move.
 
-**RESPOSTA J1:** 
+**RESPOSTA J1:** b.
 
 **J2. What holds the Rust once the JS engine is gone.**
 - a. **the oracle frozen**: the last export is committed beside the Rust tests, and a
@@ -532,7 +532,7 @@
 
 *Recomendação: c.* keeps a byte-for-byte guard from the first day, and grows the guard the spec owns (T2).
 
-**RESPOSTA J2:** 
+**RESPOSTA J2:** b.
 
 **J3. The order of the exit.**
 - a. the three tools first (M10e, M10f, M10g: 642 lines, the criterion of each already
@@ -543,7 +543,7 @@
 
 *Recomendação: a.* starts where the criterion is written and the cost is smallest.
 
-**RESPOSTA J3:** 
+**RESPOSTA J3:** a.
 
 **J4. How the skill reaches the binary.**
 - a. the plugin carries one `glyph` per system, built for each by a pipeline the
@@ -554,7 +554,7 @@
 
 *Recomendação: b.* needs no pipeline. The binary already links no crate and installs itself, and Windows is where the Regent runs it.
 
-**RESPOSTA J4:** 
+**RESPOSTA J4:** b. the installer must check and ask for installation of the plugin.
 
 ---
 
@@ -573,7 +573,7 @@
 
 *Recomendação: a.* A fence exists to carry text verbatim. An empty fence answers a question nobody asked.
 
-**RESPOSTA F1:** 
+**RESPOSTA F1:** a.
 
 **F2. A logic block.**
 - **a.** Every block burns as the open fence carrying its rules, named or not. Eight
@@ -583,7 +583,7 @@
 
 *Recomendação: a.* Two forms for one construct is the inconsistency this kind of fix exists to remove. Under b, `[logic]` and `[logic-dano]` burn differently, and only one keeps its rules.
 
-**RESPOSTA F2:** 
+**RESPOSTA F2:** a.
 
 **F3. Which engine.**
 - **a.** Both engines, in one Order, as `ORD-0035`.
@@ -591,7 +591,7 @@
 
 *Recomendação: a.* It is the answer B1 gave for the same kind of defect.
 
-**RESPOSTA F3:** 
+**RESPOSTA F3:** b.
 
 **F4. The pin.**
 - **a.** `H-16`'s `KNOWN` empties, so it reads 116 of 116, and an `H` case holds that a
@@ -600,7 +600,7 @@
 
 *Recomendação: a.* With the `KNOWN` list empty, every new burn defect fails `H-16` by name.
 
-**RESPOSTA F4:** 
+**RESPOSTA F4:** a.
 
 ---
 
@@ -614,12 +614,11 @@
 
 **D1. How far.**
 - **a.** Every group, T, N, R, P, L and D, in one Order.
-- **b.** T and N first, 22 codes and 269 of the 358 diagnostics that lack a span. R, P,
-  L and D follow in an Order of their own.
+- **b.** T and N first, 22 codes and 269 of the 358 diagnostics that lack a span. R, P, L and D follow in an Order of their own.
 
 *Recomendação: b.* T and N cover 75% of the diagnostics that lack a span, and they need no new plumbing: the token or the node is already there. R, P and L each carry a question of their own, and D2 and D3 are two of them.
 
-**RESPOSTA D1:** 
+**RESPOSTA D1:** b.
 
 **D2. A diagnostic about two nodes** (the pair rules, a duplicate binding).
 - **a.** The span of the second node, where the conflict is written.
@@ -628,7 +627,7 @@
 
 *Recomendação: a.* A reader fixes the second node, the one written against the first.
 
-**RESPOSTA D2:** 
+**RESPOSTA D2:** a.
 
 **D3. A diagnostic raised inside a template's expanded body.**
 - **a.** The invocation's span.
@@ -636,7 +635,7 @@
 
 *Recomendação: a.* The body's text is not in the document, and the invocation is what the author wrote.
 
-**RESPOSTA D3:** 
+**RESPOSTA D3:** a.
 
 **D4. A diagnostic about the document** (`MassAutoClose`, `DeepNesting`, a literal that
 runs off).
@@ -646,7 +645,7 @@ runs off).
 
 *Recomendação: a.* A coordinate at the start of the document is the absence this proposal removes.
 
-**RESPOSTA D4:** 
+**RESPOSTA D4:** a.
 
 **D5. Which engine.**
 - **a.** Both, in one Order. The 77 AST hashes move, and so does the oracle's
@@ -655,4 +654,4 @@ runs off).
 
 *Recomendação: a.* The extension, the skill and the plugin all read the JS engine.
 
-**RESPOSTA D5:** 
+**RESPOSTA D5:** a. treat it to walk towards Rust-only in the following versions.

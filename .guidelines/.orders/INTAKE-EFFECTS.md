@@ -379,3 +379,14 @@ The proposal for step 5 of the trail to the final Explorer
 - **I2 a** names a subject the way the reader names it.
 - **I3 a** removes nothing an older reader relies on.
 - **I4 a** follows a rule the project already keeps.
+
+## 12. The answers to §11 — 2026-11-21
+
+In [`.decisions/`](../.decisions/README.md), round of 2026-11-21, from the sheet [`PERGUNTAS-2026-11-20.md`](../.plan/PERGUNTAS-2026-11-20.md).
+
+| | answer | what the Order builds |
+|---|---|---|
+| I1 | a | `root-x` only on a root that has items: the `xml` hash of 7 sources moves |
+| I2 | a | `x` is the root's own name where it has one |
+| I3 | a | written as an attribute `origin`, on the root and on each item; `join="item"` stays |
+| I4 | a | two digits, three past 99 |

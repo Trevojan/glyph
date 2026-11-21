@@ -5,8 +5,9 @@
 > engine, never written by hand, and a gate checks it against the XML's content, with
 > divergence at `fix` ([`INTAKE-EFFECTS.md`](INTAKE-EFFECTS.md) §8.1, the Regent on
 > 2026-11-07). This file measures what the engine emits and asks what the norm leaves to
-> decide. It opens no Order: the Order opens with the answers to §4, once the open slot
-> is free. Measured at `5685486`.
+> decide. The Regent answered §4 on 2026-11-21, and §5 holds the answers: the step is
+> two Orders, one per engine's validator, and the first opens once the open slot is free.
+> Measured at `5685486`.
 
 ## 1. What the engine emits today
 
@@ -109,3 +110,16 @@ against.
 - **X4 a** keeps the zero-dependency rule whole.
 - **X5 b** catches a bundle that drifts while it sits in the repository.
 - **X6 a** follows the oracle until the JS leaves.
+
+## 5. The answers — 2026-11-21
+
+In [`.decisions/`](../.decisions/README.md), round of 2026-11-21, from the sheet [`PERGUNTAS-2026-11-20.md`](../.plan/PERGUNTAS-2026-11-20.md).
+
+| | answer | what the Orders build |
+|---|---|---|
+| X1 | a | the XSD describes the ORD's declaration: its sections, blocks, parts, templates and variables. The language's schema stays in `XML_REFERENCE.md` |
+| X2 | c | the declaration is the one source; the W3C XSD is its projection, written only when a tool asks for it |
+| X3 | a | the schema travels inside the package, in `<schema>`: 30 hashes move and 89 stay |
+| X4 | *"a. we need to keep caution here. it is needed to build JS and Rust validators, and this may fit two new ORDs."* | the engine's own validator, no dependency, in two Orders: the JS validator first, the reference; the Rust validator after, answering the same bytes over the oracle |
+| X5 | *"b. logging would also be helpful; may it be inside `.orders/`."* | the gate runs at `fromXML`, on a bundle read back, and over every bundle under `.orders/` in `npm run check`; what it finds is logged under `.orders/`, in a shape the first Order proposes |
+| X6 | *"a. let's confirm JS will leave correctly and Rust will take over."* | both engines, the JS first; the second Order closes only when the Rust answers every case the JS does, so the JS can leave ([`INTAKE-JS-EXIT.md`](INTAKE-JS-EXIT.md)) |

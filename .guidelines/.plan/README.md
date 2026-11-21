@@ -127,7 +127,7 @@ semântico** — categoria, espécie, tabela de composição — não de limiar 
 | `;` dentro de literal | consertado nos dois motores em 2026-09-06 (`f6d07ae`): dentro de um literal, só a aspa que o abriu o fecha. No lexer do Rust, só a aspa que abriu um literal o fecha, também na quebra de linha, desde a `EMS-002/ORD-0020`; o do JS encerra o apóstrofo na quebra de linha até sair, e o teste do oráculo nomeia a diferença. |
 | param de template nu | o deslize é recusado desde 2026-09-06 (`03aedad`): um parâmetro que não é literal antes de um literal é `fix` `TemplateParamNotLiteral`. **Resta:** a palavra nua sem literal depois (`[--germinate a,b]`) cai como `<off>` com `PlaceholderPending` ×2, e a mensagem chama a palavra nua de `[?`, no JS até sair; no Rust, desde a `EMS-002/ORD-0021`, a palavra nua numa posição de parâmetro dá `fix` `TemplateParamNotLiteral` que a nomeia e mostra a forma entre aspas, a opção (a) do [§3 das perguntas](PERGUNTAS-ABERTAS.md), e os testes do oráculo nomeiam a diferença. |
 | humor dentro de um template | `/eth/` cujo comando aberto mais interno é um template: o JS lança `TypeError` (`parser.js:263`, o nó de template não tem lista de humores) até sair; o Rust responde com o documento — o humor colore a seção, primeiro no bloco — desde a `EMS-002/ORD-0023`, e os testes do oráculo nomeiam a diferença com os bytes em `rust/testkit/known/template-moods.json`. |
-| o nome de um placeholder **queima como comando** | consertado nos dois motores em 2026-11-20 pela [`EMS-002/ORD-0035`](../.orders/EMS-002/README.md), a 4.7.10.09: `` [ph-x`q`] `` queima como `[ph-x 'q' [/ph]`, o nome na linha de cabeça e em minúsculas, e relê sem `fix`. O `H-16` conta as queimas declaradas que relêem limpas, 114 de 116; as duas que não relêem são a cerca `[raw]` (`OC-12`) e o bloco `[logic` (`R-04`), defeitos próprios, medidos no [`INTAKE-BURN-PLACEHOLDER.md`](../.orders/INTAKE-BURN-PLACEHOLDER.md) §4 |
+| o nome de um placeholder **queima como comando** | consertado nos dois motores em 2026-11-20 pela [`EMS-002/ORD-0035`](../.orders/EMS-002/README.md), a 4.7.10.09: `` [ph-x`q`] `` queima como `[ph-x 'q' [/ph]`, o nome na linha de cabeça e em minúsculas, e relê sem `fix`. O `H-16` conta as queimas declaradas que relêem limpas, 114 de 116; as duas que não relêem são a cerca `[raw]` (`OC-12`) e o bloco `[logic` (`R-04`), defeitos próprios, medidos no [`INTAKE-BURN-PLACEHOLDER.md`](../.orders/INTAKE-BURN-PLACEHOLDER.md) §4; a proposta medida é o [`INTAKE-BURN-FENCES.md`](../.orders/INTAKE-BURN-FENCES.md), respondida em 2026-11-21: o Rust só, e a Ordem abre quando a vaga estiver livre |
 | o `toXML` do JS **cresce com o quadrado das linhas** | L-03, L-02 e L-01 levam 23 ms, 0,44 s e 6,2 s; 84% do L-02 é a passada estrutural (`packageSpan`, `packageIndent` e o seu `^ +`). O port em Rust lê cada linha uma vez e faz o L-01 em 0,13 s. Fixado por decisão (pergunta 13 do [retorno](../.orders/EMS-001/RETURN.md)): o JS não é consertado, e as fontes longas vão pelo Rust |
 
 ### 5. O Glyph em Rust — a série EMS-001
@@ -182,18 +182,18 @@ passo abre como Ordem com a proposta medida do intake, e para no portão dele.
 | # | a Ordem | depende de | o intake |
 |---|---|---|---|
 | 0 | o `[part]`, a `ORD-0033`, fechada em 2026-11-11 | — | [`INTAKE-PART`](../.orders/INTAKE-PART.md) §5 e §6 |
-| 1 | o XSD gerado pelo motor e o portão que o confere contra o XML | 0 | [`INTAKE-XSD`](../.orders/INTAKE-XSD.md) §4, X1 a X6, esperando o Regente (a norma está assinada, 2026-11-07) |
-| 2 | a `EMS.json`: a lista de campos, o XSD primeiro, e a configuração dentro do `<glyph-package>` | 1 | [`INTAKE-EMS-JSON`](../.orders/INTAKE-EMS-JSON.md) §4, E1 a E7, esperando o Regente |
+| 1 | o XSD gerado pelo motor e o portão que o confere contra o XML | 0 | [`INTAKE-XSD`](../.orders/INTAKE-XSD.md) §4; X1 a X6 respondidos em 2026-11-21 (§5): duas Ordens, o validador do JS primeiro e o do Rust depois, e o portão também sobre `.orders/` com um registro do que acha |
+| 2 | a `EMS.json`: a lista de campos, o XSD primeiro, e a configuração dentro do `<glyph-package>` | 1 | [`INTAKE-EMS-JSON`](../.orders/INTAKE-EMS-JSON.md) §4; E1 a E5 respondidos em 2026-11-21 (§5), E6 e E7 esperando o Regente |
 | 3 | a coerência: `[ref'nem']`, `[ref'EMS']`, o `relates[]`, a verificação pela `EMS.json`, a NEM, e o portão do `FIELD-3b` | 2 | [`INTAKE-ORDER-COHERENCE`](../.orders/INTAKE-ORDER-COHERENCE.md) §9, ratificado; a proposta medida no §10, C1 a C5, esperando o Regente |
 | 4 | o `repair`: mostra a diferença e pergunta, a fila, e o mover | 3 | o mesmo §10, e o [`INTAKE-PIN-TRAFFIC`](../.orders/INTAKE-PIN-TRAFFIC.md) §3 |
-| 5 | o esquema de item, `root-x` e `x-item-##`, que move os hashes de `xml` | 0 | [`INTAKE-EFFECTS`](../.orders/INTAKE-EFFECTS.md) §8 e §9; a proposta medida no §11, I1 a I4, esperando o Regente |
-| 6 | o vocabulário do PIN: o glossário, depois o JS, depois o Rust | 0 | [`INTAKE-PIN-TRAFFIC`](../.orders/INTAKE-PIN-TRAFFIC.md) §5; a proposta medida no §6, N1 a N4, esperando o Regente |
+| 5 | o esquema de item, `root-x` e `x-item-##`, que move os hashes de `xml` | 0 | [`INTAKE-EFFECTS`](../.orders/INTAKE-EFFECTS.md) §8 e §9; a proposta medida no §11, I1 a I4 respondidos em 2026-11-21 (§12) |
+| 6 | o vocabulário do PIN: o glossário, depois o JS, depois o Rust | 0 | [`INTAKE-PIN-TRAFFIC`](../.orders/INTAKE-PIN-TRAFFIC.md) §5; a proposta medida no §6, N1 a N4 respondidos em 2026-11-21 (§8) |
 | 7 | o seletor do PIN pelos rótulos do `[part]`, e o tooltip | 5, 6 | o mesmo |
 | 8 | o tráfego na `EMS.json`; o caminho que não resolve avisa e nunca bloqueia | 2 | [`INTAKE-PIN-TRAFFIC`](../.orders/INTAKE-PIN-TRAFFIC.md) §3 |
 | 9 | a `EMS-000`, *Generic*: a medição de `.scope/generics/` por frequência, que o Regente reescreve | 2, 6 | o mesmo, §5; a medição é o entregável |
-| 10 | o `<invoke>` validado pela configuração da EMS, e as skills genéricas do Explorer | 2 | [`INTAKE-INVOKE`](../.orders/INTAKE-INVOKE.md), K1 a K4, esperando o Regente, sobre o [`.decisions/`](../.decisions/README.md) de 2026-10-15 |
-| 11 | a superfície de EMS no app: começar, carregar, editar e emitir uma EMS ou uma ORD, mostrada pelo título; a NEM; o `repair` e o aviso de caminho na tela | 2 a 4, 8 | [`INTAKE-EXPLORER`](../.orders/INTAKE-EXPLORER.md): a casca, a página e a superfície; S1 a S4 esperando o Regente, com a ADR que emenda a O7 rascunhada no §3 |
-| 12 | a saída do JS: `glyph-schema`, `glyph-diff` e `glyph-trace`, a skill sobre o binário Rust, e a página | o oráculo, peça por peça | [`INTAKE-JS-EXIT`](../.orders/INTAKE-JS-EXIT.md), J1 a J4 esperando o Regente; a rota da página, no [`INTAKE-EXPLORER`](../.orders/INTAKE-EXPLORER.md) §4 |
+| 10 | o `<invoke>` validado pela configuração da EMS, e as skills genéricas do Explorer | 2 | [`INTAKE-INVOKE`](../.orders/INTAKE-INVOKE.md), sobre o [`.decisions/`](../.decisions/README.md) de 2026-10-15; K1 a K4 respondidos em 2026-11-21 (§3): o `source=""` no `<invoke>`, e as skills genéricas dentro do binário, imutáveis, e no bundle que as invoca |
+| 11 | a superfície de EMS no app: começar, carregar, editar e emitir uma EMS ou uma ORD, mostrada pelo título; a NEM; o `repair` e o aviso de caminho na tela | 2 a 4, 8 | [`INTAKE-EXPLORER`](../.orders/INTAKE-EXPLORER.md): a casca, a página e a superfície; S1 a S4 respondidos em 2026-11-21 (§7): a casca é o `tauri`, e a ADR que emenda a O7 está assinada no §3 |
+| 12 | a saída do JS: `glyph-schema`, `glyph-diff` e `glyph-trace`, a skill sobre o binário Rust, e a página | o oráculo, peça por peça | [`INTAKE-JS-EXIT`](../.orders/INTAKE-JS-EXIT.md), J1 a J4 respondidos em 2026-11-21 (§3): sai tudo, o tooling incluído, e os vetores de conformidade seguram o Rust; a rota da página, no [`INTAKE-EXPLORER`](../.orders/INTAKE-EXPLORER.md) §4 |
 | 13 | a referência entre pacotes, `<needs ref="glyph://…">`, e os escopos aninhados | as duas medições devidas | [`INTAKE-VIRTUAL-PATH`](../.orders/INTAKE-VIRTUAL-PATH.md) §16 |
 
 Duas Ordens decididas em 2026-11-11 correm fora dessa cadeia, e a posição de cada
@@ -221,13 +221,15 @@ Ordem. O que segue não abre Ordem nenhuma, e é o que uma sessão faz enquanto 
 portão espera, para o Regente responder os portões em lote:
 
 1. os intakes que faltavam estão escritos, cada um fechando em perguntas numeradas
-   com opções medidas, e esperam o Regente: [`INTAKE-XSD.md`](../.orders/INTAKE-XSD.md),
+   com opções medidas, e o Regente os respondeu em 2026-11-21, salvo o E6 e o E7:
+   [`INTAKE-XSD.md`](../.orders/INTAKE-XSD.md),
    [`INTAKE-EMS-JSON.md`](../.orders/INTAKE-EMS-JSON.md),
    [`INTAKE-EXPLORER.md`](../.orders/INTAKE-EXPLORER.md) — o Tauri, o `wry` com o
    `tao` e o `eframe` medidos pela régua das crates, todos `fix`, e a ADR que emenda a
-   O7 para a casca rascunhada para a assinatura dele — e
+   O7 para a casca, assinada com o `tauri` — e
    [`INTAKE-JS-EXIT.md`](../.orders/INTAKE-JS-EXIT.md);
-2. as propostas medidas estão dadas e esperam o Regente: o `repair` e a NEM no
+2. as propostas medidas estão dadas, e o Regente respondeu todas em 2026-11-21 salvo a
+   do `repair` e da NEM, C1 a C5, que espera: o `repair` e a NEM no
    [`INTAKE-ORDER-COHERENCE.md`](../.orders/INTAKE-ORDER-COHERENCE.md) §10, o
    esquema de item no [`INTAKE-EFFECTS.md`](../.orders/INTAKE-EFFECTS.md) §11, o
    vocabulário do PIN no [`INTAKE-PIN-TRAFFIC.md`](../.orders/INTAKE-PIN-TRAFFIC.md) §6,
@@ -258,9 +260,13 @@ auditoria, e `node scripts/ladder.js --check` segue no `npm run check`.
 
 ## Aberto, esperando o Regente
 
-As 54 perguntas dos onze intakes abertos estão numa folha só, para preencher:
-[`PERGUNTAS-2026-11-20.md`](PERGUNTAS-2026-11-20.md), cada uma com a recomendação
-da sessão e a linha `RESPOSTA`.
+As 54 perguntas dos onze intakes abertos estão numa folha só,
+[`PERGUNTAS-2026-11-20.md`](PERGUNTAS-2026-11-20.md), e o Regente respondeu 47 delas
+em 2026-11-21; cada intake guarda as suas, e a rodada está em
+[`.decisions/`](../.decisions/README.md). Sete seguem em branco, esperando ele: E6 e E7
+do [`INTAKE-EMS-JSON.md`](../.orders/INTAKE-EMS-JSON.md), que seguram o passo 2 da
+trilha, e C1 a C5 do [`INTAKE-ORDER-COHERENCE.md`](../.orders/INTAKE-ORDER-COHERENCE.md),
+que seguram os passos 3 e 4.
 
 As perguntas escritas com opções medidas estão em
 [`PERGUNTAS-ABERTAS.md`](PERGUNTAS-ABERTAS.md) — as sete da primeira rodada e as

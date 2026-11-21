@@ -190,3 +190,14 @@ and `target` or `goal`. One `EMS-000` holds one name for each. The burn of every
 that uses a placeholder rereads with an `UnknownCommand` per placeholder name until the
 defect of [`.plan`](../.plan/README.md) §3 is fixed — 27 across four of them, measured
 on 2026-11-17.
+
+## 8. The answers to §6 — 2026-11-21
+
+In [`.decisions/`](../.decisions/README.md), round of 2026-11-21, from the sheet [`PERGUNTAS-2026-11-20.md`](../.plan/PERGUNTAS-2026-11-20.md).
+
+| | answer | what the Order builds |
+|---|---|---|
+| N1 | a | one command, `PIN`, whose chained operand chooses the form: `if`, `else` and `case`, and any other command the type whose attribute it pins |
+| N2 | a | `else` and `case` are words of `PIN`'s own, valid only chained to it |
+| N3 | a | one element, `<pin form="…">` |
+| N4 | a | the PIN sits in *Frame*, beside `SECTION`, `BLOCK` and `PT` |

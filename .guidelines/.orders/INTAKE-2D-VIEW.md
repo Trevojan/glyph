@@ -5,9 +5,8 @@
 > organize a 2D intuitive view and enable editing via visible links with different
 > types of operations and connectors. there must be XML Orders describing the details
 > of this bigger feature."* This file measures what the engine and the icons already
-> give, proposes the model, and asks what the model leaves to decide. §6 holds the
-> Regent's answers, and nothing of the series is built before them. Measured at
-> `c078f2c`.
+> give, proposes the model, and asks what the model leaves to decide. The Regent
+> answered on 2026-11-21, and §6 holds the signed model. Measured at `c078f2c`.
 
 ## 1. What the tree gives a picture
 
@@ -127,6 +126,33 @@ The session recommends **V1 a, V2 a, V3 a, V4 b, V5 a, V6 b, V7 b**: V1 a and V6
 keep one owner for each fact; V4 b keeps the Order free of what is personal; and V7 b
 because a plane edited by links needs the source in sight, which a tab hides.
 
-## 6. The Regent's answers
+## 6. The signed model — 2026-11-21
 
-Not given yet. `ORD-0001` stops here.
+In [`.decisions/`](../.decisions/README.md), round of 2026-11-21, from the sheet [`PERGUNTAS-2026-11-20.md`](../.plan/PERGUNTAS-2026-11-20.md).
+
+| | answer | what the series builds |
+|---|---|---|
+| V1 | a | an edit on the plane is an edit of the tree; `fromAST` writes the source, and the engine reads it again before the plane changes |
+| V2 | a | the seven connectors of §3, each drawn and each edited: nest, chain, item, sequence, reference, result and call |
+| V3 | a | a segment, a `[section`, a `[block` and a `[part` are frames that hold what they contain |
+| V4 | *"b, per EMS. when the ORD is NEM, then it's in the ORD. the EMS config file handles position; the ORD front-matter handles position."* | a position belongs to the series: an Order of a series keeps its positions in the `EMS.json` of that series, and a loose Order of `NEM/` keeps them in its own front-matter. Where none is stored, the computed layout answers. A position is not personal, so it lives in the repository |
+| V5 | a | a normalised set generated from the delivered files: one size, the colours of the interface, the name drawn by the page |
+| V6 | b | `binds` and `ref` enter the envelope, the `ast` hashes move by decision, and the page derives the graph from the envelope |
+| V7 | b | the plane is a surface of its own, with the source beside it |
+
+**The nodes, the frames and the connectors** are §3 as written: a command is its icon
+tile with its name, a literal its text attached to the command it is the operand of;
+the four frames of V3; and the seven connectors of the table of §3, each writing the
+operator in its *written as* column and drawn from the fact in its *drawn from* column,
+`binds` and `ref` read from the envelope (V6).
+
+**What V4 leaves for the Order that stores a position.** `EMS.json` does not exist yet
+([`INTAKE-EMS-JSON.md`](INTAKE-EMS-JSON.md), step 2 of the trail), and no Order source
+has a front-matter: the shape of the positions field, and whether a loose Order's
+front-matter enters what `--bundle` emits, are that Order's to propose. Until then the
+computed layout is the only one.
+
+**The queue, read against the model.** `ORD-0002` to `ORD-0005` read as signed.
+`ORD-0006` kept what is personal about a picture on the user's machine; under V4 the
+position is the series', so it is emitted again as its version 2, storing positions
+where V4 says and waiting for step 2 as well as steps 3 and 11.

@@ -1,9 +1,9 @@
 # Intake — the raw fence and the logic block, through the burn
 
 > **The measured proposal for the two burns `H-16` names as known**, `OC-12` and `R-04`,
-> left outside [`INTAKE-BURN-PLACEHOLDER.md`](INTAKE-BURN-PLACEHOLDER.md) §4. It opens no
-> Order: the Order opens with the answers to §4 once the open slot is free
-> (`EMS-003/ORD-0001` holds it). Measured at `46f47e5`, engine 4.7.10.09, with an
+> left outside [`INTAKE-BURN-PLACEHOLDER.md`](INTAKE-BURN-PLACEHOLDER.md) §4. The Regent
+> answered §4 on 2026-11-21, and §5 holds the answers. The Order opens with them once the
+> open slot is free. Measured at `46f47e5`, engine 4.7.10.09, with an
 > experimental patch applied to `scripts/core/burn.js` and taken back out. Nothing of it
 > is committed.
 
@@ -82,3 +82,14 @@ fence.
   rules.
 - **F3 a.** It is the answer B1 gave for the same kind of defect.
 - **F4 a.** With the `KNOWN` list empty, every new burn defect fails `H-16` by name.
+
+## 5. The answers — 2026-11-21
+
+In [`.decisions/`](../.decisions/README.md), round of 2026-11-21, from the sheet [`PERGUNTAS-2026-11-20.md`](../.plan/PERGUNTAS-2026-11-20.md).
+
+| | answer | what the Order builds |
+|---|---|---|
+| F1 | a | the raw fence carries its body verbatim inside the open fence |
+| F2 | a | every logic block burns as the open fence carrying its rules, named or not |
+| F3 | b | the Rust only: `glyph-burn` changes, `burn.js` keeps the defect until the JS leaves, and the oracle tests name the nine `hgml` differences of §2 in `rust/testkit/known` |
+| F4 | a | the `KNOWN` list empties and an `H` case holds that a fence and a block reread to the same XML. Under F3 b the pin is the Rust's: `H-16` runs the JS burn, so its `KNOWN` keeps `OC-12` and `R-04` until the JS leaves, and a Rust count over every declared burn holds 116 of 116 with none known |

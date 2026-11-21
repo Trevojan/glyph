@@ -70,3 +70,14 @@ JS engine is the oracle's writer, so it is the last thing that can leave.
 - **J2 c** keeps a byte-for-byte guard from the first day, and grows the guard the spec owns (T2).
 - **J3 a** starts where the criterion is written and the cost is smallest.
 - **J4 b** needs no pipeline. The binary already links no crate and installs itself, and Windows is where the Regent runs it.
+
+## 3. The answers — 2026-11-21
+
+In [`.decisions/`](../.decisions/README.md), round of 2026-11-21, from the sheet [`PERGUNTAS-2026-11-20.md`](../.plan/PERGUNTAS-2026-11-20.md).
+
+| | answer | what the exit does |
+|---|---|---|
+| J1 | b | everything JS leaves, the repository's tooling included: 6,733 lines, `test-corpus.js` and `npm run check` among them |
+| J2 | b | once the JS engine is gone, the Rust is held by conformance vectors written from the spec: `conformance/golden.json` grows until it covers what the oracle covered, and the JS engine leaves only once it does |
+| J3 | a | the three tools first (M10e, M10f, M10g); then the skill and the slash commands; then the page; the engine last |
+| J4 | *"b. the installer must check and ask for installation of the plugin."* | the skill calls an installed `glyph` and refuses by name where none is installed; the install grows to Linux and macOS, and the installer checks for the plugin and asks to install it |

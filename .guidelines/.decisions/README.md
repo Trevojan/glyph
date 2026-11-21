@@ -13,6 +13,35 @@
 
 ---
 
+## 2026-11-21
+
+The Regent's answers, written on the sheet
+[`PERGUNTAS-2026-11-20.md`](../.plan/PERGUNTAS-2026-11-20.md), to 47 of its 54
+questions. E6 and E7 of [`INTAKE-EMS-JSON.md`](../.orders/INTAKE-EMS-JSON.md) and C1 to
+C5 of [`INTAKE-ORDER-COHERENCE.md`](../.orders/INTAKE-ORDER-COHERENCE.md) are still
+blank. Each intake holds its answers in a section of its own. In force.
+
+| decision | reason |
+|---|---|
+| **The 2D view: an edit changes the tree and `fromAST` writes the source; the seven connectors of §3 are drawn and edited; a section, a block and a part are frames; the icons are a normalised set; `binds` and `ref` enter the envelope, and the `ast` hashes move by decision; the plane is a surface of its own, with the source beside it** (V1 a, V2 a, V3 a, V5 a, V6 b, V7 b) | *"a."* to each, the session's recommendation. [`INTAKE-2D-VIEW.md`](../.orders/INTAKE-2D-VIEW.md) §6 holds the signed model |
+| **A position on the plane lives with the series: in the `EMS.json` of the series the Order belongs to, and, for a loose Order of `NEM/`, in the Order's own front-matter; the computed layout is the default** (V4) | *"b, per EMS. when the ORD is NEM, then it's in the ORD. the EMS config file handles position; the ORD front-matter handles position."* The position is a fact of the series, not of the user's machine, so it is in the repository. `EMS-003/ORD-0006` said the opposite and is emitted again |
+| **The generated XSD describes the ORD's declaration; its source is that declaration, and the W3C XSD is its projection, written when a tool asks for it; it travels inside the package, in `<schema>`** (X1 a, X2 c, X3 a) | *"a."*, *"c."*, *"a."*, the session's recommendation |
+| **The engine validates the XML with a validator of its own, in each engine, and the two validators are two Orders** (X4 a) | *"a. we need to keep caution here. it is needed to build JS and Rust validators, and this may fit two new ORDs."* Step 1 of the trail is two Orders: the JS validator first, the Rust one after, held by the oracle |
+| **The gate runs where an XML enters from outside the engine and over every bundle under `.orders/` in `npm run check`, and what it finds is logged under `.orders/`** (X5 b) | *"b. logging would also be helpful; may it be inside `.orders/`."* The log's shape is the Order's to propose |
+| **Both engines build the XSD, the JS first, and the trail confirms that the JS leaves cleanly and the Rust takes over** (X6 a) | *"a. let's confirm JS will leave correctly and Rust will take over."* |
+| **`EMS.json`: the ratified fields only, the Orders staying in the spec; the configuration enters each package whole, with its digest; `engine` names the version new Orders are bundled with; the traffic's read half is derived from `[ctx]`; the session drafts the first `EMS.json` of each series** (E1 a, E2 a, E3 a, E4 a, E5 a) | *"a."* to each (*"a,"* for E2), the session's recommendation |
+| **The item scheme: `root-x` only on a root that has items, `x` the root's own name, written as the attribute `origin`, two digits and three past 99** (I1 a to I4 a) | *"a."* to each, the session's recommendation |
+| **The PIN is one command, `PIN`, whose chained operand chooses the form: `if`, `else` and `case`, the last two valid only chained to it; one element, `<pin form>`; and the PIN in the *Frame* category** (N1 a to N4 a) | *"a."* to each, the session's recommendation |
+| **An Order invokes a skill with the `[skl'name']` it already writes, resolved against the `invoke` of the `EMS.json`; a predefined action is a named entry of that `invoke`, and `<invoke>` may carry a `source=""` attribute that names where it resolved; the check runs at `--bundle` and again when the Harness follows the Order** (K1 a, K2 a, K4 b) | *"a."*; *"a. it may add an attribute `source=""` to `<invoke>` so to solve this problem."*; *"b."* |
+| **The Explorer's generic skills live inside the binary, immutable and out of the Explorer's reach, and an emitted bundle carries the generic skills it uses** (K3 b) | *"b. needs to be immutable and inaccessible to the Explorer itself. any changes may break the engine, and it could result in the need of a regeneration of EMS-000, which is a concern we don't want the final user to face. also, when emitted, the generic skills must also come with the bundle, so any Harness may read and follow the XML directly on input."* Against the session's a: a user's edit can no longer reach them, and a Harness reads the bundle without the binary |
+| **The Explorer's shell is `tauri`, in a binary of its own, `glyph-shell`, in a workspace outside `rust/`; the ADR of [`INTAKE-EXPLORER.md`](../.orders/INTAKE-EXPLORER.md) §3 is signed naming `tauri`; the page goes by the relay only, and the views move into the engine panel by panel** (S1 a, S2 a, S3 a, S4 a) | *"a, but not sure. "no dependencies" is proven something nearly impossible to maintain strictly. let's hope `tauri` is the only or kind of dependencies `Glyph's Explorer` will rely on."*; *"a."* to the other three. Against the session's S1 b (`wry` + `tao`, 78 crates on Windows against 209): the ADR pins `tauri` at an exact version, its tree measured by O7, and a second webview crate needs an ADR of its own |
+| **Everything JS leaves, the repository's tooling included; once the JS engine is gone, the Rust is held by conformance vectors written from the spec, `conformance/golden.json` grown until it covers what the oracle covered; the three tools leave first** (J1 b, J2 b, J3 a) | *"b."*, *"b."*, *"a."* Against the session's J1 a and J2 c: `npm run check` and `test-corpus.js` leave too, and no frozen export of the oracle stays beside the Rust tests, so the vectors must cover what the oracle covers before the JS engine leaves |
+| **The skill calls an installed `glyph`, and refuses by name where none is installed; the install grows to Linux and macOS, and the installer checks for the plugin and asks to install it** (J4 b) | *"b. the installer must check and ask for installation of the plugin."* |
+| **The burn fences: the raw fence carries its body verbatim, every logic block burns as the open fence carrying its rules, the Rust only, and the pin is the empty `KNOWN` with an `H` case** (F1 a, F2 a, F3 b, F4 a) | *"a."*, *"a."*, *"b."*, *"a."* Against the session's F3 a: the JS burn keeps the defect until it leaves, and the oracle names the nine `hgml` differences |
+| **The diagnostic spans: T and N first, R, P, L and D in an Order of their own; a pair takes the second node's span, a template body the invocation's, the document a span of its own; both engines, walking towards Rust only** (D1 b, D2 a, D3 a, D4 a, D5 a) | *"b."*, *"a."*, *"a."*, *"a."*, *"a. treat it to walk towards Rust-only in the following versions."* |
+
+---
+
 ## 2026-11-20
 
 The Regent's answers, given in the session, to B1–B4 of

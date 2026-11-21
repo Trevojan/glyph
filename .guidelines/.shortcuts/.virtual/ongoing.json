@@ -1,7 +1,7 @@
 {
   "_about": "Registro do trabalho dos agentes: o primeiro relance ao voltar a este repositório. Aponta, nunca copia. O modelo é o do toolkit Regency, library/virtualpath.md §3; o detalhe de cada item mora no source.",
   "schema": 1,
-  "updated": "2026-11-20",
+  "updated": "2026-11-21",
   "items": [
     {
       "id": "PLAN-1",
@@ -24,9 +24,9 @@
     {
       "id": "EMS-003-2D-VIEW",
       "title": "the 2D view: a package as icons on a plane, edited by its visible links",
-      "state": "blocked",
+      "state": "ongoing",
       "who": "DV",
-      "since": "2026-11-11",
+      "since": "2026-11-21",
       "source": ".decisions/README.md, 2026-11-11",
       "where": [
         "order:EMS-003/ORD-0001",
@@ -34,8 +34,7 @@
         ".guidelines/.orders/EMS-003/EMS-003.pgml",
         ".scope/asset/glyph-icons"
       ],
-      "blocked_by": "the Regent: the questions V1 to V7 of INTAKE-2D-VIEW.md §5",
-      "next": "ORD-0001 holds the open slot again since EMS-002/ORD-0035 closed on 2026-11-20; once the gate is answered, write the signed model in the intake §6, re-emit any queued ORD it changes, close ORD-0001 and open ORD-0002"
+      "next": "the Regent answered V1 to V7 on 2026-11-21 and INTAKE-2D-VIEW.md §6 holds the signed model; re-emit ORD-0006 as version 2 (V4 puts a position in the series' EMS.json, or a loose Order's front-matter, not on the user's machine), close ORD-0001 and open ORD-0002"
     },
     {
       "id": "EFF-8",
@@ -49,7 +48,7 @@
       "id": "XSD-GATE",
       "title": "o portão do XSD: gerado pelo motor, e conferido contra o XML",
       "state": "backlog",
-      "next": "the measured proposal is INTAKE-XSD.md §4, X1 to X6, waiting for the Regent; the Order opens with the answers once the open slot is free",
+      "next": "the Regent answered X1 to X6 on 2026-11-21 (INTAKE-XSD.md §5): two Orders, the JS validator first and the Rust one after, the gate over every bundle under .orders/ in npm run check with a log under .orders/; the first opens once the open slot is free",
       "source": ".orders/INTAKE-EFFECTS.md §8.1",
       "where": [
         ".guidelines/.orders/INTAKE-XSD.md"
@@ -74,7 +73,7 @@
       "id": "BURN-FENCES",
       "title": "a cerca [raw] e o bloco [logic na queima: a forma aberta, carregando o corpo, e a queima relida sem fix",
       "state": "backlog",
-      "next": "the measured proposal is INTAKE-BURN-FENCES.md §4, F1 to F4, waiting for the Regent; the Order opens with the answers once the open slot is free",
+      "next": "the Regent answered F1 to F4 on 2026-11-21 (INTAKE-BURN-FENCES.md §5): the open fence carrying its body, every logic block, the Rust only, the oracle naming the nine hgml differences; the Order opens once the open slot is free",
       "source": "INTAKE-BURN-PLACEHOLDER.md §4, H-16's KNOWN list",
       "where": [
         ".guidelines/.orders/INTAKE-BURN-FENCES.md",
@@ -86,7 +85,7 @@
       "id": "DIAG-SPANS",
       "title": "um intervalo de fonte em todo diagnóstico, para o editor sublinhar onde o problema está",
       "state": "backlog",
-      "next": "the measured proposal is INTAKE-DIAG-SPANS.md §4, D1 to D5, waiting for the Regent; the Order opens with the answers once the open slot is free",
+      "next": "the Regent answered D1 to D5 on 2026-11-21 (INTAKE-DIAG-SPANS.md §5): T and N first, R, P, L and D after, in two Orders, both engines; the first opens once the open slot is free",
       "source": "issue #13, INTAKE-VSCODE-AUTHORING.md §7",
       "where": [
         ".guidelines/.orders/INTAKE-DIAG-SPANS.md",
@@ -98,7 +97,7 @@
       "id": "ORDER-COHERENCE",
       "title": "a coerência entre Ordens e o repair como fila, o que habilita o Explorer de EMS",
       "state": "backlog",
-      "next": "the measured proposal is INTAKE-ORDER-COHERENCE.md §10, C1 to C5, waiting for the Regent; the Order follows steps 1 and 2 of the trail",
+      "next": "the measured proposal is INTAKE-ORDER-COHERENCE.md §10; C1 to C5 are still blank on the sheet PERGUNTAS-2026-11-20.md; the Order follows steps 1 and 2 of the trail",
       "source": ".orders/INTAKE-ORDER-COHERENCE.md §9",
       "where": [
         ".guidelines/.orders/INTAKE-ORDER-COHERENCE.md"
@@ -147,14 +146,14 @@
       "title": "a trilha até o Explorer final: a superfície de EMS no app e a saída do JS, a página incluída",
       "state": "backlog",
       "source": ".plan/README.md §5, A trilha até o Explorer final",
-      "next": "the intakes of steps 1, 2, 11 and 12 are written and wait for the Regent (INTAKE-XSD, INTAKE-EMS-JSON, INTAKE-EXPLORER with the ADR draft amending O7 for the shell, INTAKE-JS-EXIT); each step opens as an Order with its answers"
+      "next": "the Regent answered the intakes of steps 1, 5, 6, 10, 11 and 12 on 2026-11-21 (the ADR amending O7 signed with tauri); E6 and E7 of step 2 and C1 to C5 of steps 3 and 4 are still blank; each step opens as an Order with its answers"
     },
     {
       "id": "PRE-GATE",
       "title": "a fila de antes do portão: os intakes que faltam, as medições que são entregáveis, o fmt e o clippy no check:rust, e o registro de estudos",
       "state": "review",
       "source": ".plan/README.md §5, A fila de antes do portão",
-      "next": "worked by /regency:proceed on 2026-11-17: five intakes written (XSD, EMS-JSON, EXPLORER with the ADR draft amending O7, JS-EXIT, INVOKE), measured proposals for coherence (§10), the item scheme (§11) and the PIN vocabulary (§6), the generics measured (PIN-TRAFFIC §7), fmt and clippy -D warnings in check:rust on the pinned 1.97.0, and the study register in .sources/STUDY.md; held: the context-objects instrument and the two VP §16 arms (EFF-8, VP-16-MEASURES), and M06 done waits on M02 and M04; every intake waits for the Regent in one batch",
+      "next": "worked by /regency:proceed on 2026-11-17: five intakes written (XSD, EMS-JSON, EXPLORER with the ADR draft amending O7, JS-EXIT, INVOKE), measured proposals for coherence (§10), the item scheme (§11) and the PIN vocabulary (§6), the generics measured (PIN-TRAFFIC §7), fmt and clippy -D warnings in check:rust on the pinned 1.97.0, and the study register in .sources/STUDY.md; held: the context-objects instrument and the two VP §16 arms (EFF-8, VP-16-MEASURES), and M06 done waits on M02 and M04; the Regent answered the batch on 2026-11-21, 47 of 54, and E6, E7 and C1 to C5 wait",
       "who": "DV",
       "since": "2026-11-17",
       "where": [

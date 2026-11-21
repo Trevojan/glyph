@@ -5,9 +5,9 @@
 > final Explorer is the EMS surface in the installed app plus the exit of the JS, the
 > page included; the shell goes by a webview crate, Tauri first, so it stops depending
 > on Windows and Edge. That crate meets the rule of 2026-09-27 (O7), so this file
-> measures every candidate by that rule and drafts the ADR that would amend it for the
-> shell, for his signature (the norm of 2026-09-24: an ADR holds when the Regent signs
-> it). It opens no Order. Measured at `5685486`.
+> measures every candidate by that rule and holds the ADR that amends it for the shell,
+> signed by the Regent on 2026-11-21 (the norm of 2026-09-24: an ADR holds when the Regent
+> signs it). §7 holds the answers. It opens no Order. Measured at `5685486`.
 
 ## 1. The Explorer today
 
@@ -43,12 +43,12 @@ bundler — serves an app whose logic lives in the shell, and here the logic liv
 engine. **Every candidate with a crate grades `fix`**, so none enters under O7 as it
 stands, not even with an ADR: `fix` is refused.
 
-## 3. The ADR, drafted for the Regent's signature
+## 3. The ADR, signed on 2026-11-21
 
 The ladder already names it: M22, the standalone shell, says *"a native shell only by a
 signed ADR"*.
 
-> **ADR — the Explorer's shell (draft).** O7 holds for the engine: for every crate the
+> **ADR — the Explorer's shell, `tauri`.** O7 holds for the engine: for every crate the
 > engine's binaries link, as `crate-graph.js` and `crate-weight.js --check` hold it today.
 > The Explorer's shell is a binary of its own, `glyph-shell`, in a Cargo workspace of its
 > own outside `rust/`. Its only work is to open a native window on the page the engine
@@ -112,3 +112,14 @@ against the engine, with five open points of their own:
 - **S2 a** keeps the engine's dependency rule exactly where it is.
 - **S3 a** pins the tree without carrying it.
 - **S4 a** takes 6,130 lines out of the page at the cost of one route, the page opened from disk, which the installed app does not use; it then moves the interface into the engine one panel at a time, each held by the oracle.
+
+## 7. The answers — 2026-11-21
+
+In [`.decisions/`](../.decisions/README.md), round of 2026-11-21, from the sheet [`PERGUNTAS-2026-11-20.md`](../.plan/PERGUNTAS-2026-11-20.md).
+
+| | answer | what the Order builds |
+|---|---|---|
+| S1 | *"a, but not sure. "no dependencies" is proven something nearly impossible to maintain strictly. let's hope `tauri` is the only or kind of dependencies `Glyph's Explorer` will rely on."* | the shell is `tauri`, the 209 crates on Windows of §2, at an exact version, measured by O7 and recorded beside the ADR |
+| S2 | a | `glyph-shell`, a binary of its own in a workspace outside `rust/` |
+| S3 | a | the ADR of §3, signed, naming `tauri` |
+| S4 | a | the page goes by the relay only; the views move into the engine one panel at a time, each held by the oracle |

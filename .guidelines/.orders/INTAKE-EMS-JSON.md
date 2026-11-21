@@ -4,9 +4,10 @@
 > ([`.plan`](../.plan/README.md) §5). What `EMS.json` is, where it lives and what it
 > holds are ratified (2026-10-15, [`.decisions/`](../.decisions/README.md)); the rest is
 > built *with* the Regent — *"let's build it together"* — so this file lists what is
-> ratified, measures the series as they stand, and asks what is left. It opens no Order:
-> the Order opens after step 1, the XSD ([`INTAKE-XSD.md`](INTAKE-XSD.md)), with the
-> answers to §4. Measured at `5685486`.
+> ratified, measures the series as they stand, and asks what is left. The Regent answered
+> E1 to E5 of §4 on 2026-11-21, §5 holds them, and E6 and E7 are open. The Order opens
+> after step 1, the XSD ([`INTAKE-XSD.md`](INTAKE-XSD.md)), once they are answered.
+> Measured at `5685486`.
 
 ## 1. What is ratified
 
@@ -117,3 +118,22 @@ Explorer shows it, and E3 asks about `engine`:
 - **E5 a** is the "together" of the Regent's word.
 - **E6 a** checks a user's file with something the engine did not derive.
 - **E7 a** keeps one notation.
+
+## 5. The answers — 2026-11-21
+
+In [`.decisions/`](../.decisions/README.md), round of 2026-11-21, from the sheet [`PERGUNTAS-2026-11-20.md`](../.plan/PERGUNTAS-2026-11-20.md).
+
+| | answer | what the Order builds |
+|---|---|---|
+| E1 | a | the ratified fields only, as in §3; the Orders stay in the spec |
+| E2 | a | the configuration enters each package whole, as an element beside `<schema>`, with the digest of the `EMS.json` it came from |
+| E3 | a | `engine` names the version new Orders are bundled with, and the gate compares the manifest's `engine` for Orders bundled after the field exists |
+| E4 | a | the traffic's read half is derived from each Order's `[ctx]` paths; only the write half is typed in |
+| E5 | a | the session drafts the first `EMS.json` of each of the three series, and the Regent reads them |
+| E6 | open | how a user's `EMS.json` is validated at the trust boundary |
+| E7 | open | the notation of `xsd` |
+
+**A field the 2D view adds.** The Regent's V4 of 2026-11-21
+([`INTAKE-2D-VIEW.md`](INTAKE-2D-VIEW.md) §6) puts the positions of a series' plane in
+its `EMS.json`. The field is the 2D view's to propose when it stores one; this Order
+leaves room for it and writes none.

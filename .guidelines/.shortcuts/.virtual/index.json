@@ -1,7 +1,7 @@
 {
   "note": "written by glyph-vpath build, EMS-002; never edited by hand",
   "depth": 2,
-  "next": 3607,
+  "next": 3619,
   "files": {
     ".guidelines/.changelog/README.md": {
       "nodes": [
@@ -34,31 +34,32 @@
     },
     ".guidelines/.decisions/README.md": {
       "nodes": [
-        ["n12", "", 0, 86757, 1, 401, "aae4c62ce7d0d700", "", ""],
-        ["n13", "decisões--quem-decidiu-e-por-quê", 0, 86757, 1, 401, "aae4c62ce7d0d700", "bbffd296adb32600", "n12"],
+        ["n12", "", 0, 93533, 1, 430, "071ce9d606f6d600", "", ""],
+        ["n13", "decisões--quem-decidiu-e-por-quê", 0, 93533, 1, 430, "071ce9d606f6d600", "c75fd300ab071a00", "n12"],
         ["n14", "formato", 310, 382, 9, 7, "b5f95da43600fc00", "1b119b961fb48400", "n13"],
-        ["n3541", "2026-11-20", 382, 2571, 16, 17, "97efd346b573bf00", "ddf38a903906ac00", "n13"],
-        ["n3532", "2026-11-18", 2571, 3898, 33, 14, "8a135240e6e9e200", "3de51f50c0963080", "n13"],
-        ["n3533", "2026-11-17", 3898, 6578, 47, 18, "2455a108ad46f800", "61bc422c707e7a00", "n13"],
-        ["n3144", "2026-11-11", 6578, 16194, 65, 51, "e76d1970e8c8b000", "50204ad24f271a00", "n13"],
-        ["n3051", "2026-11-07", 16194, 19429, 116, 27, "309efad433e14400", "7f8116e6fec83b80", "n13"],
-        ["n2916", "2026-11-02", 19429, 20924, 143, 13, "1e8a2b205b804000", "53d50a68d2cced80", "n13"],
-        ["n2909", "2026-10-31", 20924, 21420, 156, 6, "c9fb0428e47bf600", "a67ec15ede9e2600", "n13"],
-        ["n2908", "2026-10-30", 21420, 22320, 162, 7, "1141fb0097934300", "983d550ebb7a5100", "n13"],
-        ["n2772", "2026-10-26", 22320, 25206, 169, 12, "a43f9038cc5e5e00", "97775fe4e6151800", "n13"],
-        ["n2206", "2026-10-25", 25206, 30417, 181, 15, "6378b4be825f7c00", "f3e0beb016678e00", "n13"],
-        ["n15", "2026-10-23", 30417, 32711, 196, 11, "313cabeeaca21800", "bf88c356618a6400", "n13"],
-        ["n2917", "2026-10-21", 32711, 34070, 207, 13, "9e1031d87e6a1680", "07db4d6e907a5600", "n13"],
-        ["n2918", "2026-10-16", 34070, 37574, 220, 19, "ec2e03204e643500", "c61b01f4d800e980", "n13"],
-        ["n2919", "2026-10-15", 37574, 55104, 239, 37, "944bc1e81abefe00", "8341aaa05f06e100", "n13"],
-        ["n16", "2026-09-27", 55104, 70751, 276, 40, "1581275053e10200", "d21194b6aade8140", "n13"],
-        ["n17", "2026-09-26", 70751, 72394, 316, 9, "752c7c50e2663900", "60284c2c68cce000", "n13"],
-        ["n18", "2026-09-25", 72394, 73591, 325, 8, "d890ff866d173200", "802caa2034924400", "n13"],
-        ["n19", "2026-09-24", 73591, 81973, 333, 29, "3277c0c0c74b8c00", "1093cee041691a00", "n13"],
-        ["n20", "2026-09-06", 81973, 84170, 362, 13, "e4bcd520bd70e600", "16aad970e40f7c00", "n13"],
-        ["n21", "2026-09-05", 84170, 85649, 375, 13, "67e05df081ec8a00", "197e689607dbfd00", "n13"],
-        ["n22", "anteriores-ainda-em-vigor", 85649, 86664, 388, 11, "126b256ee8e23600", "da6d5270b387c000", "n13"],
-        ["n23", "decisões-que-um-agente-tomou-e-o-regente-ainda-não-ratificou", 86664, 86757, 399, 3, "7de15c088ed2c600", "ae32b39875ca2b10", "n13"]
+        ["n3607", "2026-11-21", 382, 7158, 16, 29, "c0446b4812fd7700", "0d5e9d5463750700", "n13"],
+        ["n3541", "2026-11-20", 7158, 9347, 45, 17, "97efd346b573bf00", "ddf38a903906ac00", "n13"],
+        ["n3532", "2026-11-18", 9347, 10674, 62, 14, "8a135240e6e9e200", "3de51f50c0963080", "n13"],
+        ["n3533", "2026-11-17", 10674, 13354, 76, 18, "2455a108ad46f800", "61bc422c707e7a00", "n13"],
+        ["n3144", "2026-11-11", 13354, 22970, 94, 51, "e76d1970e8c8b000", "50204ad24f271a00", "n13"],
+        ["n3051", "2026-11-07", 22970, 26205, 145, 27, "309efad433e14400", "7f8116e6fec83b80", "n13"],
+        ["n2916", "2026-11-02", 26205, 27700, 172, 13, "1e8a2b205b804000", "53d50a68d2cced80", "n13"],
+        ["n2909", "2026-10-31", 27700, 28196, 185, 6, "c9fb0428e47bf600", "a67ec15ede9e2600", "n13"],
+        ["n2908", "2026-10-30", 28196, 29096, 191, 7, "1141fb0097934300", "983d550ebb7a5100", "n13"],
+        ["n2772", "2026-10-26", 29096, 31982, 198, 12, "a43f9038cc5e5e00", "97775fe4e6151800", "n13"],
+        ["n2206", "2026-10-25", 31982, 37193, 210, 15, "6378b4be825f7c00", "f3e0beb016678e00", "n13"],
+        ["n15", "2026-10-23", 37193, 39487, 225, 11, "313cabeeaca21800", "bf88c356618a6400", "n13"],
+        ["n2917", "2026-10-21", 39487, 40846, 236, 13, "9e1031d87e6a1680", "07db4d6e907a5600", "n13"],
+        ["n2918", "2026-10-16", 40846, 44350, 249, 19, "ec2e03204e643500", "c61b01f4d800e980", "n13"],
+        ["n2919", "2026-10-15", 44350, 61880, 268, 37, "944bc1e81abefe00", "8341aaa05f06e100", "n13"],
+        ["n16", "2026-09-27", 61880, 77527, 305, 40, "1581275053e10200", "d21194b6aade8140", "n13"],
+        ["n17", "2026-09-26", 77527, 79170, 345, 9, "752c7c50e2663900", "60284c2c68cce000", "n13"],
+        ["n18", "2026-09-25", 79170, 80367, 354, 8, "d890ff866d173200", "802caa2034924400", "n13"],
+        ["n19", "2026-09-24", 80367, 88749, 362, 29, "3277c0c0c74b8c00", "1093cee041691a00", "n13"],
+        ["n20", "2026-09-06", 88749, 90946, 391, 13, "e4bcd520bd70e600", "16aad970e40f7c00", "n13"],
+        ["n21", "2026-09-05", 90946, 92425, 404, 13, "67e05df081ec8a00", "197e689607dbfd00", "n13"],
+        ["n22", "anteriores-ainda-em-vigor", 92425, 93440, 417, 11, "126b256ee8e23600", "da6d5270b387c000", "n13"],
+        ["n23", "decisões-que-um-agente-tomou-e-o-regente-ainda-não-ratificou", 93440, 93533, 428, 3, "7de15c088ed2c600", "ae32b39875ca2b10", "n13"]
       ]
     },
     ".guidelines/.decisions/README.md.template": {
@@ -3384,24 +3385,25 @@
     },
     ".guidelines/.orders/INTAKE-2D-VIEW.md": {
       "nodes": [
-        ["n3474", "", 0, 7125, 1, 132, "ed2bf5700c322340", "", ""],
-        ["n3475", "intake--the-2d-view-the-measured-proposal", 0, 7125, 1, 132, "ed2bf5700c322340", "e40c64886d157000", "n3474"],
-        ["n3476", "1-what-the-tree-gives-a-picture", 642, 1929, 12, 16, "76a92ea87e3ffe00", "f0ede26c766cfe00", "n3475"],
-        ["n3477", "2-the-icons-as-delivered", 1929, 2904, 28, 18, "48246a0004920940", "b3f9d8b65892ce00", "n3475"],
-        ["n3478", "3-the-model-proposed", 2904, 4328, 46, 27, "eb843ec412606300", "0ddb260a747abe80", "n3475"],
-        ["n3479", "4-what-the-model-costs", 4328, 5100, 73, 13, "24a2089ecca07c00", "220d25d4442dac00", "n3475"],
-        ["n3480", "5-the-questions", 5100, 7059, 86, 44, "c2e3f798b4e07400", "b07768e06db3a400", "n3475"],
-        ["n3481", "6-the-regents-answers", 7059, 7125, 130, 3, "0a29e3e27bbfbe00", "301dfbdca6f8b200", "n3475"]
+        ["n3474", "", 0, 9506, 1, 158, "7fa42b426421d260", "", ""],
+        ["n3475", "intake--the-2d-view-the-measured-proposal", 0, 9506, 1, 158, "7fa42b426421d260", "c30b858054202e00", "n3474"],
+        ["n3476", "1-what-the-tree-gives-a-picture", 627, 1914, 11, 16, "76a92ea87e3ffe00", "f0ede26c766cfe00", "n3475"],
+        ["n3477", "2-the-icons-as-delivered", 1914, 2889, 27, 18, "48246a0004920940", "b3f9d8b65892ce00", "n3475"],
+        ["n3478", "3-the-model-proposed", 2889, 4313, 45, 27, "eb843ec412606300", "0ddb260a747abe80", "n3475"],
+        ["n3479", "4-what-the-model-costs", 4313, 5085, 72, 13, "24a2089ecca07c00", "220d25d4442dac00", "n3475"],
+        ["n3480", "5-the-questions", 5085, 7044, 85, 44, "c2e3f798b4e07400", "b07768e06db3a400", "n3475"],
+        ["n3608", "6-the-signed-model--2026-11-21", 7044, 9506, 129, 30, "d0b59b26e2de5600", "b72cd4c857b46800", "n3475"]
       ]
     },
     ".guidelines/.orders/INTAKE-BURN-FENCES.md": {
       "nodes": [
-        ["n3582", "", 0, 4351, 1, 84, "d59a63649a5f5200", "", ""],
-        ["n3583", "intake--the-raw-fence-and-the-logic-block-through-the-burn", 0, 4351, 1, 84, "d59a63649a5f5200", "979e9048316a5c00", "n3582"],
-        ["n3584", "1-the-defect-wider-than-the-corpus-shows", 510, 1754, 10, 23, "7cb31f90829fe300", "e31b39962c2e1e00", "n3583"],
-        ["n3585", "2-measured", 1754, 2656, 33, 14, "1f8f44f06144be00", "72f77d102b25b780", "n3583"],
-        ["n3586", "3-what-this-leaves-alone", 2656, 3062, 47, 8, "30569148af235200", "2a1ed164b0737380", "n3583"],
-        ["n3587", "4-what-the-order-would-decide", 3062, 4351, 55, 30, "2be3b074b6b01600", "acfa9a4698bf6200", "n3583"]
+        ["n3582", "", 0, 5235, 1, 95, "4dfe25ee441f6400", "", ""],
+        ["n3583", "intake--the-raw-fence-and-the-logic-block-through-the-burn", 0, 5235, 1, 95, "4dfe25ee441f6400", "01470b9411e62200", "n3582"],
+        ["n3584", "1-the-defect-wider-than-the-corpus-shows", 513, 1757, 10, 23, "7cb31f90829fe300", "e31b39962c2e1e00", "n3583"],
+        ["n3585", "2-measured", 1757, 2659, 33, 14, "1f8f44f06144be00", "72f77d102b25b780", "n3583"],
+        ["n3586", "3-what-this-leaves-alone", 2659, 3065, 47, 8, "30569148af235200", "2a1ed164b0737380", "n3583"],
+        ["n3587", "4-what-the-order-would-decide", 3065, 4355, 55, 31, "956ed65aa03e6200", "9a80e5a4879d9c00", "n3583"],
+        ["n3609", "5-the-answers--2026-11-21", 4355, 5235, 86, 10, "51997ad078d3ea00", "639e82ce947a5800", "n3583"]
       ]
     },
     ".guidelines/.orders/INTAKE-BURN-INVARIANCE.md": {
@@ -3431,18 +3433,19 @@
     },
     ".guidelines/.orders/INTAKE-DIAG-SPANS.md": {
       "nodes": [
-        ["n3588", "", 0, 5293, 1, 89, "bc586d2c8dda0720", "", ""],
-        ["n3589", "intake--a-source-span-on-every-diagnostic", 0, 5293, 1, 89, "bc586d2c8dda0720", "5e925cc898ec9200", "n3588"],
-        ["n3590", "1-what-carries-a-span-today", 477, 1362, 10, 19, "795c95ce7d2e4800", "e373ade8b57b1a00", "n3589"],
-        ["n3591", "2-what-each-emitter-has-in-scope", 1362, 3295, 29, 16, "dbfd930a17bed680", "07fd50ac2ad36100", "n3589"],
-        ["n3592", "3-what-this-leaves-alone", 3295, 3687, 45, 8, "f7d8b95ebaad6600", "8874b102944a9200", "n3589"],
-        ["n3593", "4-what-the-order-would-decide", 3687, 5293, 53, 37, "a36d3dc2fe0a0800", "105f921c1efab600", "n3589"]
+        ["n3588", "", 0, 6142, 1, 101, "b7461afa0de26600", "", ""],
+        ["n3589", "intake--a-source-span-on-every-diagnostic", 0, 6142, 1, 101, "b7461afa0de26600", "d87efcaee08a5e00", "n3588"],
+        ["n3590", "1-what-carries-a-span-today", 493, 1378, 10, 19, "795c95ce7d2e4800", "e373ade8b57b1a00", "n3589"],
+        ["n3591", "2-what-each-emitter-has-in-scope", 1378, 3311, 29, 16, "dbfd930a17bed680", "07fd50ac2ad36100", "n3589"],
+        ["n3592", "3-what-this-leaves-alone", 3311, 3703, 45, 8, "f7d8b95ebaad6600", "8874b102944a9200", "n3589"],
+        ["n3593", "4-what-the-order-would-decide", 3703, 5310, 53, 38, "0cf841d8d0ef1b70", "dc72f8a26205ef00", "n3589"],
+        ["n3610", "5-the-answers--2026-11-21", 5310, 6142, 91, 11, "db60d7104a2ce200", "09ab8e1ed4392200", "n3589"]
       ]
     },
     ".guidelines/.orders/INTAKE-EFFECTS.md": {
       "nodes": [
-        ["n656", "", 0, 18273, 1, 381, "26ea04280c5f5b80", "", ""],
-        ["n657", "preliminary-intake--effects", 0, 18273, 1, 381, "26ea04280c5f5b80", "940b43ae50c10800", "n656"],
+        ["n656", "", 0, 18793, 1, 392, "76600bf8e4397b00", "", ""],
+        ["n657", "preliminary-intake--effects", 0, 18793, 1, 392, "76600bf8e4397b00", "1782d910f30a65c0", "n656"],
         ["n658", "1-what-the-regent-wants", 399, 1007, 10, 12, "1ead87263b6b9a00", "39fa0bc057365f00", "n657"],
         ["n659", "2-where-it-does-not-go-and-why", 1007, 1762, 22, 15, "fd77ed9440c06500", "9204e25442821cc0", "n657"],
         ["n660", "3-where-it-does-go--measured", 1762, 3135, 37, 37, "75afb98815c0d800", "157d6a547c012400", "n657"],
@@ -3458,29 +3461,32 @@
         ["n668", "9-cost-split", 14221, 16015, 307, 27, "af7222a0dd774d00", "48a605eef1174000", "n657"],
         ["n2999", "91-item-and-root--both-under-a-naming-scheme", 14809, 16015, 314, 20, "40341510da0c3000", "085b63bc6c82dd00", "n668"],
         ["n3000", "10-unrelated-finding--closed-with-no-engine-work", 16015, 16565, 334, 10, "77edfc7ca82f4c00", "01eb11b0c25e9800", "n657"],
-        ["n3495", "11-the-item-scheme-the-measured-proposal", 16565, 18273, 344, 38, "832319381ce30400", "89187890093c2600", "n657"]
+        ["n3495", "11-the-item-scheme-the-measured-proposal", 16565, 18274, 344, 39, "a240a9b8d3838280", "6b85da706810ad40", "n657"],
+        ["n3611", "12-the-answers-to-11--2026-11-21", 18274, 18793, 383, 10, "b1255f60ad14d100", "5c78112e3000f800", "n657"]
       ]
     },
     ".guidelines/.orders/INTAKE-EMS-JSON.md": {
       "nodes": [
-        ["n3496", "", 0, 6504, 1, 119, "90c819ee20fcda00", "", ""],
-        ["n3497", "intake--emsjson-the-configuration-a-series-carries", 0, 6504, 1, 119, "90c819ee20fcda00", "738a9a0c41533600", "n3496"],
-        ["n3498", "1-what-is-ratified", 615, 1976, 11, 12, "a5039d407a019c00", "0bc3bd48f9ab7400", "n3497"],
-        ["n3499", "2-the-three-series-measured", 1976, 3165, 23, 23, "11d20b7a91ef7c00", "9124c2188050e800", "n3497"],
-        ["n3500", "3-the-proposed-shape", 3165, 3707, 46, 20, "6770e970b1a12000", "537f1d64f518de00", "n3497"],
-        ["n3501", "4-the-questions", 3707, 6504, 66, 54, "6330bd703378b000", "62d41efab374a800", "n3497"]
+        ["n3496", "", 0, 7785, 1, 139, "b2cb0ac80dc32c00", "", ""],
+        ["n3497", "intake--emsjson-the-configuration-a-series-carries", 0, 7785, 1, 139, "b2cb0ac80dc32c00", "5f9bae169e4b1c40", "n3496"],
+        ["n3498", "1-what-is-ratified", 688, 2049, 12, 12, "a5039d407a019c00", "0bc3bd48f9ab7400", "n3497"],
+        ["n3499", "2-the-three-series-measured", 2049, 3238, 24, 23, "11d20b7a91ef7c00", "9124c2188050e800", "n3497"],
+        ["n3500", "3-the-proposed-shape", 3238, 3780, 47, 20, "6770e970b1a12000", "537f1d64f518de00", "n3497"],
+        ["n3501", "4-the-questions", 3780, 6578, 67, 55, "9fba471011478200", "83ecb3d0d635aa00", "n3497"],
+        ["n3612", "5-the-answers--2026-11-21", 6578, 7785, 122, 18, "a39361e800fa5680", "bb44186d72e05a00", "n3497"]
       ]
     },
     ".guidelines/.orders/INTAKE-EXPLORER.md": {
       "nodes": [
-        ["n3502", "", 0, 7195, 1, 114, "b0ab5f983dc25800", "", ""],
-        ["n3503", "intake--the-explorer-its-shell-its-page-and-the-ems-surface", 0, 7195, 1, 114, "b0ab5f983dc25800", "809ee0f64cf12568", "n3502"],
-        ["n3504", "1-the-explorer-today", 719, 1546, 12, 9, "e85454e8784fd400", "fc6c71963a187f00", "n3503"],
-        ["n3505", "2-the-shell-measured-by-o7", 1546, 3035, 21, 25, "48633ed606472800", "f2bdd5a4ddaaa000", "n3503"],
-        ["n3506", "3-the-adr-drafted-for-the-regents-signature", 3035, 3943, 46, 15, "349c1af8b99d4000", "58354580ef949a00", "n3503"],
-        ["n3507", "4-the-page", 3943, 4991, 61, 12, "62ddc6c261da2200", "6ce6d238ed613e00", "n3503"],
-        ["n3508", "5-the-ems-surface-step-11", 4991, 5583, 73, 10, "bd30c9f84fbe7600", "c1eeab04fcf21000", "n3503"],
-        ["n3509", "6-the-questions", 5583, 7195, 83, 32, "f38e91ce710d0000", "689410e019669e00", "n3503"]
+        ["n3502", "", 0, 8018, 1, 125, "5ed823a2e20c0900", "", ""],
+        ["n3503", "intake--the-explorer-its-shell-its-page-and-the-ems-surface", 0, 8018, 1, 125, "5ed823a2e20c0900", "44fc52a855635b00", "n3502"],
+        ["n3504", "1-the-explorer-today", 753, 1580, 12, 9, "e85454e8784fd400", "fc6c71963a187f00", "n3503"],
+        ["n3505", "2-the-shell-measured-by-o7", 1580, 3069, 21, 25, "48633ed606472800", "f2bdd5a4ddaaa000", "n3503"],
+        ["n3613", "3-the-adr-signed-on-2026-11-21", 3069, 3964, 46, 15, "430b6b78d96f5000", "58597f3cd6ce4e00", "n3503"],
+        ["n3507", "4-the-page", 3964, 5012, 61, 12, "62ddc6c261da2200", "6ce6d238ed613e00", "n3503"],
+        ["n3508", "5-the-ems-surface-step-11", 5012, 5604, 73, 10, "bd30c9f84fbe7600", "c1eeab04fcf21000", "n3503"],
+        ["n3509", "6-the-questions", 5604, 7217, 83, 33, "2d6f778c74a02200", "8b16a0600ed85880", "n3503"],
+        ["n3614", "7-the-answers--2026-11-21", 7217, 8018, 116, 10, "293d91305f549500", "105f71bad04a3880", "n3503"]
       ]
     },
     ".guidelines/.orders/INTAKE-FIELD-2026-09.md": {
@@ -3535,18 +3541,20 @@
     },
     ".guidelines/.orders/INTAKE-INVOKE.md": {
       "nodes": [
-        ["n3510", "", 0, 2461, 1, 46, "9c130fb8746a9c80", "", ""],
-        ["n3511", "intake--invoke-validated-by-the-series-configuration", 0, 2461, 1, 46, "9c130fb8746a9c80", "9dd1ae404b0b8600", "n3510"],
+        ["n3510", "", 0, 3768, 1, 57, "30302e20867cc400", "", ""],
+        ["n3511", "intake--invoke-validated-by-the-series-configuration", 0, 3768, 1, 57, "30302e20867cc400", "4ab61a88807dca00", "n3510"],
         ["n3512", "1-what-the-engine-emits-today", 725, 1207, 12, 9, "4f9e37d0ac3ad600", "818cf350248ac700", "n3511"],
-        ["n3513", "2-the-questions", 1207, 2461, 21, 26, "e9a8a4c8da335800", "56e9e0b07c209a00", "n3511"]
+        ["n3513", "2-the-questions", 1207, 2462, 21, 27, "967b5d66a36e0f00", "8c2cc4d0a740d400", "n3511"],
+        ["n3615", "3-the-answers--2026-11-21", 2462, 3768, 48, 10, "71e63312e8aad800", "25d9fde0e2c2d400", "n3511"]
       ]
     },
     ".guidelines/.orders/INTAKE-JS-EXIT.md": {
       "nodes": [
-        ["n3514", "", 0, 4727, 1, 72, "b56a8728a5128500", "", ""],
-        ["n3515", "intake--the-exit-of-the-js", 0, 4727, 1, 72, "b56a8728a5128500", "929e6e803f8ed000", "n3514"],
+        ["n3514", "", 0, 5697, 1, 83, "2c7a2718f3f8c180", "", ""],
+        ["n3515", "intake--the-exit-of-the-js", 0, 5697, 1, 83, "2c7a2718f3f8c180", "012bb3c2b3928c00", "n3514"],
         ["n3516", "1-what-is-still-js", 615, 2673, 11, 25, "1caaf2c207c2f400", "f961d552424ba900", "n3515"],
-        ["n3517", "2-the-questions", 2673, 4727, 36, 37, "99ea1da432fc2640", "8af204204c18a600", "n3515"]
+        ["n3517", "2-the-questions", 2673, 4728, 36, 38, "f98cb8e85f627b00", "e4fc8e20dc708c00", "n3515"],
+        ["n3616", "3-the-answers--2026-11-21", 4728, 5697, 74, 10, "79fa02d861cb3c00", "77d6253eaa2c1c00", "n3515"]
       ]
     },
     ".guidelines/.orders/INTAKE-ORDER-COHERENCE.md": {
@@ -3591,15 +3599,16 @@
     },
     ".guidelines/.orders/INTAKE-PIN-TRAFFIC.md": {
       "nodes": [
-        ["n720", "", 0, 13023, 1, 192, "a8aa576843fa1a00", "", ""],
-        ["n721", "preliminary-intake--pin-traffic-and-the-ems-the-user-drives", 0, 13023, 1, 192, "a8aa576843fa1a00", "d23aea9489256400", "n720"],
+        ["n720", "", 0, 13614, 1, 203, "85ed143e9367cb00", "", ""],
+        ["n721", "preliminary-intake--pin-traffic-and-the-ems-the-user-drives", 0, 13614, 1, 203, "85ed143e9367cb00", "e91fba26d9ebfe00", "n720"],
         ["n722", "1-pin--a-conditional-the-user-writes-in-the-editor", 344, 1709, 8, 25, "de1f97ac431dd600", "33fe2ca8abe06000", "n721"],
         ["n723", "2-the-ems-and-the-ord-as-the-user-drives-them", 1709, 3198, 33, 24, "ed4a1b901b197600", "89f7548e4debe280", "n721"],
         ["n724", "3-traffic-and-the-paths", 3198, 4596, 57, 25, "11d075fa64f2d800", "68e6723883f2cd00", "n721"],
         ["n725", "4-the-ems-configuration-inside-every-ords-package", 4596, 5270, 82, 12, "f0e8d738edddf200", "e3b3dae43bc6a000", "n721"],
         ["n726", "5-settled-when-built", 5270, 8537, 94, 15, "c25eaf28f5957680", "3346e2b4be016a00", "n721"],
         ["n3519", "6-the-pin-vocabulary-the-measured-proposal", 8537, 10563, 109, 41, "1375c1a472b5d600", "2cb078fe7b0261c0", "n721"],
-        ["n3520", "7-the-generics-measured--the-list-the-ems-000-is-rewritten-over", 10563, 13023, 150, 43, "1d99ec58ba15e000", "35b868faab810c00", "n721"]
+        ["n3520", "7-the-generics-measured--the-list-the-ems-000-is-rewritten-over", 10563, 13024, 150, 44, "eb4f051687828c00", "814d31d0fd0e5200", "n721"],
+        ["n3617", "8-the-answers-to-6--2026-11-21", 13024, 13614, 194, 10, "48831c96621d7200", "63e6b0188fb2b600", "n721"]
       ]
     },
     ".guidelines/.orders/INTAKE-RESTRUCTURE.md": {
@@ -3744,12 +3753,13 @@
     },
     ".guidelines/.orders/INTAKE-XSD.md": {
       "nodes": [
-        ["n3521", "", 0, 6707, 1, 111, "8a4ed7681326c200", "", ""],
-        ["n3522", "intake--the-xsd-the-engine-generates-and-the-gate-that-holds-it-to-the-xml", 0, 6707, 1, 111, "8a4ed7681326c200", "0a4b3f101c28f000", "n3521"],
-        ["n3523", "1-what-the-engine-emits-today", 627, 2232, 11, 26, "909709fca3b03e00", "7329f66ad146d000", "n3522"],
-        ["n3524", "2-three-schemas-and-the-one-the-norm-names", 2232, 3482, 37, 14, "72eaa0da71fb6800", "3a4e4f302d7d3e00", "n3522"],
-        ["n3525", "3-what-any-answer-costs", 3482, 4092, 51, 12, "bc103fd86ee6fc80", "be9f29fa83d40680", "n3522"],
-        ["n3526", "4-the-questions", 4092, 6707, 63, 49, "056d71a03a9f5380", "29ce974475d03100", "n3522"]
+        ["n3521", "", 0, 8188, 1, 125, "988a33ea40916400", "", ""],
+        ["n3522", "intake--the-xsd-the-engine-generates-and-the-gate-that-holds-it-to-the-xml", 0, 8188, 1, 125, "988a33ea40916400", "815f1e0a0bda0800", "n3521"],
+        ["n3523", "1-what-the-engine-emits-today", 707, 2312, 12, 26, "909709fca3b03e00", "7329f66ad146d000", "n3522"],
+        ["n3524", "2-three-schemas-and-the-one-the-norm-names", 2312, 3562, 38, 14, "72eaa0da71fb6800", "3a4e4f302d7d3e00", "n3522"],
+        ["n3525", "3-what-any-answer-costs", 3562, 4172, 52, 12, "bc103fd86ee6fc80", "be9f29fa83d40680", "n3522"],
+        ["n3526", "4-the-questions", 4172, 6788, 64, 50, "3549ee9e60ac0300", "1e382fcaba1d7400", "n3522"],
+        ["n3618", "5-the-answers--2026-11-21", 6788, 8188, 114, 12, "81d88f9895537800", "1a1fe8d007475d00", "n3522"]
       ]
     },
     ".guidelines/.orders/ORD-2026-08-30-01.dispatch.json": {
@@ -4100,19 +4110,19 @@
     },
     ".guidelines/.plan/PERGUNTAS-2026-11-20.md": {
       "nodes": [
-        ["n3594", "", 0, 24281, 1, 658, "a7c8864e820dd000", "", ""],
-        ["n3595", "perguntas-de-2026-11-20--para-o-regente-preencher", 0, 24281, 1, 658, "a7c8864e820dd000", "89540ad0bd178600", "n3594"],
-        ["n3596", "intake-2d-view", 1720, 4121, 28, 76, "3cb1103c79dae200", "b6e1ce0846b05800", "n3595"],
-        ["n3597", "intake-xsd", 4121, 7096, 104, 74, "886542f679503a00", "1c7e2f8c92d94a00", "n3595"],
-        ["n3598", "intake-ems-json", 7096, 10258, 178, 82, "0826f73c688bad40", "bb7becd6f3cb1000", "n3595"],
-        ["n3599", "intake-order-coherence", 10258, 12236, 260, 57, "9b95d206c8dbd420", "52f9ab52b2eb3900", "n3595"],
-        ["n3600", "intake-effects", 12236, 13639, 317, 46, "0765ebecb3d2df00", "08375936a0874600", "n3595"],
-        ["n3601", "intake-pin-traffic", 13639, 15093, 363, 46, "1c66f204f3888040", "e86d1cac4ed0b880", "n3595"],
-        ["n3602", "intake-invoke", 15093, 16614, 409, 45, "85ec923600d67800", "4d595686bd160400", "n3595"],
-        ["n3603", "intake-explorer", 16614, 18510, 454, 51, "fb188b24b0d52e00", "7026fb8e3e1edc00", "n3595"],
-        ["n3604", "intake-js-exit", 18510, 20813, 505, 56, "cfcd921c58c77e00", "627065b833831d00", "n3595"],
-        ["n3605", "intake-burn-fences", 20813, 22372, 561, 46, "8652c97870103600", "bbe5c46ca79c8000", "n3595"],
-        ["n3606", "intake-diag-spans", 22372, 24281, 607, 52, "38a2e5a67b7ac200", "99367cc8a5ab0000", "n3595"]
+        ["n3594", "", 0, 25464, 1, 657, "137bdf10eb9bce00", "", ""],
+        ["n3595", "perguntas-de-2026-11-20--para-o-regente-preencher", 0, 25464, 1, 657, "137bdf10eb9bce00", "6e61083474abe780", "n3594"],
+        ["n3596", "intake-2d-view", 1720, 4264, 28, 76, "9ba0da9af1985c00", "59bce91622b0e800", "n3595"],
+        ["n3597", "intake-xsd", 4264, 7481, 104, 74, "40df2386ec219900", "56e6709041e68600", "n3595"],
+        ["n3598", "intake-ems-json", 7481, 10653, 178, 82, "94b0be36f85ffc00", "f7916a566d5e5000", "n3595"],
+        ["n3599", "intake-order-coherence", 10653, 12631, 260, 57, "9b95d206c8dbd420", "52f9ab52b2eb3900", "n3595"],
+        ["n3600", "intake-effects", 12631, 14042, 317, 46, "281b9058872e1400", "c59bf1988581c300", "n3595"],
+        ["n3601", "intake-pin-traffic", 14042, 15504, 363, 46, "1ae389b80cc0ea00", "7fe1f29844e95ac0", "n3595"],
+        ["n3602", "intake-invoke", 15504, 17458, 409, 45, "65786ec6b2a89000", "7acb4240e4787000", "n3595"],
+        ["n3603", "intake-explorer", 17458, 19542, 454, 51, "a2c2f7185757ef00", "bfaf32e6edf43600", "n3595"],
+        ["n3604", "intake-js-exit", 19542, 21918, 505, 56, "0cd0b164f0017e00", "cdc987005de51f00", "n3595"],
+        ["n3605", "intake-burn-fences", 21918, 23485, 561, 46, "39495d84a33e7200", "1a4b927ce045d400", "n3595"],
+        ["n3606", "intake-diag-spans", 23485, 25464, 607, 51, "8e8a421cf41edb00", "94289930ceb39000", "n3595"]
       ]
     },
     ".guidelines/.plan/PERGUNTAS-ABERTAS.md": {
@@ -4177,24 +4187,24 @@
     },
     ".guidelines/.plan/README.md": {
       "nodes": [
-        ["n1142", "", 0, 30456, 1, 380, "4d15f01e5a0f3200", "", ""],
-        ["n1143", "plano--o-que-vem-a-seguir", 0, 30456, 1, 380, "4d15f01e5a0f3200", "4e886528ddc80200", "n1142"],
-        ["n1144", "autorizado-pelo-regente-ainda-não-construído", 217, 19612, 7, 252, "172eb8de6e344100", "b2d5eae6305be900", "n1143"],
+        ["n1142", "", 0, 31443, 1, 386, "8bb9cd067a2f3e00", "", ""],
+        ["n1143", "plano--o-que-vem-a-seguir", 0, 31443, 1, 386, "8bb9cd067a2f3e00", "0e9849103ae52c80", "n1142"],
+        ["n1144", "autorizado-pelo-regente-ainda-não-construído", 217, 20294, 7, 254, "4706fede712ac000", "e0da59080fd0e600", "n1143"],
         ["n1870", "0-caminhos-virtuais--guidelinesshortcutsvirtual--construído-as-sete-camadas-pela-ems-002", 269, 5363, 9, 81, "da71f09e759c7600", "cb44836834464e80", "n1144"],
         ["n1146", "1-section-de-cabeçalho-irmã-do-schema--decidido-faltando-fazer", 5363, 6025, 90, 13, "29a759a8aecd1500", "f13677d632797d00", "n1144"],
         ["n1147", "2-gatilhos-de-re-ferência", 6025, 6930, 103, 19, "20d81a5623895800", "b5f416c6e3cdac00", "n1144"],
-        ["n3038", "3-seis-defeitos-medidos-o-que-foi-consertado-nos-dois-motores-e-o-que-o-rust-conserta", 6930, 9665, 122, 11, "61b9820676f9c380", "9eb4b98c1a513280", "n1144"],
-        ["n1149", "5-o-glyph-em-rust--a-série-ems-001", 9665, 19612, 133, 126, "3fa936706f3b9200", "8a8dafe845ce8080", "n1144"],
-        ["n3146", "a-trilha-até-o-explorer-final", 12302, 16792, 174, 43, "d2912240c77ff800", "ca3293089ba26000", "n1149"],
-        ["n3147", "a-fila-de-antes-do-portão", 16792, 19612, 217, 42, "999bd07c03897800", "e948f71604943200", "n1149"],
-        ["n1150", "aberto-esperando-o-regente", 19612, 26709, 259, 67, "cff71b08e5117600", "03d20470797ec600", "n1143"],
-        ["n3039", "os-dois-itens-dos-caminhos-virtuais", 20410, 20706, 276, 7, "af5baff8e545a880", "2661b508a96ce000", "n1150"],
-        ["n3040", "duas-medições-devidas-e-nenhuma-tem-instrumento-escrito", 20706, 22058, 283, 10, "4da84a305b4b3400", "dec23cd845112e00", "n1150"],
-        ["n3177", "a-e-06-ratificada-esperando-o-esquema-de-item", 22058, 22580, 293, 9, "b4a25f6864002a00", "95251e4e0df0ce00", "n1150"],
-        ["n3043", "pendências-de-registro-sem-casa-hoje", 22580, 24077, 302, 14, "ccb8acc8d8572260", "6403d496a7efa800", "n1150"],
-        ["n3044", "o-resto", 24077, 26709, 316, 10, "d08d7998dd997e00", "9a05eff851820c00", "n1150"],
-        ["n1151", "adiado-por-decisão-não-por-esquecimento", 26709, 29898, 326, 46, "30a1687e7d96c580", "bfbcde2e1b43a900", "n1143"],
-        ["n3045", "reaberto-por-decisão", 29898, 30456, 372, 9, "b4a3f77e80503400", "079763f80c948a00", "n1143"]
+        ["n3038", "3-seis-defeitos-medidos-o-que-foi-consertado-nos-dois-motores-e-o-que-o-rust-conserta", 6930, 9831, 122, 11, "2c403dfe3e46a610", "fd1f96442bc8f400", "n1144"],
+        ["n1149", "5-o-glyph-em-rust--a-série-ems-001", 9831, 20294, 133, 128, "9e5a0ca4fe71c400", "a22d6d14157f4000", "n1144"],
+        ["n3146", "a-trilha-até-o-explorer-final", 12468, 17367, 174, 43, "e03fb45e74446800", "9debb0a48db1ae00", "n1149"],
+        ["n3147", "a-fila-de-antes-do-portão", 17367, 20294, 217, 44, "0c4645a6fbf050e0", "3a9d850c39e0c400", "n1149"],
+        ["n1150", "aberto-esperando-o-regente", 20294, 27696, 261, 71, "884ec510f2ff7200", "2c0e80061aadaa00", "n1143"],
+        ["n3039", "os-dois-itens-dos-caminhos-virtuais", 21397, 21693, 282, 7, "af5baff8e545a880", "2661b508a96ce000", "n1150"],
+        ["n3040", "duas-medições-devidas-e-nenhuma-tem-instrumento-escrito", 21693, 23045, 289, 10, "4da84a305b4b3400", "dec23cd845112e00", "n1150"],
+        ["n3177", "a-e-06-ratificada-esperando-o-esquema-de-item", 23045, 23567, 299, 9, "b4a25f6864002a00", "95251e4e0df0ce00", "n1150"],
+        ["n3043", "pendências-de-registro-sem-casa-hoje", 23567, 25064, 308, 14, "ccb8acc8d8572260", "6403d496a7efa800", "n1150"],
+        ["n3044", "o-resto", 25064, 27696, 322, 10, "d08d7998dd997e00", "9a05eff851820c00", "n1150"],
+        ["n1151", "adiado-por-decisão-não-por-esquecimento", 27696, 30885, 332, 46, "30a1687e7d96c580", "bfbcde2e1b43a900", "n1143"],
+        ["n3045", "reaberto-por-decisão", 30885, 31443, 378, 9, "b4a3f77e80503400", "079763f80c948a00", "n1143"]
       ]
     },
     ".guidelines/.plan/README.md.template": {
@@ -4254,14 +4264,14 @@
     },
     ".guidelines/.shortcuts/README.md": {
       "nodes": [
-        ["n1153", "", 0, 12437, 1, 88, "998959c07e28d800", "", ""],
-        ["n1154", "atalhos--comece-por-aqui", 0, 12437, 1, 88, "998959c07e28d800", "a72f9638e7b76400", "n1153"],
-        ["n1155", "onde-estou", 442, 6431, 11, 13, "c56ef52e9beb2600", "1f1cf7080691b400", "n1154"],
-        ["n1156", "os-sete-eixos", 6431, 7671, 24, 12, "c7a610b8cc345700", "ea685f36d51a4300", "n1154"],
-        ["n1157", "o-mapa-do-motor-em-cinco-linhas", 7671, 8616, 36, 12, "fef2a4f026f43a00", "b0d1ba46f3be8000", "n1154"],
-        ["n1158", "os-documentos-que-mais-se-consulta", 8616, 10701, 48, 19, "8f437238ec9aa800", "1d1dc5788fc11000", "n1154"],
-        ["n1159", "os-outros-documentos", 10701, 12089, 67, 16, "64d35eac63761200", "35cfc74863da0e40", "n1154"],
-        ["n1160", "vocabulário-do-projeto", 12089, 12437, 83, 6, "b895f5b69b891000", "f6cb060882a72600", "n1154"]
+        ["n1153", "", 0, 12253, 1, 88, "68655526704bfe40", "", ""],
+        ["n1154", "atalhos--comece-por-aqui", 0, 12253, 1, 88, "68655526704bfe40", "c9c0480009dda000", "n1153"],
+        ["n1155", "onde-estou", 442, 6247, 11, 13, "29c04fac307462d0", "edb4b820d49ce000", "n1154"],
+        ["n1156", "os-sete-eixos", 6247, 7487, 24, 12, "c7a610b8cc345700", "ea685f36d51a4300", "n1154"],
+        ["n1157", "o-mapa-do-motor-em-cinco-linhas", 7487, 8432, 36, 12, "fef2a4f026f43a00", "b0d1ba46f3be8000", "n1154"],
+        ["n1158", "os-documentos-que-mais-se-consulta", 8432, 10517, 48, 19, "8f437238ec9aa800", "1d1dc5788fc11000", "n1154"],
+        ["n1159", "os-outros-documentos", 10517, 11905, 67, 16, "64d35eac63761200", "35cfc74863da0e40", "n1154"],
+        ["n1160", "vocabulário-do-projeto", 11905, 12253, 83, 6, "b895f5b69b891000", "f6cb060882a72600", "n1154"]
       ]
     },
     ".guidelines/.shortcuts/regency.json": {
@@ -5674,6 +5684,7 @@
     ".guidelines/templates.json#/templates/track": "n1766"
   },
   "recovered": [
+    [".guidelines/.orders/INTAKE-EXPLORER.md#3-the-adr-drafted-for-the-regents-signature", "n3506", "n3613", 83],
     [".guidelines/.plan/README.md#0-caminhos-virtuais--guidelinesshortcutsvirtual--camadas-1-2-4-5-6-e-7-construídas-3-a-seguir", "n1830", "n1870", 81],
     [".guidelines/.plan/README.md#0-caminhos-virtuais--guidelinesshortcutsvirtual--camadas-1-2-4-5-e-6-construídas-3-e-7-a-seguir", "n1790", "n1870", 64],
     [".guidelines/.sources/README.md#fontes--o-que-veio-de-fora-e-o-que-decidiu", "n1172", "n3243", 65],

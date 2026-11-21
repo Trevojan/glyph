@@ -1,9 +1,9 @@
 # Intake — a source span on every diagnostic
 
 > **The measured proposal for issue #13**, which
-> [`INTAKE-VSCODE-AUTHORING.md`](INTAKE-VSCODE-AUTHORING.md) §7 left open. It opens no
-> Order: the Order opens with the answers to §4 once the open slot is free
-> (`EMS-003/ORD-0001` holds it). Measured at `46f47e5`, engine 4.7.10.09, over the 485
+> [`INTAKE-VSCODE-AUTHORING.md`](INTAKE-VSCODE-AUTHORING.md) §7 left open. The Regent
+> answered §4 on 2026-11-21, and §5 holds the answers. Two Orders follow, and the first
+> opens once the open slot is free. Measured at `46f47e5`, engine 4.7.10.09, over the 485
 > runs of the parse oracle that `npm run check:rust` exports
 > (`rust/target/oracle-modules/parse.json`, 456 distinct sources).
 
@@ -87,3 +87,15 @@ runs off).
 - **D4 a.** A coordinate at the start of the document is the absence this proposal
   removes.
 - **D5 a.** The extension, the skill and the plugin all read the JS engine.
+
+## 5. The answers — 2026-11-21
+
+In [`.decisions/`](../.decisions/README.md), round of 2026-11-21, from the sheet [`PERGUNTAS-2026-11-20.md`](../.plan/PERGUNTAS-2026-11-20.md).
+
+| | answer | what the Orders build |
+|---|---|---|
+| D1 | b | T and N first, 22 codes and 269 of the 358 diagnostics that lack a span; R, P, L and D in an Order of their own |
+| D2 | a | a diagnostic about two nodes carries the span of the second |
+| D3 | a | a diagnostic raised inside a template's expanded body carries the invocation's span |
+| D4 | a | a diagnostic about the document carries a span of its own |
+| D5 | *"a. treat it to walk towards Rust-only in the following versions."* | both engines, in each Order: the 77 AST hashes and the oracle's `parse.json` move, and the `minor` digit with them; the Orders after these lean on the Rust |
