@@ -34,6 +34,7 @@ import * as VOCAB from "./core/vocabulary.js";
 import * as STORES from "./core/stores.js";
 import { ck } from "./core/emit-ast.js";
 import { depsOf } from "./read-expansions.js";
+import { graphOf, envelopeOf, CONNECTORS } from "./glyph-graph.js";
 import { expandInvocations, checkTemplateConstraints } from "./core/templates.js";
 import { checkRules, compileRules } from "./core/rules.js";
 
@@ -3343,6 +3344,94 @@ function runBindingChecks() {
 }
 const rBD = runBindingChecks();
 
+/* ------------------------------------------------------------------ *
+ * graph -- the graph of a package, derived from the tree alone
+ *
+ * EMS-003 ORD-0003, on the signed model of INTAKE-2D-VIEW.md §6: the page
+ * derives the graph from the envelope (V6 b), and the 2D view draws nothing
+ * else. So it is a function of the tree, the tree comes back from it, and
+ * each connector of the signed table has a case that shows it.
+ * ------------------------------------------------------------------ */
+function runGraphChecks() {
+  console.log("\n--- graph -- the package as nodes, frames and connectors ---");
+  const D = [];
+  const ok = (id, name, why) => {
+    if (why) { console.log("  \u2717 " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  \u2713 " + id + ": " + name); D.push(id); }
+  };
+  const opts = { templates: TPL.templates, rules: RULESTORE,
+                 expansions: require("../.guidelines/.sources/expansions.json") };
+  const DECLARED = [].concat(POSITIVE, INCOMPLETE, INVALID, REGRESSION, LONG,
+                             TEMPLATES, CONSTRAINTS, RULE_CASES, ORACLE_COVERAGE)
+    .filter(c => c && c.id && typeof c.src === "string");
+  const envs = [];
+  DECLARED.forEach(c => {
+    try { envs.push([c.id, G.toAST(c.src, c.opts ? { ...opts, ...c.opts } : opts)]); } catch (e) { /* a pinned throw */ }
+  });
+
+  const unstable = [], unbuilt = [], spanless = [];
+  let inherited = 0;
+  envs.forEach(([id, e]) => {
+    const a = JSON.stringify(graphOf(e)), b = JSON.stringify(graphOf(JSON.parse(JSON.stringify(e))));
+    if (a !== b) unstable.push(id);
+    if (JSON.stringify(envelopeOf(JSON.parse(a))) !== JSON.stringify(e)) unbuilt.push(id);
+    const items = JSON.parse(a).nodes.concat(JSON.parse(a).containers);
+    if (items.some(n => n.kind !== "Segment" && n.kind !== "Truncated" && !n.at)) spanless.push(id);
+    inherited += items.filter(n => n.inherited).length;
+  });
+  ok("GR-01", "every declared source gives the same graph twice, byte for byte — " + envs.length + " sources",
+     unstable.length ? "differs on " + unstable.join(", ") : null);
+  ok("GR-02", "the envelope is rebuilt from the graph, byte for byte, for every declared source",
+     unbuilt.length ? "not rebuilt on " + unbuilt.join(", ") : null);
+  ok("GR-03", "every node and frame points at the source: its own span, or the invocation's inside an expansion — " +
+              inherited + " nodes take the invocation's",
+     spanless.length ? "a node with no span on " + spanless.join(", ") : null);
+
+  const CASES = { nest: "[rwk[ctx]]", chain: "[ins-rwk]", item: "[rwk],[fmt]", sequence: "[rwk][fmt]",
+                  reference: "[sum'x'[ctx]][ref'x']", result: "[rwk[ctx]'r']", call: "[--t=[ctx]][--t]" };
+  const unseen = CONNECTORS.filter(t => !graphOf(G.toAST(CASES[t], opts)).connectors.some(c => c.type === t));
+  ok("GR-04", "each connector of the signed table has a case that shows it — " + CONNECTORS.join(", "),
+     unseen.length ? "no case shows " + unseen.join(", ") : null);
+
+  const framed = graphOf(G.toAST("[block'b'[pt'p'[rwk]]]", opts));
+  const pt = framed.containers.find(c => c.data.canonical === "PT");
+  const rwk = framed.nodes.find(n => n.data.canonical === "RWK");
+  ok("GR-05", "a section, a block and a part are frames that hold what they contain, with no nest into them",
+     !pt || !rwk || rwk.parent !== pt.id ? "the part does not hold the command"
+       : framed.connectors.some(c => c.type === "nest") ? "a frame's child is linked by a nest" : null);
+
+  const attached = graphOf(G.toAST("[rwk'x']", opts));
+  const lit = attached.nodes.find(n => n.kind === "Literal");
+  ok("GR-06", "an operand literal is attached to its command, not linked",
+     !lit || attached.nodes.find(n => n.id === lit.parent).data.canonical !== "RWK" ? "the literal hangs elsewhere"
+       : attached.connectors.some(c => c.from === lit.id || c.to === lit.id) ? "a connector touches the operand" : null);
+
+  const odd = G.toAST("[rwk[ctx]]", opts);
+  odd.segments[0].body[0].body[0].origin = "sideways";
+  let thrown = null;
+  try { graphOf(odd); } catch (e) { thrown = e.code; }
+  ok("GR-07", "a tree edge of a kind the table does not name is refused by name",
+     thrown === "UnknownEdge" ? null : "answered " + JSON.stringify(thrown));
+
+  /* a diagnostic lands on the node its span is; without a span, on the
+     package. The engine gives few spans yet (INTAKE-DIAG-SPANS.md): each
+     one it gives moves onto its node with no change here. */
+  const asked = G.toAST("[cmp]", opts);
+  const cmpAt = asked.segments[0].body[0].at;
+  asked.diagnostics.push({ code: "Probe", severity: "ask", label: "probe", message: "probe", at: { s: cmpAt.s, e: cmpAt.e } });
+  const m = graphOf(asked).marks;
+  const placed = m[m.length - 1], loose = m[0];
+  let withSpan = 0, all = 0;
+  envs.forEach(([, e]) => (e.diagnostics || []).forEach(d => { all++; if (d.at) withSpan++; }));
+  ok("GR-08", "a diagnostic lands on its node by span, an ask there is a socket, and one with no span lands on the package — " +
+              withSpan + " of " + all + " corpus diagnostics carry a span today",
+     placed.node !== "n1" || placed.socket !== true ? "the spanned ask landed as " + JSON.stringify(placed)
+       : loose.node !== null || loose.socket !== false ? "the spanless diagnostic landed as " + JSON.stringify(loose) : null);
+
+  return D.length;
+}
+const rGR = runGraphChecks();
+
 
 /* ------------------------------------------------------------------ *
  * suggest -- aponta, ou cala
@@ -4490,6 +4579,7 @@ console.log(" spellings    " + String(rSP).padStart(4) + "/4");
 console.log(" raw fence    " + String(rRW).padStart(4) + "/5");
 console.log(" literal role " + String(rRO).padStart(4) + "/9");
 console.log(" bindings     " + String(rBD).padStart(4) + "/12");
+console.log(" graph        " + String(rGR).padStart(4) + "/8");
 console.log(" suggest      " + String(rSG).padStart(4) + "/4");
 console.log(" aspas        " + String(rQT).padStart(4) + "/3");
 console.log(" param template" + String(rTP).padStart(4) + "/4");
