@@ -361,6 +361,14 @@ export function fromXmlNode(el, diag) {
   if (oa !== "name" && el.attrs.name) head += asLiteral(el.attrs.name);
   if (oa && el.attrs[oa] != null) head += asLiteral(el.attrs[oa]);
   if (was && el.attrs[was] != null) head += asLiteral(el.attrs[was]);
+  /* a PIN's form comes back as the word chained to it, with its alias or its
+     value as the literal; the type it pins, as the command chained there
+     (EMS-002 ORD-0044) */
+  if (canon === "PIN" && el.attrs.form) {
+    head += "-" + el.attrs.form;
+    var said = el.attrs.form === "if" ? el.attrs.alias : el.attrs.form === "case" ? el.attrs.value : null;
+    if (said != null) head += asLiteral(said);
+  } else if (canon === "PIN" && el.attrs.type) head += "-" + el.attrs.type;
   /* a literal ends at its quote, so a link written after it is the link it is */
   return lead + notSwitch(head.slice(lead.length) + xmlKids(el, diag) + "]");
 }

@@ -4,7 +4,7 @@
 > [`.scope/asset/glyph-icons/`](../../.scope/asset/glyph-icons/), which stay as delivered; never edited by hand.
 > `npm run check` refuses it when it differs from a fresh build. `EMS-003/ORD-0002`.
 
-120 commands: 39 with an icon, 81 with the fallback tile. 41 delivered files, 2 of them no command names.
+121 commands: 39 with an icon, 82 with the fallback tile. 41 delivered files, 2 of them no command names.
 
 ## By category
 
@@ -20,7 +20,7 @@
 | Raciocínio | 0 of 14 |
 | Rumo | 2 of 6 |
 | Intensidade | 1 of 4 |
-| Frame | 3 of 10 |
+| Frame | 3 of 11 |
 | Marca | 2 of 6 |
 | — (outside the category browser) | 3 of 16 |
 
@@ -136,6 +136,7 @@ The fallback tile answers for each until an icon arrives.
 | `DEF` | Frame |
 | `SECTION` | Frame |
 | `BLOCK` | Frame |
+| `PIN` | Frame |
 | `LOGIC` | Frame |
 | `SKL` | Frame |
 | `WARN` | Marca |

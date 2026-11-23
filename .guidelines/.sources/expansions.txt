@@ -101,13 +101,14 @@ FIN = BASE
 
 # ====================================================================
 # 3. ENGINE AND MODES — not instruction vocabulary, but they appear in
-#    formulas (IF, SKL, NONE) and must resolve in the dag. (12)
+#    formulas (IF, SKL, NONE) and must resolve in the dag. (13)
 # ====================================================================
 
 IF = BASE
 SECTION = BASE
 BLOCK = BASE
 PT = BASE
+PIN = BASE
 SKL = BASE
 NONE = BASE
 TOBLOCK = BASE

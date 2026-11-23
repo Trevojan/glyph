@@ -88,6 +88,7 @@ fn tables() -> Vec<(&'static str, Json)> {
         ("FORMER_OPERAND_ATTR", strings(FORMER_OPERAND_ATTR)),
         ("EDITORIAL_ONLY", numbers(EDITORIAL_ONLY)),
         ("NAMED_STRUCT", numbers(NAMED_STRUCT)),
+        ("PIN_FORMS", numbers(PIN_FORMS)),
         ("LOGIC_OPS", pairs(LOGIC_OPS)),
         ("PUNCT", pairs(PUNCT)),
         ("FRAMES", lists(FRAMES)),

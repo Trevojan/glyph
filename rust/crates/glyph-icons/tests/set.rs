@@ -26,7 +26,7 @@ const TILE: &str = r#"<svg width="13" height="17" viewBox="0 0 13 17" fill="none
 fn the_delivered_set_as_measured() {
     let set = build(&delivered()).unwrap();
     assert_eq!(set.icons.len(), 41);
-    assert_eq!(set.rows.len(), 120);
+    assert_eq!(set.rows.len(), 121);
     assert_eq!(set.rows.iter().filter(|r| r.icon.is_some()).count(), 39);
     let unnamed: Vec<&str> = set.unnamed.iter().map(|(f, _)| f.as_str()).collect();
     assert_eq!(unnamed, ["pin_off", "pin_on"]);

@@ -86,7 +86,7 @@ export var CATS = [
   ]},
   { id:"frame", label:"Frame", note:"peças de estrutura e template", items:[
     ["TPL","template"],["PH","casa a preencher"],["VAR","variável"],["PARAM","parâmetro"],
-    ["DEF","define"],["SECTION","seção"],["BLOCK","bloco"],["PT","parte"],["LOGIC","bloco de conta"],["SKL","skill"]
+    ["DEF","define"],["SECTION","seção"],["BLOCK","bloco"],["PT","parte"],["PIN","pin"],["LOGIC","bloco de conta"],["SKL","skill"]
   ]},
   { id:"marca", label:"Marca", note:"aviso e memória", items:[
     ["WARN","aviso"],["RMBR","lembre"],["FRGT","esqueça"],["LRN","aprender"],
@@ -149,8 +149,14 @@ Object.keys(ALIAS).forEach(function (a) { (ALIAS_OF[ALIAS[a]] = ALIAS_OF[ALIAS[a
 
 export var STRUCT = {
   SECTION:"Section", BLOCK:"Block", PT:"Part", IF:"If", UNLS:"Unless", SKL:"Skill",
-  DEF:"Define", PH:"Placeholder", TPL:"Template", LOGIC:"Logic"
+  DEF:"Define", PH:"Placeholder", TPL:"Template", LOGIC:"Logic", PIN:"Pin"
 };
+
+/* The words a PIN takes as its form, chained straight after it, and valid
+   nowhere else (EMS-002 ORD-0044, N1 a and N2 a of 2026-11-21): the way a
+   hole takes its name. Any other command chained there is the type whose
+   attribute the PIN pins. */
+export var PIN_FORMS = { if:1, else:1, case:1 };
 /* META and STRUCT are PARSING buckets, not the species taxonomy of
    GLOSSARY.md — the two axes are independent and both are needed. The
    glossary classifies by COMPOSITION (does it decompose into atoms?);

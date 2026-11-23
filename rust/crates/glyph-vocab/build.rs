@@ -250,7 +250,7 @@ fn main() {
         .unwrap();
     }
     /* name → number */
-    for name in ["EDITORIAL_ONLY", "NAMED_STRUCT"] {
+    for name in ["EDITORIAL_ONLY", "NAMED_STRUCT", "PIN_FORMS"] {
         let Lit::Obj(kv) = table(&src, name) else {
             panic!("vocabulary.js, {name}: an object expected")
         };

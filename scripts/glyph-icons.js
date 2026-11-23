@@ -113,6 +113,7 @@
     "DEF",
     "SECTION",
     "BLOCK",
+    "PIN",
     "LOGIC",
     "SKL",
     "WARN",

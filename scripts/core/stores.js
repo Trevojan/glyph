@@ -39,7 +39,8 @@ import { FRAMES, SLOTS, NAMED_STRUCT } from "./vocabulary.js";
  * ------------------------------------------------------------------ */
 export function standsAlone(canonical, opts) {
   var U = String(canonical || "").toUpperCase();
-  if (!U || FRAMES[U] || SLOTS[U] || NAMED_STRUCT[U]) return false;
+  /* a PIN holds its snippet as a block holds its commands (EMS-002 ORD-0044) */
+  if (!U || FRAMES[U] || SLOTS[U] || NAMED_STRUCT[U] || U === "PIN") return false;
   return speciesOf(U, opts) === "atom";
 }
 

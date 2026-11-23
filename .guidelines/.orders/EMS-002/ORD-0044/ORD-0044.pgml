@@ -1,0 +1,12 @@
+[block'ORD-0044-pin-vocabulary'
+  [ref'EMS']
+  [ctx'the measured proposal and the answers of the Regent','.guidelines/.orders/INTAKE-PIN-TRAFFIC.md, sections 1, 5, 6 and 8']
+  [tgt'step 6 of the trail to the final Explorer: PIN enters the vocabulary, one command whose chained operand chooses its form, and one element, in both engines']
+  [ins'enter PIN in GLOSSARY.md and expansions.txt first, an atom in the Frame category beside SECTION, BLOCK and PT']
+  [ins'read if, else and case chained straight after PIN as its form, words of its own valid only there, the way a hole takes its name']
+  [ins'emit one element, pin form if with alias, pin form case with value, pin form else, and pin type for any other command chained to it, and read each back']
+  [cnst'else and case outside a PIN stay outside the vocabulary; the selector and its tooltip wait for step 7']
+  [cnst'the ast hashes of the snapshot move with the checksum of the expansions store, by decision, and no xml and no hgml hash moves']
+  [cnst'npm run check and npm run check:rust green']
+  [val'the engines','each form emitted, read back from the XML and from the AST, and burnt to a reread that asks nothing, in the Rust as in the JS, seen failing before the code']
+];

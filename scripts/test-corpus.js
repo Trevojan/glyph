@@ -4112,14 +4112,14 @@ function runChainLinkChecks() {
   ok("LK-04", "a prosa com hifen nao vira elo",
      prose.length ? "virou elo: " + prose.join(", ") : null);
 
-  /* os 144 nomes das tabelas, e so eles: a sessao o parser aplica, nao o lexer */
+  /* os 145 nomes das tabelas, e so eles: a sessao o parser aplica, nao o lexer */
   const names = [].concat(Object.keys(VOCAB.MODE), Object.keys(VOCAB.STRUCT), Object.keys(VOCAB.META),
                           Object.keys(VOCAB.ALIAS), Object.keys(VOCAB.INSTR), Object.keys(VOCAB.SESSION));
   const uniq = [...new Set(names.map(n => n.toLowerCase()))];
   const missed = uniq.filter(n => links("[ctx]-" + n) !== 1 || links("[ctx'x'-" + n + "]") !== 1 || links("[ctx -" + n + "]") !== 1);
   const offSession = G.parse("[ctx]-rd", { ...opts, session: false }).gaps.map(g => g.code);
-  ok("LK-05", "cada um dos 144 nomes e elo nas tres posicoes",
-     uniq.length !== 144 ? "as tabelas tem " + uniq.length + " nomes"
+  ok("LK-05", "cada um dos 145 nomes e elo nas tres posicoes",
+     uniq.length !== 145 ? "as tabelas tem " + uniq.length + " nomes"
        : missed.length ? "nao viraram elo: " + missed.join(", ")
        : offSession.indexOf("UnknownCommand") === -1 ? "sem sessao, [ctx]-rd nao disse que rd nao existe: " + offSession.join(",") : null);
 
@@ -4660,6 +4660,66 @@ function runPluginBundleChecks() {
 }
 const rPB = runPluginBundleChecks();
 
+/* ------------------------------------------------------------------ *
+ * PIN, step 6 of the trail (EMS-002 ORD-0044, N1 a to N4 a of 2026-11-21):
+ * one command whose chained operand chooses its form — `if`, `else` and
+ * `case`, words of its own valid only there — or the type whose attribute
+ * it pins, and one element, <pin form> or <pin type>.
+ * ------------------------------------------------------------------ */
+function runPinChecks() {
+  console.log("\n--- PIN ---");
+  const D = [];
+  const ok = (id, name, why) => {
+    if (why) { console.log("  ✗ " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  ✓ " + id + ": " + name); D.push(id); }
+  };
+  const opts = { templates: TPL.templates, rules: RULESTORE,
+                 expansions: require("../.guidelines/.sources/expansions.json") };
+  const FORMS = [
+    ["[pin-if'ok'[nt'x']]", '<pin form="if" alias="ok" binds="ok">'],
+    ["[pin-case'v'[nt'z']]", '<pin form="case" value="v" binds="v">'],
+    ["[pin-else[nt'y']]", '<pin form="else">'],
+    ["[pin-rev]", '<pin type="rev"/>'],
+    ["[pin]", "<pin/>"]
+  ];
+  const off = FORMS.filter(([src, want]) => G.toXML(src, opts).indexOf("\n    " + want + "\n") === -1 &&
+                                          G.toXML(src, opts).indexOf("\n    " + want) === -1);
+  ok("PN-01", "each form of a PIN is one element, its form or its type an attribute",
+     off.length ? off.map(([src]) => src + " emits " + G.toXML(src, opts).split("\n")[3].trim()).join(" | ") : null);
+
+  const fix = src => G.parse(src, opts).gaps.filter(g => g.sev === "fix").map(g => g.code);
+  const words = [["[else'x']", "UnknownCommand"], ["[case'x']", "UnknownCommand"], ["[pin-foo]", "UnknownCommand"]];
+  const kept = words.filter(([src, code]) => fix(src).indexOf(code) === -1).map(([src]) => src)
+    .concat(FORMS.filter(([src]) => fix(src).length).map(([src]) => src + " refused"));
+  ok("PN-02", "else and case are words only chained to a PIN; anywhere else they are outside the vocabulary",
+     kept.length ? kept.join(" | ") : null);
+
+  const xmlBack = FORMS.filter(([src]) => {
+    const x = G.toXML(src, opts);
+    return G.toXML(G.fromXML(x, opts).src, opts) !== x;
+  }).map(([src]) => src);
+  ok("PN-03", "every form comes back from the XML to a source that emits it again",
+     xmlBack.length ? xmlBack.join(" | ") : null);
+
+  const astBack = FORMS.filter(([src]) => {
+    const back = G.fromAST(G.toAST(src, opts), opts);
+    return G.toXML(back.src, opts) !== G.toXML(src, opts);
+  }).map(([src]) => src);
+  ok("PN-04", "and from the AST, where the form is the PIN's name word",
+     astBack.length ? astBack.join(" | ") : null);
+
+  const burnt = FORMS.filter(([src]) => G.parse(G.toHGML(src, opts), opts).gaps.some(g => g.sev === "fix")).map(([src]) => src);
+  ok("PN-05", "the burn of every form rereads with nothing refused",
+     burnt.length ? burnt.map(src => src + ": " + G.toHGML(src, opts).replace(/\s+/g, " ")).join(" | ") : null);
+
+  const frame = VOCAB.CATS.filter(c => c.id === "frame")[0];
+  ok("PN-06", "PIN sits in the Frame category, and holding its snippet makes it no imperative",
+     !frame || !frame.items.some(i => i[0] === "PIN") ? "PIN is not in the Frame category"
+       : /imperative=/.test(G.toXML("[pin-else[nt'y']]", opts)) ? "a PIN is written imperative" : null);
+  return D.length;
+}
+const rPN = runPinChecks();
+
 
 /* ------------------------------------------------------------------ *
  * global store registration — the tripwire for splitting the core
@@ -4997,6 +5057,7 @@ console.log(" elo de cadeia" + String(rLK).padStart(4) + "/14");
 console.log(" dois-pontos  " + String(rCO).padStart(4) + "/7");
 console.log(" bundle ORD   " + String(rZP).padStart(4) + "/16");
 console.log(" plugin bundle" + String(rPB).padStart(4) + "/6");
+console.log(" PIN          " + String(rPN).padStart(4) + "/6");
 console.log(" global store " + rGS + "/3");
 console.log(" context      " + rCX + "/3");
 console.log(" coverage     " + String(rOC).padStart(4) + "/" + ORACLE_COVERAGE.length);

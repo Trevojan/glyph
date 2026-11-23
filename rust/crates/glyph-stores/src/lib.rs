@@ -218,10 +218,12 @@ fn js_string(v: &Json) -> String {
 /// Derived, never transcribed.
 pub fn stands_alone(canonical: &str, ctx: &Context) -> bool {
     let u = canonical.to_uppercase();
+    // a PIN holds its snippet as a block holds its commands (EMS-002 ORD-0044)
     if u.is_empty()
         || get(FRAMES, &u).is_some()
         || get(SLOTS, &u).is_some()
         || get(NAMED_STRUCT, &u).is_some()
+        || u == "PIN"
     {
         return false;
     }

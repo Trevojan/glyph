@@ -676,11 +676,31 @@ fn from_xml_node(el: &El, diag: &mut Vec<Diag>, depth: usize) -> Result<String, 
     let operand = oa
         .and_then(|a| el.attr(a))
         .map_or(String::new(), as_literal);
+    /* a PIN's form comes back as the word chained to it, with its alias or
+    its value as the literal; the type it pins, as the command chained there
+    (EMS-002 ORD-0044) */
+    let form = el.attr("form").filter(|f| !f.is_empty());
+    let pinned = match (
+        name.to_uppercase() == "PIN",
+        form,
+        el.attr("type").filter(|t| !t.is_empty()),
+    ) {
+        (true, Some(form), _) => {
+            let said = match form {
+                "if" => el.attr("alias"),
+                "case" => el.attr("value"),
+                _ => None,
+            };
+            format!("-{form}{}", said.map_or(String::new(), as_literal))
+        }
+        (true, None, Some(t)) => format!("-{t}"),
+        _ => String::new(),
+    };
     /* a literal ends at its quote, so a link written after it is the link it is */
     Ok(format!(
         "{lead}{}",
         not_switch(format!(
-            "[{name}{named}{operand}{was}{}]",
+            "[{name}{named}{operand}{was}{pinned}{}]",
             xml_kids(el, diag, depth)?
         ))
     ))

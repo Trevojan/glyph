@@ -229,6 +229,30 @@ export function operandAttr(nd, opts) {
   return { name:name, lit:lit };
 }
 
+/* What a PIN says as attributes (EMS-002 ORD-0044, N3 a of 2026-11-21): its
+   form, the word chained straight after it, with the alias of an `if` and the
+   value of a `case` from its first literal; or the type it pins, the command
+   chained there alone. The node that said it is no child of the element. */
+export function pinOf(nd) {
+  var kids = nd.children || [];
+  var first = kids[0];
+  if (!first) return null;
+  if (first.slotName) {
+    var form = String(first.raw).toLowerCase();
+    var out = { attrs:['form="' + xesc(form) + '"'], drop:[first] };
+    var name = form === "if" ? "alias" : form === "case" ? "value" : null;
+    var lit = name ? kids.filter(function (c) { return c.literal && c.form !== "raw" && c.role !== "result"; })[0] : null;
+    var v = lit && !lit.boundSlot ? String(lit.v == null ? "" : lit.v).trim() : "";
+    if (v) { out.attrs.push(name + '="' + xesc(v) + '"'); out.drop.push(lit); }
+    return out;
+  }
+  var next = kids[1];
+  if (first.chainElement && first.origin === "extend" && first.tier !== "unknown" && first.tier !== "empty" &&
+      !(next && next.chainElement && next.origin === "item"))
+    return { attrs:['type="' + xesc(String(first.canonical).toLowerCase()) + '"'], drop:[first] };
+  return null;
+}
+
 /* The parameter a template call wrote this node for, on whatever element
    the node becomes: a bound value is `<user-input slot>` and has always
    been, and what a named fill carried past its value is marked the same
@@ -303,7 +327,7 @@ export function emit(root, startDepth, L, opts) {
     var hole = nd.canonical === "PH" ? holeOf(nd) : null;
     if (hole && hole.bare) { L.push(pad(d) + hole.needs); continue; }
 
-    var open, closeName, moved = null;
+    var open, closeName, moved = null, pin = null;
     /* `chain` records the operator that attached a BARE element, and only a
        bare one. A bracketed child already announces its own scope, so marking
        it too would force fromXML() to decide whether chain="extend" meant
@@ -341,6 +365,8 @@ export function emit(root, startDepth, L, opts) {
       if (nd.boundSlot) attrs.push(slotAttr(nd).slice(1));
       moved = operandAttr(nd, opts);
       if (moved) attrs.push(moved.name + '="' + xesc(moved.lit.v) + '"');
+      pin = nd.canonical === "PIN" ? pinOf(nd) : null;
+      if (pin) pin.attrs.forEach(function (a) { attrs.push(a); });
       /* the name this command's result answers to, from its own operand */
       /* IMPERATIVO -- um primitivo que RECEBEU operando.
 
@@ -402,7 +428,9 @@ export function emit(root, startDepth, L, opts) {
     var needs = (frame && !nd.chainElement && kids.length === 0) ? frame[0].replace("*", "")
               : deepInference(nd, opts) ? "the subject" : null;
     /* the frame counts the operand where it was written; the element does not repeat it */
-    var allKids = (nd.children || []).filter(function (c) { return !moved || c !== moved.lit; });
+    var allKids = (nd.children || []).filter(function (c) {
+      return (!moved || c !== moved.lit) && (!pin || pin.drop.indexOf(c) === -1);
+    });
     /* a hole that holds more than its name and its question is a <placeholder>:
        its <needs> stands where the question was written, and what it holds
        follows in the order it was written */

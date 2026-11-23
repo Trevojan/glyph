@@ -1,0 +1,63 @@
+<glyph-package engine="4.7.10.09">
+  <schema>
+    <declares kind="block" name="ORD-0044-pin-vocabulary"/>
+  </schema>
+  <configuration of="EMS-002" digest="06e60f4f1cfb0e00" engine="4.7.10.09">{
+  "id": "EMS-002",
+  "title": "o Glyph 100% em Rust",
+  "xsd": [
+    {
+      "kind": "block",
+      "name": "ORD-####-…"
+    }
+  ],
+  "engine": "4.7.10.09",
+  "conventions": [],
+  "rules": [],
+  "exceptions": [],
+  "pins": [],
+  "traffic": {},
+  "invoke": {
+    "skills": [],
+    "actions": []
+  }
+}</configuration>
+  <block once="true">
+    <block name="ORD-0044-pin-vocabulary" binds="ORD-0044-pin-vocabulary">
+      <reference>
+        <user-input>EMS</user-input>
+        <needs var="EMS">referenciado e nunca ligado</needs>
+      </reference>
+      <context>
+        <user-input>the measured proposal and the answers of the Regent</user-input>
+        <user-input>.guidelines/.orders/INTAKE-PIN-TRAFFIC.md, sections 1, 5, 6 and 8</user-input>
+      </context>
+      <target>
+        <user-input>step 6 of the trail to the final Explorer: PIN enters the vocabulary, one command whose chained operand chooses its form, and one element, in both engines</user-input>
+      </target>
+      <instruction>
+        <user-input>enter PIN in GLOSSARY.md and expansions.txt first, an atom in the Frame category beside SECTION, BLOCK and PT</user-input>
+      </instruction>
+      <instruction>
+        <user-input>read if, else and case chained straight after PIN as its form, words of its own valid only there, the way a hole takes its name</user-input>
+      </instruction>
+      <instruction>
+        <user-input>emit one element, pin form if with alias, pin form case with value, pin form else, and pin type for any other command chained to it, and read each back</user-input>
+      </instruction>
+      <constraint>
+        <user-input>else and case outside a PIN stay outside the vocabulary; the selector and its tooltip wait for step 7</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the ast hashes of the snapshot move with the checksum of the expansions store, by decision, and no xml and no hgml hash moves</user-input>
+      </constraint>
+      <constraint>
+        <user-input>npm run check and npm run check:rust green</user-input>
+      </constraint>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the engines</user-input>
+        <user-input>each form emitted, read back from the XML and from the AST, and burnt to a reread that asks nothing, in the Rust as in the JS, seen failing before the code</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>

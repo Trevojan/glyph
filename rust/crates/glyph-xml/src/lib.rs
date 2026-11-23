@@ -274,6 +274,67 @@ fn operand_attr(tree: &Tree<Extra>, id: Id, binds: &[String]) -> Option<(&'stati
     Some((name, lit))
 }
 
+/// `pinOf` (EMS-002 ORD-0044, N3 a): what a PIN says as attributes — its
+/// form, the word chained straight after it, with the alias of an `if` and
+/// the value of a `case` from its first literal; or the type it pins, the
+/// command chained there alone — and the children that said it.
+fn pin_of(tree: &Tree<Extra>, id: Id) -> Option<(Vec<String>, Vec<Id>)> {
+    let nd = &tree.nodes[id];
+    let first = *nd.children.first()?;
+    let f = &tree.nodes[first];
+    let origin = |n: &Node<Extra>| {
+        n.origin
+            .as_ref()
+            .and_then(|o| o.as_deref())
+            .map(str::to_string)
+    };
+    if f.slot_name == Some(true) {
+        let form = f.raw.as_deref().unwrap_or("").to_lowercase();
+        let mut attrs = vec![format!("form=\"{}\"", xesc(&form))];
+        let mut drop = vec![first];
+        let name = match form.as_str() {
+            "if" => Some("alias"),
+            "case" => Some("value"),
+            _ => None,
+        };
+        if let Some(name) = name
+            && let Some(lit) = nd.children.iter().copied().find(|&c| {
+                let k = &tree.nodes[c];
+                k.is_literal()
+                    && k.form.as_deref() != Some("raw")
+                    && k.role.as_deref() != Some("result")
+            })
+        {
+            let k = &tree.nodes[lit];
+            let v = if k.bound_slot.as_deref().is_some_and(|b| !b.is_empty()) {
+                String::new()
+            } else {
+                js_trim(k.v.as_deref().unwrap_or(""))
+            };
+            if !v.is_empty() {
+                attrs.push(format!("{name}=\"{}\"", xesc(&v)));
+                drop.push(lit);
+            }
+        }
+        return Some((attrs, drop));
+    }
+    let tier = f.tier.as_deref().unwrap_or("");
+    let next_is_item = nd.children.get(1).is_some_and(|&c| {
+        let n = &tree.nodes[c];
+        n.chain_element == Some(true) && origin(n).as_deref() == Some("item")
+    });
+    if f.chain_element == Some(true)
+        && origin(f).as_deref() == Some("extend")
+        && tier != "unknown"
+        && tier != "empty"
+        && !next_is_item
+    {
+        let t = f.canonical.as_deref().unwrap_or("undefined").to_lowercase();
+        return Some((vec![format!("type=\"{}\"", xesc(&t))], vec![first]));
+    }
+    None
+}
+
 pub fn emit(
     tree: &mut Tree<Extra>,
     root: Id,
@@ -428,6 +489,11 @@ pub fn emit(
         } else {
             operand_attr(tree, id, binds)
         };
+        let pin = if canonical == "PIN" && tier != "unknown" && tier != "empty" {
+            pin_of(tree, id)
+        } else {
+            None
+        };
         let (open, close) = if tier == "unknown" || tier == "empty" {
             let mut at = vec![format!("tag=\"{}\"", xesc(nd.raw.as_deref().unwrap_or("")))];
             if let Some(Some(s)) = &nd.suggestion {
@@ -458,6 +524,9 @@ pub fn emit(
                     "{a}=\"{}\"",
                     xesc(tree.nodes[lit].v.as_deref().unwrap_or(""))
                 ));
+            }
+            if let Some((a, _)) = &pin {
+                attrs.extend(a.iter().cloned());
             }
             /* a primitive that received an operand */
             if stands_alone(&canonical, ctx)
@@ -528,7 +597,10 @@ pub fn emit(
             .children
             .iter()
             .copied()
-            .filter(|&c| moved.is_none_or(|(_, lit)| c != lit))
+            .filter(|&c| {
+                moved.is_none_or(|(_, lit)| c != lit)
+                    && pin.as_ref().is_none_or(|(_, d)| !d.contains(&c))
+            })
             .collect();
         let empty = hole
             .as_ref()

@@ -121,6 +121,9 @@ Session shortcuts are the exception — they serialise as the shortcut itself
 | `tag` | `<unresolved>` | — | what was written that is not vocabulary |
 | `nearest` | `<unresolved>` | — | the closest known word, when one is close |
 | `force` | any element | — | `"editorial"` on `BYP OVR NEV ALW FRGT` |
+| `form` | `<pin>` | the word chained to `[pin-` | `if`, `else` or `case`: the form of the PIN (EMS-002/ORD-0044) |
+| `alias` `value` | `<pin>` | the first literal of `[pin-if` / `[pin-case` | the alias of the validation an `if` names; the value a `case` takes |
+| `type` | `<pin>` | the command chained to `[pin-` | the command whose attribute the PIN pins, lowercase: `[pin-rev]` is `<pin type="rev"/>` |
 | `origin` | the head and the items of a `<chain>` or a `<holds>` with items | `,` | `root-x` on the head, `x-item-##` on each item: `x` the head's `name`, its `binds`, or its element name; `##` from `01` (`PACKAGE_TARGET.md` §3.6) |
 | `kind` `var` | `<rule>` | `[logic]` line | rule type and bound name |
 | `var` | `<needs>` | `[logic]` line, or `[ref'name']` | a name used and never defined in the fence; a name a reference writes and no command of the package binds, outside it |
@@ -426,7 +429,7 @@ The bulk of the vocabulary. `*` in the aliases column is a bracket-form economy 
 | `[warn` | `<warning>` | `[wn` |
 | `[whr` | `<where>` | — |
 
-### Structural (9)
+### Structural (10)
 
 Open a named block or bind a name. Never redefine these.
 
@@ -437,6 +440,7 @@ Open a named block or bind a name. Never redefine these.
 | `[if` | `<if>` | — |
 | `[logic` | `<logic>` | — |
 | `[ph` | `<placeholder>` | — |
+| `[pin` | `<pin>` | — |
 | `[section` | `<section>` | — |
 | `[skl` | `<skill>` | — |
 | `[tpl` | `<template>` | — |

@@ -15,7 +15,7 @@
  */
 
 import { LIMITS, esc, walk, stripTags, valueChildren } from "./util.js";
-import { INSTR, PTBR, EDITORIAL_ONLY, ALIAS, STRUCT, META, MODE, EMO, SESSION, FRAMES, NAMED_STRUCT, SLOTS, GLOSS_REVERSE, formerElement } from "./vocabulary.js";
+import { INSTR, PTBR, EDITORIAL_ONLY, ALIAS, STRUCT, META, MODE, EMO, SESSION, FRAMES, NAMED_STRUCT, SLOTS, GLOSS_REVERSE, formerElement, PIN_FORMS } from "./vocabulary.js";
 import { templateRegistry, expansionRegistry, entryOf } from "./stores.js";
 import { tokenize, classify, suggest } from "./lexer.js";
 import { parseLogic } from "./logic.js";
@@ -177,7 +177,12 @@ export function parse(input, opts) {
          awaits: a link the <placeholder> carries, never a second name the
          <needs> drops. */
       var binder = tokens[i - 1];
-      var isSlotName = inPH && tk.k === "bareTag" && !parentNode.children.length &&
+      /* a PIN takes its form the same way, `if`, `else` or `case` written
+         straight after `[pin-`, and nowhere else are they its words
+         (EMS-002 ORD-0044) */
+      var inPin = !!(parentNode && parentNode.canonical === "PIN") &&
+        Object.prototype.hasOwnProperty.call(PIN_FORMS, String(tk.v).toLowerCase());
+      var isSlotName = (inPH || inPin) && tk.k === "bareTag" && !parentNode.children.length &&
         !!binder && binder.k === "extend" && tokens[i - 2] === parentNode.tok && binder.s === parentNode.tok.e;
       var nd = {
         id:++uid, raw:cmdName, tier:cl.tier, canonical:cl.canonical, gloss:cl.gloss,

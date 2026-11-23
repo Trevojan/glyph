@@ -30,8 +30,8 @@ use glyph_util::tree::{
 };
 use glyph_util::{esc, inherited};
 use glyph_vocab::{
-    ALIAS, EDITORIAL_ONLY, EMO, FRAMES, INSTR, META, MODE, NAMED_STRUCT, SESSION, SLOTS, STRUCT,
-    derived, former_element, get,
+    ALIAS, EDITORIAL_ONLY, EMO, FRAMES, INSTR, META, MODE, NAMED_STRUCT, PIN_FORMS, SESSION, SLOTS,
+    STRUCT, derived, former_element, get,
 };
 use std::sync::Arc;
 
@@ -236,6 +236,10 @@ impl State<'_, '_> {
         let cl = classify(v, self.o.ctx, self.o.session);
         let parent = self.top();
         let in_ph = parent.is_some_and(|p| self.tree.nodes[p].canonical.as_deref() == Some("PH"));
+        /* a PIN takes its form the same way, `if`, `else` or `case` straight
+        after `[pin-`, and nowhere else are they its words (EMS-002 ORD-0044) */
+        let in_pin = parent.is_some_and(|p| self.tree.nodes[p].canonical.as_deref() == Some("PIN"))
+            && get(PIN_FORMS, &tk.v.as_deref().unwrap_or("").to_lowercase()).is_some();
         let bare = tk.k == "bareTag";
         if tk.k == "open" && v.is_empty() {
             self.fix(
@@ -248,7 +252,7 @@ impl State<'_, '_> {
         }
         /* `[ph-alvo`: the `-` straight after `[ph` binds the hole's one name;
         any other bare tag in the hole is a chain link (ORD-0026, ORD-0025) */
-        let slot_name = in_ph
+        let slot_name = (in_ph || in_pin)
             && bare
             && parent.is_some_and(|p| {
                 let ph = &self.tree.nodes[p];
