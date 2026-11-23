@@ -1,0 +1,27 @@
+{
+  "order": "ORD-0043",
+  "engine": "4.7.10.09",
+  "emitted": "2026-11-22T22:24:53.005Z",
+  "files": [
+    "ORD-0043.pgml",
+    "ORD-0043.xml",
+    "ORD-0043.json",
+    "ORD-0043.hgml"
+  ],
+  "source": "C:/Users/Usuario/AppData/Local/Temp/claude/C--Users-Usuario-Documents-GitHub-glyph/a285ad45-c0ff-408d-8fc2-d03bb232eef9/scratchpad/ORD-0043.pgml",
+  "relates": [
+    {
+      "order": "EMS",
+      "kind": "reference",
+      "reason": ""
+    }
+  ],
+  "configuration": {
+    "of": "EMS-002",
+    "digest": "06e60f4f1cfb0e00"
+  },
+  "diagnostics": {
+    "fix": 0,
+    "total": 1
+  }
+}

@@ -663,6 +663,45 @@ fn span(ind: &[usize], t: &[&str], i: usize) -> usize {
     i
 }
 
+/// The item scheme (EMS-002 ORD-0043): the name a run's head gives its
+/// items — its `name`, its `binds`, or its element name — as `originName`
+/// reads it; `null` where the line opens no element, as the JS writes it.
+fn origin_name(line: &str) -> String {
+    let at = line.len() - line.trim_start_matches(' ').len();
+    let Some((tag, attrs, _, _)) = glyph_util::start_tag(line, at) else {
+        return "null".into();
+    };
+    let get = |k: &str| {
+        attrs
+            .iter()
+            .find(|(n, _)| n == k)
+            .map(|(_, v)| v.clone())
+            .filter(|v| !v.is_empty())
+    };
+    get("name").or_else(|| get("binds")).unwrap_or(tag)
+}
+
+/// `withOrigin`: `origin` written last among the open tag's attributes, and
+/// never twice.
+fn with_origin(line: &str, v: &str) -> String {
+    let first = line.split('>').next().unwrap_or("");
+    let has = first
+        .match_indices("origin=\"")
+        .any(|(i, _)| first[..i].chars().next_back().is_some_and(js_ws));
+    let at = line.len() - line.trim_start_matches(' ').len();
+    let Some((_, _, end, closes)) = glyph_util::start_tag(line, at).filter(|_| !has) else {
+        return line.to_string();
+    };
+    let close = if closes { end - 2 } else { end - 1 };
+    let cut = line[..close].trim_end_matches(js_ws).len();
+    format!("{} origin=\"{v}\"{}", &line[..cut], &line[cut..])
+}
+
+/// `itemNumber`: two digits, three past 99.
+fn item_number(n: usize) -> String {
+    format!("{n:02}")
+}
+
 /// `packagePass`: a run of bare links becomes one `<chain>`, a run of
 /// bracketed conjuncts one `<holds>`, and a composite gets its `<invoke>`.
 pub fn package_pass(l: Vec<String>, ctx: &Context) -> Vec<String> {
@@ -681,8 +720,9 @@ pub fn package_pass(l: Vec<String>, ctx: &Context) -> Vec<String> {
             j += 1;
         }
         let padding = " ".repeat(ind);
+        let root = origin_name(&l[i]);
         out.push(format!("{padding}<chain>"));
-        for line in &l[i..j] {
+        for (r, line) in l[i..j].iter().enumerate() {
             let dropped = match find_attr(line, "chain=\"extend\"", |_| true)
                 .into_iter()
                 .chain(find_attr(line, "chain=\"item\"", |_| true))
@@ -698,7 +738,12 @@ pub fn package_pass(l: Vec<String>, ctx: &Context) -> Vec<String> {
                 Some(_) => drop_attr(line, "chain=\"item\""),
                 None => line.clone(),
             };
-            out.push(format!("  {dropped}"));
+            let link = match (j - i > 1, r) {
+                (false, _) => dropped,
+                (true, 0) => with_origin(&dropped, &format!("root-{root}")),
+                (true, r) => with_origin(&dropped, &format!("{root}-item-{}", item_number(r))),
+            };
+            out.push(format!("  {link}"));
         }
         out.push(format!("{padding}</chain>"));
         i = j;
@@ -731,13 +776,25 @@ pub fn package_pass(l: Vec<String>, ctx: &Context) -> Vec<String> {
             continue;
         }
         let hp = " ".repeat(h_ind);
+        let head = origin_name(&out[h]);
         held.push(format!("{hp}<holds>"));
-        for line in &out[h..=head_end] {
+        for (q, line) in out[h..=head_end].iter().enumerate() {
+            let line = if q == 0 {
+                with_origin(line, &format!("root-{head}"))
+            } else {
+                line.clone()
+            };
             held.push(format!("  {line}"));
         }
-        for &(a, b) in &members {
-            for line in &out[a..=b] {
-                held.push(format!("  {}", drop_attr(line, "join=\"item\"")));
+        for (n, &(a, b)) in members.iter().enumerate() {
+            for (q, line) in out[a..=b].iter().enumerate() {
+                let member = drop_attr(line, "join=\"item\"");
+                let member = if q == 0 {
+                    with_origin(&member, &format!("{head}-item-{}", item_number(n + 1)))
+                } else {
+                    member
+                };
+                held.push(format!("  {member}"));
             }
         }
         held.push(format!("{hp}</holds>"));

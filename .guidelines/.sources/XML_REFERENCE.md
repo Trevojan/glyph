@@ -122,6 +122,7 @@ Session shortcuts are the exception — they serialise as the shortcut itself
 | `tag` | `<unresolved>` | — | what was written that is not vocabulary |
 | `nearest` | `<unresolved>` | — | the closest known word, when one is close |
 | `force` | any element | — | `"editorial"` on `BYP OVR NEV ALW FRGT` |
+| `origin` | the head and the items of a `<chain>` or a `<holds>` with items | `,` | `root-x` on the head, `x-item-##` on each item: `x` the head's `name`, its `binds`, or its element name; `##` from `01` (`PACKAGE_TARGET.md` §3.6) |
 | `kind` `var` | `<rule>` | `[logic]` line | rule type and bound name |
 | `var` | `<needs>` | `[logic]` line, or `[ref'name']` | a name used and never defined in the fence; a name a reference writes and no command of the package binds, outside it |
 | `binds` | any command | an operand literal plus a bracketed nest | the name this command's result answers to |
@@ -173,17 +174,19 @@ Worked equivalence — the chain is comma-separated, and `,` is what repeats:
 ```xml
 <instruction>
   <chain>
-    <rework/>
-    <format/>
-    <improve/>
+    <rework origin="root-rework"/>
+    <format origin="rework-item-01"/>
+    <improve origin="rework-item-02"/>
   </chain>
 </instruction>
 ```
 
-**The members carry no attribute, and that is deliberate.** `<chain>` groups a
+**The members carry no `chain`, and that is deliberate.** `<chain>` groups a
 maximal run whose first member came from `-` and whose remainder came from `,`, so
 **position carries the operator** and an attribute would be a second encoding of
-one fact. The inverse reads it back from position alone.
+one fact. The inverse reads it back from position alone. What a member of a run
+with items does carry is `origin`, the item scheme: whose item it is and where it
+sits in the queue (`PACKAGE_TARGET.md` §3.6).
 
 A second `-` opens a **new** run rather than continuing the first, so
 `[rev-impr-fmt]` emits two single-member chains. That looks odd and is correct:

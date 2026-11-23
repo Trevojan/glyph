@@ -88,8 +88,8 @@ needs the source in order to be understood is not a deliverable.
 ```xml
 <criticise>
   <chain>
-    <context/>
-    <example/>
+    <context origin="root-context"/>
+    <example origin="context-item-01"/>
   </chain>
   <user-input>X</user-input>
 </criticise>
@@ -102,7 +102,8 @@ It is the parent the run nests inside. Siblings that follow the run, such as
 ### 3.2 The attribute does not survive the grouping
 
 Members of a `<chain>` **do not carry `chain`**. Once the group is explicit, the
-attribute is a second encoding of one fact, and position already carries it:
+attribute is a second encoding of one fact, and position already carries it (what
+they carry instead, `origin`, says something position does not: §3.6):
 
 ```
 first member   ← the extend operator, `-`
@@ -147,6 +148,20 @@ Consecutive siblings that carry no `chain` attribute are not a run and are not
 wrapped. A `chain="item"` with no `chain="extend"` before it is malformed (§6,
 `ChainWithoutHead`) — the item operator is defined only as a continuation.
 
+### 3.6 The item scheme — whose item, and where in the queue
+
+The head of a run that has items carries `origin="root-x"`, and each item after it
+`origin="x-item-##"`: `x` is the head's own name — the `name` of a section, a block
+or a part, the `binds` of a command — and its element name otherwise; `##` counts
+from `01`, two digits, three past 99. It holds for a `<chain>` and for a `<holds>`
+(§3b) alike, and only a run with items carries it: a run of one does not
+(EMS-002/ORD-0043; the Regent's naming of 2026-10-15, I1 a to I4 a of 2026-11-21).
+
+It does not collide with §3.2: that rule drops `chain` because position encodes `-`
+against `,`; this encodes **which root an item belongs to and where it sits in the
+queue**, which position alone does not give a reader moving between the blocks of a
+long section. It is derived from position, so the inverse reads past it.
+
 ---
 
 ## 3b. `<holds>` — conjunction between bracketed siblings
@@ -185,11 +200,11 @@ at the same level is one `<holds>`.
 
 ```xml
 <holds>
-  <simplify>
+  <simplify origin="root-simplify">
     <invoke reads="[RTNL-SUB],[CTX]" species="composite" depth="2"/>
     <user-input>X</user-input>
   </simplify>
-  <core/>
+  <core origin="simplify-item-01"/>
 </holds>
 ```
 

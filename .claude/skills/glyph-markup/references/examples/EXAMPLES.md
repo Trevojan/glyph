@@ -251,3 +251,40 @@ disagree, the reference is right and this file needs regenerating.
   </block>
 </glyph-package>
 ```
+
+---
+
+## E-06
+
+```glyph
+[in
+  [tgt`ChainDemo`]
+  [rev-cmp,eval`the current order against the expected one`]
+  [instof-add`do not redesign the caller.`]]
+```
+
+```xml
+<glyph-package engine="4.7.10.09">
+  <schema/>
+  <block once="true">
+    <instruction>
+      <target>
+        <user-input>ChainDemo</user-input>
+      </target>
+      <review>
+        <chain>
+          <compare origin="root-compare"/>
+          <evaluate origin="compare-item-01"/>
+        </chain>
+        <user-input>the current order against the expected one</user-input>
+      </review>
+      <instead-of>
+        <chain>
+          <add/>
+        </chain>
+        <user-input>do not redesign the caller.</user-input>
+      </instead-of>
+    </instruction>
+  </block>
+</glyph-package>
+```

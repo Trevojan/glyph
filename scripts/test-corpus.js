@@ -1290,7 +1290,7 @@ function runFromXmlChecks() {
 
   const edit = G.toXML("[ins-alw,nev]", opts);
   ok("F-20", "force=\"editorial\" keeps its place beside chain",
-     /<chain>\s*<always force="editorial"\/>/.test(edit) ? null
+     /<chain>\s*<always force="editorial" origin="root-always"\/>/.test(edit) ? null
        : "attribute order or presence changed: " + edit.replace(/\s+/g, " "));
 
   const seg = trip("[in-rwk;[in-fmt]");
@@ -1447,7 +1447,7 @@ function runReferenceChecks() {
          does not survive it, position carrying the operator - PACKAGE_TARGET.md
          3.1 and 3.2. This is the ONLY forward vector in the corpus exercising a
          chain of more than one member. */
-      expect: x => /<instruction>\s*<chain>\s*<rework\/>\s*<context\/>\s*<\/chain>\s*<\/instruction>/.test(x) },
+      expect: x => /<instruction>\s*<chain>\s*<rework origin="root-rework"\/>\s*<context origin="rework-item-01"\/>\s*<\/chain>\s*<\/instruction>/.test(x) },
     /* 4-08 was the `/` divide row. It is gone from the reference because it is
        gone from the grammar (C-01) and now from the engine; the refusal that
        replaced it lives in bucket N, where a malformed construct belongs. */
@@ -1961,7 +1961,7 @@ const rPK = runPackageChecks();
 
 
 /* ------------------------------------------------------------------ *
- * the five authored examples — conformance, not illustration
+ * the six authored examples — conformance, not illustration
  *
  * These are the input→XML pairs the Regent wrote by hand: the instrument the
  * documentation calls the most reliable one there is, and the thing the handoff
@@ -1976,7 +1976,7 @@ const rPK = runPackageChecks();
  * lines that carry a bare link.
  * ------------------------------------------------------------------ */
 function runExampleChecks() {
-  console.log("\n--- the five authored examples ---");
+  console.log("\n--- the six authored examples ---");
   const D = [];
   const ok = (id, name, why) => {
     const pin = awaitCheck(id, why);
@@ -4974,7 +4974,7 @@ console.log(" reference    " + rD + "/12");
 console.log(" round trip   " + rRT + "/7");
 console.log(" ast schema   " + rSC + "/3");
 console.log(" glyph-package" + String(rPK).padStart(4) + "/6");
-console.log(" examples     " + rE + "/5");
+console.log(" examples     " + rE + "/6");
 console.log(" snapshot     " + rSN + "/4");
 console.log(" app          " + String(rAP).padStart(4) + "/3");
 console.log(" cli          " + String(rCL).padStart(4) + "/5");

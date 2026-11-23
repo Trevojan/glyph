@@ -93,13 +93,11 @@ do corpus inteiro.
 A base é ponto de partida, não a resposta: o conteúdo é seu. Só mantenha o
 `[tgt`, a cadeia nua de dois membros, e nenhum `]` dentro de literal.
 
-**Estado, 2026-11-11: a fonte está ratificada como escrita** — *"i ratify."* No
-motor 4.7.10.08 ela emite `<review><chain><compare/><evaluate/></chain>…`, sem
-diagnóstico, e **nenhum `origin="item"`**, nem no XML nem no AST: o `origin` do
-`EFF-9` — resolvido em desenho, `root-x` e `x-item-##` — está decidido e não
-construído. Então a E-06 entra no `conformance/` com a Ordem que constrói o
-esquema de item, que é o que lhe dá o nó que ela existe para provar. Até lá o `K1`
-não alcança a regra de posição do `PACKAGE_TARGET.md` §3.2, e as garantias **G2 e
-G3** seguem sem cobertura
+**State, 2026-11-22: E-06 is in `conformance/`**, in `examples.json` and in `golden.json`, as the Regent
+ratified it on 2026-11-11 (*"i ratify."*), with `EMS-002/ORD-0043`, the Order that builds the item
+scheme: `<compare origin="root-compare"/>` and `<evaluate origin="compare-item-01"/>` inside its
+`<chain>`, the golden derived by hand from `PACKAGE_TARGET.md` §3.6 and met by the engine byte for byte,
+and the pair round-trips. It is the one case whose chain runs longer than one, so the position
+rule of §3.2 has a vector that exercises it
 ([`.decisions/`](../.guidelines/.decisions/README.md);
 [`INTAKE-EFFECTS.md`](../.guidelines/.orders/INTAKE-EFFECTS.md) §9.1).

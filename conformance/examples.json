@@ -1,8 +1,8 @@
 {
-  "note": "The five input->XML pairs the Regent authored by hand. They are the conformance vectors the handoff asked for, and under T4 the golden derives from these and from the specification, never from an implementation. Hand-authored SOURCES with engine-produced XML: the source is the claim, the XML is what the engine currently answers, and a change to the XML is a release decision that must be explained rather than absorbed. `roundTrips` is pinned per case: a pair that does not survive its own inverse must say why, or a real regression would hide behind a known loss. | E3b: the `xml` of every case is now the glyph-package the emitter produces, and it equals conformance/golden.json byte for byte. The golden was derived by hand from the specification BEFORE any emitter existed (lock T5), so this records the emitter meeting the claim, never the claim being taken from the emitter.",
+  "note": "The six input->XML pairs the Regent authored by hand or ratified as written (E-06, 2026-11-11). They are the conformance vectors the handoff asked for, and under T4 the golden derives from these and from the specification, never from an implementation. Hand-authored SOURCES with engine-produced XML: the source is the claim, the XML is what the engine currently answers, and a change to the XML is a release decision that must be explained rather than absorbed. `roundTrips` is pinned per case: a pair that does not survive its own inverse must say why, or a real regression would hide behind a known loss. | E3b: the `xml` of every case is now the glyph-package the emitter produces, and it equals conformance/golden.json byte for byte. The golden was derived by hand from the specification BEFORE any emitter existed (lock T5), so this records the emitter meeting the claim, never the claim being taken from the emitter.",
   "authored": "2026-08-30",
   "engine": "4.7.10.09",
-  "count": 5,
+  "count": 6,
   "cases": [
     {
       "id": "E-01",
@@ -45,6 +45,12 @@
       "changed_since_authored": true,
       "roundTrips": true,
       "digest": "a760f4371077"
+    },
+    {
+      "id": "E-06",
+      "src": "[in\n  [tgt`ChainDemo`]\n  [rev-cmp,eval`the current order against the expected one`]\n  [instof-add`do not redesign the caller.`]]",
+      "xml": "<glyph-package engine=\"4.7.10.09\">\n  <schema/>\n  <block once=\"true\">\n    <instruction>\n      <target>\n        <user-input>ChainDemo</user-input>\n      </target>\n      <review>\n        <chain>\n          <compare origin=\"root-compare\"/>\n          <evaluate origin=\"compare-item-01\"/>\n        </chain>\n        <user-input>the current order against the expected one</user-input>\n      </review>\n      <instead-of>\n        <chain>\n          <add/>\n        </chain>\n        <user-input>do not redesign the caller.</user-input>\n      </instead-of>\n    </instruction>\n  </block>\n</glyph-package>",
+      "roundTrips": true
     }
   ],
   "identity": "Each case carries `digest`, the first 12 hex of sha256 over its `src`. The id E-01 is a human label; the digest is the identity. A pin carries `pinnedTo` so it binds to the SOURCE it excuses rather than to a position: a pin that migrates to another case does not outlive its reason, it acquires a false one, and lock T10 does not catch that."

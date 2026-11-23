@@ -114,8 +114,8 @@ Four constructions, each with exactly one reading:
     <criticise>
       <invoke reads="[CMP[CTX]],[SPEC-CORE],[EVAL[ERROR]]" species="composite" depth="2"/>
       <chain>
-        <context/>
-        <example/>
+        <context origin="root-context"/>
+        <example origin="context-item-01"/>
       </chain>
       <user-input>X</user-input>
     </criticise>
@@ -126,8 +126,9 @@ Four constructions, each with exactly one reading:
 Three things the document says that you never wrote, because the engine works
 them out and states them rather than leaving you to infer:
 
-- **`<chain>`** groups the run. Its members carry no attribute: the first came
-  from `-` and the rest from `,`, so **position carries the operator**. A second
+- **`<chain>`** groups the run. Its members carry no `chain`: the first came
+  from `-` and the rest from `,`, so **position carries the operator**; `origin`
+  says whose item each is and where it sits, `root-context` and `context-item-01`. A second
   `-` opens a NEW run, which is what keeps `[a-b-c]` distinct from `[a-b,c]`.
 - **`<invoke>`** appears on a composite only, first child, and carries the
   formula the command decomposes into. A command is a function; this is its

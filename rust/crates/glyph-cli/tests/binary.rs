@@ -1,5 +1,5 @@
-//! EMS-001 ORD-0008, the val: the first binary. The five sources of
-//! `conformance/examples.json` come out byte-exact against the XML they
+//! EMS-001 ORD-0008, the val: the first binary. The six sources of
+//! `conformance/examples.json` (E-06 since EMS-002 ORD-0043) come out byte-exact against the XML they
 //! record, then all 114 sources against the oracle; and a source the JS
 //! throws on leaves stdout empty, the JS's message on stderr, and exit 1.
 
@@ -28,7 +28,7 @@ fn glyph(src: &str) -> std::process::Output {
 }
 
 #[test]
-fn the_five_examples_come_out_byte_exact() {
+fn the_six_examples_come_out_byte_exact() {
     let path =
         std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../conformance/examples.json");
     let examples = parse(&std::fs::read_to_string(&path).expect("conformance/examples.json"))
@@ -36,7 +36,7 @@ fn the_five_examples_come_out_byte_exact() {
     let list = examples.a("cases");
     assert_eq!(
         list.len(),
-        5,
+        6,
         "conformance/examples.json holds {} cases",
         list.len()
     );

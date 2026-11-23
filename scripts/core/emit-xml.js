@@ -100,6 +100,24 @@ export function packageSpan(L, i) {
   return i;
 }
 
+/* The item scheme (EMS-002 ORD-0043; the Regent's naming of 2026-10-15, I1 a
+   to I4 a of 2026-11-21): the head of a run that has items carries
+   origin="root-x", and each item after it origin="x-item-##" — x the head's
+   own name, its binds, or its element name; ## from 01, two digits, three
+   past 99. Position says an item is one; this says whose, and where in the
+   queue, which is what a reader loses between the blocks of a long section. */
+function originName(line) {
+  var m = /^ *<([a-z][\w-]*)((?:\s+[\w:-]+="[^"]*")*)\s*\/?>/.exec(line);
+  if (!m) return null;
+  var attr = function (k) { var r = new RegExp("\\s" + k + '="([^"]*)"').exec(m[2]); return r ? r[1] : null; };
+  return attr("name") || attr("binds") || m[1];
+}
+function withOrigin(line, v) {
+  if (/\sorigin="/.test(line.split(">")[0])) return line;
+  return line.replace(/^( *<[a-z][\w-]*(?:\s+[\w:-]+="[^"]*")*)(\s*\/?>)/, '$1 origin="' + v + '"$2');
+}
+function itemNumber(n) { return n < 10 ? "0" + n : String(n); }
+
 export function packagePass(L, opts) {
   /* 3 — a maximal run of siblings, first `extend` then `item`s, is one
      <chain>, and the attribute does not survive it: position carries it.
@@ -114,9 +132,13 @@ export function packagePass(L, opts) {
       run.push(L[j]); j++;
     }
     var padding = new Array(ind + 1).join(" ");
+    var root = originName(run[0].replace(/\schain="(extend|item)"/, ""));
     out.push(padding + "<chain>");
-    for (var r = 0; r < run.length; r++)
-      out.push("  " + run[r].replace(/\schain="(extend|item)"/, ""));
+    for (var r = 0; r < run.length; r++) {
+      var link = run[r].replace(/\schain="(extend|item)"/, "");
+      if (run.length > 1) link = withOrigin(link, r ? root + "-item-" + itemNumber(r) : "root-" + root);
+      out.push("  " + link);
+    }
     out.push(padding + "</chain>");
     i = j - 1;
   }
@@ -143,11 +165,15 @@ export function packagePass(L, opts) {
     }
     if (!members.length) { held.push(out[h]); continue; }
     var hp = new Array(hInd + 1).join(" ");
+    var head = originName(out[headStart]);
     held.push(hp + "<holds>");
-    for (var q = headStart; q <= headEnd; q++) held.push("  " + out[q]);
-    members.forEach(function (span) {
-      for (var s = span[0]; s <= span[1]; s++)
-        held.push("  " + out[s].replace(/\sjoin="item"/, ""));
+    for (var q = headStart; q <= headEnd; q++)
+      held.push("  " + (q === headStart ? withOrigin(out[q], "root-" + head) : out[q]));
+    members.forEach(function (span, n) {
+      for (var s = span[0]; s <= span[1]; s++) {
+        var member = out[s].replace(/\sjoin="item"/, "");
+        held.push("  " + (s === span[0] ? withOrigin(member, head + "-item-" + itemNumber(n + 1)) : member));
+      }
     });
     held.push(hp + "</holds>");
     h = members[members.length - 1][1];

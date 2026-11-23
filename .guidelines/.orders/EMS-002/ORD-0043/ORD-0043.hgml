@@ -1,0 +1,64 @@
+[block
+  'ORD-0043-item-scheme'
+  [ref
+    'EMS'
+  [/ref]
+  [ctx
+    'the naming scheme of the Regent, 2026-10-15'
+    '.guidelines/.orders/INTAKE-EFFECTS.md, section 9.1'
+  [/ctx]
+  [ctx
+    'the measured proposal and the answers of the Regent'
+    '.guidelines/.orders/INTAKE-EFFECTS.md, sections 11 and 12'
+  [/ctx]
+  [ctx
+    'the case that exists to prove it'
+    'conformance/README.md, E-06'
+  [/ctx]
+  [tgt
+    'step 5 of the trail to the final Explorer: the emitted document says which root an item belongs to and where it sits in its queue, root-x on the root of a series of items and x-item-## on each item, in both engines'
+  [/tgt]
+  [ins
+    'write origin on the head of each chain and each holds that has items, root-x, and on each item after it, x-item-##, numbered from 01 with two digits and three past 99, x the head own name, its binds, or its element name'
+  [/ins]
+  [ins
+    'read both ways back past it, the attribute being derived from position'
+  [/ins]
+  [ins
+    'state the attribute in PACKAGE_TARGET.md and XML_REFERENCE.md, and enter E-06 into conformance'
+  [/ins]
+  [cnst
+    'only a root that has items carries root-x; join and chain keep what they do'
+  [/cnst]
+  [cnst
+    'the xml hashes of the declared sources with items move by decision, and no other hash moves'
+  [/cnst]
+  [cnst
+    'npm run check and npm run check:rust green'
+  [/cnst]
+  [cmp
+    'the engines'
+    'every source of the snapshot answers the same XML in the Rust as in the JS, the moved hashes named, and the scheme seen failing before the code'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+[/block]

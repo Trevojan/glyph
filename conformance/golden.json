@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "note": "E1 of ORD-2026-08-30-01. The expected glyph-package for each of the five conformance examples, DERIVED BY HAND from `.guidelines/.sources/PACKAGE_TARGET.md` applied to `conformance/examples.json`, never from an emitter (locks T4, T5, T31). No glyph-package emitter exists at the time of writing; that is the point. `package` is the claim, and an emitter that disagrees with it is wrong until this file is revised for a stated reason.",
+  "note": "E1 of ORD-2026-08-30-01. The expected glyph-package for each of the six conformance examples, DERIVED BY HAND from `.guidelines/.sources/PACKAGE_TARGET.md` applied to `conformance/examples.json`, never from an emitter (locks T4, T5, T31). No glyph-package emitter exists at the time of writing; that is the point. `package` is the claim, and an emitter that disagrees with it is wrong until this file is revised for a stated reason.",
   "derived_from": [
     ".guidelines/.sources/PACKAGE_TARGET.md",
     "conformance/examples.json",
@@ -8,12 +8,13 @@
   ],
   "authored": "2026-08-31",
   "engine_at_derivation": "2.4.6.04",
-  "count": 5,
+  "count": 6,
   "derivation_rules": [
     "S2: the root becomes <glyph-package engine=\"2.4.5.01\">, unconditionally",
     "S5: <schema/> is emitted empty as the first child of the root",
     "S3: each maximal run of siblings starting at chain=\"extend\" becomes a <chain>; the attribute does not survive the grouping; a run of one is still a run",
-    "S4: an element whose command is `composite` gains <invoke reads species depth/> as its FIRST child, before any <chain>; atoms gain nothing"
+    "S4: an element whose command is `composite` gains <invoke reads species depth/> as its FIRST child, before any <chain>; atoms gain nothing",
+    "S6: the head of a run that has items carries origin=\"root-x\" and each item origin=\"x-item-##\", x the head's name, its binds, or its element name, ## from 01 (PACKAGE_TARGET.md §3.6, EMS-002 ORD-0043)"
   ],
   "diagnostics_are_not_in_the_document": "The emitted document carries no diagnostic content and never has: a refusal reaches it as <off> (XML_REFERENCE.md 11.3) and an advisory rule diagnostic reaches it not at all. Diagnostics travel beside the document, in the AST envelope glyph-check validates. They are recorded per case here because a golden blind to them would let a regression that silences the contradiction rules pass unseen.",
   "cases": [
@@ -113,6 +114,17 @@
       "roundTrips": true,
       "note": "the degenerate case for both new constructs: no chain and no invoke, so it is what proves <glyph-package> and <schema/> are unconditional (S18) rather than triggered by a feature. It is also the case that contradicts finding A1: the order records zero diagnostics across all five examples, and this one produces four at 2.4.5.01.",
       "digest": "a760f4371077"
+    },
+    {
+      "id": "E-06",
+      "src": "[in\n  [tgt`ChainDemo`]\n  [rev-cmp,eval`the current order against the expected one`]\n  [instof-add`do not redesign the caller.`]]",
+      "package": "<glyph-package engine=\"4.7.10.09\">\n  <schema/>\n  <block once=\"true\">\n    <instruction>\n      <target>\n        <user-input>ChainDemo</user-input>\n      </target>\n      <review>\n        <chain>\n          <compare origin=\"root-compare\"/>\n          <evaluate origin=\"compare-item-01\"/>\n        </chain>\n        <user-input>the current order against the expected one</user-input>\n      </review>\n      <instead-of>\n        <chain>\n          <add/>\n        </chain>\n        <user-input>do not redesign the caller.</user-input>\n      </instead-of>\n    </instruction>\n  </block>\n</glyph-package>",
+      "invokes": [],
+      "chains": 2,
+      "diagnostics": [],
+      "roundTrips": true,
+      "note": "the only case with an item: a bare chain of two members, so the position rule of §3.2 is proved on a run longer than one, and the item scheme of §3.6 on its root and its item; ratified as written on 2026-11-11, it entered with EMS-002 ORD-0043",
+      "digest": "bda7e6415f25"
     }
   ],
   "identity": "Each case carries `digest`, the first 12 hex of sha256 over its `src`. The id E-01 is a human label; the digest is the identity. A pin carries `pinnedTo` so it binds to the SOURCE it excuses rather than to a position: a pin that migrates to another case does not outlive its reason, it acquires a false one, and lock T10 does not catch that.",

@@ -1,7 +1,7 @@
 {
   "note": "written by glyph-vpath build, EMS-002; never edited by hand",
   "depth": 2,
-  "next": 4083,
+  "next": 4129,
   "files": {
     ".guidelines/.changelog/README.md": {
       "nodes": [
@@ -3410,6 +3410,70 @@
         ["n4081", "/glyph-package/block", 513, 4308, 25, 67, "f6c10562b3f51000", "", "n4078"]
       ]
     },
+    ".guidelines/.orders/EMS-002/ORD-0043/ORD-0043.hgml": {
+      "nodes": [
+        ["n4083", "", 0, 1833, 1, 64, "761e37385731dc00", "", ""]
+      ]
+    },
+    ".guidelines/.orders/EMS-002/ORD-0043/ORD-0043.json": {
+      "nodes": [
+        ["n4084", "", 0, 17860, 1, 593, "032abed722ae0d00", "", ""],
+        ["n4085", "/type", 12, 22, 2, 1, "6cfcf51e0b22b400", "", "n4084"],
+        ["n4086", "/schema", 36, 37, 3, 1, "360caa400a28ede0", "", "n4084"],
+        ["n4087", "/version", 52, 63, 4, 1, "b637681c05c33000", "", "n4084"],
+        ["n4088", "/source", 77, 200, 5, 7, "473102205cdb8c80", "", "n4084"],
+        ["n4089", "/source/length", 93, 97, 6, 1, "6147d6f0ae34bf00", "", "n4088"],
+        ["n4090", "/source/checksum", 115, 133, 7, 1, "bb2ee1ca833b1400", "", "n4088"],
+        ["n4091", "/source/encoding", 151, 158, 8, 1, "51d8d6a8889ada00", "", "n4088"],
+        ["n4092", "/source/newline", 175, 179, 9, 1, "cec09c50a37ddc00", "", "n4088"],
+        ["n4093", "/source/uri", 192, 196, 10, 1, "e4ee48ec82cd2c00", "", "n4088"],
+        ["n4094", "/stores", 214, 326, 12, 5, "8120c4f0d6d87200", "", "n4084"],
+        ["n4095", "/stores/templates", 233, 251, 13, 1, "e0163048f45d2940", "", "n4094"],
+        ["n4096", "/stores/rules", 266, 284, 14, 1, "406bc86654620000", "", "n4094"],
+        ["n4097", "/stores/expansions", 304, 322, 15, 1, "b33d791e77f12000", "", "n4094"],
+        ["n4098", "/projection", 344, 350, 17, 1, "8e0b2f6630c6ec00", "", "n4084"],
+        ["n4099", "/segments", 366, 17635, 18, 567, "6b6f5e27a89f3c00", "", "n4084"],
+        ["n4100", "/segments/0", 372, 17631, 19, 565, "db486250ca180980", "", "n4099"],
+        ["n4101", "/diagnostics", 17654, 17858, 585, 8, "9dce5dd0dbf6a1c0", "", "n4084"],
+        ["n4102", "/diagnostics/0", 17660, 17854, 586, 6, "f97b3c3d44d84600", "", "n4101"]
+      ]
+    },
+    ".guidelines/.orders/EMS-002/ORD-0043/ORD-0043.manifest.json": {
+      "nodes": [
+        ["n4103", "", 0, 585, 1, 27, "1e3cf31c943d6000", "", ""],
+        ["n4104", "/order", 13, 23, 2, 1, "66e08db87d621400", "", "n4103"],
+        ["n4105", "/engine", 37, 48, 3, 1, "b637681c05c33000", "", "n4103"],
+        ["n4106", "/emitted", 63, 89, 4, 1, "b76978801a78bc00", "", "n4103"],
+        ["n4107", "/files", 102, 189, 5, 6, "6c83b0a0a3b71200", "", "n4103"],
+        ["n4108", "/files/0", 108, 123, 6, 1, "06dcbe02140fae00", "", "n4107"],
+        ["n4109", "/files/1", 129, 143, 7, 1, "663ff6fec64469a0", "", "n4107"],
+        ["n4110", "/files/2", 149, 164, 8, 1, "c91e7e78e242f000", "", "n4107"],
+        ["n4111", "/files/3", 170, 185, 9, 1, "8e55e8c610549800", "", "n4107"],
+        ["n4112", "/source", 203, 349, 11, 1, "4aec5568b7bcfa00", "", "n4103"],
+        ["n4113", "/relates", 364, 449, 12, 7, "34a762e09e1a1000", "", "n4103"],
+        ["n4114", "/relates/0", 370, 445, 13, 5, "1f13a84879136c00", "", "n4113"],
+        ["n4115", "/configuration", 470, 529, 19, 4, "5897a2e4d0bce080", "", "n4103"],
+        ["n4116", "/configuration/of", 482, 491, 20, 1, "2bd2490690053400", "", "n4115"],
+        ["n4117", "/configuration/digest", 507, 525, 21, 1, "558eff5a1ee73760", "", "n4115"],
+        ["n4118", "/diagnostics", 548, 582, 23, 4, "f4eaba7ce2eabe00", "", "n4103"],
+        ["n4119", "/diagnostics/fix", 561, 562, 24, 1, "350ca8b09bec4d20", "", "n4118"],
+        ["n4120", "/diagnostics/total", 577, 578, 25, 1, "340ca71c160082b8", "", "n4118"]
+      ]
+    },
+    ".guidelines/.orders/EMS-002/ORD-0043/ORD-0043.pgml": {
+      "nodes": [
+        ["n4121", "", 0, 1389, 1, 14, "57b68b6832b8ec50", "", ""]
+      ]
+    },
+    ".guidelines/.orders/EMS-002/ORD-0043/ORD-0043.xml": {
+      "nodes": [
+        ["n4122", "", 0, 3008, 1, 71, "62559238414b6c00", "", ""],
+        ["n4123", "/glyph-package", 0, 3008, 1, 71, "62559238414b6c00", "", "n4122"],
+        ["n4124", "/glyph-package/schema", 37, 114, 2, 3, "de72ee60a4fd19c0", "", "n4123"],
+        ["n4125", "/glyph-package/configuration", 117, 509, 5, 20, "bc527e5c7bf48800", "", "n4123"],
+        ["n4126", "/glyph-package/block", 512, 2991, 25, 46, "4aa5b8a000c62800", "", "n4123"]
+      ]
+    },
     ".guidelines/.orders/EMS-002/README.md": {
       "nodes": [
         ["n598", "", 0, 24314, 1, 50, "331fd3e6c3e2d300", "", ""],
@@ -3794,9 +3858,9 @@
     },
     ".guidelines/.orders/GATE.json": {
       "nodes": [
-        ["n3837", "", 0, 5457, 1, 69, "d1d42ec69715ce00", "", ""],
+        ["n3837", "", 0, 5562, 1, 70, "91ae1020ae415600", "", ""],
         ["n3838", "/note", 12, 292, 2, 1, "53e7fb003068fce0", "", "n3837"],
-        ["n3839", "/bundles", 307, 5454, 3, 66, "c20d18fc5cb6cc00", "", "n3837"],
+        ["n3839", "/bundles", 307, 5559, 3, 67, "e26471804fd14700", "", "n3837"],
         ["n3840", "/bundles/.guidelines~1.orders~1EMS-001~1ORD-0001~1ORD-0001.xml", 366, 384, 4, 1, "dc8c39ac61706c00", "", "n3839"],
         ["n3841", "/bundles/.guidelines~1.orders~1EMS-001~1ORD-0002~1ORD-0002.xml", 443, 461, 5, 1, "dc8c39ac61706c00", "", "n3839"],
         ["n3842", "/bundles/.guidelines~1.orders~1EMS-001~1ORD-0003~1ORD-0003.xml", 520, 538, 6, 1, "dc8c39ac61706c00", "", "n3839"],
@@ -3853,14 +3917,15 @@
         ["n3986", "/bundles/.guidelines~1.orders~1EMS-002~1ORD-0040~1ORD-0040.xml", 4514, 4560, 57, 1, "06a67dec30a3f600", "", "n3839"],
         ["n4033", "/bundles/.guidelines~1.orders~1EMS-002~1ORD-0041~1ORD-0041.xml", 4619, 4665, 58, 1, "06a67dec30a3f600", "", "n3839"],
         ["n4082", "/bundles/.guidelines~1.orders~1EMS-002~1ORD-0042~1ORD-0042.xml", 4724, 4770, 59, 1, "06a67dec30a3f600", "", "n3839"],
-        ["n3893", "/bundles/.guidelines~1.orders~1EMS-003~1ORD-0001~1ORD-0001.xml", 4829, 4854, 60, 1, "52223abcbc4d0c00", "", "n3839"],
-        ["n3894", "/bundles/.guidelines~1.orders~1EMS-003~1ORD-0002~1ORD-0002.xml", 4913, 4938, 61, 1, "52223abcbc4d0c00", "", "n3839"],
-        ["n3895", "/bundles/.guidelines~1.orders~1EMS-003~1ORD-0003~1ORD-0003.xml", 4997, 5022, 62, 1, "52223abcbc4d0c00", "", "n3839"],
-        ["n3896", "/bundles/.guidelines~1.orders~1EMS-003~1ORD-0004~1ORD-0004.xml", 5081, 5106, 63, 1, "52223abcbc4d0c00", "", "n3839"],
-        ["n3897", "/bundles/.guidelines~1.orders~1EMS-003~1ORD-0005~1ORD-0005.xml", 5165, 5190, 64, 1, "52223abcbc4d0c00", "", "n3839"],
-        ["n3898", "/bundles/.guidelines~1.orders~1EMS-003~1queued~1ORD-0006~1ORD-0006.xml", 5256, 5281, 65, 1, "52223abcbc4d0c00", "", "n3839"],
-        ["n3899", "/bundles/.guidelines~1.orders~1ORD-2026-08-30-01.xml", 5332, 5353, 66, 1, "1df5c270239f6e00", "", "n3839"],
-        ["n3900", "/bundles/.guidelines~1.orders~1parked~1restructure-glyph-repo~1ORD-0011.xml", 5425, 5450, 67, 1, "52223abcbc4d0c00", "", "n3839"]
+        ["n4127", "/bundles/.guidelines~1.orders~1EMS-002~1ORD-0043~1ORD-0043.xml", 4829, 4875, 60, 1, "06a67dec30a3f600", "", "n3839"],
+        ["n3893", "/bundles/.guidelines~1.orders~1EMS-003~1ORD-0001~1ORD-0001.xml", 4934, 4959, 61, 1, "52223abcbc4d0c00", "", "n3839"],
+        ["n3894", "/bundles/.guidelines~1.orders~1EMS-003~1ORD-0002~1ORD-0002.xml", 5018, 5043, 62, 1, "52223abcbc4d0c00", "", "n3839"],
+        ["n3895", "/bundles/.guidelines~1.orders~1EMS-003~1ORD-0003~1ORD-0003.xml", 5102, 5127, 63, 1, "52223abcbc4d0c00", "", "n3839"],
+        ["n3896", "/bundles/.guidelines~1.orders~1EMS-003~1ORD-0004~1ORD-0004.xml", 5186, 5211, 64, 1, "52223abcbc4d0c00", "", "n3839"],
+        ["n3897", "/bundles/.guidelines~1.orders~1EMS-003~1ORD-0005~1ORD-0005.xml", 5270, 5295, 65, 1, "52223abcbc4d0c00", "", "n3839"],
+        ["n3898", "/bundles/.guidelines~1.orders~1EMS-003~1queued~1ORD-0006~1ORD-0006.xml", 5361, 5386, 66, 1, "52223abcbc4d0c00", "", "n3839"],
+        ["n3899", "/bundles/.guidelines~1.orders~1ORD-2026-08-30-01.xml", 5437, 5458, 67, 1, "1df5c270239f6e00", "", "n3839"],
+        ["n3900", "/bundles/.guidelines~1.orders~1parked~1restructure-glyph-repo~1ORD-0011.xml", 5530, 5555, 68, 1, "52223abcbc4d0c00", "", "n3839"]
       ]
     },
     ".guidelines/.orders/HANDOFF-2026-08-30.ast.json": {
@@ -5028,38 +5093,39 @@
     },
     ".guidelines/.sources/PACKAGE_TARGET.md": {
       "nodes": [
-        ["n1314", "", 0, 26868, 1, 568, "3060f826087d8200", "", ""],
-        ["n1315", "package-target--the-glyph-package-document", 0, 26868, 1, 568, "3060f826087d8200", "8f33dd726d57b200", "n1314"],
+        ["n1314", "", 0, 27925, 1, 583, "b4e7a080555e9d00", "", ""],
+        ["n1315", "package-target--the-glyph-package-document", 0, 27925, 1, 583, "b4e7a080555e9d00", "db1273e4b86ff100", "n1314"],
         ["n1316", "0-what-this-is-and-what-it-is-not", 332, 1026, 8, 16, "c143baf0bea67800", "fdf8cf6a64449600", "n1315"],
         ["n1317", "1-why-this-is-a-delta-and-not-a-grammar", 1026, 2113, 24, 23, "6e13d21e4c611180", "95fc3354ecfaa300", "n1315"],
         ["n1318", "2-the-root", 2113, 3204, 47, 25, "7d572206d4052000", "83137708dbe7be80", "n1315"],
-        ["n1319", "3-chain", 3204, 5925, 72, 80, "ded238002edbfa00", "d1b9287e9e4eb000", "n1315"],
-        ["n1320", "31-the-grouping-rule", 3221, 3975, 74, 28, "4d2ebd80bc691e00", "23a3d8fedfa3d600", "n1319"],
-        ["n1321", "32-the-attribute-does-not-survive-the-grouping", 3975, 4659, 102, 17, "fad5074806577800", "9b80203af5c61600", "n1319"],
-        ["n1322", "33-a-run-of-one-is-still-a-run", 4659, 4924, 119, 6, "481a88e49003a000", "2c5a079c9cc8f300", "n1319"],
-        ["n1323", "34-consecutive-extends-open-separate-runs", 4924, 5654, 125, 19, "96842560c0021e00", "048d954655971a00", "n1319"],
-        ["n1324", "35-what-is-not-a-chain", 5654, 5925, 144, 8, "53364df68430d600", "16af10e609956400", "n1319"],
-        ["n1325", "3b-holds--conjunction-between-bracketed-siblings", 5925, 8214, 152, 65, "c78f0e689850da00", "e62ebe101b753200", "n1315"],
-        ["n1326", "3b1-why-it-exists", 6146, 6927, 157, 20, "10d04950cc628000", "a6b9c0eee94afa00", "n1325"],
-        ["n1327", "3b2-the-grouping-rule", 6927, 7481, 177, 23, "5e7bc44ca50c4800", "9ac2858ed81fa400", "n1325"],
-        ["n1328", "3b3-the-attribute-does-not-survive-the-grouping", 7481, 7919, 200, 8, "95eb5e7080488200", "e810e2e445a6bc00", "n1325"],
-        ["n1329", "3b4-what-is-not-a-holds", 7919, 8214, 208, 9, "4031065429f30400", "782fbdf0609db000", "n1325"],
-        ["n3178", "3c-two-operands-as-attributes--part-name-and-if-cond", 8214, 9183, 217, 16, "462b9e0850efe340", "3056a722ae591bf0", "n1315"],
-        ["n1330", "4-invoke--the-command-call", 9183, 13666, 233, 95, "baacf410459e9720", "77c626768262fa00", "n1315"],
-        ["n1331", "41-a-command-is-a-function-and-the-xml-never-said-so", 9360, 10577, 238, 26, "a2254f4427a2e800", "c7564fec230fd500", "n1330"],
-        ["n1332", "42-shape", 10577, 11505, 264, 23, "9749455e58a795e0", "5c61b46a5b24ea00", "n1330"],
-        ["n1333", "43-emitted-for-composites-only", 11505, 11976, 287, 10, "bac71d4e33018b00", "40a22b201e7cf400", "n1330"],
-        ["n2794", "44-template-is-the-macro-and-slot-follows-what-the-call-wrote", 11976, 13006, 297, 17, "a36a0f803d4c8e00", "c12a0b0601052100", "n1330"],
-        ["n1335", "45-divergence-from-operator_targetmd", 13006, 13666, 314, 14, "9097bc582bcafc80", "a780acaeee394700", "n1330"],
-        ["n1336", "5-schema", 13666, 16178, 328, 44, "42e338681a6c3580", "6c5bc4343d07e800", "n1315"],
-        ["n1337", "6-refusals", 16178, 19165, 372, 53, "13688f604a209200", "a37b7e828a268c00", "n1315"],
-        ["n1338", "7-the-four-guarantees", 19165, 20235, 425, 17, "bd7a01617ed94500", "73303b6434f86a00", "n1315"],
-        ["n1339", "8-round-trip", 20235, 21068, 442, 20, "0d8117a09dae1c00", "465e9b082d6ae400", "n1315"],
-        ["n1340", "9-deliberately-not-specified-here", 21068, 21631, 462, 12, "5ed4b788bf128000", "cc59a9a09eccb800", "n1315"],
-        ["n1341", "10-open", 21631, 24214, 474, 43, "645536aaadd4ad00", "410f03dca3c2c0e0", "n1315"],
-        ["n1342", "11-diagnostics-are-not-carried-in-the-document", 24214, 26575, 517, 46, "a4bbe7a4af8d3800", "3d51b728a33f4200", "n1315"],
-        ["n1343", "111-two-findings-this-section-is-built-on", 25366, 26575, 541, 22, "4b3c5deee4cbfa00", "f2a8622494a6b770", "n1342"],
-        ["n1344", "12-status", 26575, 26868, 563, 6, "c937e3cc0b838100", "cd69aa6a7e600500", "n1315"]
+        ["n1319", "3-chain", 3204, 6933, 72, 95, "e21c04302372ae00", "d0b1cb2e8666eb00", "n1315"],
+        ["n1320", "31-the-grouping-rule", 3221, 4022, 74, 28, "724d64c682552d00", "fddf51dc231e3a00", "n1319"],
+        ["n1321", "32-the-attribute-does-not-survive-the-grouping", 4022, 4783, 102, 18, "10c81ce8fd0c6e40", "a3e9b3847debaa00", "n1319"],
+        ["n1322", "33-a-run-of-one-is-still-a-run", 4783, 5048, 120, 6, "481a88e49003a000", "2c5a079c9cc8f300", "n1319"],
+        ["n1323", "34-consecutive-extends-open-separate-runs", 5048, 5778, 126, 19, "96842560c0021e00", "048d954655971a00", "n1319"],
+        ["n1324", "35-what-is-not-a-chain", 5778, 6044, 145, 6, "b34bff5c5ba9c600", "2a285bbcc39f6000", "n1319"],
+        ["n4128", "36-the-item-scheme--whose-item-and-where-in-the-queue", 6044, 6933, 151, 16, "f9f0969615952000", "6a4b6c54a0d47280", "n1319"],
+        ["n1325", "3b-holds--conjunction-between-bracketed-siblings", 6933, 9271, 167, 65, "64175e3e3d5f6800", "d1a1550c9c6e8300", "n1315"],
+        ["n1326", "3b1-why-it-exists", 7154, 7935, 172, 20, "10d04950cc628000", "a6b9c0eee94afa00", "n1325"],
+        ["n1327", "3b2-the-grouping-rule", 7935, 8538, 192, 23, "fa30afbe54879800", "5e5a387a959c1700", "n1325"],
+        ["n1328", "3b3-the-attribute-does-not-survive-the-grouping", 8538, 8976, 215, 8, "95eb5e7080488200", "e810e2e445a6bc00", "n1325"],
+        ["n1329", "3b4-what-is-not-a-holds", 8976, 9271, 223, 9, "4031065429f30400", "782fbdf0609db000", "n1325"],
+        ["n3178", "3c-two-operands-as-attributes--part-name-and-if-cond", 9271, 10240, 232, 16, "462b9e0850efe340", "3056a722ae591bf0", "n1315"],
+        ["n1330", "4-invoke--the-command-call", 10240, 14723, 248, 95, "baacf410459e9720", "77c626768262fa00", "n1315"],
+        ["n1331", "41-a-command-is-a-function-and-the-xml-never-said-so", 10417, 11634, 253, 26, "a2254f4427a2e800", "c7564fec230fd500", "n1330"],
+        ["n1332", "42-shape", 11634, 12562, 279, 23, "9749455e58a795e0", "5c61b46a5b24ea00", "n1330"],
+        ["n1333", "43-emitted-for-composites-only", 12562, 13033, 302, 10, "bac71d4e33018b00", "40a22b201e7cf400", "n1330"],
+        ["n2794", "44-template-is-the-macro-and-slot-follows-what-the-call-wrote", 13033, 14063, 312, 17, "a36a0f803d4c8e00", "c12a0b0601052100", "n1330"],
+        ["n1335", "45-divergence-from-operator_targetmd", 14063, 14723, 329, 14, "9097bc582bcafc80", "a780acaeee394700", "n1330"],
+        ["n1336", "5-schema", 14723, 17235, 343, 44, "42e338681a6c3580", "6c5bc4343d07e800", "n1315"],
+        ["n1337", "6-refusals", 17235, 20222, 387, 53, "13688f604a209200", "a37b7e828a268c00", "n1315"],
+        ["n1338", "7-the-four-guarantees", 20222, 21292, 440, 17, "bd7a01617ed94500", "73303b6434f86a00", "n1315"],
+        ["n1339", "8-round-trip", 21292, 22125, 457, 20, "0d8117a09dae1c00", "465e9b082d6ae400", "n1315"],
+        ["n1340", "9-deliberately-not-specified-here", 22125, 22688, 477, 12, "5ed4b788bf128000", "cc59a9a09eccb800", "n1315"],
+        ["n1341", "10-open", 22688, 25271, 489, 43, "645536aaadd4ad00", "410f03dca3c2c0e0", "n1315"],
+        ["n1342", "11-diagnostics-are-not-carried-in-the-document", 25271, 27632, 532, 46, "a4bbe7a4af8d3800", "3d51b728a33f4200", "n1315"],
+        ["n1343", "111-two-findings-this-section-is-built-on", 26423, 27632, 556, 22, "4b3c5deee4cbfa00", "f2a8622494a6b770", "n1342"],
+        ["n1344", "12-status", 27632, 27925, 578, 6, "c937e3cc0b838100", "cd69aa6a7e600500", "n1315"]
       ]
     },
     ".guidelines/.sources/PROMOTION_BOUNDARY.md": {
@@ -5156,28 +5222,28 @@
         ["scripts/glyph-parser.js", "c7023606eb30fc00"]
       ],
       "nodes": [
-        ["n1375", "", 0, 29670, 1, 636, "7f4c1b30f5dea200", "", ""],
-        ["n1376", "glyph--xml--serialisation-reference", 45, 29670, 5, 632, "d43d3d38029c6a00", "d6f84c6c772b9c00", "n1375"],
+        ["n1375", "", 0, 30124, 1, 639, "63bb1c86cd05f800", "", ""],
+        ["n1376", "glyph--xml--serialisation-reference", 45, 30124, 5, 635, "d02c66685d8f3900", "b66727f06dd6fc00", "n1375"],
         ["n1377", "1-document-shape", 1018, 4903, 26, 67, "c4ae429c116e1400", "e7b8210816149880", "n1376"],
         ["n1378", "2-naming-rule", 4903, 5408, 93, 14, "80c450902748c800", "43105a68b1960a00", "n1376"],
-        ["n1379", "3-attributes", 5408, 8598, 107, 41, "cf77dec05ff21000", "475e6278c797f800", "n1376"],
-        ["n1380", "4-operators-delimiters-modes", 8598, 11874, 148, 58, "324c2aa0f4d3a680", "dbce440e46ede200", "n1376"],
-        ["n1381", "5-templates-and-placeholders", 11874, 16222, 206, 83, "93aa22f8215d3e00", "0dce17506d8dc940", "n1376"],
-        ["n1382", "6-mood", 16222, 17238, 289, 22, "8a69cda4dee12a00", "55078d1477a39220", "n1376"],
-        ["n1383", "7-vocabulary", 17238, 21927, 311, 160, "54545a128416bd80", "dc2af8e6c51b7e00", "n1376"],
-        ["n1384", "instructions-105", 17320, 20909, 315, 112, "441ff980b5b3f200", "9a3d2720bd7ba400", "n1383"],
-        ["n1385", "structural-9", 20909, 21312, 427, 16, "f3b8b8e4ef19d480", "3cdd2aa6b4c3bc00", "n1383"],
-        ["n1386", "meta-7", 21312, 21648, 443, 14, "6098214c0a279600", "25221868e4850b00", "n1383"],
-        ["n1387", "session-shortcuts-5", 21648, 21927, 457, 14, "3f30ff141e8c6800", "e60e61dfb1846e00", "n1383"],
-        ["n1388", "8-coined-elements", 21927, 22362, 471, 14, "0588f87025f5da80", "37eee9382952c000", "n1376"],
-        ["n1389", "9-where-the-draft-reference-diverged", 22362, 22802, 485, 12, "498bf1d06ccfd100", "5598f7383e05e200", "n1376"],
-        ["n1390", "10-round-trip", 22802, 24415, 497, 53, "281e7a2c5a891800", "a36fd3244a3c9400", "n1376"],
-        ["n1391", "11-failure--what-a-malformed-construct-produces", 24415, 29670, 550, 87, "f3f792c03d640400", "5e1cd0bc4b831580", "n1376"],
-        ["n1392", "111-missing-is-not-malformed", 24855, 25549, 558, 15, "34c324481c006400", "a6feff56d1906400", "n1391"],
-        ["n1393", "112-every-refusal-carries-a-position", 25549, 26170, 573, 12, "830e5f44688e8e00", "5af939e6646f6800", "n1391"],
-        ["n1394", "113-the-refusals", 26170, 27271, 585, 14, "15bf417a270cb500", "574bd188d76b7c00", "n1391"],
-        ["n1395", "114-what-is-deliberately-not-refused", 27271, 29134, 599, 28, "d1a3fe980cd15c00", "cf63a2f00b29a500", "n1391"],
-        ["n1396", "115-no-placeholder-character-reaches-the-deliverable", 29134, 29670, 627, 10, "21272b9a654d5900", "e28146c8b1253800", "n1391"]
+        ["n1379", "3-attributes", 5408, 8833, 107, 42, "7ee45eb4aaa85200", "1e95c17cd8d55400", "n1376"],
+        ["n1380", "4-operators-delimiters-modes", 8833, 12328, 149, 60, "a3cb9fc44e2ea700", "903eab6e42d70c00", "n1376"],
+        ["n1381", "5-templates-and-placeholders", 12328, 16676, 209, 83, "93aa22f8215d3e00", "0dce17506d8dc940", "n1376"],
+        ["n1382", "6-mood", 16676, 17692, 292, 22, "8a69cda4dee12a00", "55078d1477a39220", "n1376"],
+        ["n1383", "7-vocabulary", 17692, 22381, 314, 160, "54545a128416bd80", "dc2af8e6c51b7e00", "n1376"],
+        ["n1384", "instructions-105", 17774, 21363, 318, 112, "441ff980b5b3f200", "9a3d2720bd7ba400", "n1383"],
+        ["n1385", "structural-9", 21363, 21766, 430, 16, "f3b8b8e4ef19d480", "3cdd2aa6b4c3bc00", "n1383"],
+        ["n1386", "meta-7", 21766, 22102, 446, 14, "6098214c0a279600", "25221868e4850b00", "n1383"],
+        ["n1387", "session-shortcuts-5", 22102, 22381, 460, 14, "3f30ff141e8c6800", "e60e61dfb1846e00", "n1383"],
+        ["n1388", "8-coined-elements", 22381, 22816, 474, 14, "0588f87025f5da80", "37eee9382952c000", "n1376"],
+        ["n1389", "9-where-the-draft-reference-diverged", 22816, 23256, 488, 12, "498bf1d06ccfd100", "5598f7383e05e200", "n1376"],
+        ["n1390", "10-round-trip", 23256, 24869, 500, 53, "281e7a2c5a891800", "a36fd3244a3c9400", "n1376"],
+        ["n1391", "11-failure--what-a-malformed-construct-produces", 24869, 30124, 553, 87, "f3f792c03d640400", "5e1cd0bc4b831580", "n1376"],
+        ["n1392", "111-missing-is-not-malformed", 25309, 26003, 561, 15, "34c324481c006400", "a6feff56d1906400", "n1391"],
+        ["n1393", "112-every-refusal-carries-a-position", 26003, 26624, 576, 12, "830e5f44688e8e00", "5af939e6646f6800", "n1391"],
+        ["n1394", "113-the-refusals", 26624, 27725, 588, 14, "15bf417a270cb500", "574bd188d76b7c00", "n1391"],
+        ["n1395", "114-what-is-deliberately-not-refused", 27725, 29588, 602, 28, "d1a3fe980cd15c00", "cf63a2f00b29a500", "n1391"],
+        ["n1396", "115-no-placeholder-character-reaches-the-deliverable", 29588, 30124, 630, 10, "21272b9a654d5900", "e28146c8b1253800", "n1391"]
       ]
     },
     ".guidelines/.sources/ast-schema.json": {
@@ -5234,23 +5300,23 @@
     },
     ".guidelines/.sources/corpus-snapshot.json": {
       "nodes": [
-        ["n1445", "", 0, 14670, 1, 602, "2d77c808b7f7bc80", "", ""],
+        ["n1445", "", 0, 14670, 1, 602, "a77479fc72544100", "", ""],
         ["n1446", "/note", 12, 313, 2, 1, "a3eb619e87b97600", "", "n1445"],
         ["n1447", "/engine", 327, 338, 3, 1, "b637681c05c33000", "", "n1445"],
         ["n1448", "/count", 351, 354, 4, 1, "67361333c5e1ed00", "", "n1445"],
-        ["n1449", "/cases", 367, 14667, 5, 597, "6cfb6a5c3b4cea00", "", "n1445"],
+        ["n1449", "/cases", 367, 14667, 5, 597, "cd1efe50e9d15900", "", "n1445"],
         ["n1450", "/cases/P-01", 381, 487, 6, 5, "51950410b410cf00", "", "n1449"],
         ["n1451", "/cases/P-02", 501, 607, 11, 5, "370483331cd2ac00", "", "n1449"],
         ["n1452", "/cases/P-03", 621, 727, 16, 5, "77e8c28c65138800", "", "n1449"],
-        ["n1453", "/cases/P-04", 741, 847, 21, 5, "a042d72c21c97c00", "", "n1449"],
+        ["n1453", "/cases/P-04", 741, 847, 21, 5, "948a55b812001800", "", "n1449"],
         ["n1454", "/cases/P-05", 861, 967, 26, 5, "519d61c7e8495200", "", "n1449"],
         ["n3228", "/cases/P-06", 981, 1087, 31, 5, "fc91cab4e9eda200", "", "n1449"],
-        ["n1456", "/cases/P-07", 1101, 1207, 36, 5, "68d7fd386614d200", "", "n1449"],
-        ["n1457", "/cases/P-08", 1221, 1327, 41, 5, "552851d450826600", "", "n1449"],
+        ["n1456", "/cases/P-07", 1101, 1207, 36, 5, "63889a109bc35d40", "", "n1449"],
+        ["n1457", "/cases/P-08", 1221, 1327, 41, 5, "3999389f8bfa2c00", "", "n1449"],
         ["n1458", "/cases/P-10", 1341, 1447, 46, 5, "9df47280c223ba00", "", "n1449"],
         ["n1459", "/cases/P-13", 1461, 1567, 51, 5, "b2106488a5d6ad40", "", "n1449"],
         ["n1460", "/cases/P-14", 1581, 1687, 56, 5, "26f7a43037f47d00", "", "n1449"],
-        ["n1461", "/cases/P-15", 1701, 1807, 61, 5, "9d93884c6a073e00", "", "n1449"],
+        ["n1461", "/cases/P-15", 1701, 1807, 61, 5, "b4e2863858909600", "", "n1449"],
         ["n1462", "/cases/P-16", 1821, 1927, 66, 5, "d14b90e07ee80c00", "", "n1449"],
         ["n1463", "/cases/P-17", 1941, 2047, 71, 5, "9619557f63d0b600", "", "n1449"],
         ["n1464", "/cases/P-18", 2061, 2167, 76, 5, "7832c15784853000", "", "n1449"],
@@ -5281,8 +5347,8 @@
         ["n1488", "/cases/N-03", 5061, 5167, 201, 5, "f262e180e0077000", "", "n1449"],
         ["n1489", "/cases/N-04", 5181, 5287, 206, 5, "370b0dd460fd1800", "", "n1449"],
         ["n1490", "/cases/N-05", 5301, 5407, 211, 5, "f79ab4d8f1dbca00", "", "n1449"],
-        ["n1491", "/cases/N-09", 5421, 5527, 216, 5, "3e2a2aaf57839400", "", "n1449"],
-        ["n1492", "/cases/N-11", 5541, 5647, 221, 5, "dc0fba6095f7d200", "", "n1449"],
+        ["n1491", "/cases/N-09", 5421, 5527, 216, 5, "e87d2cc002397c00", "", "n1449"],
+        ["n1492", "/cases/N-11", 5541, 5647, 221, 5, "54f99510719c4200", "", "n1449"],
         ["n1493", "/cases/N-12", 5661, 5767, 226, 5, "3c546dc7e1f4a200", "", "n1449"],
         ["n1494", "/cases/N-22", 5781, 5887, 231, 5, "8766010b92e15c00", "", "n1449"],
         ["n1495", "/cases/N-14", 5901, 6007, 236, 5, "ef4c40a710d5ca00", "", "n1449"],
