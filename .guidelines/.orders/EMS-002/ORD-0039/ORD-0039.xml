@@ -1,0 +1,67 @@
+<glyph-package engine="4.7.10.09">
+  <schema>
+    <declares kind="block" name="ORD-0039-ems-json-rust"/>
+  </schema>
+  <configuration of="EMS-002" digest="06e60f4f1cfb0e00" engine="4.7.10.09">{
+  "id": "EMS-002",
+  "title": "o Glyph 100% em Rust",
+  "xsd": [
+    {
+      "kind": "block",
+      "name": "ORD-####-…"
+    }
+  ],
+  "engine": "4.7.10.09",
+  "conventions": [],
+  "rules": [],
+  "exceptions": [],
+  "pins": [],
+  "traffic": {},
+  "invoke": {
+    "skills": [],
+    "actions": []
+  }
+}</configuration>
+  <block once="true">
+    <block name="ORD-0039-ems-json-rust" binds="ORD-0039-ems-json-rust">
+      <context>
+        <user-input>the spec of EMS-002</user-input>
+        <user-input>.guidelines/.orders/EMS-002/EMS-002.pgml</user-input>
+      </context>
+      <context>
+        <user-input>the measured proposal and the answers of the Regent</user-input>
+        <user-input>.guidelines/.orders/INTAKE-EMS-JSON.md, sections 4 and 5</user-input>
+      </context>
+      <context>
+        <user-input>the first Order of the step, the configuration in the JS</user-input>
+        <user-input>.guidelines/.orders/EMS-002/ORD-0038</user-input>
+      </context>
+      <target>
+        <user-input>step 2 of the trail to the final Explorer, its second Order: the Rust binary checks an EMS.json against ems-schema.json and carries it into the bundle of a series as the JS does, byte for byte</user-input>
+      </target>
+      <instruction>
+        <user-input>port validateEms to glyph-schema, reading the hand-authored ems-schema.json, every breach by the name and in the order the JS gives it</user-input>
+      </instruction>
+      <instruction>
+        <user-input>have the Rust --bundle in a series check the EMS.json, refuse another engine, and write the configuration and the digest of the manifest as the JS writes them</user-input>
+      </instruction>
+      <instruction>
+        <user-input>record in the command line oracle the bundles of a series with a valid EMS.json, one under another engine and one out of the schema</user-input>
+      </instruction>
+      <constraint>
+        <user-input>no crate enters: the patterns of the schema are read with the little of a regular expression they use</user-input>
+      </constraint>
+      <constraint>
+        <user-input>no hash of the snapshot moves</user-input>
+      </constraint>
+      <constraint>
+        <user-input>npm run check and npm run check:rust green</user-input>
+      </constraint>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the engines</user-input>
+        <user-input>every run of the command line oracle answers the same stdout, exit, stderr and files in the Rust as in the JS, the new runs included, seen failing before they count</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>

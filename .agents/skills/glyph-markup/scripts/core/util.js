@@ -87,3 +87,34 @@ export function stripTags(s) {
     .replace(/&quot;/g, '"').replace(/&amp;/g, "&")
     .replace(/\s+/g, " ").trim();
 }
+
+/* What an Order declares, read off the content of its XML (EMS-002 ORD-0036,
+   the Regent's X1 a and X2 c of 2026-11-21): a named section, block and part,
+   a template, a name a command binds, a named logic block and each variable
+   it lets. The schema the engine writes is this list, so it is a function of
+   the content, and the validator reads the content the same way: what the
+   two disagree on is an XML that did not come from the engine. Attribute
+   values are kept as the XML writes them, escaped, so nothing is decoded
+   and written back differently. A section, a block and a part bind their own
+   name, which their entry already says. */
+export function declarationsOf(xml) {
+  var out = [], re = /<([a-z][\w-]*)((?:\s+[\w:-]+="[^"]*")*)\s*\/?>/g, m;
+  while ((m = re.exec(String(xml == null ? "" : xml)))) {
+    var tag = m[1], at = {}, a, ra = /([\w:-]+)="([^"]*)"/g;
+    while ((a = ra.exec(m[2]))) at[a[1]] = a[2];
+    var framed = tag === "section" || tag === "block" || tag === "part";
+    if (framed && at.name !== undefined) out.push({ kind: tag, name: at.name });
+    else if (tag === "template" && at.name !== undefined)
+      out.push(at.define === "true" ? { kind: "template", name: at.name, define: true } : { kind: "template", name: at.name });
+    else if (tag === "logic" && at.name !== undefined) out.push({ kind: "logic", name: at.name });
+    else if (tag === "rule" && at.kind === "let" && at.var !== undefined) out.push({ kind: "variable", name: at.var });
+    if (at.binds !== undefined && !framed) out.push({ kind: "binding", name: at.binds, on: tag });
+  }
+  return out;
+}
+
+/* one declaration as the schema writes it */
+export function declaresLine(d) {
+  return '<declares kind="' + d.kind + '" name="' + d.name + '"' + (d.on ? ' on="' + d.on + '"' : "") +
+         (d.define ? ' define="true"' : "") + "/>";
+}

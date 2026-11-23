@@ -12,7 +12,10 @@
 
 use glyph_json::{Json, number};
 use glyph_util::tree::Thrown;
-use glyph_util::{esc, inherited, inherited_text, js_space, js_trim};
+use glyph_util::{
+    Declared, declarations_of, declares_line, esc, inherited, inherited_text, js_space, js_trim,
+    start_tag,
+};
 use glyph_version::VERSION;
 use glyph_vocab::{
     FORMER_ELEMENT, FORMER_OPERAND_ATTR, OPERAND_ATTR, SESSION, derived, get, known_word,
@@ -769,7 +772,7 @@ pub fn package_unpass(
     }
     let mut out: Vec<El> = Vec::new();
     for c in &el.children {
-        if c.tag == "schema" || c.tag == "invoke" {
+        if c.tag == "schema" || c.tag == "invoke" || c.tag == "configuration" {
             continue;
         }
         if c.tag == "holds" || c.tag == "chain" {
@@ -852,11 +855,117 @@ fn from_xml_block(el: &El, diag: &mut Vec<Diag>, depth: usize) -> Result<String,
 }
 
 /// `fromXML(xmlString)`: xml → glyph, within the limits the JS notes.
+/// `checkSchema(xml)`: the gate (EMS-002 ORD-0036, the Rust's in ORD-0037).
+/// What the schema declares and the content does not hold, and what the
+/// content holds and the schema does not declare, are each a `fix` by name; a
+/// schema left empty over content that declares is an act emitted before the
+/// gate, read as emitted.
+pub fn check_schema(xml: &str) -> Vec<Diag> {
+    /* the first <schema/> or <schema>…</schema>, as the JS's alternation finds it */
+    let mut found = None;
+    let mut from = 0;
+    while let Some(p) = xml[from..].find("<schema") {
+        let at = from + p;
+        let rest = &xml[at + 7..];
+        let ws = rest.len()
+            - rest
+                .trim_start_matches(|c: char| c.is_ascii_whitespace())
+                .len();
+        if rest[ws..].starts_with("/>") {
+            found = Some((at + 7 + ws + 2, ""));
+            break;
+        }
+        if let Some(body) = rest.strip_prefix('>')
+            && let Some(e) = body.find("</schema>")
+        {
+            found = Some((at + 8 + e + 9, &body[..e]));
+            break;
+        }
+        from = at + 1;
+    }
+    let Some((end, body)) = found else {
+        return vec![Diag {
+            sev: "fix",
+            code: "SchemaMissing",
+            msg: "the package carries no <code>&lt;schema&gt;</code>.".into(),
+        }];
+    };
+    let have: Vec<String> = declarations_of(&xml[end..])
+        .iter()
+        .map(declares_line)
+        .collect();
+    let mut said = Vec::new();
+    let mut k = 0;
+    while let Some(p) = body[k..].find("<declares") {
+        let at = k + p;
+        k = at + 1;
+        if let Some((tag, attrs, _, true)) = start_tag(body, at)
+            && tag == "declares"
+        {
+            let get = |n: &str| attrs.iter().find(|(a, _)| a == n).map(|(_, v)| v.clone());
+            said.push(declares_line(&Declared {
+                kind: get("kind").unwrap_or_else(|| "undefined".into()),
+                name: get("name").unwrap_or_else(|| "undefined".into()),
+                on: get("on"),
+                define: get("define").as_deref() == Some("true"),
+            }));
+        }
+    }
+    if said.is_empty() && !have.is_empty() {
+        return vec![Diag {
+            sev: "note",
+            code: "SchemaBeforeGate",
+            msg: format!(
+                "the schema is empty over content that declares {}: an act emitted before the gate, read as emitted.",
+                have.len()
+            ),
+        }];
+    }
+    let mut diag = Vec::new();
+    let mut left = have;
+    for d in said {
+        match left.iter().position(|h| *h == d) {
+            Some(p) => {
+                left.remove(p);
+            }
+            None => diag.push(Diag {
+                sev: "fix",
+                code: "SchemaDeclaresAbsent",
+                msg: format!(
+                    "the schema declares <code>{}</code>, and the content does not hold it.",
+                    esc(&d)
+                ),
+            }),
+        }
+    }
+    for d in left {
+        diag.push(Diag {
+            sev: "fix",
+            code: "SchemaUndeclared",
+            msg: format!(
+                "the content holds <code>{}</code>, and the schema does not declare it.",
+                esc(&d)
+            ),
+        });
+    }
+    diag
+}
+
 pub fn from_xml(xml: &str) -> Result<Back, Thrown> {
     deep(|| from_xml_here(xml))
 }
 fn from_xml_here(xml: &str) -> Result<Back, Thrown> {
     let (root, mut diag) = xml_parse_tree(xml);
+    /* an XML read back is checked against the schema it carries first */
+    let pkg = xml.match_indices("<glyph-package").any(|(p, m)| {
+        xml[p + m.len()..]
+            .chars()
+            .next()
+            .is_some_and(|c| c == '>' || c.is_whitespace())
+    });
+    if pkg {
+        diag.extend(check_schema(xml));
+    }
     let Some(glyph) = xml_child(&root, "glyph-package") else {
         if xml_child(&root, "glyph").is_some() {
             diag.push(Diag { sev: "fix", code: "XmlLegacyRoot",

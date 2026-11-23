@@ -40,9 +40,35 @@ was reconciled from (see §9).
 - `engine` — the engine version that produced the document, mandatory. The
   document travels to readers that do not have this engine, and one that will not
   say what produced it cannot be judged perishable.
-- `<schema/>` — emitted empty, first child of the root. Empty rather than absent
-  so a consumer can tell *"this document declares no schema"* from *"this document
-  predates schemas"*.
+- `<schema>` — first child of the root: what the Order declares, one `<declares>`
+  per item in the order the content holds it ([`EMS-002/ORD-0036`](../.orders/EMS-002/README.md),
+  the Regent's X1 a and X2 c of 2026-11-21). A package that declares nothing writes
+  `<schema/>`, empty rather than absent, so a consumer can tell *"this document
+  declares nothing"* from *"this document predates schemas"*. The schema is read
+  off the content, so the engine's own output always agrees with it; the gate is
+  for an XML that comes from outside (below).
+- `<declares>` — one declaration, written only inside `<schema>`:
+  `kind` is `section`, `block` or `part` for a named frame, `template` for a
+  template (with `define="true"` where it is defined), `binding` for a name a
+  command binds (with `on`, the element that binds it), `logic` for a named logic
+  block and `variable` for each variable it lets; `name` is the name as the content
+  writes it. A section, a block and a part bind their own name, which their entry
+  already says, so they write no `binding`.
+- `<configuration>` — in a package bundled inside a series that holds an
+  `EMS.json`, the series' configuration, whole, as the file's text, right after
+  `<schema>` ([`EMS-002/ORD-0038`](../.orders/EMS-002/README.md), the Regent's E2 a of
+  2026-11-21). `of` names the series, `digest` the file it came from, and `engine`
+  the version the series bundles with, which `--bundle` refuses to differ from the
+  engine that runs. A package bundled outside a series, or in one with no
+  `EMS.json`, has none. The way back reads past it, as past `<schema>`.
+- **The gate.** `fromXML` checks an XML against its schema before reading it:
+  what the schema declares and the content does not hold is `fix`
+  `SchemaDeclaresAbsent`; what the content holds and the schema does not declare
+  is `fix` `SchemaUndeclared`; a package with no `<schema>` is `fix`
+  `SchemaMissing`; and a `<schema/>` left empty over content that declares is
+  `note` `SchemaBeforeGate`, an act emitted before the gate and read as emitted.
+  `npm run check` runs the same gate over every bundle under `.orders/`, and there
+  also holds the `engine` a `<configuration>` names to the bundle's manifest.
 - `<block>` — **one segment**, not the `[block` command. Segments are separated
   by `;` in the bracket form. Always carries `once="true"`; carries
   `continues="previous"` when the segment opened with `[=`.
@@ -475,7 +501,9 @@ the deliverable and need `fromXML()` updated in step, so both are open in
 
 ```xml
 <glyph-package engine="4.7.10.09">
-  <schema/>
+  <schema>
+    <declares kind="block" name="review"/>
+  </schema>
   <block once="true">
     <block name="review" binds="review">
       <requirement>

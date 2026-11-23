@@ -1,0 +1,16 @@
+{
+  "order": "ORD-0036",
+  "engine": "4.7.10.09",
+  "emitted": "2026-11-21T21:02:13.238Z",
+  "files": [
+    "ORD-0036.pgml",
+    "ORD-0036.xml",
+    "ORD-0036.json",
+    "ORD-0036.hgml"
+  ],
+  "source": "C:/Users/Usuario/AppData/Local/Temp/claude/C--Users-Usuario-Documents-GitHub-glyph/326c10ba-5572-44a7-a915-6d58bf3bd86c/scratchpad/ORD-0036.pgml",
+  "diagnostics": {
+    "fix": 0,
+    "total": 0
+  }
+}

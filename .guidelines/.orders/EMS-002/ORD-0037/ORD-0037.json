@@ -1,0 +1,559 @@
+{
+  "type": "GlyphAST",
+  "schema": 3,
+  "version": "4.7.10.09",
+  "source": {
+    "length": 1581,
+    "checksum": "bcbd2d30fcb0d200",
+    "encoding": "utf-8",
+    "newline": "lf",
+    "uri": null
+  },
+  "stores": {
+    "templates": "7356ea9b88319980",
+    "rules": "767e5432cdc6d400",
+    "expansions": "125235203224e180"
+  },
+  "projection": "full",
+  "segments": [
+    {
+      "type": "Segment",
+      "mood": [],
+      "isReturn": false,
+      "continues": false,
+      "breaks": 0,
+      "autoClosedCount": 0,
+      "body": [
+        {
+          "type": "Command",
+          "raw": "block",
+          "canonical": "BLOCK",
+          "tier": "struct",
+          "gloss": "Block",
+          "element": "block",
+          "isAlias": false,
+          "chainElement": false,
+          "origin": "root",
+          "slotName": false,
+          "editorial": false,
+          "name": null,
+          "depth": 0,
+          "autoClosed": false,
+          "suggestion": null,
+          "emotions": [],
+          "species": "atom",
+          "compositionDepth": 0,
+          "binds": "ORD-0037-schema-rust",
+          "at": {
+            "s": 0,
+            "e": 6
+          },
+          "body": [
+            {
+              "type": "Literal",
+              "value": "ORD-0037-schema-rust",
+              "form": "quote",
+              "slot": null,
+              "role": "operand",
+              "ref": null,
+              "at": {
+                "s": 6,
+                "e": 28
+              }
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 31,
+                "e": 35
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the spec of EMS-002",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 35,
+                    "e": 56
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": ".guidelines/.orders/EMS-002/EMS-002.pgml",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 57,
+                    "e": 99
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 103,
+                "e": 107
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the measured proposal and the answers of the Regent",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 107,
+                    "e": 160
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": ".guidelines/.orders/INTAKE-XSD.md, sections 4 and 5",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 161,
+                    "e": 214
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 218,
+                "e": 222
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the first Order of the step, which writes the schema in both engines and validates in the JS",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 222,
+                    "e": 316
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": ".guidelines/.orders/EMS-002/ORD-0036",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 317,
+                    "e": 355
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "tgt",
+              "canonical": "TGT",
+              "tier": "instr",
+              "gloss": "Target",
+              "element": "target",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 359,
+                "e": 363
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "step 1 of the trail to the final Explorer, its second Order: the Rust validates an XML against its schema as the JS does, so the oracle holds the gate in both engines",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 363,
+                    "e": 531
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 535,
+                "e": 539
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the answers of 2026-11-21: X4 a the engine validates with its own validator, the JS and the Rust each an Order; X6 a let us confirm the JS will leave correctly and the Rust will take over",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 539,
+                    "e": 728
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 732,
+                "e": 736
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "validate in the Rust fromXML what the JS validates: what the schema declares and the content does not hold, what the content holds and the schema does not declare, a package with no schema, and a schema left empty before the gate, each by the same name and in the same order",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 736,
+                    "e": 1012
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 1016,
+                "e": 1020
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "remove from the inverse oracle the set-aside that named the gate as JS-only",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1020,
+                    "e": 1097
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 1101,
+                "e": 1106
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "no hash of the snapshot moves: the gate changes what fromXML says, not what the engine emits",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1106,
+                    "e": 1200
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 1204,
+                "e": 1209
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "npm run check and npm run check:rust green",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1209,
+                    "e": 1253
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "val",
+              "canonical": "VAL",
+              "tier": "instr",
+              "gloss": "Validate",
+              "element": "validate",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "composite",
+              "compositionDepth": 5,
+              "binds": null,
+              "at": {
+                "s": 1257,
+                "e": 1261
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the engines",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1261,
+                    "e": 1274
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": "every fromXML the suite runs gives the same diagnostics in the Rust as in the JS, the gate included, with nothing set aside",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1275,
+                    "e": 1400
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "val",
+              "canonical": "VAL",
+              "tier": "instr",
+              "gloss": "Validate",
+              "element": "validate",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "composite",
+              "compositionDepth": 5,
+              "binds": null,
+              "at": {
+                "s": 1404,
+                "e": 1408
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the refusals",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1408,
+                    "e": 1422
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": "a schema that drops a declaration and one that adds what the content lacks are each refused by name in the Rust fromXML, seen failing before they count",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1423,
+                    "e": 1576
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "diagnostics": []
+}

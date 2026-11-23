@@ -1,0 +1,125 @@
+[block
+  'ORD-0036-schema'
+  [ctx
+    'the spec of EMS-002'
+    '.guidelines/.orders/EMS-002/EMS-002.pgml'
+  [/ctx]
+  [ctx
+    'the measured proposal and the answers of the Regent'
+    '.guidelines/.orders/INTAKE-XSD.md, sections 4 and 5'
+  [/ctx]
+  [tgt
+    'step 1 of the trail to the final Explorer, its first Order: the engine writes what an Order declares into the schema of its package, in both engines, and the JS validates an XML against it at the trust boundary'
+  [/tgt]
+  [ctx
+    'the answers of 2026-11-21: X1 a the schema describes what the Order declares; X2 c its notation is that declaration, and the W3C XSD a projection written only when a tool asks; X3 a it travels inside the package, in the schema element; X4 a the engine validates with its own validator, the JS and the Rust each an Order; X5 b the gate runs where an XML enters from outside and over every bundle under orders in npm run check, with a log under orders; X6 a both engines, the JS first'
+  [/ctx]
+  [ctx
+    'the Regent, 2026-11-21: after EMS-003 ORD-0005 the open slot goes to this step, the JS validator first, and the commits wait for his cycle'
+  [/ctx]
+  [ctx
+    'measured at 5685486: the schema is empty in all 119 declared sources; 30 declare something, a template in 26, binds on iterate in 5 and on validate in 6, a variable in 1, a named section, block and part in 1 each'
+  [/ctx]
+  [ins
+    'write in the schema one declares element for each thing the Order declares, in the order the content holds it: a named section, block and part, a template defined, a name bound, a logic block named and each variable it lets, in both engines'
+  [/ins]
+  [ins
+    'validate an XML against its schema in the JS: what the schema declares and the content does not hold, and what the content holds and the schema does not declare, each a fix by name'
+  [/ins]
+  [ins
+    'run the gate in fromXML and over every bundle under the orders folder in npm run check, writing its verdict per bundle to a log that the check holds to a fresh run'
+  [/ins]
+  [req
+    'a package that declares nothing keeps the empty schema, so only the sources that declare something move'
+  [/req]
+  [req
+    'a bundle emitted before the gate, its schema empty over content that declares, is read as emitted and named in the log, never refused'
+  [/req]
+  [cnst
+    'the language schema stays in XML_REFERENCE.md, and the declares element enters it before the engines write it'
+  [/cnst]
+  [cnst
+    'npm run check and npm run check:rust green, the snapshot moved only in the xml of the sources that declare something'
+  [/cnst]
+  [nev
+    'the snapshot is regenerated to make the suite green'
+  [/nev]
+  [cnst
+    'the Rust validator is the next Order of this step, not this one'
+  [/cnst]
+  [cmp
+    'the generator'
+    'both engines write the same schema, held by the oracle, and the xml hash moves for each declaring source and for no other'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+  [cmp
+    'the validator'
+    'a schema that drops a declaration, and one that adds a declaration the content lacks, are each refused by name in fromXML, seen failing before they count'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+  [cmp
+    'the gate'
+    'every bundle under the orders folder has a verdict in the log, and npm run check refuses a log that differs from a fresh run'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+[/block]

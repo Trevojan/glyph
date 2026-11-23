@@ -1,0 +1,20 @@
+{
+  "id": "EMS-003",
+  "title": "the 2D view",
+  "xsd": [
+    {
+      "kind": "block",
+      "name": "ORD-####-…"
+    }
+  ],
+  "engine": "4.7.10.09",
+  "conventions": [],
+  "rules": [],
+  "exceptions": [],
+  "pins": [],
+  "traffic": {},
+  "invoke": {
+    "skills": [],
+    "actions": []
+  }
+}

@@ -28,6 +28,7 @@ dependencies = [
  "glyph-json",
  "glyph-parse",
  "glyph-protocol",
+ "glyph-schema",
  "glyph-stores",
  "glyph-util",
  "glyph-version",
@@ -158,6 +159,9 @@ dependencies = [
 [[package]]
 name = "glyph-schema"
 version = "0.0.0"
+dependencies = [
+ "glyph-json",
+]
 
 [[package]]
 name = "glyph-stores"

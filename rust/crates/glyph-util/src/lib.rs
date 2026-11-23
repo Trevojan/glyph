@@ -123,3 +123,124 @@ pub fn walk<'a, T: Children>(list: &'a [T], mut f: impl FnMut(&'a T)) {
         stack.extend(nd.children().iter().rev());
     }
 }
+
+/// One thing an Order declares (EMS-002 ORD-0036): its kind, its name as the
+/// XML writes it, the element that binds it, and whether a template is defined.
+#[derive(Debug, Clone, PartialEq)]
+pub struct Declared {
+    pub kind: String,
+    pub name: String,
+    pub on: Option<String>,
+    pub define: bool,
+}
+
+/// A start tag of the XML at byte `i`, as the JS reads one with
+/// `<([a-z][\w-]*)((?:\s+[\w:-]+="[^"]*")*)\s*\/?>`: its name, its
+/// attributes, the byte after it, and whether it closes itself.
+/// A start tag: its name, its attributes, the byte after it, and whether it
+/// closes itself.
+pub type StartTag = (String, Vec<(String, String)>, usize, bool);
+
+pub fn start_tag(s: &str, i: usize) -> Option<StartTag> {
+    let b = s.as_bytes();
+    let word = |c: u8| c.is_ascii_alphanumeric() || c == b'_';
+    let mut j = i + 1;
+    if j >= b.len() || !b[j].is_ascii_lowercase() {
+        return None;
+    }
+    while j < b.len() && (word(b[j]) || b[j] == b'-') {
+        j += 1;
+    }
+    let tag = s[i + 1..j].to_string();
+    let mut attrs = Vec::new();
+    loop {
+        let ws = j;
+        while j < b.len() && (b[j] as char).is_ascii_whitespace() {
+            j += 1;
+        }
+        let k = j;
+        while j < b.len() && (word(b[j]) || b[j] == b':' || b[j] == b'-') {
+            j += 1;
+        }
+        if j > k && j > ws && k > ws && s[j..].starts_with("=\"") {
+            let v0 = j + 2;
+            let e = s[v0..].find('"')?;
+            attrs.push((s[k..j].to_string(), s[v0..v0 + e].to_string()));
+            j = v0 + e + 1;
+            continue;
+        }
+        j = k;
+        if s[j..].starts_with("/>") {
+            return Some((tag, attrs, j + 2, true));
+        }
+        if s[j..].starts_with('>') {
+            return Some((tag, attrs, j + 1, false));
+        }
+        return None;
+    }
+}
+
+/// `declarationsOf(xml)`: what an Order declares, read off the content of its
+/// XML, in the order the content holds it. The schema the engine writes is
+/// this list; the validator reads the content the same way.
+pub fn declarations_of(xml: &str) -> Vec<Declared> {
+    let mut out = Vec::new();
+    let mut i = 0;
+    while let Some(p) = xml[i..].find('<') {
+        let at = i + p;
+        i = at + 1;
+        let Some((tag, attrs, _, _)) = start_tag(xml, at) else {
+            continue;
+        };
+        let get = |k: &str| attrs.iter().find(|(n, _)| n == k).map(|(_, v)| v.clone());
+        let framed = tag == "section" || tag == "block" || tag == "part";
+        let d = |kind: &str, name: String, define: bool| Declared {
+            kind: kind.into(),
+            name,
+            on: None,
+            define,
+        };
+        if framed {
+            if let Some(n) = get("name") {
+                out.push(d(&tag, n, false));
+            }
+        } else if tag == "template" {
+            if let Some(n) = get("name") {
+                out.push(d("template", n, get("define").as_deref() == Some("true")));
+            }
+        } else if tag == "logic" {
+            if let Some(n) = get("name") {
+                out.push(d("logic", n, false));
+            }
+        } else if tag == "rule"
+            && get("kind").as_deref() == Some("let")
+            && let Some(n) = get("var")
+        {
+            out.push(d("variable", n, false));
+        }
+        if let Some(n) = get("binds")
+            && !framed
+        {
+            out.push(Declared {
+                kind: "binding".into(),
+                name: n,
+                on: Some(tag.clone()),
+                define: false,
+            });
+        }
+    }
+    out
+}
+
+/// `declaresLine(d)`: one declaration as the schema writes it.
+pub fn declares_line(d: &Declared) -> String {
+    let mut s = format!("<declares kind=\"{}\" name=\"{}\"", d.kind, d.name);
+    if let Some(on) = &d.on {
+        s.push_str(&format!(" on=\"{on}\""));
+    }
+    if d.define {
+        s.push_str(" define=\"true\"");
+    }
+    s.push_str("/>");
+    s
+}

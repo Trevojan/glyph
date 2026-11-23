@@ -6,6 +6,8 @@ visible links. The spec is [`EMS-003.pgml`](EMS-003.pgml), the measured proposal
 `.scope/asset/glyph-icons/`. Each ORD is a folder `ORD-####/` holding the bundle
 `--bundle` writes, and the count is this series' own.
 
+The series' configuration is [`EMS.json`](EMS.json), drafted by the session on 2026-11-21 from what the series declares (the Regent's E5 a): it waits for the Regent to read it, and `--bundle` carries it into every Order bundled here from now on.
+
 ## The open Order
 
 - [`EMS-003/ORD-0004`](ORD-0004/ORD-0004.xml) — the 2D view, read only: icons, frames and links told apart by type, tied to the source, carrying the diagnostics, walked from the keyboard, on a surface of its own beside the source (V7 b); open since 2026-11-21

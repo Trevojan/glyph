@@ -1,0 +1,832 @@
+{
+  "type": "GlyphAST",
+  "schema": 3,
+  "version": "4.7.10.09",
+  "source": {
+    "length": 3018,
+    "checksum": "59c196988fbdc600",
+    "encoding": "utf-8",
+    "newline": "lf",
+    "uri": null
+  },
+  "stores": {
+    "templates": "7356ea9b88319980",
+    "rules": "767e5432cdc6d400",
+    "expansions": "125235203224e180"
+  },
+  "projection": "full",
+  "segments": [
+    {
+      "type": "Segment",
+      "mood": [],
+      "isReturn": false,
+      "continues": false,
+      "breaks": 0,
+      "autoClosedCount": 0,
+      "body": [
+        {
+          "type": "Command",
+          "raw": "block",
+          "canonical": "BLOCK",
+          "tier": "struct",
+          "gloss": "Block",
+          "element": "block",
+          "isAlias": false,
+          "chainElement": false,
+          "origin": "root",
+          "slotName": false,
+          "editorial": false,
+          "name": null,
+          "depth": 0,
+          "autoClosed": false,
+          "suggestion": null,
+          "emotions": [],
+          "species": "atom",
+          "compositionDepth": 0,
+          "binds": "ORD-0036-schema",
+          "at": {
+            "s": 0,
+            "e": 6
+          },
+          "body": [
+            {
+              "type": "Literal",
+              "value": "ORD-0036-schema",
+              "form": "quote",
+              "slot": null,
+              "role": "operand",
+              "ref": null,
+              "at": {
+                "s": 6,
+                "e": 23
+              }
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 26,
+                "e": 30
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the spec of EMS-002",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 30,
+                    "e": 51
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": ".guidelines/.orders/EMS-002/EMS-002.pgml",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 52,
+                    "e": 94
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 98,
+                "e": 102
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the measured proposal and the answers of the Regent",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 102,
+                    "e": 155
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": ".guidelines/.orders/INTAKE-XSD.md, sections 4 and 5",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 156,
+                    "e": 209
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "tgt",
+              "canonical": "TGT",
+              "tier": "instr",
+              "gloss": "Target",
+              "element": "target",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 213,
+                "e": 217
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "step 1 of the trail to the final Explorer, its first Order: the engine writes what an Order declares into the schema of its package, in both engines, and the JS validates an XML against it at the trust boundary",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 217,
+                    "e": 429
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 433,
+                "e": 437
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the answers of 2026-11-21: X1 a the schema describes what the Order declares; X2 c its notation is that declaration, and the W3C XSD a projection written only when a tool asks; X3 a it travels inside the package, in the schema element; X4 a the engine validates with its own validator, the JS and the Rust each an Order; X5 b the gate runs where an XML enters from outside and over every bundle under orders in npm run check, with a log under orders; X6 a both engines, the JS first",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 437,
+                    "e": 921
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 925,
+                "e": 929
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the Regent, 2026-11-21: after EMS-003 ORD-0005 the open slot goes to this step, the JS validator first, and the commits wait for his cycle",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 929,
+                    "e": 1069
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 1073,
+                "e": 1077
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "measured at 5685486: the schema is empty in all 119 declared sources; 30 declare something, a template in 26, binds on iterate in 5 and on validate in 6, a variable in 1, a named section, block and part in 1 each",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1077,
+                    "e": 1291
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 1295,
+                "e": 1299
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "write in the schema one declares element for each thing the Order declares, in the order the content holds it: a named section, block and part, a template defined, a name bound, a logic block named and each variable it lets, in both engines",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1299,
+                    "e": 1541
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 1545,
+                "e": 1549
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "validate an XML against its schema in the JS: what the schema declares and the content does not hold, and what the content holds and the schema does not declare, each a fix by name",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1549,
+                    "e": 1731
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 1735,
+                "e": 1739
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "run the gate in fromXML and over every bundle under the orders folder in npm run check, writing its verdict per bundle to a log that the check holds to a fresh run",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1739,
+                    "e": 1904
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "req",
+              "canonical": "REQ",
+              "tier": "instr",
+              "gloss": "Requirement",
+              "element": "requirement",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 1908,
+                "e": 1912
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "a package that declares nothing keeps the empty schema, so only the sources that declare something move",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1912,
+                    "e": 2017
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "req",
+              "canonical": "REQ",
+              "tier": "instr",
+              "gloss": "Requirement",
+              "element": "requirement",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 2021,
+                "e": 2025
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "a bundle emitted before the gate, its schema empty over content that declares, is read as emitted and named in the log, never refused",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 2025,
+                    "e": 2160
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 2164,
+                "e": 2169
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the language schema stays in XML_REFERENCE.md, and the declares element enters it before the engines write it",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 2169,
+                    "e": 2280
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 2284,
+                "e": 2289
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "npm run check and npm run check:rust green, the snapshot moved only in the xml of the sources that declare something",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 2289,
+                    "e": 2407
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "nev",
+              "canonical": "NEV",
+              "tier": "instr",
+              "gloss": "Never",
+              "element": "never",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": true,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 2411,
+                "e": 2415
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the snapshot is regenerated to make the suite green",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 2415,
+                    "e": 2468
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 2472,
+                "e": 2477
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the Rust validator is the next Order of this step, not this one",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 2477,
+                    "e": 2542
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "val",
+              "canonical": "VAL",
+              "tier": "instr",
+              "gloss": "Validate",
+              "element": "validate",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "composite",
+              "compositionDepth": 5,
+              "binds": null,
+              "at": {
+                "s": 2546,
+                "e": 2550
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the generator",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 2550,
+                    "e": 2565
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": "both engines write the same schema, held by the oracle, and the xml hash moves for each declaring source and for no other",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 2566,
+                    "e": 2689
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "val",
+              "canonical": "VAL",
+              "tier": "instr",
+              "gloss": "Validate",
+              "element": "validate",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "composite",
+              "compositionDepth": 5,
+              "binds": null,
+              "at": {
+                "s": 2693,
+                "e": 2697
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the validator",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 2697,
+                    "e": 2712
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": "a schema that drops a declaration, and one that adds a declaration the content lacks, are each refused by name in fromXML, seen failing before they count",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 2713,
+                    "e": 2868
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "val",
+              "canonical": "VAL",
+              "tier": "instr",
+              "gloss": "Validate",
+              "element": "validate",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "composite",
+              "compositionDepth": 5,
+              "binds": null,
+              "at": {
+                "s": 2872,
+                "e": 2876
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the gate",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 2876,
+                    "e": 2886
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": "every bundle under the orders folder has a verdict in the log, and npm run check refuses a log that differs from a fresh run",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 2887,
+                    "e": 3013
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "diagnostics": []
+}

@@ -339,13 +339,67 @@ fn cli(argv: Vec<String>) {
                 )?,
             ))
         });
-        let (xml, ast, hgml) = match compiled {
+        let (mut xml, ast, hgml) = match compiled {
             Ok(t) => t,
             Err(Thrown(e)) => {
                 o.error(&format!("a fonte nao compilou: {e}"));
                 o.exit(1);
             }
         };
+        /* a series that holds an EMS.json carries it (EMS-002 ORD-0038, the
+        Rust's in ORD-0039): checked first, refused under another engine, and
+        written whole beside the schema with its digest */
+        let mut conf: Option<(String, String)> = None;
+        let ems = join(&dir, "EMS.json");
+        if series && Path::new(&ems).is_file() {
+            let text = std::fs::read_to_string(&ems)
+                .unwrap_or_default()
+                .replace("\r\n", "\n");
+            let text = glyph_util::js_trim(&text);
+            let cfg = match glyph_json::parse(&text) {
+                Ok(c) => c,
+                Err(e) => {
+                    o.error(&format!("EMS.json: {e}"));
+                    o.exit(2);
+                }
+            };
+            let bad = glyph_schema::validate_ems(&cfg);
+            if !bad.is_empty() {
+                o.error("EMS.json does not conform to ems-schema.json:");
+                bad.iter().for_each(|b| o.error(&format!("  {b}")));
+                o.exit(2);
+            }
+            let engine = cfg
+                .get("engine")
+                .and_then(Json::str)
+                .unwrap_or("")
+                .to_string();
+            if engine != glyph_version::VERSION {
+                o.error(&format!(
+                    "EMS.json bundles with engine {engine}, and this is {}: nothing written.",
+                    glyph_version::VERSION
+                ));
+                o.exit(2);
+            }
+            let of = cfg.get("id").and_then(Json::str).unwrap_or("").to_string();
+            let digest = glyph_envelope::ck(&text);
+            let body = text
+                .replace('&', "&amp;")
+                .replace('<', "&lt;")
+                .replace('>', "&gt;");
+            let line = format!(
+                "  <configuration of=\"{of}\" digest=\"{digest}\" engine=\"{engine}\">{body}</configuration>"
+            );
+            let mut lines: Vec<&str> = xml.split('\n').collect();
+            let at = lines
+                .iter()
+                .position(|l| *l == "  </schema>")
+                .or_else(|| lines.iter().position(|l| *l == "  <schema/>"))
+                .unwrap_or(0);
+            lines.insert(at + 1, &line);
+            xml = lines.join("\n");
+            conf = Some((of, digest));
+        }
         let gaps = match parse(&input, &opts) {
             Ok(p) => p.gaps,
             Err(t) => o.thrown("TypeError", t),
@@ -358,33 +412,43 @@ fn cli(argv: Vec<String>) {
         };
         let s = |v: &str| Json::Str(v.to_string());
         let manifest = stringify_indent(
-            &Json::Obj(vec![
-                ("order".into(), s(&id)),
-                ("engine".into(), s(glyph_version::VERSION)),
-                ("emitted".into(), s(&emitted)),
-                (
-                    "files".into(),
-                    Json::Arr(
-                        ["pgml", "xml", "json", "hgml"]
-                            .iter()
-                            .map(|e| s(&format!("{id}.{e}")))
-                            .collect(),
+            &Json::Obj(
+                vec![
+                    ("order".into(), s(&id)),
+                    ("engine".into(), s(glyph_version::VERSION)),
+                    ("emitted".into(), s(&emitted)),
+                    (
+                        "files".into(),
+                        Json::Arr(
+                            ["pgml", "xml", "json", "hgml"]
+                                .iter()
+                                .map(|e| s(&format!("{id}.{e}")))
+                                .collect(),
+                        ),
                     ),
-                ),
-                (
-                    "source".into(),
-                    file.as_deref()
-                        .filter(|f| !f.is_empty())
-                        .map_or(Json::Null, s),
-                ),
-                (
+                    (
+                        "source".into(),
+                        file.as_deref()
+                            .filter(|f| !f.is_empty())
+                            .map_or(Json::Null, s),
+                    ),
+                ]
+                .into_iter()
+                .chain(conf.as_ref().map(|(of, digest)| {
+                    (
+                        "configuration".to_string(),
+                        Json::Obj(vec![("of".into(), s(of)), ("digest".into(), s(digest))]),
+                    )
+                }))
+                .chain([(
                     "diagnostics".into(),
                     Json::Obj(vec![
                         ("fix".into(), Json::Num(refused as f64)),
                         ("total".into(), Json::Num(gaps.len() as f64)),
                     ]),
-                ),
-            ]),
+                )])
+                .collect(),
+            ),
             "  ",
         ) + "\n";
         let five: Vec<(String, &str)> = vec![

@@ -22,6 +22,7 @@ import path from "node:path";
 import fs from "node:fs";
 import G from "./glyph-parser.js";
 import { zipStore } from "./glyph-zip.js";
+import { validateEms } from "./glyph-check.js";
 const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -135,6 +136,28 @@ export function main() {
       console.error("a fonte nao compilou: " + e.message);
       process.exit(1);
     }
+    /* a series that holds an EMS.json carries it (EMS-002 ORD-0038): checked
+       first, refused under another engine, and written whole beside the
+       schema with its digest; a series without one, and a bundle outside a
+       series, are written as before */
+    var conf = null;
+    if (series && fs.existsSync(path.join(dir, "EMS.json"))) {
+      var confText = fs.readFileSync(path.join(dir, "EMS.json"), "utf8").replace(/\r\n/g, "\n").trim();
+      var cfg;
+      try { cfg = JSON.parse(confText); } catch (e) { console.error("EMS.json: " + e.message); process.exit(2); }
+      var bad = validateEms(cfg);
+      if (bad.length) { console.error("EMS.json does not conform to ems-schema.json:"); bad.forEach(function (b) { console.error("  " + b); }); process.exit(2); }
+      if (cfg.engine !== G.VERSION) {
+        console.error("EMS.json bundles with engine " + cfg.engine + ", and this is " + G.VERSION + ": nothing written.");
+        process.exit(2);
+      }
+      conf = { of: cfg.id, digest: G.ck(confText), engine: cfg.engine,
+               line: '  <configuration of="' + cfg.id + '" digest="' + G.ck(confText) + '" engine="' + cfg.engine + '">' +
+                     confText.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") + "</configuration>" };
+      var xl = xml.split("\n"), at = xl.indexOf("  </schema>") !== -1 ? xl.indexOf("  </schema>") : xl.indexOf("  <schema/>");
+      xl.splice(at + 1, 0, conf.line);
+      xml = xl.join("\n");
+    }
     var gaps = G.parse(input).gaps || [];
     var refused = gaps.filter(function (g) { return g.sev === "fix"; });
     /* o momento da emissao: o de SOURCE_DATE_EPOCH, a convencao dos builds
@@ -151,6 +174,7 @@ export function main() {
           order: id, engine: G.VERSION, emitted: when.toISOString(),
           files: [id + ".pgml", id + ".xml", id + ".json", id + ".hgml"],
           source: file || null,
+          configuration: conf ? { of: conf.of, digest: conf.digest } : undefined,
           diagnostics: { fix: refused.length, total: gaps.length }
         }, null, 2) + String.fromCharCode(10) }
     ];

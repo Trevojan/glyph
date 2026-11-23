@@ -831,7 +831,20 @@ pub fn build_xml(tree: &mut Tree<Extra>, ctx: &Context, describe: bool) -> Strin
         }
     }
     l.push("</glyph-package>".into());
-    package_pass(l, ctx).join("\n")
+    /* the schema is what the content declares, read off the content itself
+    (EMS-002 ORD-0036); a package that declares nothing keeps <schema/> */
+    let mut out = package_pass(l, ctx);
+    let decl = glyph_util::declarations_of(&out[2..].join("\n"));
+    if !decl.is_empty() {
+        let mut schema = vec![format!("{}<schema>", pad(1))];
+        schema.extend(
+            decl.iter()
+                .map(|d| format!("{}{}", pad(2), glyph_util::declares_line(d))),
+        );
+        schema.push(format!("{}</schema>", pad(1)));
+        out.splice(1..2, schema);
+    }
+    out.join("\n")
 }
 
 /// `toXML(src, opts)`: human → glyph → XML, in one call.

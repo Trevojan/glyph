@@ -1,0 +1,13 @@
+[block'ORD-0039-ems-json-rust'
+  [ctx'the spec of EMS-002','.guidelines/.orders/EMS-002/EMS-002.pgml']
+  [ctx'the measured proposal and the answers of the Regent','.guidelines/.orders/INTAKE-EMS-JSON.md, sections 4 and 5']
+  [ctx'the first Order of the step, the configuration in the JS','.guidelines/.orders/EMS-002/ORD-0038']
+  [tgt'step 2 of the trail to the final Explorer, its second Order: the Rust binary checks an EMS.json against ems-schema.json and carries it into the bundle of a series as the JS does, byte for byte']
+  [ins'port validateEms to glyph-schema, reading the hand-authored ems-schema.json, every breach by the name and in the order the JS gives it']
+  [ins'have the Rust --bundle in a series check the EMS.json, refuse another engine, and write the configuration and the digest of the manifest as the JS writes them']
+  [ins'record in the command line oracle the bundles of a series with a valid EMS.json, one under another engine and one out of the schema']
+  [cnst'no crate enters: the patterns of the schema are read with the little of a regular expression they use']
+  [cnst'no hash of the snapshot moves']
+  [cnst'npm run check and npm run check:rust green']
+  [val'the engines','every run of the command line oracle answers the same stdout, exit, stderr and files in the Rust as in the JS, the new runs included, seen failing before they count']
+];

@@ -1,0 +1,70 @@
+<glyph-package engine="4.7.10.09">
+  <schema>
+    <declares kind="block" name="ORD-0038-ems-json"/>
+  </schema>
+  <block once="true">
+    <block name="ORD-0038-ems-json" binds="ORD-0038-ems-json">
+      <context>
+        <user-input>the spec of EMS-002</user-input>
+        <user-input>.guidelines/.orders/EMS-002/EMS-002.pgml</user-input>
+      </context>
+      <context>
+        <user-input>the measured proposal and the answers of the Regent</user-input>
+        <user-input>.guidelines/.orders/INTAKE-EMS-JSON.md, sections 4 and 5</user-input>
+      </context>
+      <context>
+        <user-input>step 1, built: what an Order declares, in its schema</user-input>
+        <user-input>.guidelines/.orders/EMS-002/ORD-0036</user-input>
+      </context>
+      <target>
+        <user-input>step 2 of the trail to the final Explorer, its first Order: EMS.json, the configuration a series carries, checked where it enters and carried whole inside every package the series bundles, in the JS</user-input>
+      </target>
+      <context>
+        <user-input>the answers of 2026-11-21: E1 a the ratified fields only, the Orders stay in the spec; E2 a the configuration enters each package whole, beside the schema, with the digest of the EMS.json it came from; E3 a engine names the version new Orders are bundled with; E4 a the read half of the traffic is derived from each Order ctx, only the write half is typed in; E5 a the session drafts the first EMS.json of each series and the Regent reads them; E6 a a user EMS.json is checked against a hand-authored ems-schema.json beside ast-schema.json; E7 a the xsd is written in the notation of the declaration of an Order</user-input>
+      </context>
+      <context>
+        <user-input>the Regent, 2026-11-21, V4: the positions of a plane of a series live in its EMS.json; the field is the 2D view to propose, and this Order leaves room for it</user-input>
+      </context>
+      <instruction>
+        <user-input>write ems-schema.json by hand beside ast-schema.json: the ratified fields, their types, and room for positions</user-input>
+      </instruction>
+      <instruction>
+        <user-input>check an EMS.json against it in glyph-check, every breach by name</user-input>
+      </instruction>
+      <instruction>
+        <user-input>in a series that holds an EMS.json, have --bundle check it, refuse to bundle under an engine other than the one it names, and write it whole beside the schema of the package with its digest, the manifest naming the digest</user-input>
+      </instruction>
+      <instruction>
+        <user-input>draft the EMS.json of EMS-001, EMS-002 and EMS-003 from what each series already declares, for the Regent to read</user-input>
+      </instruction>
+      <requirement>
+        <user-input>a bundle outside a series, or in a series with no EMS.json, is written as before</user-input>
+      </requirement>
+      <requirement>
+        <user-input>fromXML reads a package that carries a configuration back to the same source, and the gate over the orders folder checks the engine a configuration names against its manifest</user-input>
+      </requirement>
+      <constraint>
+        <user-input>XML_REFERENCE.md states the configuration element before the engine writes it</user-input>
+      </constraint>
+      <constraint>
+        <user-input>no hash of the snapshot moves: no declared source is bundled inside a series</user-input>
+      </constraint>
+      <constraint>
+        <user-input>npm run check and npm run check:rust green</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the Rust bundle is the next Order of this step, not this one</user-input>
+      </constraint>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the schema</user-input>
+        <user-input>the three drafts conform, and a configuration missing a field, with an unknown field, or with a field of the wrong type is refused by name, each seen failing before it counts</user-input>
+      </validate>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the bundle</user-input>
+        <user-input>a series bundle carries its EMS.json whole with the digest, an invalid one and an engine other than the named one are refused with nothing written, and fromXML reads the package back to the same source</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>

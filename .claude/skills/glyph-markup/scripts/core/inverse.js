@@ -14,7 +14,7 @@
  * first stage to leave the monolith whole.
  */
 
-import { esc } from "./util.js";
+import { esc, declarationsOf, declaresLine } from "./util.js";
 import { SESSION, GLOSS_REVERSE, EMO_REVERSE, FORMER_ELEMENT, OPERAND_ATTR, FORMER_OPERAND_ATTR, knownWord } from "./vocabulary.js";
 import { VERSION } from "./version.js";
 
@@ -639,7 +639,7 @@ export function packageUnpass(el, diag) {
   if (!el || !el.children) return el;
   var out = [];
   el.children.forEach(function (c) {
-    if (c.tag === "schema" || c.tag === "invoke") return;
+    if (c.tag === "schema" || c.tag === "invoke" || c.tag === "configuration") return;
     if (c.tag === "holds") {
       /* the mirror of the <chain> rule one branch down: position carried the
          operator, so position gives it back. The head came with no operator,
@@ -703,10 +703,43 @@ export function packageUnpass(el, diag) {
 }
 
 
+/* The gate (EMS-002 ORD-0036, X5 b): an XML from outside the engine checked
+   against the schema it carries. What the schema declares and the content
+   does not hold, and what the content holds and the schema does not declare,
+   are each a `fix` by name. A schema left empty over content that declares
+   is an act emitted before the gate: it is read as emitted, and noted. */
+export function checkSchema(xmlString) {
+  var text = String(xmlString == null ? "" : xmlString);
+  var m = /<schema\s*\/>|<schema>([\s\S]*?)<\/schema>/.exec(text);
+  if (!m) return [{ sev:"fix", code:"SchemaMissing", msg:"the package carries no <code>&lt;schema&gt;</code>." }];
+  var have = declarationsOf(text.slice(m.index + m[0].length)).map(declaresLine);
+  var said = [], dm, rd = /<declares((?:\s+[\w:-]+="[^"]*")*)\s*\/>/g;
+  while ((dm = rd.exec(m[1] || ""))) {
+    var at = {}, a, ra = /([\w:-]+)="([^"]*)"/g;
+    while ((a = ra.exec(dm[1]))) at[a[1]] = a[2];
+    said.push(declaresLine({ kind: at.kind, name: at.name, on: at.on, define: at.define === "true" }));
+  }
+  if (!said.length && have.length)
+    return [{ sev:"note", code:"SchemaBeforeGate",
+              msg:"the schema is empty over content that declares " + have.length + ": an act emitted before the gate, read as emitted." }];
+  var diag = [], left = have.slice();
+  said.forEach(function (d) {
+    var k = left.indexOf(d);
+    if (k === -1) diag.push({ sev:"fix", code:"SchemaDeclaresAbsent", msg:"the schema declares <code>" + esc(d) + "</code>, and the content does not hold it." });
+    else left.splice(k, 1);
+  });
+  left.forEach(function (d) {
+    diag.push({ sev:"fix", code:"SchemaUndeclared", msg:"the content holds <code>" + esc(d) + "</code>, and the schema does not declare it." });
+  });
+  return diag;
+}
+
 export function fromXML(xmlString, opts) {
   opts = opts || {};
   var pt = xmlParseTree(String(xmlString == null ? "" : xmlString));
   var diag = pt.diag.slice();
+  /* an XML read back is checked against the schema it carries first */
+  if (/<glyph-package[\s>]/.test(String(xmlString))) checkSchema(xmlString).forEach(function (d) { diag.push(d); });
   var glyphEl = xmlChild(pt.root, "glyph-package");
   if (!glyphEl) {
     /* the retired root is refused BY NAME, never absorbed in silence - the

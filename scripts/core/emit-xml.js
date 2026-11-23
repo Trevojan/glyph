@@ -10,7 +10,7 @@
  * rather than a paraphrase.
  */
 
-import { xesc, pad, walk, valueChildren } from "./util.js";
+import { xesc, pad, walk, valueChildren, declarationsOf, declaresLine } from "./util.js";
 import { FRAMES, SLOTS, elName, GLOSS_REVERSE, OPERAND_ATTR } from "./vocabulary.js";
 import { speciesOf, depthOf, formulaOf, defOf, atomsOf, standsAlone } from "./stores.js";
 import { parse, collectBindings, bindingOf, unboundRefs, deepInference, partOutsideBlock } from "./parser.js";
@@ -66,7 +66,13 @@ export function buildXml(segments, opts) {
     if (sg.breaks) L.push(pad(1) + "<break/>");
   });
   L.push("</glyph-package>");
-  return packagePass(L, opts).join("\n");
+  /* the schema is what the content declares, read off the content itself
+     (EMS-002 ORD-0036); a package that declares nothing keeps <schema/> */
+  var out = packagePass(L, opts);
+  var decl = declarationsOf(out.slice(2).join("\n"));
+  if (decl.length)
+    out.splice.apply(out, [1, 1, pad(1) + "<schema>"].concat(decl.map(function (d) { return pad(2) + declaresLine(d); }), [pad(1) + "</schema>"]));
+  return out.join("\n");
 }
 
 

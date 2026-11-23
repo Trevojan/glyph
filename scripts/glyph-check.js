@@ -21,6 +21,17 @@
  * AST envelope against ast-schema.json. `--package` checks an emitted
  * glyph-package DOCUMENT against the twelve clauses of PACKAGE_TARGET.md 6.
  *
+ * `--ems` (EMS-002 ORD-0038, the Regent's E6 a of 2026-11-21) checks an
+ * EMS.json, the configuration a series carries, against the hand-authored
+ * .guidelines/.sources/ems-schema.json; --bundle runs the same check.
+ *
+ * `--gate` (EMS-002 ORD-0036, the Regent's X5 b of 2026-11-21) checks every
+ * bundle under .guidelines/.orders against the schema its XML carries, and holds
+ * the verdict of each to .guidelines/.orders/GATE.json: it refuses a bundle whose
+ * schema and content disagree, and a log that differs from a fresh run.
+ * `--gate --write` writes the log. A bundle emitted before the gate, its schema
+ * empty over content that declares, is read as emitted and named in the log.
+ *
  * The six-layer BUNDLE of BUNDLE_TARGET.md 5 is NOT here and is NOT a
  * glyph-package. An earlier version of this comment called it one; lock T0
  * separates them permanently, and its emitters are out of scope by the order.
@@ -286,11 +297,110 @@ function validatePackage(xml) {
   return errs;
 }
 
-export { validate, validatePackage, scan, SCHEMA };
+/* An EMS.json against ems-schema.json: every breach by name, nothing guessed. */
+const EMS_SCHEMA = JSON.parse(fs.readFileSync(path.join(__dirname, "..", ".guidelines", ".sources", "ems-schema.json"), "utf8"));
+function validateEms(cfg) {
+  const S = EMS_SCHEMA, errs = [];
+  if (!cfg || typeof cfg !== "object" || Array.isArray(cfg)) return ["EMS.json: not an object"];
+  const typeOf = v => Array.isArray(v) ? "array" : v === null ? "null" : typeof v;
+  S.required.forEach(k => { if (!(k in cfg)) errs.push("EMS.json: missing required key `" + k + "`"); });
+  Object.keys(cfg).forEach(k => {
+    if (S.required.indexOf(k) === -1 && S.optional.indexOf(k) === -1) errs.push("EMS.json: undeclared key `" + k + "`");
+    else if (typeOf(cfg[k]) !== S.types[k]) errs.push("EMS.json." + k + ": " + typeOf(cfg[k]) + ", declared " + S.types[k]);
+  });
+  Object.keys(S.patterns).forEach(k => {
+    if (typeof cfg[k] === "string" && !new RegExp(S.patterns[k]).test(cfg[k])) errs.push("EMS.json." + k + ": " + JSON.stringify(cfg[k]) + " is not of the declared form");
+  });
+  (Array.isArray(cfg.xsd) ? cfg.xsd : []).forEach((d, i) => {
+    const p = "EMS.json.xsd[" + i + "]";
+    if (!d || typeof d !== "object") { errs.push(p + ": not an object"); return; }
+    S.xsd.required.forEach(k => { if (typeof d[k] !== "string") errs.push(p + ": `" + k + "` is not a string"); });
+    if (S.xsd.kind.indexOf(d.kind) === -1) errs.push(p + ": kind " + JSON.stringify(d.kind) + " is not declared");
+  });
+  if (cfg.traffic && typeOf(cfg.traffic) === "object")
+    Object.keys(cfg.traffic).forEach(k => {
+      const p = "EMS.json.traffic." + k;
+      if (!new RegExp(S.traffic.key).test(k)) errs.push(p + ": not an Order's number");
+      const t = cfg.traffic[k];
+      if (!t || typeOf(t) !== "object") { errs.push(p + ": not an object"); return; }
+      Object.keys(t).forEach(f => { if (S.traffic.required.indexOf(f) === -1) errs.push(p + ": undeclared key `" + f + "`, the reads are derived"); });
+      if (!Array.isArray(t.writes)) errs.push(p + ".writes: not an array");
+    });
+  if (cfg.invoke && typeOf(cfg.invoke) === "object")
+    S.invoke.required.forEach(k => { if (!Array.isArray(cfg.invoke[k])) errs.push("EMS.json.invoke." + k + ": not an array"); });
+  return errs;
+}
+
+/* the bundles under .guidelines/.orders, by path, and the gate's verdict on each */
+const ORDERS = path.join(__dirname, "..", ".guidelines", ".orders");
+const GATE_LOG = path.join(ORDERS, "GATE.json");
+function gateVerdicts(checkSchema) {
+  const found = [];
+  (function walk(dir) {
+    fs.readdirSync(dir, { withFileTypes: true }).forEach(e => {
+      const p = path.join(dir, e.name);
+      if (e.isDirectory()) walk(p);
+      else if (/^ORD-.*\.xml$/.test(e.name)) found.push(p);
+    });
+  })(ORDERS);
+  const out = {};
+  found.map(p => path.relative(path.join(__dirname, ".."), p).replace(/\\/g, "/")).sort().forEach(rel => {
+    const xml = fs.readFileSync(path.join(__dirname, "..", rel), "utf8");
+    if (!/<glyph-package[\s>]/.test(xml)) { out[rel] = "not a glyph-package"; return; }
+    const d = checkSchema(xml), fixes = d.filter(x => x.sev === "fix");
+    const declared = (xml.match(/<declares\s/g) || []).length;
+    /* a configuration names the engine its series bundles with (E3 a): the
+       manifest beside the package says which one did */
+    const cfg = /<configuration of="([^"]*)" digest="([^"]*)" engine="([^"]*)">/.exec(xml);
+    if (cfg) {
+      let man = null;
+      try { man = JSON.parse(fs.readFileSync(path.join(__dirname, "..", rel.replace(/\.xml$/, ".manifest.json")), "utf8")); } catch (e) { /* none */ }
+      if (!man || man.engine !== cfg[3]) { out[rel] = "fix configuration of " + cfg[1] + " names engine " + cfg[3] + ", bundled with " + (man ? man.engine : "no manifest"); return; }
+    }
+    out[rel] = fixes.length ? "fix " + fixes.map(x => x.code).join(", ")
+      : d.some(x => x.code === "SchemaBeforeGate") ? "emitted before the gate"
+      : (declared ? "agrees, " + declared + " declared" : "declares nothing") + (cfg ? ", configuration of " + cfg[1] : "");
+  });
+  return out;
+}
+function gateLog(verdicts) {
+  return JSON.stringify({
+    note: "written by node scripts/glyph-check.js --gate --write (EMS-002 ORD-0036); never edited by hand. " +
+          "One verdict per bundle under .guidelines/.orders: its schema against its content. npm run check refuses " +
+          "a bundle whose verdict is fix, and this file when it differs from a fresh run.",
+    bundles: verdicts
+  }, null, 2) + "\n";
+}
+
+export { validate, validatePackage, scan, SCHEMA, gateVerdicts, gateLog, validateEms, EMS_SCHEMA };
 
 if (isMain(import.meta.url)) {
   const argv = process.argv.slice(2);
   const mode = argv[0];
+  if (mode === "--ems") {
+    let cfg;
+    try { cfg = JSON.parse(fs.readFileSync(argv[1], "utf8")); }
+    catch (e) { console.error("EMS.json: " + e.message); process.exit(1); }
+    const errs = validateEms(cfg);
+    if (errs.length) { errs.forEach(e => console.error("  \u2717 " + e)); process.exit(1); }
+    console.log("conforms to ems-schema.json (" + cfg.id + ", engine " + cfg.engine + ")");
+    process.exit(0);
+  }
+  if (mode === "--gate") {
+    const { default: G } = await import("./glyph-parser.js");
+    const verdicts = gateVerdicts(G.checkSchema), fresh = gateLog(verdicts);
+    if (argv[1] === "--write") { fs.writeFileSync(GATE_LOG, fresh); console.log(Object.keys(verdicts).length + " bundles, the log written"); process.exit(0); }
+    const bad = Object.keys(verdicts).filter(k => /^fix /.test(verdicts[k]));
+    let held = "";
+    try { held = fs.readFileSync(GATE_LOG, "utf8").replace(/\r\n/g, "\n"); } catch (e) { /* no log yet */ }
+    if (bad.length || held !== fresh) {
+      console.error("glyph-check --gate: " + (bad.length ? bad.length + " bundle(s) refused" : "") +
+                    (held !== fresh ? (bad.length ? "; " : "") + ".guidelines/.orders/GATE.json differs from a fresh run: node scripts/glyph-check.js --gate --write" : ""));
+      bad.forEach(k => console.error("  \u2717 " + k + ": " + verdicts[k]));
+      process.exit(1);
+    }
+    process.exit(0);
+  }
   if ((mode !== "--ast" && mode !== "--package") || !argv[1]) {
     console.error("usage: node glyph-check.js --ast     <file.json|->   an AST envelope");
     console.error("       node glyph-check.js --package <file.xml|->    an emitted glyph-package");

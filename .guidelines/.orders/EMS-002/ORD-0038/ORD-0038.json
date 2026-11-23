@@ -1,0 +1,832 @@
+{
+  "type": "GlyphAST",
+  "schema": 3,
+  "version": "4.7.10.09",
+  "source": {
+    "length": 2861,
+    "checksum": "601c338c35e35600",
+    "encoding": "utf-8",
+    "newline": "lf",
+    "uri": null
+  },
+  "stores": {
+    "templates": "7356ea9b88319980",
+    "rules": "767e5432cdc6d400",
+    "expansions": "125235203224e180"
+  },
+  "projection": "full",
+  "segments": [
+    {
+      "type": "Segment",
+      "mood": [],
+      "isReturn": false,
+      "continues": false,
+      "breaks": 0,
+      "autoClosedCount": 0,
+      "body": [
+        {
+          "type": "Command",
+          "raw": "block",
+          "canonical": "BLOCK",
+          "tier": "struct",
+          "gloss": "Block",
+          "element": "block",
+          "isAlias": false,
+          "chainElement": false,
+          "origin": "root",
+          "slotName": false,
+          "editorial": false,
+          "name": null,
+          "depth": 0,
+          "autoClosed": false,
+          "suggestion": null,
+          "emotions": [],
+          "species": "atom",
+          "compositionDepth": 0,
+          "binds": "ORD-0038-ems-json",
+          "at": {
+            "s": 0,
+            "e": 6
+          },
+          "body": [
+            {
+              "type": "Literal",
+              "value": "ORD-0038-ems-json",
+              "form": "quote",
+              "slot": null,
+              "role": "operand",
+              "ref": null,
+              "at": {
+                "s": 6,
+                "e": 25
+              }
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 28,
+                "e": 32
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the spec of EMS-002",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 32,
+                    "e": 53
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": ".guidelines/.orders/EMS-002/EMS-002.pgml",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 54,
+                    "e": 96
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 100,
+                "e": 104
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the measured proposal and the answers of the Regent",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 104,
+                    "e": 157
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": ".guidelines/.orders/INTAKE-EMS-JSON.md, sections 4 and 5",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 158,
+                    "e": 216
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 220,
+                "e": 224
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "step 1, built: what an Order declares, in its schema",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 224,
+                    "e": 278
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": ".guidelines/.orders/EMS-002/ORD-0036",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 279,
+                    "e": 317
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "tgt",
+              "canonical": "TGT",
+              "tier": "instr",
+              "gloss": "Target",
+              "element": "target",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 321,
+                "e": 325
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "step 2 of the trail to the final Explorer, its first Order: EMS.json, the configuration a series carries, checked where it enters and carried whole inside every package the series bundles, in the JS",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 325,
+                    "e": 525
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 529,
+                "e": 533
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the answers of 2026-11-21: E1 a the ratified fields only, the Orders stay in the spec; E2 a the configuration enters each package whole, beside the schema, with the digest of the EMS.json it came from; E3 a engine names the version new Orders are bundled with; E4 a the read half of the traffic is derived from each Order ctx, only the write half is typed in; E5 a the session drafts the first EMS.json of each series and the Regent reads them; E6 a a user EMS.json is checked against a hand-authored ems-schema.json beside ast-schema.json; E7 a the xsd is written in the notation of the declaration of an Order",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 533,
+                    "e": 1146
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 1150,
+                "e": 1154
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the Regent, 2026-11-21, V4: the positions of a plane of a series live in its EMS.json; the field is the 2D view to propose, and this Order leaves room for it",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1154,
+                    "e": 1313
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 1317,
+                "e": 1321
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "write ems-schema.json by hand beside ast-schema.json: the ratified fields, their types, and room for positions",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1321,
+                    "e": 1433
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 1437,
+                "e": 1441
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "check an EMS.json against it in glyph-check, every breach by name",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1441,
+                    "e": 1508
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 1512,
+                "e": 1516
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "in a series that holds an EMS.json, have --bundle check it, refuse to bundle under an engine other than the one it names, and write it whole beside the schema of the package with its digest, the manifest naming the digest",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1516,
+                    "e": 1739
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 1743,
+                "e": 1747
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "draft the EMS.json of EMS-001, EMS-002 and EMS-003 from what each series already declares, for the Regent to read",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1747,
+                    "e": 1862
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "req",
+              "canonical": "REQ",
+              "tier": "instr",
+              "gloss": "Requirement",
+              "element": "requirement",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 1866,
+                "e": 1870
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "a bundle outside a series, or in a series with no EMS.json, is written as before",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1870,
+                    "e": 1952
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "req",
+              "canonical": "REQ",
+              "tier": "instr",
+              "gloss": "Requirement",
+              "element": "requirement",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 1956,
+                "e": 1960
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "fromXML reads a package that carries a configuration back to the same source, and the gate over the orders folder checks the engine a configuration names against its manifest",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1960,
+                    "e": 2136
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 2140,
+                "e": 2145
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "XML_REFERENCE.md states the configuration element before the engine writes it",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 2145,
+                    "e": 2224
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 2228,
+                "e": 2233
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "no hash of the snapshot moves: no declared source is bundled inside a series",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 2233,
+                    "e": 2311
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 2315,
+                "e": 2320
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "npm run check and npm run check:rust green",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 2320,
+                    "e": 2364
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 2368,
+                "e": 2373
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the Rust bundle is the next Order of this step, not this one",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 2373,
+                    "e": 2435
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "val",
+              "canonical": "VAL",
+              "tier": "instr",
+              "gloss": "Validate",
+              "element": "validate",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "composite",
+              "compositionDepth": 5,
+              "binds": null,
+              "at": {
+                "s": 2439,
+                "e": 2443
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the schema",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 2443,
+                    "e": 2455
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": "the three drafts conform, and a configuration missing a field, with an unknown field, or with a field of the wrong type is refused by name, each seen failing before it counts",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 2456,
+                    "e": 2632
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "val",
+              "canonical": "VAL",
+              "tier": "instr",
+              "gloss": "Validate",
+              "element": "validate",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "composite",
+              "compositionDepth": 5,
+              "binds": null,
+              "at": {
+                "s": 2636,
+                "e": 2640
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the bundle",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 2640,
+                    "e": 2652
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": "a series bundle carries its EMS.json whole with the digest, an invalid one and an engine other than the named one are refused with nothing written, and fromXML reads the package back to the same source",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 2653,
+                    "e": 2856
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "diagnostics": []
+}

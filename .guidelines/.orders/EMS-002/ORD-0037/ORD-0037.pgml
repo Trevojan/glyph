@@ -1,0 +1,13 @@
+[block'ORD-0037-schema-rust'
+  [ctx'the spec of EMS-002','.guidelines/.orders/EMS-002/EMS-002.pgml']
+  [ctx'the measured proposal and the answers of the Regent','.guidelines/.orders/INTAKE-XSD.md, sections 4 and 5']
+  [ctx'the first Order of the step, which writes the schema in both engines and validates in the JS','.guidelines/.orders/EMS-002/ORD-0036']
+  [tgt'step 1 of the trail to the final Explorer, its second Order: the Rust validates an XML against its schema as the JS does, so the oracle holds the gate in both engines']
+  [ctx'the answers of 2026-11-21: X4 a the engine validates with its own validator, the JS and the Rust each an Order; X6 a let us confirm the JS will leave correctly and the Rust will take over']
+  [ins'validate in the Rust fromXML what the JS validates: what the schema declares and the content does not hold, what the content holds and the schema does not declare, a package with no schema, and a schema left empty before the gate, each by the same name and in the same order']
+  [ins'remove from the inverse oracle the set-aside that named the gate as JS-only']
+  [cnst'no hash of the snapshot moves: the gate changes what fromXML says, not what the engine emits']
+  [cnst'npm run check and npm run check:rust green']
+  [val'the engines','every fromXML the suite runs gives the same diagnostics in the Rust as in the JS, the gate included, with nothing set aside']
+  [val'the refusals','a schema that drops a declaration and one that adds what the content lacks are each refused by name in the Rust fromXML, seen failing before they count']
+];

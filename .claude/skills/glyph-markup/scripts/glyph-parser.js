@@ -49,7 +49,7 @@ import { parse } from "./core/parser.js";
 import { buildXml, toXML } from "./core/emit-xml.js";
 import { serializeAST, toAST, ck } from "./core/emit-ast.js";
 import { burn, toHGML } from "./core/burn.js";
-import { fromXML, fromAST } from "./core/inverse.js";
+import { fromXML, fromAST, checkSchema } from "./core/inverse.js";
 
 const GlyphCore = {
   VERSION: VERSION,
@@ -69,7 +69,7 @@ const GlyphCore = {
   defOf: defOf,
   buildXml: buildXml, toXML: toXML, toAST: toAST, serializeAST: serializeAST, ck: ck,
   burn: burn, toHGML: toHGML,
-  fromXML: fromXML, fromAST: fromAST, elementCanonicalMap: GLOSS_REVERSE, glossCollisions: GLOSS_COLLISIONS,
+  fromXML: fromXML, fromAST: fromAST, checkSchema: checkSchema, elementCanonicalMap: GLOSS_REVERSE, glossCollisions: GLOSS_COLLISIONS,
   esc: esc, xesc: xesc
 };
 

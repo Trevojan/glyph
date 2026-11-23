@@ -1,0 +1,20 @@
+{
+  "id": "EMS-002",
+  "title": "o Glyph 100% em Rust",
+  "xsd": [
+    {
+      "kind": "block",
+      "name": "ORD-####-…"
+    }
+  ],
+  "engine": "4.7.10.09",
+  "conventions": [],
+  "rules": [],
+  "exceptions": [],
+  "pins": [],
+  "traffic": {},
+  "invoke": {
+    "skills": [],
+    "actions": []
+  }
+}

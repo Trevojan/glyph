@@ -1,0 +1,104 @@
+[block
+  'ORD-0038-ems-json'
+  [ctx
+    'the spec of EMS-002'
+    '.guidelines/.orders/EMS-002/EMS-002.pgml'
+  [/ctx]
+  [ctx
+    'the measured proposal and the answers of the Regent'
+    '.guidelines/.orders/INTAKE-EMS-JSON.md, sections 4 and 5'
+  [/ctx]
+  [ctx
+    'step 1, built: what an Order declares, in its schema'
+    '.guidelines/.orders/EMS-002/ORD-0036'
+  [/ctx]
+  [tgt
+    'step 2 of the trail to the final Explorer, its first Order: EMS.json, the configuration a series carries, checked where it enters and carried whole inside every package the series bundles, in the JS'
+  [/tgt]
+  [ctx
+    'the answers of 2026-11-21: E1 a the ratified fields only, the Orders stay in the spec; E2 a the configuration enters each package whole, beside the schema, with the digest of the EMS.json it came from; E3 a engine names the version new Orders are bundled with; E4 a the read half of the traffic is derived from each Order ctx, only the write half is typed in; E5 a the session drafts the first EMS.json of each series and the Regent reads them; E6 a a user EMS.json is checked against a hand-authored ems-schema.json beside ast-schema.json; E7 a the xsd is written in the notation of the declaration of an Order'
+  [/ctx]
+  [ctx
+    'the Regent, 2026-11-21, V4: the positions of a plane of a series live in its EMS.json; the field is the 2D view to propose, and this Order leaves room for it'
+  [/ctx]
+  [ins
+    'write ems-schema.json by hand beside ast-schema.json: the ratified fields, their types, and room for positions'
+  [/ins]
+  [ins
+    'check an EMS.json against it in glyph-check, every breach by name'
+  [/ins]
+  [ins
+    'in a series that holds an EMS.json, have --bundle check it, refuse to bundle under an engine other than the one it names, and write it whole beside the schema of the package with its digest, the manifest naming the digest'
+  [/ins]
+  [ins
+    'draft the EMS.json of EMS-001, EMS-002 and EMS-003 from what each series already declares, for the Regent to read'
+  [/ins]
+  [req
+    'a bundle outside a series, or in a series with no EMS.json, is written as before'
+  [/req]
+  [req
+    'fromXML reads a package that carries a configuration back to the same source, and the gate over the orders folder checks the engine a configuration names against its manifest'
+  [/req]
+  [cnst
+    'XML_REFERENCE.md states the configuration element before the engine writes it'
+  [/cnst]
+  [cnst
+    'no hash of the snapshot moves: no declared source is bundled inside a series'
+  [/cnst]
+  [cnst
+    'npm run check and npm run check:rust green'
+  [/cnst]
+  [cnst
+    'the Rust bundle is the next Order of this step, not this one'
+  [/cnst]
+  [cmp
+    'the schema'
+    'the three drafts conform, and a configuration missing a field, with an unknown field, or with a field of the wrong type is refused by name, each seen failing before it counts'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+  [cmp
+    'the bundle'
+    'a series bundle carries its EMS.json whole with the digest, an invalid one and an engine other than the named one are refused with nothing written, and fromXML reads the package back to the same source'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+[/block]

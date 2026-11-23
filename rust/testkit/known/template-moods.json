@@ -67,8 +67,8 @@
     ]
    },
    "xml": {
-    "xml": "<glyph-package engine=\"3.6.9.07\">\n  <schema/>\n  <block once=\"true\">\n    <mood dominant=\"enthusiasm\"/>\n    <template name=\"t\" define=\"true\"/>\n  </block>\n</glyph-package>",
-    "describe": "<glyph-package engine=\"3.6.9.07\">\n  <schema/>\n  <block once=\"true\">\n    <mood dominant=\"enthusiasm\"/>\n    <template name=\"t\" define=\"true\"/>\n  </block>\n</glyph-package>"
+    "xml": "<glyph-package engine=\"3.6.9.07\">\n  <schema>\n    <declares kind=\"template\" name=\"t\" define=\"true\"/>\n  </schema>\n  <block once=\"true\">\n    <mood dominant=\"enthusiasm\"/>\n    <template name=\"t\" define=\"true\"/>\n  </block>\n</glyph-package>",
+    "describe": "<glyph-package engine=\"3.6.9.07\">\n  <schema>\n    <declares kind=\"template\" name=\"t\" define=\"true\"/>\n  </schema>\n  <block once=\"true\">\n    <mood dominant=\"enthusiasm\"/>\n    <template name=\"t\" define=\"true\"/>\n  </block>\n</glyph-package>"
    },
    "ast": {
     "full": {
@@ -355,8 +355,8 @@
     ]
    },
    "xml": {
-    "xml": "<glyph-package engine=\"3.6.9.07\">\n  <schema/>\n  <block once=\"true\">\n    <mood dominant=\"enthusiasm\"/>\n    <template name=\"zz\"/>\n  </block>\n</glyph-package>",
-    "describe": "<glyph-package engine=\"3.6.9.07\">\n  <schema/>\n  <block once=\"true\">\n    <mood dominant=\"enthusiasm\"/>\n    <template name=\"zz\"/>\n  </block>\n</glyph-package>"
+    "xml": "<glyph-package engine=\"3.6.9.07\">\n  <schema>\n    <declares kind=\"template\" name=\"zz\"/>\n  </schema>\n  <block once=\"true\">\n    <mood dominant=\"enthusiasm\"/>\n    <template name=\"zz\"/>\n  </block>\n</glyph-package>",
+    "describe": "<glyph-package engine=\"3.6.9.07\">\n  <schema>\n    <declares kind=\"template\" name=\"zz\"/>\n  </schema>\n  <block once=\"true\">\n    <mood dominant=\"enthusiasm\"/>\n    <template name=\"zz\"/>\n  </block>\n</glyph-package>"
    },
    "ast": {
     "full": {
@@ -720,8 +720,8 @@
     "en": []
    },
    "xml": {
-    "xml": "<glyph-package engine=\"3.6.9.07\">\n  <schema/>\n  <block once=\"true\">\n    <mood dominant=\"enthusiasm\"/>\n    <template name=\"reinforce\" expanded=\"true\" means=\"There is a must-follow rule. Raise its precedence and state why it holds, so it survives a long context.\">\n      <priority imperative=\"true\">\n        <mandatory>\n          <user-input slot=\"rule\">a</user-input>\n        </mandatory>\n      </priority>\n      <reason>\n        <user-input slot=\"why\">b</user-input>\n      </reason>\n    </template>\n  </block>\n</glyph-package>",
-    "describe": "<glyph-package engine=\"3.6.9.07\">\n  <schema/>\n  <block once=\"true\">\n    <mood dominant=\"enthusiasm\"/>\n    <template name=\"reinforce\" expanded=\"true\" means=\"There is a must-follow rule. Raise its precedence and state why it holds, so it survives a long context.\">\n      <priority imperative=\"true\" means=\"Element that takes precedence over others in the context.\">\n        <mandatory means=\"Required, not optional — an obligation on what is produced or done. A demand on what must already exist is REQ.\">\n          <user-input slot=\"rule\">a</user-input>\n        </mandatory>\n      </priority>\n      <reason means=\"The motive underlying a decision.\">\n        <user-input slot=\"why\">b</user-input>\n      </reason>\n    </template>\n  </block>\n</glyph-package>"
+    "xml": "<glyph-package engine=\"3.6.9.07\">\n  <schema>\n    <declares kind=\"template\" name=\"reinforce\"/>\n  </schema>\n  <block once=\"true\">\n    <mood dominant=\"enthusiasm\"/>\n    <template name=\"reinforce\" expanded=\"true\" means=\"There is a must-follow rule. Raise its precedence and state why it holds, so it survives a long context.\">\n      <priority imperative=\"true\">\n        <mandatory>\n          <user-input slot=\"rule\">a</user-input>\n        </mandatory>\n      </priority>\n      <reason>\n        <user-input slot=\"why\">b</user-input>\n      </reason>\n    </template>\n  </block>\n</glyph-package>",
+    "describe": "<glyph-package engine=\"3.6.9.07\">\n  <schema>\n    <declares kind=\"template\" name=\"reinforce\"/>\n  </schema>\n  <block once=\"true\">\n    <mood dominant=\"enthusiasm\"/>\n    <template name=\"reinforce\" expanded=\"true\" means=\"There is a must-follow rule. Raise its precedence and state why it holds, so it survives a long context.\">\n      <priority imperative=\"true\" means=\"Element that takes precedence over others in the context.\">\n        <mandatory means=\"Required, not optional — an obligation on what is produced or done. A demand on what must already exist is REQ.\">\n          <user-input slot=\"rule\">a</user-input>\n        </mandatory>\n      </priority>\n      <reason means=\"The motive underlying a decision.\">\n        <user-input slot=\"why\">b</user-input>\n      </reason>\n    </template>\n  </block>\n</glyph-package>"
    },
    "ast": {
     "full": {
@@ -1348,8 +1348,8 @@
     "en": []
    },
    "xml": {
-    "xml": "<glyph-package engine=\"3.6.9.07\">\n  <schema/>\n  <block once=\"true\">\n    <mood dominant=\"enthusiasm\"/>\n    <template name=\"t\" define=\"true\">\n      <context>\n        <user-input>x</user-input>\n      </context>\n    </template>\n  </block>\n</glyph-package>",
-    "describe": "<glyph-package engine=\"3.6.9.07\">\n  <schema/>\n  <block once=\"true\">\n    <mood dominant=\"enthusiasm\"/>\n    <template name=\"t\" define=\"true\">\n      <context means=\"Declared scope.\">\n        <user-input>x</user-input>\n      </context>\n    </template>\n  </block>\n</glyph-package>"
+    "xml": "<glyph-package engine=\"3.6.9.07\">\n  <schema>\n    <declares kind=\"template\" name=\"t\" define=\"true\"/>\n  </schema>\n  <block once=\"true\">\n    <mood dominant=\"enthusiasm\"/>\n    <template name=\"t\" define=\"true\">\n      <context>\n        <user-input>x</user-input>\n      </context>\n    </template>\n  </block>\n</glyph-package>",
+    "describe": "<glyph-package engine=\"3.6.9.07\">\n  <schema>\n    <declares kind=\"template\" name=\"t\" define=\"true\"/>\n  </schema>\n  <block once=\"true\">\n    <mood dominant=\"enthusiasm\"/>\n    <template name=\"t\" define=\"true\">\n      <context means=\"Declared scope.\">\n        <user-input>x</user-input>\n      </context>\n    </template>\n  </block>\n</glyph-package>"
    },
    "ast": {
     "full": {

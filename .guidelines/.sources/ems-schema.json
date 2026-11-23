@@ -1,0 +1,68 @@
+{
+  "schema": 1,
+  "note": "The declared shape of an EMS.json, the configuration a series carries (EMS-002 ORD-0038). HAND-AUTHORED, as ast-schema.json is, and for its reason: a user's file is checked by something the engine did not derive (the Regent's E6 a of 2026-11-21). glyph-check.js --ems validates a file against it, and --bundle runs that check before it writes anything in a series.",
+  "required": [
+    "id",
+    "title",
+    "xsd",
+    "engine",
+    "conventions",
+    "rules",
+    "exceptions",
+    "pins",
+    "traffic",
+    "invoke"
+  ],
+  "optional": [
+    "positions"
+  ],
+  "types": {
+    "id": "string",
+    "title": "string",
+    "xsd": "array",
+    "engine": "string",
+    "conventions": "array",
+    "rules": "array",
+    "exceptions": "array",
+    "pins": "array",
+    "traffic": "object",
+    "invoke": "object",
+    "positions": "object"
+  },
+  "patterns": {
+    "id": "^EMS-[0-9]{3}$",
+    "engine": "^[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]{2,3}$"
+  },
+  "xsd": {
+    "required": [
+      "kind",
+      "name"
+    ],
+    "kind": [
+      "section",
+      "block",
+      "part",
+      "template",
+      "binding",
+      "logic",
+      "variable"
+    ],
+    "note": "the pattern every Order of the series follows, in the notation of an Order's declaration, the <declares> of its schema (E7 a): a kind and a name, the name written with #### where the Order's number stands and … where its own words do"
+  },
+  "traffic": {
+    "key": "^ORD-[0-9]{4}$",
+    "required": [
+      "writes"
+    ],
+    "note": "only the write half is typed in: the paths an Order reads are its [ctx] paths, derived from its source (E4 a)"
+  },
+  "invoke": {
+    "required": [
+      "skills",
+      "actions"
+    ]
+  },
+  "positions": {
+    "note": "the positions of the series' plane (V4 of 2026-11-21); the 2D view proposes the shape of the field when it stores one"
+  }
+}

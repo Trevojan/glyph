@@ -1,0 +1,547 @@
+{
+  "type": "GlyphAST",
+  "schema": 3,
+  "version": "4.7.10.09",
+  "source": {
+    "length": 1379,
+    "checksum": "1e7f88ec8bc83000",
+    "encoding": "utf-8",
+    "newline": "lf",
+    "uri": null
+  },
+  "stores": {
+    "templates": "7356ea9b88319980",
+    "rules": "767e5432cdc6d400",
+    "expansions": "125235203224e180"
+  },
+  "projection": "full",
+  "segments": [
+    {
+      "type": "Segment",
+      "mood": [],
+      "isReturn": false,
+      "continues": false,
+      "breaks": 0,
+      "autoClosedCount": 0,
+      "body": [
+        {
+          "type": "Command",
+          "raw": "block",
+          "canonical": "BLOCK",
+          "tier": "struct",
+          "gloss": "Block",
+          "element": "block",
+          "isAlias": false,
+          "chainElement": false,
+          "origin": "root",
+          "slotName": false,
+          "editorial": false,
+          "name": null,
+          "depth": 0,
+          "autoClosed": false,
+          "suggestion": null,
+          "emotions": [],
+          "species": "atom",
+          "compositionDepth": 0,
+          "binds": "ORD-0039-ems-json-rust",
+          "at": {
+            "s": 0,
+            "e": 6
+          },
+          "body": [
+            {
+              "type": "Literal",
+              "value": "ORD-0039-ems-json-rust",
+              "form": "quote",
+              "slot": null,
+              "role": "operand",
+              "ref": null,
+              "at": {
+                "s": 6,
+                "e": 30
+              }
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 33,
+                "e": 37
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the spec of EMS-002",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 37,
+                    "e": 58
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": ".guidelines/.orders/EMS-002/EMS-002.pgml",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 59,
+                    "e": 101
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 105,
+                "e": 109
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the measured proposal and the answers of the Regent",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 109,
+                    "e": 162
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": ".guidelines/.orders/INTAKE-EMS-JSON.md, sections 4 and 5",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 163,
+                    "e": 221
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 225,
+                "e": 229
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the first Order of the step, the configuration in the JS",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 229,
+                    "e": 287
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": ".guidelines/.orders/EMS-002/ORD-0038",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 288,
+                    "e": 326
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "tgt",
+              "canonical": "TGT",
+              "tier": "instr",
+              "gloss": "Target",
+              "element": "target",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 330,
+                "e": 334
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "step 2 of the trail to the final Explorer, its second Order: the Rust binary checks an EMS.json against ems-schema.json and carries it into the bundle of a series as the JS does, byte for byte",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 334,
+                    "e": 528
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 532,
+                "e": 536
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "port validateEms to glyph-schema, reading the hand-authored ems-schema.json, every breach by the name and in the order the JS gives it",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 536,
+                    "e": 672
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 676,
+                "e": 680
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "have the Rust --bundle in a series check the EMS.json, refuse another engine, and write the configuration and the digest of the manifest as the JS writes them",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 680,
+                    "e": 840
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 844,
+                "e": 848
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "record in the command line oracle the bundles of a series with a valid EMS.json, one under another engine and one out of the schema",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 848,
+                    "e": 981
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 985,
+                "e": 990
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "no crate enters: the patterns of the schema are read with the little of a regular expression they use",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 990,
+                    "e": 1093
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 1097,
+                "e": 1102
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "no hash of the snapshot moves",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1102,
+                    "e": 1133
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 1137,
+                "e": 1142
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "npm run check and npm run check:rust green",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1142,
+                    "e": 1186
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "val",
+              "canonical": "VAL",
+              "tier": "instr",
+              "gloss": "Validate",
+              "element": "validate",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "composite",
+              "compositionDepth": 5,
+              "binds": null,
+              "at": {
+                "s": 1190,
+                "e": 1194
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the engines",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1194,
+                    "e": 1207
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": "every run of the command line oracle answers the same stdout, exit, stderr and files in the Rust as in the JS, the new runs included, seen failing before they count",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1208,
+                    "e": 1374
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "diagnostics": []
+}

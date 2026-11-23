@@ -3619,6 +3619,150 @@ function runEditChecks() {
 }
 const rED = runEditChecks();
 
+/* ------------------------------------------------------------------ *
+ * schema -- what an Order declares, and the gate (EMS-002 ORD-0036)
+ *
+ * The engine writes into <schema> what the content declares, read off the
+ * content, so its own output always passes the gate. The gate is for an XML
+ * from outside: fromXML refuses a schema and a content that disagree, by
+ * name, and npm run check runs it over every bundle under .orders.
+ * ------------------------------------------------------------------ */
+function runGateChecks() {
+  console.log("\n--- schema -- what an Order declares, and the gate ---");
+  const D = [];
+  const ok = (id, name, why) => {
+    if (why) { console.log("  \u2717 " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  \u2713 " + id + ": " + name); D.push(id); }
+  };
+  const opts = { templates: TPL.templates, rules: RULESTORE,
+                 expansions: require("../.guidelines/.sources/expansions.json") };
+  const DECLARED = [].concat(POSITIVE, INCOMPLETE, INVALID, REGRESSION, LONG,
+                             TEMPLATES, CONSTRAINTS, RULE_CASES, ORACLE_COVERAGE)
+    .filter(c => c && c.id && typeof c.src === "string");
+  let declaring = 0;
+  const failing = [];
+  DECLARED.forEach(c => {
+    let x;
+    try { x = G.toXML(c.src, c.opts ? { ...opts, ...c.opts } : opts); } catch (e) { return; }
+    if (!/<glyph-package[\s>]/.test(x)) return;
+    if (/<declares\s/.test(x)) declaring++;
+    if (G.checkSchema(x).length) failing.push(c.id);
+  });
+  ok("GT-01", "the engine's own XML passes its gate for every declared source — " + declaring + " declare something",
+     failing.length ? "the gate refuses " + failing.join(", ") : null);
+
+  const src = "[SECTION'a'[rwk]][--t=[ctx]][var`get_data`[get-find`~/d.json`]]";
+  const xml = G.toXML(src, opts);
+  const codes = x => G.fromXML(x, opts).diag.map(d => d.code);
+  const dropped = xml.replace(/\n\s*<declares kind="section" name="a"\/>/, "");
+  const added = xml.replace("<schema>", '<schema>\n    <declares kind="part" name="ghost"/>');
+  ok("GT-02", "a schema that leaves a declaration out is refused by name in fromXML",
+     dropped === xml ? "the case did not drop a line" : codes(dropped).includes("SchemaUndeclared") ? null : "answered " + codes(dropped).join(","));
+  ok("GT-03", "a schema that declares what the content lacks is refused by name in fromXML",
+     codes(added).includes("SchemaDeclaresAbsent") ? null : "answered " + codes(added).join(","));
+
+  const before = xml.replace(/<schema>[\s\S]*?<\/schema>/, "<schema/>");
+  const read = G.fromXML(before, opts);
+  ok("GT-04", "a schema left empty over content that declares is an act emitted before the gate, noted and read as emitted",
+     !read.diag.some(d => d.code === "SchemaBeforeGate" && d.sev === "note") ? "no note: " + read.diag.map(d => d.code).join(",")
+       : read.src !== G.fromXML(xml, opts).src ? "read as another source" : null);
+  ok("GT-05", "a package with no schema is refused by name",
+     codes(xml.replace(/\s*<schema>[\s\S]*?<\/schema>/, "")).includes("SchemaMissing") ? null : "no SchemaMissing");
+
+  const verdicts = CHECK_MOD.gateVerdicts(G.checkSchema);
+  const vals = Object.values(verdicts);
+  ok("GT-06", "every bundle under .orders has the gate's verdict, and none is refused — " + vals.length + " bundles, " +
+              vals.filter(v => /^emitted before/.test(v)).length + " emitted before the gate",
+     !vals.length ? "no bundle found" : vals.some(v => /^fix /.test(v)) ? "refused: " + Object.keys(verdicts).filter(k => /^fix /.test(verdicts[k])).join(", ") : null);
+
+  return D.length;
+}
+const rGT = runGateChecks();
+
+/* ------------------------------------------------------------------ *
+ * EMS.json -- the configuration a series carries (EMS-002 ORD-0038)
+ *
+ * Checked against the hand-authored ems-schema.json where it enters, and
+ * carried whole beside the schema of every package the series bundles.
+ * ------------------------------------------------------------------ */
+function runEmsChecks() {
+  console.log("\n--- EMS.json -- the configuration of a series ---");
+  const D = [];
+  const ok = (id, name, why) => {
+    if (why) { console.log("  \u2717 " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  \u2713 " + id + ": " + name); D.push(id); }
+  };
+  const fsx = require("fs"), px = require("path"), cp = require("child_process");
+  const ROOT = px.resolve(__dirname, "..");
+  const V = CHECK_MOD.validateEms;
+
+  const drafts = ["EMS-001", "EMS-002", "EMS-003"].map(id =>
+    [id, JSON.parse(fsx.readFileSync(px.join(ROOT, ".guidelines", ".orders", id, "EMS.json"), "utf8"))]);
+  const off = drafts.filter(([id, c]) => V(c).length || c.id !== id);
+  ok("EJ-01", "the EMS.json drafted for each of the three series conforms to ems-schema.json",
+     off.length ? off.map(([id, c]) => id + ": " + V(c).join("; ")).join(" | ") : null);
+
+  const base = drafts[2][1];
+  const without = Object.assign({}, base); delete without.engine;
+  const breaches = [
+    ["missing required key `engine`", without],
+    ["undeclared key `colour`", Object.assign({}, base, { colour: "cyan" })],
+    ["EMS.json.pins: object, declared array", Object.assign({}, base, { pins: {} })],
+    ["is not of the declared form", Object.assign({}, base, { id: "EMS-3" })],
+    ["kind \"chapter\" is not declared", Object.assign({}, base, { xsd: [{ kind: "chapter", name: "x" }] })],
+    ["the reads are derived", Object.assign({}, base, { traffic: { "ORD-0001": { reads: [], writes: [] } } })]
+  ];
+  const missed = breaches.filter(([want, c]) => !V(c).some(e => e.indexOf(want) !== -1)).map(([want]) => want);
+  ok("EJ-02", "a configuration that breaks the schema is refused by name — " + breaches.length + " breaches",
+     missed.length ? "not refused: " + missed.join("; ") : null);
+
+  const tmp = px.join(ROOT, ".ord-gate-ems"), series = px.join(tmp, "EMS-099");
+  try {
+    fsx.rmSync(tmp, { recursive: true, force: true });
+    fsx.mkdirSync(series, { recursive: true });
+    const srcFile = px.join(tmp, "fonte.pgml");
+    fsx.writeFileSync(srcFile, "[block'ORD-0001-probe'[tgt'a probe']]", "utf8");
+    const run = args => cp.spawnSync(process.execPath, [px.join(ROOT, "scripts", "glyph-cli.js")].concat(args), { encoding: "utf8" });
+    const cfg = Object.assign({}, base, { id: "EMS-099", title: "a probe", engine: G.VERSION });
+    const text = JSON.stringify(cfg, null, 2) + "\n";
+    fsx.writeFileSync(px.join(series, "EMS.json"), text);
+    run(["--file", srcFile, "--bundle", "--out", series]);
+    const xml = fsx.readFileSync(px.join(series, "ORD-0001", "ORD-0001.xml"), "utf8");
+    const man = JSON.parse(fsx.readFileSync(px.join(series, "ORD-0001", "ORD-0001.manifest.json"), "utf8"));
+    const m = /\n  <\/schema>\n  <configuration of="EMS-099" digest="([0-9a-f]+)" engine="([^"]+)">([^<]*)<\/configuration>\n/.exec(xml);
+    const carried = m && m[3].replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&");
+    ok("EJ-03", "a series bundle carries its EMS.json whole beside the schema, with the digest the manifest names",
+       !m ? "no configuration after the schema" : carried !== text.trim() ? "not carried whole"
+         : m[1] !== G.ck(text.trim()) || !man.configuration || man.configuration.digest !== m[1] ? "the digest does not hold" : null);
+    const bare = xml.replace(/\n  <configuration[\s\S]*?<\/configuration>/, "");
+    const said = x => JSON.stringify(G.fromXML(x).diag.map(d => d.code));
+    ok("EJ-04", "fromXML reads a package that carries a configuration back to the same source, saying nothing more, and the gate agrees",
+       G.fromXML(xml).src !== G.fromXML(bare).src ? "the configuration was read as content"
+         : said(xml) !== said(bare) ? "the way back said more: " + said(xml)
+         : G.checkSchema(xml).length ? "the gate refuses it: " + G.checkSchema(xml).map(d => d.code).join(",") : null);
+
+    fsx.writeFileSync(px.join(series, "EMS.json"), JSON.stringify(Object.assign({}, cfg, { engine: "0.0.0.01" }), null, 2));
+    const old = run(["--file", srcFile, "--bundle", "--out", series]);
+    fsx.writeFileSync(px.join(series, "EMS.json"), JSON.stringify(Object.assign({}, cfg, { pins: {} }), null, 2));
+    const broken = run(["--file", srcFile, "--bundle", "--out", series]);
+    const written = fsx.readdirSync(series).filter(f => /^ORD-/.test(f));
+    ok("EJ-05", "an engine other than the named one, and a configuration that breaks the schema, are refused with nothing written",
+       old.status === 0 || !/bundles with engine 0\.0\.0\.01/.test(old.stderr) ? "the engine was not refused: " + old.stderr
+         : broken.status === 0 || !/pins: object, declared array/.test(broken.stderr) ? "the breach was not refused: " + broken.stderr
+         : written.length !== 1 ? "something was written: " + written.join(",") : null);
+
+    fsx.rmSync(px.join(series, "EMS.json"));
+    run(["--file", srcFile, "--bundle", "--out", series]);
+    const plain = fsx.readFileSync(px.join(series, "ORD-0002", "ORD-0002.xml"), "utf8");
+    ok("EJ-06", "a series with no EMS.json bundles as before, with no configuration",
+       /<configuration/.test(plain) ? "a configuration appeared" : null);
+  } finally {
+    fsx.rmSync(tmp, { recursive: true, force: true });
+  }
+  return D.length;
+}
+const rEJ = runEmsChecks();
+
 
 /* ------------------------------------------------------------------ *
  * suggest -- aponta, ou cala
@@ -4166,7 +4310,9 @@ function runColonChecks() {
   const others = ["[ctx'review'[ctx'x']]", "[crit'review']", "[if'ready'[ctx'x']]", "[tpl'x']",
                   "[sum'review'[ctx'x']][block'review']", "[block'']", "[block[ctx'x']'late']"]
     .map(X).join("\n");
-  const nameOn = [...new Set((blk + sec + prt + others).match(/<[a-z-]+ [^>]*\bname="/g) || [])].map(t => t.slice(1, t.indexOf(" ")));
+  /* the content's names: the schema's <declares> repeats them (EMS-002 ORD-0036) */
+  const content = x => x.replace(/<schema>[\s\S]*?<\/schema>/g, "");
+  const nameOn = [...new Set(content(blk + sec + prt + others).match(/<[a-z-]+ [^>]*\bname="/g) || [])].map(t => t.slice(1, t.indexOf(" ")));
   ok("CO-05", "o name sai do primeiro literal do block, da section e da part, e de nenhum outro elemento",
      !/<block name="review" binds="review">\n\s*<context>/.test(blk) ? "block: " + JSON.stringify(blk)
        : !/<user-input ref="review">review<\/user-input>/.test(blk) || codes("[block'review'[ctx'x']][ref'review']").includes("UnboundReference")
@@ -4769,6 +4915,8 @@ console.log(" bindings     " + String(rBD).padStart(4) + "/12");
 console.log(" graph        " + String(rGR).padStart(4) + "/8");
 console.log(" plane        " + String(rPL).padStart(4) + "/8");
 console.log(" edit         " + String(rED).padStart(4) + "/4");
+console.log(" schema gate  " + String(rGT).padStart(4) + "/6");
+console.log(" EMS.json     " + String(rEJ).padStart(4) + "/6");
 console.log(" suggest      " + String(rSG).padStart(4) + "/4");
 console.log(" aspas        " + String(rQT).padStart(4) + "/3");
 console.log(" param template" + String(rTP).padStart(4) + "/4");
@@ -4967,6 +5115,15 @@ if (EXPORT_ORACLE) {
      /* EMS-002 ORD-0009: the zip of a series ORD, beside its folder, only when asked */
      b(["--file", "src.pgml", "--bundle", "--out", "EMS-002", "--zip"]), b(["--zip", "--file", "src.pgml", "--bundle", "--out", "EMS-002"])]);
   kase({ files: { "src.pgml": "[crit'x']" } }, [b(["--file", "src.pgml", "--bundle", "--out", "nowhere"])], true);
+  /* EMS-002 ORD-0038 and ORD-0039: a series that holds an EMS.json carries it,
+     and one under another engine or out of the schema is refused, by name */
+  const ems = (id, over) => JSON.stringify(Object.assign({ id: id, title: "a probe", xsd: [{ kind: "block", name: "ORD-####-…" }],
+    engine: G.VERSION, conventions: [], rules: [], exceptions: [], pins: [], traffic: {}, invoke: { skills: [], actions: [] } }, over), null, 2) + "\n";
+  kase({ dirs: ["EMS-005", "EMS-006", "EMS-007"],
+         files: { "src.pgml": "[block'ORD-0001-probe'[crit'the parser']]", "EMS-005/EMS.json": ems("EMS-005"),
+                  "EMS-006/EMS.json": ems("EMS-006", { engine: "0.0.0.01" }), "EMS-007/EMS.json": ems("EMS-007", { pins: {}, colour: 1 }) } },
+    [b(["--file", "src.pgml", "--bundle", "--out", "EMS-005"]), b(["--file", "src.pgml", "--bundle", "--out", "EMS-005", "--zip"]),
+     b(["--file", "src.pgml", "--bundle", "--out", "EMS-006"]), b(["--file", "src.pgml", "--bundle", "--out", "EMS-007"])]);
   fsx.rmSync(root, { recursive: true, force: true });
   fsx.writeFileSync(path.join(mods, "cli.json"), JSON.stringify({ engine: G.VERSION, cases: cases }, null, 1) + "\n");
   console.log("  ! command line written: " + cases.reduce((n, c) => n + c.runs.length, 0) + " runs in " + cases.length + " folders to " + path.join(mods, "cli.json"));
