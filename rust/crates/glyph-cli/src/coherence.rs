@@ -11,7 +11,7 @@
 //! and §9).
 
 use glyph_json::Json;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 /// The moment of EMS-002/ORD-0040, the Order that builds the check: the
 /// Orders bundled from it on are held, and the closed ones before it are read
@@ -45,11 +45,16 @@ pub struct Order {
     /// Its `<declares>`, kind and name.
     pub declares: Vec<(String, String)>,
     pub unreadable: Option<String>,
+    /// What removing it deletes: its folder, its zip, or its five files.
+    pub files: Vec<PathBuf>,
+    /// Its `.pgml`, the source a move adapts.
+    pub source: Option<String>,
 }
 
 /// A directory of Orders, its `queued/` with it, and the configuration that
 /// answers for a claim to its series.
 pub struct Home {
+    pub dir: PathBuf,
     pub name: String,
     pub config: Option<Result<Json, String>>,
     pub orders: Vec<Order>,
@@ -62,7 +67,7 @@ pub struct Finding {
 }
 
 /// `^ORD-\d{4}$`
-fn order_named(v: &str) -> bool {
+pub fn order_named(v: &str) -> bool {
     let b = v.as_bytes();
     b.len() == 8 && v.starts_with("ORD-") && b[4..].iter().all(u8::is_ascii_digit)
 }
@@ -83,7 +88,7 @@ fn claimable(v: &str) -> bool {
             && (at == 0 || v[..at].ends_with(['/', '\\'])))
 }
 
-fn field<'a>(nd: &'a Json, key: &str) -> &'a str {
+pub fn field<'a>(nd: &'a Json, key: &str) -> &'a str {
     nd.get(key).and_then(Json::str).unwrap_or("")
 }
 
@@ -219,24 +224,35 @@ fn orders_in(dir: &Path, shown: &str) -> Vec<Order> {
     for (name, is_dir) in names {
         let o = if is_dir && order_named(&name) {
             let at = dir.join(&name);
-            order_of(
-                &name,
-                show(&name),
-                text(&at.join(format!("{name}.manifest.json"))),
-                text(&at.join(format!("{name}.json"))),
-                text(&at.join(format!("{name}.xml"))),
-            )
+            Order {
+                files: vec![at.clone()],
+                source: text(&at.join(format!("{name}.pgml"))),
+                ..order_of(
+                    &name,
+                    show(&name),
+                    text(&at.join(format!("{name}.manifest.json"))),
+                    text(&at.join(format!("{name}.json"))),
+                    text(&at.join(format!("{name}.xml"))),
+                )
+            }
         } else if let Some(id) = name
             .strip_suffix(".manifest.json")
             .filter(|n| !is_dir && order_named(n))
         {
-            order_of(
-                id,
-                show(id),
-                text(&dir.join(&name)),
-                text(&dir.join(format!("{id}.json"))),
-                text(&dir.join(format!("{id}.xml"))),
-            )
+            Order {
+                files: ["pgml", "xml", "json", "hgml", "manifest.json"]
+                    .iter()
+                    .map(|e| dir.join(format!("{id}.{e}")))
+                    .collect(),
+                source: text(&dir.join(format!("{id}.pgml"))),
+                ..order_of(
+                    id,
+                    show(id),
+                    text(&dir.join(&name)),
+                    text(&dir.join(format!("{id}.json"))),
+                    text(&dir.join(format!("{id}.xml"))),
+                )
+            }
         } else if let Some(id) = name
             .strip_suffix(".zip")
             .filter(|n| !is_dir && order_named(n))
@@ -251,13 +267,17 @@ fn orders_in(dir: &Path, shown: &str) -> Vec<Order> {
                     .find(|(n, _)| *n == format!("{id}.{ext}"))
                     .and_then(|(_, b)| String::from_utf8(b.clone()).ok())
             };
-            order_of(
-                id,
-                show(id),
-                entry("manifest.json"),
-                entry("json"),
-                entry("xml"),
-            )
+            Order {
+                files: vec![dir.join(&name)],
+                source: entry("pgml"),
+                ..order_of(
+                    id,
+                    show(id),
+                    entry("manifest.json"),
+                    entry("json"),
+                    entry("xml"),
+                )
+            }
         } else {
             continue;
         };
@@ -297,6 +317,7 @@ pub fn home_at(dir: &Path, name: &str, shown: &str) -> Home {
         }
     }
     Home {
+        dir: dir.to_path_buf(),
         name: name.to_string(),
         config: config_of(dir),
         orders,
@@ -519,6 +540,22 @@ fn homes(dir: &Path, name: &str, shown: &str, out: &mut Vec<Home>) {
     }
 }
 
+/// Every home under `root`, `root` itself first.
+pub fn homes_under(root: &Path) -> Vec<Home> {
+    let name = std::fs::canonicalize(root)
+        .ok()
+        .and_then(|c| c.file_name().map(|n| n.to_string_lossy().into_owned()))
+        .unwrap_or_default();
+    let mut all = Vec::new();
+    homes(root, &name, "", &mut all);
+    all
+}
+
+/// An Order the check holds: bundled from `HELD_FROM` on.
+pub fn is_held(o: &Order) -> bool {
+    o.emitted.as_str() >= HELD_FROM
+}
+
 /// `glyph --check <folder>`: one line per finding on an Order held, and the
 /// count; exit 1 on a `fix`, an `ask` refusing nothing.
 pub fn check(root: &str) -> (String, i32) {
@@ -526,17 +563,12 @@ pub fn check(root: &str) -> (String, i32) {
     if root.is_empty() || !base.is_dir() {
         return (format!("glyph --check: {root} is no folder."), 2);
     }
-    let name = std::fs::canonicalize(base)
-        .ok()
-        .and_then(|c| c.file_name().map(|n| n.to_string_lossy().into_owned()))
-        .unwrap_or_default();
-    let mut all = Vec::new();
-    homes(base, &name, "", &mut all);
+    let all = homes_under(base);
     let (mut lines, mut n, mut held, mut fix, mut ask) = (Vec::new(), 0, 0, 0, 0);
     for h in &all {
         for o in &h.orders {
             n += 1;
-            if o.emitted.as_str() < HELD_FROM {
+            if !is_held(o) {
                 continue;
             }
             held += 1;

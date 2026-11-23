@@ -1,0 +1,827 @@
+{
+  "type": "GlyphAST",
+  "schema": 3,
+  "version": "4.7.10.09",
+  "source": {
+    "length": 1982,
+    "checksum": "995581b83f621400",
+    "encoding": "utf-8",
+    "newline": "lf",
+    "uri": null
+  },
+  "stores": {
+    "templates": "7356ea9b88319980",
+    "rules": "767e5432cdc6d400",
+    "expansions": "125235203224e180"
+  },
+  "projection": "full",
+  "segments": [
+    {
+      "type": "Segment",
+      "mood": [],
+      "isReturn": false,
+      "continues": false,
+      "breaks": 0,
+      "autoClosedCount": 0,
+      "body": [
+        {
+          "type": "Command",
+          "raw": "block",
+          "canonical": "BLOCK",
+          "tier": "struct",
+          "gloss": "Block",
+          "element": "block",
+          "isAlias": false,
+          "chainElement": false,
+          "origin": "root",
+          "slotName": false,
+          "editorial": false,
+          "name": null,
+          "depth": 0,
+          "autoClosed": false,
+          "suggestion": null,
+          "emotions": [],
+          "species": "atom",
+          "compositionDepth": 0,
+          "binds": "ORD-0042-repair-queue",
+          "at": {
+            "s": 0,
+            "e": 6
+          },
+          "body": [
+            {
+              "type": "Literal",
+              "value": "ORD-0042-repair-queue",
+              "form": "quote",
+              "slot": null,
+              "role": "operand",
+              "ref": null,
+              "at": {
+                "s": 6,
+                "e": 29
+              }
+            },
+            {
+              "type": "Command",
+              "raw": "ref",
+              "canonical": "REF",
+              "tier": "instr",
+              "gloss": "Reference",
+              "element": "reference",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 32,
+                "e": 36
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "EMS",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 36,
+                    "e": 41
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "drvf",
+              "canonical": "DRVF",
+              "tier": "instr",
+              "gloss": "Derive From",
+              "element": "derive-from",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "composite",
+              "compositionDepth": 2,
+              "binds": null,
+              "at": {
+                "s": 45,
+                "e": 50
+              },
+              "body": [
+                {
+                  "type": "Command",
+                  "raw": "ref",
+                  "canonical": "REF",
+                  "tier": "instr",
+                  "gloss": "Reference",
+                  "element": "reference",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "binds": null,
+                  "at": {
+                    "s": 50,
+                    "e": 54
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "ORD-0040",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "ref": null,
+                      "at": {
+                        "s": 54,
+                        "e": 64
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Literal",
+                  "value": "the findings the queue holds",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "result",
+                  "ref": null,
+                  "at": {
+                    "s": 66,
+                    "e": 96
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "drvf",
+              "canonical": "DRVF",
+              "tier": "instr",
+              "gloss": "Derive From",
+              "element": "derive-from",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "composite",
+              "compositionDepth": 2,
+              "binds": null,
+              "at": {
+                "s": 100,
+                "e": 105
+              },
+              "body": [
+                {
+                  "type": "Command",
+                  "raw": "ref",
+                  "canonical": "REF",
+                  "tier": "instr",
+                  "gloss": "Reference",
+                  "element": "reference",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "binds": null,
+                  "at": {
+                    "s": 105,
+                    "e": 109
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "ORD-0041",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "ref": null,
+                      "at": {
+                        "s": 109,
+                        "e": 119
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Literal",
+                  "value": "the Rust bundle a move runs",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "result",
+                  "ref": null,
+                  "at": {
+                    "s": 121,
+                    "e": 150
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 154,
+                "e": 158
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the ratified steps and the answers of the Regent",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 158,
+                    "e": 208
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": ".guidelines/.orders/INTAKE-ORDER-COHERENCE.md, sections 9, 11 and 12",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 209,
+                    "e": 279
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 283,
+                "e": 287
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "repair shows the difference and asks before it writes",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 287,
+                    "e": 342
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": ".guidelines/.orders/INTAKE-PIN-TRAFFIC.md, section 3",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 343,
+                    "e": 397
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "tgt",
+              "canonical": "TGT",
+              "tier": "instr",
+              "gloss": "Target",
+              "element": "target",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 401,
+                "e": 405
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "step 4 of the trail, for the Harness: glyph --repair keeps the queue of what glyph --check finds, one file per series beside its EMS.json, proposes a destination for each Order, and moves or removes one Order at a time, warning and writing nothing until it is confirmed",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 405,
+                    "e": 676
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 680,
+                "e": 684
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "have glyph --repair over a folder write the queue, REPAIR.json in each folder with findings, remove one no finding is left in, and list each Order with its findings and the destination it proposes",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 684,
+                    "e": 882
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 886,
+                "e": 890
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "propose the series an EMS.json configures for ClaimEmsOtherSeries, the Order own series for the engine and the pattern, and .orders/NEM/ when no series fits",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 890,
+                    "e": 1048
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 1052,
+                "e": 1056
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "have --apply move an Order: adapt its source to the folder it lands in, the claim to the series or to nem and the block name to the number it takes there, bundle it there with the Rust, and remove it where it was",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1056,
+                    "e": 1270
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 1274,
+                "e": 1278
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "have --apply with --remove remove an Order, and --to name a destination other than the proposed one",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1278,
+                    "e": 1379
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 1383,
+                "e": 1387
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "warn, with the difference and what will not resolve, and write nothing without --yes",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1387,
+                    "e": 1473
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 1477,
+                "e": 1482
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "a move adapts the Order to the series it lands in, which numbers it, and always warns for the Regent to confirm, RP-2 a",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1482,
+                    "e": 1603
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 1607,
+                "e": 1612
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "Move to category waits for the categories, and Add to EMS for what it means; neither is built",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1612,
+                    "e": 1707
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 1711,
+                "e": 1716
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the JS builds none of it; no hash of the snapshot moves; no crate enters",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1716,
+                    "e": 1790
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 1794,
+                "e": 1799
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "npm run check and npm run check:rust green",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1799,
+                    "e": 1843
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "val",
+              "canonical": "VAL",
+              "tier": "instr",
+              "gloss": "Validate",
+              "element": "validate",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "composite",
+              "compositionDepth": 5,
+              "binds": null,
+              "at": {
+                "s": 1847,
+                "e": 1851
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the queue",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1851,
+                    "e": 1862
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": "each proposal, each move, the removal, the refusal kept intact and the confirmation seen failing before the code",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1863,
+                    "e": 1977
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "diagnostics": [
+    {
+      "code": "UnboundReference",
+      "severity": "ask",
+      "label": "unbound reference",
+      "message": "EMS is referenced and never bound. External input, or a missing binding?"
+    },
+    {
+      "code": "UnboundReference",
+      "severity": "ask",
+      "label": "unbound reference",
+      "message": "ORD-0040 is referenced and never bound. External input, or a missing binding?"
+    },
+    {
+      "code": "UnboundReference",
+      "severity": "ask",
+      "label": "unbound reference",
+      "message": "ORD-0041 is referenced and never bound. External input, or a missing binding?"
+    }
+  ]
+}

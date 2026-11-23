@@ -1,0 +1,18 @@
+[block'ORD-0042-repair-queue'
+  [ref'EMS']
+  [drvf[ref'ORD-0040'],'the findings the queue holds']
+  [drvf[ref'ORD-0041'],'the Rust bundle a move runs']
+  [ctx'the ratified steps and the answers of the Regent','.guidelines/.orders/INTAKE-ORDER-COHERENCE.md, sections 9, 11 and 12']
+  [ctx'repair shows the difference and asks before it writes','.guidelines/.orders/INTAKE-PIN-TRAFFIC.md, section 3']
+  [tgt'step 4 of the trail, for the Harness: glyph --repair keeps the queue of what glyph --check finds, one file per series beside its EMS.json, proposes a destination for each Order, and moves or removes one Order at a time, warning and writing nothing until it is confirmed']
+  [ins'have glyph --repair over a folder write the queue, REPAIR.json in each folder with findings, remove one no finding is left in, and list each Order with its findings and the destination it proposes']
+  [ins'propose the series an EMS.json configures for ClaimEmsOtherSeries, the Order own series for the engine and the pattern, and .orders/NEM/ when no series fits']
+  [ins'have --apply move an Order: adapt its source to the folder it lands in, the claim to the series or to nem and the block name to the number it takes there, bundle it there with the Rust, and remove it where it was']
+  [ins'have --apply with --remove remove an Order, and --to name a destination other than the proposed one']
+  [ins'warn, with the difference and what will not resolve, and write nothing without --yes']
+  [cnst'a move adapts the Order to the series it lands in, which numbers it, and always warns for the Regent to confirm, RP-2 a']
+  [cnst'Move to category waits for the categories, and Add to EMS for what it means; neither is built']
+  [cnst'the JS builds none of it; no hash of the snapshot moves; no crate enters']
+  [cnst'npm run check and npm run check:rust green']
+  [val'the queue','each proposal, each move, the removal, the refusal kept intact and the confirmation seen failing before the code']
+];

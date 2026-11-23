@@ -54,6 +54,7 @@ impl Out {
 
 mod app;
 mod coherence;
+mod repair;
 
 fn main() {
     let argv: Vec<String> = std::env::args_os()
@@ -231,6 +232,7 @@ fn cli(argv: Vec<String>) {
     let (mut file, mut bundle, mut out_dir): (Option<String>, bool, Option<String>) =
         (None, false, None);
     let mut zip = false;
+    let (mut repair_it, mut yes) = (false, false);
     let mut i = 0;
     while i < argv.len() {
         let a = argv[i].as_str();
@@ -249,6 +251,16 @@ fn cli(argv: Vec<String>) {
                 o.log(glyph_version::VERSION);
                 o.exit(0);
             }
+            // the repair queue and its moves, the Rust's alone (EMS-002 ORD-0042)
+            "--repair" if i == 0 => {
+                let said = repair::run(&argv[i + 1..]);
+                said.out.iter().for_each(|l| o.log(l));
+                said.err.iter().for_each(|l| o.error(l));
+                o.exit(said.code);
+            }
+            // what a refused bundle offers, and its confirmation (EMS-002 ORD-0042)
+            "--repair" => repair_it = true,
+            "--yes" => yes = true,
             // the coherence between Orders, the Rust's alone (EMS-002 ORD-0040)
             "--check" => {
                 let (said, code) = coherence::check(argv.get(i + 1).map_or("", String::as_str));
@@ -438,7 +450,7 @@ fn cli(argv: Vec<String>) {
             engine: glyph_version::VERSION.into(),
             claims: claims.clone(),
             declares: coherence::declares_of(&xml),
-            unreadable: None,
+            ..coherence::Order::default()
         };
         let mut home = coherence::home_for(Path::new(&dir));
         home.orders.push(new.clone());
@@ -454,7 +466,12 @@ fn cli(argv: Vec<String>) {
                 "{id}: the claim does not match {}: nothing written.",
                 home.name
             ));
-            o.exit(2);
+            let codes: Vec<(&'static str, String)> =
+                fixes.iter().map(|f| (f.code, f.msg.clone())).collect();
+            let said = repair::offer(&home, &codes, &input, &id, repair_it, yes);
+            said.out.iter().for_each(|l| o.log(l));
+            said.err.iter().for_each(|l| o.error(l));
+            o.exit(said.code);
         }
         let s = |v: &str| Json::Str(v.to_string());
         let manifest = stringify_indent(

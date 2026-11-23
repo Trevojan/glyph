@@ -1,0 +1,92 @@
+<glyph-package engine="4.7.10.09">
+  <schema>
+    <declares kind="block" name="ORD-0042-repair-queue"/>
+  </schema>
+  <configuration of="EMS-002" digest="06e60f4f1cfb0e00" engine="4.7.10.09">{
+  "id": "EMS-002",
+  "title": "o Glyph 100% em Rust",
+  "xsd": [
+    {
+      "kind": "block",
+      "name": "ORD-####-…"
+    }
+  ],
+  "engine": "4.7.10.09",
+  "conventions": [],
+  "rules": [],
+  "exceptions": [],
+  "pins": [],
+  "traffic": {},
+  "invoke": {
+    "skills": [],
+    "actions": []
+  }
+}</configuration>
+  <block once="true">
+    <block name="ORD-0042-repair-queue" binds="ORD-0042-repair-queue">
+      <reference>
+        <user-input>EMS</user-input>
+        <needs var="EMS">referenciado e nunca ligado</needs>
+      </reference>
+      <derive-from>
+        <invoke reads="[RTNL-RWK[MAND-NEQ],[CTX[GO-SWITCH]]]" species="composite" depth="2"/>
+        <reference>
+          <user-input>ORD-0040</user-input>
+          <needs var="ORD-0040">referenciado e nunca ligado</needs>
+        </reference>
+        <user-input role="result">the findings the queue holds</user-input>
+      </derive-from>
+      <derive-from>
+        <invoke reads="[RTNL-RWK[MAND-NEQ],[CTX[GO-SWITCH]]]" species="composite" depth="2"/>
+        <reference>
+          <user-input>ORD-0041</user-input>
+          <needs var="ORD-0041">referenciado e nunca ligado</needs>
+        </reference>
+        <user-input role="result">the Rust bundle a move runs</user-input>
+      </derive-from>
+      <context>
+        <user-input>the ratified steps and the answers of the Regent</user-input>
+        <user-input>.guidelines/.orders/INTAKE-ORDER-COHERENCE.md, sections 9, 11 and 12</user-input>
+      </context>
+      <context>
+        <user-input>repair shows the difference and asks before it writes</user-input>
+        <user-input>.guidelines/.orders/INTAKE-PIN-TRAFFIC.md, section 3</user-input>
+      </context>
+      <target>
+        <user-input>step 4 of the trail, for the Harness: glyph --repair keeps the queue of what glyph --check finds, one file per series beside its EMS.json, proposes a destination for each Order, and moves or removes one Order at a time, warning and writing nothing until it is confirmed</user-input>
+      </target>
+      <instruction>
+        <user-input>have glyph --repair over a folder write the queue, REPAIR.json in each folder with findings, remove one no finding is left in, and list each Order with its findings and the destination it proposes</user-input>
+      </instruction>
+      <instruction>
+        <user-input>propose the series an EMS.json configures for ClaimEmsOtherSeries, the Order own series for the engine and the pattern, and .orders/NEM/ when no series fits</user-input>
+      </instruction>
+      <instruction>
+        <user-input>have --apply move an Order: adapt its source to the folder it lands in, the claim to the series or to nem and the block name to the number it takes there, bundle it there with the Rust, and remove it where it was</user-input>
+      </instruction>
+      <instruction>
+        <user-input>have --apply with --remove remove an Order, and --to name a destination other than the proposed one</user-input>
+      </instruction>
+      <instruction>
+        <user-input>warn, with the difference and what will not resolve, and write nothing without --yes</user-input>
+      </instruction>
+      <constraint>
+        <user-input>a move adapts the Order to the series it lands in, which numbers it, and always warns for the Regent to confirm, RP-2 a</user-input>
+      </constraint>
+      <constraint>
+        <user-input>Move to category waits for the categories, and Add to EMS for what it means; neither is built</user-input>
+      </constraint>
+      <constraint>
+        <user-input>the JS builds none of it; no hash of the snapshot moves; no crate enters</user-input>
+      </constraint>
+      <constraint>
+        <user-input>npm run check and npm run check:rust green</user-input>
+      </constraint>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the queue</user-input>
+        <user-input>each proposal, each move, the removal, the refusal kept intact and the confirmation seen failing before the code</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>

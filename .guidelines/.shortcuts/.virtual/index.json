@@ -1,7 +1,7 @@
 {
   "note": "written by glyph-vpath build, EMS-002; never edited by hand",
   "depth": 2,
-  "next": 4034,
+  "next": 4083,
   "files": {
     ".guidelines/.changelog/README.md": {
       "nodes": [
@@ -3342,6 +3342,74 @@
         ["n4032", "/glyph-package/block", 519, 3462, 25, 53, "fae56b486b4e3c00", "", "n4029"]
       ]
     },
+    ".guidelines/.orders/EMS-002/ORD-0042/ORD-0042.hgml": {
+      "nodes": [
+        ["n4034", "", 0, 2857, 1, 107, "0912b8285b63d300", "", ""]
+      ]
+    },
+    ".guidelines/.orders/EMS-002/ORD-0042/ORD-0042.json": {
+      "nodes": [
+        ["n4035", "", 0, 25566, 1, 827, "80681770ee627c00", "", ""],
+        ["n4036", "/type", 12, 22, 2, 1, "6cfcf51e0b22b400", "", "n4035"],
+        ["n4037", "/schema", 36, 37, 3, 1, "360caa400a28ede0", "", "n4035"],
+        ["n4038", "/version", 52, 63, 4, 1, "b637681c05c33000", "", "n4035"],
+        ["n4039", "/source", 77, 200, 5, 7, "6d98e93096abe340", "", "n4035"],
+        ["n4040", "/source/length", 93, 97, 6, 1, "a25f02307da85900", "", "n4039"],
+        ["n4041", "/source/checksum", 115, 133, 7, 1, "9e0ff7b8227bac00", "", "n4039"],
+        ["n4042", "/source/encoding", 151, 158, 8, 1, "51d8d6a8889ada00", "", "n4039"],
+        ["n4043", "/source/newline", 175, 179, 9, 1, "cec09c50a37ddc00", "", "n4039"],
+        ["n4044", "/source/uri", 192, 196, 10, 1, "e4ee48ec82cd2c00", "", "n4039"],
+        ["n4045", "/stores", 214, 326, 12, 5, "8120c4f0d6d87200", "", "n4035"],
+        ["n4046", "/stores/templates", 233, 251, 13, 1, "e0163048f45d2940", "", "n4045"],
+        ["n4047", "/stores/rules", 266, 284, 14, 1, "406bc86654620000", "", "n4045"],
+        ["n4048", "/stores/expansions", 304, 322, 15, 1, "b33d791e77f12000", "", "n4045"],
+        ["n4049", "/projection", 344, 350, 17, 1, "8e0b2f6630c6ec00", "", "n4035"],
+        ["n4050", "/segments", 366, 24931, 18, 789, "2434e5a8828e8c00", "", "n4035"],
+        ["n4051", "/segments/0", 372, 24927, 19, 787, "96ebca280e72d900", "", "n4050"],
+        ["n4052", "/diagnostics", 24950, 25564, 807, 20, "6b9e7210d3081800", "", "n4035"],
+        ["n4053", "/diagnostics/0", 24956, 25150, 808, 6, "f97b3c3d44d84600", "", "n4052"],
+        ["n4054", "/diagnostics/1", 25156, 25355, 814, 6, "ed95b22b851e3c00", "", "n4052"],
+        ["n4055", "/diagnostics/2", 25361, 25560, 820, 6, "a0b4d7fb3bd67b00", "", "n4052"]
+      ]
+    },
+    ".guidelines/.orders/EMS-002/ORD-0042/ORD-0042.manifest.json": {
+      "nodes": [
+        ["n4056", "", 0, 816, 1, 37, "5d39ed168364c000", "", ""],
+        ["n4057", "/order", 13, 23, 2, 1, "7cde71c40870a600", "", "n4056"],
+        ["n4058", "/engine", 37, 48, 3, 1, "b637681c05c33000", "", "n4056"],
+        ["n4059", "/emitted", 63, 89, 4, 1, "ee2c0f18dbaef500", "", "n4056"],
+        ["n4060", "/files", 102, 189, 5, 6, "9d69b24c628b1000", "", "n4056"],
+        ["n4061", "/files/0", 108, 123, 6, 1, "10f6ca36fddebc00", "", "n4060"],
+        ["n4062", "/files/1", 129, 143, 7, 1, "b0724c92fd7e2900", "", "n4060"],
+        ["n4063", "/files/2", 149, 164, 8, 1, "9c340a94e8e0d400", "", "n4060"],
+        ["n4064", "/files/3", 170, 185, 9, 1, "19c5920017c12e00", "", "n4060"],
+        ["n4065", "/source", 203, 349, 11, 1, "e8fa0b421458d800", "", "n4056"],
+        ["n4066", "/relates", 364, 680, 12, 17, "a967d3a8c3a38700", "", "n4056"],
+        ["n4067", "/relates/0", 370, 445, 13, 5, "1f13a84879136c00", "", "n4066"],
+        ["n4068", "/relates/1", 451, 561, 18, 5, "eb894fc74bc3c800", "", "n4066"],
+        ["n4069", "/relates/2", 567, 676, 23, 5, "9d765c186bc26000", "", "n4066"],
+        ["n4070", "/configuration", 701, 760, 29, 4, "5897a2e4d0bce080", "", "n4056"],
+        ["n4071", "/configuration/of", 713, 722, 30, 1, "2bd2490690053400", "", "n4070"],
+        ["n4072", "/configuration/digest", 738, 756, 31, 1, "558eff5a1ee73760", "", "n4070"],
+        ["n4073", "/diagnostics", 779, 813, 33, 4, "ef40e278233a7c00", "", "n4056"],
+        ["n4074", "/diagnostics/fix", 792, 793, 34, 1, "350ca8b09bec4d20", "", "n4073"],
+        ["n4075", "/diagnostics/total", 808, 809, 35, 1, "360caa400a28ede0", "", "n4073"]
+      ]
+    },
+    ".guidelines/.orders/EMS-002/ORD-0042/ORD-0042.pgml": {
+      "nodes": [
+        ["n4076", "", 0, 1982, 1, 18, "995581b83f621400", "", ""]
+      ]
+    },
+    ".guidelines/.orders/EMS-002/ORD-0042/ORD-0042.xml": {
+      "nodes": [
+        ["n4077", "", 0, 4325, 1, 92, "c9554d0c3edd6c00", "", ""],
+        ["n4078", "/glyph-package", 0, 4325, 1, 92, "c9554d0c3edd6c00", "", "n4077"],
+        ["n4079", "/glyph-package/schema", 37, 115, 2, 3, "2f7644aed5ac2c00", "", "n4078"],
+        ["n4080", "/glyph-package/configuration", 118, 510, 5, 20, "bc527e5c7bf48800", "", "n4078"],
+        ["n4081", "/glyph-package/block", 513, 4308, 25, 67, "f6c10562b3f51000", "", "n4078"]
+      ]
+    },
     ".guidelines/.orders/EMS-002/README.md": {
       "nodes": [
         ["n598", "", 0, 24314, 1, 50, "331fd3e6c3e2d300", "", ""],
@@ -3726,9 +3794,9 @@
     },
     ".guidelines/.orders/GATE.json": {
       "nodes": [
-        ["n3837", "", 0, 5352, 1, 68, "9b5a40e096321f00", "", ""],
+        ["n3837", "", 0, 5457, 1, 69, "d1d42ec69715ce00", "", ""],
         ["n3838", "/note", 12, 292, 2, 1, "53e7fb003068fce0", "", "n3837"],
-        ["n3839", "/bundles", 307, 5349, 3, 65, "db8f0ba853314140", "", "n3837"],
+        ["n3839", "/bundles", 307, 5454, 3, 66, "c20d18fc5cb6cc00", "", "n3837"],
         ["n3840", "/bundles/.guidelines~1.orders~1EMS-001~1ORD-0001~1ORD-0001.xml", 366, 384, 4, 1, "dc8c39ac61706c00", "", "n3839"],
         ["n3841", "/bundles/.guidelines~1.orders~1EMS-001~1ORD-0002~1ORD-0002.xml", 443, 461, 5, 1, "dc8c39ac61706c00", "", "n3839"],
         ["n3842", "/bundles/.guidelines~1.orders~1EMS-001~1ORD-0003~1ORD-0003.xml", 520, 538, 6, 1, "dc8c39ac61706c00", "", "n3839"],
@@ -3784,14 +3852,15 @@
         ["n3892", "/bundles/.guidelines~1.orders~1EMS-002~1ORD-0039~1ORD-0039.xml", 4409, 4455, 56, 1, "06a67dec30a3f600", "", "n3839"],
         ["n3986", "/bundles/.guidelines~1.orders~1EMS-002~1ORD-0040~1ORD-0040.xml", 4514, 4560, 57, 1, "06a67dec30a3f600", "", "n3839"],
         ["n4033", "/bundles/.guidelines~1.orders~1EMS-002~1ORD-0041~1ORD-0041.xml", 4619, 4665, 58, 1, "06a67dec30a3f600", "", "n3839"],
-        ["n3893", "/bundles/.guidelines~1.orders~1EMS-003~1ORD-0001~1ORD-0001.xml", 4724, 4749, 59, 1, "52223abcbc4d0c00", "", "n3839"],
-        ["n3894", "/bundles/.guidelines~1.orders~1EMS-003~1ORD-0002~1ORD-0002.xml", 4808, 4833, 60, 1, "52223abcbc4d0c00", "", "n3839"],
-        ["n3895", "/bundles/.guidelines~1.orders~1EMS-003~1ORD-0003~1ORD-0003.xml", 4892, 4917, 61, 1, "52223abcbc4d0c00", "", "n3839"],
-        ["n3896", "/bundles/.guidelines~1.orders~1EMS-003~1ORD-0004~1ORD-0004.xml", 4976, 5001, 62, 1, "52223abcbc4d0c00", "", "n3839"],
-        ["n3897", "/bundles/.guidelines~1.orders~1EMS-003~1ORD-0005~1ORD-0005.xml", 5060, 5085, 63, 1, "52223abcbc4d0c00", "", "n3839"],
-        ["n3898", "/bundles/.guidelines~1.orders~1EMS-003~1queued~1ORD-0006~1ORD-0006.xml", 5151, 5176, 64, 1, "52223abcbc4d0c00", "", "n3839"],
-        ["n3899", "/bundles/.guidelines~1.orders~1ORD-2026-08-30-01.xml", 5227, 5248, 65, 1, "1df5c270239f6e00", "", "n3839"],
-        ["n3900", "/bundles/.guidelines~1.orders~1parked~1restructure-glyph-repo~1ORD-0011.xml", 5320, 5345, 66, 1, "52223abcbc4d0c00", "", "n3839"]
+        ["n4082", "/bundles/.guidelines~1.orders~1EMS-002~1ORD-0042~1ORD-0042.xml", 4724, 4770, 59, 1, "06a67dec30a3f600", "", "n3839"],
+        ["n3893", "/bundles/.guidelines~1.orders~1EMS-003~1ORD-0001~1ORD-0001.xml", 4829, 4854, 60, 1, "52223abcbc4d0c00", "", "n3839"],
+        ["n3894", "/bundles/.guidelines~1.orders~1EMS-003~1ORD-0002~1ORD-0002.xml", 4913, 4938, 61, 1, "52223abcbc4d0c00", "", "n3839"],
+        ["n3895", "/bundles/.guidelines~1.orders~1EMS-003~1ORD-0003~1ORD-0003.xml", 4997, 5022, 62, 1, "52223abcbc4d0c00", "", "n3839"],
+        ["n3896", "/bundles/.guidelines~1.orders~1EMS-003~1ORD-0004~1ORD-0004.xml", 5081, 5106, 63, 1, "52223abcbc4d0c00", "", "n3839"],
+        ["n3897", "/bundles/.guidelines~1.orders~1EMS-003~1ORD-0005~1ORD-0005.xml", 5165, 5190, 64, 1, "52223abcbc4d0c00", "", "n3839"],
+        ["n3898", "/bundles/.guidelines~1.orders~1EMS-003~1queued~1ORD-0006~1ORD-0006.xml", 5256, 5281, 65, 1, "52223abcbc4d0c00", "", "n3839"],
+        ["n3899", "/bundles/.guidelines~1.orders~1ORD-2026-08-30-01.xml", 5332, 5353, 66, 1, "1df5c270239f6e00", "", "n3839"],
+        ["n3900", "/bundles/.guidelines~1.orders~1parked~1restructure-glyph-repo~1ORD-0011.xml", 5425, 5450, 67, 1, "52223abcbc4d0c00", "", "n3839"]
       ]
     },
     ".guidelines/.orders/HANDOFF-2026-08-30.ast.json": {

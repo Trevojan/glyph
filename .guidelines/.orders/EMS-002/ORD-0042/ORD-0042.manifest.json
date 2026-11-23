@@ -1,0 +1,37 @@
+{
+  "order": "ORD-0042",
+  "engine": "4.7.10.09",
+  "emitted": "2026-11-22T22:04:02.096Z",
+  "files": [
+    "ORD-0042.pgml",
+    "ORD-0042.xml",
+    "ORD-0042.json",
+    "ORD-0042.hgml"
+  ],
+  "source": "C:/Users/Usuario/AppData/Local/Temp/claude/C--Users-Usuario-Documents-GitHub-glyph/a285ad45-c0ff-408d-8fc2-d03bb232eef9/scratchpad/ORD-0042.pgml",
+  "relates": [
+    {
+      "order": "EMS",
+      "kind": "reference",
+      "reason": ""
+    },
+    {
+      "order": "ORD-0040",
+      "kind": "derive-from",
+      "reason": "the findings the queue holds"
+    },
+    {
+      "order": "ORD-0041",
+      "kind": "derive-from",
+      "reason": "the Rust bundle a move runs"
+    }
+  ],
+  "configuration": {
+    "of": "EMS-002",
+    "digest": "06e60f4f1cfb0e00"
+  },
+  "diagnostics": {
+    "fix": 0,
+    "total": 3
+  }
+}
