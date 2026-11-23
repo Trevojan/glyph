@@ -53,6 +53,67 @@ fn tree(dir: &Path, rel: &str, out: &mut Vec<(String, Option<Vec<u8>>)>) {
     }
 }
 
+/// The burn's known fence difference (EMS-002 ORD-0045) in what a bundle
+/// run wrote: each `.hgml` it holds undone, a zip rebuilt from the undone
+/// files at the run's moment, and the byte count each line printed redone.
+/// The JS writes these bytes; everything else of the run stays as the Rust
+/// wrote it.
+fn undo_bundle(dir: &Path, stdout: &str, epoch: Option<&str>) -> String {
+    let ms = epoch.and_then(|e| e.parse::<i64>().ok()).map(|e| e * 1000);
+    stdout
+        .split('\n')
+        .map(|line| {
+            let Some((path, rest)) = line.split_once("  (") else {
+                return line.to_string();
+            };
+            let Some(tail) = rest.split_once(" bytes, ").map(|(_, t)| t) else {
+                return line.to_string();
+            };
+            let at = dir.join(path.replace('\\', "/"));
+            let size = if at.is_dir() {
+                let mut total = 0;
+                for e in fs::read_dir(&at).expect("the folder").flatten() {
+                    let mut text = fs::read(e.path()).expect("a file");
+                    if e.path().extension().is_some_and(|x| x == "hgml") {
+                        let back = oracle::known::fences(&String::from_utf8_lossy(&text));
+                        fs::write(e.path(), &back).expect("the undone burn");
+                        text = back.into_bytes();
+                    }
+                    total += text.len();
+                }
+                total
+            } else if let (true, Some(ms)) = (at.is_file(), ms) {
+                let zip = fs::read(&at).expect("the zip");
+                let Some(entries) = glyph_bundle::zip_entries(&zip) else {
+                    return line.to_string();
+                };
+                let undone: Vec<(String, Vec<u8>)> = entries
+                    .into_iter()
+                    .map(|(n, b)| {
+                        if n.ends_with(".hgml") {
+                            let back = oracle::known::fences(&String::from_utf8_lossy(&b));
+                            (n, back.into_bytes())
+                        } else {
+                            (n, b)
+                        }
+                    })
+                    .collect();
+                let pairs: Vec<(&str, &[u8])> = undone
+                    .iter()
+                    .map(|(n, b)| (n.as_str(), b.as_slice()))
+                    .collect();
+                let packed = glyph_bundle::zip_store(&pairs, ms);
+                fs::write(&at, &packed).expect("the rebuilt zip");
+                packed.len()
+            } else {
+                return line.to_string();
+            };
+            format!("{path}  ({size} bytes, {tail}")
+        })
+        .collect::<Vec<_>>()
+        .join("\n")
+}
+
 #[test]
 fn every_recorded_run_answers_the_same_bytes() {
     let cases = module("cli").a("cases");
@@ -94,7 +155,15 @@ fn every_recorded_run_answers_the_same_bytes() {
             {
                 cmd.env("SOURCE_DATE_EPOCH", e);
             }
-            let out = cmd.output().expect("glyph runs");
+            let mut out = cmd.output().expect("glyph runs");
+            if args.contains(&"--bundle") {
+                let epoch = r
+                    .get("env")
+                    .and_then(|e| e.get("SOURCE_DATE_EPOCH"))
+                    .and_then(Json::str);
+                out.stdout =
+                    undo_bundle(&dir, &String::from_utf8_lossy(&out.stdout), epoch).into_bytes();
+            }
             let said = |b: &[u8]| String::from_utf8_lossy(b).into_owned();
             let at = format!(
                 "case {n} {:?}",
@@ -111,7 +180,7 @@ fn every_recorded_run_answers_the_same_bytes() {
                     said(&out.stderr).trim()
                 ));
             } else if (if args.contains(&"--hgml") {
-                oracle::known::semicolons(&said(&out.stdout))
+                oracle::known::fences(&oracle::known::semicolons(&said(&out.stdout)))
             } else {
                 said(&out.stdout)
             }) != r.s("stdout")

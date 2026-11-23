@@ -1,0 +1,63 @@
+<glyph-package engine="4.7.10.09">
+  <schema>
+    <declares kind="block" name="ORD-0045-burn-fences"/>
+  </schema>
+  <configuration of="EMS-002" digest="06e60f4f1cfb0e00" engine="4.7.10.09">{
+  "id": "EMS-002",
+  "title": "o Glyph 100% em Rust",
+  "xsd": [
+    {
+      "kind": "block",
+      "name": "ORD-####-…"
+    }
+  ],
+  "engine": "4.7.10.09",
+  "conventions": [],
+  "rules": [],
+  "exceptions": [],
+  "pins": [],
+  "traffic": {},
+  "invoke": {
+    "skills": [],
+    "actions": []
+  }
+}</configuration>
+  <block once="true">
+    <block name="ORD-0045-burn-fences" binds="ORD-0045-burn-fences">
+      <reference>
+        <user-input>EMS</user-input>
+        <needs var="EMS">referenciado e nunca ligado</needs>
+      </reference>
+      <context>
+        <user-input>the defect measured, the variants and the answers of the Regent</user-input>
+        <user-input>.guidelines/.orders/INTAKE-BURN-FENCES.md, sections 1 to 5</user-input>
+      </context>
+      <target>
+        <user-input>the burn of a raw fence and of a logic block rereads to what the source said, in the Rust only: the open fence carrying what it holds</user-input>
+      </target>
+      <instruction>
+        <user-input>burn a raw fence as the open fence carrying its body verbatim, and every logic block, named or not, as the open fence carrying its rules</user-input>
+      </instruction>
+      <instruction>
+        <user-input>name the nine hgml differences in rust/testkit/known, undone where an oracle test holds the Rust burn to the JS one</user-input>
+      </instruction>
+      <instruction>
+        <user-input>hold in the Rust that a fence and a block reread to the same XML, and that every declared burn rereads with no fix its source lacks, none known</user-input>
+      </instruction>
+      <constraint>
+        <user-input>burn.js keeps the defect until the JS leaves, and H-16 keeps OC-12 and R-04 in its KNOWN while the JS burns</user-input>
+      </constraint>
+      <constraint>
+        <user-input>no hash of the snapshot moves: the snapshot is the JS burn</user-input>
+      </constraint>
+      <constraint>
+        <user-input>npm run check and npm run check:rust green</user-input>
+      </constraint>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the Rust</user-input>
+        <user-input>the three sources of the defect reread to the same XML, every declared burn rereads clean, and the undo reaches the nine sources it names and no other, seen failing before the code</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>

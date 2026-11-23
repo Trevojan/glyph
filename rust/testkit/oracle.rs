@@ -659,6 +659,53 @@ pub mod known {
             .join("\n")
     }
 
+    /// The burn of a fence (EMS-002 ORD-0045, the Rust only by F3 b): the
+    /// Rust writes the open fence carrying what it holds — `[raw]` body
+    /// `[/raw]`, `[logic-name]` its rules `[/logic]` — where the JS writes
+    /// `[raw[/raw]` and `[logic-name[/logic]`. The declared burns it reaches.
+    pub const FENCES: &[&str] = &[
+        "N-14", "OC-02", "OC-03", "OC-04", "OC-07", "OC-09", "OC-12", "R-04", "R-05",
+    ];
+
+    /// The undo: each open fence back to the closed form the JS writes. A raw
+    /// body cannot hold `[/raw]`, and a literal line opens with a quote, so
+    /// the undo reaches nothing but a fence.
+    pub fn fences(rust: &str) -> String {
+        let mut out: Vec<String> = Vec::new();
+        let lines: Vec<&str> = rust.split('\n').collect();
+        let mut i = 0;
+        while i < lines.len() {
+            let line = lines[i];
+            let t = line.trim_start_matches(' ');
+            let pad = &line[..line.len() - t.len()];
+            if let Some(body) = t.strip_prefix("[raw]") {
+                // the body runs to the first `[/raw]`, on this line or a later one
+                let rest = std::iter::once(body)
+                    .chain(lines[i + 1..].iter().copied())
+                    .collect::<Vec<_>>()
+                    .join("\n");
+                if let Some(end) = rest.find("[/raw]") {
+                    let used = rest[..end].matches('\n').count();
+                    let after = rest[end + 6..].split('\n').next().unwrap_or("");
+                    out.push(format!("{pad}[raw[/raw]{after}"));
+                    i += used + 1;
+                    continue;
+                }
+            }
+            if t.starts_with("[logic") && t.ends_with(']') && !t.contains("[/logic]") {
+                let close = format!("{pad}[/logic]");
+                if let Some(k) = lines[i + 1..].iter().position(|l| *l == close) {
+                    out.push(format!("{pad}{}[/logic]", &t[..t.len() - 1]));
+                    i += k + 2;
+                    continue;
+                }
+            }
+            out.push(line.to_string());
+            i += 1;
+        }
+        out.join("\n")
+    }
+
     /// O4, residual 2: inside a literal only the quote that opened it closes
     /// it, a line break as well, so the apostrophe reads as the backtick does.
     /// Each source of the oracle it reaches, with the tokens the decision
@@ -816,11 +863,12 @@ pub mod known {
         })
     }
 
-    /// The same undo over every string of a JSON answer that carries a burn.
-    pub fn semicolons_json(rust: &str) -> String {
+    /// The burn's two undos, `semicolons` and `fences`, over every string of
+    /// a JSON answer that carries a burn.
+    pub fn burn_json(rust: &str) -> String {
         fn walk(v: Json) -> Json {
             match v {
-                Json::Str(s) => Json::Str(semicolons(&s)),
+                Json::Str(s) => Json::Str(fences(&semicolons(&s))),
                 Json::Arr(a) => Json::Arr(a.into_iter().map(walk).collect()),
                 Json::Obj(kv) => Json::Obj(kv.into_iter().map(|(k, v)| (k, walk(v))).collect()),
                 v => v,

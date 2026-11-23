@@ -1,0 +1,12 @@
+[block'ORD-0045-burn-fences'
+  [ref'EMS']
+  [ctx'the defect measured, the variants and the answers of the Regent','.guidelines/.orders/INTAKE-BURN-FENCES.md, sections 1 to 5']
+  [tgt'the burn of a raw fence and of a logic block rereads to what the source said, in the Rust only: the open fence carrying what it holds']
+  [ins'burn a raw fence as the open fence carrying its body verbatim, and every logic block, named or not, as the open fence carrying its rules']
+  [ins'name the nine hgml differences in rust/testkit/known, undone where an oracle test holds the Rust burn to the JS one']
+  [ins'hold in the Rust that a fence and a block reread to the same XML, and that every declared burn rereads with no fix its source lacks, none known']
+  [cnst'burn.js keeps the defect until the JS leaves, and H-16 keeps OC-12 and R-04 in its KNOWN while the JS burns']
+  [cnst'no hash of the snapshot moves: the snapshot is the JS burn']
+  [cnst'npm run check and npm run check:rust green']
+  [val'the Rust','the three sources of the defect reread to the same XML, every declared burn rereads clean, and the undo reaches the nine sources it names and no other, seen failing before the code']
+];

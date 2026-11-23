@@ -36,8 +36,10 @@ pub enum Burnt {
     },
     Literal(Option<String>),
     Text(Option<String>),
-    Raw,
-    Logic(String),
+    /// A raw fence and the body it carries, verbatim (EMS-002 ORD-0045).
+    Raw(Option<String>),
+    /// A logic block's name and the source of each of its rules.
+    Logic(String, Vec<String>),
 }
 
 impl Burnt {
@@ -257,11 +259,16 @@ pub fn burn_list(
             continue;
         }
         if nd.raw_fence == Some(true) {
-            out.push(Burnt::Raw);
+            out.push(Burnt::Raw(nd.v.clone()));
             continue;
         }
         if let Some(name) = &nd.logic {
-            out.push(Burnt::Logic(name.clone()));
+            let rules = nd
+                .extra
+                .as_ref()
+                .map(|l| l.rules.iter().map(|r| r.source.clone()).collect())
+                .unwrap_or_default();
+            out.push(Burnt::Logic(name.clone(), rules));
             continue;
         }
         let Some(canonical) = nd.canonical.clone().filter(|c| !c.is_empty()) else {
@@ -425,16 +432,25 @@ pub fn hgml_lines(list: &[Burnt], d: usize, l: &mut Vec<String>) {
             Burnt::Literal(v) | Burnt::Text(v) => {
                 l.push(format!("{}'{}'", pad(d), hgml_lit(v.as_deref())))
             }
-            Burnt::Raw => l.push(format!("{}[raw[/raw]", pad(d))),
-            Burnt::Logic(name) => l.push(format!(
-                "{}[logic{}[/logic]",
+            /* a fence burns open, carrying what it holds, so the reread says
+            what the source said: the body verbatim, the rules one a line
+            (EMS-002 ORD-0045, the Rust only by F3 b; the JS writes the closed
+            form until it leaves) */
+            Burnt::Raw(body) => l.push(format!(
+                "{}[raw]{}[/raw]",
                 pad(d),
-                if name.is_empty() {
+                body.as_deref().unwrap_or("")
+            )),
+            Burnt::Logic(name, rules) => {
+                let named = if name.is_empty() {
                     String::new()
                 } else {
                     format!("-{name}")
-                }
-            )),
+                };
+                l.push(format!("{}[logic{named}]", pad(d)));
+                l.extend(rules.iter().map(|r| format!("{}{r}", pad(d + 1))));
+                l.push(format!("{}[/logic]", pad(d)));
+            }
             Burnt::Atom {
                 canonical,
                 children,

@@ -169,11 +169,10 @@ fn every_round_trip_the_suite_runs_equals_the_js() {
                     },
                 )
                 .unwrap_or_else(|e| panic!("#{n}: {e:?}"));
-                assert_eq!(
-                    oracle::known::semicolons(&out),
-                    t.s("out"),
-                    "#{n}: the burn"
-                );
+                let out = oracle::known::fences(&oracle::known::semicolons(&out));
+                assert_eq!(out, t.s("out"), "#{n}: the burn");
+                /* the JS burn's reread, read by the Rust parser: what the Rust
+                burn's own reread says is `tests/fences.rs`'s (EMS-002 ORD-0045) */
                 let fix = match parse(&out, &o) {
                     Ok(p) => Json::Arr(
                         p.gaps

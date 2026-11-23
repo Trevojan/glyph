@@ -43,7 +43,7 @@ fn the_engine_answers_every_recorded_request_in_order() {
             .and_then(|q| q.get("call").and_then(Json::str).map(|c| c == "toHGML"))
             == Some(true);
         let got = if burn {
-            oracle::known::semicolons_json(got)
+            oracle::known::burn_json(got)
         } else {
             got.to_string()
         };

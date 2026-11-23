@@ -15,6 +15,7 @@ dependencies = [
  "glyph-rules",
  "glyph-stores",
  "glyph-util",
+ "glyph-xml",
 ]
 
 [[package]]

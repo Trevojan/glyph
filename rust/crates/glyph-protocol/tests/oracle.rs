@@ -52,7 +52,7 @@ fn every_request_answers_the_bytes_the_js_answered() {
         }
         let got = answer(q);
         let got = if call.as_deref() == Some("toHGML") {
-            oracle::known::semicolons_json(&got)
+            oracle::known::burn_json(&got)
         } else {
             got
         };

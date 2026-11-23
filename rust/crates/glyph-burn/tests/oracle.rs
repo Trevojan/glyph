@@ -74,7 +74,7 @@ fn the_hgml_digest_of_every_case_equals_the_snapshot() {
             },
         )
         .unwrap_or_else(|e| panic!("{id}: {e:?}"));
-        let got = oracle::known::semicolons(&got);
+        let got = oracle::known::fences(&oracle::known::semicolons(&got));
         assert_eq!(got, case.s("hgml"), "{id}: the burn");
         assert_eq!(
             &sha256(got.as_bytes())[..16],
@@ -119,7 +119,7 @@ fn every_burn_equals_the_js() {
             match want {
                 Json::Str(w) => {
                     let got = got.unwrap_or_else(|e| panic!("{id} {k}: {e:?}"));
-                    let back = oracle::known::semicolons(&got);
+                    let back = oracle::known::fences(&oracle::known::semicolons(&got));
                     undone += usize::from(back != got);
                     assert_eq!(back, *w, "{id} {k}: the burn");
                 }
