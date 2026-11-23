@@ -24,8 +24,10 @@ propósito. Não reconstrua por inferência o que está a um atalho de distânci
 
 A skill **`/glyph-markup`** está em `.claude/skills/glyph-markup/`. Ela é gerada
 deste repositório por `node scripts/build-skill.js`, e `npm run check` recusa
-quando ela diverge do motor — então é a cópia corrente. Uma cópia instalada na
-conta pode estar atrasada; a desta pasta é a que vale.
+quando ela diverge do motor — então é a cópia corrente. O mesmo script escreve o
+espelho dela em `.agents/skills/glyph-markup/`, para o agente que lê essa pasta,
+com o `SKILL.md` copiado deste, e o `--check` segura os dois. Uma cópia instalada
+na conta pode estar atrasada; a desta pasta é a que vale.
 
 ## Entregar o plugin
 

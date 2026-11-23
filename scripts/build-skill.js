@@ -1,5 +1,6 @@
 /**
- * Builds the Glyph resources for Claude Code and the Codex plugin.
+ * Builds the Glyph resources for Claude Code, the Codex plugin, and the
+ * repository's own `.agents/skills/` for an agent that reads that folder.
  *
  *   node build-skill.js            write it
  *   node build-skill.js --check    verify it matches, write nothing
@@ -7,6 +8,9 @@
  * Both packages derive their references and engine from the same sources.
  * Each host has its own authored SKILL.md and Codex also bundles the CLI and
  * its stores so the installed skill can compile outside a Glyph checkout.
+ * `.agents/skills/glyph-markup` mirrors the Claude package, its SKILL.md
+ * included, copied from `.claude/skills/glyph-markup/SKILL.md`: one authored
+ * prose for both, so a copy made by hand cannot fall behind the engine.
  *
  * The Regent's layout: SKILL.md at the root, the engine beside it, the
  * normative material in `references/`, and the examples NESTED below that
@@ -48,6 +52,7 @@ const ROOT = path.join(__dirname, "..");
 const GUIDE = path.join(ROOT, ".guidelines");
 const SKILL = path.join(ROOT, ".claude", "skills", "glyph-markup");
 const CODEX_SKILL = path.join(ROOT, "plugins", "glyph-markup", "skills", "glyph-markup");
+const AGENTS_SKILL = path.join(ROOT, ".agents", "skills", "glyph-markup");
 
 const CHECK = process.argv.indexOf("--check") !== -1;
 const STALE = [];
@@ -115,6 +120,7 @@ function emitTo(dir, rel, content) {
 function emit(rel, content) {
   emitTo(SKILL, rel, content);
   emitTo(CODEX_SKILL, rel, content);
+  emitTo(AGENTS_SKILL, rel, content);
 }
 
 /* the engine itself: the skill can then prove behaviour instead of describing
@@ -172,6 +178,9 @@ const declared = (skillMd.match(/# Glyph Shorthand Markup Language \(v([0-9.]+)\
 if (declared !== VERSION)
   STALE.push("SKILL.md: declares v" + declared + ", engine is " + VERSION);
 else console.log("  ✓ SKILL.md declares v" + VERSION);
+/* the mirror takes the Claude package's prose as it stands, frontmatter first,
+   so it carries no banner */
+emitTo(AGENTS_SKILL, "SKILL.md", skillMd);
 
 /* Same exposure one level down. XML_REFERENCE.md shows the emitted document in
    worked examples, and its root element carries the engine version. The suite
@@ -198,6 +207,6 @@ if (CHECK) {
   console.log("\nThe skill packages match a fresh build.");
 } else {
   commitWrites();
-  console.log("\nThe Claude and Codex skill packages are built at " + VERSION + " (" +
+  console.log("\nThe Claude, Codex and .agents skill packages are built at " + VERSION + " (" +
               WRITES.length + " generated files).");
 }
