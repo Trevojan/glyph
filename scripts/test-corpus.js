@@ -4589,6 +4589,77 @@ function runBundleChecks() {
 }
 const rZP = runBundleChecks();
 
+/* ------------------------------------------------------------------ *
+ * a series bundle through the plugin is the Rust binary's (EMS-002 ORD-0041,
+ * the Regent's CO-2 of 2026-11-22): the plugin hands it to an installed
+ * glyph of this version, or refuses by name and writes nothing. The binary
+ * here is the workspace's own build, named by GLYPH_BIN.
+ * ------------------------------------------------------------------ */
+function runPluginBundleChecks() {
+  console.log("\n--- series bundle through the plugin ---");
+  const D = [];
+  const ok = (id, name, why) => {
+    if (why) { console.log("  ✗ " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  ✓ " + id + ": " + name); D.push(id); }
+  };
+  const fsx = require("fs"), px = require("path"), cp = require("child_process");
+  const ROOT = px.resolve(__dirname, "..");
+  const built = cp.spawnSync("cargo", ["build", "-q", "--manifest-path", px.join(ROOT, "rust", "Cargo.toml"),
+                                       "-p", "glyph-cli", "--bin", "glyph"], { encoding: "utf8" });
+  const bin = px.join(ROOT, "rust", "target", "debug", process.platform === "win32" ? "glyph.exe" : "glyph");
+  const tmp = px.join(ROOT, ".ord-gate-plugin"), series = px.join(tmp, "EMS-098"), flat = px.join(tmp, "out");
+  const plugin = (src, out, env) => {
+    fsx.writeFileSync(px.join(tmp, "src.pgml"), src, "utf8");
+    return cp.spawnSync(process.execPath, [px.join(ROOT, "scripts", "glyph-plugin.js"), "--from",
+      px.join(tmp, "src.pgml"), "--bundle", "--out", out],
+      { encoding: "utf8", env: Object.assign({}, process.env, env) });
+  };
+  const written = dir => fsx.readdirSync(dir).filter(n => /^\.?ORD-/.test(n));
+  try {
+    fsx.rmSync(tmp, { recursive: true, force: true });
+    fsx.mkdirSync(series, { recursive: true });
+    fsx.mkdirSync(flat, { recursive: true });
+    const cfg = JSON.parse(fsx.readFileSync(px.join(ROOT, ".guidelines", ".orders", "EMS-003", "EMS.json"), "utf8"));
+    fsx.writeFileSync(px.join(series, "EMS.json"),
+      JSON.stringify(Object.assign({}, cfg, { id: "EMS-098", title: "a probe", engine: G.VERSION }), null, 2) + "\n");
+    const asked = cp.spawnSync(bin, ["--version"], { encoding: "utf8" });
+    ok("PB-01", "the binary answers --version with the engine's version and nothing else",
+       built.status !== 0 ? "cargo build failed: " + String(built.stderr).trim()
+         : asked.stdout !== G.VERSION + "\n" ? "it answered " + JSON.stringify(asked.stdout) : null);
+
+    const gone = plugin("[block'ORD-0001-a' [ref'EMS']]", series, { GLYPH_BIN: px.join(tmp, "nowhere.exe") });
+    ok("PB-02", "with no glyph where the plugin looks, a series bundle is refused by name and nothing is written",
+       gone.status !== 2 || !/runs the installed glyph.*does not exist/.test(gone.stderr) ? "exit " + gone.status + ": " + gone.stderr.trim()
+         : written(series).length ? "wrote " + written(series).join(", ") : null);
+
+    const other = plugin("[block'ORD-0001-a' [ref'EMS']]", series, { GLYPH_BIN: process.execPath });
+    ok("PB-03", "a glyph that answers another version is refused by name, and nothing is written",
+       other.status !== 2 || !/answers no version/.test(other.stderr) ? "exit " + other.status + ": " + other.stderr.trim()
+         : written(series).length ? "wrote " + written(series).join(", ") : null);
+
+    const rust = plugin("[block'ORD-0001-a' [ref'EMS']]", series, { GLYPH_BIN: bin });
+    let man = null;
+    try { man = JSON.parse(fsx.readFileSync(px.join(series, "ORD-0001", "ORD-0001.manifest.json"), "utf8")); } catch (e) { /* none */ }
+    ok("PB-04", "the installed glyph writes the series bundle, and its manifest carries the claim as relates",
+       rust.status !== 0 ? "exit " + rust.status + ": " + rust.stderr.trim()
+         : !man || !Array.isArray(man.relates) || man.relates[0].order !== "EMS" ? "manifest: " + JSON.stringify(man) : null);
+
+    const bad = plugin("[block'ORD-0002-b' [ref'nem']]", series, { GLYPH_BIN: bin });
+    ok("PB-05", "a claim the series does not answer is refused through the plugin, and nothing is written",
+       bad.status !== 2 || !/\[fix\] NemOutsideNem/.test(bad.stderr) ? "exit " + bad.status + ": " + bad.stderr.trim()
+         : fsx.existsSync(px.join(series, "ORD-0002")) ? "ORD-0002 was written" : null);
+
+    const loose = plugin("[block'x' [ref'EMS']]", flat, { GLYPH_BIN: px.join(tmp, "nowhere.exe") });
+    ok("PB-06", "a bundle outside a series stays the JS's, with no installed glyph needed",
+       loose.status !== 0 ? "exit " + loose.status + ": " + loose.stderr.trim()
+         : !fsx.existsSync(px.join(flat, "ORD-0001.zip")) ? "no ORD-0001.zip" : null);
+  } finally {
+    try { fsx.rmSync(tmp, { recursive: true, force: true }); } catch (e) { /* already gone */ }
+  }
+  return D.length;
+}
+const rPB = runPluginBundleChecks();
+
 
 /* ------------------------------------------------------------------ *
  * global store registration — the tripwire for splitting the core
@@ -4925,6 +4996,7 @@ console.log(" mode words   " + String(rMO).padStart(4) + "/10");
 console.log(" elo de cadeia" + String(rLK).padStart(4) + "/14");
 console.log(" dois-pontos  " + String(rCO).padStart(4) + "/7");
 console.log(" bundle ORD   " + String(rZP).padStart(4) + "/16");
+console.log(" plugin bundle" + String(rPB).padStart(4) + "/6");
 console.log(" global store " + rGS + "/3");
 console.log(" context      " + rCX + "/3");
 console.log(" coverage     " + String(rOC).padStart(4) + "/" + ORACLE_COVERAGE.length);

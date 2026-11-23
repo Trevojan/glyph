@@ -1,0 +1,15 @@
+[block'ORD-0041-series-bundle-rust'
+  [ref'EMS']
+  [drvf[ref'ORD-0040'],'the claim and the refusal this bundle runs']
+  [ctx'the Regent, 2026-11-22, CO-2: move it now. we need to move it little by little, otherwise we will not ever retire JS','.guidelines/.decisions/README.md, 2026-11-22']
+  [ctx'the skill calls an installed glyph and refuses by name where none is installed, J4 b of 2026-11-21','.guidelines/.orders/INTAKE-JS-EXIT.md, section 3']
+  [tgt'bundling into a series moves to the Rust binary: the plugin hands --bundle into a series to an installed glyph of its own version, and the coherence of ORD-0040 holds every Order the plugin bundles there']
+  [ins'have glyph-plugin.js run an installed glyph for --bundle into a series, found by GLYPH_BIN or the place the install writes, with the flags it was given']
+  [ins'refuse by name, with nothing written, where no glyph is found or the one found answers another version']
+  [ins'add --version to the binary, which answers the engine version and nothing else']
+  [ins'state in the bundle command that a series bundle runs the installed glyph, and that several Orders may be open at once']
+  [cnst'glyph-cli.js keeps its --bundle, the reference the command line oracle records, until the JS leaves']
+  [cnst'no hash of the snapshot moves; no crate enters']
+  [cnst'npm run check and npm run check:rust green']
+  [val'the plugin','a series bundle through glyph-plugin.js written by the Rust binary, its manifest carrying relates, and the two refusals by name, each seen failing before the code']
+];

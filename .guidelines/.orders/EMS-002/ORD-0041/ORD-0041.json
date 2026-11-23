@@ -1,0 +1,665 @@
+{
+  "type": "GlyphAST",
+  "schema": 3,
+  "version": "4.7.10.09",
+  "source": {
+    "length": 1560,
+    "checksum": "0efbcef65a87d200",
+    "encoding": "utf-8",
+    "newline": "lf",
+    "uri": null
+  },
+  "stores": {
+    "templates": "7356ea9b88319980",
+    "rules": "767e5432cdc6d400",
+    "expansions": "125235203224e180"
+  },
+  "projection": "full",
+  "segments": [
+    {
+      "type": "Segment",
+      "mood": [],
+      "isReturn": false,
+      "continues": false,
+      "breaks": 0,
+      "autoClosedCount": 0,
+      "body": [
+        {
+          "type": "Command",
+          "raw": "block",
+          "canonical": "BLOCK",
+          "tier": "struct",
+          "gloss": "Block",
+          "element": "block",
+          "isAlias": false,
+          "chainElement": false,
+          "origin": "root",
+          "slotName": false,
+          "editorial": false,
+          "name": null,
+          "depth": 0,
+          "autoClosed": false,
+          "suggestion": null,
+          "emotions": [],
+          "species": "atom",
+          "compositionDepth": 0,
+          "binds": "ORD-0041-series-bundle-rust",
+          "at": {
+            "s": 0,
+            "e": 6
+          },
+          "body": [
+            {
+              "type": "Literal",
+              "value": "ORD-0041-series-bundle-rust",
+              "form": "quote",
+              "slot": null,
+              "role": "operand",
+              "ref": null,
+              "at": {
+                "s": 6,
+                "e": 35
+              }
+            },
+            {
+              "type": "Command",
+              "raw": "ref",
+              "canonical": "REF",
+              "tier": "instr",
+              "gloss": "Reference",
+              "element": "reference",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 38,
+                "e": 42
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "EMS",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 42,
+                    "e": 47
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "drvf",
+              "canonical": "DRVF",
+              "tier": "instr",
+              "gloss": "Derive From",
+              "element": "derive-from",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "composite",
+              "compositionDepth": 2,
+              "binds": null,
+              "at": {
+                "s": 51,
+                "e": 56
+              },
+              "body": [
+                {
+                  "type": "Command",
+                  "raw": "ref",
+                  "canonical": "REF",
+                  "tier": "instr",
+                  "gloss": "Reference",
+                  "element": "reference",
+                  "isAlias": false,
+                  "chainElement": false,
+                  "origin": "nest",
+                  "slotName": false,
+                  "editorial": false,
+                  "name": null,
+                  "depth": 2,
+                  "autoClosed": false,
+                  "suggestion": null,
+                  "emotions": [],
+                  "species": "atom",
+                  "compositionDepth": 0,
+                  "binds": null,
+                  "at": {
+                    "s": 56,
+                    "e": 60
+                  },
+                  "body": [
+                    {
+                      "type": "Literal",
+                      "value": "ORD-0040",
+                      "form": "quote",
+                      "slot": null,
+                      "role": "operand",
+                      "ref": null,
+                      "at": {
+                        "s": 60,
+                        "e": 70
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Literal",
+                  "value": "the claim and the refusal this bundle runs",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "result",
+                  "ref": null,
+                  "at": {
+                    "s": 72,
+                    "e": 116
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 120,
+                "e": 124
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the Regent, 2026-11-22, CO-2: move it now. we need to move it little by little, otherwise we will not ever retire JS",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 124,
+                    "e": 242
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": ".guidelines/.decisions/README.md, 2026-11-22",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 243,
+                    "e": 289
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ctx",
+              "canonical": "CTX",
+              "tier": "instr",
+              "gloss": "Context",
+              "element": "context",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 293,
+                "e": 297
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the skill calls an installed glyph and refuses by name where none is installed, J4 b of 2026-11-21",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 297,
+                    "e": 397
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": ".guidelines/.orders/INTAKE-JS-EXIT.md, section 3",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 398,
+                    "e": 448
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "tgt",
+              "canonical": "TGT",
+              "tier": "instr",
+              "gloss": "Target",
+              "element": "target",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 452,
+                "e": 456
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "bundling into a series moves to the Rust binary: the plugin hands --bundle into a series to an installed glyph of its own version, and the coherence of ORD-0040 holds every Order the plugin bundles there",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 456,
+                    "e": 661
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 665,
+                "e": 669
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "have glyph-plugin.js run an installed glyph for --bundle into a series, found by GLYPH_BIN or the place the install writes, with the flags it was given",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 669,
+                    "e": 822
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 826,
+                "e": 830
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "refuse by name, with nothing written, where no glyph is found or the one found answers another version",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 830,
+                    "e": 934
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 938,
+                "e": 942
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "add --version to the binary, which answers the engine version and nothing else",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 942,
+                    "e": 1022
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "ins",
+              "canonical": "INS",
+              "tier": "instr",
+              "gloss": "Instruction",
+              "element": "instruction",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 1026,
+                "e": 1030
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "state in the bundle command that a series bundle runs the installed glyph, and that several Orders may be open at once",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1030,
+                    "e": 1150
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 1154,
+                "e": 1159
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "glyph-cli.js keeps its --bundle, the reference the command line oracle records, until the JS leaves",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1159,
+                    "e": 1260
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 1264,
+                "e": 1269
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "no hash of the snapshot moves; no crate enters",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1269,
+                    "e": 1317
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "cnst",
+              "canonical": "CNST",
+              "tier": "instr",
+              "gloss": "Constraint",
+              "element": "constraint",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "atom",
+              "compositionDepth": 0,
+              "binds": null,
+              "at": {
+                "s": 1321,
+                "e": 1326
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "npm run check and npm run check:rust green",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1326,
+                    "e": 1370
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Command",
+              "raw": "val",
+              "canonical": "VAL",
+              "tier": "instr",
+              "gloss": "Validate",
+              "element": "validate",
+              "isAlias": false,
+              "chainElement": false,
+              "origin": "nest",
+              "slotName": false,
+              "editorial": false,
+              "name": null,
+              "depth": 1,
+              "autoClosed": false,
+              "suggestion": null,
+              "emotions": [],
+              "species": "composite",
+              "compositionDepth": 5,
+              "binds": null,
+              "at": {
+                "s": 1374,
+                "e": 1378
+              },
+              "body": [
+                {
+                  "type": "Literal",
+                  "value": "the plugin",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1378,
+                    "e": 1390
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "value": "a series bundle through glyph-plugin.js written by the Rust binary, its manifest carrying relates, and the two refusals by name, each seen failing before the code",
+                  "form": "quote",
+                  "slot": null,
+                  "role": "operand",
+                  "ref": null,
+                  "at": {
+                    "s": 1391,
+                    "e": 1555
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "diagnostics": [
+    {
+      "code": "UnboundReference",
+      "severity": "ask",
+      "label": "unbound reference",
+      "message": "EMS is referenced and never bound. External input, or a missing binding?"
+    },
+    {
+      "code": "UnboundReference",
+      "severity": "ask",
+      "label": "unbound reference",
+      "message": "ORD-0040 is referenced and never bound. External input, or a missing binding?"
+    }
+  ]
+}

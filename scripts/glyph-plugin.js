@@ -8,8 +8,8 @@
  * A slash command cannot do three things the CLI needs: hand over a source that
  * carries quotes, newlines and `;` without a shell mangling it; know where THIS
  * repository keeps its `.guidelines/`; and turn `ORD-0011` into the file it
- * names. This script does exactly those three and nothing else, then calls
- * `glyph-cli.js` with `--file`. The engine stays untouched: everything here is
+ * names. This script does exactly those three, then calls `glyph-cli.js` with
+ * `--file` — or, for a bundle into a series, the installed Rust `glyph`. The engine stays untouched: everything here is
  * glue between a `commands/*.md` leaf and the CLI it already has.
  *
  *   source     stdin, always (a quoted heredoc from the leaf). Blank stdin
@@ -24,6 +24,11 @@
  *              its path first — so a later step can `--from` it without the
  *              source travelling through a model.
  *   --bundle   without `--out`, the resolved `.orders/` becomes the `--out`.
+ *              Into a series, `EMS-###/`, the bundle is the Rust binary's
+ *              (EMS-002 ORD-0041, CO-2 of 2026-11-22): an installed `glyph` of
+ *              this version — GLYPH_BIN, or the place `glyph --install` writes —
+ *              runs it with the same flags, and checks the Order's claim before
+ *              it writes; with none, the plugin refuses by name (J4 b).
  *
  * Claude Code escapes `!` after whitespace in a command's arguments (`\!`);
  * Glyph never writes `\!`, so the escape is undone here.
@@ -31,11 +36,13 @@
 
 "use strict";
 
+import cp from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { main } from "./glyph-cli.js";
+import { VERSION } from "./core/version.js";
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const CLI = path.join(HERE, "glyph-cli.js");
@@ -102,6 +109,29 @@ if (engine.includes("--bundle") && !engine.includes("--out")) {
   const g = guidelines();
   if (!g) die("--bundle sem --out, e nenhum .guidelines/ em " + root);
   engine.push("--out", path.join(g, ".orders"));
+}
+
+/* the installed glyph a series bundle runs: GLYPH_BIN, or the place the
+   install writes; refused by name when it is missing or another version */
+function installed() {
+  const local = process.env.LOCALAPPDATA;
+  const bin = process.env.GLYPH_BIN ||
+    (process.platform === "win32" && local ? path.join(local, "Programs", "Glyph", "glyph.exe") : null);
+  const why = "bundling into a series runs the installed glyph, version " + VERSION + " (EMS-002 ORD-0041)";
+  if (!bin) die(why + ": none is installed on " + process.platform + ", and GLYPH_BIN is not set. Nothing written.");
+  if (!fs.existsSync(bin)) die(why + ": " + bin + " does not exist. Install it with glyph --install, or set GLYPH_BIN. Nothing written.");
+  const asked = cp.spawnSync(bin, ["--version"], { encoding: "utf8" });
+  const said = String(asked.stdout || "").trim();
+  if (asked.status !== 0 || said !== VERSION)
+    die(why + ": " + bin + " answers " + (/^\d+(\.\d+)+$/.test(said) ? said : "no version") +
+        ". Install this version with glyph --install, or set GLYPH_BIN. Nothing written.");
+  return bin;
+}
+
+const out = engine.indexOf("--out") >= 0 ? engine[engine.indexOf("--out") + 1] : null;
+if (engine.includes("--bundle") && out && /^EMS-\d{3}$/.test(path.basename(path.resolve(out)))) {
+  const run = cp.spawnSync(installed(), ["--file", file, ...engine], { stdio: "inherit" });
+  process.exit(run.status == null ? 1 : run.status);
 }
 
 /* glyph-cli.main() reads process.argv and guards on argv[1], so it did not run

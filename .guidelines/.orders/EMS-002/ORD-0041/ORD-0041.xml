@@ -1,0 +1,78 @@
+<glyph-package engine="4.7.10.09">
+  <schema>
+    <declares kind="block" name="ORD-0041-series-bundle-rust"/>
+  </schema>
+  <configuration of="EMS-002" digest="06e60f4f1cfb0e00" engine="4.7.10.09">{
+  "id": "EMS-002",
+  "title": "o Glyph 100% em Rust",
+  "xsd": [
+    {
+      "kind": "block",
+      "name": "ORD-####-…"
+    }
+  ],
+  "engine": "4.7.10.09",
+  "conventions": [],
+  "rules": [],
+  "exceptions": [],
+  "pins": [],
+  "traffic": {},
+  "invoke": {
+    "skills": [],
+    "actions": []
+  }
+}</configuration>
+  <block once="true">
+    <block name="ORD-0041-series-bundle-rust" binds="ORD-0041-series-bundle-rust">
+      <reference>
+        <user-input>EMS</user-input>
+        <needs var="EMS">referenciado e nunca ligado</needs>
+      </reference>
+      <derive-from>
+        <invoke reads="[RTNL-RWK[MAND-NEQ],[CTX[GO-SWITCH]]]" species="composite" depth="2"/>
+        <reference>
+          <user-input>ORD-0040</user-input>
+          <needs var="ORD-0040">referenciado e nunca ligado</needs>
+        </reference>
+        <user-input role="result">the claim and the refusal this bundle runs</user-input>
+      </derive-from>
+      <context>
+        <user-input>the Regent, 2026-11-22, CO-2: move it now. we need to move it little by little, otherwise we will not ever retire JS</user-input>
+        <user-input>.guidelines/.decisions/README.md, 2026-11-22</user-input>
+      </context>
+      <context>
+        <user-input>the skill calls an installed glyph and refuses by name where none is installed, J4 b of 2026-11-21</user-input>
+        <user-input>.guidelines/.orders/INTAKE-JS-EXIT.md, section 3</user-input>
+      </context>
+      <target>
+        <user-input>bundling into a series moves to the Rust binary: the plugin hands --bundle into a series to an installed glyph of its own version, and the coherence of ORD-0040 holds every Order the plugin bundles there</user-input>
+      </target>
+      <instruction>
+        <user-input>have glyph-plugin.js run an installed glyph for --bundle into a series, found by GLYPH_BIN or the place the install writes, with the flags it was given</user-input>
+      </instruction>
+      <instruction>
+        <user-input>refuse by name, with nothing written, where no glyph is found or the one found answers another version</user-input>
+      </instruction>
+      <instruction>
+        <user-input>add --version to the binary, which answers the engine version and nothing else</user-input>
+      </instruction>
+      <instruction>
+        <user-input>state in the bundle command that a series bundle runs the installed glyph, and that several Orders may be open at once</user-input>
+      </instruction>
+      <constraint>
+        <user-input>glyph-cli.js keeps its --bundle, the reference the command line oracle records, until the JS leaves</user-input>
+      </constraint>
+      <constraint>
+        <user-input>no hash of the snapshot moves; no crate enters</user-input>
+      </constraint>
+      <constraint>
+        <user-input>npm run check and npm run check:rust green</user-input>
+      </constraint>
+      <validate>
+        <invoke reads="[CMP-CTX[CNST]][SUB[EQ[CMP-CTX]]][CAT-EQ]" species="composite" depth="5"/>
+        <user-input>the plugin</user-input>
+        <user-input>a series bundle through glyph-plugin.js written by the Rust binary, its manifest carrying relates, and the two refusals by name, each seen failing before the code</user-input>
+      </validate>
+    </block>
+  </block>
+</glyph-package>

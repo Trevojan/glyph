@@ -244,6 +244,11 @@ fn cli(argv: Vec<String>) {
             }
             "--bundle" => bundle = true,
             "--zip" => zip = true,
+            // the version a plugin asks before it hands a bundle over (EMS-002 ORD-0041)
+            "--version" => {
+                o.log(glyph_version::VERSION);
+                o.exit(0);
+            }
             // the coherence between Orders, the Rust's alone (EMS-002 ORD-0040)
             "--check" => {
                 let (said, code) = coherence::check(argv.get(i + 1).map_or("", String::as_str));
