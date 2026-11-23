@@ -8,6 +8,13 @@
 > conclusion as §4 before seeing it, which is noted where it lands.
 >
 > Formal treatment — structures, costs, invariants — in `INTAKE-FORMAL-ANALYSIS.md` §2.
+>
+> Step 3 of the trail is built on 2026-11-22 as [`EMS-002/ORD-0040`](EMS-002/README.md),
+> in the Rust alone (C5 b): the claim read from the AST, `relates` in the manifest of the
+> Rust `--bundle` and its refusal on a mismatch, and `glyph --check` over `.orders/` in
+> `npm run check`. Step 4, `repair` as a queue, is built on 2026-11-22 as
+> [`EMS-002/ORD-0042`](EMS-002/README.md), by the Regent's answers of that day (§12): `glyph --repair`
+> for the Harness. §13 holds CO-1 measured and CO-4 asked again, and §14 what ORD-0042 left.
 
 ## 1. Between Orders — nothing. Not even informal.
 
@@ -230,3 +237,110 @@ In [`.decisions/`](../.decisions/README.md), round of 2026-11-21, from the sheet
 | C3 | b | the `repair` queue is one file per series, beside its `EMS.json`: each finding names the Order, what did not match and the move it proposes, and `repair` asks through it one Order at a time |
 | C4 | a | `.orders/NEM/` is made by the first loose Order emitted into it |
 | C5 | b | the Rust alone extracts `relates[]` and runs the check; the JS does neither |
+
+## 12. The answers to the questions `ORD-0040` left — 2026-11-22
+
+In [`.decisions/`](../.decisions/README.md), round of 2026-11-22. RP-1 to RP-4 shape step 4,
+`repair` as a queue; CO-1 to CO-5 were the points `EMS-002/ORD-0040` did not decide.
+
+| | answer | what it builds |
+|---|---|---|
+| RP-1 | b | `--bundle` refuses a claim that does not match, as `ORD-0040` built it, and the refusal offers `repair` as an option; the queue takes what `glyph --check` finds in Orders already written |
+| RP-2 | a | a moved Order adapts to the series it lands in: the destination's next number, its five files, the manifest's `order` and the block name the series declares; the move always warns, for the Regent to confirm |
+| RP-3 | both | the Harness repairs through `glyph --repair`, built first; the Regent through the Explorer. An MCP for the Harness germinates here, a line of [`STUDY.md`](../.sources/STUDY.md) |
+| RP-4 | b | every finding proposes a destination; a misplaced ORD or EMS is a software mistake, kept in a category of its own and listed whole, and the user says where each goes through the Explorer's `-Repair-` menu, [`.ux/explorer/`](../.ux/explorer/README.md) |
+| CO-1 | investigate | measured in §13 |
+| CO-2 | now | bundling into a series moves to the Rust binary now, by J4 b: the plugin calls an installed `glyph` and refuses by name where none is installed |
+| CO-3 | keep | `ORD-0040` holds itself; the suggestion the Regent invited is in §13 |
+| CO-4 | asked again | §13 |
+| CO-5 | a state update | the `EMS.json` row of `GLOSSARY.md` §8 names `ems-schema.json` |
+
+`Move to category`, one of the `-Repair-` options, moves an Order among the three categories
+the Regent set the same day; how they are kept is
+[`INTAKE-ORDER-STATES.md`](INTAKE-ORDER-STATES.md)'s.
+
+## 13. CO-1 measured, the suggestion for CO-3, and CO-4 asked again — 2026-11-22
+
+### CO-1 — the diagnostic a claim raises
+
+Measured at engine 4.7.10.09 over the working tree of 2026-11-22.
+
+| | |
+|---|---|
+| what a claim raises today | `ask UnboundReference`, from `unboundRefs` in `parser.js` and its port in `glyph-parse`: `EMS`, `nem` and `ORD-####` are name-shaped literals under `REF` that nothing binds (`EMS-002/ORD-0015`) |
+| what the XML carries for it | `<needs var="EMS">` beside the literal: the package says it **needs** something it in fact claims |
+| a claim that points outside its directory, `EMS-001/ORD-0001` | asks nothing: the slash makes it no name |
+| sources of the suite, the snapshot, the conformance and the testkit that carry a claim | 0 |
+| Orders that carry one | 1, `EMS-002/ORD-0040`, an act that stays as emitted |
+
+So no hash moves whichever answer is given; only the probes a new diagnostic adds.
+
+**CL-1. What a claim raises in place of `ask UnboundReference`.**
+- a. a `note` of its own, `OrderClaim`, one per claim, naming what it claims — the series, a loose Order, or an Order of its own directory — and that `--bundle` and `glyph --check` answer it; no `<needs>` in the XML
+- b. nothing: the claim is checked where it can be answered, at `--bundle` and by `glyph --check`
+- c. the `ask` stays, with words of its own for a claim
+
+**CL-2. In which engine.**
+- a. both, the JS first: the parser is the JS's too while the app reads it, and the parse oracle holds the two together
+- b. the Rust only, named as a known difference in the testkit, as the walk towards Rust of D5 b and C5 b
+
+**The session's recommendation:** CL-1 a, CL-2 a. A note says what the parse cannot check
+and where it is checked, which an `ask` asks of nobody; and a parse diagnostic that differs
+between the engines is a known difference in five oracle modules, not one.
+
+### CO-3 — the suggestion
+
+`HELD_FROM` is a moment written in the code: in a user's repository, where `ORD-0040` never
+existed, it still means "bundled after 2026-11-22T20:06:46Z". Once CO-2 moves series bundling
+to the Rust, every bundle the Rust writes can carry `relates`, an empty list when the source
+makes no claim, and the check can hold exactly the bundles whose manifest carries `relates`:
+a fact of the bundle itself, with no moment in the code. `ORD-0040`'s manifest, written by
+the JS, carries no `relates`, so it would be the one Order held by name. Offered, not built:
+it changes every series bundle the CLI oracle records, a known difference of the Rust.
+
+### CO-4 — whether `deprecated` supersedes, with its detail
+
+An Order can point at another Order in two families of ways:
+
+- **pointing**: `[drvf]` *derives from*, `[seeal]` *see also*, a bare `[ref]`. "I build on X",
+  "X is related". A cycle here is harmless: `ORD-0002` sees also `ORD-0003`, and `ORD-0003`
+  sees also `ORD-0002`.
+- **replacing**: `[ovr]` *overrides*, "where we disagree, I win over X"; `[instof]` *instead
+  of*, "use me in place of X". A cycle here is a contradiction: `ORD-0002` replaces
+  `ORD-0003` and `ORD-0003` replaces `ORD-0002`, and nobody can say which one is in force.
+  `glyph --check` refuses it, `SupersessionCycle`.
+
+`[depr]` *deprecated* sits between the two. Its formula, `[AVD[GO]],[OPT[REF[INSTOF]]]`,
+reads "avoid going on with X; optionally, refer to what replaces it": it retires X, and may
+or may not name the replacement. `ORD-0040` put it with the replacing family, so
+`ORD-0002` deprecating `ORD-0003` while `ORD-0003` deprecates `ORD-0002` is refused too.
+
+It matters for rework: a rework Order corrects a closed Order, and the claim it writes to
+say so is one of the replacing kinds.
+
+**CO-4. Is `deprecated` a replacing kind?**
+- a. yes, as built: two Orders that deprecate each other are refused as a cycle
+- b. no, it points: an Order may deprecate one that deprecates it, and only `override` and `instead-of` make the refused cycle
+
+**The session's recommendation:** a. Two Orders that each retire the other leave neither in
+force, which is the contradiction the check exists to refuse.
+
+## 14. What `EMS-002/ORD-0042` left — 2026-11-22
+
+`glyph --repair` is built for the Harness (RP-3), all of the `-Repair-` menu but two options.
+
+**RQ-1. A closed Order in the queue.** The queue holds Orders bundled from `ORD-0040` on, and
+some of them close: `ORD-0040` to `ORD-0042` are closed in the working tree. Until the
+categories of [`INTAKE-ORDER-STATES.md`](INTAKE-ORDER-STATES.md) are kept, the binary cannot
+tell a closed Order from an open one, so a move or a removal warns that it rewrites the Order,
+and the Regent's confirmation is the only guard.
+- a. so it stays until the categories exist; then `repair` refuses to move or remove a closed Order, and offers *rework* instead
+- b. `repair` reads the series register's *Ordens fechadas* now, and refuses what it lists
+
+**RQ-2. What *Add to EMS* does**, offered only for an ORD.
+- a. it moves a loose ORD into a series the user picks, as *Move to...* does — so it is *Move to...* filtered to the series
+- b. it keeps the ORD where it is and writes it into the series' spec, so the series answers for it without a move
+- c. something else, in the Regent's words
+
+**The session's recommendation:** RQ-1 a, RQ-2 a. A closed Order is an act, and a rework is
+how a closed Order is corrected; and the only thing a series answers for is what lies in it.

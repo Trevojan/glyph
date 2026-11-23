@@ -17,6 +17,7 @@
 | does the mini-repo of virtual paths reduce re-reading? | the re-read rate and the round-trips to first edit, against the 13-session baseline | the protocol of [`INTAKE-VIRTUAL-PATH.md`](../.orders/INTAKE-VIRTUAL-PATH.md) §8.1, stamped 2026-09-11 before counting | **owed, held**: the transcripts of the sessions after 2026-10-23 live in `~/.claude/projects/` on the Regent's machine; kept owed by the Regent, 2026-11-18 | [`INTAKE-VIRTUAL-PATH.md`](../.orders/INTAKE-VIRTUAL-PATH.md) §8 and §16 |
 | does an MCP transport buy what a file does not? | the third arm of §16 | none written | **owed, held**: no MCP resources transport exists; kept owed by the Regent, 2026-11-18 | [`INTAKE-VIRTUAL-PATH.md`](../.orders/INTAKE-VIRTUAL-PATH.md) §16 |
 | what must be measured before the context objects are designed? | what the engine's generated XSD declares, applied to the XML's content | none written | **held**: it waits for the XSD of step 1 of the trail ([`INTAKE-XSD.md`](../.orders/INTAKE-XSD.md)), by the Regent's word of 2026-11-18 | [`INTAKE-EFFECTS.md`](../.orders/INTAKE-EFFECTS.md) §9, the second order |
+| does an MCP server let the Harness repair, bundle and check better than the command line? | what the Harness does through `glyph --repair` and `glyph --check` once they exist, against what a server would add | none written | **germinating**: the Regent, 2026-11-22, RP-3: the command line comes first, and *"this starts germinating the idea of an MCP"* | [`INTAKE-ORDER-COHERENCE.md`](../.orders/INTAKE-ORDER-COHERENCE.md) §12 |
 
 ## Measured
 

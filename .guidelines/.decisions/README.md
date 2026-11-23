@@ -13,6 +13,31 @@
 
 ---
 
+## 2026-11-22
+
+The Regent's answers to the questions `/regency:proceed` left after building
+`EMS-002/ORD-0040`, RP-1 to RP-4 and CO-1 to CO-5
+([`INTAKE-ORDER-COHERENCE.md`](../.orders/INTAKE-ORDER-COHERENCE.md) §12), and two
+rules of his own. In force.
+
+| decision | reason |
+|---|---|
+| **A claim that does not match is refused at `--bundle`, as `ORD-0040` built it, and the refusal offers `repair` as an option; the queue takes what `glyph --check` finds in Orders already written** (RP-1 b) | *"b, "repair" needs to be an option"* |
+| **A moved Order adapts to the series it lands in — the destination's next number, its five files, the manifest's `order` and the block name the series declares — and the move always warns, for the Regent to confirm** (RP-2 a) | *"a, it adapts the ORD to fit the landing EMS and always warns about it for the Regent to confirm"* |
+| **Both the Harness and the Regent repair: the Harness through the command line, `glyph --repair`, which comes first, and the Regent through the Explorer** (RP-3) | *"both the Harness and the Regent may do it, and allowing the Harness to go through CLI is faster approach. this starts germinating the idea of an MCP"*. The MCP is a line of [`STUDY.md`](../.sources/STUDY.md) |
+| **Every finding proposes a destination; a misplaced ORD or a misplaced EMS is a software mistake, kept in a category of its own and listed whole, and the user says where each one goes, through the Explorer's `-Repair-` menu** (RP-4 b) | *"b, but "misplaced ORD" or "misplaced EMS" are software mistakes and must isolate in a category, listing all finding in a list and allowing the final user to specify where to move it"*. The menu, in his words, is in [`.ux/explorer/`](../.ux/explorer/README.md) |
+| **A claim gets a diagnostic of its own, to be measured and proposed, in place of `ask UnboundReference`** (CO-1) | *"hmm... must investigate. maybe an specific warning for the situations fits better than "ask UnboundReference""*. Measured in [`INTAKE-ORDER-COHERENCE.md`](../.orders/INTAKE-ORDER-COHERENCE.md) §13 |
+| **Bundling into a series moves to the Rust binary now, not at the JS exit** (CO-2) | *"move it now. we need to move it little by little, otherwise we won't ever retire JS"*. It applies J4 b of 2026-11-21: the skill calls an installed `glyph` and refuses by name where none is installed |
+| **`glyph --check` holds `ORD-0040` itself, the first Order to make a claim** (CO-3) | *"keep it, by i do accept suggestions"*. The session's suggestion is in §13 of the intake |
+| **The `EMS.json` row of [`GLOSSARY.md`](../.sources/GLOSSARY.md) §8 states the format, `ems-schema.json`** (CO-5) | *"must be treated as STALE from what i know. a simple state update should solve it"* |
+| **Several Orders may be open at once, as many as the work allows while none waits on a blocking question.** Replaces the rule of exactly one open Order (2026-09-24, [`.constraints/`](../.constraints/README.md)) and the open-slot rows of 2026-11-20 and 2026-11-21 | *"the convention rule of only one ORD open at a time must be revisited. a better strategy is to work on how many ORDs are possible as long as no blocking questions are met"*. What the rule keeps and what it drops is measured in [`INTAKE-ORDER-STATES.md`](../.orders/INTAKE-ORDER-STATES.md) |
+| **The Orders of a series and of `NEM` are kept in three categories — open, being worked on; closed, finished and not worked on again; rework, in the queue as a correction to a closed Order — and the same three apply to Emissions** | *"the NEM's and EMS's Orders must be separated in 3 categories for better adoption of sudden changes ("open" -> ORD is open and being worked on; "closed" -> the ORD is treated as finished and won't be worked on; "rework" -> this ORD is in the queue as a correction to an already closed Order; the same categories apply to Emissions)"*. How they are kept is [`INTAKE-ORDER-STATES.md`](../.orders/INTAKE-ORDER-STATES.md)'s to propose |
+
+CO-4, whether `deprecated` supersedes, is asked again with its detail in
+[`INTAKE-ORDER-COHERENCE.md`](../.orders/INTAKE-ORDER-COHERENCE.md) §13.
+
+---
+
 ## 2026-11-21
 
 The Regent's answers to the 54 questions of the sheet
@@ -46,6 +71,7 @@ intake holds its answers in a section of its own. In force.
 | **A loose Order's front-matter, with its positions, enters what `--bundle` emits** (V4, the question it left) | *"b."*, asked after the sheet. `EMS-003/ORD-0006` is emitted again as its version 3 to say it; the shape of the field is still that Order's to measure and bring back |
 | **The envelope's `schema` is 3: `binds` and `ref` are required keys of `ast-schema.json`** | *"I ratify"*, over the session's decision while building `EMS-003/ORD-0003` |
 | **The version does not move with `EMS-003/ORD-0002` and `ORD-0003`; the batch moves it once when it closes** | *"I ratify"*, over the session's decision, by the rule of 2026-10-25 |
+| **After `EMS-003/ORD-0005`, the open slot goes to step 1 of the trail, the XSD, its JS validator's Order first; `/regency:proceed` builds both and commits nothing, and the Regent runs the commit cycle when they are done** | *"good idea, go on with it. when finished, i'll run commiting command."*, to the session's recommendation: step 1 unblocks steps 2, 3, 4, 8, 10 and 11, and through them `EMS-003/ORD-0006`. `ORD-0004` closes in the working tree, and its commit is the cycle's |
 | **The icon generator of `EMS-003/ORD-0002` is Rust: a tool crate, `glyph-icons`, run by `npm run check` as `glyph-vpath` is** | *"Rust"*, asked in the session after the close of `ORD-0001`, since J1 b takes the repository's tooling out of the JS too. No new JS script enters to leave later; the page reads what the crate writes |
 | **`EMS-003/ORD-0002` keeps the open slot; the queue may be renumbered where its order needs fixing, and a workaround is welcome so long as each ORD keeps its goal and the detail of its instructions** | *"keep the way it is, renumber if needed to fix the queue. workarounds are welcome, as long as the ORDs maintain their goal and instructions' detail."* The answered engine Orders — the XSD, `BURN-FENCES`, `DIAG-SPANS` — wait for the slot behind it |
 

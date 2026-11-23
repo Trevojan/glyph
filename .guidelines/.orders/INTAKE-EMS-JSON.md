@@ -5,8 +5,10 @@
 > holds are ratified (2026-10-15, [`.decisions/`](../.decisions/README.md)); the rest is
 > built *with* the Regent — *"let's build it together"* — so this file lists what is
 > ratified, measures the series as they stand, and asks what is left. The Regent answered
-> §4 on 2026-11-21, and §5 holds the answers. The Order opens after step 1, the XSD
-> ([`INTAKE-XSD.md`](INTAKE-XSD.md)).
+> §4 on 2026-11-21, and §5 holds the answers. Step 2's first Order,
+> [`EMS-002/ORD-0038`](EMS-002/README.md), is built: the schema, the JS check, the
+> configuration in the bundle, and the three drafts; its second, `ORD-0039`, carries the
+> same into the Rust binary.
 > Measured at `5685486`.
 
 ## 1. What is ratified

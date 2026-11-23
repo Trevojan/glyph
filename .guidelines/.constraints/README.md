@@ -26,7 +26,7 @@
 | **Um agente não ratifica norma que escreveu** | |
 | **O desnecessário de custo médio se pula, como requisito não funcional** | *"if unnecessary and mid cost, skip it like a nonfunctional requirement."* — o Regente, 2026-10-16. Desnecessário se mede: o item é desnecessário quando nada medido ou ratificado o pede. Um item necessário fica, seja qual for o custo. Cada item pulado leva uma linha de razão onde ele estava na fila |
 | **O mais simples suficiente** | antes de construir, parar no primeiro degrau que resolve, e escrever numa linha qual degrau mais simples foi recusado e por quê; o desnecessário de custo médio se pula, e validação numa fronteira de confiança, erro que perde dado, segurança e acessibilidade nunca contam como desnecessários |
-| **Uma ordem aberta é imutável salvo por versão** | e duas ordens concorrentes são proibidas — por isso o material novo vira *intake* |
+| **An open Order is immutable save by version, and several may be open at once while none waits on a blocking question** | the Regent, 2026-11-22, replacing *exactly one open*; what arrives while an Order is open becomes an *intake*, and what else the rule keeps is asked in [`INTAKE-ORDER-STATES.md`](../.orders/INTAKE-ORDER-STATES.md) §3 |
 
 ## Da escrita
 

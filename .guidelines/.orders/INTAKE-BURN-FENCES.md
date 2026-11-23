@@ -2,8 +2,8 @@
 
 > **The measured proposal for the two burns `H-16` names as known**, `OC-12` and `R-04`,
 > left outside [`INTAKE-BURN-PLACEHOLDER.md`](INTAKE-BURN-PLACEHOLDER.md) §4. The Regent
-> answered §4 on 2026-11-21, and §5 holds the answers. The Order opens with them once the
-> open slot is free. Measured at `46f47e5`, engine 4.7.10.09, with an
+> answered §4 on 2026-11-21, and §5 holds the answers. The Order is built, in the Rust only,
+> as [`EMS-002/ORD-0045`](EMS-002/README.md) on 2026-11-22. Measured at `46f47e5`, engine 4.7.10.09, with an
 > experimental patch applied to `scripts/core/burn.js` and taken back out. Nothing of it
 > is committed.
 

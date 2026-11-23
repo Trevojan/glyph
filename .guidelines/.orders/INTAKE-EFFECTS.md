@@ -390,3 +390,5 @@ In [`.decisions/`](../.decisions/README.md), round of 2026-11-21, from the sheet
 | I2 | a | `x` is the root's own name where it has one |
 | I3 | a | written as an attribute `origin`, on the root and on each item; `join="item"` stays |
 | I4 | a | two digits, three past 99 |
+
+Built on 2026-11-22 as [`EMS-002/ORD-0043`](EMS-002/README.md), in both engines: the six declared sources with items moved their `xml` hash, where §11 counted seven at `5685486`, and E-06 is in `conformance/`.

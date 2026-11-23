@@ -6,8 +6,9 @@
 > divergence at `fix` ([`INTAKE-EFFECTS.md`](INTAKE-EFFECTS.md) §8.1, the Regent on
 > 2026-11-07). This file measures what the engine emits and asks what the norm leaves to
 > decide. The Regent answered §4 on 2026-11-21, and §5 holds the answers: the step is
-> two Orders, one per engine's validator, and the first opens once the open slot is free.
-> Measured at `5685486`.
+> two Orders, one per engine's validator, both built on 2026-11-21: [`EMS-002/ORD-0036`](EMS-002/README.md),
+> the generator in both engines and the JS validator with the gate over `.orders/`, and
+> `ORD-0037`, the Rust validator. Measured at `5685486`.
 
 ## 1. What the engine emits today
 

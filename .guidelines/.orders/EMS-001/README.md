@@ -6,6 +6,8 @@ A spec é [`EMS-001.pgml`](EMS-001.pgml), as razões estão em
 que corre a fila é [`RETURN.md`](RETURN.md). Cada ORD é uma pasta `ORD-####/`
 com o pacote que o `--bundle` escreve, e a contagem é desta série.
 
+The series' configuration is [`EMS.json`](EMS.json), drafted by the session on 2026-11-21 from what the series declares (the Regent's E5 a): it waits for the Regent to read it, and `--bundle` carries it into every Order bundled here from now on.
+
 ## A Ordem aberta
 
 Nenhuma: a série fechou com a `ORD-0014`, em 2026-11-07, e fica como o registro do

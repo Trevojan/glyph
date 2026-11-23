@@ -4,8 +4,8 @@
 > **commissions**: it says what is to be done, under which constraints, and which deliverables come back.
 >
 > **An open Order is immutable except by version.** New material that arrives while an Order is open
-> becomes *intake*, never an amendment. **Two concurrent Orders are forbidden:** exactly one stays open at
-> a time.
+> becomes *intake*, never an amendment. **Several Orders may be open at once**, as many as the work allows
+> while none waits on a blocking question (the Regent, 2026-11-22; [`INTAKE-ORDER-STATES.md`](INTAKE-ORDER-STATES.md)).
 
 ## Numbering
 
@@ -24,9 +24,10 @@ EMS-###/ORD-####/ORD-####.{pgml,xml,json,hgml,manifest.json}
 
 > One, or none. If there are two, one of them is wrong.
 
-It is named in the register of its series: [`EMS-003/README.md`](EMS-003/README.md),
+Each is named in the register of its series: [`EMS-003/README.md`](EMS-003/README.md),
 *The open Order*. An Order emitted and waiting its turn sits in the `queued/` folder
-of its series, out of the open slot.
+of its series. The three categories the Regent set on 2026-11-22 — open, closed and
+rework — are proposed in [`INTAKE-ORDER-STATES.md`](INTAKE-ORDER-STATES.md) §4.
 
 ## Closed Orders
 

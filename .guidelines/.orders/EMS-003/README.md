@@ -10,7 +10,7 @@ The series' configuration is [`EMS.json`](EMS.json), drafted by the session on 2
 
 ## The open Order
 
-- [`EMS-003/ORD-0004`](ORD-0004/ORD-0004.xml) — the 2D view, read only: icons, frames and links told apart by type, tied to the source, carrying the diagnostics, walked from the keyboard, on a surface of its own beside the source (V7 b); open since 2026-11-21
+No Order of the series is open. `ORD-0006` waits for steps 2, 3 and 11 of the trail; steps 1 to 3 are built in [`EMS-002`](../EMS-002/README.md), and step 11 waits for step 4.
 
 ## The queue
 

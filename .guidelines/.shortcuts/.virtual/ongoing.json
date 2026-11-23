@@ -1,7 +1,7 @@
 {
   "_about": "Registro do trabalho dos agentes: o primeiro relance ao voltar a este repositório. Aponta, nunca copia. O modelo é o do toolkit Regency, library/virtualpath.md §3; o detalhe de cada item mora no source.",
   "schema": 1,
-  "updated": "2026-11-21",
+  "updated": "2026-11-22",
   "items": [
     {
       "id": "PLAN-1",
@@ -24,35 +24,52 @@
     {
       "id": "EMS-003-2D-VIEW",
       "title": "the 2D view: a package as icons on a plane, edited by its visible links",
-      "state": "ongoing",
+      "state": "review",
       "who": "DV",
       "since": "2026-11-21",
       "source": ".decisions/README.md, 2026-11-11",
       "where": [
-        "order:EMS-003/ORD-0004",
-        ".guidelines/.orders/INTAKE-2D-VIEW.md",
         ".guidelines/.orders/EMS-003/EMS-003.pgml",
-        ".scope/asset/glyph-icons"
+        ".guidelines/.orders/INTAKE-2D-VIEW.md",
+        ".scope/asset/glyph-icons",
+        "glyph-engine-alias.html",
+        "glyph-engine.css",
+        "order:EMS-003/ORD-0005",
+        "scripts/glyph-edit.js",
+        "scripts/glyph-plane.js",
+        "scripts/glyph-ui.js"
       ],
-      "next": "ORD-0001 to ORD-0003 closed on 2026-11-21: the signed model, the icons (glyph-icons), and the graph (binds and ref in the envelope, schema 3; scripts/glyph-graph.js); ORD-0004, the read-only view, holds the open slot: a surface of its own beside the source (V7 b), drawn from graphOf, tied to the source, marks on the plane, walked from the keyboard; the schema move and the version waiting for the batch await the Regent's ratification"
+      "next": "ORD-0004 and ORD-0005 closed in the working tree on 2026-11-21 by /regency:proceed (glyph-plane.js and glyph-edit.js, PL-01 to PL-08 and ED-01 to ED-04, measured in Edge), not committed; ORD-0006 waits for steps 2, 3 and 11 of the trail. Waits for the Regent's review and the cycle's commit"
     },
     {
       "id": "EFF-8",
       "title": "os objetos de contexto, segunda ordem dos efeitos",
-      "state": "blocked",
-      "next": "a fronteira de item está dada pelo Regente (o XSD gerado aplicado ao conteúdo do XML); falta a medição que a segunda ordem exige antes do desenho, e nenhum instrumento está escrito",
-      "source": ".orders/INTAKE-EFFECTS.md §8.1 e §9",
-      "blocked_by": "XSD-GATE: the instrument measures against what the engine's generated XSD declares, once step 1 of the trail builds it (the Regent, 2026-11-18)"
+      "state": "backlog",
+      "next": "step 1 of the trail is built (EMS-002/ORD-0036 and ORD-0037, 2026-11-21): the schema the engine writes declares what an Order holds, which is what the instrument of the context objects measures against; the instrument is still to write",
+      "source": ".orders/INTAKE-EFFECTS.md §8.1 e §9"
     },
     {
       "id": "XSD-GATE",
       "title": "o portão do XSD: gerado pelo motor, e conferido contra o XML",
-      "state": "backlog",
-      "next": "the Regent answered X1 to X6 on 2026-11-21 (INTAKE-XSD.md §5): two Orders, the JS validator first and the Rust one after, the gate over every bundle under .orders/ in npm run check with a log under .orders/; the first opens once the open slot is free",
+      "state": "review",
+      "next": "EMS-002/ORD-0036 and ORD-0037 built by /regency:proceed on 2026-11-21 in the working tree, not committed: the schema in both engines (37 xml hashes), the gate in both fromXML, glyph-check --gate over .orders with GATE.json; waits for the Regent's review and the cycle's commit",
       "source": ".orders/INTAKE-EFFECTS.md §8.1",
       "where": [
-        ".guidelines/.orders/INTAKE-XSD.md"
-      ]
+        ".guidelines/.orders/GATE.json",
+        ".guidelines/.orders/INTAKE-XSD.md",
+        "order:EMS-002/ORD-0036",
+        "order:EMS-002/ORD-0037",
+        "rust/crates/glyph-inverse/src/lib.rs",
+        "rust/crates/glyph-inverse/tests/schema.rs",
+        "rust/crates/glyph-util/src/lib.rs",
+        "rust/crates/glyph-xml/src/lib.rs",
+        "scripts/core/emit-xml.js",
+        "scripts/core/inverse.js",
+        "scripts/core/util.js",
+        "scripts/glyph-check.js"
+      ],
+      "who": "DV",
+      "since": "2026-11-21"
     },
     {
       "id": "BURN-PH",
@@ -72,43 +89,166 @@
     {
       "id": "BURN-FENCES",
       "title": "a cerca [raw] e o bloco [logic na queima: a forma aberta, carregando o corpo, e a queima relida sem fix",
-      "state": "backlog",
-      "next": "the Regent answered F1 to F4 on 2026-11-21 (INTAKE-BURN-FENCES.md §5): the open fence carrying its body, every logic block, the Rust only, the oracle naming the nine hgml differences; the Order opens once the open slot is free",
+      "state": "review",
+      "next": "built by /regency:proceed on 2026-11-22 as EMS-002/ORD-0045, not committed: the Rust burn writes the open fence carrying what it holds; the nine differences named in known::FENCES and undone in every oracle test; waits for the Regent's review and the cycle's commit",
       "source": "INTAKE-BURN-PLACEHOLDER.md §4, H-16's KNOWN list",
       "where": [
         ".guidelines/.orders/INTAKE-BURN-FENCES.md",
-        "scripts/core/burn.js",
-        "rust/crates/glyph-burn/src/lib.rs"
-      ]
+        "order:EMS-002/ORD-0045",
+        "rust/crates/glyph-burn/src/lib.rs",
+        "rust/crates/glyph-burn/tests/fences.rs",
+        "rust/crates/glyph-cli/tests/cli.rs",
+        "rust/crates/glyph-inverse/tests/oracle.rs",
+        "rust/testkit/oracle.rs",
+        "scripts/core/burn.js"
+      ],
+      "who": "DV",
+      "since": "2026-11-22"
     },
     {
       "id": "DIAG-SPANS",
       "title": "um intervalo de fonte em todo diagnóstico, para o editor sublinhar onde o problema está",
-      "state": "backlog",
-      "next": "the Regent answered D1 to D5 on 2026-11-21 (INTAKE-DIAG-SPANS.md §5): T and N first, R, P, L and D after, in two Orders, both engines; the first opens once the open slot is free",
+      "state": "blocked",
+      "next": "the Regent answered D1 to D5 on 2026-11-21; the first Order, T and N, opens once VER-1 is answered",
       "source": "issue #13, INTAKE-VSCODE-AUTHORING.md §7",
       "where": [
         ".guidelines/.orders/INTAKE-DIAG-SPANS.md",
         "scripts/core/parser.js",
         "rust/crates/glyph-parse/src/lib.rs"
-      ]
+      ],
+      "blocked_by": "VER-1 in INTAKE-DIAG-SPANS.md §6 (2026-11-22): D5 moves the minor digit with these Orders, the batch rule once at the batch's close; the Regent decides"
     },
     {
       "id": "ORDER-COHERENCE",
       "title": "a coerência entre Ordens e o repair como fila, o que habilita o Explorer de EMS",
-      "state": "backlog",
-      "next": "the Regent answered C1 to C5 on 2026-11-21 (INTAKE-ORDER-COHERENCE.md §11): the closed Orders read as emitted, the claim anywhere in the source, the repair queue one file per series beside its EMS.json, NEM made by its first Order, relates[] and the check in the Rust only; the Order follows steps 1 and 2 of the trail",
+      "state": "review",
+      "who": "DV",
+      "since": "2026-11-22",
+      "next": "step 3 built by /regency:proceed on 2026-11-22 as EMS-002/ORD-0040, not committed; the Regent answered CO-1 to CO-5 on 2026-11-22: CO-4 asked again and CO-1 measured as CL-1 and CL-2, both in INTAKE-ORDER-COHERENCE.md §13; waits for the Regent's review and the cycle's commit",
       "source": ".orders/INTAKE-ORDER-COHERENCE.md §9",
       "where": [
-        ".guidelines/.orders/INTAKE-ORDER-COHERENCE.md"
+        ".guidelines/.orders/INTAKE-ORDER-COHERENCE.md",
+        "order:EMS-002/ORD-0040",
+        "rust/crates/glyph-cli/src/coherence.rs",
+        "rust/crates/glyph-cli/src/main.rs",
+        "rust/crates/glyph-cli/tests/coherence.rs",
+        "rust/crates/glyph-bundle/src/lib.rs",
+        "package.json",
+        ".guidelines/.sources/GLOSSARY.md"
+      ]
+    },
+    {
+      "id": "REPAIR-QUEUE",
+      "title": "step 4 of the trail: repair as a queue, one file per series beside its EMS.json, showing the difference and asking to move each misplaced ORD",
+      "state": "review",
+      "next": "built by /regency:proceed on 2026-11-22 as EMS-002/ORD-0042, not committed: glyph --repair lists, writes REPAIR.json, moves and removes one Order at a time with --yes, and a refused --bundle offers --repair; Move to category waits for ST, Add to EMS for RQ-2; RQ-1 and RQ-2 in INTAKE-ORDER-COHERENCE.md §14; waits for the Regent's review and the cycle's commit",
+      "source": ".orders/INTAKE-ORDER-COHERENCE.md §9 and §11 (C3 b); .orders/INTAKE-PIN-TRAFFIC.md §3",
+      "where": [
+        ".guidelines/.orders/INTAKE-ORDER-COHERENCE.md",
+        ".guidelines/.plan/README.md",
+        ".guidelines/.sources/GLOSSARY.md",
+        ".guidelines/.ux/explorer/README.md",
+        "README.md",
+        "order:EMS-002/ORD-0042",
+        "rust/crates/glyph-cli/src/repair.rs",
+        "rust/crates/glyph-cli/tests/repair.rs"
+      ],
+      "who": "DV",
+      "since": "2026-11-22"
+    },
+    {
+      "id": "BUNDLE-RUST",
+      "title": "bundling into a series through the Rust binary: the plugin calls an installed glyph for --bundle into a series, and refuses by name where none is installed",
+      "state": "review",
+      "next": "built by /regency:proceed on 2026-11-22 as EMS-002/ORD-0041, not committed: the plugin hands a series bundle to the installed glyph of its version, refusing by name otherwise; PB-01 to PB-06; waits for the Regent's review and the cycle's commit",
+      "source": ".decisions/README.md, 2026-11-22; .plan/README.md §5",
+      "where": [
+        "README.md",
+        "commands/repo-config/guidelines/orders/bundle.md",
+        "order:EMS-002/ORD-0041",
+        "rust/crates/glyph-cli/src/main.rs",
+        "scripts/glyph-plugin.js",
+        "scripts/test-corpus.js"
+      ],
+      "who": "DV",
+      "since": "2026-11-22"
+    },
+    {
+      "id": "ORDER-STATES",
+      "title": "several open Orders, and the three categories open, closed and rework, for the Orders of a series and of NEM and for Emissions",
+      "state": "blocked",
+      "blocked_by": "OR-1 to OR-3 and ST-1 to ST-5 in INTAKE-ORDER-STATES.md (2026-11-22); the Regent decides",
+      "next": "the rules are the Regent's of 2026-11-22 and stated in the norm documents; how they are kept waits for his answers; ST-5 names a defect both engines carry today, a second ORD-0006 in EMS-003",
+      "source": ".orders/INTAKE-ORDER-STATES.md",
+      "where": [
+        ".guidelines/.orders/INTAKE-ORDER-STATES.md"
+      ]
+    },
+    {
+      "id": "CLAIM-DIAG",
+      "title": "the diagnostic a claim raises, in place of ask UnboundReference",
+      "state": "blocked",
+      "blocked_by": "CL-1 and CL-2 in INTAKE-ORDER-COHERENCE.md §13 (2026-11-22); the Regent decides",
+      "next": "measured on 2026-11-22: no source of the suite carries a claim, so no hash moves; only ORD-0040 carries one, an act",
+      "source": ".orders/INTAKE-ORDER-COHERENCE.md §13",
+      "where": [
+        "scripts/core/parser.js",
+        "rust/crates/glyph-parse/src/lib.rs"
+      ]
+    },
+    {
+      "id": "ITEM-SCHEME",
+      "title": "step 5 of the trail: the item scheme, root-x and x-item-##, in both engines, and E-06 into conformance",
+      "state": "review",
+      "who": "DV",
+      "since": "2026-11-22",
+      "next": "built by /regency:proceed on 2026-11-22 as EMS-002/ORD-0043, not committed: origin root-x and x-item-## in both engines, six xml hashes moved by decision, E-06 in conformance; waits for the Regent's review and the cycle's commit",
+      "source": ".orders/INTAKE-EFFECTS.md §11 and §12",
+      "where": [
+        ".guidelines/.sources/PACKAGE_TARGET.md",
+        ".guidelines/.sources/XML_REFERENCE.md",
+        ".guidelines/.sources/corpus-snapshot.json",
+        "conformance/README.md",
+        "conformance/examples.json",
+        "conformance/golden.json",
+        "order:EMS-002/ORD-0043",
+        "rust/crates/glyph-xml/src/lib.rs",
+        "scripts/core/emit-xml.js",
+        "scripts/test-corpus.js"
+      ]
+    },
+    {
+      "id": "PIN-VOCAB",
+      "title": "step 6 of the trail: the PIN vocabulary, one command and its forms, one element, in both engines",
+      "state": "review",
+      "who": "DV",
+      "since": "2026-11-22",
+      "next": "built by /regency:proceed on 2026-11-22 as EMS-002/ORD-0044, not committed: PIN in the vocabulary, its forms and one element in both engines, 119 ast hashes moved by decision; PN-1 to PN-3 in INTAKE-PIN-TRAFFIC.md §9; waits for the Regent's review and the cycle's commit",
+      "source": ".orders/INTAKE-PIN-TRAFFIC.md §6 and §8",
+      "where": [
+        ".guidelines/.sources/GLOSSARY.md",
+        ".guidelines/.sources/ICONS.md",
+        ".guidelines/.sources/XML_REFERENCE.md",
+        ".guidelines/.sources/corpus-snapshot.json",
+        ".guidelines/.sources/expansions.txt",
+        "order:EMS-002/ORD-0044",
+        "rust/crates/glyph-inverse/src/lib.rs",
+        "rust/crates/glyph-parse/src/lib.rs",
+        "rust/crates/glyph-stores/src/lib.rs",
+        "rust/crates/glyph-vocab/build.rs",
+        "rust/crates/glyph-xml/src/lib.rs",
+        "scripts/core/emit-xml.js",
+        "scripts/core/inverse.js",
+        "scripts/core/parser.js",
+        "scripts/core/vocabulary.js"
       ]
     },
     {
       "id": "E-06",
       "title": "a base verificada da E-06",
-      "state": "backlog",
+      "state": "review",
       "source": ".plan/README.md, Aberto: a E-06",
-      "next": "the Regent ratified the source on 2026-11-11; on engine 4.7.10.08 it emits no origin=\"item\", so it enters conformance/ with the item-scheme Order (step 5 of the trail), which gives it that node"
+      "next": "in conformance/ with EMS-002/ORD-0043 on 2026-11-22: examples.json and golden.json, the golden derived by hand from PACKAGE_TARGET.md §3.6 and met by the engine"
     },
     {
       "id": "VP-16-MEASURES",
@@ -144,9 +284,24 @@
     {
       "id": "EXPLORER-TRAIL",
       "title": "a trilha até o Explorer final: a superfície de EMS no app e a saída do JS, a página incluída",
-      "state": "backlog",
+      "state": "review",
       "source": ".plan/README.md §5, A trilha até o Explorer final",
-      "next": "the Regent answered every intake of the trail on 2026-11-21 (the ADR amending O7 signed with tauri); each step opens as an Order with its answers"
+      "next": "steps 1 to 6 built by /regency:proceed on 2026-11-21 and 2026-11-22, not committed: EMS-002/ORD-0036 to ORD-0044; next on the trail is step 7, the PIN selector, which waits for its intake, and step 8, the traffic in EMS.json; the questions that wait for the Regent are in .plan, Open after the answers of 2026-11-22",
+      "who": "DV",
+      "since": "2026-11-21",
+      "where": [
+        ".guidelines/.orders/EMS-001/EMS.json",
+        ".guidelines/.orders/EMS-002/EMS.json",
+        ".guidelines/.orders/EMS-003/EMS.json",
+        ".guidelines/.sources/ems-schema.json",
+        "order:EMS-002/ORD-0038",
+        "order:EMS-002/ORD-0039",
+        "rust/crates/glyph-cli/src/main.rs",
+        "rust/crates/glyph-schema/src/lib.rs",
+        "scripts/glyph-check.js",
+        "scripts/glyph-cli.js",
+        "order:EMS-002/ORD-0040"
+      ]
     },
     {
       "id": "PRE-GATE",

@@ -182,12 +182,12 @@ passo abre como Ordem com a proposta medida do intake, e para no portão dele.
 | # | a Ordem | depende de | o intake |
 |---|---|---|---|
 | 0 | o `[part]`, a `ORD-0033`, fechada em 2026-11-11 | — | [`INTAKE-PART`](../.orders/INTAKE-PART.md) §5 e §6 |
-| 1 | o XSD gerado pelo motor e o portão que o confere contra o XML | 0 | [`INTAKE-XSD`](../.orders/INTAKE-XSD.md) §4; X1 a X6 respondidos em 2026-11-21 (§5): duas Ordens, o validador do JS primeiro e o do Rust depois, e o portão também sobre `.orders/` com um registro do que acha |
-| 2 | a `EMS.json`: a lista de campos, o XSD primeiro, e a configuração dentro do `<glyph-package>` | 1 | [`INTAKE-EMS-JSON`](../.orders/INTAKE-EMS-JSON.md) §4; respondido em 2026-11-21 (§5) |
-| 3 | a coerência: `[ref'nem']`, `[ref'EMS']`, o `relates[]`, a verificação pela `EMS.json`, a NEM, e o portão do `FIELD-3b` | 2 | [`INTAKE-ORDER-COHERENCE`](../.orders/INTAKE-ORDER-COHERENCE.md) §9, ratificado; a proposta medida no §10, respondida em 2026-11-21 (§11): a fila do `repair` uma por série, ao lado da `EMS.json`, e o `relates[]` e a verificação só no Rust |
-| 4 | o `repair`: mostra a diferença e pergunta, a fila, e o mover | 3 | o mesmo §10, e o [`INTAKE-PIN-TRAFFIC`](../.orders/INTAKE-PIN-TRAFFIC.md) §3 |
-| 5 | o esquema de item, `root-x` e `x-item-##`, que move os hashes de `xml` | 0 | [`INTAKE-EFFECTS`](../.orders/INTAKE-EFFECTS.md) §8 e §9; a proposta medida no §11, I1 a I4 respondidos em 2026-11-21 (§12) |
-| 6 | o vocabulário do PIN: o glossário, depois o JS, depois o Rust | 0 | [`INTAKE-PIN-TRAFFIC`](../.orders/INTAKE-PIN-TRAFFIC.md) §5; a proposta medida no §6, N1 a N4 respondidos em 2026-11-21 (§8) |
+| 1 | o XSD gerado pelo motor e o portão que o confere contra o XML | 0 | [`INTAKE-XSD`](../.orders/INTAKE-XSD.md) §4; X1 a X6 respondidos em 2026-11-21 (§5): duas Ordens; a [`EMS-002/ORD-0036`](../.orders/EMS-002/README.md), o gerador nos dois motores e o validador do JS com o portão sobre `.orders/` e o registro dele, e a `ORD-0037`, o validador do Rust, estão construídas na árvore de trabalho em 2026-11-21 |
+| 2 | a `EMS.json`: a lista de campos, o XSD primeiro, e a configuração dentro do `<glyph-package>` | 1 | [`INTAKE-EMS-JSON`](../.orders/INTAKE-EMS-JSON.md) §4; respondido em 2026-11-21 (§5); a primeira Ordem, a [`EMS-002/ORD-0038`](../.orders/EMS-002/README.md), o `ems-schema.json`, a checagem do JS, a configuração no bundle e os três rascunhos, e a segunda, a `ORD-0039`, o mesmo no binário Rust, estão construídas na árvore de trabalho |
+| 3 | a coerência: `[ref'nem']`, `[ref'EMS']`, o `relates[]`, a verificação pela `EMS.json`, a NEM, e o portão do `FIELD-3b` | 2 | [`INTAKE-ORDER-COHERENCE`](../.orders/INTAKE-ORDER-COHERENCE.md) §9, ratificado; a proposta medida no §10, respondida em 2026-11-21 (§11): a fila do `repair` uma por série, ao lado da `EMS.json`, e o `relates[]` e a verificação só no Rust. Built in the working tree on 2026-11-22 as [`EMS-002/ORD-0040`](../.orders/EMS-002/README.md): the claim read from the AST, `relates` in the manifest of the Rust `--bundle` and its refusal on a mismatch, and `glyph --check` over `.orders/` in `npm run check` |
+| 4 | o `repair`: mostra a diferença e pergunta, a fila, e o mover | 3 | o mesmo §10, e o [`INTAKE-PIN-TRAFFIC`](../.orders/INTAKE-PIN-TRAFFIC.md) §3. Answered on 2026-11-22, RP-1 to RP-4 (§12 of the coherence intake): the bundle refuses and offers `repair`, a move adapts the Order and warns for the Regent to confirm, `glyph --repair` for the Harness first, and the Explorer's `-Repair-` menu; *Move to category* waits for ST-1 to ST-5. `glyph --repair` is built in the working tree on 2026-11-22 as [`EMS-002/ORD-0042`](../.orders/EMS-002/README.md) |
+| 5 | o esquema de item, `root-x` e `x-item-##`, que move os hashes de `xml` | 0 | [`INTAKE-EFFECTS`](../.orders/INTAKE-EFFECTS.md) §8 e §9; a proposta medida no §11, I1 a I4 respondidos em 2026-11-21 (§12). Built in the working tree on 2026-11-22 as [`EMS-002/ORD-0043`](../.orders/EMS-002/README.md), in both engines, with E-06 in `conformance/`; six `xml` hashes moved by decision |
+| 6 | o vocabulário do PIN: o glossário, depois o JS, depois o Rust | 0 | [`INTAKE-PIN-TRAFFIC`](../.orders/INTAKE-PIN-TRAFFIC.md) §5; a proposta medida no §6, N1 a N4 respondidos em 2026-11-21 (§8). Built in the working tree on 2026-11-22 as [`EMS-002/ORD-0044`](../.orders/EMS-002/README.md), in both engines; PN-1 to PN-3 in its intake §9 |
 | 7 | o seletor do PIN pelos rótulos do `[part]`, e o tooltip | 5, 6 | o mesmo |
 | 8 | o tráfego na `EMS.json`; o caminho que não resolve avisa e nunca bloqueia | 2 | [`INTAKE-PIN-TRAFFIC`](../.orders/INTAKE-PIN-TRAFFIC.md) §3 |
 | 9 | a `EMS-000`, *Generic*: a medição de `.scope/generics/` por frequência, que o Regente reescreve | 2, 6 | o mesmo, §5; a medição é o entregável |
@@ -196,8 +196,13 @@ passo abre como Ordem com a proposta medida do intake, e para no portão dele.
 | 12 | a saída do JS: `glyph-schema`, `glyph-diff` e `glyph-trace`, a skill sobre o binário Rust, e a página | o oráculo, peça por peça | [`INTAKE-JS-EXIT`](../.orders/INTAKE-JS-EXIT.md), J1 a J4 respondidos em 2026-11-21 (§3): sai tudo, o tooling incluído, e os vetores de conformidade seguram o Rust; a rota da página, no [`INTAKE-EXPLORER`](../.orders/INTAKE-EXPLORER.md) §4 |
 | 13 | a referência entre pacotes, `<needs ref="glyph://…">`, e os escopos aninhados | as duas medições devidas | [`INTAKE-VIRTUAL-PATH`](../.orders/INTAKE-VIRTUAL-PATH.md) §16 |
 
-Duas Ordens decididas em 2026-11-11 correm fora dessa cadeia, e a posição de cada
-uma na fila é do Regente:
+Three Orders run outside that chain, two decided on 2026-11-11 and one on 2026-11-22,
+and the place of each in the queue is the Regent's:
+
+- **bundling into a series through the Rust binary** (CO-2, the Regent, 2026-11-22: *"move it now"*):
+  the plugin calls an installed `glyph` for `--bundle` into a series, and refuses by name where
+  none is installed, by J4 b of 2026-11-21; built in the working tree on 2026-11-22 as
+  [`EMS-002/ORD-0041`](../.orders/EMS-002/README.md), and the JS keeps the other flags until step 12;
 
 - **a reestruturação**, a `ORD-0011` chapada de
   [`.orders/parked/restructure-glyph-repo/`](../.orders/parked/restructure-glyph-repo/):
@@ -216,8 +221,8 @@ uma na fila é do Regente:
 
 #### A fila de antes do portão
 
-Só uma Ordem fica aberta por vez, e uma proposta medida é um intake, não uma
-Ordem. O que segue não abre Ordem nenhuma, e é o que uma sessão faz enquanto um
+Several Orders may be open at once while none waits on a blocking question (the Regent,
+2026-11-22), and a measured proposal is an intake, not an Order. O que segue não abre Ordem nenhuma, e é o que uma sessão faz enquanto um
 portão espera, para o Regente responder os portões em lote:
 
 1. os intakes que faltavam estão escritos, cada um fechando em perguntas numeradas
@@ -276,6 +281,27 @@ não mora aqui: mora no §5 e nos intakes, e cada peça abre como proposta medid
 ORD que a constrói, parando no portão dele — a forma que ele ratificou em
 2026-09-27.
 
+### Open after the answers of 2026-11-22
+
+The Regent answered RP-1 to RP-4 and CO-1 to CO-5 on 2026-11-22
+([`.decisions/`](../.decisions/README.md);
+[`INTAKE-ORDER-COHERENCE.md`](../.orders/INTAKE-ORDER-COHERENCE.md) §12) and set two rules:
+several Orders open at once, and three categories, open, closed and rework. What waits for
+him, each question in its own intake:
+
+| questions | what they decide | where |
+|---|---|---|
+| **VER-1** (blocks `DIAG-SPANS`) | when the `minor` digit moves: once at the batch's close, or with the first spans Order, as D5 says | [`INTAKE-DIAG-SPANS.md`](../.orders/INTAKE-DIAG-SPANS.md) §6 |
+| CO-4 | whether `deprecated` replaces, as `override` and `instead-of` do, and enters the refused cycle; asked again with its detail | [`INTAKE-ORDER-COHERENCE.md`](../.orders/INTAKE-ORDER-COHERENCE.md) §13 |
+| CL-1, CL-2 | the diagnostic a claim raises in place of `ask UnboundReference`, and in which engine (CO-1, measured) | the same §13 |
+| OR-1 to OR-3 | what the rule of several open Orders keeps from the old one: immutability, the intake, two Orders on one file, and what a blocking question is | [`INTAKE-ORDER-STATES.md`](../.orders/INTAKE-ORDER-STATES.md) §3 |
+| RQ-1, RQ-2 | what `EMS-002/ORD-0042` left: how `repair` tells a closed Order before the categories exist, and what *Add to EMS* does | [`INTAKE-ORDER-COHERENCE.md`](../.orders/INTAKE-ORDER-COHERENCE.md) §14 |
+| PN-1 to PN-3 | what `EMS-002/ORD-0044` left: the icon of `PIN`, a PIN with no form, and a type with items | [`INTAKE-PIN-TRAFFIC.md`](../.orders/INTAKE-PIN-TRAFFIC.md) §9 |
+| ST-1 to ST-5 | how the three categories are kept for Orders and for Emissions, what `queued/` and `parked/` become, and the count of a series, which today writes a second `ORD-0006` into `EMS-003` | the same §4 |
+
+The session's suggestion for CO-3, a check held by the bundle's own `relates` instead of a
+moment in the code, is offered in the same §13 of the coherence intake.
+
 ### Os dois itens dos caminhos virtuais
 
 Nomeados pelo §0: o `study.md` saiu do sótão e é o registro de estudos,
@@ -293,15 +319,6 @@ Não são perguntas: são dívidas que uma decisão assumiu. As duas são linhas
 | o braço de comparação do §8 — o mini-repo reduz releitura? — e o terceiro braço, o transporte MCP comprando o que o arquivo não compra | [`INTAKE-VIRTUAL-PATH.md`](../.orders/INTAKE-VIRTUAL-PATH.md) §16 as exigia **em ordem** antes do `resources`; o Regente decidiu por B sem elas, e elas seguem devidas | o braço de comparação conta os transcripts das sessões feitas depois dos caminhos virtuais (2026-10-23), e eles moram em `~/.claude/projects/` na máquina do Regente, que uma sessão na nuvem não alcança; o terceiro braço pede um transporte MCP que não existe; as duas seguem devidas (o Regente, 2026-11-18) |
 | a medição dos objetos de contexto, antes do desenho — *measure before design* | [`INTAKE-EFFECTS.md`](../.orders/INTAKE-EFFECTS.md) §9, a segunda ordem. Com a fronteira de "item" dada, é só isto que falta antes do desenho, e o instrumento não está escrito | nenhum documento diz a pergunta que o instrumento espera o XSD do passo 1 da trilha: o instrumento mede contra o que o XSD gerado declara (o Regente, 2026-11-18) |
 
-### A E-06, ratificada, esperando o esquema de item
-
-A fonte de [`conformance/README.md`](../../conformance/README.md) §E-06 está
-ratificada como escrita (o Regente, 2026-11-11). No motor 4.7.10.08 ela emite sem
-diagnóstico e sem nenhum `origin="item"`, porque o esquema de item está decidido e
-não construído; então ela entra no `conformance/` com a Ordem do passo 5 da trilha
-do §5. Até lá, `K1` não alcança a regra de posição do `PACKAGE_TARGET.md` §3.2 e
-as garantias **G2 e G3** seguem sem cobertura.
-
 ### Pendências de registro, sem casa hoje
 
 Achados do inventário de 2026-10-15 que não são consequência de resposta nenhuma
@@ -314,7 +331,6 @@ nenhum agente pode ratificar:
 | `Q9` nomeia duas perguntas diferentes sobre o mesmo assunto — [`E0b-ARCHITECT-RETURN.md`](../.orders/E0b-ARCHITECT-RETURN.md) e [`PACKAGE_TARGET.md`](../.sources/PACKAGE_TARGET.md) §10 | as duas fechadas; a colisão está registrada nos dois |
 | `O1`, `O2`, `O3` e `O6` são referenciados como resolvidos e nunca enunciados; `O2` e `O6` não têm nem descrição recuperável | todas as dez resolvidas; `O2` e `O6` são identificadores sem conteúdo |
 | em [`PERGUNTAS-ABERTAS.md`](PERGUNTAS-ABERTAS.md), *"O que eu faço sem você"* fecha o documento antes da pergunta 7 | ordem de leitura, não perda |
-| as linhas de [`GLOSSARY.md`](../.sources/GLOSSARY.md) §8 que `[ref'nem']`, `[ref'EMS']` e a fila do `repair` pedem | o `GLOSSARY.md` é fonte de uma cópia gerada que a skill carrega, então entram **na ORD que as constrói**, com `node scripts/build-skill.js` no mesmo passo — a ordem que o §5 do [`INTAKE-PIN-TRAFFIC.md`](../.orders/INTAKE-PIN-TRAFFIC.md) já declara: vocabulário primeiro, depois o JS, depois o Rust |
 
 ### O resto
 
@@ -322,8 +338,8 @@ nenhum agente pode ratificar:
 |---|---|
 | **estudo de setembro** | oito intakes em [`.orders/`](../.orders/): [`INTAKE-VIRTUAL-PATH`](../.orders/INTAKE-VIRTUAL-PATH.md) (mini-repo, medido: o custo de round-trip é o tamanho de `glyph-parser.js`), [`INTAKE-ORDER-COHERENCE`](../.orders/INTAKE-ORDER-COHERENCE.md) (a aresta declarada, ratificada em 2026-10-15 com `[ref'nem']`, `[ref'EMS']` e a fila do `repair`; não construída), [`INTAKE-BURN-INVARIANCE`](../.orders/INTAKE-BURN-INVARIANCE.md) (fechado), [`INTAKE-FORMAL-ANALYSIS`](../.orders/INTAKE-FORMAL-ANALYSIS.md), [`INTAKE-PARSER-SPLIT`](../.orders/INTAKE-PARSER-SPLIT.md) (o corte, feito: treze módulos), [`INTAKE-RUST`](../.orders/INTAKE-RUST.md) (steelman e defeater; o Regente decidiu migrar), [`INTAKE-RUST-LADDER`](../.orders/INTAKE-RUST-LADDER.md) (a escada auditada; nada nela espera o Regente — as dez perguntas `O` fecharam em 2026-09-24 e 2026-09-27, e o §8 registra quando cada uma fechou), [`INTAKE-FIELD-2026-09`](../.orders/INTAKE-FIELD-2026-09.md) (o kit de cliente; `H-09` fechou por ele, e os dois achados estruturais fecharam em 2026-10-15). |
 | **EMS-001** | fechou em 2026-11-07, com a `ORD-0014`, e as perguntas do [retorno](../.orders/EMS-001/RETURN.md) têm todas resposta. A execução assíncrona da seção `queue` **passou à EMS-002** em 2026-10-15 e saiu desta lista |
-| **EMS-002** | aberta em 2026-10-23, e o [registro da série](../.orders/EMS-002/README.md) guarda o que fechou, da `ORD-0001` à `ORD-0035`; nenhuma Ordem está aberta na série; o resto do §5 segue pela trilha, cada peça como proposta medida para o Regente cortar |
-| **EMS-003** | aberta em 2026-11-11, a vista 2D: um pacote desenhado com os ícones do Regente num plano e editado pelos links visíveis. A `ORD-0001`, o modelo, fechou em 2026-11-21 com as respostas V1 a V7, assinadas no [`INTAKE-2D-VIEW.md`](../.orders/INTAKE-2D-VIEW.md) §6; a `ORD-0002`, os ícones, e a `ORD-0003`, o grafo, fecharam no mesmo dia, com o `glyph-icons` em Rust e `binds` e `ref` no envelope, o `schema` 3; a `ORD-0004`, a vista, está aberta; as `ORD-0005` e `ORD-0006` — a edição e o Explorer, este na versão 3 — esperam em [`EMS-003/queued/`](../.orders/EMS-003/README.md) |
+| **EMS-002** | aberta em 2026-10-23, e o [registro da série](../.orders/EMS-002/README.md) guarda o que fechou, da `ORD-0001` à `ORD-0035`, e as `ORD-0036` e `ORD-0037`, o `<schema>` e o portão nos dois motores, o passo 1 da trilha, construídas na árvore de trabalho em 2026-11-21; o resto do §5 segue pela trilha. ORD-0038 and ORD-0039, `EMS.json` in both engines, step 2, are built in the working tree on 2026-11-21, and ORD-0040, the coherence between Orders in the Rust only, step 3, on 2026-11-22, cada peça como proposta medida para o Regente cortar |
+| **EMS-003** | aberta em 2026-11-11, a vista 2D: um pacote desenhado com os ícones do Regente num plano e editado pelos links visíveis. A `ORD-0001`, o modelo, fechou em 2026-11-21 com as respostas V1 a V7, assinadas no [`INTAKE-2D-VIEW.md`](../.orders/INTAKE-2D-VIEW.md) §6; a `ORD-0002`, os ícones, e a `ORD-0003`, o grafo, fecharam no mesmo dia, com o `glyph-icons` em Rust e `binds` e `ref` no envelope, o `schema` 3; a `ORD-0004`, a vista, fechou na árvore de trabalho pelo `/regency:proceed` de 2026-11-21, e o commit é o do ciclo; a `ORD-0005`, a edição, fechou também na árvore de trabalho; a vaga vai ao passo 1 da trilha, o XSD; a `ORD-0006`, o Explorer, na versão 3, espera em [`EMS-003/queued/`](../.orders/EMS-003/README.md) |
 | **as stores numa atualização** | o `--install` não sobrescreve as stores, e por isso uma versão nova instalada sobre uma antiga segue lendo as que vieram da instalação antiga, mesmo sem edição nenhuma. Medido em 2026-11-07, com as stores de 2026-10-18 e o motor 4.7.10.08: o `.xml` e o `.hgml` das 118 fontes não mudam; o `.json` leva os digests antigos e, no K-04, um diagnóstico diz *preset*; e o `expansions.json` nomeia `skeptic`, sem chegar ao XML delas. O Regente decidiu em 2026-11-11 que a instalação atualiza, com os três atos do §5; falta a Ordem |
 
 ## Adiado por decisão, não por esquecimento

@@ -59,3 +59,25 @@ top bar (1512 × 966).
    (`#8D879B`, `#B3ADBF`) and the primary text an off-white (`#E7E3DC`); the
    code conventions ask for black, with cyan, purple, dark-green and light-blue
    text, and nothing greyish.
+
+## The `-Repair-` menu — the Regent, 2026-11-22
+
+A misplaced ORD or a misplaced EMS is a software mistake, not the user's: the findings of
+`glyph --check` are kept in a category of their own, listed whole, and the user says where
+each one goes (RP-4 b, [`INTAKE-ORDER-COHERENCE.md`](../../.orders/INTAKE-ORDER-COHERENCE.md) §12).
+The Regent's words:
+
+> click on "⁝" -> most options are disabled, but down to "-Repair-" category:
+> "Destination..." -> opens-up a pop-up: "This ORD"/"This EMS" + " is actually misplaced.
+> The Explorer suggests a correction for this: '∙ Move to...', '∙ Remove ORD'/'∙Remove EMS',
+> '∙ Add to EMS' (only if it is an ORD), '∙ Move to category' (only if an EMS or a loose ORD)
+
+| the item | its `⁝` menu | `Destination...` opens |
+|---|---|---|
+| a misplaced ORD in a series | every option disabled but the `-Repair-` category | *This ORD is actually misplaced. The Explorer suggests a correction for this:* `∙ Move to...`, `∙ Remove ORD`, `∙ Add to EMS` |
+| a misplaced loose ORD | the same | the same, and `∙ Move to category` |
+| a misplaced EMS | the same | *This EMS is actually misplaced. …* `∙ Move to...`, `∙ Remove EMS`, `∙ Move to category` |
+
+A move adapts the ORD to the series it lands in and always warns, for the Regent to confirm
+(RP-2 a). The categories `Move to category` offers are open, closed and rework
+([`INTAKE-ORDER-STATES.md`](../../.orders/INTAKE-ORDER-STATES.md)).

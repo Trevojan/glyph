@@ -17,7 +17,7 @@ propósito. Não reconstrua por inferência o que está a um atalho de distânci
 | [`.decisions/`](.guidelines/.decisions/) | o que já foi decidido, por quem, e a razão |
 | [`.constraints/`](.guidelines/.constraints/) | o que o projeto se proíbe — **leia antes de propor** |
 | [`.changelog/`](.guidelines/.changelog/) | como o número de versão se move |
-| [`.orders/`](.guidelines/.orders/) | as Ordens e os intakes; exatamente uma Ordem aberta por vez |
+| [`.orders/`](.guidelines/.orders/) | the Orders and the intakes; several Orders open at once while none waits on a blocking question |
 | [`.sources/`](.guidelines/.sources/) | os fatos: a linguagem — as normas e as stores — e as referências externas que decidiram alguma coisa |
 
 ## Escrever Glyph
@@ -52,6 +52,11 @@ de costura, de crates e de links, a escada, o índice dos caminhos virtuais, os
 o segundo mede e gradua cada crate externa, confere o formato e o `clippy` com
 avisos negados, escreve o oráculo no commit sob teste e roda `cargo test` em
 `rust/`. Os dois pedem `cargo`, no Rust que o `rust-toolchain.toml` fixa. **Um passo por commit, verde em cada um.**
+
+The first also runs the XSD gate over every bundle under `.orders/`
+(`glyph-check.js --gate`) and the coherence between Orders over the same folder
+(`glyph --check`, EMS-002/ORD-0040): a claim that does not match is refused, and
+an Order bundled from ORD-0040 on that makes no claim is asked where it stands.
 
 Editou um arquivo de `.guidelines/`, o `README.md` ou este? Rode
 `npm run vpath -- build`: o índice em `.guidelines/.shortcuts/.virtual/` cobre

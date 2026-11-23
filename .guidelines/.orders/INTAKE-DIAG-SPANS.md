@@ -3,7 +3,7 @@
 > **The measured proposal for issue #13**, which
 > [`INTAKE-VSCODE-AUTHORING.md`](INTAKE-VSCODE-AUTHORING.md) §7 left open. The Regent
 > answered §4 on 2026-11-21, and §5 holds the answers. Two Orders follow, and the first
-> opens once the open slot is free. Measured at `46f47e5`, engine 4.7.10.09, over the 485
+> may open now: several Orders may be open at once (the Regent, 2026-11-22). Measured at `46f47e5`, engine 4.7.10.09, over the 485
 > runs of the parse oracle that `npm run check:rust` exports
 > (`rust/target/oracle-modules/parse.json`, 456 distinct sources).
 
@@ -99,3 +99,18 @@ In [`.decisions/`](../.decisions/README.md), round of 2026-11-21, from the sheet
 | D3 | a | a diagnostic raised inside a template's expanded body carries the invocation's span |
 | D4 | a | a diagnostic about the document carries a span of its own |
 | D5 | *"a. treat it to walk towards Rust-only in the following versions."* | both engines, in each Order: the 77 AST hashes and the oracle's `parse.json` move, and the `minor` digit with them; the Orders after these lean on the Rust |
+
+## 6. When the version moves — asked on 2026-11-22
+
+D5 says the `minor` digit moves with these Orders. The batch rule (2026-10-25, applied again
+to `EMS-003/ORD-0002` and `ORD-0003` on 2026-11-21) says the batch moves the version once, when
+it closes. A move of the version moves every `xml` hash through `engine`, the `engine` of the
+three `EMS.json`, which `--bundle` refuses to bundle under another, and the plugin's version.
+
+**VER-1. When the `minor` digit moves.**
+- a. once, when the batch closes, as the batch rule says: the two Orders build the spans and leave the version where it is
+- b. with the first of the two Orders, as D5 says, the `EMS.json` of the three series following it
+
+**The session's recommendation:** a. It is the reading two rounds applied, and it moves the
+version, the hashes and the series' configuration once instead of with each Order.
+

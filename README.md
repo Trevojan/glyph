@@ -72,6 +72,28 @@ série, sai `ORD-####.zip` com os mesmos cinco arquivos, numerado pelo maior
 `ORD-####` do destino seguido de nada ou de um ponto, e um ID datado como
 `ORD-2026-08-30-01` não conta como 2026. É a regra de um ADR, e pela mesma razão.
 
+Into a series, this repository and the plugin bundle with the Rust binary, which
+also checks where the Order says it stands (EMS-002/ORD-0040 and ORD-0041):
+
+```bash
+cargo run -q --manifest-path rust/Cargo.toml -p glyph-cli --bin glyph -- --file fonte.pgml --bundle --out .guidelines/.orders/EMS-002
+```
+
+The claim — `[ref'EMS']` for the series, `[ref'nem']` for a loose Order in
+`.orders/NEM/`, `[ref'ORD-####']` for an Order of the same folder — goes into the
+manifest as `relates`, and a claim the destination does not answer is refused with
+nothing written. `glyph --check .guidelines/.orders` holds every Order bundled from
+ORD-0040 on, and `glyph --version` answers the engine's version.
+
+`glyph --repair .guidelines/.orders` keeps the queue of what the check refuses, a
+`REPAIR.json` beside the `EMS.json` of each series with findings, and proposes a
+destination for each Order; `--apply <Order>` moves it there, or to `--to <folder>`,
+adapted to where it lands and numbered there, and `--remove` removes it. Each act
+shows what it would write and writes nothing until `--yes` (EMS-002/ORD-0042).
+
+The JS `--bundle` of `glyph-cli.js` stays the reference the command-line oracle
+records until the JS leaves.
+
 O momento que o manifesto chama de `emitted`, e que o zip leva, é o de
 `SOURCE_DATE_EPOCH` quando a variável existe, e o horário do zip é UTC: a mesma
 fonte no mesmo momento dá os mesmos bytes.

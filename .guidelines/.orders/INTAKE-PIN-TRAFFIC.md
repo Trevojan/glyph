@@ -201,3 +201,26 @@ In [`.decisions/`](../.decisions/README.md), round of 2026-11-21, from the sheet
 | N2 | a | `else` and `case` are words of `PIN`'s own, valid only chained to it |
 | N3 | a | one element, `<pin form="…">` |
 | N4 | a | the PIN sits in *Frame*, beside `SECTION`, `BLOCK` and `PT` |
+
+## 9. What `EMS-002/ORD-0044` left — 2026-11-22
+
+The vocabulary is built (N1 a to N4 a): `PIN`, its three form words, and one element. Three
+points it does not decide:
+
+**PN-1. The icon of `PIN`.** The set the Regent drew holds `pin_on.svg` and `pin_off.svg`, the
+two files no command named; `PIN` now stands on the fallback tile
+([`ICONS.md`](../.sources/ICONS.md)).
+- a. `PIN` takes `pin_on`, and `pin_off` stays for the selector of step 7, a PIN that does not apply
+- b. both wait for step 7, and `PIN` keeps the tile
+- c. another pairing, in the Regent's words
+
+**PN-2. A PIN with no form.** `[pin]` and `[pin[nt'x']]` emit `<pin>` and ask nothing.
+- a. it asks, `ask PinWithoutForm`, with a `<needs>` for the form: a PIN that says neither a condition nor a type pins nothing
+- b. it stays as built
+
+**PN-3. A type with items.** `[pin-rev,fmt]` is not read as a type: the run of two is a chain,
+`<pin><chain>…</chain></pin>`, because one `type` cannot name two commands.
+- a. so it stays, and the selector of step 7 decides whether a PIN pins more than one type
+- b. it is refused, `fix PinTypeIsOne`
+
+**The session's recommendation:** PN-1 a, PN-2 a, PN-3 a.
