@@ -53,6 +53,7 @@ impl Out {
 }
 
 mod app;
+mod coherence;
 
 fn main() {
     let argv: Vec<String> = std::env::args_os()
@@ -243,6 +244,16 @@ fn cli(argv: Vec<String>) {
             }
             "--bundle" => bundle = true,
             "--zip" => zip = true,
+            // the coherence between Orders, the Rust's alone (EMS-002 ORD-0040)
+            "--check" => {
+                let (said, code) = coherence::check(argv.get(i + 1).map_or("", String::as_str));
+                if code == 2 {
+                    o.error(&said);
+                } else {
+                    o.log(&said);
+                }
+                o.exit(code);
+            }
             "--out" => {
                 i += 1;
                 out_dir = argv.get(i).cloned();
@@ -329,7 +340,7 @@ fn cli(argv: Vec<String>) {
         let compiled = to_xml(&input, &opts, false).and_then(|xml| {
             Ok((
                 xml,
-                ast_text(&input)?,
+                to_ast(&input, &ast_opts, &AstOpts::default())?,
                 to_hgml(
                     &input,
                     &BurnOpts {
@@ -339,13 +350,14 @@ fn cli(argv: Vec<String>) {
                 )?,
             ))
         });
-        let (mut xml, ast, hgml) = match compiled {
+        let (mut xml, ast_json, hgml) = match compiled {
             Ok(t) => t,
             Err(Thrown(e)) => {
                 o.error(&format!("a fonte nao compilou: {e}"));
                 o.exit(1);
             }
         };
+        let ast = stringify_indent(&ast_json, "  ");
         /* a series that holds an EMS.json carries it (EMS-002 ORD-0038, the
         Rust's in ORD-0039): checked first, refused under another engine, and
         written whole beside the schema with its digest */
@@ -410,6 +422,35 @@ fn cli(argv: Vec<String>) {
             Some(s) => s,
             None => o.thrown("RangeError", Thrown("Invalid time value".into())),
         };
+        /* where the Order says it stands, read from its AST, refused when its
+        destination does not answer the claim (EMS-002 ORD-0040, the Rust's
+        alone); an Order that makes no claim bundles as before */
+        let claims = coherence::claims_of(&ast_json);
+        let new = coherence::Order {
+            id: id.clone(),
+            shown: id.clone(),
+            emitted: emitted.clone(),
+            engine: glyph_version::VERSION.into(),
+            claims: claims.clone(),
+            declares: coherence::declares_of(&xml),
+            unreadable: None,
+        };
+        let mut home = coherence::home_for(Path::new(&dir));
+        home.orders.push(new.clone());
+        let fixes: Vec<_> = coherence::findings(&home, &new)
+            .into_iter()
+            .filter(|f| f.sev == "fix")
+            .collect();
+        if !fixes.is_empty() {
+            for f in &fixes {
+                o.error(&format!("[fix] {} — {}", f.code, f.msg));
+            }
+            o.error(&format!(
+                "{id}: the claim does not match {}: nothing written.",
+                home.name
+            ));
+            o.exit(2);
+        }
         let s = |v: &str| Json::Str(v.to_string());
         let manifest = stringify_indent(
             &Json::Obj(
@@ -434,6 +475,23 @@ fn cli(argv: Vec<String>) {
                     ),
                 ]
                 .into_iter()
+                .chain((!claims.is_empty()).then(|| {
+                    (
+                        "relates".to_string(),
+                        Json::Arr(
+                            claims
+                                .iter()
+                                .map(|c| {
+                                    Json::Obj(vec![
+                                        ("order".into(), s(&c.order)),
+                                        ("kind".into(), s(&c.kind)),
+                                        ("reason".into(), s(&c.reason)),
+                                    ])
+                                })
+                                .collect(),
+                        ),
+                    )
+                }))
                 .chain(conf.as_ref().map(|(of, digest)| {
                     (
                         "configuration".to_string(),

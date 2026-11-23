@@ -1,0 +1,73 @@
+[block
+  'ORD-0040-order-coherence'
+  [ref
+    'EMS'
+  [/ref]
+  [ctx
+    'the spec of EMS-002'
+    '.guidelines/.orders/EMS-002/EMS-002.pgml'
+  [/ctx]
+  [ctx
+    'the ratified steps, the measured proposal and the answers of the Regent'
+    '.guidelines/.orders/INTAKE-ORDER-COHERENCE.md, sections 4, 5, 9, 10 and 11'
+  [/ctx]
+  [ctx
+    'the configuration of a series, which the claim hands the check to'
+    '.guidelines/.orders/EMS-002/ORD-0039'
+  [/ctx]
+  [tgt
+    'step 3 of the trail to the final Explorer, in the Rust only: an Order says where it stands, the Rust reads the claim from its AST, writes it into the manifest as relates, refuses to bundle a claim that does not match, and checks every Order bundled from this one on'
+  [/tgt]
+  [ins
+    'read the claim from the AST, as binds and ref are read: a reference to EMS, to nem, or to an ORD-#### of its own directory, bare or under override, instead-of, deprecated, derive-from or see-also, the relation command naming the kind and its own literals the reason'
+  [/ins]
+  [ins
+    'have the Rust --bundle write relates, one order, kind and reason per claim, and refuse with nothing written when a claim does not match its destination'
+  [/ins]
+  [ins
+    'add glyph --check, which reads every bundle under a folder, holds the Orders bundled from this one on, and answers fix for a mismatch and ask for an Order that makes no claim'
+  [/ins]
+  [ins
+    'run glyph --check over .guidelines/.orders in npm run check'
+  [/ins]
+  [cnst
+    'the trigger is mismatch, not absence: an Order with no claim is asked, never refused'
+  [/cnst]
+  [cnst
+    'the closed Orders are read as emitted, and nothing is asked of them'
+  [/cnst]
+  [cnst
+    'the JS neither extracts relates nor runs the check, and every run of the command line oracle still answers the same bytes in both engines'
+  [/cnst]
+  [cnst
+    'no hash of the snapshot moves; no crate enters'
+  [/cnst]
+  [cnst
+    'npm run check and npm run check:rust green'
+  [/cnst]
+  [cmp
+    'the rules'
+    'each mismatch, the absent claim and the cycle of supersession seen refused or asked by a test that failed before the code it holds'
+    [ctx[/ctx]
+    [cnst[/cnst]
+  [/cmp]
+  [sub
+    [eq
+      [cmp
+        [ctx[/ctx]
+      [/cmp]
+    [/eq]
+  [/sub]
+  [elab
+    [eq[/eq]
+    [sub[/sub]
+    [rsn[/rsn]
+  [/elab]
+  [ref
+    [cnst[/cnst]
+  [/ref]
+  [ctx[/ctx]
+  [core[/core]
+  [core[/core]
+  [elab[/elab]
+[/block]

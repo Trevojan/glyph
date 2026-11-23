@@ -1,0 +1,20 @@
+{
+  "order": "ORD-0040",
+  "engine": "4.7.10.09",
+  "emitted": "2026-11-22T20:06:46.248Z",
+  "files": [
+    "ORD-0040.pgml",
+    "ORD-0040.xml",
+    "ORD-0040.json",
+    "ORD-0040.hgml"
+  ],
+  "source": "C:/Users/Usuario/AppData/Local/Temp/claude/C--Users-Usuario-Documents-GitHub-glyph/a285ad45-c0ff-408d-8fc2-d03bb232eef9/scratchpad/ORD-0040.pgml",
+  "configuration": {
+    "of": "EMS-002",
+    "digest": "06e60f4f1cfb0e00"
+  },
+  "diagnostics": {
+    "fix": 0,
+    "total": 1
+  }
+}

@@ -155,6 +155,27 @@ pub fn zip_store(entries: &[(&str, &[u8])], ms: i64) -> Vec<u8> {
     out
 }
 
+/// The entries of a zip `zip_store` wrote, for the check of the coherence to
+/// read a loose Order (EMS-002 ORD-0040, the Rust only): each name and its
+/// bytes, read from the local headers. `None` for anything it did not write,
+/// a compressed entry or one whose size trails it.
+pub fn zip_entries(zip: &[u8]) -> Option<Vec<(String, Vec<u8>)>> {
+    let r16 = |at: usize| Some(u16::from_le_bytes(zip.get(at..at + 2)?.try_into().ok()?) as usize);
+    let r32 = |at: usize| Some(u32::from_le_bytes(zip.get(at..at + 4)?.try_into().ok()?) as usize);
+    let (mut out, mut at) = (Vec::new(), 0);
+    while r32(at) == Some(0x0403_4B50) {
+        if r16(at + 6)? & 0x0008 != 0 || r16(at + 8)? != 0 {
+            return None;
+        }
+        let (size, name, extra) = (r32(at + 18)?, r16(at + 26)?, r16(at + 28)?);
+        let data = at + 30 + name + extra;
+        let name = String::from_utf8(zip.get(at + 30..at + 30 + name)?.to_vec()).ok()?;
+        out.push((name, zip.get(data..data + size)?.to_vec()));
+        at = data + size;
+    }
+    Some(out)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -182,6 +203,22 @@ mod tests {
             Some("+010000-01-01T00:00:00.000Z")
         );
         assert_eq!(iso(MAX_MS + 1), None);
+    }
+
+    #[test]
+    fn a_stored_zip_reads_back_entry_by_entry() {
+        let zip = zip_store(&[("ORD-0001.pgml", b"[crit'x']"), ("é.json", b"")], 0);
+        assert_eq!(
+            zip_entries(&zip),
+            Some(vec![
+                ("ORD-0001.pgml".into(), b"[crit'x']".to_vec()),
+                ("é.json".into(), Vec::new())
+            ])
+        );
+        let mut deflated = zip.clone();
+        deflated[8] = 8;
+        assert_eq!(zip_entries(&deflated), None);
+        assert_eq!(zip_entries(&zip[..40]), None);
     }
 
     #[test]
