@@ -240,6 +240,42 @@
   }
   table.cmds td.c button:hover { background:var(--surface-2); }
   .gi { width:26px; height:24px; vertical-align:middle; margin-right:6px; flex:none; }
+
+  /* the plane (EMS-003 ORD-0004): frames, connectors told apart by dash and
+     end mark as well as colour, and rows that take focus */
+  .plane { padding:8px 10px; }
+  .plane .pscroll { overflow:auto; max-height:70vh; border:1px solid var(--line-soft); border-radius:var(--r); background:var(--ink); }
+  .plane .plegend { display:flex; flex-wrap:wrap; gap:4px 12px; font-size:11.5px; color:var(--text-dim); margin-bottom:6px; }
+  .plane .pkey { display:inline-flex; align-items:center; gap:4px; }
+  .plane .pkey line { stroke-width:1.6; }
+  .plane .pmarks { display:flex; flex-wrap:wrap; gap:6px; font-size:11.5px; margin-bottom:6px; }
+  .plane .pmark { border:1px solid currentColor; border-radius:var(--r); padding:0 5px; font-family:var(--mono); }
+  .plane .pmark.sev-fix { color:var(--fix); } .plane .pmark.sev-ask { color:var(--ask); } .plane .pmark.sev-note { color:var(--note); }
+  .plane-svg { display:block; font-family:var(--mono); font-size:12px; }
+  .plane-svg .pf { fill:none; stroke:var(--line); stroke-width:1; }
+  .plane-svg .pf-seg { fill:var(--surface); stroke:var(--line-soft); }
+  .plane-svg .pf-block, .plane-svg .pf-section, .plane-svg .pf-pt { stroke:var(--h-op); stroke-dasharray:4 2; }
+  .plane-svg .pc { fill:none; stroke-width:1.6; }
+  .plane-svg .pc:focus { stroke-width:3.2; outline:none; }
+  .plane-svg .pn:focus { outline:2px solid var(--focus); outline-offset:3px; }
+  .plane-svg .pl { fill:var(--text); }
+  .plane-svg .pl-literal, .plane-svg .pl-raw { fill:var(--h-lit); }
+  .plane-svg .pl-text, .plane-svg .pl-verbatim { fill:var(--text-dim); font-style:italic; }
+  .plane-svg .pl-segment { fill:var(--h-op); }
+  .plane-svg .pchip rect { fill:var(--surface-2); stroke:var(--line); }
+  .plane-svg .pchip text { fill:var(--h-lit); }
+  .plane-svg .ring { fill:none; stroke-width:2; }
+  .plane-svg .sev-fix .ring { stroke:var(--fix); } .plane-svg .sev-ask .ring { stroke:var(--ask); stroke-dasharray:3 2; }
+  .plane-svg .sev-note .ring { stroke:var(--note); stroke-dasharray:1 2; }
+  .plane-svg .socket { fill:var(--ink); stroke:var(--ask); stroke-width:1.6; }
+  .plane-svg .pn.here .pl { fill:var(--focus); text-decoration:underline; }
+  .plane-svg .pn { cursor:pointer; }
+  .plane .ptools { display:flex; flex-wrap:wrap; align-items:center; gap:4px 6px; margin-bottom:6px; font-size:12px; }
+  .plane .ptools select, .plane .ptools input { font-family:var(--mono); font-size:11.5px; background:var(--surface-2);
+                                                color:var(--text); border:1px solid var(--line); border-radius:var(--r); padding:1px 4px; }
+  .plane .ptools .pnow { color:var(--ask); }
+  .plane .ptools .pstat { font-family:var(--mono); font-size:11.5px; }
+  .plane .ptools .pstat.sev-fix { color:var(--fix); } .plane .ptools .pstat.sev-ok { color:var(--ok); }
   table.cmds td.m { color:var(--muted); font-size:12px; }
   table.cmds tr:hover td.m { color:var(--text-dim); }
   .none { color:var(--muted); font-size:12px; padding:10px 2px; }

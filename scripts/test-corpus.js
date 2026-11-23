@@ -35,6 +35,8 @@ import * as STORES from "./core/stores.js";
 import { ck } from "./core/emit-ast.js";
 import { depsOf } from "./read-expansions.js";
 import { graphOf, envelopeOf, CONNECTORS } from "./glyph-graph.js";
+import { layout, render, walkOrder, legend, STYLE } from "./glyph-plane.js";
+import { apply as editApply, admits, keyed, idOf, index as editIndex, WRITES, OPERATIONS } from "./glyph-edit.js";
 import { expandInvocations, checkTemplateConstraints } from "./core/templates.js";
 import { checkRules, compileRules } from "./core/rules.js";
 
@@ -3432,6 +3434,191 @@ function runGraphChecks() {
 }
 const rGR = runGraphChecks();
 
+/* ------------------------------------------------------------------ *
+ * plane -- the 2D view, read only (EMS-003 ORD-0004)
+ *
+ * What the browser shows is measured in the browser, at the Order's close;
+ * what the drawing promises is held here, over every declared source: the
+ * plane draws the whole graph, the same picture twice, a walk that reaches
+ * every stop, a text for each, and nothing written back.
+ * ------------------------------------------------------------------ */
+function runPlaneChecks() {
+  console.log("\n--- plane -- the read-only view ---");
+  const D = [];
+  const ok = (id, name, why) => {
+    if (why) { console.log("  \u2717 " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  \u2713 " + id + ": " + name); D.push(id); }
+  };
+  const opts = { templates: TPL.templates, rules: RULESTORE,
+                 expansions: require("../.guidelines/.sources/expansions.json") };
+  const DECLARED = [].concat(POSITIVE, INCOMPLETE, INVALID, REGRESSION, LONG,
+                             TEMPLATES, CONSTRAINTS, RULE_CASES, ORACLE_COVERAGE)
+    .filter(c => c && c.id && typeof c.src === "string");
+  const count = (svg, re) => (svg.match(re) || []).length;
+  const short = [], twice = [], walked = [], unsaid = [], wrote = [];
+  let sources = 0, stops = 0;
+  DECLARED.forEach(c => {
+    let e;
+    try { e = G.toAST(c.src, c.opts ? { ...opts, ...c.opts } : opts); } catch (err) { return; }
+    sources++;
+    const g = graphOf(e), before = JSON.stringify(g);
+    const L = layout(g), svg = render(g, L, null);
+    if (count(svg, /class="pn[ "]/g) + count(svg, /class="pchip"/g) !== g.nodes.length + g.containers.length ||
+        count(svg, /class="pf /g) !== g.containers.length || count(svg, /class="pc pc-/g) !== g.connectors.length) short.push(c.id);
+    if (render(graphOf(e), layout(graphOf(e)), null) !== svg) twice.push(c.id);
+    const order = walkOrder(g, L);
+    stops += order.length;
+    if (new Set(order).size !== order.length || order.length !== L.rows.length + g.connectors.length) walked.push(c.id);
+    if (/aria-label=""/.test(svg)) unsaid.push(c.id);
+    if (JSON.stringify(g) !== before) wrote.push(c.id);
+  });
+  ok("PL-01", "every declared source draws every node, frame and connector of its graph — " + sources + " sources",
+     short.length ? "something left out on " + short.join(", ") : null);
+  ok("PL-02", "the same source is the same picture",
+     twice.length ? "a second drawing differs on " + twice.join(", ") : null);
+  ok("PL-03", "the walk reaches every row and every connector once — " + stops + " stops",
+     walked.length ? "the walk misses or repeats on " + walked.join(", ") : null);
+  ok("PL-04", "every row and every connector carries the text a screen reader says",
+     unsaid.length ? "an empty text on " + unsaid.join(", ") : null);
+  ok("PL-05", "the view writes nothing: the graph is the same after it is drawn",
+     wrote.length ? "the graph changed on " + wrote.join(", ") : null);
+
+  const pairs = CONNECTORS.map(t => STYLE[t].dash + "|" + STYLE[t].end);
+  const key = legend();
+  const unnamed = CONNECTORS.filter(t => key.indexOf(">" + t + "</span>") === -1);
+  ok("PL-06", "each connector type has a stroke and an end mark of its own, and the legend names all seven",
+     new Set(pairs).size !== CONNECTORS.length ? "two types share a stroke and an end mark"
+       : unnamed.length ? "the legend leaves out " + unnamed.join(", ") : null);
+
+  const marked = graphOf(G.toAST("[on][rwk]", opts));
+  const msvg = render(marked, layout(marked), null);
+  ok("PL-07", "a node a diagnostic lands on is marked by its severity, and says it",
+     !/class="pn sev-note"[^>]*aria-label="[^"]*note: UnmatchedOnMode/.test(msvg) ? "no note ring that says its code"
+       : !/<rect class="ring"/.test(msvg) ? "no ring drawn" : null);
+
+  const moved = layout(marked, { n2: { x: 500, y: 400 } });
+  ok("PL-08", "where a position is stored, the stored one wins over the computed row",
+     moved.row.n2.x !== 500 || moved.row.n2.y !== 400 ? "the row stayed at " + moved.row.n2.x + "," + moved.row.n2.y : null);
+
+  return D.length;
+}
+const rPL = runPlaneChecks();
+
+/* ------------------------------------------------------------------ *
+ * edit -- editing by the links (EMS-003 ORD-0005)
+ *
+ * Each operation is one edit of the tree, the way back writes the source,
+ * and the engine reads it again: an edit holds only when the tree read back
+ * is the edited tree. The undo that gives the source back byte for byte is
+ * the page's, and is measured in the browser at the Order's close.
+ * ------------------------------------------------------------------ */
+function runEditChecks() {
+  console.log("\n--- edit -- the plane edits the tree ---");
+  const D = [];
+  const ok = (id, name, why) => {
+    if (why) { console.log("  \u2717 " + id + ": " + name); console.log("      " + why); failures.push(id); }
+    else { console.log("  \u2713 " + id + ": " + name); D.push(id); }
+  };
+  const opts = { templates: TPL.templates, rules: RULESTORE,
+                 expansions: require("../.guidelines/.sources/expansions.json") };
+  const E = { toAST: G.toAST, fromAST: G.fromAST, opts: opts };
+  const fixes = e => e.diagnostics.filter(d => d.severity === "fix").map(d => d.code).sort().join(",");
+
+  /* each operation, the source a hand would write for the edited tree */
+  const CASES = [
+    ["connect nest", "[rwk][ctx]", "connect", { from: "n1", to: "n2", type: "nest" }, "[rwk[ctx]]"],
+    ["connect chain", "[ins][rwk]", "connect", { from: "n1", to: "n2", type: "chain" }, "[ins-rwk]"],
+    ["connect item", "[rwk][fmt]", "connect", { from: "n1", to: "n2", type: "item" }, "[rwk],[fmt]"],
+    ["connect sequence", "[rwk[ctx]][fmt]", "connect", { from: "n2", to: "n3", type: "sequence" }, "[rwk[ctx][fmt]]"],
+    ["connect reference", "[sum'x'[ctx]][ref'y']", "connect", { from: "n5", to: "n1", type: "reference" }, "[sum'x'[ctx]][ref'x']"],
+    ["connect result", "[rwk[ctx]]'r'", "connect", { from: "n1", to: "n3", type: "result" }, "[rwk[ctx]'r']"],
+    ["connect call", "[--t=[ctx]][--u]", "connect", { from: "n3", to: "n1", type: "call" }, "[--t=[ctx]][--t]"],
+    ["retype", "[rwk[ctx]]", "retype", { connector: 0, type: "item" }, "[rwk],[ctx]"],
+    ["move an end", "[rwk[ctx][fmt]]", "move", { connector: 0, node: "n3" }, "[rwk[fmt]][ctx]"],
+    ["cut", "[rwk[ctx]]", "cut", { connector: 0 }, "[rwk][ctx]"],
+    ["place", "[rwk]", "place", { canonical: "ctx", parent: "n1" }, "[rwk[ctx]]"],
+    ["remove", "[rwk][fmt]", "remove", { node: "n2" }, "[rwk]"],
+    ["remove, lifting", "[rwk[ctx]]", "remove", { node: "n1", how: "lift" }, "[ctx]"],
+    ["reorder", "[rwk][fmt]", "reorder", { node: "n2", by: -1 }, "[fmt][rwk]"],
+    ["operand", "[rwk]", "operand", { node: "n1", text: "the draft" }, "[rwk'the draft']"],
+    ["wrap", "[rwk][fmt]", "wrap", { nodes: ["n1", "n2"], kind: "block", name: "core" }, "[block'core'[rwk][fmt]]"]
+  ];
+  const off = [];
+  CASES.forEach(([name, src, op, args, want]) => {
+    const e = G.toAST(src, opts), r = editApply(e, op, args, E);
+    if (r.refused) { off.push(name + ": refused " + r.refused); return; }
+    if (r.src !== want) { off.push(name + ": wrote " + JSON.stringify(r.src)); return; }
+    if (fixes(r.env) !== fixes(G.toAST(G.fromAST(e, opts).src, opts))) off.push(name + ": a new fix, " + fixes(r.env));
+  });
+  const ops = new Set(CASES.map(c => c[2]));
+  ok("ED-01", "each operation writes the source a hand would write, read back as the edited tree with no new fix — " + CASES.length + " cases",
+     off.length ? off.join("; ") : OPERATIONS.some(o => !ops.has(o)) ? "no case for " + OPERATIONS.filter(o => !ops.has(o)).join(", ") : null);
+
+  /* what the tree cannot hold is refused by name, and nothing moves */
+  const REFUSED = [
+    ["EditCycle", "[rwk[ctx]]", "connect", { from: "n2", to: "n1", type: "nest" }],
+    ["EditChainHolds", "[ins][rwk[ctx]]", "connect", { from: "n1", to: "n2", type: "chain" }],
+    ["EditInsideExpansion", "[--t=[ctx]][--t]", "operand", { node: "n4", text: "x" }],
+    ["EditNoBinding", "[rwk'x'][fmt]", "connect", { from: "n2", to: "n3", type: "reference" }],
+    ["EditNoNest", "[rwk]'r'", "connect", { from: "n1", to: "n2", type: "result" }],
+    ["EditHoldsOthers", "[rwk[ctx]]", "remove", { node: "n1" }],
+    ["EditWrapApart", "[rwk][fmt][ctx]", "wrap", { nodes: ["n1", "n3"], kind: "block", name: "b" }],
+    ["EditWrapNeedsName", "[rwk]", "wrap", { nodes: ["n1"], kind: "section", name: "" }],
+    ["EditReferenceIsText", "[sum'x'[ctx]][ref'x']", "cut", { connector: 2 }],
+    ["EditCallIsName", "[--t=[ctx]][--t]", "cut", { connector: 3 }],
+    ["EditUnknownCommand", "[rwk]", "place", { canonical: "zzzz", parent: null, known: ["RWK", "CTX"] }],
+    ["EditNotHeld", "[rwk]", "operand", { node: "n1", text: "a'b`c" }]
+  ];
+  const wrong = [];
+  REFUSED.forEach(([code, src, op, args]) => {
+    const e = G.toAST(src, opts), before = JSON.stringify(e), r = editApply(e, op, args, E);
+    if (r.refused !== code) wrong.push(code + " answered " + (r.refused || JSON.stringify(r.src)));
+    else if (JSON.stringify(e) !== before) wrong.push(code + " changed the envelope it was given");
+  });
+  ok("ED-02", "an edit the tree cannot hold is refused by its name, and the envelope stays as it was — " + REFUSED.length + " refusals",
+     wrong.length ? wrong.join("; ") : null);
+
+  /* every link cut and connected again by its type gives the source back */
+  const DECLARED = [].concat(POSITIVE, INCOMPLETE, INVALID, REGRESSION, LONG,
+                             TEMPLATES, CONSTRAINTS, RULE_CASES, ORACLE_COVERAGE)
+    .filter(c => c && c.id && typeof c.src === "string");
+  let tried = 0, refusedCut = 0;
+  const whyCut = {};
+  const broken = [];
+  DECLARED.forEach(c => {
+    let e;
+    try { e = G.toAST(c.src, c.opts ? { ...opts, ...c.opts } : opts); } catch (err) { return; }
+    if (e.truncatedNodes) return;
+    const O = { ...E, opts: c.opts ? { ...opts, ...c.opts } : opts };
+    const base = G.fromAST(e, O.opts).src;
+    graphOf(e).connectors.forEach((cn, i) => {
+      if (["nest", "chain", "item", "sequence", "result"].indexOf(cn.type) === -1) return;
+      const ix = editIndex(e), it = ix[cn.to];
+      const at = it && it.list.indexOf(it.node);
+      const cut = editApply(keyed(JSON.parse(JSON.stringify(e))), "cut", { connector: i }, O);
+      if (cut.refused) { refusedCut++; whyCut[cut.refused] = (whyCut[cut.refused] || 0) + 1; return; }
+      tried++;
+      const k = cut.edited;
+      const back = editApply(cut.env, "connect", { from: idOf(k, cn.from), to: idOf(k, cn.to), type: cn.type, at: at,
+                                                   bare: cn.type === "chain" ? !!it.node.chainElement : undefined }, O);
+      if (back.refused || back.src !== base) broken.push(c.id + "/" + cn.type + (back.refused ? ":" + back.refused : ""));
+    });
+  });
+  ok("ED-03", "every link of the declared sources, cut and connected again by its type, gives the source back byte for byte — " +
+              tried + " links" + (refusedCut ? ", " + refusedCut + " refused at the cut by name (" + Object.keys(whyCut).sort().map(k => k + " " + whyCut[k]).join(", ") + ")" : ""),
+     broken.length ? broken.length + " do not, the first " + broken.slice(0, 6).join(", ") : null);
+
+  /* the types a link's ends admit, each held, each naming its operator */
+  const offer = admits(G.toAST("[rwk[ctx]]", opts), 0, E);
+  ok("ED-04", "a link offers the types its two ends admit, each one held, and the plane names the operator each writes",
+     offer.indexOf("nest") === -1 ? "the link's own type is not offered"
+       : offer.some(t => !WRITES[t]) ? "a type with no operator named"
+       : Object.keys(WRITES).length !== CONNECTORS.length ? "the operators do not name all seven" : null);
+
+  return D.length;
+}
+const rED = runEditChecks();
+
 
 /* ------------------------------------------------------------------ *
  * suggest -- aponta, ou cala
@@ -4580,6 +4767,8 @@ console.log(" raw fence    " + String(rRW).padStart(4) + "/5");
 console.log(" literal role " + String(rRO).padStart(4) + "/9");
 console.log(" bindings     " + String(rBD).padStart(4) + "/12");
 console.log(" graph        " + String(rGR).padStart(4) + "/8");
+console.log(" plane        " + String(rPL).padStart(4) + "/8");
+console.log(" edit         " + String(rED).padStart(4) + "/4");
 console.log(" suggest      " + String(rSG).padStart(4) + "/4");
 console.log(" aspas        " + String(rQT).padStart(4) + "/3");
 console.log(" param template" + String(rTP).padStart(4) + "/4");

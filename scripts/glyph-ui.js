@@ -4,6 +4,8 @@
    data in glyph-moulds.js. What is left here is only the app. */
 
 import { zipStore } from "./glyph-zip.js";
+import { mountPlane } from "./glyph-plane.js";
+import { apply as editTree, admits as linkAdmits, WRITES } from "./glyph-edit.js";
 
 (function () {
   "use strict";
@@ -43,6 +45,65 @@ import { zipStore } from "./glyph-zip.js";
     return '<svg class="gi' + (stem ? "" : " gi-none") + '" viewBox="0 0 ' + Icons.tile.join(" ") +
       '" aria-hidden="true" focusable="false"><use href="#gi-' + (stem || "fallback") + '"/></svg>';
   }
+
+  /* o plano (EMS-003 ORD-0004): a vista 2D só de leitura, numa superfície
+     própria ao lado da fonte (V7 b), desenhada do grafo do envelope `full`.
+     Só desenha com o cartão aberto: o envelope inteiro e o grafo custam, e
+     um cartão fechado não pede nenhum dos dois. */
+  var plane = null, lastRes = null, lastEnv = null;
+  /* a edição pelos links (EMS-003 ORD-0005): cada operação edita a árvore, o
+     fromAST escreve a fonte e o motor a lê de novo; desfazer devolve os bytes
+     que a fonte tinha. Digitar na fonte esvazia as duas pilhas: o campo de
+     texto tem o desfazer dele. */
+  var undoStack = [], redoStack = [], editing = false;
+  var editEngine = function () { return { toAST: Core.toAST, fromAST: Core.fromAST, opts: OPTS }; };
+  function setSource(text) {
+    if (!state.detached) { state.detached = true; srcEl.readOnly = false; drawMould(); drawMouldPick(); }
+    editing = true;
+    srcEl.value = text;
+    run();
+    editing = false;
+  }
+  function planeEdit(op, args) {
+    if (!lastEnv) return { refused: "EditNoTree", message: "" };
+    var r = editTree(lastEnv, op, args, editEngine());
+    if (r.refused) return r;
+    undoStack.push(srcEl.value);
+    redoStack = [];
+    setSource(r.src);
+    return { ok: true };
+  }
+  function planeUndo() { if (undoStack.length) { redoStack.push(srcEl.value); setSource(undoStack.pop()); } }
+  function planeRedo() { if (redoStack.length) { undoStack.push(srcEl.value); setSource(redoStack.pop()); } }
+  function planeWords() {
+    return {
+      types: { nest: t("pnNest"), chain: t("pnChain"), item: t("pnItem"), sequence: t("pnSequence"),
+               reference: t("pnReference"), result: t("pnResult"), call: t("pnCall") },
+      sev: { fix: t("labFix"), ask: t("labAsk"), note: t("labNote") },
+      segment: t("pnSegment"), operand: t("pnOperand"), socket: t("pnSocket"),
+      omitted: t("pnOmitted"), plane: t("planeTitle"), onPackage: t("pnOnPackage"),
+      tools: { bar: t("edBar"), link: t("edLink"), pick: t("edPick"), operand: t("edOperand"), write: t("edWrite"),
+               up: t("edUp"), down: t("edDown"), remove: t("edRemove"), lift: t("edLift"), drop: t("edDrop"),
+               place: t("edPlace"), wrap: t("edWrap"), name: t("edName"), retype: t("edRetype"), cut: t("edCut"),
+               moveEnd: t("edMove"), undo: t("edUndo"), redo: t("edRedo"), refused: t("edRefused"), done: t("edDone"),
+               cancel: t("edCancel"), frames: { section: "[section", block: "[block", part: "[pt" } }
+    };
+  }
+  function drawPlane(res) {
+    var card = document.getElementById("planeCard");
+    if (!res || !card || !card.open) return;
+    if (!plane) plane = mountPlane(document.getElementById("plane"), document.getElementById("src"), {
+      icons: Icons, edit: planeEdit, undo: planeUndo, redo: planeRedo, writes: WRITES,
+      known: Icons ? Object.keys(Icons.icons).concat(Icons.fallback).sort() : null,
+      admits: function (i) { return lastEnv ? linkAdmits(lastEnv, i, editEngine()) : []; }
+    });
+    plane.words(planeWords());
+    lastEnv = Core.serializeAST(res.segments, res.gaps, { projection: "full" });
+    var got = plane.update(lastEnv);
+    document.getElementById("planeCount").textContent = got ? t("planeCount", got.nodes + got.chips, got.connectors) : "";
+  }
+  /* aberto depois, o cartão desenha a última leitura */
+  document.getElementById("planeCard").addEventListener("toggle", function () { if (this.open) drawPlane(lastRes); });
 
   /* stores de dados (glyph-data.js, gerado dos .json por build-templates.js).
      Ausentes, o motor roda igual — só sem expandir template nem apontar
@@ -484,6 +545,8 @@ import { zipStore } from "./glyph-zip.js";
        aba visível recebe tinta; as outras ficam sujas e esperam a troca. */
     markDirty();
     paintTab(state.tab);
+    lastRes = res;
+    drawPlane(res);
 
     var asks = res.gaps.filter(function (g) { return g.sev === "ask"; }).length;
     var fixes = res.gaps.filter(function (g) { return g.sev === "fix"; }).length;
@@ -554,7 +617,10 @@ import { zipStore } from "./glyph-zip.js";
   });
   $("find").addEventListener("input", drawCmds);
 
-  srcEl.addEventListener("input", function () { if (state.detached) run(); });
+  srcEl.addEventListener("input", function () {
+    if (!editing) { undoStack = []; redoStack = []; }
+    if (state.detached) run();
+  });
 
 
   /* ======================================================
@@ -1414,6 +1480,16 @@ import { zipStore } from "./glyph-zip.js";
       xmlEdit: "editar", xmlApply: "aplicar",
       copy: "copiar", download: "baixar", emitOrder: "emitir ORD",
       gapsTitle: "o que falta dizer",
+      planeTitle: "plano", planeCount: "{0} nó(s) · {1} ligação(ões)",
+      pnNest: "aninha", pnChain: "encadeia", pnItem: "item", pnSequence: "sequência",
+      pnReference: "referência", pnResult: "resultado", pnCall: "chamada",
+      pnSegment: "segmento", pnOperand: "operando", pnSocket: "pergunta aqui",
+      pnOmitted: "nós omitidos", pnOnPackage: "no pacote",
+      edBar: "editar a árvore", edLink: "ligar", edPick: "escolha a outra ponta no plano", edOperand: "operando",
+      edWrite: "escrever", edUp: "subir", edDown: "descer", edRemove: "remover", edLift: "subir o que ele guarda",
+      edDrop: "remover tudo", edPlace: "colocar", edWrap: "envolver", edName: "nome", edRetype: "mudar o tipo",
+      edCut: "cortar", edMove: "mover a ponta", edUndo: "desfazer", edRedo: "refazer", edRefused: "recusado",
+      edDone: "feito", edCancel: "cancelar",
       targetTitle: "destino",
       fHarness: "harness", fModel: "modelo", fRole: "papel",
       tgWrites: "escreve", tgRegisters: "registra", tgHeader: "cabeçalho",
@@ -1511,6 +1587,16 @@ import { zipStore } from "./glyph-zip.js";
       xmlEdit: "edit", xmlApply: "apply",
       copy: "copy", download: "download", emitOrder: "emit ORD",
       gapsTitle: "what is left to say",
+      planeTitle: "plane", planeCount: "{0} node(s) · {1} link(s)",
+      pnNest: "nest", pnChain: "chain", pnItem: "item", pnSequence: "sequence",
+      pnReference: "reference", pnResult: "result", pnCall: "call",
+      pnSegment: "segment", pnOperand: "operand", pnSocket: "asks here",
+      pnOmitted: "nodes omitted", pnOnPackage: "on the package",
+      edBar: "edit the tree", edLink: "link", edPick: "choose the other end on the plane", edOperand: "operand",
+      edWrite: "write", edUp: "up", edDown: "down", edRemove: "remove", edLift: "lift what it holds",
+      edDrop: "remove all", edPlace: "place", edWrap: "wrap", edName: "name", edRetype: "change type",
+      edCut: "cut", edMove: "move the end", edUndo: "undo", edRedo: "redo", edRefused: "refused",
+      edDone: "done", edCancel: "cancel",
       targetTitle: "destination",
       fHarness: "harness", fModel: "model", fRole: "role",
       tgWrites: "writes", tgRegisters: "registers", tgHeader: "header",

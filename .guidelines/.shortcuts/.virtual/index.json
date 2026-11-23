@@ -1,7 +1,7 @@
 {
   "note": "written by glyph-vpath build, EMS-002; never edited by hand",
   "depth": 2,
-  "next": 3639,
+  "next": 3643,
   "files": {
     ".guidelines/.changelog/README.md": {
       "nodes": [
@@ -3187,26 +3187,17 @@
         ["n3399", "/glyph-package/block", 49, 3754, 3, 57, "7bcf2e907a939200", "", "n3397"]
       ]
     },
-    ".guidelines/.orders/EMS-003/README.md": {
-      "nodes": [
-        ["n3284", "", 0, 4965, 1, 31, "1b773e48abebe800", "", ""],
-        ["n3285", "ems-003--the-2d-view", 0, 4965, 1, 31, "1b773e48abebe800", "b7382b8a9d294800", "n3284"],
-        ["n3286", "the-open-order", 412, 694, 9, 4, "5e70af365caf8a00", "731e3e1699d78000", "n3285"],
-        ["n3287", "the-queue", 694, 1735, 13, 12, "26c41208cb245900", "51be39ce8e2fa000", "n3285"],
-        ["n3288", "closed-orders", 1735, 4965, 25, 7, "622cb532a4bddd00", "ec09306ab28e6300", "n3285"]
-      ]
-    },
-    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.hgml": {
+    ".guidelines/.orders/EMS-003/ORD-0005/ORD-0005.hgml": {
       "nodes": [
         ["n3400", "", 0, 3182, 1, 113, "0bdbe928472ae400", "", ""]
       ]
     },
-    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.json": {
+    ".guidelines/.orders/EMS-003/ORD-0005/ORD-0005.json": {
       "nodes": [
         ["n3401", "", 0, 19991, 1, 641, "4e147b38882f2800", "", ""],
         ["n3402", "/type", 12, 22, 2, 1, "6cfcf51e0b22b400", "", "n3401"],
         ["n3403", "/schema", 36, 37, 3, 1, "370cabd49014b848", "", "n3401"],
-        ["n3404", "/version", 52, 63, 4, 1, "cc354c289aec8d00", "", "n3401"],
+        ["n3639", "/version", 52, 63, 4, 1, "cc354c289aec8d00", "", "n3401"],
         ["n3405", "/source", 77, 200, 5, 7, "c833aba0323c5800", "", "n3401"],
         ["n3406", "/source/length", 93, 97, 6, 1, "5032ae4c620bbe00", "", "n3405"],
         ["n3407", "/source/checksum", 115, 133, 7, 1, "475e25ce4a8bdc00", "", "n3405"],
@@ -3223,11 +3214,11 @@
         ["n3418", "/diagnostics", 19987, 19989, 640, 1, "721635809ba5e8c0", "", "n3401"]
       ]
     },
-    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.manifest.json": {
+    ".guidelines/.orders/EMS-003/ORD-0005/ORD-0005.manifest.json": {
       "nodes": [
         ["n3419", "", 0, 358, 1, 16, "d06fd32ec3277460", "", ""],
         ["n3420", "/order", 13, 23, 2, 1, "ba1d2903d1f46c00", "", "n3419"],
-        ["n3421", "/engine", 37, 48, 3, 1, "cc354c289aec8d00", "", "n3419"],
+        ["n3640", "/engine", 37, 48, 3, 1, "cc354c289aec8d00", "", "n3419"],
         ["n3422", "/emitted", 63, 89, 4, 1, "0fe7d30c5e8c14c0", "", "n3419"],
         ["n3423", "/files", 102, 189, 5, 6, "41c985c7d2eb51d0", "", "n3419"],
         ["n3424", "/files/0", 108, 123, 6, 1, "04269a7016643c00", "", "n3423"],
@@ -3236,21 +3227,30 @@
         ["n3427", "/files/3", 170, 185, 9, 1, "683faebada109800", "", "n3423"],
         ["n3428", "/source", 203, 302, 11, 1, "85aea81028bdd000", "", "n3419"],
         ["n3429", "/diagnostics", 321, 355, 12, 4, "83b9246074dcc400", "", "n3419"],
-        ["n3430", "/diagnostics/fix", 334, 335, 13, 1, "350ca8b09bec4d20", "", "n3429"],
-        ["n3431", "/diagnostics/total", 350, 351, 14, 1, "350ca8b09bec4d20", "", "n3429"]
+        ["n3641", "/diagnostics/fix", 334, 335, 13, 1, "350ca8b09bec4d20", "", "n3429"],
+        ["n3642", "/diagnostics/total", 350, 351, 14, 1, "350ca8b09bec4d20", "", "n3429"]
       ]
     },
-    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.pgml": {
+    ".guidelines/.orders/EMS-003/ORD-0005/ORD-0005.pgml": {
       "nodes": [
         ["n3432", "", 0, 2187, 1, 16, "a677c4d0e4ba2000", "", ""]
       ]
     },
-    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.xml": {
+    ".guidelines/.orders/EMS-003/ORD-0005/ORD-0005.xml": {
       "nodes": [
         ["n3433", "", 0, 3641, 1, 57, "3f0b0b661ff11900", "", ""],
         ["n3434", "/glyph-package", 0, 3641, 1, 57, "3f0b0b661ff11900", "", "n3433"],
         ["n3435", "/glyph-package/schema", 37, 46, 2, 1, "9047f1df86dca200", "", "n3434"],
         ["n3436", "/glyph-package/block", 49, 3624, 3, 54, "60f2911ac59c4400", "", "n3434"]
+      ]
+    },
+    ".guidelines/.orders/EMS-003/README.md": {
+      "nodes": [
+        ["n3284", "", 0, 8043, 1, 32, "7670bb20b82dca00", "", ""],
+        ["n3285", "ems-003--the-2d-view", 0, 8043, 1, 32, "7670bb20b82dca00", "9d1679781b764800", "n3284"],
+        ["n3286", "the-open-order", 412, 694, 9, 4, "5e70af365caf8a00", "731e3e1699d78000", "n3285"],
+        ["n3287", "the-queue", 694, 1542, 13, 11, "dbb17846a9abad00", "3e9bcbf8aa2e5200", "n3285"],
+        ["n3288", "closed-orders", 1542, 8043, 24, 9, "94ad8e1013ae3ca0", "7b1b02a2bc072700", "n3285"]
       ]
     },
     ".guidelines/.orders/EMS-003/queued/ORD-0006/ORD-0006.hgml": {
@@ -5220,6 +5220,39 @@
     ".guidelines/.orders/EMS-003/queued/ORD-0004/ORD-0004.xml#/glyph-package": "n3397",
     ".guidelines/.orders/EMS-003/queued/ORD-0004/ORD-0004.xml#/glyph-package/block": "n3399",
     ".guidelines/.orders/EMS-003/queued/ORD-0004/ORD-0004.xml#/glyph-package/schema": "n3398",
+    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.hgml": "n3400",
+    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.json": "n3401",
+    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.json#/diagnostics": "n3418",
+    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.json#/projection": "n3415",
+    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.json#/schema": "n3403",
+    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.json#/segments": "n3416",
+    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.json#/segments/0": "n3417",
+    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.json#/source": "n3405",
+    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.json#/source/checksum": "n3407",
+    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.json#/source/encoding": "n3408",
+    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.json#/source/length": "n3406",
+    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.json#/source/newline": "n3409",
+    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.json#/source/uri": "n3410",
+    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.json#/stores": "n3411",
+    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.json#/stores/expansions": "n3414",
+    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.json#/stores/rules": "n3413",
+    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.json#/stores/templates": "n3412",
+    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.json#/type": "n3402",
+    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.manifest.json": "n3419",
+    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.manifest.json#/diagnostics": "n3429",
+    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.manifest.json#/emitted": "n3422",
+    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.manifest.json#/files": "n3423",
+    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.manifest.json#/files/0": "n3424",
+    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.manifest.json#/files/1": "n3425",
+    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.manifest.json#/files/2": "n3426",
+    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.manifest.json#/files/3": "n3427",
+    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.manifest.json#/order": "n3420",
+    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.manifest.json#/source": "n3428",
+    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.pgml": "n3432",
+    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.xml": "n3433",
+    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.xml#/glyph-package": "n3434",
+    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.xml#/glyph-package/block": "n3436",
+    ".guidelines/.orders/EMS-003/queued/ORD-0005/ORD-0005.xml#/glyph-package/schema": "n3435",
     ".guidelines/.sources/GLOSSARY.md#glyphs-and-hieroglyphs--normative-glossary-v471008": "n1225",
     ".guidelines/BUNDLE_TARGET.md": "n1188",
     ".guidelines/BUNDLE_TARGET.md#0-why-a-compiler-and-not-a-yaml-file": "n1190",
